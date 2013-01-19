@@ -1,0 +1,18 @@
+{% extends '/layout-bootstrap.html.twig' %}
+
+{% block body %}
+        {% if (events) %}
+        <table class="table table-striped">
+        {% for event in events %}
+        <tr><td>
+            {{ event.name }}
+        </td></tr>
+        {% endfor %}
+        </table>
+        {% else %}
+        <p class="notice">
+            There are no events yet
+        </p>
+        {% endif %}
+
+{% endblock %}
