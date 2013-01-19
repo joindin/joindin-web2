@@ -1,0 +1,292 @@
+@import url(http://fonts.googleapis.com/css?family=Concert+One);
+@import url(http://fonts.googleapis.com/css?family=Belgrano);
+
+h1, h2 {
+    font-family:      'Concert One', helvetica, sans-serif;
+    border-radius:    5px;
+    font-weight:      normal;
+    background-color: #afc6e9;
+}
+
+h1 {
+    font-size:   1.5em;
+    line-height: 1.2em;
+}
+
+h2 {
+    padding-left: 10px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+h2 i {
+    margin-top: 7px;
+}
+
+.heading h1.event-name {
+    background-color: transparent;
+    padding: 10px 5px;
+    color: orange;
+    text-align: left;
+
+}
+
+p.notice {
+    font-family: Belgrano;
+    font-size: 18px;
+    line-height: 1.4em;
+    padding: 15px;
+    text-align: center
+}
+
+.navbar {
+    background: #1c1f24;
+    margin-bottom: 0;
+}
+
+.navbar .brand img {
+    height: 26px;
+}
+
+.navbar .brand {
+    padding: 3px 15px;
+    padding-bottom: 0px;
+    background: #f6f7f8;
+    border: 2px solid #939dac;
+    border-radius: 10px;
+    position: absolute;
+    top: 3px;
+    margin-left: 7px;
+}
+
+.navbar .login {
+    padding: 4px 15px;
+    margin-bottom: 0;
+    padding-top: 8px;
+}
+
+.navbar .nav > li > a {
+    text-shadow: none;
+    color: white;
+    font-family: 'Concert One', helvetica, sans-serif;
+    font-size: 16px;
+    padding: 7px 10px 14px;
+}
+
+.navbar .nav > li.submit > a {
+    color: orange;
+}
+
+.navbar .login .btn {
+    margin-top: 0px;
+}
+
+.navbar .btn-group {
+    margin-top: 3px;
+    padding: 0;
+}
+.heading {
+    background-color: #535d6c;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-top: 10px;
+    box-shadow: 0 10px 20px silver;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.heading > div > div {
+    background-color: white;
+    border-radius: 7px;
+    height: 300px;
+    margin-bottom: -20px;
+    /*margin-bottom: 10px;*/
+    margin-left: 26px;
+    position:relative;
+    border: 2px solid #7d8ca3;
+}
+
+.heading .carousel .item {
+    overflow: hidden;
+    height: 289px
+}
+
+.heading > div > div > p, .heading .carousel  {
+    margin: 5px;
+}
+
+.heading {
+    margin-bottom: 40px;
+}
+
+.heading h1 {
+    text-align: center;
+}
+
+.heading h1.bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top-left-radius:  0px;
+    border-top-right-radius: 0px;
+    padding-bottom: 10px;
+}
+
+.heading h1.top:after {
+    content: '';
+    display: block;
+    background: white;
+    height: 10px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    margin-top: 10px;
+}
+
+.heading h1.bottom:before {
+    content: '';
+    display: block;
+    background: white;
+    height: 10px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.heading .auto-height {
+    height: auto;
+}
+
+.heading .logo {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+}
+
+.logo img {
+    border-radius: 5px;
+    border: 4px solid #7D8CA3;
+}
+
+@media (min-width: 980px) {
+    body {
+        padding-top: 39px !important; /* 60px to make the container go all the way to the bottom of the topbar */
+    }
+
+    .navbar .nav, .nav-bar .login {
+        float: right;
+    }
+}
+
+.blurb {
+    font-weight: bold;
+    text-align: center;
+}
+
+.event-summary {
+    margin-bottom: 10px;
+    height: 80px;
+}
+
+.event-summary h3
+{
+    white-space:   nowrap;
+    width:         100%;
+    overflow:      hidden;
+    text-overflow: ellipsis;
+    font-family:   sans-serif;
+    font-weight:   normal;
+    font-size:     1.6em;
+
+}
+
+.event-summary .links {
+    text-align: right;
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+
+}
+
+/* Landscape phone to portrait tablet*/
+@media (max-width: 768px) {
+    .event-summary .span1, .logo {
+        text-align: center;
+    }
+
+    .heading .logo {
+        height: auto;
+        padding-bottom: 0px;
+        width: 94px;
+        margin: 0 auto !important;
+        margin-bottom: 20px !important;
+    }
+
+    .row h2, .row h3 {
+       text-align: center;
+    }
+
+    .heading > div > div {
+        height: auto;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+    }
+
+    .navbar .brand {
+        display: none;
+    }
+
+    .carousel-container {
+        display: none;
+    }
+
+    .mobile-header {
+        display: block;
+    }
+}
+
+@media (max-width: 980px) {
+    p.notice {
+        font-size: 1.05em;
+    }
+}
+
+@media (min-width: 980px) and (max-width: 1200px) {
+    p.notice {
+        font-size: 1.3em;
+    }
+}
+
+@media (max-width: 1200px) {
+    .heading > div > div {
+        margin-left: 16px;
+    }
+}
+/* Portrait tablet to landscape and desktop*/
+@media (min-width: 768px) and (max-width: 980px) {
+
+}
+
+/* Large desktop*/
+@media (min-width: 1200px) {
+
+}
+
+.thumbnail p {
+    text-align: right;
+    font-size: 0.9em;
+}
+
+.side-menu {
+    margin-bottom: 0;
+}
+
+p.comment {
+    font-size: 0.8em;
+}
+
+p.comment span.attribution {
+    font-style: italic;
+    color: gray;
+    text-align: right;
+    display: block;
+}
