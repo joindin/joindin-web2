@@ -74,35 +74,10 @@ or
         </Directory>
     </VirtualHost>
 
-2. Create a MySQL database with username and password.
-   Use a database name of 'joindin'
+2. Add hostname to /etc/hosts.
+   echo "127.0.0.1 joindin.local" | sudo tee -a /etc/hosts
 
-3. Initialise, patch, and populate the database.
-
-        src/scripts/patchdb.sh -t /path/to/joind.in -d joindin -u username -p password -i
-
-   (use the correct username and password)
-
-4. Create directories for user-added content.
-
-        mkdir src/system/cache/ctokens && chown apache:apache src/system/cache/ctokens
-
-   (or whatever user and group your web server runs as)
-
-5. Create configuration files for database and config (based on the .dist templates):
-
-        cp src/system/application/config/database.php.dist src/system/application/config/database.php
-        cp src/system/application/config/config.php.dist   src/system/application/config/config.php
-
-   Edit these files as appropriate!
-
-6. Create some sample data to get you started - see `/doc/dbgen/README` for information about this excellent tool
-
-7. To enable useful error messages, add the following to your `.htaccess`
-
-        SetEnv JOINDIN_DEBUG On
-        
-8. Enjoy the site!
+3. Enjoy the site!
 
 ## Other Resources
 
@@ -113,27 +88,3 @@ or
 
 See LICENSE file for license information for this software
 (located in /doc/LICENSE)
-
-## Extensions
-
-### API Tests
-
-To run the frisby tests (frisby.js), you will first need to install node.js and
-npm.  Then run:
-
-        npm install -g frisby jasmine-node
-
-I also found that I needed:
-
-        export NODE_PATH=/usr/local/lib/node_modules
-
-Then run the tests by going to `/src/tests/api_tests` and running:
-
-        jasmine-node newapi_spec.js
-
-### Unit Tests
-
-There are some tests set up, which use PHPUnit; these can be found in the
-src/tests directory.  There is a phing task configured to run them - from the
-root directory simply run "phing phpunit" to run the tests.
-
