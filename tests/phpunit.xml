@@ -1,0 +1,11 @@
+<phpunit bootstrap="./bootstrap.php">
+    <testsuite name="Joind.in responsive Test Suite">
+        <directory>.</directory>
+    </testsuite>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhiteList="true">
+            <directory suffix=".php">.</directory>
+        </whitelist>
+    </filter>
+</phpunit>

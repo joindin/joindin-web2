@@ -1,7 +1,9 @@
 <?php
 namespace Joindin;
 
-spl_autoload_register('Joindin\autoload');
+require_once '../Service/Autoload.php';
+
+spl_autoload_register('Joindin\Service\autoload::autoload');
 
 session_cache_limiter(false);
 session_start();
@@ -31,12 +33,3 @@ new Controller\Event($app);
 
 // execute application
 $app->run();
-
-function autoload($class)
-{
-    if (in_array('Joindin', explode('\\', $class))) {
-        $path = str_replace('\\', '/', $class);
-        $path = substr($path, 8);
-        require_once('../'.$path.'.php');
-    }
-}
