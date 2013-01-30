@@ -45,27 +45,37 @@ table {
     border-spacing: 0;
 }
 
-/*
+/*------------------------------------*\
  * Base typography and colours
- */
+\*------------------------------------*/
 body {
     color: #333;
     font-family: Helvetica;
     font-size: 14px;
 }
 
-/*
+a {
+    color: #2368AF;
+    text-decoration: underline;
+}
+
+p {
+    padding-bottom: 1ex;
+}
+
+/*------------------------------------*\
  * Layout/Structure
- */
+\*------------------------------------*/
 
 #head {
-    background: rgb(255,255,255); /* Old browsers */
-    background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(209,232,255,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(209,232,255,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(209,232,255,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(209,232,255,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(209,232,255,1) 100%); /* IE10+ */
-    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(209,232,255,1) 100%); /* W3C */
+    background: rgb(187,218,249); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(187,218,249,1) 0%, rgba(204,229,255,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(187,218,249,1)), color-stop(100%,rgba(204,229,255,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(187,218,249,1) 0%,rgba(204,229,255,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(187,218,249,1) 0%,rgba(204,229,255,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(187,218,249,1) 0%,rgba(204,229,255,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(187,218,249,1) 0%,rgba(204,229,255,1) 100%); /* W3C */
+    border-bottom: 1px solid rgba(187,218,249,1);
     padding: 8px 8px 0 8px;
     margin-bottom: 8px;
 }
@@ -82,20 +92,46 @@ body {
 #menu li {
     background-color: #fff;
     display: inline-block;
-    margin-right: 8px;
+    margin: 0 8px 8px 0;
+
+    /* So that the tabs reach to the bottom of the header bg */
+    position: relative;
+    top: 1px;
 }
 
 #menu a {
-    border-bottom: 0;
     display: block;
 }
 
-#body {
+/* Make the buttons less tab-like if they start to wrap */
+@media only screen and (min-width: 396px) {
+    #menu li {
+        margin-bottom: 0;
+    }
+
+    #menu a {
+        border-bottom: 0;
+    }
+}
+
+#wrapper {
     margin: 8px auto;
+    padding: 0 8px;
     max-width: 960px;
 }
 
-/* Objects */
+#content {
+    float: left;
+    width: 66%;
+}
+
+#aside {
+    float: right;
+}
+
+/*------------------------------------*\
+ * Objects
+\*------------------------------------*/
 .button {
     border: 1px solid #2368AF;
     color: #000;

@@ -1,34 +1,41 @@
-{% extends '/layout-bootstrap.html.twig' %}
+{% extends '/layout.html.twig' %}
 
 {% block body %}
 
-<div class="row highlights">
-    <div class="span8">
-        <div>
-            <h2><i class="icon-calendar"></i> Upcoming events</h2>
-            {% for event in upcoming_events %}
-            {% include 'Application/_summary.html.twig' %}
-            {% endfor %}
+    <p>
+        Welcome to joind.in! This is the site where event attendees
+        can leave feedback on an event and its sessions. Do you have
+        an opinion? Then
+        <a href="/user/register">register an account</a> and share it!
+    </p>
+
+    <div class="row highlights">
+        <div class="span8">
+            <div>
+                <h2><i class="icon-calendar"></i> Upcoming events</h2>
+                {% for event in upcoming_events %}
+                {% include 'Application/_summary.html.twig' %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="span4">
+            <div>
+                <h2><i class="icon-comment"></i> Call for Papers</h2>
+                <p class="notice">
+                    I'm sorry, but we do not know of any
+                    Calls for Papers open at this moment.<br />
+                    <br />
+                    You may want to follow <a>this feed</a> to
+                    find out when the next Call for Paper is opened.
+                </p>
+            </div>
+            <div>
+                <h2><i class="icon-fire"></i> Hot events</h2>
+                {% for event in hot_events %}
+                {% include 'Application/_summary.html.twig' %}
+                {% endfor %}
+            </div>
         </div>
     </div>
-    <div class="span4">
-        <div>
-            <h2><i class="icon-comment"></i> Call for Papers</h2>
-            <p class="notice">
-                I'm sorry, but we do not know of any
-                Calls for Papers open at this moment.<br />
-                <br />
-                You may want to follow <a>this feed</a> to
-                find out when the next Call for Paper is opened.
-            </p>
-        </div>
-        <div>
-            <h2><i class="icon-fire"></i> Hot events</h2>
-            {% for event in hot_events %}
-            {% include 'Application/_summary.html.twig' %}
-            {% endfor %}
-        </div>
-    </div>
-</div>
 
 {% endblock %}
