@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="joindin-responsive" default="build" basedir=".">
+
+ <target name="build">
+	 <!-- TODO: something -->
+ </target>
+
+ <target name="launch">
+  <exec command="src/scripts/jenkinslaunch.sh" />
+ </target>
+
+</project>
