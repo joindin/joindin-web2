@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="joindin-responsive" default="build" basedir=".">
+ <property name="basedir" value="."/>
 
  <target name="build">
-	 <!-- TODO: something -->
+   <phingcall target="phplint"/>
+ </target>
+
+ <target name="phplint" description="Run php -l over the fileset">
+   <phplint haltonfailure="true">
+     <fileset dir="${basedir}">
+       <patternset>
+         <include name="**/*.php"/>
+       </patternset>
+     </fileset>
+   </phplint>
  </target>
 
  <target name="launch">
