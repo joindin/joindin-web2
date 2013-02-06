@@ -1,102 +1,48 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr">
-
+<!DOCTYPE html>
+<html>
 <head>
+    <meta charset="utf-8">
     <title>{% block title %}Joind.in{% endblock %}</title>
-    <link media="all" rel="stylesheet" type="text/css" href="/inc/css/site.css" />
-    <link media="all" rel="stylesheet" type="text/css" href="/inc/css/jquery-ui/jquery-ui-1.7.3.custom.css" />
-    <link media="all" rel="stylesheet" type="text/css" href="/inc/css/jquery-ui/theme/ui.all.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link href="/css/main.css" rel="stylesheet">
 
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <script type="text/javascript" src="/inc/js/jquery.js"></script>
-    <script type="text/javascript" src="/inc/js/jquery.pause.js"></script>
-    <script type="text/javascript" src="/inc/js/jquery-ui.js"></script>
-    <script type="text/javascript" src="/inc/js/site.js" async></script>
-    <script type="text/javascript" src="/inc/js/notifications.js" async></script>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
-    <script type="text/javascript">var reqk = "0a36dc89e6ee2932c76ddbf77a66ee29";</script>
-    <script type="text/javascript">var seck = "557674967";</script>
+    {#<link rel="shortcut icon" href="/images/favicon.ico">#}
+    {#<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">#}
+    {#<link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">#}
+    {#<link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">#}
 </head>
-<body id="page-home">
 
-<div id="hd">
-    <div class="container_12 top">
-        <div class="grid_12">
-            <div class="usr">
-                <div class="wrapper">
-                    <a href="/user/login">Login</a> or
-                    <a href="/user/register">Register</a>
-                </div>
-                <div class="clear"></div>
+<body>
+    <div id="head">
+        <h1><a href="/">
+            <img src="/img/logo.png" alt="Joind.in" class="respImage"/>
+        </a></h1>
+
+        <ul id="menu">
+            <li class="submit"><a href="#submit">Submit</a></li>
+            <li class="active"><a href="#events">Events</a></li>
+            <li><a href="#talks">Talks</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#help">Help</a></li>
+            <li><a href="#blog">Blog</a></li>
+        </ul>
+
+    </div>
+
+    <div id="wrapper">
+        <div id="content">
+            {% block body %}{% endblock %}
+        </div>
+        <div id="aside">
+            <div class="box wideOnly">
+                <img src="/img/logo-combell.png" alt=" " />
+                <p>
+                    <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
+                    <a href="http://www.combell.com/en">hosting</a> by Combell
+                </p>
             </div>
         </div>
-        <div class="clear"></div>
     </div>
-
-    <div class="container_12 nav">
-        <div class="grid_3 logo">
-            <a href="/"><img src="/inc/img/logo.png" border="0" alt="Joind.in Logo" height="60" width="200" /></a>
-        </div>
-        <div class="grid_6 menu">
-            <ul>
-                <li id="menu-event"><a href="/event">Events</a>
-                <li id="menu-talk"><a href="/talk">Talks</a>
-                <li id="menu-about" class="sep"><a href="/about">About</a>
-                <li id="menu-help"><a href="/help">Help</a>
-                <li id="menu-blog"><a href="/blog">Blog</a>
-            </ul>
-            <div class="clear"></div>
-        </div>
-        <div class="grid_3 search">
-            <form id="top-search" method="post" action="/search">
-                <label id="top-search-label" accesskey="2" for="top-search-input">Search Joind.in...</label>
-                <input type="text" value="" id="top-search-input" name="search_term" />
-                <input type="image" alt="Search" src="/inc/img/top-search-submit.png" id="top-search-submit" />
-            </form>
-            <div class="clear"></div>
-        </div>
-        <div class="clear"></div>
-    </div>
-</div>
-
-<div id="ctn">
-<div class="container_12 container">
-<div class="grid_8">
-<div class="main">
-    {% block body %}{% endblock %}
-</div>
-</div>
-<div class="grid_4">
-    <div class="sidebar">
-        {% block sidebar %}{% endblock %}
-    </div>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-
-<div id="ftr">
-    <div class="container_12">
-        <div class="grid_6">
-            <a href="/event">Events</a> | <a href="/talk">Talks</a> |
-            <a href="/search">Search</a> | <a href="/about">About</a> |
-            <a href="/help">Help</a> | <a href="/blog">Blog</a> |
-            <a href="/api">API</a> | <a href="/about/contact">Contact</a>
-        </div>
-        <div class="grid_6 rgt">
-            <a href="http://www.combell.com/en/servers/cloud-server" title="Cloud servers & cloud hosting">Cloud server</a>
-            <a href="http://www.combell.com/en" title="Hosting & webhosting">hosting</a> by Combell
-            <a href="http://www.combell.com/en" title="Cloud hosting Combell"><img src="/inc/img/LOGO-COMBELL_small.gif" border="0" style="vertical-align:text-bottom;" alt="Combell" height="22" width="80" /></a> &nbsp;&nbsp;&nbsp;&nbsp; &copy; Joind.in 2012
-        </div>
-        <div class="clear"></div>
-    </div>
-</div>
-
-<div id="jQueryUImessageBox" style="display:none"></div>
-
-{% include 'google-analytics.html.twig' %}
-
 </body>
 </html>
