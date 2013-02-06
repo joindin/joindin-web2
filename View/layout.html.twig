@@ -15,18 +15,18 @@
 
 <body>
     <div id="head">
-        <a class="brand" href="/">
-            <img src="/img/logo.png" alt="Joind.in"/>
-        </a>
+        <h1><a href="/">
+            <img src="/img/logo.png" alt="Joind.in" class="respImage"/>
+        </a></h1>
 
-    <ul id="menu">
-        <li class="submit"><a href="#submit" class="button">Submit</a></li>
-        <li class="active"><a href="#events" class="button">Events</a></li>
-        <li><a href="#talks" class="button">Talks</a></li>
-        <li><a href="#about" class="button">About</a></li>
-        <li><a href="#help" class="button">Help</a></li>
-        <li><a href="#blog" class="button">Blog</a></li>
-    </ul>
+        <ul id="menu">
+            <li class="submit"><a href="#submit">Submit</a></li>
+            <li class="active"><a href="#events">Events</a></li>
+            <li><a href="#talks">Talks</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#help">Help</a></li>
+            <li><a href="#blog">Blog</a></li>
+        </ul>
 
     </div>
 
@@ -34,98 +34,15 @@
         <div id="content">
             {% block body %}{% endblock %}
         </div>
-    </div>
-
-<!--
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span> <span class="icon-bar"></span>
-                <span class="icon-bar"></span> </a>
-
-
-            <div class="nav-collapse">
-                <div class="btn-group" style="float: right">
-                  <a class="btn dropdown-toggle btn-info btn-user btn-mini" data-toggle="dropdown" href="#">
-                    <img src="http://www.gravatar.com/avatar/ba4801d2cbcf2e649f3aedbfcbfb3c36.png?s=24" alt="Mike van Riel"/>
-                    <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu pull-right">
-                      <form class="login form-inline">
-                          <input type="text" class="input-small" placeholder="Email">
-                          <input type="password" class="input-small" placeholder="Password">
-                          <button type="submit" class="btn">Go</button>
-                      </form>
-
-                  </ul>
-                </div>
-
+        <div id="aside">
+            <div class="box wideOnly">
+                <img src="/img/logo-combell.png" alt=" " />
+                <p>
+                    <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
+                    <a href="http://www.combell.com/en">hosting</a> by Combell
+                </p>
             </div>
         </div>
     </div>
-</div>
-
-<div class="container" id="ctn">
-
-    {% block page_header %}
-    <div class="row">
-        <div class="span12">
-            <div class="heading">
-                <div class="row-fluid">
-                    <div class="span6 carousel-container">
-                        <div id="carousel" class="carousel">
-                          <!-- Carousel items -->
-                          <!--<div class="carousel-inner">
-                            <div class="active item">
-                                <img src="/img/carousel/1_1.jpg"/>
-                                {# http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=&tags=dpc11,phpnw11&content_type=1 #}
-                                <div class="carousel-caption">
-                                    <h4>Rowan Merewood <a>#dpc11</a></h4>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <img src="/img/carousel/2_2.jpg" />
-                                <div class="carousel-caption">
-                                    <h4>At the metro <a>#dpc11</a></h4>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <img src="/img/carousel/3_3.jpg" />
-                                <div class="carousel-caption">
-                                    <h4>Community columnists for php|architect</h4>
-                                </div>
-                            </div>
-                          </div>
-                          <!-- Carousel nav -->
-                          <!--<a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
-                          <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
-                        </div>
-                    </div>
-                    <div class="span3">
-                        <h1 class="top">Now</h1>
-                        <p class="notice">
-                            Conference organisers are currently taking a break.<br />
-                            <br />
-                            Why not <a style="color: orange">submit</a> your own event?
-                        </p>
-                    </div>
-                    <div class="span3">
-                        <h1 class="bottom">Welcome</h1>
-                        <p class="notice">
-                            <b>Welcome to Joind.in!</b><br />
-                            This is the site where event attendees can leave feedback on an event and its sessions.<br />
-                            <br />
-                            Do you have an opinion? Then <a>register an account</a> and share it!
-                       </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endblock %}
-
-</div>-->
-
 </body>
 </html>
