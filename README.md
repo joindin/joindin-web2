@@ -8,6 +8,7 @@ This version is the next generation version, providing a responsive cross-device
 
 You can install joind.in on an existing PHP platform using the following instructions
 
+
 ## Quick Start
 
 1. Create a vhost entry for the site. The docroot should be `/web`.
