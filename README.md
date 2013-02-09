@@ -6,7 +6,7 @@ way to claim and track their presentations over time.
 
 This version is the next generation version, providing a responsive cross-device site for screens of all devices
 
-You can install joind.in on an existing PHP platform
+You can install joind.in on an existing PHP platform using the following instructions
 
 ## Quick Start
 
