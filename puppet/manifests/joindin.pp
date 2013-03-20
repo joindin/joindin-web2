@@ -9,3 +9,7 @@ node default {
     include params
     include joindin
 }
+
+host { 'api.dev.joind.in':
+    ip => '192.168.57.5',
+}
