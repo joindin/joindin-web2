@@ -57,6 +57,9 @@ You can set up a development virtual machine running joind.in by following these
 
         vagrant provision
 
+- The VM has a network interface that use the host only networking. This allow the responsive VM to communicate with the VM that host the API if needed. The IP of this interface is 192.168.57.6.
+
+- There is an entry in the host file that map api.dev.joind.in to the IP 192.168.57.5. This is the IP used by the VM that host the API. If you want the responsive site to use the API in your local VM, change the file 'Model/API/JoindIn.php'. On line 6, change the baseApiUrl to 'http://api.dev.joind.in'.
 
 ## Quick Start for existing platforms
 
