@@ -22,8 +22,12 @@ Vagrant::Config.run do |config|
 
     # Use :gui for showing a display for easy debugging of vagrant
     ji_config.vm.boot_mode = :gui
-   
-# Provision the VM with Puppet
+
+    # Create a network for the vms. This will allow the responsive VM
+    # to see this one
+    ji_config.vm.network :hostonly, "192.168.57.6"
+
+    # Provision the VM with Puppet
     ji_config.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/manifests"
       puppet.module_path = "puppet/modules"
