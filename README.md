@@ -87,6 +87,14 @@ You can set up a development virtual machine running joind.in by following these
 
 1. Enjoy the site!
 
+## Configuration
+
+1. Copy the file config/config.php.dist to config/config.php
+
+        cp config/config.php.dist config/config.php
+
+1. Change the value of apiUrl to the URL of your development API if you don't want to use the production API.
+
 ## Other Resources
 
 * The main website http://joind.in

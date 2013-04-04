@@ -16,10 +16,17 @@ require '../Vendor/TwigView.php';
 // include view controller
 require('../View/Filters.php');
 
+$config = array();
+$configFile = realpath(__DIR__ . '/../config/config.php');
+if (is_readable($configFile)) {
+	require($configFile);
+}
+
 // initialize Slim
 $app = new \Slim(array(
     'mode' => 'development',
-    'view' => new \TwigView()
+    'view' => new \TwigView(),
+    'custom' => $config,
 ));
 
 // set Twig base folder, view folder and initialize Joindin filters
