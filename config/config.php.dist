@@ -1,0 +1,4 @@
+<?php
+$config = array(
+    'apiUrl' => 'http://api.joind.in',
+);
