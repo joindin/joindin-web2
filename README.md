@@ -28,7 +28,9 @@ You can install joind.in on an existing PHP platform using the following instruc
 
    echo "127.0.0.1 joindin.local" | sudo tee -a /etc/hosts
 
-3. Enjoy the site!
+3. Set up MongoDB: instructions can be found at http://docs.mongodb.org/manual/installation/
+
+4. Enjoy the site!
 
 ## Other Resources
 
@@ -36,6 +38,3 @@ You can install joind.in on an existing PHP platform using the following instruc
 * Issues list: http://joindin.jira.com/ (good bug reports ALWAYS welcome!)
 * CI Environment: lots of output and information about tests, deploys etc: http://jenkins.joind.in
 * Community: We hang out on IRC, pop in with questions or comments! #joind.in on Freenode
-
-See LICENSE file for license information for this software
-(located in /doc/LICENSE)
