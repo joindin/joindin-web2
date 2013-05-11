@@ -1,6 +1,7 @@
 <?php
 namespace Joindin\Controller;
 
+
 class Event extends Base
 {
     protected function defineRoutes(\Slim $app)
@@ -12,19 +13,18 @@ class Event extends Base
 
     public function index()
     {
-        $event = new \Joindin\Model\Collection\Event();
-        $result = $event->retrieve(10, 1, 'hot');
-
+        $event = new \Joindin\Model\API\Event();
+        $events = $event->getCollection(10, 1, 'hot');
         echo $this->application->render(
             'Event/index.html.twig',
-            array('events' => $result)
+            array('events' => $events)
         );
     }
 
     public function show($id)
     {
-        $event = new \Joindin\Model\Event();
-        $event->load($id);
+        $event = new \Joindin\Model\API\Event();
+        $event->getBySlug($id);
 
         echo $this->application->render(
             'Event/show.html.twig',

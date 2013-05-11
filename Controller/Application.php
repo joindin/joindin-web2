@@ -11,9 +11,9 @@ class Application extends Base
 
     public function index()
     {
-        $event_collection = new \Joindin\Model\Collection\Event();
-        $hot_events      = $event_collection->retrieve(5, 1, 'hot');
-        $upcoming_events = $event_collection->retrieve(5, 1, 'upcoming');
+        $event_collection = new \Joindin\Model\API\Event();
+        $hot_events      = $event_collection->getCollection(5, 1, 'hot');
+        $upcoming_events = $event_collection->getCollection(5, 1, 'upcoming');
 
         echo $this->application->render(
             'Application/index.html.twig',
