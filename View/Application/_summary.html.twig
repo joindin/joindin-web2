@@ -26,7 +26,7 @@
         <a href="{{ event.website_uri }}#comments">
             {{ event.event_comments_count }} comments
         </a>
-        | {{ event.attendee_count }} attending
+        | {{ event.attending_message|escape }}
         <!--| <a href="" class="button">I'm attending</a>-->
     </p>
 </div>
