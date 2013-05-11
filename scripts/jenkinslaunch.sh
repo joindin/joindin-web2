@@ -33,6 +33,7 @@ mkdir -p $TARGET \
 && git fetch deployremote \
 && git archive $LAUNCHREF | tar xC $TARGET \
 && (echo $TARGET ; echo $LAUNCHREF) > $TARGET/release.txt \
+&& ln -s $TARGETBASE/config.php $TARGET/config/config.php \
 && ln -s $TARGET $TARGETBASE/www.new \
 && mv -Tf $TARGETBASE/www.new $TARGETBASE/www
 "

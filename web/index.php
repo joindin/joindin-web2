@@ -14,13 +14,22 @@ require '../Vendor/Slim/Slim.php';
 require '../Vendor/TwigView.php';
 
 // include view controller
-require('../View/Filters.php');
+require '../View/Filters.php';
+
+$config = array();
+$configFile = realpath(__DIR__ . '/../config/config.php');
+if (is_readable($configFile)) {
+    include $configFile;
+}
 
 // initialize Slim
-$app = new \Slim(array(
-    'mode' => 'development',
-    'view' => new \TwigView()
-));
+$app = new \Slim(
+    array(
+        'mode' => 'development',
+        'view' => new \TwigView(),
+        'custom' => $config,
+    )
+);
 
 // set Twig base folder, view folder and initialize Joindin filters
 \TwigView::$twigDirectory = realpath(__DIR__ . '/../Vendor/Twig/lib/Twig');
