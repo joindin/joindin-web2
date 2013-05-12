@@ -23,12 +23,12 @@ class Event extends Base
 
     public function show($id)
     {
-        $event = new \Joindin\Model\API\Event();
-        $event->getBySlug($id);
+        $apiEvent = new \Joindin\Model\API\Event();
+        $event = $apiEvent->getBySlug($id);
 
         echo $this->application->render(
             'Event/show.html.twig',
-            array('event' => $event)
+            array('event' => $event->getTemplateData())
         );
     }
 }

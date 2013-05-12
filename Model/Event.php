@@ -70,6 +70,14 @@ class Event extends \Joindin\Model\API\Event
         return $this->_event->uri;
     }
 
+    /**
+     * Twig likes arrays, so give it one
+     */
+    public function getTemplateData()
+    {
+        return (array)$this->_event;
+    }
+
     public function getSlug()
     {
         // Slug is set if given in URL so already is known, so return it
