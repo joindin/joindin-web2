@@ -57,31 +57,16 @@ class Event extends \Joindin\Model\API\JoindIn
             throw new \Exception('Event not found');
         }
 
-        $event = current(
-            current(
-                (array)json_decode(
-                    $this->apiGet(
-                        $this->baseApiUrl
-                        .'/v2.1/events/'.$event['id'].'?format=json&verbose=yes'
-                    )
-                )
-            )
-        );
+        $event_list = json_decode($this->apiGet($event['uri']));
 
-        $event->comments = current(
-            (array)json_decode(
-                $this->apiGet($event->comments_uri)
-            )
-        );
+        $event = new \Joindin\Model\Event($event_list->events[0]);
+
+        $event->comments = json_decode($this->apiGet($event->getCommentsUri()));
 
         // For later use, so that we don't have to
         $event->slug = $slug;
 
         return $event;
 
-        // import properties
-        /*foreach ($event as $key => $value) {
-            $this->$key = $value;
-        }*/
     }
 }

@@ -60,6 +60,16 @@ class Event extends \Joindin\Model\API\Event
         return $this->_event->event_comments_count;
     }
 
+    public function getCommentsUri()
+    {
+        return $this->_event->comments_uri;
+    }
+
+    public function getUri()
+    {
+        return $this->_event->uri;
+    }
+
     public function getSlug()
     {
         // Slug is set if given in URL so already is known, so return it
@@ -93,7 +103,8 @@ class Event extends \Joindin\Model\API\Event
         $db = new \Joindin\Service\Db;
         $data = array(
             'name' => $this->getName(),
-            'slug' => $slug
+            'slug' => $slug,
+            'uri'  => $this->getUri()
         );
 
         return $db->save('events', $data);
