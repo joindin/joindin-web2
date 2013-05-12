@@ -1,32 +1,32 @@
 <div class="eventCard" xmlns="http://www.w3.org/1999/html">
     <div class="logo">
-        <a href="{{ event.website_uri }}">
-            <img src="{{ event.icon|img_path("event_icons") }}" alt=" " />
+        <a href="{{ event.getUrl }}">
+            <img src="{{ event.getIcon|img_path("event_icons") }}" alt=" " />
         </a>
     </div>
 
     <h3 class="header">
-        <a href="{{ event.website_uri }}">{{ event.name }}</a>
+        <a href="{{ event.getUrl }}">{{ event.getName }}</a>
     </h3>
 
     <p class="meta">
-        <strong>{{ event.start_date|format_date }}</strong> &ndash;
-        <strong>{{ event.end_date|format_date }}</strong>
+        <strong>{{ event.getStartDate|format_date }}</strong> &ndash;
+        <strong>{{ event.getEndDate|format_date }}</strong>
     </p>
 
-    <p>{{ event.description | slice(0, 200)}}&hellip;</p>
+    <p>{{ event.getDescription | slice(0, 200)}}&hellip;</p>
 
     <p>tagged
-        {% for tag in event.tags %}
+        {% for tag in event.getTags %}
             <a href="/event/tag/{{ tag }}">{{ tag }}</a>
         {% endfor %}
 
     </p>
     <p class="meta">
-        <a href="{{ event.website_uri }}#comments">
-            {{ event.event_comments_count }} comments
+        <a href="{{ event.getUrl }}#comments">
+            {{ event.getCommentsCount}} comments
         </a>
-        | {{ event.attendee_count }} attending
+        | {{ event.getAttendeeCount }} attending
         <!--| <a href="" class="button">I'm attending</a>-->
     </p>
 </div>
