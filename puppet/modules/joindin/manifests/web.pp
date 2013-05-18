@@ -1,6 +1,7 @@
 class joindin::web {
     include apache
     include php
+    include mongodb
 
     # Configure apache virtual host
     apache::vhost { $params::host :
@@ -11,7 +12,7 @@ class joindin::web {
     }
     
     # Install PHP modules
-    php::module { "pecl-xdebug" :
+    php::module { ["pecl-xdebug", "pecl-mongo"] :
         require => File["EpelRepo"],            # xdebug is in the epel repo
     }
 
