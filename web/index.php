@@ -32,7 +32,7 @@ $app = new \Slim(
 );
 
 // set Twig base folder, view folder and initialize Joindin filters
-\TwigView::$twigDirectory = realpath(__DIR__ . '/../Vendor/Twig/lib/Twig');
+\TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../views');
 \Joindin\View\Filter\initialize($app->view()->getEnvironment());
 
