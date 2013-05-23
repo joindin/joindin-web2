@@ -1,7 +1,7 @@
 <?php
 namespace Joindin;
 
-require_once '../src/Joindin/Service/Autoload.php';
+require_once '../app/Joindin/Service/Autoload.php';
 
 spl_autoload_register('Joindin\Service\Autoload::autoload');
 
@@ -14,7 +14,7 @@ require '../vendor/Slim/Slim.php';
 require '../vendor/TwigView.php';
 
 // include view controller
-require '../src/Joindin/View/Filters.php';
+require '../app/Joindin/View/Filters.php';
 
 $config = array();
 $configFile = realpath(__DIR__ . '/../config/config.php');
@@ -33,7 +33,7 @@ $app = new \Slim(
 
 // set Twig base folder, view folder and initialize Joindin filters
 \TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
-$app->view()->setTemplatesDirectory('../views');
+$app->view()->setTemplatesDirectory('../app/templates');
 \Joindin\View\Filter\initialize($app->view()->getEnvironment());
 
 // register routes
