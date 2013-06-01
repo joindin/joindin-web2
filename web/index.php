@@ -7,7 +7,6 @@ spl_autoload_register('Joindin\Service\Autoload::autoload');
 
 session_cache_limiter(false);
 session_start();
-ini_set('display_errors', 'on');
 
 // include dependencies
 require '../vendor/Slim/Slim.php';
@@ -20,16 +19,26 @@ $config = array();
 $configFile = realpath(__DIR__ . '/../config/config.php');
 if (is_readable($configFile)) {
     include $configFile;
+} else {
+    include realpath(__DIR__ . '/../config/config.php.dist');
 }
 
 // initialize Slim
 $app = new \Slim(
-    array(
-        'mode' => 'development',
-        'view' => new \TwigView(),
-        'custom' => $config,
+    array_merge(
+        $config['slim'],
+        array(
+            'view' => new \TwigView(),
+        )
     )
 );
+
+$app->configureMode('development', function() {
+    error_reporting(-1);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+});
+
 
 // set Twig base folder, view folder and initialize Joindin filters
 \TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');

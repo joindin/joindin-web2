@@ -1,4 +1,9 @@
 <?php
 $config = array(
-    'apiUrl' => 'http://api.joind.in',
+    'slim' => array(
+        'mode' => 'development',
+        'custom' => array(
+            'apiUrl' => 'http://api.joind.in',
+        ),
+    ),
 );
