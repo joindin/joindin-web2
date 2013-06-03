@@ -87,6 +87,10 @@ You can set up a development virtual machine running joind.in by following these
 
 1. Enjoy the site!
 
+1. Set up MongoDB: instructions can be found at http://docs.mongodb.org/manual/installation/
+
+1. Enjoy the site!
+
 ## Configuration
 
 1. Copy the file config/config.php.dist to config/config.php
@@ -101,6 +105,3 @@ You can set up a development virtual machine running joind.in by following these
 * Issues list: http://joindin.jira.com/ (good bug reports ALWAYS welcome!)
 * CI Environment: lots of output and information about tests, deploys etc: http://jenkins.joind.in
 * Community: We hang out on IRC, pop in with questions or comments! #joind.in on Freenode
-
-See LICENSE file for license information for this software
-(located in /doc/LICENSE)

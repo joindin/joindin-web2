@@ -11,9 +11,9 @@ class Application extends Base
 
     public function index()
     {
-        $event_collection = new \Joindin\Model\Collection\Event();
-        $hot_events      = $event_collection->retrieve(5, 1, 'hot');
-        $upcoming_events = $event_collection->retrieve(5, 1, 'upcoming');
+        $event_collection = new \Joindin\Model\API\Event();
+        $hot_events      = $event_collection->getCollection(5, 1, 'hot');
+        $upcoming_events = $event_collection->getCollection(5, 1, 'upcoming');
 
         array_walk($hot_events, array($this, 'add_attending_message'));
         array_walk($upcoming_events, array($this, 'add_attending_message'));
