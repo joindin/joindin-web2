@@ -10,7 +10,7 @@ You can either install joind.in on an existing PHP platform, or use our vagrant 
 
 ## Quick start with Vagrant
 
-The virtual machine has been moved to a different repo. To use it [fork the joindin-vm](https://github.com/joindin/joindin-vm) reposiroty and follow the instructions in there. 
+The virtual machine has been moved to a different repo. To use it [fork the joindin-vm](https://github.com/joindin/joindin-vm) repository and follow the instructions in there. 
 
 This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-web2). 
 
