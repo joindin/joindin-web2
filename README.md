@@ -10,56 +10,10 @@ You can either install joind.in on an existing PHP platform, or use our vagrant 
 
 ## Quick start with Vagrant
 
-You can set up a development virtual machine running joind.in by following these simple instructions.
+The virtual machine has been moved to a different repo. To use it [fork the joindin-vm](https://github.com/joindin/joindin-vm) reposiroty and follow the instructions in there. 
 
-1. Install requirements. (Note: these are not required by joind.in itself, but are required for this quick start guide.)
-    - VirtualBox (https://www.virtualbox.org/) (versions 4.0 and 4.1 are currently supported)
-    - Ruby (http://www.ruby-lang.org/)
-    - Vagrant (http://vagrantup.com/)
+This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-web2). 
 
-1. Clone repository to any location and fetch required submodules (containing Puppet manifests).
-
-        git clone https://github.com/joindin/responsive --recursive
-        cd responsive
-        
-    -- or -- 
-
-        git clone https://github.com/joindin/responsive && cd responsive
-        git submodule init
-        git submodule update
-        
-1. Add hostname to /etc/hosts.
-
-        echo "127.0.0.1 joindin.local" | sudo tee -a /etc/hosts
-
-1. Start the process by running Vagrant.
-
-        vagrant up
-
-1. Browse to the newly provisioned development copy of joind.in.
-
-        open http://joindin.local:8008
-
-*Notes:*
-
-- HTTP and SSH ports on the VM are forwarded to localhost (22 -> 2222, 80 -> 8008)
-
-- The responsive directory you cloned will be mounted inside the VM at `/vagrant`
-- You can develop by editing the files you cloned in the IDE of you choice.in
-
-- To stop the VM do one of the following:
- 
-     `vagrant suspend` if you plan on running it later
-     
-     `vagrant destroy` if you wish to delete the VM completely
-
-- Also, when any of of the Puppet manifests change, it is a good idea to rerun them:
-
-        vagrant provision
-
-- The VM has a network interface that use the host only networking. This allow the responsive VM to communicate with the VM that host the API if needed. The IP of this interface is 192.168.57.6.
-
-- There is an entry in the host file that map api.dev.joind.in to the IP 192.168.57.5. This is the IP used by the VM that host the API. If you want the responsive site to use the API in your local VM, change the file 'Model/API/JoindIn.php'. On line 6, change the baseApiUrl to 'http://api.dev.joind.in'.
 
 ## Quick Start for existing platforms
 
