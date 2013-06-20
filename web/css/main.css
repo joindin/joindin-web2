@@ -1,7 +1,7 @@
 /*
  * Joind.in
  * Colours:
- *   Blue: #2368af
+ *   Blue: #317a95
  *   Orange: #f90
  *   Darker orange, for highlights: #f80
  *   White: #fff
@@ -11,10 +11,11 @@
  * Table of Contents:
  *   - Reset
  *   - Layout/Structure
+ *   - Objects
  */
 
 /* Reset
- * From Eric Meyer's Reset v2: http://meyerweb.com/eric/tools/css/reset/
+ * Based on Eric Meyer's Reset v2: http://meyerweb.com/eric/tools/css/reset/
  */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -33,15 +34,12 @@ time, mark, audio, video {
     padding: 0;
     border: 0;
     font-size: 100%;
-    vertical-align: baseline;
+    vertical-align: top;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
-}
-body {
-    line-height: 1;
 }
 table {
     border-collapse: collapse;
@@ -55,10 +53,11 @@ body {
     color: #333;
     font-family: Helvetica;
     font-size: 14px;
+    line-height: 1.4;
 }
 
 a {
-    color: #2368af;
+    color: #317a95;
     text-decoration: underline;
 }
 
@@ -66,59 +65,48 @@ p {
     padding-bottom: 2ex;
 }
 
+
 /*------------------------------------*\
  * Layout/Structure
 \*------------------------------------*/
 
 #head {
-    background: rgb(187,218,249); /* Old browsers */
-    background: -moz-linear-gradient(top, rgba(187,218,249,1) 0%, rgba(204,229,255,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(187,218,249,1)), color-stop(100%,rgba(204,229,255,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgba(187,218,249,1) 0%,rgba(204,229,255,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, rgba(187,218,249,1) 0%,rgba(204,229,255,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, rgba(187,218,249,1) 0%,rgba(204,229,255,1) 100%); /* IE10+ */
-    background: linear-gradient(to bottom, rgba(187,218,249,1) 0%,rgba(204,229,255,1) 100%); /* W3C */
-    border-bottom: 1px solid #2368af;
-    padding: 8px 8px 0 8px;
-    margin-bottom: 12px;
+    border-bottom: 1px solid #317a95;
+    margin: 0 0 12px;
+    padding: 8px;
 }
 
 #login {
     display: none; /* For now @TODO Finish */
 }
 
-#menu li {
-    background-color: #fff;
-    display: inline-block;
-    margin: 0 8px 8px 0;
-
-    /* So that the tabs reach to the bottom of the header bg */
-    position: relative;
-    top: 1px;
-}
-
-#menu a {
-    border: 1px solid #2368af;
-    color: #000;
+nav li a {
     display: block;
-    padding: 7px;
+    border-top: 1px solid #d7dcdf;
+    padding: 4px;
     text-decoration: none;
+    vertical-align: middle;
+}
+nav li:first-child a {
+    border: 0
 }
 
-#menu a:hover {
-    color: #2368af;
-}
-
-/* Make the buttons less tab-like if they start to wrap */
-@media only screen and (min-width: 406px) {
-    #menu li {
-        margin-bottom: 0;
+@media only screen and (min-width: 275px) {
+    nav li {
+        display: table-cell;
+        vertical-align: middle;
     }
-
-    #menu a {
-        border-bottom: 0;
+    nav li a {
+        border: 0;
+        display: inline;
+        padding: 0 16px 0 0;
     }
 }
+
+nav a:hover {
+    text-decoration: underline;
+}
+
 
 #wrapper {
     display: table;
@@ -183,38 +171,39 @@ p {
 /** Event card **/
 
 .eventCard {
-    border-bottom: 1px solid #d7dcdf;
     clear: both;
     margin-bottom: 16px;
     min-height: 100px;
     padding-bottom: 16px;
 }
 
+
+
 .eventCard .logo {
-    border: 5px solid #d7dcdf;
-    float: left;
     height: 90px;
-    margin-right: 8px;
     width: 90px;
 
     /* Don't show if the viewport is too narrow, it looks silly otherwise */
     display: none;
 }
 
-@media only screen and (min-width: 260px) {
+@media only screen and (min-width: 299px) {
+    /*
+        299
+      = 275 (width of when nav looks good on one line)
+      - 16  (whitespace in eventcard content:
+             3 x 8px padding: one each side, one between columns)
+    */
     .eventCard .logo {
         display: inline;
+    }
+
+    .eventCard section {
+        display: table-cell;
+        padding: 8px;
     }
 }
 
 .eventCard .header {
     font-size: 16px;
-}
-
-/** Box **/
-.box {
-    border: 1px solid #d7dcdf;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    padding: 8px;
 }
