@@ -15,18 +15,29 @@
 
 <body>
     <div id="head">
-        <h1><a href="/">
-            <img src="/img/logo.png" alt="Joind.in" class="respImage"/>
-        </a></h1>
+        <nav>
+            <ul>
+                <li>
+                    <h1>
+                        <a href="/">
+                            <img src="/img/logo.png"
+                                 alt="Joind.in"
+                                 class="respImage"
+                                 width="120"
+                                 height="30"/>
+                        </a>
+                    </h1>
+                </li>
 
-        <ul id="menu">
-            <li class="submit"><a href="#submit">Submit</a></li>
-            <li class="active"><a href="#events">Events</a></li>
-            <li><a href="#talks">Talks</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#help">Help</a></li>
-        </ul>
+                <li>
+                    <a href="/event">Events</a>
+                </li>
 
+                <li>
+                    <a href="/talk">Talks</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <div id="wrapper">
@@ -35,13 +46,13 @@
             {% block body %}{% endblock %}
         </div>
         <div id="aside">
-            <div class="box wideOnly">
+            <section class="wideOnly">
                 <img src="/img/logo-combell.png" alt=" " />
                 <p>
                     <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
                     <a href="http://www.combell.com/en">hosting</a> by Combell
                 </p>
-            </div>
+            </section>
         </div>
     </div>
 </body>
