@@ -2,7 +2,15 @@ $(document).ready(function() {
     joindin.getTaggedPhotos();
 });
 
+//joindin object created to hold function to avoid
+//unnecessary vars in global scope
 var joindin = {
+    /**
+     * Calls event controller to retrieve machine-tagged photo
+     * data in JSON format.  If photos are present, HTML elements
+     * are constructed and injected into the DOM
+     *
+     */
     getTaggedPhotos:function () {
         var src = './photos/' + event.slug;
         $.getJSON(src,

@@ -8,7 +8,7 @@ class Event extends Base
     {
         $app->get('/event', array($this, 'index'));
         $app->get('/event/view/:id', array($this, 'show'));
-        $app->get('/event/view/photos/:slug', array($this, 'callFlikrApi'));
+        $app->get('/event/view/photos/:slug', array($this, 'callFlickrApi'));
     }
 
     public function index()
@@ -35,7 +35,13 @@ class Event extends Base
         );
     }
 
-    public function callFlikrApi($slug)
+    /**
+     * Uses PhotoService to retrieve machine-tagged
+     * photos from Flickr
+     *
+     * @param $slug
+     */
+    public function callFlickrApi($slug)
     {
         $photoService = new \Joindin\Service\PhotoService();
         $photos = $photoService->getTaggedPhotos('event', $slug);
