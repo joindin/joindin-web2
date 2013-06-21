@@ -34,7 +34,7 @@ class PhotoService
         $tag = $this->buildTag($type, $unique_identifier);
 
         $defaults = array(
-            CURLOPT_URL => $config['flikrApiUrl'].$tag,
+            CURLOPT_URL => $config['flickrApiUrl'].$tag,
             CURLOPT_RETURNTRANSFER => TRUE,
             CURLOPT_TIMEOUT => 15
         );
