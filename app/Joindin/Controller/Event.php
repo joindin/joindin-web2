@@ -8,7 +8,7 @@ class Event extends Base
     {
         $app->get('/event', array($this, 'index'));
         $app->get('/event/view/:id', array($this, 'show'));
-
+        $app->get('/event/view/photos/:slug', array($this, 'callFlikrApi'));
     }
 
     public function index()
@@ -28,7 +28,21 @@ class Event extends Base
 
         echo $this->application->render(
             'Event/show.html.twig',
-            array('event' => $event->getTemplateData())
+            array(
+                'event' => $event->getTemplateData(),
+                'slug' => $id,
+            )
         );
+    }
+
+    public function callFlikrApi($slug)
+    {
+        $photoService = new \Joindin\Service\PhotoService();
+        $photos = $photoService->getTaggedPhotos('event', $slug);
+
+        $app = \Slim::getInstance();
+        $app->contentType('application/json');
+        echo $photos;
+        exit();
     }
 }
