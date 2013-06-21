@@ -4,7 +4,7 @@ $config = array(
         'mode' => 'development',
         'custom' => array(
             'apiUrl' => 'http://api.joind.in',
-            'flikrApiUrl' => 'http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=1763ca9424eaa901ed6e06a394a51592&format=json&nojsoncallback=1&machine_tags='
+            'flickrApiUrl' => 'http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=1763ca9424eaa901ed6e06a394a51592&format=json&nojsoncallback=1&machine_tags='
         ),
     ),
 );
