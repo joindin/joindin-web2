@@ -1,6 +1,14 @@
 {% extends '/layout.html.twig' %}
 
 {% block extra_headers %}
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        var event =  {
+              "slug" : "{{ slug }}"
+            }
+    </script>
+    <script type="text/javascript" src="/js/event.js"></script>
+
     <script type="text/javascript" src="/js/ulayers.js"></script>
     <script type="text/javascript">
         // <![CDATA[
@@ -25,7 +33,6 @@
                 <strong>{{event.cfp_start_date|format_date}}</strong> until
                 <strong>{{event.cfp_end_date|format_date}}</strong>. {{event.cfp_url|link("See the event's website for more information")}}
             </div>
-
 
             <div class="row-fluid">
                 <div class="span2 logo auto-height">
@@ -141,7 +148,13 @@
             </script>
         </p>
     </div>
-
+</div>
+<div class="row">
+    <div class="span12">
+        <h2>Photographs</h2>
+        <p>Tag your Flickr photos of this event with: <em>joindin:event={{ slug }}</em></p>
+        <div id="thumbnails"></div>
+    </div>
 </div>
 {% endblock %}
 

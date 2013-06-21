@@ -218,3 +218,9 @@ p {
     border-radius: 5px;
     padding: 8px;
 }
+
+#thumbnails ul li {
+    display: inline;
+    list-style: none;
+    padding-right: 5px;
+}
