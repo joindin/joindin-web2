@@ -1,32 +1,37 @@
 <div class="eventCard" xmlns="http://www.w3.org/1999/html">
-    <div class="logo">
-        <a href="{{ event.getUrl }}">
-            <img src="{{ event.getIcon|img_path("event_icons") }}" alt=" " />
-        </a>
-    </div>
+    <section>
+        <div class="logo">
+            <a href="{{ event.getUrl }}">
+                <img src="{{ event.getIcon|img_path("event_icons") }}" alt=" " />
+            </a>
+        </div>
+    </section>
 
-    <h3 class="header">
-        <a href="{{ event.getUrl }}">{{ event.getName }}</a>
-    </h3>
+    <section>
+        <h3 class="header">
+            <a href="{{ event.getUrl }}">{{ event.getName }}</a>
+        </h3>
 
-    <p class="meta">
-        <strong>{{ event.getStartDate|format_date }}</strong> &ndash;
-        <strong>{{ event.getEndDate|format_date }}</strong>
-    </p>
+        <p class="meta">
+            <strong>{{ event.getStartDate|format_date }}</strong> &ndash;
+            <strong>{{ event.getEndDate|format_date }}</strong>
+        </p>
 
-    <p>{{ event.getDescription | slice(0, 200)}}&hellip;</p>
+        <p>{{ event.getDescription | slice(0, 200)}}&hellip;</p>
 
-    <p>tagged
-        {% for tag in event.getTags %}
-            <a href="/event/tag/{{ tag }}">{{ tag }}</a>
-        {% endfor %}
+        <p>tagged
+            {% for tag in event.getTags %}
+                <a href="/event/tag/{{ tag }}">{{ tag }}</a>
+            {% endfor %}
 
-    </p>
-    <p class="meta">
-        <a href="{{ event.getUrl }}#comments">
-            {{ event.getCommentsCount}} comments
-        </a>
-        | {{ event.getAttendeeString|escape }}
-        <!--| <a href="" class="button">I'm attending</a>-->
-    </p>
+        </p>
+        <p class="meta">
+            <a href="{{ event.getUrl }}#comments">
+                {{ event.getCommentsCount}} comments
+            </a>
+            | {{ event.getAttendeeString|escape }}
+            <!--| <a href="" class="button">I'm attending</a>-->
+        </p>
+    </section>
+
 </div>
