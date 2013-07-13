@@ -2,13 +2,14 @@
 
 {% block extra_headers %}
     <script type="text/javascript" src="/js/ulayers.js"></script>
+    <script src="/js/jquery.min.js"></script>
     <script type="text/javascript">
         // <![CDATA[
         var map;
 
         $(document).ready(function(){
             map = new uLayers.Map('map', uLayers.OSM);
-            map.setOrigin({lat: {{ event.latitude }}, lon: {{ event.longitude }} }, 17);
+            map.setOrigin({lat: {{ event.latitude }}, lon: {{ event.longitude }} }, 14);
             map.addMarker({lat: {{ event.latitude }}, lon: {{ event.longitude }} });
         });
         // ]]>
@@ -17,49 +18,25 @@
 
 {% block page_header %}
 <div class="row">
-    <div class="span12">
+    <div>
         <div class="heading">
-            <div class="alert alert-info">
-                <button class="close" data-dismiss="alert" href="#">&times;</button>
-                <strong>Tip!</strong> The Call for Papers for this event is open from
-                <strong>{{event.cfp_start_date|format_date}}</strong> until
-                <strong>{{event.cfp_end_date|format_date}}</strong>. {{event.cfp_url|link("See the event's website for more information")}}
-            </div>
-
 
             <div class="row-fluid">
-                <div class="span2 logo auto-height">
+                <div class="logo auto-height">
                     <img src="{{ event.icon|img_path("event_icons") }}" alt="{{ event.name }}" />
                 </div>
 
-                <div class="span7 auto-height">
+                <div class="auto-height">
                     <h1 class="event-name">{{ event.name }}</h1>
                     <p>
-                        <span class="label label-warning">#mdevcon</span>
-                        <span class="label">tag1</span>
-                        <span class="label">tag2</span>
-                        <span class="label">tag3</span>
+                        {% for tag in event.tags %}
+                            <span class="label"><i>{{ tag }}</i></span>
+                        {% endfor %}
                     </p>
                     <p><i class="icon icon-globe"></i> {{ event.href|link }}</p>
                     <p>{{ event.description|format_string|raw }}</p>
                 </div>
-                <div class="span3 auto-height">
-                    <ul class="nav nav-tabs nav-stacked side-menu">
-                        <li class="active"><a href=""><i class="icon-info-sign"></i> Event information</a></li>
-                        <li><a href=""><i class="icon-calendar"></i> Schedule</a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="icon-plus-sign"></i> More
-                                <b class="caret"></b>
-                            </a>
 
-                            <ul class="dropdown-menu">
-                                <li><a href=""><i class="icon-user"></i> Attendees</a></li>
-                                <li><a href=""><i class="icon-picture"></i> Pictures</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -68,43 +45,19 @@
 
 {% block body %}
 <div class="row">
-    <div class="span5">
+    <div>
         <h2><i class="icon-calendar"></i> When and where</h2>
 
         <p>
             From <b>{{ event.start_date|format_date}}</b> until
             <b>{{ event.end_date|format_date}}</b> at <b>{{ event.location }}</b>
         </p>
+
         <div class="thumbnail">
             <div id="map" style="border: 1px solid black; width: 100%; height: 300px;"></div>
             <p>&copy; <a href="http://www.openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a></p>
         </div>
 
-    </div>
-    <div class="span4">
-        <h2><i class="icon-comment"></i> Comments</h2>
-
-        {% if (event.comments) %}
-        <table class="table table-striped">
-        {% for comment in event.comments %}
-        <tr><td>
-            <p class="comment">
-                &ldquo;{{ comment.comment|format_string|raw}}&rdquo;
-                <span class="attribution">
-                    -- {{comment.user_display_name}}
-                    {% if comment.user_display_name == '' %}
-                        ANONYMOUS
-                    {% endif %}
-                </span>
-            </p>
-        </td></tr>
-        {% endfor %}
-        </table>
-        {% else %}
-        <p class="notice">
-            There are no comments yet; be the first one to comment on this event.
-        </p>
-        {% endif %}
     </div>
 </div>
 {% endblock %}
