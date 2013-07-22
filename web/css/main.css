@@ -62,7 +62,7 @@ a {
 }
 
 p {
-    padding-bottom: 2ex;
+    padding-bottom: 0.5ex;
 }
 
 
@@ -134,6 +134,12 @@ nav a:hover {
     .wideOnly {
         display: block;
     }
+
+    .eventCard .logo img {
+        height: 90px !important;
+        width: 90px !important;
+    }
+
 }
 
 /*------------------------------------*\
@@ -172,17 +178,11 @@ nav a:hover {
 
 .eventCard {
     clear: both;
-    margin-bottom: 16px;
-    min-height: 100px;
-    padding-bottom: 16px;
 }
 
 
 
 .eventCard .logo {
-    height: 90px;
-    width: 90px;
-
     /* Don't show if the viewport is too narrow, it looks silly otherwise */
     display: none;
 }
@@ -196,6 +196,11 @@ nav a:hover {
     */
     .eventCard .logo {
         display: inline;
+    }
+
+    .eventCard .logo img {
+        height: 45px;
+        width: 45px;
     }
 
     .eventCard section {

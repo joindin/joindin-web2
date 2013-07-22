@@ -70,6 +70,11 @@ class Event extends \Joindin\Model\API\Event
         return $this->_event->uri;
     }
 
+    public function getVerboseUri()
+    {
+        return $this->_event->verbose_uri;
+    }
+
     /**
      * Twig likes arrays, so give it one
      */
@@ -131,7 +136,8 @@ class Event extends \Joindin\Model\API\Event
         $data = array(
             'name' => $this->getName(),
             'slug' => $slug,
-            'uri'  => $this->getUri()
+            'uri'  => $this->getUri(),
+            'verboseuri'  => $this->getVerboseUri()
         );
 
         return $db->save('events', $data);

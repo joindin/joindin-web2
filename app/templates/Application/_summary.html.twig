@@ -17,14 +17,8 @@
             <strong>{{ event.getEndDate|format_date }}</strong>
         </p>
 
-        <p>{{ event.getDescription | slice(0, 200)}}&hellip;</p>
+        <p class="wideOnly">{{ event.getDescription | slice(0, 200)}}&hellip;</p>
 
-        <p>tagged
-            {% for tag in event.getTags %}
-                <a href="/event/tag/{{ tag }}">{{ tag }}</a>
-            {% endfor %}
-
-        </p>
         <p class="meta">
             <a href="{{ event.getUrl }}#comments">
                 {{ event.getCommentsCount}} comments
