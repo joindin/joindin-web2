@@ -15,13 +15,21 @@ class Application extends Base
         $hot_events      = $event_collection->getCollection(12, 1, 'hot');
         $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
 
-        echo $this->application->render(
-            'Application/index.html.twig',
-            array(
-                'hot_events'      => $hot_events,
-                'upcoming_events' => $upcoming_events
-            )
-        );
+        try {
+            echo $this->application->render(
+                'Application/index.html.twig',
+                array(
+                    'hot_events'      => $hot_events,
+                    'upcoming_events' => $upcoming_events
+                )
+            );
+        } catch (\Twig_Error_Runtime $e) {
+            $this->application->render('Error/app_load_error.html.twig',
+                array(
+                    'env' => $this->application->getMode(),
+                    'message' => sprintf('An exception has been thrown during the rendering of a template ("%s").', $e->getMessage()), -1, null, $e)
+            );
+        }
     }
 
     public function oauth_callback()
@@ -30,3 +38,6 @@ class Application extends Base
         $this->application->redirect('/');
     }
 }
+
+
+
