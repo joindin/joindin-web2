@@ -57,7 +57,7 @@ class Event extends \Joindin\Model\API\JoindIn
             throw new \Exception('Event not found');
         }
 
-        $event_list = json_decode($this->apiGet($event['uri']));
+        $event_list = json_decode($this->apiGet($event['verboseuri']));
 
         $event = new \Joindin\Model\Event($event_list->events[0]);
 

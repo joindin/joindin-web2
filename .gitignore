@@ -10,3 +10,4 @@
 .idea/libraries/sass_stdlib.xml
 .idea/scopes/scope_settings.xml
 .vagrant
+*.swp
