@@ -219,3 +219,13 @@ nav a:hover {
 .eventCard .header {
     font-size: 16px;
 }
+
+/** Will need checking added by @GeeH **/
+#paginator li {
+    text-align: center;
+    list-style: none;
+    float: left;
+    width: 75px;
+    padding: 5px;
+    display: block;
+}
