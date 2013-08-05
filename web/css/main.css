@@ -221,6 +221,11 @@ nav a:hover {
 }
 
 /** Will need checking added by @GeeH **/
+#paginator {
+    margin: 0 auto;
+    width: 255px;
+}
+
 #paginator li {
     text-align: center;
     list-style: none;
@@ -229,3 +234,4 @@ nav a:hover {
     padding: 5px;
     display: block;
 }
+
