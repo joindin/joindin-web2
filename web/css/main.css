@@ -219,3 +219,18 @@ nav a:hover {
 .eventCard .header {
     font-size: 16px;
 }
+
+#paginator {
+    margin: 0 auto;
+    width: 255px;
+}
+
+#paginator li {
+    text-align: center;
+    list-style: none;
+    float: left;
+    width: 75px;
+    padding: 5px;
+    display: block;
+}
+

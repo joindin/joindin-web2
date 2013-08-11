@@ -4,6 +4,7 @@ namespace Joindin\Controller;
 
 class Event extends Base
 {
+
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/event', array($this, 'index'));
@@ -28,7 +29,11 @@ class Event extends Base
 
         echo $this->application->render(
             'Event/show.html.twig',
-            array('event' => $event->getTemplateData())
+            array(
+                'event' => $event->getTemplateData(),
+            )
         );
     }
+
+
 }

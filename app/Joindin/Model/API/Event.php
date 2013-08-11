@@ -7,46 +7,51 @@ class Event extends \Joindin\Model\API\JoindIn
      * Get the latest events
      *
      * @param $limit Number of events to get per page
-     * @param $page Which page to get
+     * @param $start Start value for pagination
      * @param $filter Filter to apply
+     * @param $metaOnly Only return meta data?
      *
      * @usage
      * $eventapi = new \Joindin\Model\API\Event();
      * $eventapi->getCollection()
      *
-     * @returns \Joindin\Model\Event model
+     * @return \Joindin\Model\Event model
      */
-    public function getCollection($limit = 10, $page = 1, $filter = null)
+    public function getCollection($limit = 10, $start = 1, $filter = null)
     {
-        $url = $this->baseApiUrl.'/v2.1/events'
-            .'?resultsperpage='.$limit
-            .'&page='.$page;
+        $url = $this->baseApiUrl . '/v2.1/events'
+            . '?resultsperpage=' . $limit
+            . '&start=' . $start;
+
         if ($filter) {
-            $url .= '&filter='.$filter;
+            $url .= '&filter=' . $filter;
         }
 
         $events = (array)json_decode(
             $this->apiGet($url)
         );
+
         $meta = array_pop($events);
 
         $collectionData = array();
         foreach ($events['events'] as $event) {
-            $collectionData[] = new \Joindin\Model\Event($event);
+            $collectionData['events'][] = new \Joindin\Model\Event($event);
         }
+        $collectionData['pagination'] = $meta;
 
         return $collectionData;
     }
 
 
-   /*
-    * Get a single event, by slug
-    *
-    * @param $slug String of event to get
-    * @usage
-    * $eventapi = new \Joindin\Model\API\Event();
-    * $eventapi->getBySlug('openwest-conference-2013')
-    */
+    /*
+     * Get a single event, by slug
+     *
+     * @param $slug String of event to get
+     * @usage
+     * $eventapi = new \Joindin\Model\API\Event();
+     * $eventapi->getBySlug('openwest-conference-2013')
+     */
+
     public function getBySlug($slug)
     {
         $db = new \Joindin\Service\Db;
@@ -69,4 +74,6 @@ class Event extends \Joindin\Model\API\JoindIn
         return $event;
 
     }
+
+
 }
