@@ -70,11 +70,11 @@
 {% block extra_javascript %}{% endblock %}
 
 {# Begin Google Analytics code #}
-{% if 'development' != joindin_env %}
+{% if 'live' == slim_mode %}
     <script type="text/javascript">
 
         var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-246789-3']);
+        _gaq.push(['_setAccount', '{{ google_analytics_id }}']);
         _gaq.push(['_setDomainName', 'joind.in']);
         _gaq.push(['_trackPageview']);
 
