@@ -39,6 +39,12 @@ $app->configureMode('development', function() {
     ini_set('display_startup_errors', 1);
 });
 
+// Pass the current mode to the template, so we can choose to show
+// certain things only if the app is in live/development mode
+$app->view()->appendData(
+    array('joindin_env' => $config['slim']['mode'])
+);
+
 
 // set Twig base folder, view folder and initialize Joindin filters
 \TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');

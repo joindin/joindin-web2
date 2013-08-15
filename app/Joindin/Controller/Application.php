@@ -28,7 +28,6 @@ class Application extends Base
             $this->application->render(
                 'Error/app_load_error.html.twig',
                 array(
-                    'env' => $this->application->getMode(),
                     'message' => sprintf(
                         'An exception has been thrown during the rendering of a template ("%s").',
                         $e->getMessage()
