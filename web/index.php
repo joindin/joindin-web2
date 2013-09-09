@@ -39,6 +39,18 @@ $app->configureMode('development', function() {
     ini_set('display_startup_errors', 1);
 });
 
+// Pass the current mode to the template, so we can choose to show
+// certain things only if the app is in live/development mode
+$app->view()->appendData(
+    array('slim_mode' => $config['slim']['mode'])
+);
+
+// Other variables needed by the main layout.html.twig template
+$app->view()->appendData(
+    array(
+        'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId']
+    )
+);
 
 // set Twig base folder, view folder and initialize Joindin filters
 \TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
