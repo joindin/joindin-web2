@@ -2,29 +2,11 @@
 
 {% block body %}
     <h2 class="title">Hot Events</h2>
-    <div class="row highlights">
-        <div class="span8">
-            <div>
-                {% for event in hot_events.events %}
-                    {% include 'Application/_summary.html.twig' %}
-                {% endfor %}
-            </div>
-        </div>
+    <div>
+        {% for event in events.events %}
+            {% include '_common/eventsummary.html.twig' %}
+        {% endfor %}
     </div>
 
-    <div id="paginator">
-            <ul>
-                <li>
-                {% if hot_events.pagination.prev_page is defined %}
-                    <a href="?page={{ page - 1 }}"><< Previous</a>
-                {% endif %}
-                </li>
-                <li>Page {{ page }}</li>
-                <li>
-                {% if hot_events.pagination.next_page is defined %}
-                    <a href="?page={{ page + 1 }}">Next >></a>
-                {% endif %}
-                </li>
-            </ul>
-    </div>
+    {% include '_common/pagination.html.twig' %}
 {% endblock %}
