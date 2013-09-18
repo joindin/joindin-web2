@@ -1,0 +1,15 @@
+<div id="paginator">
+    <ul>
+        <li>
+            {% if events.pagination.prev_page is defined %}
+                <a href="?page={{ page - 1 }}">&lt;&lt; Previous</a>
+            {% endif %}
+        </li>
+        <li>Page {{ page }}</li>
+        <li>
+            {% if events.pagination.next_page is defined %}
+                <a href="?page={{ page + 1 }}">Next &gt;&gt;</a>
+            {% endif %}
+        </li>
+    </ul>
+</div>

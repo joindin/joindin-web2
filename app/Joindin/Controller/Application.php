@@ -19,7 +19,7 @@ class Application extends Base
             echo $this->application->render(
                 'Application/index.html.twig',
                 array(
-                    'hot_events' => $hot_events,
+                    'events' => $hot_events,
 //                    'upcoming_events' => $upcoming_events,
                     'page' => $page,
                 )
