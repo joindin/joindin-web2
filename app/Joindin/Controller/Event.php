@@ -9,6 +9,7 @@ class Event extends Base
     {
         $app->get('/event', array($this, 'index'));
         $app->get('/event/view/:id', array($this, 'show'));
+        $app->get('/event/view/schedule/:id', array($this, 'schedule'));
 
     }
 
@@ -61,5 +62,16 @@ class Event extends Base
         );
     }
 
+    public function schedule($id)
+    {
+        $apiEvent = new \Joindin\Model\API\Event();
+        $event = $apiEvent->getBySlug($id);
 
+        $apiTalk = new \Joindin\Model\API\Talk();
+        $scheduler = new \Joindin\Service\Scheduler($apiTalk);
+
+        $schedule = $scheduler->getScheduleData($event);
+
+        var_dump($schedule);
+    }
 }
