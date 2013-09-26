@@ -65,6 +65,11 @@ class Event extends \Joindin\Model\API\Event
         return $this->_event->comments_uri;
     }
 
+    public function getTalksUri()
+    {
+        return $this->_event->talks_uri;
+    }
+
     public function getUri()
     {
         return $this->_event->uri;
