@@ -13,7 +13,7 @@ export TARGET
 
 if [ -z $GITHUB_REPO ]
 then
-	GITHUB_REPO=responsive
+	GITHUB_REPO=joindin-web2
 fi
 
 if [ -z $GITHUB_USER ]
