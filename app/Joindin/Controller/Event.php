@@ -8,8 +8,8 @@ class Event extends Base
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/event', array($this, 'index'));
-        $app->get('/event/view/:id', array($this, 'show'));
-
+        $app->get('/event/view/:id', array($this, 'details'));
+        $app->get('/event/view/:id/map', array($this, 'map'));
     }
 
     public function index()
@@ -48,18 +48,30 @@ class Event extends Base
         }
     }
 
-    public function show($id)
+    public function details($id)
     {
         $apiEvent = new \Joindin\Model\API\Event();
         $event = $apiEvent->getBySlug($id);
 
         echo $this->application->render(
-            'Event/show.html.twig',
+            'Event/details.html.twig',
             array(
                 'event' => $event
             )
         );
     }
 
+    public function map($id)
+    {
+        $apiEvent = new \Joindin\Model\API\Event();
+        $event = $apiEvent->getBySlug($id);
 
+        echo $this->application->render(
+            'Event/map.html.twig',
+            array(
+                'event' => $event->getTemplateData(),
+                'url' => $event->getUrl()
+            )
+        );
+    }
 }
