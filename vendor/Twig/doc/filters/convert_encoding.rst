@@ -14,8 +14,15 @@ is the input charset:
 
 .. note::
 
-    This filter relies on the `iconv`_ or `mbstring`_ extension. So one of
-    them must be installed.
+    This filter relies on the `iconv`_ or `mbstring`_ extension, so one of
+    them must be installed. In case both are installed, `mbstring`_ is used by
+    default (Twig before 1.8.1 uses `iconv`_ by default).
+
+Arguments
+---------
+
+ * ``from``: The input charset
+ * ``to``:   The output charset
 
 .. _`iconv`:    http://php.net/iconv
 .. _`mbstring`: http://php.net/mbstring

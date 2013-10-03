@@ -14,7 +14,6 @@ The virtual machine has been moved to a different repo. To use it [fork the join
 
 This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-web2). 
 
-
 ## Quick Start for existing platforms
 
 1. Clone repository to any location
