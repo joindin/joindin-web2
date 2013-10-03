@@ -51,7 +51,7 @@ table {
 \*------------------------------------*/
 body {
     color: #333;
-    font-family: Helvetica;
+    font-family: Helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.4;
 }
@@ -114,6 +114,10 @@ nav a:hover {
     text-decoration: underline;
 }
 
+#content nav {
+    padding-bottom: 24px;
+}
+
 
 #wrapper {
     display: table;
@@ -147,6 +151,11 @@ nav a:hover {
         width: 90px !important;
     }
 
+}
+
+.logo {
+    float: left;
+    padding-right: 8px;
 }
 
 /*------------------------------------*\
@@ -212,7 +221,7 @@ nav a:hover {
 
     .eventCard section {
         display: table-cell;
-        padding: 8px;
+        padding: 8px 8px 8px 0;
     }
 }
 

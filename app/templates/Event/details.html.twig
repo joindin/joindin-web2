@@ -1,0 +1,8 @@
+{% extends '/layout.html.twig' %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    <p>{{ event.description|format_string|raw }}</p>
+{% endblock %}
+
