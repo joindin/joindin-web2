@@ -9,32 +9,32 @@
 
         $(document).ready(function(){
             map = new uLayers.Map('map', uLayers.OSM);
-            map.setOrigin({lat: {{ event.latitude }}, lon: {{ event.longitude }} }, 14);
-            map.addMarker({lat: {{ event.latitude }}, lon: {{ event.longitude }} });
+            map.setOrigin({lat: {{ event.getLatitude() }}, lon: {{ event.getLongitude() }} }, 14);
+            map.addMarker({lat: {{ event.getLatitude() }}, lon: {{ event.getLongitude() }} });
         });
         // ]]>
     </script>
 {% endblock %}
 
 {% block page_header %}
-<div class="row">
+<div class="rowget">
     <div>
         <div class="heading">
 
             <div class="row-fluid">
                 <div class="logo auto-height">
-                    <img src="{{ event.icon|img_path("event_icons") }}" alt="{{ event.name }}" />
+                    <img src="{{ event.getIcon()|img_path("event_icons") }}" alt="{{ event.getName() }}" />
                 </div>
 
                 <div class="auto-height">
-                    <h1 class="event-name">{{ event.name }}</h1>
+                    <h1 class="event-name">{{ event.getName() }}</h1>
                     <p>
-                        {% for tag in event.tags %}
+                        {% for tag in event.getTags() %}
                             <span class="label"><i>{{ tag }}</i></span>
                         {% endfor %}
                     </p>
-                    <p><i class="icon icon-globe"></i> {{ event.href|link }}</p>
-                    <p>{{ event.description|format_string|raw }}</p>
+                    <p><i class="icon icon-globe"></i> {{ event.getHref()|link }}</p>
+                    <p>{{ event.getDescription()|format_string|raw }}</p>
                 </div>
 
             </div>
@@ -49,8 +49,8 @@
         <h2><i class="icon-calendar"></i> When and where</h2>
 
         <p>
-            From <b>{{ event.start_date|format_date}}</b> until
-            <b>{{ event.end_date|format_date}}</b> at <b>{{ event.location }}</b>
+            From <b>{{ event.getStartDate()|format_date}}</b> until
+            <b>{{ event.getEndDate()|format_date}}</b> at <b>{{ event.getLocation() }}</b>
         </p>
 
         <div class="thumbnail">

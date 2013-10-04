@@ -56,7 +56,7 @@ class Event extends Base
         echo $this->application->render(
             'Event/show.html.twig',
             array(
-                'event' => $event->getTemplateData(),
+                'event' => $event
             )
         );
     }
