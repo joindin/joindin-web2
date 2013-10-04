@@ -54,6 +54,7 @@ body {
     font-family: Helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.4;
+    margin: 8px;
 }
 
 a {
@@ -121,9 +122,8 @@ nav a:hover {
 
 #wrapper {
     display: table;
-    margin: 8px auto;
-    padding: 0 8px;
     max-width: 960px;
+    width: 100%;
 }
 
 .wideOnly {
