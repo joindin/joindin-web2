@@ -13,6 +13,15 @@ class Event extends \Joindin\Model\API\Event
     public function __construct($data)
     {
         $this->_event = $data;
+        parent::__construct();
+    }
+
+    public function setComments($comments) {
+        $this->_event->comments = $comments;
+    }
+
+    public function setSlug($slug) {
+        $this->_event->slug = $slug;
     }
 
     public function getName()

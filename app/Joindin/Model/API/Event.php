@@ -66,14 +66,25 @@ class Event extends \Joindin\Model\API\JoindIn
 
         $event = new \Joindin\Model\Event($event_list->events[0]);
 
-        $event->comments = json_decode($this->apiGet($event->getCommentsUri()));
+        $data = json_decode($this->apiGet($event->getCommentsUri(), array('verbose'=>'yes')), true);
+        $event->setComments($data['comments']);
 
         // For later use, so that we don't have to
         $event->slug = $slug;
+        $event->setSlug($slug);
 
         return $event;
 
     }
 
+    public function addComment($comment)
+    {
+        $url = $this->getUri() . '/comments';
+        $params = array(
+            'comment' => $comment,
+        );
+        $result = $this->apiPost($url, $params);
+        return $result;
+    }
 
 }

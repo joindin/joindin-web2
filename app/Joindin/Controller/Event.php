@@ -9,6 +9,7 @@ class Event extends Base
     {
         $app->get('/event', array($this, 'index'));
         $app->get('/event/view/:id', array($this, 'show'));
+        $app->post('/event/:id/add-comment', array($this, 'addComment'))->name('event-add-comment');
 
     }
 
@@ -61,5 +62,16 @@ class Event extends Base
         );
     }
 
+    function addComment($id)
+    {
+        $request = $this->application->request();
+        $comment = $request->post('comment');
 
+        $apiEvent = new \Joindin\Model\API\Event();
+        $event = $apiEvent->getBySlug($id);
+
+        $result = $event->addComment($comment);
+
+        $this->application->redirect('/event/view/'.$id);
+    }
 }

@@ -255,3 +255,6 @@ nav a:hover, #head .userdetails a:hover {
     margin: 10px auto;
 }
 
+.comment {
+    padding-bottom: 10px;
+}

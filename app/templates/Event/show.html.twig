@@ -60,6 +60,29 @@
 
     </div>
 </div>
+
+<div class="row">
+    <h2>Comments</h2>
+    <ul>
+    {% for comment in event.comments %}
+        {% include '_common/comment.html.twig' %}
+    {% endfor %}
+    </ul>
+
+    <h2>Add new comment</h2>
+    <form id="add-comment" method="POST" action="{{ urlFor('event-add-comment', {'id': event.slug}) }}">
+    <div>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment"></textarea>
+    </div>
+    <div>
+        <label>&nbsp;</label>
+        <input type="submit" value="Submit comment">
+    </div>
+    </form>
+</div>
+
+
 {% endblock %}
 
 {#
