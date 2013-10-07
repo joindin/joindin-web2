@@ -84,7 +84,13 @@ p {
 }
 
 #login {
-    display: none; /* For now @TODO Finish */
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+#login label {
+    width: 75px;
+    display: inline-block;
 }
 
 nav li a {
@@ -98,19 +104,29 @@ nav li:first-child a {
     border: 0
 }
 
+#head .userdetails {
+    float: right;
+    padding: 4px;
+    vertical-align: middle;
+}
+#head .userdetails a {
+    text-decoration: none;
+}
+
+
 @media only screen and (min-width: 275px) {
-    nav li {
+    nav li, #head .userdetails {
         display: table-cell;
         vertical-align: middle;
     }
-    nav li a {
+    nav li a, #head .userdetails a {
         border: 0;
         display: inline;
         padding: 0 16px 0 0;
     }
 }
 
-nav a:hover {
+nav a:hover, #head .userdetails a:hover {
     text-decoration: underline;
 }
 
@@ -232,5 +248,10 @@ nav a:hover {
     width: 75px;
     padding: 5px;
     display: block;
+}
+
+.error {
+    color: #c00;
+    margin: 10px auto;
 }
 
