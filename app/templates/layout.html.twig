@@ -15,6 +15,15 @@
 
 <body>
     <div id="head">
+        <div class="userdetails">
+        {% if user %}
+            Welcome {{ user.full_name }}
+            <a href="{{ urlFor('user-logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ urlFor('user-login') }}">Login</a>
+        {% endif %}
+
+        </div>
         <nav>
             <ul>
                 <li>
