@@ -1,0 +1,22 @@
+<h2 class="title">
+    <img
+            src="{{ event.getIcon|img_path("event_icons") }}"
+            alt=" "
+            class="logo"/>
+    {{  event.getName }}
+
+    <p class="meta">
+        {{ event.getStartDate|date('M d Y') }}
+        {%  if event.getStartDate|date('M d Y')
+        is not sameas(event.getEndDate|date('M d Y')) %}
+            &ndash; {{ event.getEndDate|date('M d Y') }}
+        {% endif %} at <a href="{{ event.getUrl }}/map">{{ event.getLocation }}</a>
+    </p>
+</h2>
+
+<nav>
+    <ul>
+        <li><a href="{{ event.getUrl }}">Details</a></li>
+        <li><a href="{{ event.getUrl }}/map">Map</a></li>
+    </ul>
+</nav>
