@@ -9,11 +9,11 @@
         $(document).ready(function(){
             map = new uLayers.Map('map', uLayers.OSM);
             map.setOrigin(
-                    {lat: {{ event.latitude }}, lon: {{ event.longitude }} },
+                    {lat: {{ event.getLatitude }}, lon: {{ event.getLongitude }} },
                     14
             );
             map.addMarker(
-                    {lat: {{ event.latitude }}, lon: {{ event.longitude }} }
+                    {lat: {{ event.getLatitude }}, lon: {{ event.getLongitude }} }
             );
         });
     </script>

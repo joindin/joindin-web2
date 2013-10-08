@@ -3,6 +3,6 @@
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
-    <p>{{ event.description|format_string|raw }}</p>
+    <p>{{ event.getDescription|format_string|raw }}</p>
 {% endblock %}
 

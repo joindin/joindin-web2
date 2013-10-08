@@ -69,8 +69,7 @@ class Event extends Base
         echo $this->application->render(
             'Event/map.html.twig',
             array(
-                'event' => $event->getTemplateData(),
-                'url' => $event->getUrl()
+                'event' => $event
             )
         );
     }
