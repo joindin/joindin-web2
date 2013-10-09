@@ -7,8 +7,23 @@ use Joindin\Model\API\User as UserService;
 class User extends Base
 {
     /**
+     * Routes implemented by this class
+     *
+     * @param  Slim   $app Slim application instance
+     *
+     * @return void
+     */
+    protected function defineRoutes(\Slim $app)
+    {
+        $app->get('/user/logout', array($this, 'logout'))->name('user-logout');
+        $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
+        $app->map('/user/register', array($this, 'register'))->via('GET', 'POST')->name('user-register');
+    }
+
+    /**
      * Login page
      *
+     * @return void
      */
     public function login()
     {
@@ -50,8 +65,9 @@ class User extends Base
     }
 
     /**
-     * Register page
+     * Registration page
      *
+     * @return void
      */
     public function register()
     {
@@ -64,10 +80,10 @@ class User extends Base
         exit;
     }
 
-
     /**
      * Log out
      *
+     * @return void
      */
     public function logout()
     {
@@ -80,14 +96,4 @@ class User extends Base
         session_regenerate_id(true);
         $this->application->redirect('/');
     }
-
-    protected function defineRoutes(\Slim $app)
-    {
-        $app->get('/user/logout', array($this, 'logout'))->name('user-logout');
-        $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
-        $app->map('/user/register', array($this, 'register'))->via('GET', 'POST')->name('user-register');
-    }
 }
-
-
-

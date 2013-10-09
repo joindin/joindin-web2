@@ -3,6 +3,13 @@ namespace Joindin\Model\API;
 
 class Auth extends \Joindin\Model\API\JoindIn
 {
+    /**
+     * Log in via the API
+     *
+     * @param  string $username username
+     * @param  string $password password
+     * @return mixed            stdClass of token and user's URI
+     */
     public function login($username, $password)
     {
         $url = $this->baseApiUrl . '/v2.1/token';
@@ -14,7 +21,6 @@ class Auth extends \Joindin\Model\API\JoindIn
         );
 
         $result = $this->apiPost($url, $params);
-
         if ($result) {
             $data = json_decode($result);
             if ($data) {
@@ -25,5 +31,4 @@ class Auth extends \Joindin\Model\API\JoindIn
         }
         return false;
     }
-
 }

@@ -3,6 +3,12 @@ namespace Joindin\Model\API;
 
 class User extends \Joindin\Model\API\JoindIn
 {
+    /**
+     * Retreive user information from the API
+     *
+     * @param  string $url User's URI
+     * @return mixed       stdClass of user data or false
+     */
     public function getUser($url)
     {
         $result = $this->apiGet($url, array('verbose'=>'yes'));
