@@ -11,7 +11,6 @@ class JoindIn
         $app = \Slim::getInstance();
         $config = $app->config('custom');
 
-
         if (isset($config['apiUrl'])) {
             $this->baseApiUrl = $config['apiUrl'];
         }
@@ -30,6 +29,10 @@ class JoindIn
             )
         );
         
+        if ($this->token) {
+            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->token}";
+        }
+
         $streamContext = stream_context_create($contextOpts);
         $result = file_get_contents($url.$paramsString, 0, $streamContext);
 
