@@ -9,14 +9,15 @@ namespace Joindin\Model\API;
 class Search extends \Joindin\Model\API\JoindIn
 {
     /**
+     * Calls API to search for events by keyword (stub) and returns a collection of events
      *
+     * @param string $keyword
      * @param int $limit
      * @param int $start
-     * @param string $keyword
      * @param null $filter
      * @return array
      */
-    public function getEventCollection($limit = 10, $start = 1, $keyword, $filter = null)
+    public function getEventCollection($keyword, $limit = 10, $start = 1, $filter = null)
     {
         $url = $this->baseApiUrl . '/v2.1/events'
             . '?resultsperpage=' . $limit
@@ -44,14 +45,15 @@ class Search extends \Joindin\Model\API\JoindIn
 
 
     /**
+     * Calls API to search for talks by keyword (stub) and returns a collection of talks
      *
+     * @param string $keyword
      * @param int $limit
      * @param int $start
-     * @param string $keyword
      * @param null $filter
      * @return array
      */
-    public function getTalkCollection($limit = 10, $start = 1, $keyword, $filter = null)
+    public function getTalkCollection($keyword, $limit = 10, $start = 1, $filter = null)
     {
         $url = $this->baseApiUrl . '/v2.1/talks'
             . '?resultsperpage=' . $limit
