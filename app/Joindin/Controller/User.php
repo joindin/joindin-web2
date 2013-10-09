@@ -6,7 +6,6 @@ use Joindin\Model\API\User as UserService;
 
 class User extends Base
 {
-
     /**
      * Login page
      *
@@ -20,7 +19,6 @@ class User extends Base
             // handle submission of login form
         
             // make a call to the api with granttype=password
-            
             $username = $request->post('username');
             $password = $request->post('password');
 
@@ -30,7 +28,7 @@ class User extends Base
             if (false === $result) {
                 $error = true;
             } else {
-                session_regenerate_id();
+                session_regenerate_id(true);
                 $_SESSION['access_token'] = $result->access_token;
 
                 // now get users details
@@ -58,8 +56,12 @@ class User extends Base
     public function register()
     {
         // TODO: Implement!
-        // This empty method exists so that the named route can be defined
+        // This  method exists so that the named route can be defined
         // for the login page text.
+        
+        // For now, we just redirect to the legacy site
+        header("Location: https://joind.in/user/register");
+        exit;
     }
 
 
@@ -75,7 +77,7 @@ class User extends Base
         if (isset($_SESSION['access_token'])) {
             unset($_SESSION['access_token']);
         }
-        session_regenerate_id();
+        session_regenerate_id(true);
         $this->application->redirect('/');
     }
 
