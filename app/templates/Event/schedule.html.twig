@@ -1,0 +1,121 @@
+{% extends '/layout.html.twig' %}
+
+{% block extra_javascript %}{% endblock %}
+
+{% block page_header %}
+<div class="row">
+    <div>
+        <div class="heading">
+            <div class="row-fluid">
+                <div class="logo auto-height">
+                    <img src="{{ event.icon|img_path("event_icons") }}" alt="{{ event.name }}" />
+                </div>
+                <div class="auto-height">
+                    <h1 class="event-name">{{ event.name }}</h1>
+                    <p>
+                        {% for tag in event.tags %}
+                            <span class="label"><i>{{ tag }}</i></span>
+                        {% endfor %}
+                    </p>
+                    <p><i class="icon icon-globe"></i> {{ event.href|link }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="table">
+    {% for day in eventDays %}
+    <h1>{{ day.date }}</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Time</th>
+            {% if day.tracks %}
+                {% for track in day.tracks %}
+                <th>{{ track }}</th>
+                {% endfor %}
+            {% else %}
+                <th>Talks</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% set trackCellHTMLMap = [] %}
+        {% set titleTrackMap = [] %}
+        {% for time, talks in day.talks %}
+            <tr>
+            <td>{{ time }}</td>
+            {% if day.tracks|length < 1 %}
+                {% for talk in talks %}
+                    {% if loop.index0 > 0 %}
+                        <td></td>
+                    {% endif %}
+                    <td>{{ talk.title }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for talk in talks %}
+                    {# build an array of tracks the talk is in #}
+                    {% set actualTracks = [] %}
+                    {% for talkTrack in talk.tracks %}
+                        {%  set actualTracks = actualTracks|merge({ (loop.index0): talkTrack.track_name}) %}
+                    {% endfor %}
+
+                    {# skip keynote talks, as they will span all tracks (columns) #}
+                    {% if talk.type != "Keynote" %}
+                        {% for track in day.tracks %}
+                            {% if track in actualTracks %}
+                                {# if track is a number, Twig won't allow this value
+                                   to be used as an array key, so append an empty space
+                                   to make Twig think it is a string #}
+                                {% set trackName = track~" " %}
+                                {% set title = talk.title %}
+                                {% set cell %}
+                                    <p><a href="{{ talk.absoluteWebsiteUrl }}">{{ title }}</a></p>
+                                    <p>{% for speaker in talk.speakers %}
+                                            <a href="{{ speaker.speaker_uri }}">
+                                            {% if loop.last %}
+                                                {{ speaker.speaker_name }}</a>
+                                            {% else %}
+                                                {{ speaker.speaker_name }}</a>,
+                                            {% endif %}
+                                        {% endfor %}
+                                    </p>
+                                {% endset %}
+                                {% set trackCellHTMLMap = trackCellHTMLMap|merge({ (trackName) : cell }) %}
+                                {% set titleTrackMap = titleTrackMap|merge({  (title)  : trackName }) %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {# if a talk has no tracks, or is a Keynote, span all tracks (columns) in table #}
+                    {% if talk.tracks|length == 0 or talk.type == "Keynote" %}
+                        <td colspan={{ day.tracks|length }}>{{ talk.title}}</td>
+                    {% endif %}
+                {% endfor %}
+
+                {# if a track => title map was created for current time slot, output column cells #}
+                {% for track in day.tracks if trackCellHTMLMap  %}
+                    {# again, ensure trackName is a string value #}
+                    {% set trackName = track~" " %}
+                    {% if trackName in titleTrackMap %}
+                        <td>{{ trackCellHTMLMap[trackName] }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endfor %}
+
+                {# reset map arrays for next loop iteration #}
+                {% set trackCellHTMLMap = [] %}
+                {% set titleTrackMap = [] %}
+            {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+{% endblock %}
