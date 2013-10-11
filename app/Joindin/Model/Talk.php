@@ -20,6 +20,11 @@ class Talk extends \Joindin\Model\API\Talk
         return $this->_talk->talk_title;
     }
 
+    public function getType()
+    {
+        return $this->_talk->type;
+    }
+
     public function getAbsoluteWebsiteUrl()
     {
         return $this->_talk->website_uri;
