@@ -9,7 +9,7 @@ class Event extends Base
     {
         $app->get('/event', array($this, 'index'));
         $app->get('/event/view/:id', array($this, 'show'));
-        $app->get('/event/view/schedule/:id', array($this, 'schedule'));
+        $app->get('/event/:id/schedule', array($this, 'schedule'));
 
     }
 
@@ -72,6 +72,12 @@ class Event extends Base
 
         $schedule = $scheduler->getScheduleData($event);
 
-        var_dump($schedule);
+        echo $this->application->render(
+            'Event/schedule.html.twig',
+            array(
+                'event' => $event->getTemplateData(),
+                'eventDays' => $schedule,
+            )
+        );
     }
 }
