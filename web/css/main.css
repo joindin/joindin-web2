@@ -234,3 +234,7 @@ nav a:hover {
     display: block;
 }
 
+.table table, .table td, .table th {
+    border: 1px solid green;
+}
+
