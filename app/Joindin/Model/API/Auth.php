@@ -10,12 +10,12 @@ class Auth extends \Joindin\Model\API\JoindIn
      * @param  string $password password
      * @return mixed            stdClass of token and user's URI
      */
-    public function login($username, $password)
+    public function login($username, $password, $clientId)
     {
         $url = $this->baseApiUrl . '/v2.1/token';
         $params = array(
             'grant_type' => 'password',
-            'client_id'  => 'web2',
+            'client_id'  => $clientId,
             'username'   => $username,
             'password'   => $password,
         );

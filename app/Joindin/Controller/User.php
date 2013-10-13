@@ -27,6 +27,7 @@ class User extends Base
      */
     public function login()
     {
+        $config = $this->application->config('oauth');
         $request = $this->application->request();
 
         $error = false;
@@ -36,9 +37,10 @@ class User extends Base
             // make a call to the api with granttype=password
             $username = $request->post('username');
             $password = $request->post('password');
+            $clientId = $config['client_id'];
 
             $authService = new AuthService();
-            $result      = $authService->login($username, $password);
+            $result      = $authService->login($username, $password, $clientId);
 
             if (false === $result) {
                 $error = true;
