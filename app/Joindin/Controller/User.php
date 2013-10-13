@@ -39,7 +39,7 @@ class User extends Base
             $password = $request->post('password');
             $clientId = $config['client_id'];
 
-            $authService = new AuthService();
+            $authService = new AuthService($this->accessToken);
             $result      = $authService->login($username, $password, $clientId);
 
             if (false === $result) {
@@ -47,9 +47,10 @@ class User extends Base
             } else {
                 session_regenerate_id(true);
                 $_SESSION['access_token'] = $result->access_token;
+                $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $userService = new UserService();
+                $userService = new UserService($this->accessToken);
                 $user = $userService->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;

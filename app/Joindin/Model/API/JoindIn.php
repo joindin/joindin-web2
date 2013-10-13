@@ -4,9 +4,9 @@ namespace Joindin\Model\API;
 class JoindIn
 {
     protected $baseApiUrl = 'http://api.joind.in';
-    protected $token;
+    protected $accessToken;
 
-    public function __construct()
+    public function __construct($accessToken)
     {
         $app = \Slim::getInstance();
         $config = $app->config('custom');
@@ -14,8 +14,7 @@ class JoindIn
         if (isset($config['apiUrl'])) {
             $this->baseApiUrl = $config['apiUrl'];
         }
-        
-        $this->token = isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null;
+        $this->accessToken = $accessToken;
     }
 
     protected function apiGet($url, $params = array())
@@ -29,8 +28,8 @@ class JoindIn
             )
         );
         
-        if ($this->token) {
-            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->token}";
+        if ($this->accessToken) {
+            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
         }
 
         $streamContext = stream_context_create($contextOpts);
@@ -54,8 +53,8 @@ class JoindIn
             )
         );
 
-        if ($this->token) {
-            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->token}";
+        if ($this->accessToken) {
+            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
         }
         
         $streamContext = stream_context_create($contextOpts);

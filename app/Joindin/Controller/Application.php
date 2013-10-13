@@ -12,7 +12,7 @@ class Application extends Base
         $perPage = 6;
         $start = ($page -1) * $perPage;
 
-        $event_collection = new \Joindin\Model\API\Event();
+        $event_collection = new \Joindin\Model\API\Event($this->accessToken);
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 //        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
         try {
