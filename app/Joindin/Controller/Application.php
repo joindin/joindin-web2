@@ -40,16 +40,9 @@ class Application extends Base
         }
     }
 
-    public function oauth_callback()
-    {
-        $_SESSION['access_token'] = $this->application->request()->params('access_token');
-        $this->application->redirect('/');
-    }
-
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/', array($this, 'index'));
-        $app->get('/oauth/callback', array($this, 'oauth_callback'));
     }
 }
 
