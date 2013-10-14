@@ -1,0 +1,34 @@
+{% extends '/layout.html.twig' %}
+
+{% block extra_javascript %}
+    <script src="/js/ulayers.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script>
+        var map;
+
+        $(document).ready(function(){
+            map = new uLayers.Map('map', uLayers.OSM);
+            map.setOrigin(
+                    {lat: {{ event.getLatitude }}, lon: {{ event.getLongitude }} },
+                    14
+            );
+            map.addMarker(
+                    {lat: {{ event.getLatitude }}, lon: {{ event.getLongitude }} }
+            );
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    <div id="map" style="border: 1px solid black; height: 300px;">
+    </div>
+
+    <p class="meta">
+        &copy; <a href="http://www.openstreetmap.org">OpenStreetMap</a>
+        contributors,
+        <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>
+    </p>
+{% endblock %}
+
