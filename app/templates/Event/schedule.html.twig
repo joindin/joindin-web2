@@ -6,6 +6,17 @@
     {% include 'Event/_common/event_header.html.twig' %}
 
     <div class="table">
+        <h1>Key</h1>
+        <table id=key>
+            <tr>
+                <td class="keynote key">Keynote</td>
+                <td class="talk key">Talk</td>
+                <td class="workshop key">Workshop</td>
+                <td class="social key">Social</td>
+                <td class="related key">Event Related</td>
+            </tr>
+        </table>
+
         {% for day in eventDays %}
         <h1>{{ day.date }}</h1>
         <table>

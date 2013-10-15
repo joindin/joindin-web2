@@ -243,7 +243,7 @@ nav a:hover {
     display: block;
 }
 
-.table table {
+.table table, .table table#key {
     width: 900px;
     margin-bottom: 35px;
 }
@@ -295,7 +295,7 @@ nav a:hover {
 }
 
 .table td.related {
-    background-color: #51505D;
+    background-color: #5BB068;
 }
 
 .table td a {
@@ -322,4 +322,11 @@ nav a:hover {
     color: #555555;
     font-size: 22px;
     font-weight: normal;
+}
+
+
+.table table#key td {
+    color: white;
+    width: 20%;
+    text-align: center;
 }
