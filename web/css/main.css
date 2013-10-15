@@ -243,7 +243,83 @@ nav a:hover {
     display: block;
 }
 
-.table table, .table td, .table th {
-    border: 1px solid green;
+.table table {
+    width: 900px;
+    margin-bottom: 35px;
 }
 
+.table table th, .table table td {
+    border: 1px solid white;
+}
+
+.table table th {
+    background-color: lightgrey;
+    border: 1px solid white;
+    text-align:center;
+    font-weight: normal;
+    vertical-align: middle;
+    padding: 3px 0;
+}
+
+.table table td {
+    color: black;
+    padding-top: 3px;
+    padding-left: 3px;
+}
+
+.table td.time {
+    width: 7%;
+    background-color: lightgrey;
+    border: 1px solid white;
+    vertical-align: middle;
+    text-align: center;
+    padding-top: 0;
+    padding-left: 0;
+    color:black;
+}
+
+.table td.talk {
+    background-color: #5A8EC3;
+}
+
+.table td.keynote {
+    background-color: #C799CE;
+}
+
+.table td.workshop {
+     background-color: #F69159;
+}
+
+.table td.social {
+    background-color: #CAAD90;
+}
+
+.table td.related {
+    background-color: #51505D;
+}
+
+.table td a {
+    color: white;
+    text-decoration: none;
+}
+
+.table td a span.speaker {
+    font-style: italic;
+    font-size: 1em;
+    color: black;
+}
+
+.table td a:hover {
+    color: black;
+}
+
+.table td a:hover span.speaker {
+    color: white;
+}
+
+.table h1 {
+    margin-bottom: 10px;
+    color: #555555;
+    font-size: 22px;
+    font-weight: normal;
+}
