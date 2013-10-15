@@ -3,7 +3,7 @@ namespace Joindin\Model;
 
 class Talk extends \Joindin\Model\API\Talk
 {
-    private $_talk;
+    private $data;
 
     /**
      * Crate new Event model
@@ -12,66 +12,58 @@ class Talk extends \Joindin\Model\API\Talk
      */
     public function __construct($data)
     {
-        $this->_talk = $data;
+        $this->data = $data;
     }
 
     public function getTitle()
     {
-        return $this->_talk->talk_title;
+        return $this->data->talk_title;
     }
 
     public function getType()
     {
-        return $this->_talk->type;
+        return $this->data->type;
     }
 
     public function getAbsoluteWebsiteUrl()
     {
-        return $this->_talk->website_uri;
+        return $this->data->website_uri;
     }
 
     public function getStartDateTime()
     {
-        return new \DateTime($this->_talk->start_date);
+        return new \DateTime($this->data->start_date);
     }
 
     public function getEndDateTime()
     {
-        if(!$this->_talk->duration) {
+        if(!$this->data->duration) {
             return null;
         }
 
         $start_time = $this->getStartDateTime();
-        $end_time = $start_time->add(new \DateInterval('PT'.$this->_talk->duration.'M'));
+        $end_time = $start_time->add(new \DateInterval('PT'.$this->data->duration.'M'));
 
         return $end_time;
     }
 
     public function getDuration()
     {
-        return $this->_talk->duration;
+        return $this->data->duration;
     }
 
     public function getDescription()
     {
-        return $this->_talk->talk_description;
+        return $this->data->talk_description;
     }
 
     public function getSpeakers()
     {
-        return $this->_talk->speakers;
+        return $this->data->speakers;
     }
 
     public function getTracks()
     {
-        return $this->_talk->tracks;
-    }
-
-    /**
-     * Twig likes arrays, so give it one
-     */
-    public function getTemplateData()
-    {
-        return (array)$this->_talk;
+        return $this->data->tracks;
     }
 }
