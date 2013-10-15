@@ -8,7 +8,7 @@ class Event extends Base
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/event', array($this, 'index'));
-        $app->get('/event/view/:id', array($this, 'show'));
+        $app->get('/event/view/:id', array($this, 'details'));
         $app->get('/event/view/:id/map', array($this, 'map'));
         $app->get('/event/:id/schedule', array($this, 'schedule'));
     }
@@ -89,7 +89,7 @@ class Event extends Base
         echo $this->application->render(
             'Event/schedule.html.twig',
             array(
-                'event' => $event->getTemplateData(),
+                'event' => $event,
                 'eventDays' => $schedule,
             )
         );
