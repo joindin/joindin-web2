@@ -28,11 +28,11 @@ class Scheduler
      * Builds schedule data into an array structure
      * for schedule view
      *
-     * @param \Joindin\Model\API\Event $event
+     * @param \Joindin\Model\Event $event
      * @return mixed
      * @throws \Exception
      */
-    public function getScheduleData(\Joindin\Model\API\Event $event)
+    public function getScheduleData(\Joindin\Model\Event $event)
     {
         $talks = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
         $eventDays = $this->getEventDays($talks);
