@@ -87,7 +87,7 @@ class Event
 
     public function getTalksUri()
     {
-        return $this->_event->talks_uri;
+        return $this->data->talks_uri;
     }
 
     public function getUri()
