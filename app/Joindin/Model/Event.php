@@ -85,6 +85,11 @@ class Event
         return $this->data->comments_uri;
     }
 
+    public function getTalksUri()
+    {
+        return $this->data->talks_uri;
+    }
+
     public function getUri()
     {
         return $this->data->uri;
