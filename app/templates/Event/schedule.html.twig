@@ -6,7 +6,7 @@
     {% include 'Event/_common/event_header.html.twig' %}
 
     <div class="table">
-        <h1>Key</h1>
+        <h1>Sessions Key</h1>
         <table id=key>
             <tr>
                 <td class="keynote key">Keynote</td>
@@ -29,7 +29,7 @@
                     <th>{{ track }}</th>
                     {% endfor %}
                 {% else %}
-                    <th>Talks</th>
+                    <th>Sessions</th>
                 {% endif %}
                 {# if multi-track, repeat time column on right side of table #}
                 {% if day.tracks|length > 1 %}
