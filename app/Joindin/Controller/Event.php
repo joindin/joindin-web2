@@ -10,6 +10,7 @@ class Event extends Base
         $app->get('/event', array($this, 'index'));
         $app->get('/event/view/:id', array($this, 'details'));
         $app->get('/event/view/:id/map', array($this, 'map'));
+        $app->get('/event/:id/schedule', array($this, 'schedule'));
     }
 
     public function index()
@@ -61,6 +62,7 @@ class Event extends Base
         );
     }
 
+
     public function map($id)
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
@@ -73,4 +75,23 @@ class Event extends Base
             )
         );
     }
+
+     public function schedule($id)
+     {
+        $apiEvent = new \Joindin\Model\API\Event();
+        $event = $apiEvent->getBySlug($id);
+
+        $apiTalk = new \Joindin\Model\API\Talk();
+        $scheduler = new \Joindin\Service\Scheduler($apiTalk);
+
+        $schedule = $scheduler->getScheduleData($event);
+
+        echo $this->application->render(
+            'Event/schedule.html.twig',
+            array(
+                'event' => $event,
+                'eventDays' => $schedule,
+            )
+        );
+     }
 }
