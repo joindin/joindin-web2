@@ -100,9 +100,6 @@ class Event
         return $this->data->verbose_uri;
     }
 
-    /**
-     * Twig likes arrays, so give it one
-     */
     public function getSlug()
     {
         // Slug is set if given in URL so already is known, so return it
