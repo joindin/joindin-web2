@@ -1,0 +1,12 @@
+{% extends '/layout.html.twig' %}
+
+{% block body %}
+    <h2 class="title">Search results for keyword "{{ keyword }}"</h2>
+    <div>
+        {% for event in events.events %}
+            {% include '_common/eventsummary.html.twig' %}
+        {% endfor %}
+    </div>
+
+    {% include '_common/pagination.html.twig' %}
+{% endblock %}

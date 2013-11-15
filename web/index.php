@@ -60,6 +60,7 @@ $app->view()->setTemplatesDirectory('../app/templates');
 // register routes
 new Controller\Application($app);
 new Controller\Event($app);
+new Controller\Search($app);
 
 // execute application
 $app->run();
