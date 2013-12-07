@@ -1,7 +1,7 @@
 {% extends '/layout.html.twig' %}
 
 {% block body %}
-    <h2 class="title">Latest events</h2>
+    <h1 class="title">Latest events</h1>
     <div>
         {% for event in events.events %}
             {% include '_common/eventsummary.html.twig' %}
