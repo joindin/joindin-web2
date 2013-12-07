@@ -22,9 +22,9 @@ class JoindIn
         $paramsString = count($params) ? '?' . http_build_query($params, '', '&') : '';
         
         $contextOpts = array('http' => array(
-            'header'  => "Content-type: \r\n"
-                       . "Accept: application/json",
+            'header'  => "Accept: application/json",
             'timeout' => 10,
+            'ignore_errors' => true,
             )
         );
         
@@ -50,6 +50,7 @@ class JoindIn
                        . "Accept: application/json",
             'content' => json_encode($params),
             'timeout' => 10,
+            'ignore_errors' => true,
             )
         );
 
