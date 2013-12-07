@@ -78,10 +78,10 @@ class Event extends Base
 
      public function schedule($id)
      {
-        $apiEvent = new \Joindin\Model\API\Event();
+        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getBySlug($id);
 
-        $apiTalk = new \Joindin\Model\API\Talk();
+        $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
         $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
         $schedule = $scheduler->getScheduleData($event);
