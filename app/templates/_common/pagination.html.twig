@@ -2,13 +2,14 @@
     <ul>
         <li>
             {% if events.pagination.prev_page is defined %}
-                <a href="?page={{ page - 1 }}">&lt;&lt; Previous</a>
+                <a href="?page={{ page - 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}">&lt;&lt; Previous</a>
             {% endif %}
         </li>
         <li>Page {{ page }}</li>
         <li>
-            {% if events.pagination.next_page is defined %}
-                <a href="?page={{ page + 1 }}">Next &gt;&gt;</a>
+            {% if events.pagination.next_page is defined
+                and events.pagination.count >= 10 %}
+                <a href="?page={{ page + 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}">Next &gt;&gt;</a>
             {% endif %}
         </li>
     </ul>
