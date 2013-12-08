@@ -46,41 +46,42 @@ class Search extends Base
     {
 
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
+        $events = array();
+
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
 
         if (!empty($keyword)) {
-            $page = ((int)$this->application->request()->get('page') === 0)
-                ? 1
-                : $this->application->request()->get('page');
-
             $perPage = 10;
             $start = ($page -1) * $perPage;
 
             $event_collection = new \Joindin\Model\API\Search($this->accessToken);
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
-            try {
-                echo $this->application->render(
-                    'Event/search.html.twig',
-                    array(
-                        'events'    => $events,
-                        'page'      => $page,
-                        'keyword'   => $keyword
-                    )
-                );
-            } catch (\Twig_Error_Runtime $e) {
-                $this->application->render(
-                    'Error/app_load_error.html.twig',
-                    array(
-                        'message' => sprintf(
-                            'An exception has been thrown during the rendering of '.
-                            'a template ("%s").',
-                            $e->getMessage()
-                        ),
-                        -1,
-                        null,
-                        $e
-                    )
-                );
-            }
+        }
+        try {
+            echo $this->application->render(
+                'Event/search.html.twig',
+                array(
+                    'events'    => $events,
+                    'page'      => $page,
+                    'keyword'   => $keyword
+                )
+            );
+        } catch (\Twig_Error_Runtime $e) {
+            $this->application->render(
+                'Error/app_load_error.html.twig',
+                array(
+                    'message' => sprintf(
+                        'An exception has been thrown during the rendering of '.
+                        'a template ("%s").',
+                        $e->getMessage()
+                    ),
+                    -1,
+                    null,
+                    $e
+                )
+            );
         }
     }
 }
