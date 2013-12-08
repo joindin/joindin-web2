@@ -2,11 +2,16 @@
 
 {% block body %}
     <h2 class="title">Search results for keyword "{{ keyword }}"</h2>
+    {% if events is empty %}
+        <p>Sorry, no results found</p>
+    {% else %}
     <div>
         {% for event in events.events %}
             {% include '_common/eventsummary.html.twig' %}
         {% endfor %}
     </div>
+
+    {% endif %}
 
     {% include '_common/pagination.html.twig' %}
 {% endblock %}
