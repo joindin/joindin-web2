@@ -9,7 +9,7 @@ namespace Joindin\Model\API;
 class Search extends \Joindin\Model\API\JoindIn
 {
     /**
-     * Calls API to search for events by keyword (stub) and returns a collection of events
+     * Calls API to search for events by title and returns a collection of events
      *
      * @param string $keyword
      * @param int $limit
@@ -21,7 +21,7 @@ class Search extends \Joindin\Model\API\JoindIn
     {
         $url = $this->baseApiUrl . '/v2.1/events'
             . '?resultsperpage=' . $limit
-            . '&stub=' . $keyword
+            . '&title=' . $keyword
             . '&start=' . $start;
 
         if ($filter) {
@@ -35,10 +35,12 @@ class Search extends \Joindin\Model\API\JoindIn
         $meta = array_pop($events);
 
         $collectionData = array();
-        foreach ($events['events'] as $event) {
-            $collectionData['events'][] = new \Joindin\Model\Event($event);
+        if($events['events']) {
+            foreach ($events['events'] as $event) {
+                $collectionData['events'][] = new \Joindin\Model\Event($event);
+            }
+            $collectionData['pagination'] = $meta;
         }
-        $collectionData['pagination'] = $meta;
 
         return $collectionData;
     }
