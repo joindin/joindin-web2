@@ -35,7 +35,7 @@ class Search extends \Joindin\Model\API\JoindIn
         $meta = array_pop($events);
 
         $collectionData = array();
-        if($events['events']) {
+        if(isset($events['events'])) {
             foreach ($events['events'] as $event) {
                 $collectionData['events'][] = new \Joindin\Model\Event($event);
             }
