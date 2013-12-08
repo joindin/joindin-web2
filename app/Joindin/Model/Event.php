@@ -1,9 +1,9 @@
 <?php
 namespace Joindin\Model;
 
-class Event extends \Joindin\Model\API\Event
+class Event
 {
-    private $_event;
+    private $data;
 
     /**
      * Crate new Event model
@@ -12,12 +12,12 @@ class Event extends \Joindin\Model\API\Event
      */
     public function __construct($data)
     {
-        $this->_event = $data;
+        $this->data = $data;
     }
 
     public function getName()
     {
-        return $this->_event->name;
+        return $this->data->name;
     }
 
     public function getUrl()
@@ -27,67 +27,84 @@ class Event extends \Joindin\Model\API\Event
 
     public function getIcon()
     {
-        return $this->_event->icon;
+        return $this->data->icon;
     }
 
     public function getStartDate()
     {
-        return $this->_event->start_date;
+        return $this->data->start_date;
     }
 
     public function getEndDate()
     {
-        return $this->_event->end_date;
+        return $this->data->end_date;
+    }
+
+    public function getLocation()
+    {
+        return $this->data->location;
     }
 
     public function getDescription()
     {
-        return $this->_event->description;
+        return $this->data->description;
     }
 
     public function getTags()
     {
-        return $this->_event->tags;
+        return $this->data->tags;
+    }
+
+    public function getLatitude()
+    {
+        return $this->data->latitude;
+    }
+
+    public function getLongitude()
+    {
+        return $this->data->longitude;
+    }
+
+    public function getHref()
+    {
+        return $this->data->href;
     }
 
     public function getAttendeeCount()
     {
-        return $this->_event->attendee_count;
+        return $this->data->attendee_count;
     }
 
     public function getCommentsCount()
     {
-        return $this->_event->event_comments_count;
+        return $this->data->event_comments_count;
     }
 
     public function getCommentsUri()
     {
-        return $this->_event->comments_uri;
+        return $this->data->comments_uri;
+    }
+
+    public function getTalksUri()
+    {
+        return $this->data->talks_uri;
     }
 
     public function getUri()
     {
-        return $this->_event->uri;
+        return $this->data->uri;
     }
 
     public function getVerboseUri()
     {
-        return $this->_event->verbose_uri;
-    }
-
-    /**
-     * Twig likes arrays, so give it one
-     */
-    public function getTemplateData()
-    {
-        return (array)$this->_event;
+        return $this->data->verbose_uri;
     }
 
     public function getSlug()
     {
         // Slug is set if given in URL so already is known, so return it
-        if (property_exists($this->_event, 'slug')) {
-            return $this->_event->slug;
+        if (property_exists($this->data, 'slug')) {
+            return $this->data->slug;
         }
 
         // Check if the event is known in the database. If it's not, then
@@ -106,7 +123,7 @@ class Event extends \Joindin\Model\API\Event
 
     public function isAttending()
     {
-        return $this->_event->attending;
+        return $this->data->attending;
     }
 
     public function getAttendeeString()

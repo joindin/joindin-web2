@@ -16,8 +16,10 @@ class Twig_Tests_Extension_CoreTest extends PHPUnit_Framework_TestCase
      */
     public function testRandomFunction($value, $expectedInArray)
     {
+        $env = new Twig_Environment();
+
         for ($i = 0; $i < 100; $i++) {
-            $this->assertTrue(in_array(twig_random(new Twig_Environment(), $value), $expectedInArray, true)); // assertContains() would not consider the type
+            $this->assertTrue(in_array(twig_random($env, $value), $expectedInArray, true)); // assertContains() would not consider the type
         }
     }
 
@@ -68,6 +70,7 @@ class Twig_Tests_Extension_CoreTest extends PHPUnit_Framework_TestCase
     public function testRandomFunctionReturnsAsIs()
     {
         $this->assertSame('', twig_random(new Twig_Environment(), ''));
+        $this->assertSame('', twig_random(new Twig_Environment(null, array('charset' => null)), ''));
 
         $instance = new stdClass();
         $this->assertSame($instance, twig_random(new Twig_Environment(), $instance));

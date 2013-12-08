@@ -51,9 +51,10 @@ table {
 \*------------------------------------*/
 body {
     color: #333;
-    font-family: Helvetica;
+    font-family: Helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.4;
+    margin: 8px;
 }
 
 a {
@@ -63,6 +64,11 @@ a {
 
 p {
     padding-bottom: 0.5ex;
+}
+
+h2 {
+    font-size: 16px;
+    padding-top: 8px;
 }
 
 
@@ -84,7 +90,13 @@ p {
 }
 
 #login {
-    display: none; /* For now @TODO Finish */
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+#login label {
+    width: 75px;
+    display: inline-block;
 }
 
 nav li a {
@@ -98,28 +110,41 @@ nav li:first-child a {
     border: 0
 }
 
+#head .userdetails {
+    float: right;
+    padding: 4px;
+    vertical-align: middle;
+}
+#head .userdetails a {
+    text-decoration: none;
+}
+
+
 @media only screen and (min-width: 275px) {
-    nav li {
+    nav li, #head .userdetails {
         display: table-cell;
         vertical-align: middle;
     }
-    nav li a {
+    nav li a, #head .userdetails a {
         border: 0;
         display: inline;
         padding: 0 16px 0 0;
     }
 }
 
-nav a:hover {
+nav a:hover, #head .userdetails a:hover {
     text-decoration: underline;
+}
+
+#content nav {
+    padding-bottom: 24px;
 }
 
 
 #wrapper {
     display: table;
-    margin: 8px auto;
-    padding: 0 8px;
     max-width: 960px;
+    width: 100%;
 }
 
 .wideOnly {
@@ -147,6 +172,11 @@ nav a:hover {
         width: 90px !important;
     }
 
+}
+
+.logo {
+    float: left;
+    padding-right: 8px;
 }
 
 /*------------------------------------*\
@@ -212,7 +242,7 @@ nav a:hover {
 
     .eventCard section {
         display: table-cell;
-        padding: 8px;
+        padding: 8px 8px 8px 0;
     }
 }
 
@@ -234,3 +264,95 @@ nav a:hover {
     display: block;
 }
 
+.error {
+    color: #c00;
+    margin: 10px auto;
+}
+
+.table table, .table table#key {
+    width: 900px;
+    margin-bottom: 35px;
+}
+
+.table table th, .table table td {
+    border: 1px solid white;
+}
+
+.table table th {
+    background-color: lightgrey;
+    border: 1px solid white;
+    text-align:center;
+    font-weight: normal;
+    vertical-align: middle;
+    padding: 3px 0;
+}
+
+.table table td {
+    color: black;
+    padding-top: 3px;
+    padding-left: 3px;
+}
+
+.table td.time {
+    width: 7%;
+    background-color: lightgrey;
+    border: 1px solid white;
+    vertical-align: middle;
+    text-align: center;
+    padding-top: 0;
+    padding-left: 0;
+    color:black;
+}
+
+.table td.talk {
+    background-color: #5A8EC3;
+}
+
+.table td.keynote {
+    background-color: #C799CE;
+}
+
+.table td.workshop {
+     background-color: #F69159;
+}
+
+.table td.social {
+    background-color: #CAAD90;
+}
+
+.table td.related {
+    background-color: #5BB068;
+}
+
+.table td a {
+    color: white;
+    text-decoration: none;
+}
+
+.table td a span.speaker {
+    font-style: italic;
+    font-size: 1em;
+    color: black;
+}
+
+.table td a:hover {
+    color: black;
+}
+
+.table td a:hover span.speaker {
+    color: white;
+}
+
+.table h1 {
+    margin-bottom: 10px;
+    color: #555555;
+    font-size: 22px;
+    font-weight: normal;
+}
+
+
+.table table#key td {
+    color: white;
+    width: 20%;
+    text-align: center;
+}

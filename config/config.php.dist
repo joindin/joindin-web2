@@ -6,5 +6,8 @@ $config = array(
             'apiUrl' => 'http://api.joind.in',
             'googleAnalyticsId' => 'UA-246789-3'
         ),
+        'oauth' => array(
+            'client_id' => 'web2',
+        ),
     ),
 );

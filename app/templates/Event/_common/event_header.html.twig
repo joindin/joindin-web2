@@ -1,0 +1,29 @@
+<h2 class="title">
+    <img
+            src="{{ event.getIcon|img_path("event_icons") }}"
+            alt=" "
+            class="logo"/>
+    {{  event.getName }}
+
+    <p class="meta">
+        {{ event.getStartDate|date('M d Y') }}
+        {%  if event.getStartDate|date('M d Y')
+        is not sameas(event.getEndDate|date('M d Y')) %}
+            &ndash; {{ event.getEndDate|date('M d Y') }}
+        {% endif %} at <a href="{{ event.getUrl }}/map">{{ event.getLocation }}</a>
+    </p>
+</h2>
+
+<nav>
+    <ul>
+        <li><a href="{{ event.getUrl }}">Details</a></li>
+        <li><a href="{{ event.getUrl }}/map">Map</a></li>
+        <!-- The schedule URL uses the new URL without /view/, until we fix
+             all event page URLs to be consistant, I've put in a temporary
+             fix for now. It can probably be removed and the following line
+             uncommented out once the fix has been completed
+         -->
+        <!--<li><a href="{{ event.getUrl }}/schedule">Schedule</a></li>-->
+        <li><a href="/event/{{ event.getSlug }}/schedule">Schedule</a></li>
+    </ul>
+</nav>

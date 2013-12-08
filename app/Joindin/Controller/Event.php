@@ -8,8 +8,9 @@ class Event extends Base
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/event', array($this, 'index'));
-        $app->get('/event/view/:id', array($this, 'show'));
-
+        $app->get('/event/view/:id', array($this, 'details'));
+        $app->get('/event/view/:id/map', array($this, 'map'));
+        $app->get('/event/:id/schedule', array($this, 'schedule'));
     }
 
     public function index()
@@ -21,7 +22,7 @@ class Event extends Base
         $perPage = 10;
         $start = ($page -1) * $perPage;
 
-        $event_collection = new \Joindin\Model\API\Event();
+        $event_collection = new \Joindin\Model\API\Event($this->accessToken);
         $events = $event_collection->getCollection($perPage, $start);
         try {
             echo $this->application->render(
@@ -48,18 +49,49 @@ class Event extends Base
         }
     }
 
-    public function show($id)
+    public function details($id)
     {
-        $apiEvent = new \Joindin\Model\API\Event();
+        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getBySlug($id);
 
         echo $this->application->render(
-            'Event/show.html.twig',
+            'Event/details.html.twig',
             array(
-                'event' => $event->getTemplateData(),
+                'event' => $event
             )
         );
     }
 
 
+    public function map($id)
+    {
+        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $event = $apiEvent->getBySlug($id);
+
+        echo $this->application->render(
+            'Event/map.html.twig',
+            array(
+                'event' => $event
+            )
+        );
+    }
+
+     public function schedule($id)
+     {
+        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $event = $apiEvent->getBySlug($id);
+
+        $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
+        $scheduler = new \Joindin\Service\Scheduler($apiTalk);
+
+        $schedule = $scheduler->getScheduleData($event);
+
+        echo $this->application->render(
+            'Event/schedule.html.twig',
+            array(
+                'event' => $event,
+                'eventDays' => $schedule,
+            )
+        );
+     }
 }
