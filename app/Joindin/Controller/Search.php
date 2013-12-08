@@ -22,9 +22,7 @@ class Search extends Base
      */
     protected function defineRoutes(\Slim $app)
     {
-        $app->get('/search/all', array($this, 'searchAll'));
         $app->get('/search/events', array($this, 'searchEvents'));
-        $app->get('/search/talks', array($this, 'searchTalks'));
     }
 
     /**
@@ -36,15 +34,6 @@ class Search extends Base
     protected function sanitizeKeyword($keyword)
     {
         return preg_replace("/[^A-Za-z0-9-_[:space:]]/", '', $keyword);
-    }
-
-    /**
-     * Combines search for events and tasks
-     * Get results from both services and return both in a seperate list
-     */
-    public function searchAll()
-    {
-        // TODO in the future: really implement this
     }
 
     /**
@@ -66,7 +55,7 @@ class Search extends Base
             $perPage = 10;
             $start = ($page -1) * $perPage;
 
-            $event_collection = new \Joindin\Model\API\Search();
+            $event_collection = new \Joindin\Model\API\Search($this->accessToken);
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
             try {
                 echo $this->application->render(
@@ -94,12 +83,4 @@ class Search extends Base
             }
         }
     }
-
-
-    public function searchTalks()
-    {
-
-    }
-
-
 }
