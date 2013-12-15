@@ -22,7 +22,7 @@ class Event
 
     public function getUrl()
     {
-        return '/event/view/'.$this->getSlug();
+        return '/event/'.$this->getSlug();
     }
 
     public function getIcon()

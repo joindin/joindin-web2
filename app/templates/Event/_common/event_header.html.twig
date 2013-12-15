@@ -18,12 +18,6 @@
     <ul>
         <li><a href="{{ event.getUrl }}">Details</a></li>
         <li><a href="{{ event.getUrl }}/map">Map</a></li>
-        <!-- The schedule URL uses the new URL without /view/, until we fix
-             all event page URLs to be consistant, I've put in a temporary
-             fix for now. It can probably be removed and the following line
-             uncommented out once the fix has been completed
-         -->
-        <!--<li><a href="{{ event.getUrl }}/schedule">Schedule</a></li>-->
-        <li><a href="/event/{{ event.getSlug }}/schedule">Schedule</a></li>
+        <li><a href="{{ event.getUrl }}/schedule">Schedule</a></li>
     </ul>
 </nav>
