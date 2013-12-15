@@ -4,6 +4,7 @@ namespace Joindin\Model;
 class Event
 {
     private $data;
+    protected $slug;
 
     /**
      * Crate new Event model
@@ -100,25 +101,14 @@ class Event
         return $this->data->verbose_uri;
     }
 
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
     public function getSlug()
     {
-        // Slug is set if given in URL so already is known, so return it
-        if (property_exists($this->data, 'slug')) {
-            return $this->data->slug;
-        }
-
-        // Check if the event is known in the database. If it's not, then
-        // generate one
-        if (!$slug = $this->_getSlugFromDatabase()) {
-            $name = $this->getName();
-            $alphaNumericName = preg_replace("/[^0-9a-zA-Z- ]/", "", $name);
-
-            $slug = strtolower(str_replace(' ', '-', $alphaNumericName));
-
-            $this->_saveSlugToDatabase($slug);
-        }
-
-        return $slug;
+        return $this->slug;
     }
 
     public function isAttending()
@@ -137,27 +127,6 @@ class Event
         $message .= $this->get_end_of_attending_message();
 
         return $message;
-    }
-
-
-    private function _getSlugFromDatabase()
-    {
-        $db = new \Joindin\Service\Db;
-        $data = $db->getOneByKey('events', 'name', $this->getName());
-        return $data['slug'];
-    }
-
-    private function _saveSlugToDatabase($slug)
-    {
-        $db = new \Joindin\Service\Db;
-        $data = array(
-            'name' => $this->getName(),
-            'slug' => $slug,
-            'uri'  => $this->getUri(),
-            'verboseuri'  => $this->getVerboseUri()
-        );
-
-        return $db->save('events', $data);
     }
 
     protected function get_beginning_of_attending_message($attendee_count) {

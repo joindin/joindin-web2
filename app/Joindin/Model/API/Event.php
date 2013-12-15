@@ -35,7 +35,10 @@ class Event extends \Joindin\Model\API\JoindIn
 
         $collectionData = array();
         foreach ($events['events'] as $event) {
-            $collectionData['events'][] = new \Joindin\Model\Event($event);
+            $thisEvent = new \Joindin\Model\Event($event);
+            $thisEvent->setSlug($this->getSlugFromDatabase($thisEvent));
+
+            $collectionData['events'][] = $thisEvent;
         }
         $collectionData['pagination'] = $meta;
 
@@ -69,11 +72,39 @@ class Event extends \Joindin\Model\API\JoindIn
         $event->comments = json_decode($this->apiGet($event->getCommentsUri()));
 
         // For later use, so that we don't have to
-        $event->slug = $slug;
+        $event->setSlug($slug);
 
         return $event;
 
     }
 
+    protected function getSlugFromDatabase($event)
+    {
+        $db = new \Joindin\Service\Db;
+        $data = $db->getOneByKey('events', 'name', $event->getName());
+        if (!$data) {
+            // couldn't find, so create one in the database
+            return $this->createSlugInDatabase($event);
 
+        }
+        return $data['slug'];
+    }
+
+    protected function createSlugInDatabase($event)
+    {
+        $alphaNumericName = preg_replace("/[^0-9a-zA-Z- ]/", "", $event->getName());
+        $slug = strtolower(str_replace(' ', '-', $alphaNumericName));
+
+        $data = array(
+            'name' => $event->getName(),
+            'slug' => $slug,
+            'uri'  => $event->getUri(),
+            'verboseuri'  => $event->getVerboseUri()
+        );
+
+        $db = new \Joindin\Service\Db;
+        $db->save('events', $data);
+
+        return $slug;
+    }
 }
