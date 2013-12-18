@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Model;
 
-class Talk extends \Joindin\Model\API\Talk
+class Talk
 {
     private $data;
 
