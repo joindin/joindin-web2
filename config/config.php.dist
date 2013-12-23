@@ -4,7 +4,7 @@ $config = array(
         'mode' => 'development',
         'custom' => array(
             'apiUrl' => 'https://api.joind.in',
-            'googleAnalyticsId' => 'UA-246789-3'
+            'googleAnalyticsId' => ''
         ),
         'oauth' => array(
             'client_id' => 'web2',

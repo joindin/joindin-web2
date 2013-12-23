@@ -22,7 +22,7 @@ class Event
 
     public function getUrl()
     {
-        return '/event/view/'.$this->getStub();
+        return '/event/'.$this->getStub();
     }
 
     public function getIcon()
@@ -42,7 +42,7 @@ class Event
 
     public function getLocation()
     {
-        if (isset ($this->data->location)) {
+        if (isset($this->data->location)) {
             return $this->data->location;
         }
         return null;
