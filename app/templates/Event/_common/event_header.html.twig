@@ -10,7 +10,8 @@
         {%  if event.getStartDate|date('M d Y')
         is not sameas(event.getEndDate|date('M d Y')) %}
             &ndash; {{ event.getEndDate|date('M d Y') }}
-        {% endif %} at <a href="{{ event.getUrl }}/map">{{ event.getLocation }}</a>
+        {% endif %}
+        {% if event.getLocation %} at <a href="{{ event.getUrl }}/map">{{ event.getLocation }}</a>{% endif %}
     </p>
 </h2>
 
