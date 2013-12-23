@@ -22,7 +22,7 @@ class Event
 
     public function getUrl()
     {
-        return '/event/view/'.$this->getSlug();
+        return '/event/view/'.$this->getStub();
     }
 
     public function getIcon()
@@ -42,7 +42,10 @@ class Event
 
     public function getLocation()
     {
-        return $this->data->location;
+        if (isset ($this->data->location)) {
+            return $this->data->location;
+        }
+        return null;
     }
 
     public function getDescription()
@@ -57,12 +60,18 @@ class Event
 
     public function getLatitude()
     {
-        return $this->data->latitude;
+        if (isset($this->data->latitude)) {
+            return $this->data->latitude;
+        }
+        return null;
     }
 
     public function getLongitude()
     {
-        return $this->data->longitude;
+        if (isset($this->data->longitude)) {
+            return $this->data->longitude;
+        }
+        return null;
     }
 
     public function getHref()
@@ -85,40 +94,14 @@ class Event
         return $this->data->comments_uri;
     }
 
+    public function getStub()
+    {
+        return $this->data->stub;
+    }
+
     public function getTalksUri()
     {
         return $this->data->talks_uri;
-    }
-
-    public function getUri()
-    {
-        return $this->data->uri;
-    }
-
-    public function getVerboseUri()
-    {
-        return $this->data->verbose_uri;
-    }
-
-    public function getSlug()
-    {
-        // Slug is set if given in URL so already is known, so return it
-        if (property_exists($this->data, 'slug')) {
-            return $this->data->slug;
-        }
-
-        // Check if the event is known in the database. If it's not, then
-        // generate one
-        if (!$slug = $this->_getSlugFromDatabase()) {
-            $name = $this->getName();
-            $alphaNumericName = preg_replace("/[^0-9a-zA-Z- ]/", "", $name);
-
-            $slug = strtolower(str_replace(' ', '-', $alphaNumericName));
-
-            $this->_saveSlugToDatabase($slug);
-        }
-
-        return $slug;
     }
 
     public function isAttending()
@@ -137,27 +120,6 @@ class Event
         $message .= $this->get_end_of_attending_message();
 
         return $message;
-    }
-
-
-    private function _getSlugFromDatabase()
-    {
-        $db = new \Joindin\Service\Db;
-        $data = $db->getOneByKey('events', 'name', $this->getName());
-        return $data['slug'];
-    }
-
-    private function _saveSlugToDatabase($slug)
-    {
-        $db = new \Joindin\Service\Db;
-        $data = array(
-            'name' => $this->getName(),
-            'slug' => $slug,
-            'uri'  => $this->getUri(),
-            'verboseuri'  => $this->getVerboseUri()
-        );
-
-        return $db->save('events', $data);
     }
 
     protected function get_beginning_of_attending_message($attendee_count) {

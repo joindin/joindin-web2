@@ -52,7 +52,7 @@ class Event extends Base
     public function details($id)
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getBySlug($id);
+        $event = $apiEvent->getEvent($id);
 
         echo $this->application->render(
             'Event/details.html.twig',
@@ -66,7 +66,7 @@ class Event extends Base
     public function map($id)
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getBySlug($id);
+        $event = $apiEvent->getEvent($id);
 
         echo $this->application->render(
             'Event/map.html.twig',
@@ -79,7 +79,7 @@ class Event extends Base
      public function schedule($id)
      {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getBySlug($id);
+        $event = $apiEvent->getEvent($id);
 
         $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
         $scheduler = new \Joindin\Service\Scheduler($apiTalk);

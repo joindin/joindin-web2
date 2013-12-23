@@ -38,10 +38,8 @@ class Event extends \Joindin\Model\API\JoindIn
             $collectionData['events'][] = new \Joindin\Model\Event($event);
         }
         $collectionData['pagination'] = $meta;
-
         return $collectionData;
     }
-
 
     /*
      * Get a single event, by slug
@@ -51,28 +49,17 @@ class Event extends \Joindin\Model\API\JoindIn
      * $eventapi = new \Joindin\Model\API\Event();
      * $eventapi->getBySlug('openwest-conference-2013')
      */
-
-    public function getBySlug($slug)
+    public function getEvent($slug)
     {
-        $db = new \Joindin\Service\Db;
-        $event = $db->getOneByKey('events', 'slug', $slug);
+        $url = $this->baseApiUrl . '/v2.1/events'
+            . '?verbose=yes&stub=' . $slug;
 
-        // Throw exception if event not found
-        if (!$event) {
-            throw new \Exception('Event not found');
-        }
+        $events = (array)json_decode(
+            $this->apiGet($url)
+        );
 
-        $event_list = json_decode($this->apiGet($event['verboseuri']));
-
-        $event = new \Joindin\Model\Event($event_list->events[0]);
-
-        $event->comments = json_decode($this->apiGet($event->getCommentsUri()));
-
-        // For later use, so that we don't have to
-        $event->slug = $slug;
-
+        $event = new \Joindin\Model\Event($events['events'][0]);
         return $event;
-
     }
 
 
