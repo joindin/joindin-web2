@@ -43,7 +43,18 @@ class Talk extends \Joindin\Model\API\JoindIn
             $this->talkDb->saveSlugToDatabase($talkObject);
         }
 
-
         return $collectionData;
+    }
+
+    /**
+     * Gets talk data from api on single talk
+     *
+     * @param string $talk_uri  API talk uri
+     * @return \Joindin\Model\Talk
+     */
+    public function getTalk($talk_uri)
+    {
+        $talk = (array)json_decode($this->apiGet($talk_uri));
+        return new \Joindin\Model\Talk($talk);
     }
 }

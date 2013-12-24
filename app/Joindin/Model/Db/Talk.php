@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Model\Db;
 
-use  \Joindin\Service\Db as DbService;
+use Joindin\Service\Db as DbService;
 use Joindin\Service\Helper\Slug;
 
 class Talk
@@ -14,9 +14,12 @@ class Talk
         $this->db = new DbService();
     }
 
-    public function getUriFor($slug)
+    public function getUriFor($slug, $eventUri)
     {
-        $data = $this->db->getOneByKey($this->keyName, 'slug', $slug);
+        $data = $this->db->getOneByKeys($this->keyName, array(
+            'event_uri' => $eventUri,
+            'slug' => $slug
+        ));
         return $data['uri'];
     }
 
@@ -29,10 +32,10 @@ class Talk
     public function saveSlugToDatabase(\Joindin\Model\Talk $talk)
     {
         $data = array(
-            'uri'  => $talk->getApiUri(),
+            'uri' => $talk->getApiUri(),
             'title' => $talk->getTitle(),
             'slug' => Slug::stringToSlug($talk->getTitle()),
-            'verbose_uri'  => $talk->getApiUri(true),
+            'verbose_uri' => $talk->getApiUri(true),
             'event_uri' => $talk->getEventUri(),
         );
 

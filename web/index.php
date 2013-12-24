@@ -77,6 +77,7 @@ new Controller\Application($app);
 new Controller\Event($app);
 new Controller\Search($app);
 new Controller\User($app);
+new Controller\Talk($app);
 
 // execute application
 $app->run();
