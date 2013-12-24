@@ -1,6 +1,8 @@
 <?php
 namespace Joindin\Model\API;
 
+use Joindin\Model\User as UserEntity;
+
 class User extends \Joindin\Model\API\JoindIn
 {
     /**
@@ -17,7 +19,7 @@ class User extends \Joindin\Model\API\JoindIn
             $data = json_decode($result);
             if ($data) {
                 if (isset($data->users) && isset($data->users[0])) {
-                    $user = $data->users[0];
+                    $user = new UserEntity($data->users[0]);
                     return $user;
                 }
 
@@ -25,5 +27,4 @@ class User extends \Joindin\Model\API\JoindIn
         }
         return false;
     }
-
 }
