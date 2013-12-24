@@ -1,11 +1,4 @@
 <div class="eventCard" xmlns="http://www.w3.org/1999/html">
-    <section>
-        <div class="logo">
-            <a href="{{ event.getUrl }}">
-                <img src="{{ event.getIcon|img_path("event_icons") }}" alt=" " />
-            </a>
-        </div>
-    </section>
 
     <section>
         <h3 class="header">
@@ -15,8 +8,6 @@
         <p class="meta">
 
         </p>
-
-        <p class="wideOnly">{{ event.getDescription | slice(0, 200)}}&hellip;</p>
 
         <p class="meta">
             {{ event.getStartDate|date('M d Y') }}

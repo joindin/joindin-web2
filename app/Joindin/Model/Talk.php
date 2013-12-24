@@ -79,4 +79,14 @@ class Talk
     {
         return $this->data->event_uri;
     }
+
+    public function getAverageRating()
+    {
+        return $this->data->average_rating;
+    }
+
+    public function getCommentUri()
+    {
+        return $this->data->comments_uri;
+    }
 }

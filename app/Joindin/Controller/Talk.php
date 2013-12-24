@@ -17,19 +17,23 @@ class Talk extends Base
     {
         $eventDb = new DbEvent();
         $eventUri = $eventDb->getUriFor($eventSlug);
+        $eventApi = new \Joindin\Model\API\Event($this->accessToken);
+        $event = $eventApi->getBySlug($eventSlug);
 
         $talkDb = new DbTalk();
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
         $talkApi = new \Joindin\Model\API\Talk($this->accessToken, new DbTalk);
-        $talk = $talkApi->getTalk($talkUri);
+        $talk = $talkApi->getTalk($talkUri, true);
 
-        echo '<pre>'; var_dump($talk); die();
+        $comments = $talkApi->getComments($talk->getCommentUri(), true);
 
         try {
             echo $this->application->render(
                 'Talk/index.html.twig',
                 array(
-                    'talk' => $events,
+                    'talk' => $talk,
+                    'event' => $event,
+                    'comments' => $comments,
                 )
             );
         } catch (\Twig_Error_Runtime $e) {

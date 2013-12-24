@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Model;
 
-class Talk
+class Comment
 {
     private $data;
 
@@ -15,78 +15,24 @@ class Talk
         $this->data = $data;
     }
 
-    public function getTitle()
+    public function getRating()
     {
-        return $this->data->talk_title;
+        return $this->data->rating;
     }
 
-    public function getType()
+    public function getUserDisplayName()
     {
-        return $this->data->type;
+        return $this->data->user_display_name;
     }
 
-    public function getAbsoluteWebsiteUrl()
+    public function getCommentDate()
     {
-        return $this->data->website_uri;
+        return $this->data->created_date;
     }
 
-    public function getStartDateTime()
+    public function getComment()
     {
-        return new \DateTime($this->data->start_date);
+        return $this->data->comment;
     }
 
-    public function getEndDateTime()
-    {
-        if(!$this->data->duration) {
-            return null;
-        }
-
-        $start_time = $this->getStartDateTime();
-        $end_time = $start_time->add(new \DateInterval('PT'.$this->data->duration.'M'));
-
-        return $end_time;
-    }
-
-    public function getDuration()
-    {
-        return $this->data->duration;
-    }
-
-    public function getDescription()
-    {
-        return $this->data->talk_description;
-    }
-
-    public function getSpeakers()
-    {
-        return $this->data->speakers;
-    }
-
-    public function getTracks()
-    {
-        return $this->data->tracks;
-    }
-
-    public function getApiUri($verbose = false)
-    {
-        if($verbose) {
-            return $this->data->verbose_uri;
-        }
-        return $this->data->uri;
-    }
-
-    public function getEventUri()
-    {
-        return $this->data->event_uri;
-    }
-
-    public function getAverageRating()
-    {
-        return $this->data->average_rating;
-    }
-
-    public function getCommentUri()
-    {
-        return $this->data->comments_uri;
-    }
 }
