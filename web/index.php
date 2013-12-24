@@ -16,6 +16,11 @@ require '../vendor/TwigView.php';
 require '../app/Joindin/View/Filters.php';
 require '../app/Joindin/View/Functions.php';
 
+function pr($obj) {
+    echo '<pre>';
+    die(var_dump($obj));
+}
+
 $config = array();
 $configFile = realpath(__DIR__ . '/../config/config.php');
 if (is_readable($configFile)) {

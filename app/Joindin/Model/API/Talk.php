@@ -3,6 +3,22 @@ namespace Joindin\Model\API;
 
 class Talk extends \Joindin\Model\API\JoindIn
 {
+
+    /**
+     * @var \Joindin\Model\Db\Talk
+     */
+    protected $talkDb;
+
+    /**
+     * @param \Joindin\Model\Db\Talk $talkDb
+     */
+    function __construct($accessToken, \Joindin\Model\Db\Talk $talkDb)
+    {
+        parent::__construct($accessToken);
+        $this->talkDb = $talkDb;
+    }
+
+
     /**
      * Get all talks associated with an event
      *
@@ -22,7 +38,9 @@ class Talk extends \Joindin\Model\API\JoindIn
 
         $collectionData = array();
         foreach ($talks['talks'] as $talk) {
-            $collectionData['talks'][] = new \Joindin\Model\Talk($talk);
+            $talkObject = new \Joindin\Model\Talk($talk);
+            $collectionData['talks'][] = $talkObject;
+            $this->talkDb->saveSlugToDatabase($talkObject);
         }
 
 
