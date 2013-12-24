@@ -17,7 +17,7 @@
     <header id="head">
         <div class="userdetails">
         {% if user %}
-            Welcome {{ user.full_name }}
+            Welcome {{ user.getFullName }}
             <a href="{{ urlFor('user-logout') }}">Logout</a>
         {% else %}
             <a href="{{ urlFor('user-login') }}">Login</a>
