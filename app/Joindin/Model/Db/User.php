@@ -1,6 +1,8 @@
 <?php
 namespace Joindin\Model\Db;
 
+use  \Joindin\Service\Db as DbService;
+
 class User
 {
     protected $keyName = 'users';
@@ -8,7 +10,7 @@ class User
 
     public function __construct()
     {
-        $this->db = new \Joindin\Service\Db;
+        $this->db = new DbService();
     }
 
     public function getUriFor($username)
