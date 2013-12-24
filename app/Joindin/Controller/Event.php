@@ -86,11 +86,14 @@ class Event extends Base
 
         $schedule = $scheduler->getScheduleData($event);
 
+        $config = $this->application->config('custom');
+
         echo $this->application->render(
             'Event/schedule.html.twig',
             array(
                 'event' => $event,
                 'eventDays' => $schedule,
+                'baseUri' => $config['baseUri'],
             )
         );
      }

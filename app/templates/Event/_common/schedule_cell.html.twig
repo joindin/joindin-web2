@@ -1,4 +1,4 @@
-<p><a href="{{ talk.absoluteWebsiteUrl }}">{{ talk.title }}</a></p>
+<p><a href="{{ talk.absoluteWebsiteUrl|replace({'joind.in': baseUri}) }}">{{ talk.title }}</a></p>
 <p>{% for speaker in talk.speakers %}
     <a href="{{ speaker.speaker_uri }}">
         <span class="speaker">
