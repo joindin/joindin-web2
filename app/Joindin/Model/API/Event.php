@@ -36,75 +36,31 @@ class Event extends \Joindin\Model\API\JoindIn
         $collectionData = array();
         foreach ($events['events'] as $event) {
             $thisEvent = new \Joindin\Model\Event($event);
-            $thisEvent->setSlug($this->getSlugFromDatabase($thisEvent));
-
             $collectionData['events'][] = $thisEvent;
+
+            // save the URL so we can look up by it
+            $this->saveEventUrl($thisEvent);
         }
         $collectionData['pagination'] = $meta;
 
         return $collectionData;
     }
 
-
-    /*
-     * Get a single event, by slug
+    /**
+     * Take an event and save the url_friendly_name and the API URL for that
      *
-     * @param $slug String of event to get
-     * @usage
-     * $eventapi = new \Joindin\Model\API\Event();
-     * $eventapi->getBySlug('openwest-conference-2013')
+     * @param \Joindin\Model\Event $event The event to take details from
      */
-
-    public function getBySlug($slug)
-    {
+    protected function saveEventUrl($event) {
         $db = new \Joindin\Service\Db;
-        $event = $db->getOneByKey('events', 'slug', $slug);
-
-        // Throw exception if event not found
-        if (!$event) {
-            throw new \Exception('Event not found');
-        }
-
-        $event_list = json_decode($this->apiGet($event['verboseuri']));
-
-        $event = new \Joindin\Model\Event($event_list->events[0]);
-
-        $event->comments = json_decode($this->apiGet($event->getCommentsUri()));
-
-        // For later use, so that we don't have to
-        $event->setSlug($slug);
-
-        return $event;
-
-    }
-
-    protected function getSlugFromDatabase($event)
-    {
-        $db = new \Joindin\Service\Db;
-        $data = $db->getOneByKey('events', 'name', $event->getName());
-        if (!$data) {
-            // couldn't find, so create one in the database
-            return $this->createSlugInDatabase($event);
-
-        }
-        return $data['slug'];
-    }
-
-    protected function createSlugInDatabase($event)
-    {
-        $alphaNumericName = preg_replace("/[^0-9a-zA-Z- ]/", "", $event->getName());
-        $slug = strtolower(str_replace(' ', '-', $alphaNumericName));
-
+    
         $data = array(
-            'name' => $event->getName(),
-            'slug' => $slug,
-            'uri'  => $event->getUri(),
-            'verboseuri'  => $event->getVerboseUri()
+            "url_friendly_name" => $event->getUrlFriendlyName(),
+            "uri" => $event->getUri(),
+            "verbose_uri" => $event->getVerboseUri()
         );
 
-        $db = new \Joindin\Service\Db;
         $db->save('events', $data);
-
-        return $slug;
     }
+
 }

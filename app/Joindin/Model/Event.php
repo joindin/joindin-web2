@@ -4,7 +4,6 @@ namespace Joindin\Model;
 class Event
 {
     private $data;
-    protected $slug;
 
     /**
      * Crate new Event model
@@ -23,7 +22,7 @@ class Event
 
     public function getUrl()
     {
-        return '/event/'.$this->getSlug();
+        return '/event/'.$this->getUrlFriendlyName();
     }
 
     public function getIcon()
@@ -101,16 +100,6 @@ class Event
         return $this->data->verbose_uri;
     }
 
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
-
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
     public function isAttending()
     {
         return $this->data->attending;
@@ -162,4 +151,9 @@ class Event
 
         return ($endDate < $now);
     }
+    public function getUrlFriendlyName()
+    {
+        return $this->data->url_friendly_name;
+    }
+
 }
