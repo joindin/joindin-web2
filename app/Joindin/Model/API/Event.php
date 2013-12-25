@@ -63,4 +63,29 @@ class Event extends \Joindin\Model\API\JoindIn
         $db->save('events', $data);
     }
 
+    /**
+     * Look up this friendlyUrl in the DB, get an API endpoint, fetch data
+     * and return us an event
+     *
+     * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
+     * @return \Joindin\Model\Event The event we found, or false if something went wrong
+     */
+    public function getByFriendlyUrl($friendlyUrl) {
+        $db = new \Joindin\Service\Db;
+
+        $event = $db->getOneByKey('events', 'url_friendly_name', $friendlyUrl);
+
+        // Throw exception if event not found
+        if (!$event) {
+            throw new \Exception('Event not found');
+        }
+
+        $event_list = json_decode($this->apiGet($event['verbose_uri']));
+        $event = new \Joindin\Model\Event($event_list->events[0]);
+
+        $event->comments = json_decode($this->apiGet($event->getCommentsUri()));
+
+        return $event;
+
+    }
 }
