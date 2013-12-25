@@ -60,7 +60,12 @@ class Event extends \Joindin\Model\API\JoindIn
             "verbose_uri" => $event->getVerboseUri()
         );
 
-        $db->save('events', $data);
+        // criteria for mongo to update or insert by
+        $criteria = array(
+            "uri" => $event->getUri()
+        ); 
+
+        $db->save('events', $data, $criteria);
     }
 
     /**
