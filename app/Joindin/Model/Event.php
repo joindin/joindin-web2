@@ -156,4 +156,9 @@ class Event
         return $this->data->url_friendly_name;
     }
 
+    public function getStub()
+    {
+        return $this->data->stub;
+    }
+
 }

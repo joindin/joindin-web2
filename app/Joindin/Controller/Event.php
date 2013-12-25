@@ -51,8 +51,7 @@ class Event extends Base
 
     public function details($id)
     {
-        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl($id);
+        $event = $this->getEventFromUrl($id);
 
         echo $this->application->render(
             'Event/details.html.twig',
@@ -65,8 +64,7 @@ class Event extends Base
 
     public function map($id)
     {
-        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl($id);
+        $event = $this->getEventFromUrl($id);
 
         echo $this->application->render(
             'Event/map.html.twig',
@@ -78,8 +76,7 @@ class Event extends Base
 
      public function schedule($id)
      {
-        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl($id);
+        $event = $this->getEventFromUrl($id);
 
         $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
         $scheduler = new \Joindin\Service\Scheduler($apiTalk);
@@ -94,4 +91,21 @@ class Event extends Base
             )
         );
      }
+
+    protected function getEventFromUrl($id) {
+        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $event = $apiEvent->getByFriendlyUrl($id);
+        if($event) {
+            return $event;
+        }
+
+        // see if it was a shorthand one instead
+        $event = $apiEvent->getByStub($id);
+        if($event) {
+            return $event;
+        }
+
+        // we didn't find it
+        return false;
+    }
 }

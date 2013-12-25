@@ -57,6 +57,7 @@ class Event extends \Joindin\Model\API\JoindIn
         $data = array(
             "url_friendly_name" => $event->getUrlFriendlyName(),
             "uri" => $event->getUri(),
+            "stub" => $event->getStub(),
             "verbose_uri" => $event->getVerboseUri()
         );
 
@@ -80,9 +81,34 @@ class Event extends \Joindin\Model\API\JoindIn
 
         $event = $db->getOneByKey('events', 'url_friendly_name', $friendlyUrl);
 
-        // Throw exception if event not found
         if (!$event) {
-            throw new \Exception('Event not found');
+            // don't throw an exception, Slim eats them
+            return false;
+        }
+
+        $event_list = json_decode($this->apiGet($event['verbose_uri']));
+        $event = new \Joindin\Model\Event($event_list->events[0]);
+
+        $event->comments = json_decode($this->apiGet($event->getCommentsUri()));
+
+        return $event;
+
+    }
+
+    /**
+     * Look up this stub in the DB, get an API endpoint, fetch data
+     * and return us an event
+     *
+     * @param string $stub The short url bit of the event (e.g. phpbnl14)
+     * @return \Joindin\Model\Event The event we found, or false if something went wrong
+     */
+    public function getByStub($stub) {
+        $db = new \Joindin\Service\Db;
+
+        $event = $db->getOneByKey('events', 'stub', $stub);
+
+        if (!$event) {
+            return false;
         }
 
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
