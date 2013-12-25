@@ -36,11 +36,13 @@ time, mark, audio, video {
     font-size: 100%;
     vertical-align: top;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -70,7 +72,6 @@ h2 {
     font-size: 16px;
     padding-top: 8px;
 }
-
 
 /*------------------------------------*\
  * Layout/Structure
@@ -106,6 +107,7 @@ nav li a {
     text-decoration: none;
     vertical-align: middle;
 }
+
 nav li:first-child a {
     border: 0
 }
@@ -115,16 +117,17 @@ nav li:first-child a {
     padding: 4px;
     vertical-align: middle;
 }
+
 #head .userdetails a {
     text-decoration: none;
 }
-
 
 @media only screen and (min-width: 275px) {
     nav li, #head .userdetails {
         display: table-cell;
         vertical-align: middle;
     }
+
     nav li a, #head .userdetails a {
         border: 0;
         display: inline;
@@ -140,7 +143,6 @@ nav a:hover, #head .userdetails a:hover {
     padding-bottom: 24px;
 }
 
-
 #wrapper {
     display: table;
     max-width: 960px;
@@ -150,7 +152,6 @@ nav a:hover, #head .userdetails a:hover {
 .wideOnly {
     display: none;
 }
-
 
 @media only screen and (min-width: 690px) {
     #content {
@@ -195,6 +196,7 @@ nav a:hover, #head .userdetails a:hover {
     padding: 0.8ex 0.5ex 0.5ex;
     text-decoration: none;
 }
+
 .button:hover {
     background-color: #f80;
 }
@@ -216,8 +218,6 @@ nav a:hover, #head .userdetails a:hover {
 .eventCard {
     clear: both;
 }
-
-
 
 .eventCard .logo {
     /* Don't show if the viewport is too narrow, it looks silly otherwise */
@@ -281,7 +281,7 @@ nav a:hover, #head .userdetails a:hover {
 .table table th {
     background-color: lightgrey;
     border: 1px solid white;
-    text-align:center;
+    text-align: center;
     font-weight: normal;
     vertical-align: middle;
     padding: 3px 0;
@@ -301,7 +301,7 @@ nav a:hover, #head .userdetails a:hover {
     text-align: center;
     padding-top: 0;
     padding-left: 0;
-    color:black;
+    color: black;
 }
 
 .table td.talk {
@@ -313,7 +313,7 @@ nav a:hover, #head .userdetails a:hover {
 }
 
 .table td.workshop {
-     background-color: #F69159;
+    background-color: #F69159;
 }
 
 .table td.social {
@@ -350,9 +350,20 @@ nav a:hover, #head .userdetails a:hover {
     font-weight: normal;
 }
 
-
 .table table#key td {
     color: white;
     width: 20%;
     text-align: center;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.float {
+    float: left;
+}
+
+.rating {
+    margin: 5px;
 }

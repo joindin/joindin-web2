@@ -35,6 +35,22 @@ class Db
     }
 
     /**
+     * Get a single talk from Key/Value paired array
+     *
+     * @param $collection
+     * @param array $keyValues
+     * @return array|null
+     */
+    public function getOneByKeys($collection, array $keyValues)
+    {
+        $record = $this->_getMongoClient()
+            ->selectCollection('joindin', $collection)
+            ->findOne($keyValues);
+
+        return $record;
+    }
+
+    /**
      * Save a value
      *
      * @param string $collection Collection to save into
@@ -53,7 +69,7 @@ class Db
     /**
      * Returns MongoClient object, or a mock
      *
-     * @return MongoClient
+     * @return \MongoClient
      */
     private function _getMongoClient()
     {

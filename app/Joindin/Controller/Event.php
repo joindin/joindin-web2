@@ -2,6 +2,8 @@
 namespace Joindin\Controller;
 
 
+use Joindin\Model\Db\Talk;
+
 class Event extends Base
 {
 
@@ -81,16 +83,19 @@ class Event extends Base
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getBySlug($id);
 
-        $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
+        $apiTalk = new \Joindin\Model\API\Talk($this->accessToken, new Talk());
         $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
         $schedule = $scheduler->getScheduleData($event);
+
+        $config = $this->application->config('custom');
 
         echo $this->application->render(
             'Event/schedule.html.twig',
             array(
                 'event' => $event,
                 'eventDays' => $schedule,
+                'baseUri' => $config['baseUri'],
             )
         );
      }

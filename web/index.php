@@ -16,6 +16,11 @@ require '../vendor/TwigView.php';
 require '../app/Joindin/View/Filters.php';
 require '../app/Joindin/View/Functions.php';
 
+function pr($obj) {
+    echo '<pre>';
+    die(var_dump($obj));
+}
+
 $config = array();
 $configFile = realpath(__DIR__ . '/../config/config.php');
 if (is_readable($configFile)) {
@@ -72,6 +77,7 @@ new Controller\Application($app);
 new Controller\Event($app);
 new Controller\Search($app);
 new Controller\User($app);
+new Controller\Talk($app);
 
 // execute application
 $app->run();

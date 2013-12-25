@@ -66,4 +66,27 @@ class Talk
     {
         return $this->data->tracks;
     }
+
+    public function getApiUri($verbose = false)
+    {
+        if($verbose) {
+            return $this->data->verbose_uri;
+        }
+        return $this->data->uri;
+    }
+
+    public function getEventUri()
+    {
+        return $this->data->event_uri;
+    }
+
+    public function getAverageRating()
+    {
+        return $this->data->average_rating;
+    }
+
+    public function getCommentUri()
+    {
+        return $this->data->comments_uri;
+    }
 }
