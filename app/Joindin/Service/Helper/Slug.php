@@ -17,7 +17,7 @@ class Slug
     {
         $string = strtolower($string);
         $string = str_replace(' ', '-', $string);
-        $string = urlencode($string);
+//        $string = urlencode($string);
         return $string;
     }
 
