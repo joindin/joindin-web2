@@ -128,7 +128,7 @@ class Event
 
     public function getAttendeeString()
     {
-        $message = $this->get_beginning_of_attending_message((int) $this->getAttendeeCount());
+        $message = $this->get_beginning_of_attending_message();
 
         if ($this->isAttending()) {
             $message .= '(including you) ';
@@ -160,9 +160,9 @@ class Event
         return $db->save('events', $data);
     }
 
-    protected function get_beginning_of_attending_message($attendee_count) {
-        $message = $attendee_count . ' ';
-        if (1 == $attendee_count) {
+    protected function get_beginning_of_attending_message() {
+        $message = $this->getAttendeeCount() . ' ';
+        if (1 == $this->getAttendeeCount()) {
             $message .= 'person ';
         } else {
             $message .= 'people ';
