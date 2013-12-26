@@ -3,17 +3,17 @@ namespace Joindin\Model\API;
 
 class JoindIn
 {
-    protected $baseApiUrl = 'http://api.joind.in';
+    protected $baseApiUrl;
     protected $accessToken;
 
-    public function __construct($accessToken)
+    public function __construct($configObj, $accessToken)
     {
-        $app = \Slim::getInstance();
-        $config = $app->config('custom');
+        $config = $configObj->getConfig();
 
         if (isset($config['apiUrl'])) {
             $this->baseApiUrl = $config['apiUrl'];
         }
+
         $this->accessToken = $accessToken;
     }
 

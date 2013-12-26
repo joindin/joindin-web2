@@ -1,10 +1,11 @@
 <?php
 namespace Joindin\Controller;
 
+use \Joindin\Service\Helper\Config as Config;
+
 
 class Event extends Base
 {
-
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/event', array($this, 'index'));
@@ -22,7 +23,7 @@ class Event extends Base
         $perPage = 10;
         $start = ($page -1) * $perPage;
 
-        $event_collection = new \Joindin\Model\API\Event($this->accessToken);
+        $event_collection = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
         $events = $event_collection->getCollection($perPage, $start);
         try {
             echo $this->application->render(
@@ -51,7 +52,7 @@ class Event extends Base
 
     public function details($id)
     {
-        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $apiEvent = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
         $event = $apiEvent->getBySlug($id);
 
         echo $this->application->render(
@@ -65,7 +66,7 @@ class Event extends Base
 
     public function map($id)
     {
-        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $apiEvent = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
         $event = $apiEvent->getBySlug($id);
 
         echo $this->application->render(
@@ -78,10 +79,10 @@ class Event extends Base
 
      public function schedule($id)
      {
-        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $apiEvent = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
         $event = $apiEvent->getBySlug($id);
 
-        $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
+        $apiTalk = new \Joindin\Model\API\Talk(new Config(), $this->accessToken);
         $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
         $schedule = $scheduler->getScheduleData($event);

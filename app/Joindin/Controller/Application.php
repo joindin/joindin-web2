@@ -1,8 +1,15 @@
 <?php
 namespace Joindin\Controller;
 
+use \Joindin\Service\Helper\Config as Config;
+
 class Application extends Base
 {
+    protected function defineRoutes(\Slim $app)
+    {
+        $app->get('/', array($this, 'index'));
+    }
+
     public function index()
     {
         $page = ((int)$this->application->request()->get('page') === 0)
@@ -12,7 +19,7 @@ class Application extends Base
         $perPage = 6;
         $start = ($page -1) * $perPage;
 
-        $event_collection = new \Joindin\Model\API\Event($this->accessToken);
+        $event_collection = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 //        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
         try {
@@ -38,11 +45,6 @@ class Application extends Base
                 )
             );
         }
-    }
-
-    protected function defineRoutes(\Slim $app)
-    {
-        $app->get('/', array($this, 'index'));
     }
 }
 
