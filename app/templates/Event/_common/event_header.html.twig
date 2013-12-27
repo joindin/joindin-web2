@@ -10,14 +10,14 @@
         {%  if event.getStartDate|date('M d Y')
         is not sameas(event.getEndDate|date('M d Y')) %}
             &ndash; {{ event.getEndDate|date('M d Y') }}
-        {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.geturlfriendlyname}) }}">{{ event.getLocation }}</a>
+        {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
     </p>
 </h2>
 
 <nav>
     <ul>
-        <li><a href="{{ urlFor('event-detail', {"friendly_name": event.geturlfriendlyname}) }}">Details</a></li>
-        <li><a href="{{ urlFor('event-map', {"friendly_name": event.geturlfriendlyname}) }}">Map</a></li>
-        <li><a href="{{ urlFor('event-schedule', {"friendly_name": event.geturlfriendlyname}) }}">Schedule</a></li>
+        <li><a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">Details</a></li>
+        <li><a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">Map</a></li>
+        <li><a href="{{ urlFor('event-schedule', {"friendly_name": event.getUrlFriendlyName}) }}">Schedule</a></li>
     </ul>
 </nav>
