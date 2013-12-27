@@ -20,11 +20,6 @@ class Event
         return $this->data->name;
     }
 
-    public function getUrl()
-    {
-        return '/event/'.$this->getUrlFriendlyName();
-    }
-
     public function getIcon()
     {
         return $this->data->icon;
@@ -151,6 +146,7 @@ class Event
 
         return ($endDate < $now);
     }
+
     public function getUrlFriendlyName()
     {
         return $this->data->url_friendly_name;
@@ -159,11 +155,6 @@ class Event
     public function getStub()
     {
         return $this->data->stub;
-    }
-
-    public function getShortUrl()
-    {
-        return '/e/'.$this->getStub();
     }
 
 }

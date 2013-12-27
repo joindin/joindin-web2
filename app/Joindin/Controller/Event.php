@@ -8,10 +8,10 @@ class Event extends Base
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/event', array($this, 'index'))->name("events");
-        $app->get('/event/:friendly_name', array($this, 'details'));
-        $app->get('/event/:friendly_name/map', array($this, 'map'));
-        $app->get('/event/:friendly_name/schedule', array($this, 'schedule'));
-        $app->get('/e/:stub', array($this, 'quicklink'));
+        $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
+        $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
+        $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
+        $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
     }
 
     public function index()
@@ -54,10 +54,14 @@ class Event extends Base
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
-        $request = $this->application->request();
-        $quicklink = $request->headers("host") . $event->getShortUrl();
 
         if($event) {
+            $quicklink = $this->application->request()->headers("host") 
+                . $this->application->urlFor(
+                    "event-quicklink", 
+                    array("stub" => $event->getStub()
+                ));
+
             echo $this->application->render(
                 'Event/details.html.twig',
                 array(
@@ -122,7 +126,11 @@ class Event extends Base
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getByStub($stub);
         if($event) {
-            $this->application->redirect($event->getUrl(), 301);
+            $this->application->redirect(
+                $this->application->urlFor("event-detail", 
+                    array("friendly_name" => $event->getUrlFriendlyName())),
+                301
+            );
         } else {
             $events_url = $this->application->urlFor("events");
             $this->application->redirect($events_url);
