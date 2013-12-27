@@ -54,12 +54,16 @@ class Event extends Base
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
+        $request = $this->application->request();
+        $quicklink = $request->headers("host") . $event->getShortUrl();
 
         if($event) {
             echo $this->application->render(
                 'Event/details.html.twig',
                 array(
-                    'event' => $event
+                    'event' => $event,
+                    'quicklink' => $quicklink,
+
                 )
             );
         } else {

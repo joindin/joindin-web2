@@ -4,5 +4,7 @@
     {% include 'Event/_common/event_header.html.twig' %}
 
     <p>{{ event.getDescription|format_string|raw }}</p>
+
+    <p>Quicklink: <a href="{{ event.getShortUrl }}">{{ quicklink }}</a></p>
 {% endblock %}
 

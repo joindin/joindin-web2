@@ -161,4 +161,9 @@ class Event
         return $this->data->stub;
     }
 
+    public function getShortUrl()
+    {
+        return '/e/'.$this->getStub();
+    }
+
 }
