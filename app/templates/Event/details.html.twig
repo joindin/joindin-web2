@@ -4,5 +4,10 @@
     {% include 'Event/_common/event_header.html.twig' %}
 
     <p>{{ event.getDescription|format_string|raw }}</p>
+
+    {% if event.getStub %}
+    <p>Quicklink: <a href="{{ urlFor('event-quicklink', {"stub": event.getStub}) }}">{{ quicklink }}</a></p>
+    {% endif %}
+
 {% endblock %}
 
