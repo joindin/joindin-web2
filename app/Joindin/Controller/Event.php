@@ -8,9 +8,9 @@ class Event extends Base
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/event', array($this, 'index'));
-        $app->get('/event/:id', array($this, 'details'));
-        $app->get('/event/:id/map', array($this, 'map'));
-        $app->get('/event/:id/schedule', array($this, 'schedule'));
+        $app->get('/event/:friendly_name', array($this, 'details'));
+        $app->get('/event/:friendly_name/map', array($this, 'map'));
+        $app->get('/event/:friendly_name/schedule', array($this, 'schedule'));
         $app->get('/e/:stub', array($this, 'quicklink'));
     }
 
@@ -50,10 +50,10 @@ class Event extends Base
         }
     }
 
-    public function details($id)
+    public function details($friendly_name)
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl($id);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         echo $this->application->render(
             'Event/details.html.twig',
@@ -64,10 +64,10 @@ class Event extends Base
     }
 
 
-    public function map($id)
+    public function map($friendly_name)
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl($id);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         echo $this->application->render(
             'Event/map.html.twig',
@@ -77,10 +77,10 @@ class Event extends Base
         );
     }
 
-     public function schedule($id)
+     public function schedule($friendly_name)
      {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl($id);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
         $scheduler = new \Joindin\Service\Scheduler($apiTalk);
