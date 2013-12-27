@@ -7,7 +7,7 @@ class Event extends Base
 
     protected function defineRoutes(\Slim $app)
     {
-        $app->get('/event', array($this, 'index'));
+        $app->get('/event', array($this, 'index'))->name("events");
         $app->get('/event/:friendly_name', array($this, 'details'));
         $app->get('/event/:friendly_name/map', array($this, 'map'));
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'));
@@ -55,12 +55,18 @@ class Event extends Base
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
-        echo $this->application->render(
-            'Event/details.html.twig',
-            array(
-                'event' => $event
-            )
-        );
+        if($event) {
+            echo $this->application->render(
+                'Event/details.html.twig',
+                array(
+                    'event' => $event
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events");
+            $this->application->redirect($events_url);
+        }
+
     }
 
 
@@ -69,12 +75,17 @@ class Event extends Base
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
-        echo $this->application->render(
-            'Event/map.html.twig',
-            array(
-                'event' => $event
-            )
-        );
+        if($event) {
+            echo $this->application->render(
+                'Event/map.html.twig',
+                array(
+                    'event' => $event
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events");
+            $this->application->redirect($events_url);
+        }
     }
 
      public function schedule($friendly_name)
@@ -82,18 +93,24 @@ class Event extends Base
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
-        $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
-        $scheduler = new \Joindin\Service\Scheduler($apiTalk);
+        if($event) {
+            $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
+            $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
-        $schedule = $scheduler->getScheduleData($event);
+            $schedule = $scheduler->getScheduleData($event);
 
-        echo $this->application->render(
-            'Event/schedule.html.twig',
-            array(
-                'event' => $event,
-                'eventDays' => $schedule,
-            )
-        );
+            echo $this->application->render(
+                'Event/schedule.html.twig',
+                array(
+                    'event' => $event,
+                    'eventDays' => $schedule,
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events");
+            $this->application->redirect($events_url);
+        }
+
      }
 
     public function quicklink($stub)
@@ -102,9 +119,10 @@ class Event extends Base
         $event = $apiEvent->getByStub($stub);
         if($event) {
             $this->application->redirect($event->getUrl(), 301);
+        } else {
+            $events_url = $this->application->urlFor("events");
+            $this->application->redirect($events_url);
         }
 
-        // we didn't find it
-        return false;
     }
 }
