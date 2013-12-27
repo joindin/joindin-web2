@@ -5,6 +5,9 @@
 
     <p>{{ event.getDescription|format_string|raw }}</p>
 
-    <p>Quicklink: <a href="{{ event.getShortUrl }}">{{ quicklink }}</a></p>
+    {% if event.getStub %}
+    <p>Quicklink: <a href="{{ urlFor('event-quicklink', {"stub": event.getStub}) }}">{{ quicklink }}</a></p>
+    {% endif %}
+
 {% endblock %}
 
