@@ -1,0 +1,103 @@
+{% extends '/layout.html.twig' %}
+
+{% block extra_javascript %}
+    <script type="text/javascript" src="/js/ulayers.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        // <![CDATA[
+        var map;
+
+        $(document).ready(function(){
+            map = new uLayers.Map('map', uLayers.OSM);
+            map.setOrigin({lat: {{ event.latitude }}, lon: {{ event.longitude }} }, 14);
+            map.addMarker({lat: {{ event.latitude }}, lon: {{ event.longitude }} });
+        });
+        // ]]>
+    </script>
+{% endblock %}
+
+{% block page_header %}
+<div class="row">
+    <div>
+        <div class="heading">
+
+            <div class="row-fluid">
+                <div class="logo auto-height">
+                    <img src="{{ event.icon|img_path("event_icons") }}" alt="{{ event.name }}" />
+                </div>
+
+                <div class="auto-height">
+                    <h1 class="event-name">{{ event.name }}</h1>
+                    <p>
+                        {% for tag in event.tags %}
+                            <span class="label"><i>{{ tag }}</i></span>
+                        {% endfor %}
+                    </p>
+                    <p><i class="icon icon-globe"></i> {{ event.href|link }}</p>
+                    <p>{{ event.description|format_string|raw }}</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div>
+        <h2><i class="icon-calendar"></i> When and where</h2>
+
+        <p>
+            From <b>{{ event.start_date|format_date}}</b> until
+            <b>{{ event.end_date|format_date}}</b> at <b>{{ event.location }}</b>
+        </p>
+
+        <div class="thumbnail">
+            <div id="map" style="border: 1px solid black; width: 100%; height: 300px;"></div>
+            <p>&copy; <a href="http://www.openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a></p>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <h2>Comments</h2>
+    <ul>
+    {% for comment in event.comments %}
+        {% include '_common/comment.html.twig' %}
+    {% endfor %}
+    </ul>
+
+    <h2>Add new comment</h2>
+    <form id="add-comment" method="POST" action="{{ urlFor('event-add-comment', {'id': event.slug}) }}">
+    <div>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment"></textarea>
+    </div>
+    <div>
+        <label>&nbsp;</label>
+        <input type="submit" value="Submit comment">
+    </div>
+    </form>
+</div>
+
+
+{% endblock %}
+
+{#
+Presented information:
+        -Name
+        Slug
+        -Description
+        -Hosts
+        -Hashtag
+        -tags
+        -URL
+        -CFP
+        ?Event hyperlink
+        -Logo icon
+        -Address information + Map
+        Attending status
+#}
+

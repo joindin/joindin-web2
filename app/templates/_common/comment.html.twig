@@ -1,0 +1,13 @@
+{# This template should work for both event and talk comments #}
+{# {{ dump(comment) }} #}
+
+<li class="comment" id="comment-{{ hash(comment.comment_uri)|slice(1,7) }}">
+    <div class="info">
+        <strong>{{ comment.created_date }}</strong>
+by <strong>{# <a href="{{ urlFor('user-details' }}"> #}{{ comment.user_display_name }}{# </a> #}</strong>
+        via {{ comment.source }}
+    </div>
+    <div class="comment-body">
+        {{ comment.comment }}
+    </div>
+</li>

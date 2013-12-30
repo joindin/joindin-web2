@@ -15,6 +15,16 @@ class Event
         $this->data = $data;
     }
 
+    public function setComments($comments)
+    {
+        $this->_event->comments = $comments;
+    }
+
+    public function setSlug($slug)
+    {
+        $this->_event->slug = $slug;
+    }
+
     public function getName()
     {
         return $this->data->name;

@@ -11,6 +11,7 @@ class Event extends Base
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
+        $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
     }
 
@@ -136,5 +137,19 @@ class Event extends Base
             $this->application->redirect($events_url);
         }
 
+    }
+
+    public function addComment($friendly_name)
+    {
+        $request = $this->application->request();
+        $comment = $request->post('comment');
+
+        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
+
+        $result = $event->addComment($event, $comment);
+
+        $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
+        $this->application->redirect($url);
     }
 }
