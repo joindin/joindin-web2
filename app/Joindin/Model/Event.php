@@ -12,6 +12,7 @@ class Event
      */
     public function __construct($data)
     {
+        $this->data = $data;
     }
 
     public function setComments($comments)
