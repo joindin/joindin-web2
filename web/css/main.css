@@ -375,3 +375,17 @@ nav a:hover, #head .userdetails a:hover {
     margin-top: 5px;
     font-size: 11px;
 }
+
+#add-comment {
+    margin-bottom: 10px;
+}
+
+#add-comment label {
+    display:block;
+    font-size: 11px;
+}
+
+#add-comment textarea {
+    width: 30em;
+    height: 5em;
+}

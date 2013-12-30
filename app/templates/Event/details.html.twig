@@ -18,14 +18,13 @@
         {% endfor %}
         </ul>
 
-        <h2>Add new comment</h2>
+        <h2>Write a comment</h2>
         <form id="add-comment" method="POST" action="{{ urlFor('event-add-comment', {'friendly_name': event.getUrlFriendlyName}) }}">
         <div>
-            <label for="comment">Comment:</label>
+            <label for="comment">Your comment:</label>
             <textarea id="comment" name="comment"></textarea>
         </div>
         <div>
-            <label>&nbsp;</label>
             <input type="submit" value="Submit comment">
         </div>
         </form>
