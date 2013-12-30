@@ -64,6 +64,11 @@ class JoindIn
             throw new \Exception('Unable to connect to API');
         }
 
-        return $result;
+        $status = 0;
+        if (preg_match('@HTTP\/1\.[0|1] (\d+) @', $http_response_header[0], $matches)) {
+            $status = $matches[1];
+        }
+
+        return array($status, $result);
     }
 }

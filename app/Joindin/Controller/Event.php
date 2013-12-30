@@ -146,9 +146,11 @@ class Event extends Base
 
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
-
-        $result = $event->addComment($event, $comment);
+        if ($event) {
+            $apiEvent->addComment($event, $comment);
+        }
 
         $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
+        $this->application->redirect($url);
     }
 }

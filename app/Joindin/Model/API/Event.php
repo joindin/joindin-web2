@@ -92,10 +92,6 @@ class Event extends \Joindin\Model\API\JoindIn
         $data = json_decode($this->apiGet($event->getCommentsUri(), array('verbose'=>'yes')), true);
         $event->setComments($data['comments']);
 
-        // For later use, so that we don't have to
-        $event->slug = $slug;
-        $event->setSlug($slug);
-
         return $event;
 
     }
@@ -126,11 +122,15 @@ class Event extends \Joindin\Model\API\JoindIn
 
     public function addComment($event, $comment)
     {
-        $url = $event->getCommentsUri();
+        $uri = $event->getCommentsUri();
         $params = array(
             'comment' => $comment,
         );
-        $result = $this->apiPost($url, $params);
-        return $result;
+        list ($status, $result) = $this->apiPost($uri, $params);
+
+        if ($status == 201) {
+            return true;
+        }
+        throw new \Exception("Failed to add comment: " . $result);
     }
 }

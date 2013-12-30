@@ -4,6 +4,7 @@ namespace Joindin\Model;
 class Event
 {
     private $data;
+    private $comments;
 
     /**
      * Crate new Event model
@@ -17,12 +18,12 @@ class Event
 
     public function setComments($comments)
     {
-        $this->_event->comments = $comments;
+        $this->comments = $comments;
     }
 
-    public function setSlug($slug)
+    public function getComments()
     {
-        $this->_event->slug = $slug;
+        return $this->comments;
     }
 
     public function getName()

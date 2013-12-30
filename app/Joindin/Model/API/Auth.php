@@ -20,7 +20,7 @@ class Auth extends \Joindin\Model\API\JoindIn
             'password'   => $password,
         );
 
-        $result = $this->apiPost($url, $params);
+        list($status, $result) = $this->apiPost($url, $params);
         if ($result) {
             $data = json_decode($result);
             if ($data) {
