@@ -11,6 +11,7 @@ class JoindIn
         $app = \Slim::getInstance();
         $config = $app->config('custom');
 
+
         if (isset($config['apiUrl'])) {
             $this->baseApiUrl = $config['apiUrl'];
         }

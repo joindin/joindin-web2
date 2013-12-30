@@ -150,6 +150,5 @@ class Event extends Base
         $result = $event->addComment($event, $comment);
 
         $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
-        $this->application->redirect($url);
     }
 }

@@ -92,6 +92,10 @@ class Event extends \Joindin\Model\API\JoindIn
         $data = json_decode($this->apiGet($event->getCommentsUri(), array('verbose'=>'yes')), true);
         $event->setComments($data['comments']);
 
+        // For later use, so that we don't have to
+        $event->slug = $slug;
+        $event->setSlug($slug);
+
         return $event;
 
     }
