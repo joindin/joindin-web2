@@ -39,14 +39,15 @@ class Db
      *
      * @param string $collection Collection to save into
      * @param array  $data       Data to save
+     * @param array  $criteria   The data to update on
      *
      * @return array Status of save
      */
-    public function save($collection, $data)
+    public function save($collection, $data, $criteria)
     {
         return $this->_getMongoClient()
             ->selectCollection('joindin', $collection)
-            ->save($data);
+            ->update($criteria, $data, array("upsert" => true));
     }
 
 

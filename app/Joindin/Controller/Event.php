@@ -7,10 +7,11 @@ class Event extends Base
 
     protected function defineRoutes(\Slim $app)
     {
-        $app->get('/event', array($this, 'index'));
-        $app->get('/event/:id', array($this, 'details'));
-        $app->get('/event/:id/map', array($this, 'map'));
-        $app->get('/event/:id/schedule', array($this, 'schedule'));
+        $app->get('/event', array($this, 'index'))->name("events");
+        $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
+        $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
+        $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
+        $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
     }
 
     public function index()
@@ -49,49 +50,91 @@ class Event extends Base
         }
     }
 
-    public function details($id)
+    public function details($friendly_name)
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getBySlug($id);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
-        echo $this->application->render(
-            'Event/details.html.twig',
-            array(
-                'event' => $event
-            )
-        );
+        if($event) {
+            $quicklink = $this->application->request()->headers("host") 
+                . $this->application->urlFor(
+                    "event-quicklink", 
+                    array("stub" => $event->getStub()
+                ));
+
+            echo $this->application->render(
+                'Event/details.html.twig',
+                array(
+                    'event' => $event,
+                    'quicklink' => $quicklink,
+
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events");
+            $this->application->redirect($events_url);
+        }
+
     }
 
 
-    public function map($id)
+    public function map($friendly_name)
     {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getBySlug($id);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
-        echo $this->application->render(
-            'Event/map.html.twig',
-            array(
-                'event' => $event
-            )
-        );
+        if($event) {
+            echo $this->application->render(
+                'Event/map.html.twig',
+                array(
+                    'event' => $event
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events");
+            $this->application->redirect($events_url);
+        }
     }
 
-     public function schedule($id)
+     public function schedule($friendly_name)
      {
         $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $apiEvent->getBySlug($id);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
-        $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
-        $scheduler = new \Joindin\Service\Scheduler($apiTalk);
+        if($event) {
+            $apiTalk = new \Joindin\Model\API\Talk($this->accessToken);
+            $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
-        $schedule = $scheduler->getScheduleData($event);
+            $schedule = $scheduler->getScheduleData($event);
 
-        echo $this->application->render(
-            'Event/schedule.html.twig',
-            array(
-                'event' => $event,
-                'eventDays' => $schedule,
-            )
-        );
+            echo $this->application->render(
+                'Event/schedule.html.twig',
+                array(
+                    'event' => $event,
+                    'eventDays' => $schedule,
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events");
+            $this->application->redirect($events_url);
+        }
+
      }
+
+    public function quicklink($stub)
+    {
+        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $event = $apiEvent->getByStub($stub);
+        if($event) {
+            $this->application->redirect(
+                $this->application->urlFor("event-detail", 
+                    array("friendly_name" => $event->getUrlFriendlyName())),
+                301
+            );
+        } else {
+            $events_url = $this->application->urlFor("events");
+            $this->application->redirect($events_url);
+        }
+
+    }
 }

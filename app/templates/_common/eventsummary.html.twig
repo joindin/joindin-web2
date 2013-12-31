@@ -1,7 +1,8 @@
 <div class="eventCard" xmlns="http://www.w3.org/1999/html">
     <section>
         <div class="logo">
-            <a href="{{ event.getUrl }}">
+            <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">
+
                 <img src="{{ event.getIcon|img_path("event_icons") }}" alt=" " />
             </a>
         </div>
@@ -9,7 +10,7 @@
 
     <section>
         <h3 class="header">
-            <a href="{{ event.getUrl }}">{{ event.getName }}</a>
+            <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getName }}</a>
         </h3>
 
         <p class="meta">
@@ -27,7 +28,7 @@
 
             |
 
-            <a href="{{ event.getUrl }}#comments">
+            <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}#comments">
                 {{ event.getCommentsCount}} comments</a> |
             {{ event.getAttendeeString|escape }}
             <!--| <a href="" class="button">I'm attending</a>-->
