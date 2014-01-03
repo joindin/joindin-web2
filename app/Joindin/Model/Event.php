@@ -4,6 +4,7 @@ namespace Joindin\Model;
 class Event
 {
     private $data;
+    private $comments;
 
     /**
      * Crate new Event model
@@ -13,6 +14,16 @@ class Event
     public function __construct($data)
     {
         $this->data = $data;
+    }
+
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
     }
 
     public function getName()

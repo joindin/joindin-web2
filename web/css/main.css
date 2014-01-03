@@ -66,11 +66,15 @@ p {
     padding-bottom: 0.5ex;
 }
 
+h2, h3, h4 {
+    font-weight: normal;
+}
+
 h2 {
+    color: #f90;
     font-size: 16px;
     padding-top: 8px;
 }
-
 
 /*------------------------------------*\
  * Layout/Structure
@@ -350,9 +354,37 @@ nav a:hover, #head .userdetails a:hover {
     font-weight: normal;
 }
 
-
 .table table#key td {
     color: white;
     width: 20%;
     text-align: center;
+}
+
+.comments {
+    margin-top: 10px;
+}
+
+.comment {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted #d7dcdf;
+}
+
+.comment .info {
+    margin-top: 5px;
+    font-size: 11px;
+}
+
+#add-comment {
+    margin-bottom: 10px;
+}
+
+#add-comment label {
+    display:block;
+    font-size: 11px;
+}
+
+#add-comment textarea {
+    width: 30em;
+    height: 5em;
 }

@@ -9,5 +9,25 @@
     <p>Quicklink: <a href="{{ urlFor('event-quicklink', {"stub": event.getStub}) }}">{{ quicklink }}</a></p>
     {% endif %}
 
+    <div class="row">
+        <h2>Comments</h2>
+        <ul class="comments">
+        {% for comment in event.getComments %}
+            {% include '_common/comment.html.twig' %}
+        {% endfor %}
+        </ul>
+
+        <h2>Write a comment</h2>
+        <form id="add-comment" method="POST" action="{{ urlFor('event-add-comment', {'friendly_name': event.getUrlFriendlyName}) }}">
+        <div>
+            <label for="comment">Your comment:</label>
+            <textarea id="comment" name="comment"></textarea>
+        </div>
+        <div>
+            <input type="submit" value="Submit comment">
+        </div>
+        </form>
+    </div>
+
 {% endblock %}
 
