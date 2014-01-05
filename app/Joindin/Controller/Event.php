@@ -125,7 +125,7 @@ class Event extends Base
 
     public function quicklink($stub)
     {
-        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $apiEvent = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
         $event = $apiEvent->getByStub($stub);
         if($event) {
             $this->application->redirect(
@@ -145,7 +145,7 @@ class Event extends Base
         $request = $this->application->request();
         $comment = $request->post('comment');
 
-        $apiEvent = new \Joindin\Model\API\Event($this->accessToken);
+        $apiEvent = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
         if ($event) {
             $apiEvent->addComment($event, $comment);
