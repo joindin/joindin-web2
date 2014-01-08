@@ -57,7 +57,7 @@ class Event extends Base
     public function details($friendly_name)
     {
         $apiEvent = new EventApi(new Config(), $this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl(new DbService, $friendly_name);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
             $quicklink = $this->application->request()->headers("host") 
@@ -85,7 +85,7 @@ class Event extends Base
     public function map($friendly_name)
     {
         $apiEvent = new EventApi(new Config(), $this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl(new DbService, $friendly_name);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
             echo $this->application->render(
@@ -103,7 +103,7 @@ class Event extends Base
      public function schedule($friendly_name)
      {
         $apiEvent = new EventApi(new Config(), $this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl(new DbService, $friendly_name);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
             $apiTalk = new \Joindin\Model\API\Talk(new Config(), $this->accessToken);
@@ -128,7 +128,7 @@ class Event extends Base
     public function quicklink($stub)
     {
         $apiEvent = new EventApi(new Config(), $this->accessToken);
-        $event = $apiEvent->getByStub(new DbService(), $stub);
+        $event = $apiEvent->getByStub($stub);
         if($event) {
             $this->application->redirect(
                 $this->application->urlFor("event-detail", 
@@ -148,7 +148,7 @@ class Event extends Base
         $comment = $request->post('comment');
 
         $apiEvent = new EventApi(new Config(), $this->accessToken);
-        $event = $apiEvent->getByFriendlyUrl(new DbService, $friendly_name);
+        $event = $apiEvent->getByFriendlyUrl($friendly_name);
         if ($event) {
             $apiEvent->addComment($event, $comment);
         }

@@ -3,6 +3,7 @@ namespace Joindin\Controller;
 
 use Joindin\Model\API\Auth as AuthService;
 use Joindin\Model\API\User as UserService;
+use \Joindin\Service\Helper\Config as Config;
 
 class User extends Base
 {
@@ -39,7 +40,7 @@ class User extends Base
             $password = $request->post('password');
             $clientId = $config['client_id'];
 
-            $authService = new AuthService($this->accessToken);
+            $authService = new AuthService(new Config(), $this->accessToken);
             $result      = $authService->login($username, $password, $clientId);
 
             if (false === $result) {
@@ -50,7 +51,7 @@ class User extends Base
                 $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $userService = new UserService($this->accessToken);
+                $userService = new UserService(new Config(), $this->accessToken);
                 $user = $userService->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;

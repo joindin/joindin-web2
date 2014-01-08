@@ -3,6 +3,20 @@ namespace Joindin\Model\API;
 
 class Event extends \Joindin\Model\API\JoindIn
 {
+    protected $mongoDatabaseName;
+
+    public function __construct($configObj, $accessToken)
+    {
+        parent::__construct($configObj, $accessToken);
+
+        $config = $configObj->getConfig();
+        if (isset($config['mongo']) && isset($config['mongo']['database_name'])) {
+            $this->mongoDatabaseName = $config['mongo']['database_name'];
+        }
+
+        $this->accessToken = $accessToken;
+    }
+
     /**
      * Get the latest events
      *
@@ -52,7 +66,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * @param \Joindin\Model\Event $event The event to take details from
      */
     protected function saveEventUrl($event) {
-        $db = new \Joindin\Service\Db;
+        $db = new \Joindin\Service\Db($this->mongoDatabaseName);
     
         $data = array(
             "url_friendly_name" => $event->getUrlFriendlyName(),
@@ -76,7 +90,8 @@ class Event extends \Joindin\Model\API\JoindIn
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
      * @return \Joindin\Model\Event The event we found, or false if something went wrong
      */
-    public function getByFriendlyUrl($db, $friendlyUrl) {
+    public function getByFriendlyUrl($friendlyUrl) {
+        $db = new \Joindin\Service\Db($this->mongoDatabaseName);
         $event = $db->getOneByKey('events', 'url_friendly_name', $friendlyUrl);
 
         if (!$event) {
@@ -85,7 +100,6 @@ class Event extends \Joindin\Model\API\JoindIn
         }
 
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
-
         $event = new \Joindin\Model\Event($event_list->events[0]);
 
         $data = json_decode($this->apiGet($event->getCommentsUri()));
@@ -102,7 +116,9 @@ class Event extends \Joindin\Model\API\JoindIn
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
      * @return \Joindin\Model\Event The event we found, or false if something went wrong
      */
-    public function getByStub($db, $stub) {
+    public function getByStub($stub) {
+        $db = new \Joindin\Service\Db($this->mongoDatabaseName);
+
         $event = $db->getOneByKey('events', 'stub', $stub);
 
         if (!$event) {
