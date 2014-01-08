@@ -9,13 +9,15 @@
     <p>Quicklink: <a href="{{ urlFor('event-quicklink', {"stub": event.getStub}) }}">{{ quicklink }}</a></p>
     {% endif %}
 
-    <div class="row">
-        <h2>Comments</h2>
-        <ul class="comments">
-        {% for comment in event.getComments %}
-            {% include '_common/comment.html.twig' %}
-        {% endfor %}
-        </ul>
+    <div id="comments">
+        {% if event.getComments %}
+            <h2>Comments</h2>
+            <ul class="comments">
+            {% for comment in event.getComments %}
+                {% include '_common/comment.html.twig' %}
+            {% endfor %}
+            </ul>
+        {% endif %}
 
         {% if user %}
             <h2>Write a comment</h2>

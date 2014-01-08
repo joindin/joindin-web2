@@ -6,8 +6,8 @@
         {{ comment.comment }}
     </div>
     <div class="info">
-        by {{ comment.user_display_name }}
+        by {% if comment.user_display_name %}{{ comment.user_display_name }}{%  else %}Anonymous{% endif %}
         at {{ comment.created_date|date('H:i \\o\\n j M Y') }}
-        via {{ comment.source }}
+        {% if comment.source %}via {{ comment.source }}{% endif %}
     </div>
 </li>
