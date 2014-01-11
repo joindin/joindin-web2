@@ -102,7 +102,7 @@ class Event extends \Joindin\Model\API\JoindIn
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
         $event = new \Joindin\Model\Event($event_list->events[0]);
 
-        $data = json_decode($this->apiGet($event->getCommentsUri()));
+        $data = json_decode($this->apiGet($event->getCommentsUri(), array("verbose" => "yes")));
         $event->setComments($data->comments);
 
         return $event;
