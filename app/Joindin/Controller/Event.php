@@ -2,7 +2,7 @@
 namespace Joindin\Controller;
 
 use \Joindin\Service\Helper\Config as Config;
-
+use \Joindin\Model\API\Photos as Photos;
 
 class Event extends Base
 {
@@ -12,7 +12,7 @@ class Event extends Base
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
-        $app->get('/event/:friendly_name/photos', array($this, 'callFlickrApi'));
+        $app->get('/event/:friendly_name/photos', array($this, 'photos'))->name("event-photos");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
     }
@@ -156,20 +156,24 @@ class Event extends Base
         $this->application->redirect($url);
     }
 
-    /**
-     * Uses PhotoService to retrieve machine-tagged
-     * photos from Flickr
-     *
-     * @param $slug
-     */
-    public function callFlickrApi($slug)
+    public function photos($friendlyName)
     {
-        $photoService = new \Joindin\Service\PhotoService();
-        $photos = $photoService->getTaggedPhotos('event', $slug);
+        $apiEvent = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
+        $event = $apiEvent->getByFriendlyUrl($friendlyName);
 
-        $app = \Slim::getInstance();
-        $app->contentType('application/json');
-        echo $photos;
-        exit();
+        if ($event) {
+            $photoService = new Photos(new Config());
+            $photos = $photoService->getTaggedPhotos('event', $friendlyName);
+
+            echo $this->application->render(
+                'Event/photos.html.twig',
+                array(
+                    'event' => $event,
+                    'photos' => $photos
+                )
+            );
+        } else {
+            throw new \Exception("Event not found");
+        }
     }
 }

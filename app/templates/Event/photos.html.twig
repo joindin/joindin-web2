@@ -1,0 +1,13 @@
+{% extends '/layout.html.twig' %}
+
+{% block extra_javascript %}
+    <script src="/js/photos.js"></script>
+    <script>
+            photos.getTaggedPhotos({{ photos | raw }});
+    </script>
+{% endblock %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+    <ul id="thumbnails"></ul>
+{% endblock %}

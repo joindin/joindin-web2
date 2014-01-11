@@ -91,7 +91,8 @@ h2 {
 
 #foot {
     border-top: 1px solid #317a95;
-    margin: 0 0 12px;
+    clear: both;
+    margin: 12px 0 12px;
     padding: 8px;
     text-align: right;
 }
@@ -265,11 +266,12 @@ nav a:hover, #head .userdetails a:hover {
     padding: 8px;
 }
 
-#thumbnails ul li {
+#thumbnails li {
     display: inline;
     list-style: none;
     padding-right: 5px;
 }
+
 #paginator {
     margin: 0 auto;
     width: 255px;
