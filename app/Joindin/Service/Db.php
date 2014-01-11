@@ -4,6 +4,12 @@ namespace Joindin\Service;
 class Db
 {
     private $_dbclass;
+    protected $databaseName;
+
+    public function __construct($databaseName)
+    {
+        $this->databaseName = $databaseName;
+    }
 
     /**
      * Set a mock MongoClient class
@@ -30,7 +36,7 @@ class Db
     public function getOneByKey($collection, $key, $value)
     {
         return $this->_getMongoClient()
-            ->selectCollection('joindin', $collection)
+            ->selectCollection($this->databaseName, $collection)
             ->findOne(array($key => $value));
     }
 
@@ -39,14 +45,15 @@ class Db
      *
      * @param string $collection Collection to save into
      * @param array  $data       Data to save
+     * @param array  $criteria   The data to update on
      *
      * @return array Status of save
      */
-    public function save($collection, $data)
+    public function save($collection, $data, $criteria)
     {
         return $this->_getMongoClient()
-            ->selectCollection('joindin', $collection)
-            ->save($data);
+            ->selectCollection($this->databaseName, $collection)
+            ->update($criteria, $data, array("upsert" => true));
     }
 
 

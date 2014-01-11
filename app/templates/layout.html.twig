@@ -16,35 +16,91 @@
 </head>
 
 <body>
-    <div id="head">
-        <h1><a href="/">
-            <img src="/img/logo.png" alt="Joind.in" class="respImage"/>
-        </a></h1>
+    <header id="head">
+        <div class="userdetails">
+        {% if user %}
+            Welcome {{ user.full_name }}
+            <a href="{{ urlFor('user-logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ urlFor('user-login') }}">Login</a>
+        {% endif %}
 
-        <ul id="menu">
-            <li class="submit"><a href="#submit">Submit</a></li>
-            <li class="active"><a href="#events">Events</a></li>
-            <li><a href="#talks">Talks</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#help">Help</a></li>
-        </ul>
+        </div>
+        <nav>
+            <ul>
+                <li>
+                    <h1>
+                        <a href="/">
+                            <img src="/img/logo.png"
+                                 alt="Joind.in"
+                                 class="respImage"
+                                 width="120"
+                                 height="30"/>
+                        </a>
+                    </h1>
+                </li>
 
-    </div>
+                <li>
+                    <a href="/event">Events</a>
+                </li>
+
+            </ul>
+        </nav>
+    </header>
 
     <div id="wrapper">
         <div id="content">
-            {% block page_header %}{% endblock %}
             {% block body %}{% endblock %}
         </div>
-        <div id="aside">
-            <div class="box wideOnly">
+        <aside id="aside">
+            <section class="wideOnly">
+
+                <form action="/search/events" method="get">
+                    <input type="text" name="keyword" value="{{ keyword }}" placeholder="Search events or talks">
+                    <button type="submit">Search</button>
+                </form>
+
                 <img src="/img/logo-combell.png" alt=" " />
                 <p>
                     <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
                     <a href="http://www.combell.com/en">hosting</a> by Combell
                 </p>
-            </div>
-        </div>
+            </section>
+        </aside>
+    </div>
+
+    <div id="foot">
+        <a href="http://www.combell.com/en/servers/cloud-server">
+            Cloud server
+        </a>
+        <a href="http://www.combell.com/en">hosting</a>
+        by Combell
+        <a href="http://www.combell.com/en">
+            <img src="/img/logo-combell-small.gif"
+                 alt="Combell"
+                 height="22"
+                 width="80"/ >
+        </a>
     </div>
 </body>
+{% block extra_javascript %}{% endblock %}
+
+{# Begin Google Analytics code #}
+{% if 'live' == slim_mode %}
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', '{{ google_analytics_id }}']);
+        _gaq.push(['_setDomainName', 'joind.in']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+{% endif %}
+{# End Google Analytics code #}
 </html>

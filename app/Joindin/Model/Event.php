@@ -1,9 +1,10 @@
 <?php
 namespace Joindin\Model;
 
-class Event extends \Joindin\Model\API\Event
+class Event
 {
-    private $_event;
+    private $data;
+    private $comments;
 
     /**
      * Crate new Event model
@@ -12,96 +13,102 @@ class Event extends \Joindin\Model\API\Event
      */
     public function __construct($data)
     {
-        $this->_event = $data;
+        $this->data = $data;
+    }
+
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
     }
 
     public function getName()
     {
-        return $this->_event->name;
-    }
-
-    public function getUrl()
-    {
-        return '/event/view/'.$this->getSlug();
+        return $this->data->name;
     }
 
     public function getIcon()
     {
-        return $this->_event->icon;
+        return $this->data->icon;
     }
 
     public function getStartDate()
     {
-        return $this->_event->start_date;
+        return $this->data->start_date;
     }
 
     public function getEndDate()
     {
-        return $this->_event->end_date;
+        return $this->data->end_date;
+    }
+
+    public function getLocation()
+    {
+        return $this->data->location;
     }
 
     public function getDescription()
     {
-        return $this->_event->description;
+        return $this->data->description;
     }
 
     public function getTags()
     {
-        return $this->_event->tags;
+        return $this->data->tags;
+    }
+
+    public function getLatitude()
+    {
+        return $this->data->latitude;
+    }
+
+    public function getLongitude()
+    {
+        return $this->data->longitude;
+    }
+
+    public function getHref()
+    {
+        return $this->data->href;
     }
 
     public function getAttendeeCount()
     {
-        return $this->_event->attendee_count;
+        return $this->data->attendee_count;
     }
 
     public function getCommentsCount()
     {
-        return $this->_event->event_comments_count;
+        return $this->data->event_comments_count;
     }
 
     public function getCommentsUri()
     {
-        return $this->_event->comments_uri;
+        return $this->data->comments_uri;
+    }
+
+    public function getTalksUri()
+    {
+        return $this->data->talks_uri;
     }
 
     public function getUri()
     {
-        return $this->_event->uri;
+        return $this->data->uri;
     }
 
-    /**
-     * Twig likes arrays, so give it one
-     */
-    public function getTemplateData()
+    public function getVerboseUri()
     {
-        return (array)$this->_event;
-    }
-
-    public function getSlug()
-    {
-        // Slug is set if given in URL so already is known, so return it
-        if (property_exists($this->_event, 'slug')) {
-            return $this->_event->slug;
-        }
-
-        // Check if the event is known in the database. If it's not, then
-        // generate one
-        if (!$slug = $this->_getSlugFromDatabase()) {
-            $name = $this->getName();
-            $alphaNumericName = preg_replace("/[^0-9a-zA-Z- ]/", "", $name);
-
-            $slug = strtolower(str_replace(' ', '-', $alphaNumericName));
-
-            $this->_saveSlugToDatabase($slug);
-        }
-
-        return $slug;
+        return $this->data->verbose_uri;
     }
 
     public function isAttending()
     {
-        return $this->_event->attending;
+        return $this->data->attending;
     }
 
     public function getAttendeeString()
@@ -115,26 +122,6 @@ class Event extends \Joindin\Model\API\Event
         $message .= $this->get_end_of_attending_message();
 
         return $message;
-    }
-
-
-    private function _getSlugFromDatabase()
-    {
-        $db = new \Joindin\Service\Db;
-        $data = $db->getOneByKey('events', 'name', $this->getName());
-        return $data['slug'];
-    }
-
-    private function _saveSlugToDatabase($slug)
-    {
-        $db = new \Joindin\Service\Db;
-        $data = array(
-            'name' => $this->getName(),
-            'slug' => $slug,
-            'uri'  => $this->getUri()
-        );
-
-        return $db->save('events', $data);
     }
 
     protected function get_beginning_of_attending_message($attendee_count) {
@@ -170,4 +157,15 @@ class Event extends \Joindin\Model\API\Event
 
         return ($endDate < $now);
     }
+
+    public function getUrlFriendlyName()
+    {
+        return $this->data->url_friendly_name;
+    }
+
+    public function getStub()
+    {
+        return $this->data->stub;
+    }
+
 }

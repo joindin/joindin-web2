@@ -1,0 +1,116 @@
+{% extends '/layout.html.twig' %}
+
+{% block extra_javascript %}{% endblock %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    <div class="table">
+        <h1>Sessions Key</h1>
+        <table id=key>
+            <tr>
+                <td class="keynote key">Keynote</td>
+                <td class="talk key">Talk</td>
+                <td class="workshop key">Workshop</td>
+                <td class="social key">Social</td>
+                <td class="related key">Event Related</td>
+            </tr>
+        </table>
+
+        {% for day in eventDays %}
+        <h1>{{ day.date }}</h1>
+        <table>
+            <thead>
+            <tr>
+                {# time column on left side of table #}
+                <th></th>
+                {% if day.tracks %}
+                    {% for track in day.tracks %}
+                    <th>{{ track }}</th>
+                    {% endfor %}
+                {% else %}
+                    <th>Sessions</th>
+                {% endif %}
+                {# if multi-track, repeat time column on right side of table #}
+                {% if day.tracks|length > 1 %}
+                    <th></th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% set trackCellHTMLMap = [] %}
+            {% set titleTrackMap = [] %}
+            {% set titleTypeMap = [] %}
+            {% for time, talks in day.talks %}
+                <tr>
+                {% if day.tracks|length <= 1 %}
+                   <td class="time" rowspan="{{ talks|length }}">{{ time }}</td>
+                    {% for talk in talks %}
+                        {% set cell %}
+                            {% include '/Event/_common/schedule_cell.html.twig' %}
+                        {% endset %}
+                        <td class="{{ talk.type|lower }}">{{ cell }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <td class="time">{{ time }}</td>
+                    {% for talk in talks %}
+                        {# build an array of tracks the talk is in #}
+                        {% set actualTracks = [] %}
+                        {% for talkTrack in talk.tracks %}
+                            {%  set actualTracks = actualTracks|merge({ (loop.index0): talkTrack.track_name}) %}
+                        {% endfor %}
+
+                        {# skip keynote talks, as they will span all tracks (columns) #}
+                        {% if talk.type != "Keynote" %}
+                            {% for track in day.tracks %}
+                                {% if track in actualTracks %}
+                                    {# if track is a number, Twig won't allow this value
+                                       to be used as an array key, so append an empty space
+                                       to make Twig think it is a string #}
+                                    {% set trackName = track~" " %}
+                                    {% set title = talk.title %}
+                                    {% set cell %}
+                                        <td class="{{ talk.type|lower }}">
+                                            {% include '/Event/_common/schedule_cell.html.twig' %}
+                                        </td>
+                                    {% endset %}
+                                    {% set trackCellHTMLMap = trackCellHTMLMap|merge({ (trackName) : cell }) %}
+                                    {% set titleTrackMap = titleTrackMap|merge({  (title)  : trackName }) %}
+                                    {% set titleTypeMap = titleTypeMap|merge({ (title) : talk.type }) %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {# if a talk has no tracks, or is a Keynote, span all tracks (columns) in table #}
+                        {% if talk.tracks|length == 0 or talk.type == "Keynote" %}
+                            <td class="{{ talk.type|lower }}" colspan={{ day.tracks|length }}>
+                                {% include '/Event/_common/schedule_cell.html.twig' %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+
+                    {# if a trackCellHTMLMap array was created for the current time slot, output column cells #}
+                    {% for track in day.tracks if trackCellHTMLMap  %}
+                        {# again, ensure trackName is a string value #}
+                        {% set trackName = track~" " %}
+                        {% if trackName in titleTrackMap %}
+                            {{ trackCellHTMLMap[trackName] }}
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    {% endfor %}
+
+                    {# reset map arrays for next loop iteration #}
+                    {% set trackCellHTMLMap = [] %}
+                    {% set titleTrackMap = [] %}
+                    {% set titleTypeMap = [] %}
+                    <td class="time">{{ time }}</td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+    </div>
+{% endblock %}

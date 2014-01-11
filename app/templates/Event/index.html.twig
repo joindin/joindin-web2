@@ -1,18 +1,12 @@
 {% extends '/layout.html.twig' %}
 
 {% block body %}
-        {% if (events) %}
-        <table class="table table-striped">
-        {% for event in events %}
-        <tr><td>
-            {{ event.getName }}
-        </td></tr>
+    <h1 class="title">Latest events</h1>
+    <div>
+        {% for event in events.events %}
+            {% include '_common/eventsummary.html.twig' %}
         {% endfor %}
-        </table>
-        {% else %}
-        <p class="notice">
-            There are no events yet
-        </p>
-        {% endif %}
+    </div>
 
+    {% include '_common/pagination.html.twig' %}
 {% endblock %}

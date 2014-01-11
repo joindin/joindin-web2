@@ -14,6 +14,7 @@ require '../vendor/TwigView.php';
 
 // include view controller
 require '../app/Joindin/View/Filters.php';
+require '../app/Joindin/View/Functions.php';
 
 $config = array();
 $configFile = realpath(__DIR__ . '/../config/config.php');
@@ -33,21 +34,44 @@ $app = new \Slim(
     )
 );
 
-$app->configureMode('development', function() {
+$app->configureMode('development', function() use ($app) {
     error_reporting(-1);
     ini_set('display_errors', 1);
+    ini_set('html_errors', 1);
     ini_set('display_startup_errors', 1);
 });
 
+// Pass the current mode to the template, so we can choose to show
+// certain things only if the app is in live/development mode
+$app->view()->appendData(
+    array('slim_mode' => $config['slim']['mode'])
+);
+
+// Other variables needed by the main layout.html.twig template
+$app->view()->appendData(
+    array(
+        'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
+        'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
+    )
+);
 
 // set Twig base folder, view folder and initialize Joindin filters
 \TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
-\Joindin\View\Filter\initialize($app->view()->getEnvironment());
+\Joindin\View\Filter\initialize($app->view()->getEnvironment(), $app);
+\Joindin\View\Functions\initialize($app->view()->getEnvironment(), $app);
+$app->configureMode('development', function() use ($app) {
+    $env = $app->view()->getEnvironment();
+    $env->enableDebug();
+    $env->addExtension(new \Twig_Extension_Debug());
+});
+
 
 // register routes
 new Controller\Application($app);
 new Controller\Event($app);
+new Controller\Search($app);
+new Controller\User($app);
 
 // execute application
 $app->run();

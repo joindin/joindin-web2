@@ -3,11 +3,18 @@ $config = array(
     'slim' => array(
         'mode' => 'development',
         'custom' => array(
-            'apiUrl' => 'http://api.joind.in',
+            'mongo' => array(
+                'database_name' => 'joindin',
+            ),
+            'apiUrl' => 'https://api.joind.in',
+            'googleAnalyticsId' => '',
             'flickr' => array(
                 'apiUrl' => 'http://api.flickr.com/services/rest/?method=flickr.photos.search&format=json&nojsoncallback=1',
-                'apiKey' => 'enterYoursHere',
+                'apiKey' => '',
             )
+        ),
+        'oauth' => array(
+            'client_id' => 'web2',
         ),
     ),
 );
