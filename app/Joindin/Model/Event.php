@@ -4,6 +4,7 @@ namespace Joindin\Model;
 class Event
 {
     private $data;
+    private $comments;
 
     /**
      * Crate new Event model
@@ -15,14 +16,19 @@ class Event
         $this->data = $data;
     }
 
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
     public function getName()
     {
         return $this->data->name;
-    }
-
-    public function getUrl()
-    {
-        return '/event/'.$this->getSlug();
     }
 
     public function getIcon()
@@ -100,27 +106,6 @@ class Event
         return $this->data->verbose_uri;
     }
 
-    public function getSlug()
-    {
-        // Slug is set if given in URL so already is known, so return it
-        if (property_exists($this->data, 'slug')) {
-            return $this->data->slug;
-        }
-
-        // Check if the event is known in the database. If it's not, then
-        // generate one
-        if (!$slug = $this->_getSlugFromDatabase()) {
-            $name = $this->getName();
-            $alphaNumericName = preg_replace("/[^0-9a-zA-Z- ]/", "", $name);
-
-            $slug = strtolower(str_replace(' ', '-', $alphaNumericName));
-
-            $this->_saveSlugToDatabase($slug);
-        }
-
-        return $slug;
-    }
-
     public function isAttending()
     {
         return $this->data->attending;
@@ -137,27 +122,6 @@ class Event
         $message .= $this->get_end_of_attending_message();
 
         return $message;
-    }
-
-
-    private function _getSlugFromDatabase()
-    {
-        $db = new \Joindin\Service\Db;
-        $data = $db->getOneByKey('events', 'name', $this->getName());
-        return $data['slug'];
-    }
-
-    private function _saveSlugToDatabase($slug)
-    {
-        $db = new \Joindin\Service\Db;
-        $data = array(
-            'name' => $this->getName(),
-            'slug' => $slug,
-            'uri'  => $this->getUri(),
-            'verboseuri'  => $this->getVerboseUri()
-        );
-
-        return $db->save('events', $data);
     }
 
     protected function get_beginning_of_attending_message($attendee_count) {
@@ -193,4 +157,15 @@ class Event
 
         return ($endDate < $now);
     }
+
+    public function getUrlFriendlyName()
+    {
+        return $this->data->url_friendly_name;
+    }
+
+    public function getStub()
+    {
+        return $this->data->stub;
+    }
+
 }

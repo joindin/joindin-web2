@@ -3,9 +3,7 @@
 <project name="joindin-responsive" default="build" basedir=".">
  <property name="basedir" value="."/>
 
- <target name="build">
-   <phingcall target="phplint"/>
- </target>
+ <target name="build" depends="phplint,phpunit" />
 
  <target name="phplint" description="Run php -l over the fileset">
    <phplint haltonfailure="true">
@@ -15,6 +13,10 @@
        </patternset>
      </fileset>
    </phplint>
+ </target>
+
+ <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
+  <exec command="phpunit -c tests/phpunit.xml" logoutput="/dev/stdout" checkreturn="true" />
  </target>
 
  <target name="launch">

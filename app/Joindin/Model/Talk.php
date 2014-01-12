@@ -89,4 +89,14 @@ class Talk
     {
         return $this->data->comments_uri;
     }
+
+    public function getUrlFriendlyTalkTitle()
+    {
+        return $this->data->url_friendly_talk_title;
+    }
+
+    public function getStub()
+    {
+        return $this->data->stub;
+    }
 }

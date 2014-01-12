@@ -2,16 +2,15 @@
 namespace Joindin\Model\Db;
 
 use Joindin\Service\Db as DbService;
-use Joindin\Service\Helper\Slug;
 
 class Talk
 {
     protected $keyName = 'talks';
     protected $db;
 
-    public function __construct()
+    public function __construct($dbName)
     {
-        $this->db = new DbService();
+        $this->db = new DbService($dbName);
     }
 
     public function getUriFor($slug, $eventUri)
@@ -21,6 +20,12 @@ class Talk
             'slug' => $slug
         ));
         return $data['uri'];
+    }
+
+    public function getTalkByStub($stub)
+    {
+        $data = $this->db->getOneByKey($this->keyName, 'stub', $stub);
+        return $data;
     }
 
     public function load($uri)
@@ -34,9 +39,10 @@ class Talk
         $data = array(
             'uri' => $talk->getApiUri(),
             'title' => $talk->getTitle(),
-            'slug' => Slug::stringToSlug($talk->getTitle()),
+            'slug' => $talk->getUrlFriendlyTalkTitle(),
             'verbose_uri' => $talk->getApiUri(true),
             'event_uri' => $talk->getEventUri(),
+            'stub' => $talk->getStub(),
         );
 
         $mongoTalk = $this->load($talk->getApiUri());
@@ -45,6 +51,8 @@ class Talk
             $data = array_merge($mongoTalk, $data);
         }
 
-        return $this->db->save($this->keyName, $data);
+        $criteria = array('uri' => $talk->getApiUri());
+
+        return $this->db->save($this->keyName, $data, $criteria);
     }
 }

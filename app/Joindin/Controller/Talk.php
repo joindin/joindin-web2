@@ -1,28 +1,32 @@
 <?php
 namespace Joindin\Controller;
 
-
 use Joindin\Model\Db\Event as DbEvent;
 use Joindin\Model\Db\Talk as DbTalk;
+use Joindin\Service\Helper\Config;
 
 class Talk extends Base
 {
 
     protected function defineRoutes(\Slim $app)
     {
-        $app->get('/event/:eventSlug/talk/:talkSlug', array($this, 'index'));
+        $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
+        $app->get('/talk/:talkStub', array($this, 'quick'));
     }
+
 
     public function index($eventSlug, $talkSlug)
     {
-        $eventDb = new DbEvent();
-        $eventUri = $eventDb->getUriFor($eventSlug);
-        $eventApi = new \Joindin\Model\API\Event($this->accessToken);
-        $event = $eventApi->getBySlug($eventSlug);
+        $config = new Config();
+        $eventApi = new \Joindin\Model\API\Event($config, $this->accessToken);
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $eventUri = $event->getUri();
 
-        $talkDb = new DbTalk();
+        $dbName = $config->getConfig()['mongo']['database_name'];
+        $talkDb = new DbTalk($dbName);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
-        $talkApi = new \Joindin\Model\API\Talk($this->accessToken, new DbTalk);
+
+        $talkApi = new \Joindin\Model\API\Talk($config, $this->accessToken, new DbTalk($dbName));
         $talk = $talkApi->getTalk($talkUri, true);
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
@@ -41,7 +45,7 @@ class Talk extends Base
                 'Error/app_load_error.html.twig',
                 array(
                     'message' => sprintf(
-                        'An exception has been thrown during the rendering of '.
+                        'An exception has been thrown during the rendering of ' .
                         'a template ("%s").',
                         $e->getMessage()
                     ),
@@ -52,6 +56,27 @@ class Talk extends Base
             );
         }
     }
+
+    public function quick($talkStub)
+    {
+        $config = new Config();
+        $dbName = $config->getConfig()['mongo']['database_name'];
+        $talkDb = new DbTalk($dbName);
+        $talk = $talkDb->getTalkByStub($talkStub);
+
+
+
+        $eventDb = new DbEvent($dbName);
+        $event = $eventDb->load($talk['event_uri']);
+        if (!$event) {
+            throw new \Slim_Exception_Pass('Page not found', 404);
+        }
+
+        $this->application->redirect(
+            $this->application->urlFor('talk', array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk['slug']))
+        );
+    }
+
 
 
 }

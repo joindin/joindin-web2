@@ -20,5 +20,16 @@ function initialize(\Twig_Environment $env, Slim $app)
     $env->addFunction(new \Twig_SimpleFunction('hash', function ($value) {
         return md5($value);
     }));
-}
+
+    $env->addFunction(
+        new \Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = array()) use ($app) {
+            return "/event/{$eventSlug}/{$talkSlug}";
+        })
+    );
+
+    $env->addFunction(
+        new \Twig_SimpleFunction('urlForSpeaker', function ($speakerNam, $params = array()) use ($app) {
+            return "#"; // @todo  Fix this please akrabat
+        })
+    );}
 

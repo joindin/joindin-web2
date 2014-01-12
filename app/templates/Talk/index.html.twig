@@ -1,5 +1,4 @@
 {% extends '/layout.html.twig' %}
-
 {% block body %}
 
     <section>
@@ -22,7 +21,7 @@
 
         <p>{{ talk.getDescription }}</p>
 
-        <p>Quicklink: <a href="#">http://joind.in/#</a></p>
+        <p>Quicklink: <a href="/talk/{{ talk.getStub }}">http://joind.in/talk/{{ talk.getStub }}</a></p>
     </section>
 
     <section>

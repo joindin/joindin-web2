@@ -3,17 +3,17 @@ namespace Joindin\Model\API;
 
 class JoindIn
 {
-    protected $baseApiUrl = 'http://api.joind.in';
+    protected $baseApiUrl;
     protected $accessToken;
 
-    public function __construct($accessToken)
+    public function __construct($configObj, $accessToken)
     {
-        $app = \Slim::getInstance();
-        $config = $app->config('custom');
+        $config = $configObj->getConfig();
 
         if (isset($config['apiUrl'])) {
             $this->baseApiUrl = $config['apiUrl'];
         }
+
         $this->accessToken = $accessToken;
     }
 
@@ -64,6 +64,11 @@ class JoindIn
             throw new \Exception('Unable to connect to API');
         }
 
-        return $result;
+        $status = 0;
+        if (preg_match('@HTTP\/1\.[0|1] (\d+) @', $http_response_header[0], $matches)) {
+            $status = $matches[1];
+        }
+
+        return array($status, $result);
     }
 }

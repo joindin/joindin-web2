@@ -8,9 +8,9 @@ class Event
     protected $keyName = 'events';
     protected $db;
 
-    public function __construct()
+    public function __construct($dbName)
     {
-        $this->db = new DbService();
+        $this->db = new DbService($dbName);
     }
 
     public function getUriFor($slug)

@@ -1,12 +1,18 @@
-<section class="comment">
-    <h3>
-        {% include '_common/rating.html.twig' with {'rating': comment.getRating} %}
-        by <a href="#">{{ comment.getUserDisplayName }}</a> on {{ comment.getCommentDate|date('l jS \o\f F Y h:i:s A') }}
-    </h3>
-    <div class="clearfix"></div>
-    <p>{{ comment.getComment }}</p>
-    <hr/>
-</section>
-{#<pre>#}
+{# This template should work for both event and talk comments #}
 {#{{ dump(comment) }}#}
-{#</pre>#}
+
+<li class="comment" id="comment-{{ hash(comment.comment_uri)|slice(1,7) }}">
+    {% if comment.rating %} {% include '_common/rating.html.twig' with {'rating': comment.rating} %} {% endif %}
+    <div class="comment-body">
+        {{ comment.comment }}
+    </div>
+    <div class="info">
+        by {% if comment.getUserDisplayName %}
+            <a href="{{ urlForSpeaker(comment.getUserDisplayName) }}" class="speaker-url">
+                {{ comment.getUserDisplayName }}
+            </a>
+        {% else %}Anonymous{% endif %}
+        at {{ comment.created_date|date('H:i \\o\\n j M Y') }}
+        {% if comment.source %}via {{ comment.source }}{% endif %}
+    </div>
+</li>
