@@ -23,7 +23,7 @@ function initialize(\Twig_Environment $env, Slim $app)
 
     $env->addFunction(
         new \Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = array()) use ($app) {
-            return "/event/{$eventSlug}/{$talkSlug}";
+            return $app->urlFor('talk', array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
         })
     );
 

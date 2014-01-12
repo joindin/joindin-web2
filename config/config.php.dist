@@ -8,7 +8,6 @@ $config = array(
             ),
             'apiUrl' => 'https://api.joind.in',
             'googleAnalyticsId' => '',
-            'baseUri' => 'j2.dev'
         ),
         'oauth' => array(
             'client_id' => 'web2',
