@@ -20,7 +20,7 @@
  </target>
 
  <target name="launch">
-  <exec command="scripts/jenkinslaunch.sh" />
+  <exec command="scripts/jenkinslaunch.sh" checkreturn="true" />
  </target>
 
 </project>
