@@ -11,6 +11,7 @@ session_start();
 // include dependencies
 require '../vendor/Slim/Slim.php';
 require '../vendor/TwigView.php';
+require '../vendor/predis-0.8/autoload.php';
 
 // include view controller
 require '../app/Joindin/View/Filters.php';

@@ -1,16 +1,16 @@
 <?php
 namespace Joindin\Model\Db;
 
-use  \Joindin\Service\Db as DbService;
+use  \Joindin\Service\Cache as CacheService;
 
 class Event
 {
     protected $keyName = 'events';
     protected $db;
 
-    public function __construct($dbName)
+    public function __construct($dbNum)
     {
-        $this->db = new DbService($dbName);
+        $this->cache = new CacheService($dbNum);
     }
 
     public function getUriFor($slug)

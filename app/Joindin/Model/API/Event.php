@@ -3,18 +3,16 @@ namespace Joindin\Model\API;
 
 class Event extends \Joindin\Model\API\JoindIn
 {
-    protected $mongoDatabaseName;
+    /**
+     * @var \Joindin\Model\Db\Talk
+     */
+    protected $eventDb;
 
-    public function __construct($configObj, $accessToken)
+    public function __construct($configObj, $accessToken, \Joindin\Model\Db\Event $eventDb)
     {
         parent::__construct($configObj, $accessToken);
-
-        $config = $configObj->getConfig();
-        if (isset($config['mongo']) && isset($config['mongo']['database_name'])) {
-            $this->mongoDatabaseName = $config['mongo']['database_name'];
-        }
-
         $this->accessToken = $accessToken;
+        $this->eventDb = $eventDb;
     }
 
     /**
@@ -66,7 +64,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * @param \Joindin\Model\Event $event The event to take details from
      */
     protected function saveEventUrl($event) {
-        $db = new \Joindin\Service\Db($this->mongoDatabaseName);
+        $db = new \Joindin\Service\Db();
     
         $data = array(
             "url_friendly_name" => $event->getUrlFriendlyName(),
@@ -91,7 +89,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * @return \Joindin\Model\Event The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl) {
-        $db = new \Joindin\Service\Db($this->mongoDatabaseName);
+        $db = new \Joindin\Service\Db();
         $event = $db->getOneByKey('events', 'url_friendly_name', $friendlyUrl);
 
         if (!$event) {
@@ -117,7 +115,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * @return \Joindin\Model\Event The event we found, or false if something went wrong
      */
     public function getByStub($stub) {
-        $db = new \Joindin\Service\Db($this->mongoDatabaseName);
+        $db = new \Joindin\Service\Db();
 
         $event = $db->getOneByKey('events', 'stub', $stub);
 

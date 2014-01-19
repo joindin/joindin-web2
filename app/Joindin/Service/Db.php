@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Service;
 
-class Db
+class Dbz
 {
     private $_dbclass;
     protected $databaseName;
