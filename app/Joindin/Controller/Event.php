@@ -1,6 +1,8 @@
 <?php
 namespace Joindin\Controller;
 
+use Joindin\Model\Db\Talk;
+use Joindin\Service\Db;
 use \Joindin\Service\Helper\Config as Config;
 use \Joindin\Model\API\Event as EventApi;
 use \Joindin\Service\Db as DbService;
@@ -106,7 +108,10 @@ class Event extends Base
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
-            $apiTalk = new \Joindin\Model\API\Talk(new Config(), $this->accessToken);
+            $config = new Config();
+            $config = $config->getConfig();
+            $dbTalk = new Talk($config['mongo']['database_name']);
+            $apiTalk = new \Joindin\Model\API\Talk(new Config(), $this->accessToken, $dbTalk);
             $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
             $schedule = $scheduler->getScheduleData($event);
