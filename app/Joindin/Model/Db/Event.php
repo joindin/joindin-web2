@@ -24,9 +24,17 @@ class Event
 		return $this->cache->load($collection, $keyField, $keyValue);
     }
 
-    public function save($collection, $data, $keyField, $keyValue)
+    public function save(\Joindin\Model\Event $event)
     {
-		return $this->cache->save($collection, $data, $keyField, $keyValue);
+        $data = array(
+            "url_friendly_name" => $event->getUrlFriendlyName(),
+            "uri" => $event->getUri(),
+            "stub" => $event->getStub(),
+            "verbose_uri" => $event->getVerboseUri()
+        );
+
+        $this->cache->save('events', $data, 'uri', $event->getUri());
+        $this->cache->save('events', $data, 'url_friendly_name', $event->getUrlFriendlyName());
     }
 
     public function saveSlugToDatabase(\Joindin\Model\Event $event)

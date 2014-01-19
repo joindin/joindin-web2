@@ -63,15 +63,8 @@ class Event extends \Joindin\Model\API\JoindIn
      *
      * @param \Joindin\Model\Event $event The event to take details from
      */
-    protected function saveEventUrl($event) {
-        $data = array(
-            "url_friendly_name" => $event->getUrlFriendlyName(),
-            "uri" => $event->getUri(),
-            "stub" => $event->getStub(),
-            "verbose_uri" => $event->getVerboseUri()
-        );
-
-        $this->eventDb->save('events', $data, 'uri', $event->getUri());
+    protected function saveEventUrl(\Joindin\Model\Event $event) {
+        $this->eventDb->save($event);
     }
 
     /**
