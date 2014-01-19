@@ -19,9 +19,9 @@ class Event
         return $data['uri'];
     }
 
-    public function load($collection, $keyField, $keyValue)
+    public function load($keyField, $keyValue)
     {
-		return $this->cache->load($collection, $keyField, $keyValue);
+		return $this->cache->load('events', $keyField, $keyValue);
     }
 
     public function save(\Joindin\Model\Event $event)
@@ -46,10 +46,10 @@ class Event
             'verbose_uri'  => $event->getVerboseUri(),
         );
 
-        $mongoEvent = $this->load($event->getUri());
-        if ($mongoEvent) {
+        $savedEvent = $this->load('uri', $event->getUri());
+        if ($savedEvent) {
             // event is already known - update this record
-            $data = array_merge($mongoEvent, $data);
+            $data = array_merge($savedEvent, $data);
         }
 
         return $this->db->save($this->keyName, $data);

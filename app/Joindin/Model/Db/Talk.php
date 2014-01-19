@@ -24,7 +24,7 @@ class Talk
 
     public function getTalkByStub($stub)
     {
-        $data = $this->db->getOneByKey($this->keyName, 'stub', $stub);
+        $data = $this->cache->load('talks', 'stub', $stub);
         return $data;
     }
 
@@ -57,6 +57,7 @@ class Talk
         );
 
         $this->cache->save('talks', $data, 'uri', $talk->getApiUri());
+        $this->cache->save('talks', $data, 'stub', $talk->getStub());
         $this->cache->saveByKeys('talks', $data, $keys);
     }
 }

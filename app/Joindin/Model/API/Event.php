@@ -75,7 +75,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * @return \Joindin\Model\Event The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl) {
-        $event = $this->eventDb->load('events', 'url_friendly_name', $friendlyUrl);
+        $event = $this->eventDb->load('url_friendly_name', $friendlyUrl);
 
         if (!$event) {
             // don't throw an exception, Slim eats them

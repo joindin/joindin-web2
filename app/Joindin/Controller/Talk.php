@@ -59,16 +59,12 @@ class Talk extends Base
 
     public function quick($talkStub)
     {
-        $config = new Config();
-        $dbName_ = $config->getConfig();
-        $dbName = $dbName_['mongo']['database_name'];
-        $talkDb = new DbTalk($dbName);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $talkDb = new DbTalk($dbNum);
         $talk = $talkDb->getTalkByStub($talkStub);
 
-
-
-        $eventDb = new DbEvent($dbName);
-        $event = $eventDb->load($talk['event_uri']);
+        $eventDb = new DbEvent($dbNum);
+        $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
             throw new \Slim_Exception_Pass('Page not found', 404);
         }
