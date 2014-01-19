@@ -7,7 +7,7 @@ $config = array(
                 'database_name' => 'joindin',
             ),
             'apiUrl' => 'https://api.joind.in',
-            'googleAnalyticsId' => ''
+            'googleAnalyticsId' => '',
         ),
         'oauth' => array(
             'client_id' => 'web2',
