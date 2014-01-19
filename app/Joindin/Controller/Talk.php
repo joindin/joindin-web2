@@ -22,7 +22,8 @@ class Talk extends Base
         $event = $eventApi->getByFriendlyUrl($eventSlug);
         $eventUri = $event->getUri();
 
-        $dbName = $config->getConfig()['mongo']['database_name'];
+        $dbName_ = $config->getConfig();
+        $dbName = $dbName_['mongo']['database_name'];
         $talkDb = new DbTalk($dbName);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
 
@@ -60,7 +61,8 @@ class Talk extends Base
     public function quick($talkStub)
     {
         $config = new Config();
-        $dbName = $config->getConfig()['mongo']['database_name'];
+        $dbName_ = $config->getConfig();
+        $dbName = $dbName_['mongo']['database_name'];
         $talkDb = new DbTalk($dbName);
         $talk = $talkDb->getTalkByStub($talkStub);
 
