@@ -25,12 +25,12 @@ class Cache
     }
 
 	public function save($collection, $data, $keyField, $keyValue) {
-		$fqKey = $collection.'-'.$keyField.'-'.md5($keyValue);
+		$fqKey = $collection.'-'.$keyField.'-'.substr(md5($keyValue), 0, 6);
 		$this->client->set($fqKey, serialize($data));
 	}
 
 	public function load($collection, $keyField, $keyValue) {
-		$fqKey = $collection.'-'.$keyField.'-'.md5($keyValue);
+		$fqKey = $collection.'-'.$keyField.'-'.substr(md5($keyValue), 0, 6);
 		$data = unserialize($this->client->get($fqKey));
 		return $data;
 	}
@@ -38,7 +38,7 @@ class Cache
 	public function saveByKeys($collection, $data, array $keys) {
 		$fqKey = $collection;
 		foreach ($keys as $keyField=>$keyValue) {
-			$fqKey.= '-'.$keyField.'-'.md5($keyValue);
+			$fqKey.= '-'.$keyField.'-'.substr(md5($keyValue), 0, 6);
 		}
 		$this->client->set($fqKey, serialize($data));
 	}
@@ -46,7 +46,7 @@ class Cache
 	public function loadByKeys($collection, array $keys) {
 		$fqKey = $collection;
 		foreach ($keys as $keyField=>$keyValue) {
-			$fqKey.= '-'.$keyField.'-'.md5($keyValue);
+			$fqKey.= '-'.$keyField.'-'.substr(md5($keyValue), 0, 6);
 		}
 		$data = unserialize($this->client->get($fqKey));
 		return $data;
