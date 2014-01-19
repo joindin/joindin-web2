@@ -1,16 +1,16 @@
 <?php
 namespace Joindin\Model\Db;
 
-use Joindin\Service\Db as DbService;
+use  \Joindin\Service\Cache as CacheService;
 
 class Talk
 {
     protected $keyName = 'talks';
     protected $db;
 
-    public function __construct($dbName)
+    public function __construct($dbNum)
     {
-        $this->db = new DbService($dbName);
+        $this->cache = new CacheService($dbNum);
     }
 
     public function getUriFor($slug, $eventUri)
@@ -30,7 +30,7 @@ class Talk
 
     public function load($uri)
     {
-        $data = $this->db->getOneByKey($this->keyName, 'uri', $uri);
+        $data = $this->cache->load('talks', 'uri', $uri);
         return $data;
     }
 
@@ -51,8 +51,6 @@ class Talk
             $data = array_merge($mongoTalk, $data);
         }
 
-        $criteria = array('uri' => $talk->getApiUri());
-
-        return $this->db->save($this->keyName, $data, $criteria);
+        return $this->cache->save('talks', $data, 'uri', $talk->getApiUri());
     }
 }

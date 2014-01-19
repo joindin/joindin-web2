@@ -108,14 +108,13 @@ class Event extends Base
 
      public function schedule($friendly_name)
      {
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
-            $config = new Config();
-            $config = $config->getConfig();
-            $dbTalk = new Talk($config['mongo']['database_name']);
-            $apiTalk = new \Joindin\Model\API\Talk(new Config(), $this->accessToken, $dbTalk);
+            $dbTalk = new Talk($this->cfg['redis']['dbIndex']);
+            $apiTalk = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $dbTalk);
             $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
             $schedule = $scheduler->getScheduleData($event);
