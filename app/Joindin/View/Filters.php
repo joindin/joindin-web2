@@ -1,6 +1,8 @@
 <?php
 namespace Joindin\View\Filter;
 
+use Joindin\Service\Helper\Slug;
+
 function initialize(\Twig_Environment $env)
 {
     $env->addFilter(
@@ -17,6 +19,11 @@ function initialize(\Twig_Environment $env)
     );
     $env->addFilter(
         'format_string', new \Twig_Filter_Function('\Joindin\View\Filter\format_string')
+    );
+    $env->addFilter(
+        'slugify', new \Twig_Filter_Function(function ($string) {
+            return Slug::stringToSlug($string);
+        })
     );
 }
 
@@ -41,5 +48,5 @@ function format_string($string)
 
 function link($url, $label = '', $class = '')
 {
-    return '<a href="'.$url.'" class="'.$class.'">'.($label ? $label : $url).'</a>';
+    return '<a href="' . $url . '" class="' . $class . '">' . ($label ? $label : $url) . '</a>';
 }
