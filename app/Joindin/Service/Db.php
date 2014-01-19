@@ -50,7 +50,7 @@ class Db
     public function getOneByKeys($collection, array $keyValues)
     {
         $record = $this->_getMongoClient()
-            ->selectCollection('joindin', $collection)
+            ->selectCollection($this->databaseName, $collection)
             ->findOne($keyValues);
 
         return $record;
