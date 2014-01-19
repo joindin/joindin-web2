@@ -88,7 +88,9 @@ class Event extends Base
 
     public function map($friendly_name)
     {
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
