@@ -15,7 +15,7 @@ class Talk
 
     public function getUriFor($slug, $eventUri)
     {
-        $data = $this->db->getOneByKeys($this->keyName, array(
+        $data = $this->cache->loadByKeys('talks', array(
             'event_uri' => $eventUri,
             'slug' => $slug
         ));
@@ -45,12 +45,18 @@ class Talk
             'stub' => $talk->getStub(),
         );
 
-        $mongoTalk = $this->load($talk->getApiUri());
-        if ($mongoTalk) {
+        $savedTalk = $this->load($talk->getApiUri());
+        if ($savedTalk) {
             // talk is already known - update this record
-            $data = array_merge($mongoTalk, $data);
+            $data = array_merge($savedTalk, $data);
         }
 
-        return $this->cache->save('talks', $data, 'uri', $talk->getApiUri());
+		$keys = array(
+            'event_uri' => $talk->getEventUri(),
+            'slug' => $talk->getUrlFriendlyTalkTitle()
+        );
+
+        $this->cache->save('talks', $data, 'uri', $talk->getApiUri());
+        $this->cache->saveByKeys('talks', $data, $keys);
     }
 }

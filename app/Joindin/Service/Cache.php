@@ -35,5 +35,22 @@ class Cache
 		return $data;
 	}
 
+	public function saveByKeys($collection, $data, array $keys) {
+		$fqKey = $collection;
+		foreach ($keys as $keyField=>$keyValue) {
+			$fqKey.= '-'.$keyField.'-'.md5($keyValue);
+		}
+		$this->client->set($fqKey, serialize($data));
+	}
+
+	public function loadByKeys($collection, array $keys) {
+		$fqKey = $collection;
+		foreach ($keys as $keyField=>$keyValue) {
+			$fqKey.= '-'.$keyField.'-'.md5($keyValue);
+		}
+		$data = unserialize($this->client->get($fqKey));
+		return $data;
+	}
+
 }
 
