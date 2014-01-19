@@ -6,7 +6,7 @@ namespace Joindin\Model\API;
  * Model to fetch tags or events form the API based on a search parameter (string)
  * @package Joindin\Model\API
  */
-class Search extends \Joindin\Model\API\JoindIn
+class Search extends Event
 {
     /**
      * Calls API to search for events by title and returns a collection of events
@@ -37,7 +37,9 @@ class Search extends \Joindin\Model\API\JoindIn
         $collectionData = array();
         if(isset($events['events'])) {
             foreach ($events['events'] as $event) {
-                $collectionData['events'][] = new \Joindin\Model\Event($event);
+                $thisEvent = new \Joindin\Model\Event($event);
+                $collectionData['events'][] = $thisEvent;
+                $this->saveEventUrl($thisEvent);
             }
             $collectionData['pagination'] = $meta;
         }
