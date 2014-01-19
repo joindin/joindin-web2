@@ -19,10 +19,14 @@ class Event
         return $data['uri'];
     }
 
-    public function load($uri)
+    public function load($collection, $keyField, $keyValue)
     {
-        $data = $this->db->getOneByKey($this->keyName, 'uri', $uri);
-        return $data;
+		return $this->cache->load($collection, $keyField, $keyValue);
+    }
+
+    public function save($collection, $data, $keyField, $keyValue)
+    {
+		return $this->cache->save($collection, $data, $keyField, $keyValue);
     }
 
     public function saveSlugToDatabase(\Joindin\Model\Event $event)

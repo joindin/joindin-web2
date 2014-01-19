@@ -24,13 +24,13 @@ class Cache
 		}
     }
 
-	public function save($collection, $data, $key) {
-		$fqKey = $collection.'-'.md5($key);
+	public function save($collection, $data, $keyField, $keyValue) {
+		$fqKey = $collection.'-'.$keyField.'-'.md5($keyValue);
 		$this->client->set($fqKey, serialize($data));
 	}
 
-	public function getOneByKey($collection, $key) {
-		$fqKey = $collection.'-'.md5($key);
+	public function load($collection, $keyField, $keyValue) {
+		$fqKey = $collection.'-'.$keyField.'-'.md5($keyValue);
 		$data = unserialize($this->client->get($fqKey));
 		return $data;
 	}

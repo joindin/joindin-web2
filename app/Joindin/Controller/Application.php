@@ -24,7 +24,7 @@ class Application extends Base
         $cfg = $config->getConfig();
         $dbNum = $cfg['redis']['dbIndex'];
 
-        $event_collection = new \Joindin\Model\API\Event(new Config(), $this->accessToken, new DbEvent($dbNum));
+        $event_collection = new \Joindin\Model\API\Event($cfg, $this->accessToken, new DbEvent($dbNum));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 //        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
         try {

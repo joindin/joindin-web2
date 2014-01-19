@@ -3,7 +3,6 @@ namespace Joindin\Controller;
 
 use Joindin\Model\Db\Talk;
 use Joindin\Service\Db;
-use \Joindin\Service\Helper\Config as Config;
 use \Joindin\Model\API\Event as EventApi;
 use \Joindin\Service\Db as DbService;
 
@@ -29,7 +28,9 @@ class Event extends Base
         $perPage = 10;
         $start = ($page -1) * $perPage;
 
-        $event_collection = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $event_collection = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+
         $events = $event_collection->getCollection($perPage, $start);
         try {
             echo $this->application->render(
@@ -58,7 +59,8 @@ class Event extends Base
 
     public function details($friendly_name)
     {
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
