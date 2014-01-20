@@ -62,7 +62,6 @@ class Event extends Base
         $dbNum = $this->cfg['redis']['dbIndex'];
         $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
-
         if($event) {
             $quicklink = $this->application->request()->headers("host") 
                 . $this->application->urlFor(
@@ -135,7 +134,8 @@ class Event extends Base
 
     public function quicklink($stub)
     {
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByStub($stub);
         if($event) {
             $this->application->redirect(
@@ -155,7 +155,8 @@ class Event extends Base
         $request = $this->application->request();
         $comment = $request->post('comment');
 
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
         if ($event) {
             $apiEvent->addComment($event, $comment);
