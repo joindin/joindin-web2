@@ -3,8 +3,8 @@ $config = array(
     'slim' => array(
         'mode' => 'development',
         'custom' => array(
-            'mongo' => array(
-                'database_name' => 'joindin',
+            'redis' => array(
+                'dbIndex' => 2,
             ),
             'apiUrl' => 'https://api.joind.in',
             'googleAnalyticsId' => '',
