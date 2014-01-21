@@ -3,7 +3,6 @@ namespace Joindin\Controller;
 
 use Joindin\Model\Db\Talk;
 use Joindin\Service\Db;
-use \Joindin\Service\Helper\Config as Config;
 use \Joindin\Model\API\Event as EventApi;
 use \Joindin\Service\Db as DbService;
 
@@ -29,7 +28,9 @@ class Event extends Base
         $perPage = 10;
         $start = ($page -1) * $perPage;
 
-        $event_collection = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $event_collection = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+
         $events = $event_collection->getCollection($perPage, $start);
         try {
             echo $this->application->render(
@@ -58,9 +59,9 @@ class Event extends Base
 
     public function details($friendly_name)
     {
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
-
         if($event) {
             $quicklink = $this->application->request()->headers("host") 
                 . $this->application->urlFor(
@@ -86,7 +87,9 @@ class Event extends Base
 
     public function map($friendly_name)
     {
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
@@ -104,14 +107,13 @@ class Event extends Base
 
      public function schedule($friendly_name)
      {
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
-            $config = new Config();
-            $config = $config->getConfig();
-            $dbTalk = new Talk($config['mongo']['database_name']);
-            $apiTalk = new \Joindin\Model\API\Talk(new Config(), $this->accessToken, $dbTalk);
+            $dbTalk = new Talk($this->cfg['redis']['dbIndex']);
+            $apiTalk = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $dbTalk);
             $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
             $schedule = $scheduler->getScheduleData($event);
@@ -132,7 +134,8 @@ class Event extends Base
 
     public function quicklink($stub)
     {
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByStub($stub);
         if($event) {
             $this->application->redirect(
@@ -152,7 +155,8 @@ class Event extends Base
         $request = $this->application->request();
         $comment = $request->post('comment');
 
-        $apiEvent = new EventApi(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
         if ($event) {
             $apiEvent->addComment($event, $comment);

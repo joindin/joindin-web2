@@ -2,6 +2,7 @@
 namespace Joindin\Controller;
 
 use \Joindin\Service\Helper\Config as Config;
+use Joindin\Model\Db\Event as DbEvent;
 
 class Application extends Base
 {
@@ -19,7 +20,9 @@ class Application extends Base
         $perPage = 6;
         $start = ($page -1) * $perPage;
 
-        $event_collection = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+
+        $event_collection = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($dbNum));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 //        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
         try {

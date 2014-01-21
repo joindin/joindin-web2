@@ -17,17 +17,16 @@ class Talk extends Base
 
     public function index($eventSlug, $talkSlug)
     {
-        $config = new Config();
-        $eventApi = new \Joindin\Model\API\Event($config, $this->accessToken);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+
+        $eventApi = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($dbNum));
         $event = $eventApi->getByFriendlyUrl($eventSlug);
         $eventUri = $event->getUri();
 
-        $dbName_ = $config->getConfig();
-        $dbName = $dbName_['mongo']['database_name'];
-        $talkDb = new DbTalk($dbName);
+        $talkDb = new DbTalk($dbNum);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
 
-        $talkApi = new \Joindin\Model\API\Talk($config, $this->accessToken, new DbTalk($dbName));
+        $talkApi = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, new DbTalk($dbNum));
         $talk = $talkApi->getTalk($talkUri, true);
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
@@ -60,16 +59,12 @@ class Talk extends Base
 
     public function quick($talkStub)
     {
-        $config = new Config();
-        $dbName_ = $config->getConfig();
-        $dbName = $dbName_['mongo']['database_name'];
-        $talkDb = new DbTalk($dbName);
+        $dbNum = $this->cfg['redis']['dbIndex'];
+        $talkDb = new DbTalk($dbNum);
         $talk = $talkDb->getTalkByStub($talkStub);
 
-
-
-        $eventDb = new DbEvent($dbName);
-        $event = $eventDb->load($talk['event_uri']);
+        $eventDb = new DbEvent($dbNum);
+        $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
             throw new \Slim_Exception_Pass('Page not found', 404);
         }

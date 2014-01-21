@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Model\Db;
 
-use  \Joindin\Service\Db as DbService;
+use  \Joindin\Service\Cache as CacheService;
 
 class User
 {
@@ -10,7 +10,7 @@ class User
 
     public function __construct()
     {
-        $this->db = new DbService();
+        $this->cache = new CacheService();
     }
 
     public function getUriFor($username)
@@ -21,7 +21,7 @@ class User
 
     public function load($uri)
     {
-        $data = $this->db->getOneByKey($this->keyName, 'uri', $uri);
+        $data = $this->cache->load('users', 'uri', $uri);
         return $data;
     }
 
@@ -34,12 +34,12 @@ class User
             'verbose_uri'  => $user->getVerboseUri()
         );
 
-        $mongoUser = $this->load($user->getUri());
-        if ($mongoUser) {
+        $savedUser = $this->load($user->getUri());
+        if ($savedUser) {
             // user is already known - update this record
-            $data = array_merge($mongoUser, $data);
+            $data = array_merge($savedUser, $data);
         }
 
-        return $this->db->save($this->keyName, $data);
+        return $this->cache->save('users', $data, 'uri', $user->getUri());
     }
 }
