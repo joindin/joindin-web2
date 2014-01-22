@@ -1,0 +1,36 @@
+{% extends '/layout.html.twig' %}
+{% block body %}
+
+    <section>
+        <h1 class="title">{{ talk.getTitle }}</h1>
+
+        {% include '_common/eventtitle.html.twig' %}
+
+        <h3>
+            {{ talk.type }} by
+
+            {% for speaker in talk.speakers %}
+                {% include '_common/speakersummary.html.twig' %}
+            {% endfor %}
+
+        </h3>
+
+        {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating} %}
+
+        <div class="clearfix"></div>
+
+        <p>{{ talk.getDescription }}</p>
+
+        <p>Quicklink: <a href="/talk/{{ talk.getStub }}">http://joind.in/talk/{{ talk.getStub }}</a></p>
+    </section>
+
+    <section>
+        <h3 class="title">Comments</h3>
+        {% for comment in comments %}
+            {% include '_common/comment.html.twig' %}
+        {% endfor %}
+    </section>
+
+    {#<pre>{{ dump(talk) }}</pre>#}
+
+{% endblock %}

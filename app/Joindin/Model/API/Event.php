@@ -92,7 +92,6 @@ class Event extends \Joindin\Model\API\JoindIn
      */
     public function getByFriendlyUrl($friendlyUrl) {
         $db = new \Joindin\Service\Db($this->mongoDatabaseName);
-
         $event = $db->getOneByKey('events', 'url_friendly_name', $friendlyUrl);
 
         if (!$event) {
@@ -103,8 +102,8 @@ class Event extends \Joindin\Model\API\JoindIn
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
         $event = new \Joindin\Model\Event($event_list->events[0]);
 
-        $data = json_decode($this->apiGet($event->getCommentsUri(), array('verbose'=>'yes')), true);
-        $event->setComments($data['comments']);
+        $data = json_decode($this->apiGet($event->getCommentsUri(), array("verbose" => "yes")));
+        $event->setComments($data->comments);
 
         return $event;
 
@@ -129,7 +128,8 @@ class Event extends \Joindin\Model\API\JoindIn
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
         $event = new \Joindin\Model\Event($event_list->events[0]);
 
-        $event->comments = json_decode($this->apiGet($event->getCommentsUri()));
+        $data = json_decode($this->apiGet($event->getCommentsUri()));
+        $event->setComments($data->comments);
 
         return $event;
     }

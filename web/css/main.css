@@ -69,15 +69,11 @@ p {
     padding-bottom: 0.5ex;
 }
 
-h2, h3, h4 {
-    font-weight: normal;
-}
-
 h2 {
-    color: #f90;
     font-size: 16px;
     padding-top: 8px;
 }
+
 
 /*------------------------------------*\
  * Layout/Structure
@@ -376,6 +372,18 @@ nav a:hover, #head .userdetails a:hover {
     color: white;
     width: 20%;
     text-align: center;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.float {
+    float: left;
+}
+
+.rating {
+    margin: 5px;
 }
 
 .comments {

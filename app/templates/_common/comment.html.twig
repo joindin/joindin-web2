@@ -1,13 +1,18 @@
 {# This template should work for both event and talk comments #}
-{# {{ dump(comment) }} #}
+{#{{ dump(comment) }}#}
 
 <li class="comment" id="comment-{{ hash(comment.comment_uri)|slice(1,7) }}">
+    {% if comment.rating %} {% include '_common/rating.html.twig' with {'rating': comment.rating} %} {% endif %}
     <div class="comment-body">
         {{ comment.comment }}
     </div>
     <div class="info">
-        by {{ comment.user_display_name }}
+        by {% if comment.getUserDisplayName %}
+            <a href="{{ urlForSpeaker(comment.getUserDisplayName) }}" class="speaker-url">
+                {{ comment.getUserDisplayName }}
+            </a>
+        {% else %}Anonymous{% endif %}
         at {{ comment.created_date|date('H:i \\o\\n j M Y') }}
-        via {{ comment.source }}
+        {% if comment.source %}via {{ comment.source }}{% endif %}
     </div>
 </li>
