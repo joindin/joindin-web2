@@ -56,6 +56,8 @@ class User extends Base
                 if ($user) {
                     $_SESSION['user'] = $user;
                     $this->application->redirect('/');
+                } else {
+                    unset($_SESSION['access_token']);
                 }
             }
         }

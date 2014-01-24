@@ -8,9 +8,9 @@ class User
     protected $keyName = 'users';
     protected $db;
 
-    public function __construct()
+    public function __construct($dbname)
     {
-        $this->db = new DbService();
+        $this->db = new DbService($dbname);
     }
 
     public function getUriFor($username)
@@ -40,6 +40,8 @@ class User
             $data = array_merge($mongoUser, $data);
         }
 
-        return $this->db->save($this->keyName, $data);
+        return $this->db->save($this->keyName, $data, 
+            array('uri'  => $user->getUri())
+        );
     }
 }
