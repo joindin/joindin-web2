@@ -1,4 +1,10 @@
 <?php
+/*
+ * PROBLEMS LOGGING IN?
+ *
+ * If you want to use User related features, you will need to use a locally
+ * checked out copy of the API: you cannot log into the live API
+ */
 
 namespace Joindin\Model;
 

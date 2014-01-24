@@ -52,6 +52,9 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 
 1. Change the value of apiUrl to the URL of your development API if you don't want to use the production API.
 
+**If you are connecting to the production API, you will find that you won't be able to log in. Please use
+your local development API if you require to be logged in**
+
 ## Other Resources
 
 * The main website http://joind.in
