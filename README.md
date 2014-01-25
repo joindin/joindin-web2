@@ -57,6 +57,9 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
        **Create a local copy of the API from the [GitHub project](https://github.com/joindin/joindin-api) and then you can log in to it from your web2 installation**
  
 
+**If you are connecting to the production API, you will find that you won't be able to log in. Please use
+your local development API if you require to be logged in**
+
 ## Other Resources
 
 * The main website http://joind.in
