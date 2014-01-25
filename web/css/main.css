@@ -376,6 +376,7 @@ nav a:hover, #head .userdetails a:hover {
     margin-bottom: 10px;
     padding-bottom: 10px;
     border-bottom: 1px dotted #d7dcdf;
+    list-style: none;
 }
 
 .comment .info {
