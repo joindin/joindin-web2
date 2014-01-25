@@ -397,3 +397,23 @@ nav a:hover, #head .userdetails a:hover {
     width: 30em;
     height: 5em;
 }
+
+
+ul.apps
+{
+    margin-bottom: 20px;
+    list-style-type: none;
+    float: left;
+}
+
+ul.apps li
+{
+    width: 270px;
+    float: left;
+}
+ul.apps li h2 {
+    margin-bottom: 5px;
+}
+ul.apps li img {
+    border: 1px solid #d7dcdf;
+}
