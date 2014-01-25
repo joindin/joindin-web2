@@ -50,7 +50,12 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 
         cp config/config.php.dist config/config.php
 
-1. Change the value of apiUrl to the URL of your development API if you don't want to use the production API.
+1. Change the value of `apiUrl` to the URL of your development API if you don't want to use the production API.
+
+       Note that if you are connecting to the production API, you will find that you won't be able to log in as you don't have the correct oauth client_id.
+
+       **Create a local copy of the API from the [GitHub project](https://github.com/joindin/joindin-api) and then you can log in to it from your web2 installation**
+ 
 
 ## Other Resources
 
