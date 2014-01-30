@@ -14,6 +14,7 @@ var uLayers = {
     },
     OSM:{
         url:"http://tile.openstreetmap.org/",
+        markerUrl:"/img/marker-icon.png",
 
         getTileUrl:function (xyz)
         {
