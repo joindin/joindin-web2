@@ -14,7 +14,7 @@ var uLayers = {
     },
     OSM:{
         url:"http://tile.openstreetmap.org/",
-        markerUrl:"http://joindin2.chronos.com/img/icons/pin.png",
+        markerUrl:"/img/marker-icon.png",
 
         getTileUrl:function (xyz)
         {
