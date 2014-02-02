@@ -115,7 +115,7 @@ class Event extends Base
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
-            $dbTalk = new Talk($this->cfg['redis']['dbIndex']);
+            $dbTalk = new Talk($this->cfg['redis']['keyPrefix']);
             $apiTalk = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $dbTalk);
             $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
@@ -157,8 +157,8 @@ class Event extends Base
         $request = $this->application->request();
         $comment = $request->post('comment');
 
-        $dbNum = $this->cfg['redis']['dbIndex'];
-        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($keyPrefix));
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
         if ($event) {
             $apiEvent->addComment($event, $comment);
