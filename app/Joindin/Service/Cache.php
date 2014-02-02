@@ -12,16 +12,10 @@ class Cache
 {
     protected $client;
 
-    public function __construct($dbIndex = false)
+    public function __construct($keyPrefix = '')
     {
-		$this->client = new \Predis\Client();
-		if ($dbIndex !== false) {
-			if (is_numeric($dbIndex)) {
-				$this->client->select($dbIndex);
-			} else {
-				throw new Exception("Invalid config (".var_export($dbIndex, true).") for Redis DB index, should be numeric");
-			}
-		}
+		$settings = new Array('prefix'=>$keyPrefix);
+		$this->client = new \Predis\Client($settings);
     }
 
 	public function save($collection, $data, $keyField, $keyValue) {

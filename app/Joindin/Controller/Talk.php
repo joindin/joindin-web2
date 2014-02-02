@@ -17,16 +17,16 @@ class Talk extends Base
 
     public function index($eventSlug, $talkSlug)
     {
-        $dbNum = $this->cfg['redis']['dbIndex'];
+        $keyPrefix = $this->cfg['redis']['keyPrefix'];
 
-        $eventApi = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($dbNum));
+        $eventApi = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($keyPrefix));
         $event = $eventApi->getByFriendlyUrl($eventSlug);
         $eventUri = $event->getUri();
 
-        $talkDb = new DbTalk($dbNum);
+        $talkDb = new DbTalk($keyPrefix);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
 
-        $talkApi = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, new DbTalk($dbNum));
+        $talkApi = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, new DbTalk($keyPrefix));
         $talk = $talkApi->getTalk($talkUri, true);
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
@@ -59,11 +59,11 @@ class Talk extends Base
 
     public function quick($talkStub)
     {
-        $dbNum = $this->cfg['redis']['dbIndex'];
-        $talkDb = new DbTalk($dbNum);
+        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $talkDb = new DbTalk($keyPrefix);
         $talk = $talkDb->getTalkByStub($talkStub);
 
-        $eventDb = new DbEvent($dbNum);
+        $eventDb = new DbEvent($keyPrefix);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
             throw new \Slim_Exception_Pass('Page not found', 404);

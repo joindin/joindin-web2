@@ -19,6 +19,13 @@ class Event extends Base
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
     }
 
+    protected function getEventApi()
+    {
+        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $eventApi = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($keyPrefix));
+        return $eventApi;
+    }
+
     public function index()
     {
         $page = ((int)$this->application->request()->get('page') === 0)
@@ -28,8 +35,7 @@ class Event extends Base
         $perPage = 10;
         $start = ($page -1) * $perPage;
 
-        $dbNum = $this->cfg['redis']['dbIndex'];
-        $event_collection = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+        $event_collection = $this->getEventApi();
 
         $events = $event_collection->getCollection($perPage, $start);
         try {
@@ -59,8 +65,7 @@ class Event extends Base
 
     public function details($friendly_name)
     {
-        $dbNum = $this->cfg['redis']['dbIndex'];
-        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+        $apiEvent = $this->getEventApi();
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
         if($event) {
             $quicklink = $this->application->request()->headers("host") 
@@ -87,8 +92,7 @@ class Event extends Base
 
     public function map($friendly_name)
     {
-        $dbNum = $this->cfg['redis']['dbIndex'];
-        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+        $apiEvent = $this->getEventApi();
 
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
@@ -107,8 +111,7 @@ class Event extends Base
 
      public function schedule($friendly_name)
      {
-        $dbNum = $this->cfg['redis']['dbIndex'];
-        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+        $apiEvent = $this->getEventApi();
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
@@ -134,8 +137,7 @@ class Event extends Base
 
     public function quicklink($stub)
     {
-        $dbNum = $this->cfg['redis']['dbIndex'];
-        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($dbNum));
+        $apiEvent = $this->getEventApi();
         $event = $apiEvent->getByStub($stub);
         if($event) {
             $this->application->redirect(

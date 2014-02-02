@@ -20,9 +20,9 @@ class Application extends Base
         $perPage = 6;
         $start = ($page -1) * $perPage;
 
-        $dbNum = $this->cfg['redis']['dbIndex'];
+        $keyPrefix = $this->cfg['redis']['keyPrefix'];
 
-        $event_collection = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($dbNum));
+        $event_collection = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($keyPrefix));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 //        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
         try {

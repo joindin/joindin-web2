@@ -8,9 +8,9 @@ class Event
     protected $keyName = 'events';
     protected $db;
 
-    public function __construct($dbNum)
+    public function __construct($keyPrefix)
     {
-        $this->cache = new CacheService($dbNum);
+        $this->cache = new CacheService($keyPrefix);
     }
 
     public function getUriFor($slug)
