@@ -41,6 +41,9 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
+body {
+    line-height: 1;
+}
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -84,7 +87,8 @@ h2 {
 
 #foot {
     border-top: 1px solid #317a95;
-    margin: 0 0 12px;
+    clear: both;
+    margin: 12px 0 12px;
     padding: 8px;
     text-align: right;
 }
@@ -248,6 +252,20 @@ nav a:hover, #head .userdetails a:hover {
 
 .eventCard .header {
     font-size: 16px;
+}
+
+/** Box **/
+.box {
+    border: 1px solid #d7dcdf;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+#thumbnails li {
+    display: inline;
+    list-style: none;
+    padding-right: 5px;
 }
 
 #paginator {

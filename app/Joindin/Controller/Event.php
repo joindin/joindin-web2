@@ -2,11 +2,9 @@
 namespace Joindin\Controller;
 
 use Joindin\Model\Db\Talk;
-use Joindin\Service\Db;
 use \Joindin\Service\Helper\Config as Config;
+use \Joindin\Model\API\Photos as Photos;
 use \Joindin\Model\API\Event as EventApi;
-use \Joindin\Service\Db as DbService;
-
 
 class Event extends Base
 {
@@ -16,6 +14,7 @@ class Event extends Base
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
+        $app->get('/event/:friendly_name/photos', array($this, 'photos'))->name("event-photos");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
     }
@@ -160,5 +159,26 @@ class Event extends Base
 
         $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
         $this->application->redirect($url);
+    }
+
+    public function photos($friendlyName)
+    {
+        $apiEvent = new \Joindin\Model\API\Event(new Config(), $this->accessToken);
+        $event = $apiEvent->getByFriendlyUrl($friendlyName);
+
+        if ($event) {
+            $photoService = new Photos(new Config());
+            $photos = $photoService->getTaggedPhotos('event', $friendlyName);
+
+            echo $this->application->render(
+                'Event/photos.html.twig',
+                array(
+                    'event' => $event,
+                    'photos' => $photos
+                )
+            );
+        } else {
+            throw new \Exception("Event not found");
+        }
     }
 }
