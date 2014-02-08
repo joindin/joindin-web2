@@ -6,8 +6,21 @@ use Joindin\Model\Db\User as UserDb;
 
 class User extends \Joindin\Model\API\JoindIn
 {
+
+    protected $mongoDatabaseName;
+
+    public function __construct($configObj, $accessToken) {
+        parent::__construct($configObj, $accessToken);
+
+        $config = $configObj->getConfig();
+        if (isset($config['mongo']) && isset($config['mongo']['database_name'])) {
+            $this->mongoDatabaseName = $config['mongo']['database_name'];
+        }
+
+    }
+
     /**
-     * Retreive user information from the API
+     * Retrieve user information from the API
      *
      * @param  string $url User's URI
      * @return mixed       stdClass of user data or false
@@ -23,7 +36,7 @@ class User extends \Joindin\Model\API\JoindIn
                     $user = new UserEntity($data->users[0]);
 
                     // store to database for later
-                    $db = new UserDb();
+                    $db = new UserDb($this->mongoDatabaseName);
                     $db->saveSlugToDatabase($user);
                     return $user;
                 }

@@ -8,7 +8,7 @@ class User
     protected $keyName = 'users';
     protected $db;
 
-    public function __construct()
+    public function __construct($dbname)
     {
         $this->cache = new CacheService();
     }

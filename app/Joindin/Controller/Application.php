@@ -9,6 +9,7 @@ class Application extends Base
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/', array($this, 'index'));
+        $app->get('/apps', array($this, 'apps'))->name('apps');
     }
 
     public function index()
@@ -49,7 +50,9 @@ class Application extends Base
             );
         }
     }
+
+    public function apps()
+    {
+        echo $this->application->render('Application/apps.html.twig');
+    }
 }
-
-
-

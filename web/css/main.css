@@ -376,6 +376,7 @@ nav a:hover, #head .userdetails a:hover {
     margin-bottom: 10px;
     padding-bottom: 10px;
     border-bottom: 1px dotted #d7dcdf;
+    list-style: none;
 }
 
 .comment .info {
@@ -395,4 +396,24 @@ nav a:hover, #head .userdetails a:hover {
 #add-comment textarea {
     width: 30em;
     height: 5em;
+}
+
+
+ul.apps
+{
+    margin-bottom: 20px;
+    list-style-type: none;
+    float: left;
+}
+
+ul.apps li
+{
+    width: 270px;
+    float: left;
+}
+ul.apps li h2 {
+    margin-bottom: 5px;
+}
+ul.apps li img {
+    border: 1px solid #d7dcdf;
 }
