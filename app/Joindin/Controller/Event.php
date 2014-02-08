@@ -2,10 +2,7 @@
 namespace Joindin\Controller;
 
 use Joindin\Model\Db\Talk;
-use Joindin\Service\Db;
 use \Joindin\Model\API\Event as EventApi;
-use \Joindin\Service\Db as DbService;
-
 
 class Event extends Base
 {
