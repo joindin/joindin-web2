@@ -8,8 +8,7 @@ class User extends \Joindin\Model\API\JoindIn
 
     public function __construct($config, $accessToken, \Joindin\Model\Db\User $userDb)
     {
-        parent::__construct($configObj, $accessToken);
-
+        parent::__construct($config, $accessToken);
         $this->userDb = $userDb;
     }
 

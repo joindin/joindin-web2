@@ -51,7 +51,8 @@ class User extends Base
                 $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $userService = new UserService($this->cfg, $this->accessToken);
+                $keyPrefix = $this->cfg['redis']['keyPrefix'];
+                $userService = new UserService($this->cfg, $this->accessToken, new \Joindin\Model\Db\User($keyPrefix));
                 $user = $userService->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;
