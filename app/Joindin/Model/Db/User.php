@@ -6,17 +6,11 @@ use  \Joindin\Service\Cache as CacheService;
 class User
 {
     protected $keyName = 'users';
-    protected $db;
+    protected $cache;
 
-    public function __construct($dbname)
+    public function __construct($keyPrefix)
     {
-        $this->cache = new CacheService();
-    }
-
-    public function getUriFor($username)
-    {
-        $data = $this->db->getOneByKey($this->keyName, 'username', $username);
-        return $data['uri'];
+        $this->cache = new CacheService($keyPrefix);
     }
 
     public function load($uri)

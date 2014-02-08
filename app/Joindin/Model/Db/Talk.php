@@ -6,7 +6,7 @@ use  \Joindin\Service\Cache as CacheService;
 class Talk
 {
     protected $keyName = 'talks';
-    protected $db;
+    protected $cache;
 
     public function __construct($keyPrefix)
     {
