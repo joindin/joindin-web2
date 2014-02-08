@@ -2,21 +2,14 @@
 namespace Joindin\Model\API;
 
 use Joindin\Model\User as UserEntity;
-use Joindin\Model\Db\User as UserDb;
 
 class User extends \Joindin\Model\API\JoindIn
 {
 
-    protected $mongoDatabaseName;
-
-    public function __construct($configObj, $accessToken) {
+    public function __construct($config, $accessToken, \Joindin\Model\Db\User $userDb)
         parent::__construct($configObj, $accessToken);
 
-        $config = $configObj->getConfig();
-        if (isset($config['mongo']) && isset($config['mongo']['database_name'])) {
-            $this->mongoDatabaseName = $config['mongo']['database_name'];
-        }
-
+        $this->userDb = $userDb;
     }
 
     /**
@@ -35,9 +28,6 @@ class User extends \Joindin\Model\API\JoindIn
                 if (isset($data->users) && isset($data->users[0])) {
                     $user = new UserEntity($data->users[0]);
 
-                    // store to database for later
-                    $db = new UserDb($this->mongoDatabaseName);
-                    $db->saveSlugToDatabase($user);
                     return $user;
                 }
 

@@ -4,14 +4,13 @@ namespace Joindin\Model\API;
 class Event extends \Joindin\Model\API\JoindIn
 {
     /**
-     * @var \Joindin\Model\Db\Talk
+     * @var \Joindin\Model\Db\Event
      */
     protected $eventDb;
 
     public function __construct($config, $accessToken, \Joindin\Model\Db\Event $eventDb)
     {
         parent::__construct($config, $accessToken);
-        $this->accessToken = $accessToken;
         $this->eventDb = $eventDb;
     }
 
