@@ -29,6 +29,7 @@ class Event
 
         $this->cache->save('events', $data, 'uri', $event->getUri());
         $this->cache->save('events', $data, 'url_friendly_name', $event->getUrlFriendlyName());
+        $this->cache->save('events', $data, 'stub', $event->getStub());
     }
 
 }

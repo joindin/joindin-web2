@@ -100,9 +100,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * @return \Joindin\Model\Event The event we found, or false if something went wrong
      */
     public function getByStub($stub) {
-        $db = new \Joindin\Service\Db();
-
-        $event = $db->getOneByKey('events', 'stub', $stub);
+        $event = $this->eventDb->load('stub', $stub);
 
         if (!$event) {
             return false;
