@@ -2,6 +2,7 @@
 namespace Joindin\Controller;
 
 use \Joindin\Service\Helper\Config as Config;
+use \Joindin\Service\Cache as Cache;
 use Joindin\Model\Db\Event as DbEvent;
 
 class Application extends Base
@@ -23,7 +24,8 @@ class Application extends Base
 
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
 
-        $event_collection = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($keyPrefix));
+        $cache = new Cache($keyPrefix);
+        $event_collection = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($cache));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 //        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
         try {

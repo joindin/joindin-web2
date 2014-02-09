@@ -3,6 +3,7 @@ namespace Joindin\Controller;
 
 use Joindin\Model\Db\Event as DbEvent;
 use Joindin\Model\Db\Talk as DbTalk;
+use Joindin\Service\Cache as Cache;
 use Joindin\Service\Helper\Config;
 
 class Talk extends Base
@@ -18,8 +19,9 @@ class Talk extends Base
     public function index($eventSlug, $talkSlug)
     {
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $cache = new Cache($keyPrefix);
 
-        $eventApi = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($keyPrefix));
+        $eventApi = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($cache));
         $event = $eventApi->getByFriendlyUrl($eventSlug);
         $eventUri = $event->getUri();
 
@@ -60,10 +62,11 @@ class Talk extends Base
     public function quick($talkStub)
     {
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $cache = new Cache($keyPrefix);
         $talkDb = new DbTalk($keyPrefix);
         $talk = $talkDb->getTalkByStub($talkStub);
 
-        $eventDb = new DbEvent($keyPrefix);
+        $eventDb = new DbEvent($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
             throw new \Slim_Exception_Pass('Page not found', 404);
