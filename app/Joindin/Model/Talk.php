@@ -25,6 +25,15 @@ class Talk
         return $this->data->type;
     }
 
+    /**
+     * Return the event type class name
+     * The type class is all lower case with no spaces
+     */
+    public function getTypeClass()
+    {
+        return 'talk-type-'.str_replace(' ', '', strtolower($this->data->type));
+    }
+
     public function getAbsoluteWebsiteUrl()
     {
         return $this->data->website_uri;
