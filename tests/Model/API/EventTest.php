@@ -4,20 +4,22 @@ namespace Tests\Model\API;
 class EventTest extends \PHPUnit_Framework_TestCase
 {
     private $mockConfig;
+    private $mockCache;
+    private $mockDbEvent;
 
     public function setUp()
     {
-        $this->mockConfig = $this->getMockBuilder('Joindin\Service\Helper\Config')
-            ->setMethods(array('getConfig'))
-            ->getMock();
+		$this->mockConfig = array('apiUrl' => 'http://example.com');
+        $this->mockCache = $this->getMock(
+            'Joindin\Service\Cache'
+        );
 
-        $this->mockConfig->expects($this->any())
-            ->method('getConfig')
-            ->will($this->returnValue(
-            array(
-                'apiUrl'=>'http://example.com'
-            )
-        ));
+        $this->mockDbEvent = $this->getMock(
+			'Joindin\Model\Db\Event',
+			null,
+			array($this->mockCache)
+        );
+
     }
 
     public function testDefaultGetCollectionParametersAreSet()
@@ -25,7 +27,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Joindin\Model\API\Event',
             array('apiGet'),
-            array($this->mockConfig, null)
+            array($this->mockConfig, null, $this->mockDbEvent)
         );
 
         $mockEvent->expects($this->once())
@@ -41,7 +43,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Joindin\Model\API\Event',
             array('apiGet'),
-            array($this->mockConfig, null)
+            array($this->mockConfig, null, $this->mockDbEvent)
         );
 
         $mockEvent->expects($this->once())
@@ -57,7 +59,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Joindin\Model\API\Event',
             array('apiGet'),
-            array($this->mockConfig, null)
+            array($this->mockConfig, null, $this->mockDbEvent)
         );
 
         $mockEvent->expects($this->once())
@@ -73,7 +75,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Joindin\Model\API\Event',
             array('apiGet'),
-            array($this->mockConfig, null)
+            array($this->mockConfig, null, $this->mockDbEvent)
         );
 
         $mockEvent->expects($this->once())
@@ -110,7 +112,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $mockEventApi = $this->getMock(
             'Joindin\Model\API\Event',
             array('apiPost'),
-            array($this->mockConfig, null)
+            array($this->mockConfig, null, $this->mockDbEvent)
         );
 
         $mockEventApi->expects($this->once())
@@ -153,7 +155,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $mockEventApi = $this->getMock(
             'Joindin\Model\API\Event',
             array('apiPost'),
-            array($this->mockConfig, null)
+            array($this->mockConfig, null, $this->mockDbEvent)
         );
 
         $mockEventApi->expects($this->once())

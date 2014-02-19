@@ -1,16 +1,14 @@
 <?php
 namespace Joindin\Model\Db;
 
-use  \Joindin\Service\Cache as CacheService;
-
 class Event
 {
     protected $keyName = 'events';
     protected $cache;
 
-    public function __construct($keyPrefix)
+    public function __construct(\Joindin\Service\Cache $cache)
     {
-        $this->cache = new CacheService($keyPrefix);
+        $this->cache = $cache;
     }
 
     public function load($keyField, $keyValue)
