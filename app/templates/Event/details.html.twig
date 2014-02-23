@@ -5,16 +5,12 @@
 
     <p>{{ event.getDescription|format_string|raw }}</p>
 
-    {% if event.getStub %}
-    <p>Quicklink: <a href="{{ urlFor('event-quicklink', {"stub": event.getStub}) }}">{{ quicklink }}</a></p>
-    {% endif %}
-
     <div id="comments">
         {% if event.getComments %}
             <h2>Comments</h2>
-            <ul class="comments">
+            <ul>
             {% for comment in event.getComments %}
-                {% include '_common/comment.html.twig' %}
+                {% include '_common/comment.html.twig' with {'comment': comment} %}
             {% endfor %}
             </ul>
         {% endif %}
@@ -34,6 +30,18 @@
             <a href="{{ urlFor('user-login') }}">Login</a> to write a comment
         {% endif %}
     </div>
-
 {% endblock %}
 
+
+{% block extraAside %}
+    {% if event.getStub %}
+        <div class="extraAside">
+            <p>
+                Short URL to this event:
+                <a href="{{ urlFor('event-quicklink', {"stub": event.getStub}) }}">
+                    {{ quicklink }}
+                </a>
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}
