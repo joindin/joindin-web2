@@ -29,6 +29,8 @@ class EventTest extends \PHPUnit_Framework_TestCase
 		$this->eventData->uri                  = "Test event uri";
 		$this->eventData->verbose_uri          = "Test event verbose uri";
 		$this->eventData->attending            = "Test event attending";
+		$this->eventData->url_friendly_name    = "Test event url friendly name";
+		$this->eventData->stub                 = "Test event stub";
     }
 
     public function testBasicEventData()
@@ -120,5 +122,16 @@ class EventTest extends \PHPUnit_Framework_TestCase
             "Test event attending"
         );
 
+        $this->assertEquals(
+            $event->getUrlFriendlyName(),
+            "Test event url friendly name"
+        );
+
+        $this->assertEquals(
+            $event->getStub(),
+            "Test event stub"
+        );
+
     }
+
 }
