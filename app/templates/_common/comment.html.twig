@@ -1,5 +1,4 @@
 {# This template should work for both event and talk comments #}
-{#{{ dump(comment) }}#}
 
 <li>
     <div class="media">
@@ -8,8 +7,8 @@
                 {% include '_common/rating.html.twig' with {'rating': comment.rating} %}
             {% endif %}
 
-            {% if comment.getUserDisplayName %}
-                {{ comment.getUserDisplayName }}
+            {% if comment.user_display_name %}
+                {{ comment.user_display_name }}
             {% else %}
                 Anonymous
             {% endif %}

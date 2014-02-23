@@ -1,21 +1,21 @@
 <?php
 namespace Joindin\Model\Db;
 
-use Joindin\Service\Db as DbService;
+use  \Joindin\Service\Cache as CacheService;
 
 class Talk
 {
     protected $keyName = 'talks';
-    protected $db;
+    protected $cache;
 
-    public function __construct($dbName)
+    public function __construct($keyPrefix)
     {
-        $this->db = new DbService($dbName);
+        $this->cache = new CacheService($keyPrefix);
     }
 
     public function getUriFor($slug, $eventUri)
     {
-        $data = $this->db->getOneByKeys($this->keyName, array(
+        $data = $this->cache->loadByKeys('talks', array(
             'event_uri' => $eventUri,
             'slug' => $slug
         ));
@@ -24,13 +24,13 @@ class Talk
 
     public function getTalkByStub($stub)
     {
-        $data = $this->db->getOneByKey($this->keyName, 'stub', $stub);
+        $data = $this->cache->load('talks', 'stub', $stub);
         return $data;
     }
 
     public function load($uri)
     {
-        $data = $this->db->getOneByKey($this->keyName, 'uri', $uri);
+        $data = $this->cache->load('talks', 'uri', $uri);
         return $data;
     }
 
@@ -45,14 +45,19 @@ class Talk
             'stub' => $talk->getStub(),
         );
 
-        $mongoTalk = $this->load($talk->getApiUri());
-        if ($mongoTalk) {
+        $savedTalk = $this->load($talk->getApiUri());
+        if ($savedTalk) {
             // talk is already known - update this record
-            $data = array_merge($mongoTalk, $data);
+            $data = array_merge($savedTalk, $data);
         }
 
-        $criteria = array('uri' => $talk->getApiUri());
+		$keys = array(
+            'event_uri' => $talk->getEventUri(),
+            'slug' => $talk->getUrlFriendlyTalkTitle()
+        );
 
-        return $this->db->save($this->keyName, $data, $criteria);
+        $this->cache->save('talks', $data, 'uri', $talk->getApiUri());
+        $this->cache->save('talks', $data, 'stub', $talk->getStub());
+        $this->cache->saveByKeys('talks', $data, $keys);
     }
 }

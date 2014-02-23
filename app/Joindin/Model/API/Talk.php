@@ -14,7 +14,7 @@ class Talk extends \Joindin\Model\API\JoindIn
     /**
      * @param \Joindin\Model\Db\Talk $talkDb
      */
-    function __construct($config, $accessToken, \Joindin\Model\Db\Talk $talkDb)
+    public function __construct($config, $accessToken, \Joindin\Model\Db\Talk $talkDb)
     {
         parent::__construct($config, $accessToken);
         $this->talkDb = $talkDb;

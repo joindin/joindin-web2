@@ -1,45 +1,33 @@
 <?php
 namespace Joindin\Model\Db;
 
-use  \Joindin\Service\Db as DbService;
-
 class Event
 {
     protected $keyName = 'events';
-    protected $db;
+    protected $cache;
 
-    public function __construct($dbName)
+    public function __construct(\Joindin\Service\Cache $cache)
     {
-        $this->db = new DbService($dbName);
+        $this->cache = $cache;
     }
 
-    public function getUriFor($slug)
+    public function load($keyField, $keyValue)
     {
-        $data = $this->db->getOneByKey($this->keyName, 'slug', $slug);
-        return $data['uri'];
+		return $this->cache->load('events', $keyField, $keyValue);
     }
 
-    public function load($uri)
-    {
-        $data = $this->db->getOneByKey($this->keyName, 'uri', $uri);
-        return $data;
-    }
-
-    public function saveSlugToDatabase(\Joindin\Model\Event $event)
+    public function save(\Joindin\Model\Event $event)
     {
         $data = array(
-            'uri'  => $event->getUri(),
-            'name' => $event->getName(),
-            'slug' => $event->getSlug(),
-            'verbose_uri'  => $event->getVerboseUri(),
+            "url_friendly_name" => $event->getUrlFriendlyName(),
+            "uri" => $event->getUri(),
+            "stub" => $event->getStub(),
+            "verbose_uri" => $event->getVerboseUri()
         );
 
-        $mongoEvent = $this->load($event->getUri());
-        if ($mongoEvent) {
-            // event is already known - update this record
-            $data = array_merge($mongoEvent, $data);
-        }
-
-        return $this->db->save($this->keyName, $data);
+        $this->cache->save('events', $data, 'uri', $event->getUri());
+        $this->cache->save('events', $data, 'url_friendly_name', $event->getUrlFriendlyName());
+        $this->cache->save('events', $data, 'stub', $event->getStub());
     }
+
 }

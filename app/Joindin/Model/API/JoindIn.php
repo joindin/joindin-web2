@@ -6,10 +6,8 @@ class JoindIn
     protected $baseApiUrl;
     protected $accessToken;
 
-    public function __construct($configObj, $accessToken)
+    public function __construct($config, $accessToken)
     {
-        $config = $configObj->getConfig();
-
         if (isset($config['apiUrl'])) {
             $this->baseApiUrl = $config['apiUrl'];
         }

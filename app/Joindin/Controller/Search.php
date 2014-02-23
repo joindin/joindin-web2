@@ -59,7 +59,7 @@ class Search extends Base
             $perPage = 10;
             $start = ($page -1) * $perPage;
 
-            $event_collection = new \Joindin\Model\API\Search(new Config(), $this->accessToken);
+            $event_collection = new \Joindin\Model\API\Search($this->cfg, $this->accessToken);
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
         }
         try {

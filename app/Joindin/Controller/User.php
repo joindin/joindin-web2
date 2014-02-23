@@ -40,7 +40,7 @@ class User extends Base
             $password = $request->post('password');
             $clientId = $config['client_id'];
 
-            $authService = new AuthService(new Config(), $this->accessToken);
+            $authService = new AuthService($this->cfg, $this->accessToken);
             $result      = $authService->login($username, $password, $clientId);
 
             if (false === $result) {
@@ -51,7 +51,8 @@ class User extends Base
                 $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $userService = new UserService(new Config(), $this->accessToken);
+                $keyPrefix = $this->cfg['redis']['keyPrefix'];
+                $userService = new UserService($this->cfg, $this->accessToken, new \Joindin\Model\Db\User($keyPrefix));
                 $user = $userService->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;
