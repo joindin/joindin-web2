@@ -6,10 +6,10 @@
     <p>{{ event.getDescription|format_string|raw }}</p>
 
     <div id="comments">
-        {% if event.getComments %}
+        {% if comments %}
             <h2>Comments</h2>
             <ul>
-            {% for comment in event.getComments %}
+            {% for comment in comments %}
                 {% include '_common/comment.html.twig' with {'comment': comment} %}
             {% endfor %}
             </ul>
