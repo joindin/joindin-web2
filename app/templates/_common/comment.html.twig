@@ -1,17 +1,32 @@
 {# This template should work for both event and talk comments #}
 
-<li class="comment" id="comment-{{ hash(comment.comment_uri)|slice(1,7) }}">
-    {% if comment.hasRating %} {% include '_common/rating.html.twig' with {'rating': comment.getRating} %} {% endif %}
-    <div class="comment-body">
-        {{ comment.comment }}
-    </div>
-    <div class="info">
-        by {% if comment.getUserDisplayName %}
-            <a href="{{ urlForSpeaker(comment.getUserDisplayName) }}" class="speaker-url">
+<li>
+    <div class="media">
+        <section>
+            {% if comment.hasRating %}
+                {% include '_common/rating.html.twig' with {'rating': comment.getRating} %}
+            {% endif %}
+
+            {% if comment.getUserDisplayName %}
                 {{ comment.getUserDisplayName }}
-            </a>
-        {% else %}Anonymous{% endif %}
-        at {{ comment.created_date|date('H:i \\o\\n j M Y') }}
-        {% if comment.source %}via {{ comment.source }}{% endif %}
+            {% else %}
+                Anonymous
+            {% endif %}
+
+            <p class="meta">
+                at {{ comment.created_date|date('H:i \\o\\n j M Y') }}
+                {% if comment.source %}via {{ comment.source }}{% endif %}
+            </p>
+        </section>
+        <section>
+
+            <p>
+                {{ comment.comment | nl2br }}
+            </p>
+        </section>
+    </div>
+
+    <div class="meta">
+
     </div>
 </li>

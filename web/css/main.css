@@ -68,7 +68,6 @@ p {
 
 h2 {
     font-size: 16px;
-    padding-top: 8px;
 }
 
 
@@ -167,7 +166,7 @@ nav a:hover, #head .userdetails a:hover {
         display: block;
     }
 
-    .eventCard .logo img {
+    .media .logo img {
         height: 90px !important;
         width: 90px !important;
     }
@@ -179,96 +178,45 @@ nav a:hover, #head .userdetails a:hover {
     padding-right: 8px;
 }
 
-/*------------------------------------*\
- * Objects
-\*------------------------------------*/
-
-.respImage {
-    max-width: 100%;
-}
-
-.button {
-    background-color: #f90;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    color: #ffffff;
-    padding: 0.8ex 0.5ex 0.5ex;
-    text-decoration: none;
-}
-.button:hover {
-    background-color: #f80;
-}
-
-.title {
-    border-bottom: 1px solid #d7dcdf;
-    color: #f90;
-    font-size: 24px;
-    font-weight: normal;
-    margin-bottom: 16px;
-}
-
-.meta {
-    font-size: 10px;
-}
-
-/** Event card **/
-
-.eventCard {
-    clear: both;
+.extraAside {
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+    margin-top: 8px;
 }
 
 
-
-.eventCard .logo {
-    /* Don't show if the viewport is too narrow, it looks silly otherwise */
-    display: none;
+/* Comments */
+#comments {
+    background-color: #d7dcdf;
+    margin: 8px;
+    padding: 8px
 }
 
-@media only screen and (min-width: 299px) {
-    /*
-        299
-      = 275 (width of when nav looks good on one line)
-      - 16  (whitespace in eventcard content:
-             3 x 8px padding: one each side, one between columns)
-    */
-    .eventCard .logo {
-        display: inline;
-    }
-
-    .eventCard .logo img {
-        height: 45px;
-        width: 45px;
-    }
-
-    .eventCard section {
-        display: table-cell;
-        padding: 8px 8px 8px 0;
-    }
-}
-
-.eventCard .header {
-    font-size: 16px;
-}
-
-#paginator {
-    margin: 0 auto;
-    width: 255px;
-}
-
-#paginator li {
-    text-align: center;
+#comments li {
+    border-top: 1px solid #333;
     list-style: none;
-    float: left;
-    width: 75px;
-    padding: 5px;
-    display: block;
+    padding-top: 8px;
 }
 
-.error {
-    color: #c00;
-    margin: 10px auto;
+#comments section {
+    min-width: 125px; /* Makes the left-most column lined up */
 }
 
+#add-comment {
+    margin-bottom: 10px;
+}
+
+#add-comment label {
+    display:block;
+    font-size: 11px;
+}
+
+#add-comment textarea {
+    width: 30em;
+    height: 5em;
+}
+
+/* Schedule table */
 .table table, .table table#key {
     width: 900px;
     margin-bottom: 35px;
@@ -304,26 +252,6 @@ nav a:hover, #head .userdetails a:hover {
     color:black;
 }
 
-.table td.talk {
-    background-color: #5A8EC3;
-}
-
-.table td.keynote {
-    background-color: #C799CE;
-}
-
-.table td.workshop {
-     background-color: #F69159;
-}
-
-.table td.social {
-    background-color: #CAAD90;
-}
-
-.table td.related {
-    background-color: #5BB068;
-}
-
 .table td a {
     color: white;
     text-decoration: none;
@@ -356,64 +284,122 @@ nav a:hover, #head .userdetails a:hover {
     text-align: center;
 }
 
-.clearfix {
+/*------------------------------------*\
+ * Objects
+\*------------------------------------*/
+
+.respImage {
+    max-width: 100%;
+}
+
+.button {
+    background-color: #f90;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 0.8ex 0.5ex 0.5ex;
+    text-decoration: none;
+}
+.button:hover {
+    background-color: #f80;
+}
+
+.title {
+    border-bottom: 1px solid #d7dcdf;
+    color: #f90;
+    font-size: 24px;
+    font-weight: normal;
+    margin-bottom: 16px;
+}
+
+.meta {
+    font-size: 10px;
+}
+
+/* Talk type highlights */
+.talk-type-talk {
+    background-color: #5A8EC3;
+}
+
+.talk-type-keynote {
+    background-color: #C799CE;
+}
+
+.talk-type-workshop {
+    background-color: #F69159;
+}
+
+.talk-type-socialevent {
+    background-color: #CAAD90;
+}
+
+.talk-type-eventrelated {
+    background-color: #5BB068;
+}
+/* A special case that lets us put the talk type as a label */
+.talk-type-label {
+    padding: 4px;
+    font-size: 8pt;
+}
+
+
+
+/** Media Element: Meta stuff to the left, more detailed stuff to the right **/
+
+.media {
     clear: both;
+    width: 100%;
 }
 
-.float {
-    float: left;
+.media:first-child {
 }
 
-.rating {
-    margin: 5px;
+.media .logo {
+    /* Don't show if the viewport is too narrow, it looks silly otherwise */
+    display: none;
 }
 
-.comments {
-    margin-top: 10px;
+@media only screen and (min-width: 299px) {
+    /*
+        299
+      = 275 (width of when nav looks good on one line)
+      - 16  (whitespace in media content:
+             3 x 8px padding: one each side, one between columns)
+    */
+    .media .logo {
+        display: inline;
+    }
+
+    .media .logo img {
+        height: 45px;
+        width: 45px;
+    }
+
+    .media section {
+        display: table-cell;
+        padding: 8px 8px 8px 0;
+    }
 }
 
-.comment {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px dotted #d7dcdf;
+.media .header {
+    font-size: 16px;
+}
+
+#paginator {
+    margin: 0 auto;
+    width: 255px;
+}
+
+#paginator li {
+    text-align: center;
     list-style: none;
-}
-
-.comment .info {
-    margin-top: 5px;
-    font-size: 11px;
-}
-
-#add-comment {
-    margin-bottom: 10px;
-}
-
-#add-comment label {
-    display:block;
-    font-size: 11px;
-}
-
-#add-comment textarea {
-    width: 30em;
-    height: 5em;
-}
-
-
-ul.apps
-{
-    margin-bottom: 20px;
-    list-style-type: none;
     float: left;
+    width: 75px;
+    padding: 5px;
+    display: block;
 }
 
-ul.apps li
-{
-    width: 270px;
-    float: left;
-}
-ul.apps li h2 {
-    margin-bottom: 5px;
-}
-ul.apps li img {
-    border: 1px solid #d7dcdf;
+.error {
+    color: #c00;
+    margin: 10px auto;
 }

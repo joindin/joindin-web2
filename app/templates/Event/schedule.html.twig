@@ -9,11 +9,11 @@
         <h1>Sessions Key</h1>
         <table id=key>
             <tr>
-                <td class="keynote key">Keynote</td>
-                <td class="talk key">Talk</td>
-                <td class="workshop key">Workshop</td>
-                <td class="social key">Social</td>
-                <td class="related key">Event Related</td>
+                <td class="talk-type-keynote key">Keynote</td>
+                <td class="talk-type-talk key">Talk</td>
+                <td class="talk-type-workshop key">Workshop</td>
+                <td class="talk-type-socialevent key">Social</td>
+                <td class="talk-type-eventrelated key">Event Related</td>
             </tr>
         </table>
 
@@ -49,7 +49,7 @@
                         {% set cell %}
                             {% include '/Event/_common/schedule_cell.html.twig' %}
                         {% endset %}
-                        <td class="{{ talk.type|lower }}">{{ cell }}</td>
+                        <td class="{{ talk.getTypeClass }}">{{ cell }}</td>
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -71,7 +71,7 @@
                                     {% set trackName = track~" " %}
                                     {% set title = talk.title %}
                                     {% set cell %}
-                                        <td class="{{ talk.type|lower }}">
+                                        <td class="{{ talk.getTypeClass }}">
                                             {% include '/Event/_common/schedule_cell.html.twig' %}
                                         </td>
                                     {% endset %}
@@ -84,7 +84,7 @@
 
                         {# if a talk has no tracks, or is a Keynote, span all tracks (columns) in table #}
                         {% if talk.tracks|length == 0 or talk.type == "Keynote" %}
-                            <td class="{{ talk.type|lower }}" colspan={{ day.tracks|length }}>
+                            <td class="{{ talk.getTypeClass }}" colspan={{ day.tracks|length }}>
                                 {% include '/Event/_common/schedule_cell.html.twig' %}
                             </td>
                         {% endif %}

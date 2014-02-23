@@ -26,10 +26,5 @@ function initialize(\Twig_Environment $env, Slim $app)
             return $app->urlFor('talk', array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
         })
     );
-
-    $env->addFunction(
-        new \Twig_SimpleFunction('urlForSpeaker', function ($speakerNam, $params = array()) use ($app) {
-            return "#"; // @todo  Fix this please akrabat
-        })
-    );}
+}
 

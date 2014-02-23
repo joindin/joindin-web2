@@ -16,13 +16,10 @@
 <body>
     <header id="head">
         <div class="userdetails">
-        {% if user %}
-            Welcome {{ user.getFullName }}
-            <a href="{{ urlFor('user-logout') }}">Logout</a>
-        {% else %}
-            <a href="{{ urlFor('user-login') }}">Login</a>
-        {% endif %}
-
+            <form action="/search/events" method="get" style="float: left">
+                <input type="text" name="keyword" value="{{ keyword }}" placeholder="Search events or talks">
+                <button type="submit">Search</button>
+            </form>
         </div>
         <nav>
             <ul>
@@ -40,8 +37,17 @@
 
                 <li>
                     <a href="/event">Events</a>
+                </li>
+                <li>
                     <a href="{{ urlFor('apps') }}">Apps</a>
                 </li>
+
+                {% if user %}
+                    <li><a href="#">{{ user.getFullName }}</a></li> <!-- This should link to the user profile page in the future -->
+                    <li><a href="{{ urlFor('user-logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ urlFor('user-login') }}">Login</a></li>
+                {% endif %}
 
             </ul>
         </nav>
@@ -53,17 +59,13 @@
         </div>
         <aside id="aside">
             <section class="wideOnly">
-
-                <form action="/search/events" method="get">
-                    <input type="text" name="keyword" value="{{ keyword }}" placeholder="Search events or talks">
-                    <button type="submit">Search</button>
-                </form>
-
                 <img src="/img/logo-combell.png" alt=" " />
                 <p>
                     <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
                     <a href="http://www.combell.com/en">hosting</a> by Combell
                 </p>
+
+                {% block extraAside %}{% endblock %}
             </section>
         </aside>
     </div>
