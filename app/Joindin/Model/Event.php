@@ -4,7 +4,6 @@ namespace Joindin\Model;
 class Event
 {
     private $data;
-    private $comments;
 
     /**
      * Crate new Event model
