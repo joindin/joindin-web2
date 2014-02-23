@@ -16,16 +16,6 @@ class Event
         $this->data = $data;
     }
 
-    public function setComments($comments)
-    {
-        $this->comments = $comments;
-    }
-
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
     public function getName()
     {
         return $this->data->name;

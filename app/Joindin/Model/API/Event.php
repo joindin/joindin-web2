@@ -1,6 +1,8 @@
 <?php
 namespace Joindin\Model\API;
 
+use Joindin\Model\Comment;
+
 class Event extends \Joindin\Model\API\JoindIn
 {
     /**
@@ -84,8 +86,8 @@ class Event extends \Joindin\Model\API\JoindIn
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
         $event = new \Joindin\Model\Event($event_list->events[0]);
 
-        $data = json_decode($this->apiGet($event->getCommentsUri(), array("verbose" => "yes")));
-        $event->setComments($data->comments);
+        //$data = json_decode($this->apiGet($event->getCommentsUri(), array("verbose" => "yes")));
+        //$event->setComments($data->comments);
 
         return $event;
 
@@ -108,10 +110,33 @@ class Event extends \Joindin\Model\API\JoindIn
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
         $event = new \Joindin\Model\Event($event_list->events[0]);
 
-        $data = json_decode($this->apiGet($event->getCommentsUri()));
-        $event->setComments($data->comments);
+        //$data = json_decode($this->apiGet($event->getCommentsUri()));
+        //$event->setComments($data->comments);
 
         return $event;
+    }
+
+	/**
+	 * Get comments for given event
+	 * @param $comment_uri
+	 * @param bool $verbose
+	 * @return Comment[]
+	 */
+    public function getComments($comment_uri, $verbose = false)
+    {
+        if($verbose) {
+            $comment_uri = $comment_uri . '?verbose=yes';
+        }
+
+        $comments = (array)json_decode($this->apiGet($comment_uri));
+
+        $commentData = array();
+
+        foreach($comments['comments'] as $comment) {
+            $commentData[] = new Comment($comment);
+        }
+
+        return $commentData;
     }
 
     public function addComment($event, $comment)

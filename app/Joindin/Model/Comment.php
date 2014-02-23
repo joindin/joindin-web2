@@ -15,6 +15,11 @@ class Comment
         $this->data = $data;
     }
 
+    public function hasRating()
+    {
+        return (isset($this->data->rating));
+    }
+
     public function getRating()
     {
         return $this->data->rating;
