@@ -3,12 +3,12 @@
 <li>
     <div class="media">
         <section>
-            {% if comment.rating %}
-                {% include '_common/rating.html.twig' with {'rating': comment.rating} %}
+            {% if comment.hasRating %}
+                {% include '_common/rating.html.twig' with {'rating': comment.getRating} %}
             {% endif %}
 
-            {% if comment.user_display_name %}
-                {{ comment.user_display_name }}
+            {% if comment.getUserDisplayName %}
+                {{ comment.getUserDisplayName }}
             {% else %}
                 Anonymous
             {% endif %}

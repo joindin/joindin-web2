@@ -75,12 +75,13 @@ class Event extends Base
                     array("stub" => $event->getStub()
                 ));
 
+            $comments = $apiEvent->getComments($event->getCommentsUri());
             echo $this->application->render(
                 'Event/details.html.twig',
                 array(
                     'event' => $event,
                     'quicklink' => $quicklink,
-
+                    'comments' => $comments,
                 )
             );
         } else {
