@@ -185,6 +185,11 @@ nav a:hover, #head .userdetails a:hover {
 }
 
 
+/* Ratings */
+.rating {
+    width: 120px;
+}
+
 /* Comments */
 #comments {
     background-color: #d7dcdf;
