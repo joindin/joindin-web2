@@ -8,9 +8,9 @@ class Talk
     protected $keyName = 'talks';
     protected $cache;
 
-    public function __construct($keyPrefix)
+    public function __construct(\Joindin\Service\Cache $cache)
     {
-        $this->cache = new CacheService($keyPrefix);
+        $this->cache = $cache;
     }
 
     public function getUriFor($slug, $eventUri)
