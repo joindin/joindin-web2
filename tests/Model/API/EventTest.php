@@ -38,7 +38,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getCollection();
     }
 
-    public function tesGetCollectionWithLimitSetsParamsCorrectly()
+    public function testGetCollectionWithLimitSetsParamsCorrectly()
     {
         $mockEvent = $this->getMock(
             'Joindin\Model\API\Event',
