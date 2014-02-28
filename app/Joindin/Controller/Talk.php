@@ -25,10 +25,10 @@ class Talk extends Base
         $event = $eventApi->getByFriendlyUrl($eventSlug);
         $eventUri = $event->getUri();
 
-        $talkDb = new DbTalk($keyPrefix);
+        $talkDb = new DbTalk($cache);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
 
-        $talkApi = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, new DbTalk($keyPrefix));
+        $talkApi = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $talkDb);
         $talk = $talkApi->getTalk($talkUri, true);
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
@@ -63,7 +63,7 @@ class Talk extends Base
     {
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
         $cache = new Cache($keyPrefix);
-        $talkDb = new DbTalk($keyPrefix);
+        $talkDb = new DbTalk($cache);
         $talk = $talkDb->getTalkByStub($talkStub);
 
         $eventDb = new DbEvent($cache);

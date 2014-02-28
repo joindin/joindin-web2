@@ -117,7 +117,10 @@ class Event extends Base
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
-            $dbTalk = new Talk($this->cfg['redis']['keyPrefix']);
+            $keyPrefix = $this->cfg['redis']['keyPrefix'];
+            $cache = new CacheService($keyPrefix);
+
+            $dbTalk = new Talk($cache);
             $apiTalk = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $dbTalk);
             $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 
