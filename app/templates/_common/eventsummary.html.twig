@@ -36,7 +36,10 @@
             <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}#comments">
                 {{ event.getCommentsCount}} comments</a> |
             {{ event.getAttendeeString|escape }}
-            <!--| <a href="" class="button">I'm attending</a>-->
+
+            {% if event.isAttending == false and user %}
+            | <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" class="button">I'm attending</a>
+            {% endif %}
         </p>
     </section>
 
