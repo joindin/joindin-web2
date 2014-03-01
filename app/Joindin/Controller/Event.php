@@ -162,8 +162,7 @@ class Event extends Base
         $request = $this->application->request();
         $comment = $request->post('comment');
 
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
-        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($keyPrefix));
+        $apiEvent = $this->getEventApi();
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
         if ($event) {
             $apiEvent->addComment($event, $comment);
