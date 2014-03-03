@@ -102,18 +102,18 @@ class Event
 
     public function getAttendeeString()
     {
-        $message = $this->get_beginning_of_attending_message((int) $this->getAttendeeCount());
+        $message = $this->getBeginningOfAttendingMessage((int) $this->getAttendeeCount());
 
         if ($this->isAttending()) {
             $message .= '(including you) ';
         }
 
-        $message .= $this->get_end_of_attending_message();
+        $message .= $this->getEndOfAttendingMessage();
 
         return $message;
     }
 
-    protected function get_beginning_of_attending_message($attendee_count) {
+    protected function getBeginningOfAttendingMessage($attendee_count) {
         $message = $attendee_count . ' ';
         if (1 == $attendee_count) {
             $message .= 'person ';
@@ -124,7 +124,7 @@ class Event
         return $message;
     }
 
-    protected function get_end_of_attending_message() {
+    protected function getEndOfAttendingMessage() {
         $are = 'are';
         if (1 == $this->getAttendeeCount()) {
             $are = 'is';
