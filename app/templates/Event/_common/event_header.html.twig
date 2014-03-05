@@ -11,6 +11,7 @@
         is not sameas(event.getEndDate|date('M d Y')) %}
             &ndash; {{ event.getEndDate|date('M d Y') }}
         {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
+        {% include 'Event/_common/attending_string.html.twig' %}
     </p>
 </h2>
 
