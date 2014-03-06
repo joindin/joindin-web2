@@ -80,6 +80,11 @@ class Event
         return $this->data->comments_uri;
     }
 
+    public function getAttendingUri()
+    {
+        return $this->data->attending_uri;
+    }
+
     public function getTalksUri()
     {
         return $this->data->talks_uri;

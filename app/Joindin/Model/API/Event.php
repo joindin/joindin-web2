@@ -146,4 +146,15 @@ class Event extends \Joindin\Model\API\JoindIn
         }
         throw new \Exception("Failed to add comment: " . $result);
     }
+
+    public function attend(\Joindin\Model\Event $event)
+    {
+        list ($status, $result) = $this->apiPost($event->getAttendingUri());
+
+        if ($status == 201) {
+            return true;
+        }
+
+        throw new \Exception("Failed to mark you as attending: " . $result);
+    }
 }

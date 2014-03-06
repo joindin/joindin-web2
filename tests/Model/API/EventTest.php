@@ -170,4 +170,36 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         $mockEventApi->addComment($mockEventObj, 'comment');
     }
+
+    public function testAttendThrowsExceptionIfAPIReturnsBadStatus()
+    {
+        $mockEventObj = $this->getMock(
+            'Joindin\Model\Event',
+            array('getAttendingUri'),
+            array(
+                (object) array('attending_uri'=>'http://example.com/events/1/attending')
+            )
+        );
+
+        $mockEventObj->expects($this->once())
+            ->method('getAttendingUri')
+            ->will($this->returnValue('http://example.com/events/1/attending'));
+
+
+        $mockEventApi = $this->getMock(
+            'Joindin\Model\API\Event',
+            array('apiPost'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEventApi->expects($this->once())
+            ->method('apiPost')
+            ->with(
+                'http://example.com/events/1/attending'
+            )
+            ->will($this->returnValue(array('500', 'no result')));
+
+        $this->setExpectedException('Exception');
+        $mockEventApi->attend($mockEventObj);
+    }
 }

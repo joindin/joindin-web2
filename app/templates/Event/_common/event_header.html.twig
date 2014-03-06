@@ -11,6 +11,10 @@
         is not sameas(event.getEndDate|date('M d Y')) %}
             &ndash; {{ event.getEndDate|date('M d Y') }}
         {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
+        {{ event.getAttendeeString|escape }}
+        {% if event.isAttending == false and user %}
+            | <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" class="button">I'm attending</a>
+        {% endif %}
     </p>
 </h2>
 
