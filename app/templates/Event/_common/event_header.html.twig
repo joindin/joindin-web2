@@ -13,7 +13,7 @@
         {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
         {{ event.getAttendeeString|escape }}
         {% if event.isAttending == false and user %}
-            | <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" class="button">I'm attending</a>
+            | <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}?r={{ event.getUrlFriendlyName |url_encode }}" class="button">I'm attending</a>
         {% endif %}
     </p>
 </h2>

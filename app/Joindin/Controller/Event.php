@@ -183,6 +183,11 @@ class Event extends Base
             $api->attend($event, $_SESSION['user']);
         }
 
-        $this->application->redirect('/');
+        $url = '/';
+        $r = $this->application->request()->get('r');
+        if ($r) {
+            $url = $this->application->urlFor("event-detail", array('friendly_name' => $r));
+        }
+        $this->application->redirect($url);
     }
 }
