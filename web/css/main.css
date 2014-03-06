@@ -303,7 +303,7 @@ nav a:hover, #head .userdetails a:hover {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     color: #ffffff;
-    padding: 0.8ex 0.5ex 0.5ex;
+    padding: 4px 8px 6px 8px;
     text-decoration: none;
 }
 .button:hover {
