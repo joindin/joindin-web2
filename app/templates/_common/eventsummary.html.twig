@@ -34,11 +34,13 @@
             |
 
             <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}#comments">
-                {{ event.getCommentsCount}} comments</a>
+                {{ event.getCommentsCount}} comments</a> |
 
             {% include 'Event/_common/attending_string.html.twig' %}
 
-            <!--| <a href="" class="button">I'm attending</a>-->
+            {% if event.isAttending == false and user %}
+                | <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" class="button">I'm attending</a>
+            {% endif %}
         </p>
     </section>
 
