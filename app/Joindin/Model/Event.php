@@ -105,46 +105,7 @@ class Event
         return $this->data->attending;
     }
 
-    public function getAttendeeString()
-    {
-        $message = $this->get_beginning_of_attending_message((int) $this->getAttendeeCount());
-
-        if ($this->isAttending()) {
-            $message .= '(including you) ';
-        }
-
-        $message .= $this->get_end_of_attending_message();
-
-        return $message;
-    }
-
-    protected function get_beginning_of_attending_message($attendee_count) {
-        $message = $attendee_count . ' ';
-        if (1 == $attendee_count) {
-            $message .= 'person ';
-        } else {
-            $message .= 'people ';
-        }
-
-        return $message;
-    }
-
-    protected function get_end_of_attending_message() {
-        $are = 'are';
-        if (1 == $this->getAttendeeCount()) {
-            $are = 'is';
-        }
-
-        if ($this->isPastEvent()) {
-            $message = 'attended.';
-        } else {
-            $message = $are . ' attending.';
-        }
-
-        return $message;
-    }
-
-    protected function isPastEvent() {
+    public function isPastEvent() {
         $endDate = \DateTime::createFromFormat(\DateTime::ISO8601, $this->getEndDate());
         $now = new \DateTime(null, $endDate->getTimezone());
         $now->setTime(0, 0, 0);
