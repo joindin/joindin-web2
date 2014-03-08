@@ -2,6 +2,7 @@
 namespace Joindin\Model\API;
 
 use Joindin\Model\Comment;
+use Joindin\Model\Db\Event as DbEvent;
 
 class Event extends \Joindin\Model\API\JoindIn
 {
@@ -10,7 +11,7 @@ class Event extends \Joindin\Model\API\JoindIn
      */
     protected $eventDb;
 
-    public function __construct($config, $accessToken, \Joindin\Model\Db\Event $eventDb)
+    public function __construct($config, $accessToken, DbEvent $eventDb)
     {
         parent::__construct($config, $accessToken);
         $this->eventDb = $eventDb;

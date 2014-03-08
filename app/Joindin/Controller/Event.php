@@ -4,7 +4,7 @@ namespace Joindin\Controller;
 use Joindin\Model\Db\Talk as DbTalk;
 use \Joindin\Model\API\Event as EventApi;
 use  \Joindin\Service\Cache as Cache;
-
+use Joindin\Model\Db\Event as DbEVent;
 
 class Event extends Base
 {
@@ -23,7 +23,7 @@ class Event extends Base
     {
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
         $cache = new Cache($keyPrefix);
-        $dbEvent = new \Joindin\Model\Db\Event($cache);
+        $dbEvent = new DbEvent($cache);
         $eventApi = new EventApi($this->cfg, $this->accessToken, $dbEvent);
         return $eventApi;
     }
