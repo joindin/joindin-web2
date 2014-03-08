@@ -40,7 +40,7 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 
 1. Enjoy the site!
 
-1. Set up Redis: instructions can be found at http://redis.io/topics/quickstart but to be honest, your favourite package manager should be good enough
+1. Set up Redis: instructions can be found at http://redis.io/topics/quickstart but to be honest, your favourite package manager should do a good enough job
 
 1. Enjoy the site!
 
