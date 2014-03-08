@@ -80,7 +80,7 @@ class Event
         return $this->data->comments_uri;
     }
 
-    public function getAttendingUri()
+    public function getApiUriToMarkAsAttending()
     {
         return $this->data->attending_uri;
     }

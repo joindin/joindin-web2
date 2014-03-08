@@ -149,7 +149,7 @@ class Event extends \Joindin\Model\API\JoindIn
 
     public function attend(\Joindin\Model\Event $event)
     {
-        list ($status, $result) = $this->apiPost($event->getAttendingUri());
+        list ($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
 
         if ($status == 201) {
             return true;
