@@ -5,7 +5,7 @@ use Joindin\Model\Db\Event as DbEvent;
 use Joindin\Model\Db\Talk as DbTalk;
 use Joindin\Service\Cache as Cache;
 use Joindin\Service\Helper\Config;
-use \Joindin\Model\API\Event as ApiEvent;
+use Joindin\Model\API\Event as ApiEvent;
 
 class Talk extends Base
 {

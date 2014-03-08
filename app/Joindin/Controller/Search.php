@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Controller;
 
-use \Joindin\Service\Helper\Config as Config;
+use Joindin\Service\Helper\Config as Config;
 
 /**
  * Class Search

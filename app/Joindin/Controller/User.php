@@ -3,7 +3,7 @@ namespace Joindin\Controller;
 
 use Joindin\Model\API\Auth as AuthApi;
 use Joindin\Model\API\User as UserApi;
-use \Joindin\Service\Helper\Config as Config;
+use Joindin\Service\Helper\Config as Config;
 
 class User extends Base
 {
