@@ -17,92 +17,164 @@ class Event
 
     public function getName()
     {
-        return $this->data->name;
+        if (isset($this->data->name)) {
+            return $this->data->name;
+        } else {
+            return null;
+        }
     }
 
     public function getIcon()
     {
-        return $this->data->icon;
+        if (isset($this->data->icon)) {
+            return $this->data->icon;
+        } else {
+            return null;
+        }
     }
 
     public function getStartDate()
     {
-        return $this->data->start_date;
+        if (isset($this->data->start_date)) {
+            return $this->data->start_date;
+        } else {
+            return null;
+        }
     }
 
     public function getEndDate()
     {
-        return $this->data->end_date;
+        if (isset($this->data->end_date)) {
+            return $this->data->end_date;
+        } else {
+            return null;
+        }
     }
 
     public function getLocation()
     {
-        return $this->data->location;
+        if (isset($this->data->location)) {
+            return $this->data->location;
+        } else {
+            return null;
+        }
     }
 
     public function getDescription()
     {
-        return $this->data->description;
+        if (isset($this->data->description)) {
+            return $this->data->description;
+        } else {
+            return null;
+        }
     }
 
     public function getTags()
     {
-        return $this->data->tags;
+        if (isset($this->data->tags)) {
+            return $this->data->tags;
+        } else {
+            return null;
+        }
     }
 
     public function getLatitude()
     {
-        return $this->data->latitude;
+        if (isset($this->data->latitude)) {
+            return $this->data->latitude;
+        } else {
+            return null;
+        }
     }
 
     public function getLongitude()
     {
-        return $this->data->longitude;
+        if (isset($this->data->longitude)) {
+            return $this->data->longitude;
+        } else {
+            return null;
+        }
     }
 
     public function getHref()
     {
-        return $this->data->href;
+        if (isset($this->data->href)) {
+            return $this->data->href;
+        } else {
+            return null;
+        }
     }
 
     public function getAttendeeCount()
     {
-        return $this->data->attendee_count;
+        if (isset($this->data->attendee_count)) {
+            return $this->data->attendee_count;
+        } else {
+            return null;
+        }
     }
 
     public function getCommentsCount()
     {
-        return $this->data->event_comments_count;
+        if (isset($this->data->event_comments_count)) {
+            return $this->data->event_comments_count;
+        } else {
+            return null;
+        }
     }
 
     public function getCommentsUri()
     {
-        return $this->data->comments_uri;
+        if (isset($this->data->comments_uri)) {
+            return $this->data->comments_uri;
+        } else {
+            return null;
+        }
     }
 
     public function getAttendingUri()
     {
-        return $this->data->attending_uri;
+        if (isset($this->data->attending_uri)) {
+            return $this->data->attending_uri;
+        } else {
+            return null;
+        }
     }
 
     public function getTalksUri()
     {
-        return $this->data->talks_uri;
+        if (isset($this->data->talks_uri)) {
+            return $this->data->talks_uri;
+        } else {
+            return null;
+        }
     }
 
     public function getUri()
     {
-        return $this->data->uri;
+        if (isset($this->data->uri)) {
+            return $this->data->uri;
+        } else {
+            return null;
+        }
     }
 
     public function getVerboseUri()
     {
-        return $this->data->verbose_uri;
+        if (isset($this->data->verbose_uri)) {
+            return $this->data->verbose_uri;
+        } else {
+            return null;
+        }
     }
 
     public function isAttending()
     {
-        return $this->data->attending;
+        if (isset($this->data->attending)) {
+            return $this->data->attending;
+        } else {
+            return null;
+        }
     }
 
     public function getAttendeeString()
@@ -154,12 +226,20 @@ class Event
 
     public function getUrlFriendlyName()
     {
-        return $this->data->url_friendly_name;
+        if (isset($this->data->url_friendly_name)) {
+            return $this->data->url_friendly_name;
+        } else {
+            return null;
+        }
     }
 
     public function getStub()
     {
-        return $this->data->stub;
+        if (isset($this->data->stub)) {
+            return $this->data->stub;
+        } else {
+            return null;
+        }
     }
 
 }
