@@ -1,8 +1,8 @@
 <?php
 namespace Joindin\Controller;
 
-use Joindin\Model\API\Auth as AuthService;
-use Joindin\Model\API\User as UserService;
+use Joindin\Model\API\Auth as AuthApi;
+use Joindin\Model\API\User as UserApi;
 use \Joindin\Service\Helper\Config as Config;
 
 class User extends Base
@@ -40,7 +40,7 @@ class User extends Base
             $password = $request->post('password');
             $clientId = $config['client_id'];
 
-            $authService = new AuthService($this->cfg, $this->accessToken);
+            $authService = new AuthApi($this->cfg, $this->accessToken);
             $result      = $authService->login($username, $password, $clientId);
 
             if (false === $result) {
