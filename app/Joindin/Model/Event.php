@@ -60,7 +60,7 @@ class Event
         return $this->data->longitude;
     }
 
-    public function getHref()
+    public function getWebsiteAddress()
     {
         return $this->data->href;
     }

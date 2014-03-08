@@ -43,5 +43,14 @@
                 </a>
             </p>
         </div>
+        <div class="extraAside">
+            <p>
+                {% if event.getWebsiteAddress %}
+                    <a href="{{ event.getWebsiteAddress }}">
+                        Visit event website
+                    </a>
+                {% endif %}
+            </p>
+        </div>
     {% endif %}
 {% endblock %}
