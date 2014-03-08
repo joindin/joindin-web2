@@ -1,8 +1,13 @@
+{%
+set eventUrl = urlFor(
+    'event-detail', {"friendly_name": event.getUrlFriendlyName}
+)
+%}
+
 <div class="media">
     <section>
         <div class="logo">
-            <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">
-
+            <a href="{{ eventUrl }}">
                 <img src="{{ event.getIcon|img_path("event_icons") }}" alt=" " />
             </a>
         </div>
@@ -10,14 +15,16 @@
 
     <section>
         <h3 class="header">
-            <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getName }}</a>
+            <a href="{{ eventUrl }}">{{ event.getName }}</a>
         </h3>
 
         <p class="meta">
 
         </p>
 
-        <p class="wideOnly">{{ event.getDescription | slice(0, 200)}}&hellip;</p>
+        <p class="wideOnly">
+            {{ event.getDescription | slice(0, 200)}}&hellip;
+        </p>
 
         <p class="meta">
             {{ event.getStartDate|date('M d Y') }}
@@ -33,12 +40,17 @@
 
             |
 
-            <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}#comments">
-                {{ event.getCommentsCount}} comments</a> |
-            {{ event.getAttendeeString|escape }}
+            <a href="{{ eventUrl }}#comments">
+                {{ event.getCommentsCount}} comments
+            </a>
+
+            {% include 'Event/_common/attending_string.html.twig' %}
 
             {% if event.isAttending == false and user %}
-            | <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" class="button">I'm attending</a>
+                <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}"
+                   class="button">
+                    I'm attending
+                </a>
             {% endif %}
         </p>
     </section>

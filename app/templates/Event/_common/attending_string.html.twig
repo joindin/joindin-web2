@@ -1,0 +1,12 @@
+{% if 0 != event.getAttendeeCount %}
+    | {{ event.getAttendeeCount|escape }}
+    {% if event.isPastEvent() %}
+        attended
+    {% else %}
+        attending
+    {% endif %}
+
+    {% if event.isAttending() %}
+        (including you)
+    {% endif %}
+{% endif %}
