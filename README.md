@@ -40,7 +40,7 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 
 1. Enjoy the site!
 
-1. Set up MongoDB: instructions can be found at http://docs.mongodb.org/manual/installation/
+1. Set up Redis: instructions can be found at http://redis.io/topics/quickstart but to be honest, your favourite package manager should be good enough
 
 1. Enjoy the site!
 
