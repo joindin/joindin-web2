@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Controller;
 
-use Joindin\Model\Db\Talk;
+use Joindin\Model\Db\Talk as DbTalk;
 use \Joindin\Model\API\Event as EventApi;
 use  \Joindin\Service\Cache as Cache;
 
@@ -121,7 +121,7 @@ class Event extends Base
             $keyPrefix = $this->cfg['redis']['keyPrefix'];
             $cache = new Cache($keyPrefix);
 
-            $dbTalk = new Talk($cache);
+            $dbTalk = new DbTalk($cache);
             $apiTalk = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $dbTalk);
             $scheduler = new \Joindin\Service\Scheduler($apiTalk);
 

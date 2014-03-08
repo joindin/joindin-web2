@@ -2,6 +2,7 @@
 namespace Joindin\Model\API;
 
 use Joindin\Model\Comment;
+use Joindin\Model\Db\Talk as DbTalk;
 
 class Talk extends \Joindin\Model\API\JoindIn
 {
@@ -14,7 +15,7 @@ class Talk extends \Joindin\Model\API\JoindIn
     /**
      * @param \Joindin\Model\Db\Talk $talkDb
      */
-    public function __construct($config, $accessToken, \Joindin\Model\Db\Talk $talkDb)
+    public function __construct($config, $accessToken, DbTalk $talkDb)
     {
         parent::__construct($config, $accessToken);
         $this->talkDb = $talkDb;
