@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Model\Db;
 
-use  \Joindin\Service\Cache as CacheService;
+use  \Joindin\Service\Cache as Cache;
 
 class Talk
 {
