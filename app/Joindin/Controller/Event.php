@@ -16,6 +16,7 @@ class Event extends Base
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
+        $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
     }
 
     protected function getEventApi()
@@ -162,14 +163,30 @@ class Event extends Base
         $request = $this->application->request();
         $comment = $request->post('comment');
 
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
-        $apiEvent = new EventApi($this->cfg, $this->accessToken, new \Joindin\Model\Db\Event($keyPrefix));
+        $apiEvent = $this->getEventApi();
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
         if ($event) {
             $apiEvent->addComment($event, $comment);
         }
 
         $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
+        $this->application->redirect($url);
+    }
+
+    public function attend($friendly_name)
+    {
+        $api = $this->getEventApi();
+        $event = $api->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            $api->attend($event, $_SESSION['user']);
+        }
+
+        $url = '/';
+        $r = $this->application->request()->get('r');
+        if ($r) {
+            $url = $this->application->urlFor("event-detail", array('friendly_name' => $r));
+        }
         $this->application->redirect($url);
     }
 }

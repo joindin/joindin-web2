@@ -63,11 +63,12 @@ a {
 }
 
 p {
-    padding-bottom: 0.5ex;
+    padding-bottom: 1ex;
 }
 
 h2 {
     font-size: 16px;
+    line-height: 200%;
 }
 
 
@@ -302,7 +303,7 @@ nav a:hover, #head .userdetails a:hover {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     color: #ffffff;
-    padding: 0.8ex 0.5ex 0.5ex;
+    padding: 2px 4px 3px 4px;
     text-decoration: none;
 }
 .button:hover {

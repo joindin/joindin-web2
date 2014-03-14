@@ -80,6 +80,11 @@ class Event
         return $this->data->comments_uri;
     }
 
+    public function getAttendingUri()
+    {
+        return $this->data->attending_uri;
+    }
+
     public function getTalksUri()
     {
         return $this->data->talks_uri;
@@ -100,46 +105,7 @@ class Event
         return $this->data->attending;
     }
 
-    public function getAttendeeString()
-    {
-        $message = $this->getBeginningOfAttendingMessage((int) $this->getAttendeeCount());
-
-        if ($this->isAttending()) {
-            $message .= '(including you) ';
-        }
-
-        $message .= $this->getEndOfAttendingMessage();
-
-        return $message;
-    }
-
-    protected function getBeginningOfAttendingMessage($attendee_count) {
-        $message = $attendee_count . ' ';
-        if (1 == $attendee_count) {
-            $message .= 'person ';
-        } else {
-            $message .= 'people ';
-        }
-
-        return $message;
-    }
-
-    protected function getEndOfAttendingMessage() {
-        $are = 'are';
-        if (1 == $this->getAttendeeCount()) {
-            $are = 'is';
-        }
-
-        if ($this->isPastEvent()) {
-            $message = 'attended.';
-        } else {
-            $message = $are . ' attending.';
-        }
-
-        return $message;
-    }
-
-    protected function isPastEvent() {
+    public function isPastEvent() {
         $endDate = \DateTime::createFromFormat(\DateTime::ISO8601, $this->getEndDate());
         $now = new \DateTime(null, $endDate->getTimezone());
         $now->setTime(0, 0, 0);
