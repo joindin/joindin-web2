@@ -11,27 +11,27 @@ class EventTest extends \PHPUnit_Framework_TestCase
     {
         // Not used at the moment, but it's here for future use when we
         // want to provide data to the class
-        $this->eventData = new \stdClass();
-        $this->eventData->name                 = "Test event name";
-        $this->eventData->icon                 = "Test event icon";
-        $this->eventData->start_date           = "Test event start date";
-        $this->eventData->end_date             = "Test event end date";
-        $this->eventData->location             = "Test event location";
-        $this->eventData->description          = "Test event description";
-        $this->eventData->tags                 = "Test event tags";
-        $this->eventData->latitude             = "Test event latitude";
-        $this->eventData->longitude            = "Test event longitude";
-        $this->eventData->href                 = "Test event href";
-        $this->eventData->attendee_count       = "Test event attendee count";
-        $this->eventData->event_comments_count = "Test event event comments count";
-        $this->eventData->comments_uri         = "Test event comments uri";
+        $this->eventData = new \stdClass($data);
+		$this->eventData->name                 = "Test event name";
+		$this->eventData->icon                 = "Test event icon";
+		$this->eventData->start_date           = "Test event start date";
+		$this->eventData->end_date             = "Test event end date";
+		$this->eventData->location             = "Test event location";
+		$this->eventData->description          = "Test event description";
+		$this->eventData->tags                 = "Test event tags";
+		$this->eventData->latitude             = "Test event latitude";
+		$this->eventData->longitude            = "Test event longitude";
+		$this->eventData->href                 = "Test event href";
+		$this->eventData->attendee_count       = "Test event attendee count";
+		$this->eventData->event_comments_count = "Test event event comments count";
+		$this->eventData->comments_uri         = "Test event comments uri";
+		$this->eventData->talks_uri            = "Test event talks uri";
+		$this->eventData->uri                  = "Test event uri";
+		$this->eventData->verbose_uri          = "Test event verbose uri";
+		$this->eventData->attending            = "Test event attending";
         $this->eventData->attending_uri        = "Test event attending uri";
-        $this->eventData->talks_uri            = "Test event talks uri";
-        $this->eventData->uri                  = "Test event uri";
-        $this->eventData->verbose_uri          = "Test event verbose uri";
-        $this->eventData->attending            = "Test event attending";
-        $this->eventData->url_friendly_name    = "Test event url friendly name";
-        $this->eventData->stub                 = "Test event stub";
+		$this->eventData->url_friendly_name    = "Test event url friendly name";
+		$this->eventData->stub                 = "Test event stub";
     }
 
     public function testBasicEventData()
@@ -104,11 +104,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            $event->getAttendingUri(),
-            "Test event attending uri"
-        );
-
-        $this->assertEquals(
             $event->getTalksUri(),
             "Test event talks uri"
         );
@@ -137,6 +132,11 @@ class EventTest extends \PHPUnit_Framework_TestCase
             $event->getStub(),
             "Test event stub"
         );
+
+        $this->assertEquals(
+            $event->getApiUriToMarkAsAttending(),
+            "Test event attending uri"
+        );
     }
 
     public function testNonExistentTestDataDoesntBreak()
@@ -156,7 +156,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $event->getAttendeeCount();
         $event->getCommentsCount();
         $event->getCommentsUri();
-        $event->getAttendingUri();
+        $event->getApiUriToMarkAsAttending();
         $event->getTalksUri();
         $event->getUri();
         $event->getVerboseUri();
@@ -164,5 +164,4 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $event->getUrlFriendlyName();
         $event->getStub();
     }
-
 }

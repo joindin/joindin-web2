@@ -132,7 +132,7 @@ class Event
         }
     }
 
-    public function getAttendingUri()
+    public function getApiUriToMarkAsAttending()
     {
         if (isset($this->data->attending_uri)) {
             return $this->data->attending_uri;
