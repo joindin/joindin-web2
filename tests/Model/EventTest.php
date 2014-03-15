@@ -139,4 +139,29 @@ class EventTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testNonExistentTestDataDoesntBreak()
+    {
+        $event = new Event(new \stdClass());
+
+        $event->getName();
+        $event->getIcon();
+        $event->getStartDate();
+        $event->getEndDate();
+        $event->getLocation();
+        $event->getDescription();
+        $event->getTags();
+        $event->getLatitude();
+        $event->getLongitude();
+        $event->getHref();
+        $event->getAttendeeCount();
+        $event->getCommentsCount();
+        $event->getCommentsUri();
+        $event->getApiUriToMarkAsAttending();
+        $event->getTalksUri();
+        $event->getUri();
+        $event->getVerboseUri();
+        $event->isAttending();
+        $event->getUrlFriendlyName();
+        $event->getStub();
+    }
 }
