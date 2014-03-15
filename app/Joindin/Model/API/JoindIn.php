@@ -1,6 +1,8 @@
 <?php
 namespace Joindin\Model\API;
 
+use Exception;
+
 class JoindIn
 {
     protected $baseApiUrl;
@@ -34,7 +36,7 @@ class JoindIn
         $result = file_get_contents($url.$paramsString, 0, $streamContext);
 
         if (false === $result) {
-            throw new \Exception('Unable to connect to API');
+            throw new Exception('Unable to connect to API');
         }
 
         return $result;
@@ -59,7 +61,7 @@ class JoindIn
         $streamContext = stream_context_create($contextOpts);
         $result = file_get_contents($url, 0, $streamContext);
         if (false === $result) {
-            throw new \Exception('Unable to connect to API');
+            throw new Exception('Unable to connect to API');
         }
 
         $status = 0;

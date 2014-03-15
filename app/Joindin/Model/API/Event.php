@@ -1,8 +1,10 @@
 <?php
 namespace Joindin\Model\API;
 
-use Joindin\Model\Comment;
+use Joindin\Model\Comment as CommentEntity;
+use Joindin\Model\Event as EventEntity;
 use Joindin\Model\Db\Event as DbEvent;
+use Exception;
 
 class Event extends \Joindin\Model\API\JoindIn
 {
@@ -49,7 +51,7 @@ class Event extends \Joindin\Model\API\JoindIn
 
         $collectionData = array();
         foreach ($events['events'] as $event) {
-            $thisEvent = new \Joindin\Model\Event($event);
+            $thisEvent = new EventEntity($event);
             $collectionData['events'][] = $thisEvent;
 
             // save the URL so we can look up by it
@@ -85,7 +87,7 @@ class Event extends \Joindin\Model\API\JoindIn
         }
 
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new \Joindin\Model\Event($event_list->events[0]);
+        $event = new EventEntity($event_list->events[0]);
 
         return $event;
 
@@ -106,7 +108,7 @@ class Event extends \Joindin\Model\API\JoindIn
         }
 
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new \Joindin\Model\Event($event_list->events[0]);
+        $event = new EventEntity($event_list->events[0]);
 
         return $event;
     }
@@ -128,7 +130,7 @@ class Event extends \Joindin\Model\API\JoindIn
         $commentData = array();
 
         foreach($comments['comments'] as $comment) {
-            $commentData[] = new Comment($comment);
+            $commentData[] = new CommentEntity($comment);
         }
 
         return $commentData;
@@ -145,7 +147,7 @@ class Event extends \Joindin\Model\API\JoindIn
         if ($status == 201) {
             return true;
         }
-        throw new \Exception("Failed to add comment: " . $result);
+        throw new Exception("Failed to add comment: " . $result);
     }
 
     public function attend(\Joindin\Model\Event $event)
@@ -156,6 +158,6 @@ class Event extends \Joindin\Model\API\JoindIn
             return true;
         }
 
-        throw new \Exception("Failed to mark you as attending: " . $result);
+        throw new Exception("Failed to mark you as attending: " . $result);
     }
 }

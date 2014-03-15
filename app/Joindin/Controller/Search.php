@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Controller;
 
-use Joindin\Service\Helper\Config as Config;
+use Joindin\Model\API\Search as ApiSearch;
 
 /**
  * Class Search
@@ -59,7 +59,7 @@ class Search extends Base
             $perPage = 10;
             $start = ($page -1) * $perPage;
 
-            $event_collection = new \Joindin\Model\API\Search($this->cfg, $this->accessToken);
+            $event_collection = new ApiSearch($this->cfg, $this->accessToken);
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
         }
         try {

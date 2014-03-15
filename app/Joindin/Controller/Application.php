@@ -1,7 +1,6 @@
 <?php
 namespace Joindin\Controller;
 
-use Joindin\Service\Helper\Config as Config;
 use Joindin\Service\Cache as Cache;
 use Joindin\Model\Db\Event as DbEvent;
 use Joindin\Model\API\Event as ApiEvent;

@@ -1,7 +1,8 @@
 <?php
 namespace Joindin\Model\API;
 
-use Joindin\Model\Comment;
+use Joindin\Model\Comment as CommentEntity;
+use Joindin\Model\Talk as TalkEntity;
 use Joindin\Model\Db\Talk as DbTalk;
 
 class Talk extends \Joindin\Model\API\JoindIn
@@ -41,7 +42,7 @@ class Talk extends \Joindin\Model\API\JoindIn
 
         $collectionData = array();
         foreach ($talks['talks'] as $talk) {
-            $talkObject = new \Joindin\Model\Talk($talk);
+            $talkObject = new TalkEntity($talk);
             $collectionData['talks'][] = $talkObject;
             $this->talkDb->saveSlugToDatabase($talkObject);
         }
@@ -64,7 +65,7 @@ class Talk extends \Joindin\Model\API\JoindIn
 
         $talk = (array)json_decode($this->apiGet($talk_uri));
 
-        return new \Joindin\Model\Talk($talk['talks'][0]);
+        return new TalkEntity($talk['talks'][0]);
     }
 
     /**
@@ -85,7 +86,7 @@ class Talk extends \Joindin\Model\API\JoindIn
         $commentData = array();
 
         foreach($comments['comments'] as $comment) {
-            $commentData[] = new Comment($comment);
+            $commentData[] = new CommentEntity($comment);
         }
 
         return $commentData;

@@ -3,9 +3,10 @@ namespace Joindin\Controller;
 
 use Joindin\Model\Db\Event as DbEvent;
 use Joindin\Model\Db\Talk as DbTalk;
-use Joindin\Service\Cache as Cache;
-use Joindin\Service\Helper\Config;
+use Joindin\Service\Cache;
 use Joindin\Model\API\Event as ApiEvent;
+use Joindin\Model\API\Talk as APITalk;
+use Slim_Exception_Pass;
 
 class Talk extends Base
 {
@@ -29,7 +30,7 @@ class Talk extends Base
         $talkDb = new DbTalk($cache);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
 
-        $talkApi = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $talkDb);
+        $talkApi = new ApiTalk($this->cfg, $this->accessToken, $talkDb);
         $talk = $talkApi->getTalk($talkUri, true);
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
@@ -70,7 +71,7 @@ class Talk extends Base
         $eventDb = new DbEvent($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
-            throw new \Slim_Exception_Pass('Page not found', 404);
+            throw new Slim_Exception_Pass('Page not found', 404);
         }
 
         $this->application->redirect(

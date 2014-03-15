@@ -2,9 +2,11 @@
 namespace Joindin\Controller;
 
 use Joindin\Model\Db\Talk as DbTalk;
-use Joindin\Model\API\Event as EventApi;
-use Joindin\Service\Cache as Cache;
 use Joindin\Model\Db\Event as DbEvent;
+use Joindin\Model\API\Event as ApiEvent;
+use Joindin\Model\API\Talk as ApiTalk;
+use Joindin\Service\Cache;
+use Joindin\Service\Scheduler;
 
 class Event extends Base
 {
@@ -24,7 +26,7 @@ class Event extends Base
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
         $cache = new Cache($keyPrefix);
         $dbEvent = new DbEvent($cache);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, $dbEvent);
+        $eventApi = new ApiEvent($this->cfg, $this->accessToken, $dbEvent);
         return $eventApi;
     }
 
@@ -122,8 +124,8 @@ class Event extends Base
             $cache = new Cache($keyPrefix);
 
             $dbTalk = new DbTalk($cache);
-            $apiTalk = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $dbTalk);
-            $scheduler = new \Joindin\Service\Scheduler($apiTalk);
+            $apiTalk = new ApiTalk($this->cfg, $this->accessToken, $dbTalk);
+            $scheduler = new Scheduler($apiTalk);
 
             $schedule = $scheduler->getScheduleData($event);
 

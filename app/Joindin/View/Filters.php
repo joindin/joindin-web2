@@ -2,26 +2,27 @@
 namespace Joindin\View\Filter;
 
 use Joindin\Service\Helper\Slug;
+use Twig_Filter_Function;
 
 function initialize(\Twig_Environment $env)
 {
     $env->addFilter(
-        'img_path', new \Twig_Filter_Function('\Joindin\View\Filter\img_path')
+        'img_path', new Twig_Filter_Function('\Joindin\View\Filter\img_path')
     );
     $env->addFilter(
-        'link', new \Twig_Filter_Function(
+        'link', new Twig_Filter_Function(
             '\Joindin\View\Filter\link', array('is_safe' => array('html'))
         )
     );
     $env->addFilter(
         'format_date',
-        new \Twig_Filter_Function('\Joindin\View\Filter\format_date')
+        new Twig_Filter_Function('\Joindin\View\Filter\format_date')
     );
     $env->addFilter(
-        'format_string', new \Twig_Filter_Function('\Joindin\View\Filter\format_string')
+        'format_string', new Twig_Filter_Function('\Joindin\View\Filter\format_string')
     );
     $env->addFilter(
-        'slugify', new \Twig_Filter_Function(function ($string) {
+        'slugify', new Twig_Filter_Function(function ($string) {
             return Slug::stringToSlug($string);
         })
     );

@@ -8,7 +8,7 @@ class Talk
     protected $keyName = 'talks';
     protected $cache;
 
-    public function __construct(\Joindin\Service\Cache $cache)
+    public function __construct(Cache $cache)
     {
         $this->cache = $cache;
     }
