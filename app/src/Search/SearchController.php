@@ -59,29 +59,14 @@ class SearchController extends BaseController
             $event_collection = new SearchApi($this->cfg, $this->accessToken);
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
         }
-        try {
-            echo $this->application->render(
-                'Event/search.html.twig',
-                array(
-                    'events'    => $events,
-                    'page'      => $page,
-                    'keyword'   => $keyword
-                )
-            );
-        } catch (\Twig_Error_Runtime $e) {
-            $this->application->render(
-                'Error/app_load_error.html.twig',
-                array(
-                    'message' => sprintf(
-                        'An exception has been thrown during the rendering of '.
-                        'a template ("%s").',
-                        $e->getMessage()
-                    ),
-                    -1,
-                    null,
-                    $e
-                )
-            );
-        }
+
+        echo $this->render(
+            'Event/search.html.twig',
+            array(
+                'events'    => $events,
+                'page'      => $page,
+                'keyword'   => $keyword
+            )
+        );
     }
 }

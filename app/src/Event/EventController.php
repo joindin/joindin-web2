@@ -40,29 +40,14 @@ class EventController extends BaseController
         $event_collection = $this->getEventApi();
 
         $events = $event_collection->getCollection($perPage, $start);
-        try {
-            echo $this->application->render(
-                'Event/index.html.twig',
-                array(
-                    'events' => $events,
-                    'page' => $page,
-                )
-            );
-        } catch (\Twig_Error_Runtime $e) {
-            $this->application->render(
-                'Error/app_load_error.html.twig',
-                array(
-                    'message' => sprintf(
-                        'An exception has been thrown during the rendering of '.
-                        'a template ("%s").',
-                        $e->getMessage()
-                    ),
-                    -1,
-                    null,
-                    $e
-                )
-            );
-        }
+
+        echo $this->render(
+            'Event/index.html.twig',
+            array(
+                'events' => $events,
+                'page' => $page,
+            )
+        );
     }
 
     public function details($friendly_name)
@@ -77,7 +62,7 @@ class EventController extends BaseController
                 ));
 
             $comments = $apiEvent->getComments($event->getCommentsUri());
-            echo $this->application->render(
+            echo $this->render(
                 'Event/details.html.twig',
                 array(
                     'event' => $event,
@@ -100,7 +85,7 @@ class EventController extends BaseController
         $event = $apiEvent->getByFriendlyUrl($friendly_name);
 
         if($event) {
-            echo $this->application->render(
+            echo $this->render(
                 'Event/map.html.twig',
                 array(
                     'event' => $event
@@ -126,7 +111,7 @@ class EventController extends BaseController
 
             $schedule = $scheduler->getScheduleData($event);
 
-            echo $this->application->render(
+            echo $this->render(
                 'Event/schedule.html.twig',
                 array(
                     'event' => $event,

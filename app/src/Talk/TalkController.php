@@ -34,30 +34,14 @@ class TalkController extends BaseController
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
 
-        try {
-            echo $this->application->render(
-                'Talk/index.html.twig',
-                array(
-                    'talk' => $talk,
-                    'event' => $event,
-                    'comments' => $comments,
-                )
-            );
-        } catch (\Twig_Error_Runtime $e) {
-            $this->application->render(
-                'Error/app_load_error.html.twig',
-                array(
-                    'message' => sprintf(
-                        'An exception has been thrown during the rendering of ' .
-                        'a template ("%s").',
-                        $e->getMessage()
-                    ),
-                    -1,
-                    null,
-                    $e
-                )
-            );
-        }
+        echo $this->render(
+            'Talk/index.html.twig',
+            array(
+                'talk' => $talk,
+                'event' => $event,
+                'comments' => $comments,
+            )
+        );
     }
 
     public function quick($talkStub)

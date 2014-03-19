@@ -63,7 +63,7 @@ class UserController extends BaseController
             }
         }
 
-        echo $this->application->render(
+        echo $this->render(
             'User/login.html.twig',
             array(
                 'error' => $error,

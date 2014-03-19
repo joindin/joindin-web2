@@ -28,33 +28,18 @@ class ApplicationController extends BaseController
         $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 
-        try {
-            echo $this->application->render(
-                'Application/index.html.twig',
-                array(
-                    'events' => $hot_events,
-                    'page' => $page,
-                )
-            );
-        } catch (\Twig_Error_Runtime $e) {
-            $this->application->render(
-                'Error/app_load_error.html.twig',
-                array(
-                    'message' => sprintf(
-                        'An exception has been thrown during the rendering of a template ("%s").',
-                        $e->getMessage()
-                    ),
-                    -1,
-                    null,
-                    $e
-                )
-            );
-        }
+        echo $this->render(
+            'Application/index.html.twig',
+            array(
+                'events' => $hot_events,
+                'page' => $page,
+            )
+        );
     }
 
     public function apps()
     {
-        echo $this->application->render('Application/apps.html.twig');
+        echo $this->render('Application/apps.html.twig');
     }
 
     /**
@@ -62,7 +47,7 @@ class ApplicationController extends BaseController
      */
     public function about()
     {
-        echo $this->application->render(
+        echo $this->render(
             'Application/about.html.twig'
         );
     }
