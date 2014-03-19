@@ -1,17 +1,18 @@
 <?php
-namespace Joindin\Service\Helper;
+namespace Event;
+
+use DateTime;
 
 /**
  * Class EventDay
  *
  * A helper class to support the scheduler service
  *
- * @package Joindin\Service\Helper
  */
-class EventDay
+class EventSchedulerDay
 {
     /**
-     * @var \DateTime $date
+     * @var DateTime $date
      */
     private $date;
 
@@ -46,7 +47,7 @@ class EventDay
      */
     public function getDate()
     {
-        $date = new \DateTime($this->date);
+        $date = new DateTime($this->date);
 
         return $date->format('l, jS F Y');
     }

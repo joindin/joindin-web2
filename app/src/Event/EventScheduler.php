@@ -1,15 +1,16 @@
 <?php
-namespace Joindin\Service;
+namespace Event;
+
+use Talk\TalkApi;
 
 /**
- * Class Scheduler
+ * Class EventScheduler
  *
  * Takes an event and constructs a data
  * structure to facilitate schedule layout view
  *
- * @package Joindin\Service
  */
-class Scheduler
+class EventScheduler
 {
     protected $talkApi;
     protected $distinctDates;
@@ -17,22 +18,21 @@ class Scheduler
     /**
      * Constructor
      *
-     * @param \Joindin\Model\API\Talk $apiTalk
+     * @param TalkApi $talkApi
      */
-    public function __construct(\Joindin\Model\API\Talk $apiTalk)
+    public function __construct(TalkApi $talkApi)
     {
-        $this->apiTalk = $apiTalk;
+        $this->talkApi = $talkApi;
     }
 
     /**
      * Builds schedule data into an array structure
      * for schedule view
      *
-     * @param \Joindin\Model\Event $event
-     * @return mixed
-     * @throws \Exception
+     * @param EventEntity $event
+     * @return array
      */
-    public function getScheduleData(\Joindin\Model\Event $event)
+    public function getScheduleData(EventEntity $event)
     {
         $talks = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
         $eventDays = $this->getEventDays($talks);
@@ -44,20 +44,20 @@ class Scheduler
      * Retrieves talk collection from API
      *
      * @param $talks_uri
-     * @return \Joindin\Model\Talk
+     * @return array
      */
     public function getTalks($talks_uri)
     {
-        $talks = $this->apiTalk->getCollection($talks_uri);
+        $talks = $this->talkApi->getCollection($talks_uri);
 
         return $talks;
     }
 
     /**
-     * Get an array of populated EventDay objects
+     * Get an array of populated EventSchedulerDay objects
      *
      * @param $talks
-     * @return array Array of EventDay objects
+     * @return array Array of EventSchedulerDay objects
      */
     public function getEventDays($talks)
     {
@@ -72,7 +72,7 @@ class Scheduler
 
         $eventDays = array();
         foreach ($talksByDay as $date => $talks) {
-            $eventDays[] = new \Joindin\Service\Helper\EventDay($date, $talks, $tracksByDay[$date]);
+            $eventDays[] = new EventSchedulerDay($date, $talks, $tracksByDay[$date]);
         }
 
         return $eventDays;

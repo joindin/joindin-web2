@@ -1,7 +1,7 @@
 <?php
-namespace Joindin\Model\API;
+namespace Application;
 
-class JoindIn
+class BaseApi
 {
     protected $baseApiUrl;
     protected $accessToken;

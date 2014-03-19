@@ -1,12 +1,12 @@
 <?php
-namespace Joindin\Controller;
+namespace Event;
 
-use Joindin\Model\Db\Talk;
-use \Joindin\Model\API\Event as EventApi;
-use  \Joindin\Service\Cache as CacheService;
+use Application\BaseController;
+use Application\CacheService;
+use Talk\TalkDb;
+use Talk\TalkApi;
 
-
-class Event extends Base
+class EventController extends BaseController
 {
     protected function defineRoutes(\Slim $app)
     {
@@ -23,7 +23,7 @@ class Event extends Base
     {
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
         $cache = new CacheService($keyPrefix);
-        $dbEvent = new \Joindin\Model\Db\Event($cache);
+        $dbEvent = new EventDb($cache);
         $eventApi = new EventApi($this->cfg, $this->accessToken, $dbEvent);
         return $eventApi;
     }
@@ -120,10 +120,9 @@ class Event extends Base
         if($event) {
             $keyPrefix = $this->cfg['redis']['keyPrefix'];
             $cache = new CacheService($keyPrefix);
-
-            $dbTalk = new Talk($cache);
-            $apiTalk = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $dbTalk);
-            $scheduler = new \Joindin\Service\Scheduler($apiTalk);
+            $dbTalk = new TalkDb($cache);
+            $apiTalk = new TalkApi($this->cfg, $this->accessToken, $dbTalk);
+            $scheduler = new EventScheduler($apiTalk);
 
             $schedule = $scheduler->getScheduleData($event);
 

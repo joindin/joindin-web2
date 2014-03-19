@@ -1,11 +1,9 @@
 <?php
-namespace Joindin\Controller;
+namespace User;
 
-use Joindin\Model\API\Auth as AuthService;
-use Joindin\Model\API\User as UserService;
-use \Joindin\Service\Helper\Config as Config;
+use Application\BaseController;
 
-class User extends Base
+class UserController extends BaseController
 {
     /**
      * Routes implemented by this class
@@ -40,8 +38,8 @@ class User extends Base
             $password = $request->post('password');
             $clientId = $config['client_id'];
 
-            $authService = new AuthService($this->cfg, $this->accessToken);
-            $result      = $authService->login($username, $password, $clientId);
+            $authApi = new AuthApi($this->cfg, $this->accessToken);
+            $result = $authApi->login($username, $password, $clientId);
 
             if (false === $result) {
                 $error = true;
@@ -52,8 +50,8 @@ class User extends Base
 
                 // now get users details
                 $keyPrefix = $this->cfg['redis']['keyPrefix'];
-                $userService = new UserService($this->cfg, $this->accessToken, new \Joindin\Model\Db\User($keyPrefix));
-                $user = $userService->getUser($result->user_uri);
+                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($keyPrefix));
+                $user = $userApi->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;
                     $this->application->redirect('/');

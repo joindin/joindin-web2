@@ -1,11 +1,13 @@
 <?php
-namespace Joindin\Service\Helper;
+namespace Application;
 
-class Config
+use Slim;
+
+class ConfigHelper
 {
     public function getConfig()
     {
-        $app = \Slim::getInstance();
+        $app = Slim::getInstance();
         $config = $app->config('custom');
         return $config;
     }

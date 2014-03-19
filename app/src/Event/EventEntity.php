@@ -1,7 +1,9 @@
 <?php
-namespace Joindin\Model;
+namespace Event;
 
-class Event
+use DateTime;
+
+class EventEntity
 {
     private $data;
 
@@ -106,8 +108,8 @@ class Event
     }
 
     public function isPastEvent() {
-        $endDate = \DateTime::createFromFormat(\DateTime::ISO8601, $this->getEndDate());
-        $now = new \DateTime(null, $endDate->getTimezone());
+        $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getEndDate());
+        $now = new DateTime(null, $endDate->getTimezone());
         $now->setTime(0, 0, 0);
 
         return ($endDate < $now);

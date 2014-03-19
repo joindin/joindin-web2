@@ -1,8 +1,8 @@
 <?php
 
-namespace Joindin\Model;
+namespace User;
 
-class User
+class UserEntity
 {
     private $data;
 

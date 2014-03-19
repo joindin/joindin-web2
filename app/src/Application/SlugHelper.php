@@ -1,13 +1,12 @@
 <?php
-namespace Joindin\Service\Helper;
+namespace Application;
 
 /**
  * Generic Slug related helper functions
  *
  * Class Slug
- * @package Joindin\Service\Helper
  */
-class Slug
+class SlugHelper
 {
     /**
      * @param string $string The string to slugify

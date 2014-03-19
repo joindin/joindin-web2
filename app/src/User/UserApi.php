@@ -1,12 +1,12 @@
 <?php
-namespace Joindin\Model\API;
+namespace User;
 
-use Joindin\Model\User as UserEntity;
+use Application\BaseApi;
 
-class User extends \Joindin\Model\API\JoindIn
+class UserApi extends BaseApi
 {
 
-    public function __construct($config, $accessToken, \Joindin\Model\Db\User $userDb)
+    public function __construct($config, $accessToken, UserDb $userDb)
     {
         parent::__construct($config, $accessToken);
         $this->userDb = $userDb;

@@ -1,12 +1,14 @@
 <?php
-namespace Joindin\Model\Db;
+namespace Event;
 
-class Event
+use Application\CacheService;
+
+class EventDb
 {
     protected $keyName = 'events';
     protected $cache;
 
-    public function __construct(\Joindin\Service\Cache $cache)
+    public function __construct(CacheService $cache)
     {
         $this->cache = $cache;
     }
@@ -16,7 +18,7 @@ class Event
 		return $this->cache->load('events', $keyField, $keyValue);
     }
 
-    public function save(\Joindin\Model\Event $event)
+    public function save(EventEntity $event)
     {
         $data = array(
             "url_friendly_name" => $event->getUrlFriendlyName(),

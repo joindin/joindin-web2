@@ -1,17 +1,14 @@
 <?php
-namespace Joindin\Controller;
+namespace Search;
 
-use \Joindin\Service\Helper\Config as Config;
+use Application\BaseController;
 
 /**
- * Class Search
+ * Class SearchController
  * SearchController that will be combining API calls to search for events and talks
  * or to search for both seperately
- *
- * @package Joindin\Controller
  */
-
-class Search extends Base
+class SearchController extends BaseController
 {
 
     /**
@@ -59,7 +56,7 @@ class Search extends Base
             $perPage = 10;
             $start = ($page -1) * $perPage;
 
-            $event_collection = new \Joindin\Model\API\Search($this->cfg, $this->accessToken);
+            $event_collection = new SearchApi($this->cfg, $this->accessToken);
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
         }
         try {

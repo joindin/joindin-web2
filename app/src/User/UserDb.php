@@ -1,9 +1,9 @@
 <?php
-namespace Joindin\Model\Db;
+namespace User;
 
-use  \Joindin\Service\Cache as CacheService;
+use Application\CacheService;
 
-class User
+class UserDb
 {
     protected $keyName = 'users';
     protected $cache;

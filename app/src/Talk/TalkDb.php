@@ -1,14 +1,14 @@
 <?php
-namespace Joindin\Model\Db;
+namespace Talk;
 
-use  \Joindin\Service\Cache as CacheService;
+use Application\CacheService;
 
-class Talk
+class TalkDb
 {
     protected $keyName = 'talks';
     protected $cache;
 
-    public function __construct(\Joindin\Service\Cache $cache)
+    public function __construct(CacheService $cache)
     {
         $this->cache = $cache;
     }
@@ -34,7 +34,7 @@ class Talk
         return $data;
     }
 
-    public function saveSlugToDatabase(\Joindin\Model\Talk $talk)
+    public function saveSlugToDatabase(TalkEntity $talk)
     {
         $data = array(
             'uri' => $talk->getApiUri(),

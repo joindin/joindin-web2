@@ -1,7 +1,7 @@
 <?php
-namespace Joindin\Service;
+namespace Application;
 
-class Autoload
+class Autoloader
 {
     /**
      * Autoloader for joind.in classes
@@ -12,14 +12,16 @@ class Autoload
      */
     public static function autoload($class)
     {
-        if (in_array('Joindin', explode('\\', $class))) {
-            // Convert namespace to directory separators
+        // Convert namespace to directory separators
 
-            $path = str_replace('\\', '/', $class);
+        $path = str_replace('\\', '/', $class);
 
-            // Trim off Joindin
-            $path = substr($path, 8);
-            require_once(__DIR__ . '/../'.$path.'.php');
+        // Trim off Joindin
+        $path = realpath(__DIR__ . '/../'.$path.'.php');
+        if (!$path) {
+            return false;
         }
+
+        require_once($path);
     }
 }

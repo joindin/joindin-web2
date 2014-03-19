@@ -1,11 +1,10 @@
 <?php
-namespace Joindin\Controller;
+namespace Application;
 
-use \Joindin\Service\Helper\Config as Config;
-use \Joindin\Service\Cache as Cache;
-use Joindin\Model\Db\Event as DbEvent;
+use Event\EventDb;
+use Event\EventApi;
 
-class Application extends Base
+class ApplicationController extends BaseController
 {
     protected function defineRoutes(\Slim $app)
     {
@@ -25,16 +24,15 @@ class Application extends Base
 
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
 
-        $cache = new Cache($keyPrefix);
-        $event_collection = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($cache));
+        $cache = new CacheService($keyPrefix);
+        $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
-//        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
+
         try {
             echo $this->application->render(
                 'Application/index.html.twig',
                 array(
                     'events' => $hot_events,
-//                    'upcoming_events' => $upcoming_events,
                     'page' => $page,
                 )
             );

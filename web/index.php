@@ -1,9 +1,7 @@
 <?php
-namespace Joindin;
+require_once '../app/src/Application/Autoloader.php';
 
-require_once '../app/Joindin/Service/Autoload.php';
-
-spl_autoload_register('Joindin\Service\Autoload::autoload');
+spl_autoload_register('Application\Autoloader::autoload');
 
 session_cache_limiter(false);
 session_start();
@@ -14,8 +12,8 @@ require '../vendor/TwigView.php';
 require '../vendor/predis-0.8/autoload.php';
 
 // include view controller
-require '../app/Joindin/View/Filters.php';
-require '../app/Joindin/View/Functions.php';
+require '../app/src/View/Filters.php';
+require '../app/src/View/Functions.php';
 
 $config = array();
 $configFile = realpath(__DIR__ . '/../config/config.php');
@@ -26,7 +24,7 @@ if (is_readable($configFile)) {
 }
 
 // initialize Slim
-$app = new \Slim(
+$app = new Slim(
     array_merge(
         $config['slim'],
         array(
@@ -59,8 +57,8 @@ $app->view()->appendData(
 // set Twig base folder, view folder and initialize Joindin filters
 \TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
-\Joindin\View\Filter\initialize($app->view()->getEnvironment(), $app);
-\Joindin\View\Functions\initialize($app->view()->getEnvironment(), $app);
+View\Filters\initialize($app->view()->getEnvironment(), $app);
+View\Functions\initialize($app->view()->getEnvironment(), $app);
 $app->configureMode('development', function() use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
@@ -69,11 +67,11 @@ $app->configureMode('development', function() use ($app) {
 
 
 // register routes
-new Controller\Application($app);
-new Controller\Event($app);
-new Controller\Search($app);
-new Controller\User($app);
-new Controller\Talk($app);
+new Application\ApplicationController($app);
+new Event\EventController($app);
+new Search\SearchController($app);
+new User\UserController($app);
+new Talk\TalkController($app);
 
 // execute application
 $app->run();

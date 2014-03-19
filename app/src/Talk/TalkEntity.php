@@ -1,7 +1,10 @@
 <?php
-namespace Joindin\Model;
+namespace Talk;
 
-class Talk
+use DateTime;
+use DateInterval;
+
+class TalkEntity
 {
     private $data;
 
@@ -41,7 +44,7 @@ class Talk
 
     public function getStartDateTime()
     {
-        return new \DateTime($this->data->start_date);
+        return new DateTime($this->data->start_date);
     }
 
     public function getEndDateTime()
@@ -51,7 +54,7 @@ class Talk
         }
 
         $start_time = $this->getStartDateTime();
-        $end_time = $start_time->add(new \DateInterval('PT'.$this->data->duration.'M'));
+        $end_time = $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
 
         return $end_time;
     }

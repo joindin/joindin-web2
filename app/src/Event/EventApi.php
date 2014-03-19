@@ -1,16 +1,17 @@
 <?php
-namespace Joindin\Model\API;
+namespace Event;
 
-use Joindin\Model\Comment;
+use Application\BaseApi;
+use Application\CommentEntity;
 
-class Event extends \Joindin\Model\API\JoindIn
+class EventApi extends BaseApi
 {
     /**
-     * @var \Joindin\Model\Db\Event
+     * @var EventDb
      */
     protected $eventDb;
 
-    public function __construct($config, $accessToken, \Joindin\Model\Db\Event $eventDb)
+    public function __construct($config, $accessToken, EventDb $eventDb)
     {
         parent::__construct($config, $accessToken);
         $this->eventDb = $eventDb;
@@ -24,11 +25,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * @param $filter Filter to apply
      * @param $metaOnly Only return meta data?
      *
-     * @usage
-     * $eventapi = new \Joindin\Model\API\Event();
-     * $eventapi->getCollection()
-     *
-     * @return \Joindin\Model\Event model
+     * @return EventModel model
      */
     public function getCollection($limit = 10, $start = 1, $filter = null)
     {
@@ -48,7 +45,7 @@ class Event extends \Joindin\Model\API\JoindIn
 
         $collectionData = array();
         foreach ($events['events'] as $event) {
-            $thisEvent = new \Joindin\Model\Event($event);
+            $thisEvent = new EventEntity($event);
             $collectionData['events'][] = $thisEvent;
 
             // save the URL so we can look up by it
@@ -62,9 +59,9 @@ class Event extends \Joindin\Model\API\JoindIn
     /**
      * Take an event and save the url_friendly_name and the API URL for that
      *
-     * @param \Joindin\Model\Event $event The event to take details from
+     * @param EventEntity $event The event to take details from
      */
-    protected function saveEventUrl(\Joindin\Model\Event $event) {
+    protected function saveEventUrl(EventEntity $event) {
         $this->eventDb->save($event);
     }
 
@@ -73,7 +70,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * and return us an event
      *
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
-     * @return \Joindin\Model\Event The event we found, or false if something went wrong
+     * @return EventEntity The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl) {
         $event = $this->eventDb->load('url_friendly_name', $friendlyUrl);
@@ -84,7 +81,7 @@ class Event extends \Joindin\Model\API\JoindIn
         }
 
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new \Joindin\Model\Event($event_list->events[0]);
+        $event = new EventEntity($event_list->events[0]);
 
         return $event;
 
@@ -95,7 +92,7 @@ class Event extends \Joindin\Model\API\JoindIn
      * and return us an event
      *
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
-     * @return \Joindin\Model\Event The event we found, or false if something went wrong
+     * @return EventEntity The event we found, or false if something went wrong
      */
     public function getByStub($stub) {
         $event = $this->eventDb->load('stub', $stub);
@@ -105,7 +102,7 @@ class Event extends \Joindin\Model\API\JoindIn
         }
 
         $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new \Joindin\Model\Event($event_list->events[0]);
+        $event = new EventEntity($event_list->events[0]);
 
         return $event;
     }
@@ -127,7 +124,7 @@ class Event extends \Joindin\Model\API\JoindIn
         $commentData = array();
 
         foreach($comments['comments'] as $comment) {
-            $commentData[] = new Comment($comment);
+            $commentData[] = new CommentEntity($comment);
         }
 
         return $commentData;
@@ -147,7 +144,7 @@ class Event extends \Joindin\Model\API\JoindIn
         throw new \Exception("Failed to add comment: " . $result);
     }
 
-    public function attend(\Joindin\Model\Event $event)
+    public function attend(EventEntity $event)
     {
         list ($status, $result) = $this->apiPost($event->getAttendingUri());
 

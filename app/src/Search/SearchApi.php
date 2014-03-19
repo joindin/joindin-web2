@@ -1,12 +1,14 @@
 <?php
-namespace Joindin\Model\API;
+namespace Search;
+
+use Application\BaseApi;
+use Event\EventEntity;
 
 /**
  * Class Search
  * Model to fetch tags or events form the API based on a search parameter (string)
- * @package Joindin\Model\API
  */
-class Search extends \Joindin\Model\API\JoindIn
+class SearchApi extends BaseApi
 {
     /**
      * Calls API to search for events by title and returns a collection of events
@@ -37,7 +39,7 @@ class Search extends \Joindin\Model\API\JoindIn
         $collectionData = array();
         if(isset($events['events'])) {
             foreach ($events['events'] as $event) {
-                $collectionData['events'][] = new \Joindin\Model\Event($event);
+                $collectionData['events'][] = new EventEntity($event);
             }
             $collectionData['pagination'] = $meta;
         }
@@ -74,7 +76,7 @@ class Search extends \Joindin\Model\API\JoindIn
 // todo make this actually work with talks!! Theres no talk model just yet
         $collectionData = array();
         foreach ($events['events'] as $event) {
-            $collectionData['events'][] = new \Joindin\Model\Event($event);
+            $collectionData['events'][] = new EventEntity($event);
         }
         $collectionData['pagination'] = $meta;
 

@@ -1,7 +1,7 @@
 <?php
-namespace Joindin\Model;
+namespace Application;
 
-class Comment
+class CommentEntity
 {
     private $data;
 

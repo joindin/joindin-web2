@@ -1,20 +1,21 @@
 <?php
-namespace Joindin\Model\API;
+namespace Talk;
 
-use Joindin\Model\Comment;
+use Application\BaseApi;
+use Application\CommentEntity;
 
-class Talk extends \Joindin\Model\API\JoindIn
+class TalkApi extends BaseApi
 {
 
     /**
-     * @var \Joindin\Model\Db\Talk
+     * @var TalkDb
      */
     protected $talkDb;
 
     /**
-     * @param \Joindin\Model\Db\Talk $talkDb
+     * @param TalkDb $talkDb
      */
-    public function __construct($config, $accessToken, \Joindin\Model\Db\Talk $talkDb)
+    public function __construct($config, $accessToken, TalkDb $talkDb)
     {
         parent::__construct($config, $accessToken);
         $this->talkDb = $talkDb;
@@ -26,11 +27,7 @@ class Talk extends \Joindin\Model\API\JoindIn
      *
      * @param $talks_uri  API talk uri
      *
-     * @usage
-     * $talkapi = new \Joindin\Model\API\Talk();
-     * $talkapi->getCollection()
-     *
-     * @return \Joindin\Model\Talk model
+     * @return TalkEntity model
      */
     public function getCollection($talks_uri)
     {
@@ -40,7 +37,7 @@ class Talk extends \Joindin\Model\API\JoindIn
 
         $collectionData = array();
         foreach ($talks['talks'] as $talk) {
-            $talkObject = new \Joindin\Model\Talk($talk);
+            $talkObject = new TalkEntity($talk);
             $collectionData['talks'][] = $talkObject;
             $this->talkDb->saveSlugToDatabase($talkObject);
         }
@@ -53,7 +50,7 @@ class Talk extends \Joindin\Model\API\JoindIn
      *
      * @param string $talk_uri  API talk uri
      * @param bool $verbose  Return verbose data?
-     * @return \Joindin\Model\Talk
+     * @return TalkEntity
      */
     public function getTalk($talk_uri, $verbose = false)
     {
@@ -63,7 +60,7 @@ class Talk extends \Joindin\Model\API\JoindIn
 
         $talk = (array)json_decode($this->apiGet($talk_uri));
 
-        return new \Joindin\Model\Talk($talk['talks'][0]);
+        return new TalkEntity($talk['talks'][0]);
     }
 
     /**
@@ -84,7 +81,7 @@ class Talk extends \Joindin\Model\API\JoindIn
         $commentData = array();
 
         foreach($comments['comments'] as $comment) {
-            $commentData[] = new Comment($comment);
+            $commentData[] = new CommentEntity($comment);
         }
 
         return $commentData;

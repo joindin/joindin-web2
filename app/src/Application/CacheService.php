@@ -1,14 +1,13 @@
 <?php
-namespace Joindin\Service;
+namespace Application;
 
 /**
- * Class Cache
+ * Class CacheService
  *
  * Stores semi-transiently a piece of data against a given key.
  *
- * @package Joindin\Service
  */
-class Cache
+class CacheService
 {
     protected $client;
 	protected $keyPrefix;

@@ -1,12 +1,13 @@
 <?php
-namespace Joindin\Controller;
+namespace Talk;
 
-use Joindin\Model\Db\Event as DbEvent;
-use Joindin\Model\Db\Talk as DbTalk;
-use Joindin\Service\Cache as Cache;
-use Joindin\Service\Helper\Config;
+use Application\BaseController;
+use Application\CacheService;
+use Event\EventDb;
+use Event\EventApi;
+use Slim_Exception_Pass;
 
-class Talk extends Base
+class TalkController extends BaseController
 {
 
     protected function defineRoutes(\Slim $app)
@@ -19,16 +20,16 @@ class Talk extends Base
     public function index($eventSlug, $talkSlug)
     {
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
-        $cache = new Cache($keyPrefix);
+        $cache = new CacheService($keyPrefix);
 
-        $eventApi = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($cache));
+        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
         $event = $eventApi->getByFriendlyUrl($eventSlug);
         $eventUri = $event->getUri();
 
-        $talkDb = new DbTalk($cache);
+        $talkDb = new TalkDb($cache);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
 
-        $talkApi = new \Joindin\Model\API\Talk($this->cfg, $this->accessToken, $talkDb);
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $talk = $talkApi->getTalk($talkUri, true);
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
@@ -62,14 +63,14 @@ class Talk extends Base
     public function quick($talkStub)
     {
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
-        $cache = new Cache($keyPrefix);
-        $talkDb = new DbTalk($cache);
+        $cache = new CacheService($keyPrefix);
+        $talkDb = new TalkDb($cache);
         $talk = $talkDb->getTalkByStub($talkStub);
 
-        $eventDb = new DbEvent($cache);
+        $eventDb = new EventDb($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
-            throw new \Slim_Exception_Pass('Page not found', 404);
+            throw new Slim_Exception_Pass('Page not found', 404);
         }
 
         $this->application->redirect(

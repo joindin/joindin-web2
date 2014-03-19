@@ -1,9 +1,7 @@
 <?php
-namespace Joindin\Controller;
+namespace Application;
 
-use \Joindin\Service\Helper\Config as Config;
-
-abstract class Base
+abstract class BaseController
 {
     /** @var \Slim */
     protected $application = null;
@@ -15,7 +13,7 @@ abstract class Base
     {
         $this->application = $app;
         $this->defineRoutes($app);
-		$cfg = new Config();
+		$cfg = new ConfigHelper();
 		$this->cfg = $cfg->getConfig();
 
         $this->accessToken = isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null;

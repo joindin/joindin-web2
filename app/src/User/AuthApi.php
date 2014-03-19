@@ -1,7 +1,9 @@
 <?php
-namespace Joindin\Model\API;
+namespace User;
 
-class Auth extends \Joindin\Model\API\JoindIn
+use Application\BaseApi;
+
+class AuthApi extends BaseApi
 {
     /**
      * Log in via the API
