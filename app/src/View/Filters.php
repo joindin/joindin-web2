@@ -21,11 +21,6 @@ function initialize(Twig_Environment $env)
     $env->addFilter(
         'format_string', new Twig_Filter_Function('\View\Filters\format_string')
     );
-    $env->addFilter(
-        'slugify', new Twig_Filter_Function(function ($string) {
-            return Application\SlugHelper::stringToSlug($string);
-        })
-    );
 }
 
 function img_path($suffix, $infix)
