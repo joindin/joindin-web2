@@ -9,7 +9,7 @@ class UserDb extends BaseDb
 
     public function load($uri)
     {
-        $data = $this->cache->load('users', 'uri', $uri);
+        $data = $this->cache->load($this->keyName, 'uri', $uri);
         return $data;
     }
 
@@ -28,6 +28,6 @@ class UserDb extends BaseDb
             $data = array_merge($savedUser, $data);
         }
 
-        return $this->cache->save('users', $data, 'uri', $user->getUri());
+        return $this->cache->save($this->keyName, $data, 'uri', $user->getUri());
     }
 }

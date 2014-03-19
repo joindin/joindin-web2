@@ -9,7 +9,7 @@ class EventDb extends BaseDb
 
     public function load($keyField, $keyValue)
     {
-		return $this->cache->load('events', $keyField, $keyValue);
+		return $this->cache->load($this->keyName, $keyField, $keyValue);
     }
 
     public function save(EventEntity $event)
@@ -21,9 +21,9 @@ class EventDb extends BaseDb
             "verbose_uri" => $event->getVerboseUri()
         );
 
-        $this->cache->save('events', $data, 'uri', $event->getUri());
-        $this->cache->save('events', $data, 'url_friendly_name', $event->getUrlFriendlyName());
-        $this->cache->save('events', $data, 'stub', $event->getStub());
+        $this->cache->save($this->keyName, $data, 'uri', $event->getUri());
+        $this->cache->save($this->keyName, $data, 'url_friendly_name', $event->getUrlFriendlyName());
+        $this->cache->save($this->keyName, $data, 'stub', $event->getStub());
     }
 
 }

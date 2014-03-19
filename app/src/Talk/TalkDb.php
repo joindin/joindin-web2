@@ -9,7 +9,7 @@ class TalkDb extends BaseDb
 
     public function getUriFor($slug, $eventUri)
     {
-        $data = $this->cache->loadByKeys('talks', array(
+        $data = $this->cache->loadByKeys($this->keyName, array(
             'event_uri' => $eventUri,
             'slug' => $slug
         ));
@@ -18,13 +18,13 @@ class TalkDb extends BaseDb
 
     public function getTalkByStub($stub)
     {
-        $data = $this->cache->load('talks', 'stub', $stub);
+        $data = $this->cache->load($this->keyName, 'stub', $stub);
         return $data;
     }
 
     public function load($uri)
     {
-        $data = $this->cache->load('talks', 'uri', $uri);
+        $data = $this->cache->load($this->keyName, 'uri', $uri);
         return $data;
     }
 
@@ -50,8 +50,8 @@ class TalkDb extends BaseDb
             'slug' => $talk->getUrlFriendlyTalkTitle()
         );
 
-        $this->cache->save('talks', $data, 'uri', $talk->getApiUri());
-        $this->cache->save('talks', $data, 'stub', $talk->getStub());
-        $this->cache->saveByKeys('talks', $data, $keys);
+        $this->cache->save($this->keyName, $data, 'uri', $talk->getApiUri());
+        $this->cache->save($this->keyName, $data, 'stub', $talk->getStub());
+        $this->cache->saveByKeys($this->keyName, $data, $keys);
     }
 }
