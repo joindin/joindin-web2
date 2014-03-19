@@ -1,17 +1,11 @@
 <?php
 namespace Event;
 
-use Application\CacheService;
+use Application\BaseDb;
 
-class EventDb
+class EventDb extends BaseDb
 {
     protected $keyName = 'events';
-    protected $cache;
-
-    public function __construct(CacheService $cache)
-    {
-        $this->cache = $cache;
-    }
 
     public function load($keyField, $keyValue)
     {

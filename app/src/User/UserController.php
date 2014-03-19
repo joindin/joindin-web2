@@ -2,6 +2,7 @@
 namespace User;
 
 use Application\BaseController;
+use Application\CacheService;
 
 class UserController extends BaseController
 {
@@ -50,7 +51,8 @@ class UserController extends BaseController
 
                 // now get users details
                 $keyPrefix = $this->cfg['redis']['keyPrefix'];
-                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($keyPrefix));
+                $cache = new CacheService($keyPrefix);
+                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
                 $user = $userApi->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;

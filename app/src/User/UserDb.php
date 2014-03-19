@@ -1,17 +1,11 @@
 <?php
 namespace User;
 
-use Application\CacheService;
+use Application\baseDb;
 
-class UserDb
+class UserDb extends BaseDb
 {
     protected $keyName = 'users';
-    protected $cache;
-
-    public function __construct($keyPrefix)
-    {
-        $this->cache = new CacheService($keyPrefix);
-    }
 
     public function load($uri)
     {

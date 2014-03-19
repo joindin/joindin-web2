@@ -1,17 +1,11 @@
 <?php
 namespace Talk;
 
-use Application\CacheService;
+use Application\BaseDb;
 
-class TalkDb
+class TalkDb extends BaseDb
 {
     protected $keyName = 'talks';
-    protected $cache;
-
-    public function __construct(CacheService $cache)
-    {
-        $this->cache = $cache;
-    }
 
     public function getUriFor($slug, $eventUri)
     {
