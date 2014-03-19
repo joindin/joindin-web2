@@ -1,7 +1,7 @@
 <?php
-namespace Tests\Model\API;
+namespace Tests\Event;
 
-class EventTest extends \PHPUnit_Framework_TestCase
+class EventApiTest extends \PHPUnit_Framework_TestCase
 {
     private $mockConfig;
     private $mockCache;
@@ -11,11 +11,11 @@ class EventTest extends \PHPUnit_Framework_TestCase
     {
 		$this->mockConfig = array('apiUrl' => 'http://example.com');
         $this->mockCache = $this->getMock(
-            'Joindin\Service\Cache'
+            'Application\CacheService'
         );
 
         $this->mockDbEvent = $this->getMock(
-			'Joindin\Model\Db\Event',
+			'Event\EventDb',
 			null,
 			array($this->mockCache)
         );
@@ -25,7 +25,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     public function testDefaultGetCollectionParametersAreSet()
     {
         $mockEvent = $this->getMock(
-            'Joindin\Model\API\Event',
+            'Event\EventApi',
             array('apiGet'),
             array($this->mockConfig, null, $this->mockDbEvent)
         );
@@ -41,7 +41,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionWithLimitSetsParamsCorrectly()
     {
         $mockEvent = $this->getMock(
-            'Joindin\Model\API\Event',
+            'Event\EventApi',
             array('apiGet'),
             array($this->mockConfig, null, $this->mockDbEvent)
         );
@@ -57,7 +57,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionWithPageValueSetsParamsCorrectly()
     {
         $mockEvent = $this->getMock(
-            'Joindin\Model\API\Event',
+            'Event\EventApi',
             array('apiGet'),
             array($this->mockConfig, null, $this->mockDbEvent)
         );
@@ -73,7 +73,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     public function testGetCollectionWithFilterSetsAllParamsCorrectly()
     {
         $mockEvent = $this->getMock(
-            'Joindin\Model\API\Event',
+            'Event\EventApi',
             array('apiGet'),
             array($this->mockConfig, null, $this->mockDbEvent)
         );
@@ -94,7 +94,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         // The object containing the event details (in this case, we only
         // need to mock the comments_uri and its getter
         $mockEventObj = $this->getMock(
-            'Joindin\Model\Event',
+            'Event\EventEntity',
             array('getCommentsUri'),
             array(
                 (object) array('comments_uri'=>'http://example.com/comments/123')
@@ -110,7 +110,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         // joind.in API to return a known result and check we're making the
         // correct call
         $mockEventApi = $this->getMock(
-            'Joindin\Model\API\Event',
+            'Event\EventApi',
             array('apiPost'),
             array($this->mockConfig, null, $this->mockDbEvent)
         );
@@ -137,7 +137,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         // The object containing the event details (in this case, we only
         // need to mock the comments_uri and its getter
         $mockEventObj = $this->getMock(
-            'Joindin\Model\Event',
+            'Event\EventEntity',
             array('getCommentsUri'),
             array(
                 (object) array('comments_uri'=>'http://example.com/comments/123')
@@ -153,7 +153,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         // joind.in API to return a known (failed) result and check we're making the
         // correct call
         $mockEventApi = $this->getMock(
-            'Joindin\Model\API\Event',
+            'Event\EventApi',
             array('apiPost'),
             array($this->mockConfig, null, $this->mockDbEvent)
         );
@@ -174,7 +174,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     public function testAttendThrowsExceptionIfAPIReturnsBadStatus()
     {
         $mockEventObj = $this->getMock(
-            'Joindin\Model\Event',
+            'Event\EventEntity',
             array('getApiUriToMarkAsAttending'),
             array(
                 (object) array('attending_uri'=>'http://example.com/events/1/attending')
@@ -187,7 +187,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
 
 
         $mockEventApi = $this->getMock(
-            'Joindin\Model\API\Event',
+            'Event\EventApi',
             array('apiPost'),
             array($this->mockConfig, null, $this->mockDbEvent)
         );

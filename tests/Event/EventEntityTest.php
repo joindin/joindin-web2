@@ -1,9 +1,10 @@
 <?php
-namespace Tests\Model;
+namespace Tests\Event;
 
-use \Joindin\Model\Event;
+use Event\EventEntity;
+use stdClass;
 
-class EventTest extends \PHPUnit_Framework_TestCase
+class EventEntityTest extends \PHPUnit_Framework_TestCase
 {
     private $eventData;
 
@@ -11,7 +12,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
     {
         // Not used at the moment, but it's here for future use when we
         // want to provide data to the class
-        $this->eventData = new \stdClass($data);
+        $this->eventData = new stdClass($data);
 		$this->eventData->name                 = "Test event name";
 		$this->eventData->icon                 = "Test event icon";
 		$this->eventData->start_date           = "Test event start date";
@@ -36,7 +37,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
 
     public function testBasicEventData()
     {
-        $event = new Event($this->eventData);
+        $event = new EventEntity($this->eventData);
 
         $this->assertEquals(
             $event->getName(),
@@ -141,7 +142,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
 
     public function testNonExistentTestDataDoesntBreak()
     {
-        $event = new Event(new \stdClass());
+        $event = new EventEntity(new stdClass());
 
         $event->getName();
         $event->getIcon();
