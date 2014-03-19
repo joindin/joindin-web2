@@ -16,18 +16,6 @@ class TalkDb extends BaseDb
         return $data['uri'];
     }
 
-    public function getTalkByStub($stub)
-    {
-        $data = $this->cache->load($this->keyName, 'stub', $stub);
-        return $data;
-    }
-
-    public function load($uri)
-    {
-        $data = $this->cache->load($this->keyName, 'uri', $uri);
-        return $data;
-    }
-
     public function saveSlugToDatabase(TalkEntity $talk)
     {
         $data = array(
@@ -39,7 +27,7 @@ class TalkDb extends BaseDb
             'stub' => $talk->getStub(),
         );
 
-        $savedTalk = $this->load($talk->getApiUri());
+        $savedTalk = $this->load('uri', $talk->getApiUri());
         if ($savedTalk) {
             // talk is already known - update this record
             $data = array_merge($savedTalk, $data);

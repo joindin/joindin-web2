@@ -9,4 +9,9 @@ class BaseDb
     {
         $this->cache = $cache;
     }
+
+    public function load($keyField, $keyValue)
+    {
+        return $this->cache->load($this->keyName, $keyField, $keyValue);
+    }
 }

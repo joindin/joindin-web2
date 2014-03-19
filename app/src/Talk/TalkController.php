@@ -49,7 +49,7 @@ class TalkController extends BaseController
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
         $cache = new CacheService($keyPrefix);
         $talkDb = new TalkDb($cache);
-        $talk = $talkDb->getTalkByStub($talkStub);
+        $talk = $talkDb->load('stub', $talkStub);
 
         $eventDb = new EventDb($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);

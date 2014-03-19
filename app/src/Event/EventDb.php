@@ -7,11 +7,6 @@ class EventDb extends BaseDb
 {
     protected $keyName = 'events';
 
-    public function load($keyField, $keyValue)
-    {
-		return $this->cache->load($this->keyName, $keyField, $keyValue);
-    }
-
     public function save(EventEntity $event)
     {
         $data = array(

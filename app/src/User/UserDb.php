@@ -7,12 +7,6 @@ class UserDb extends BaseDb
 {
     protected $keyName = 'users';
 
-    public function load($uri)
-    {
-        $data = $this->cache->load($this->keyName, 'uri', $uri);
-        return $data;
-    }
-
     public function saveSlugToDatabase($user)
     {
         $data = array(
@@ -22,7 +16,7 @@ class UserDb extends BaseDb
             'verbose_uri'  => $user->getVerboseUri()
         );
 
-        $savedUser = $this->load($user->getUri());
+        $savedUser = $this->load('uri', $user->getUri());
         if ($savedUser) {
             // user is already known - update this record
             $data = array_merge($savedUser, $data);
