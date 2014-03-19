@@ -175,14 +175,14 @@ class EventTest extends \PHPUnit_Framework_TestCase
     {
         $mockEventObj = $this->getMock(
             'Joindin\Model\Event',
-            array('getAttendingUri'),
+            array('getApiUriToMarkAsAttending'),
             array(
                 (object) array('attending_uri'=>'http://example.com/events/1/attending')
             )
         );
 
         $mockEventObj->expects($this->once())
-            ->method('getAttendingUri')
+            ->method('getApiUriToMarkAsAttending')
             ->will($this->returnValue('http://example.com/events/1/attending'));
 
 

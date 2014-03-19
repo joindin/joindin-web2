@@ -146,7 +146,7 @@ class EventApi extends BaseApi
 
     public function attend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiPost($event->getAttendingUri());
+        list ($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
 
         if ($status == 201) {
             return true;
