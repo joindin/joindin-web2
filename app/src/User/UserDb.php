@@ -7,7 +7,7 @@ class UserDb extends BaseDb
 {
     protected $keyName = 'users';
 
-    public function saveSlugToDatabase($user)
+    public function save($user)
     {
         $data = array(
             'uri'  => $user->getUri(),
@@ -22,6 +22,6 @@ class UserDb extends BaseDb
             $data = array_merge($savedUser, $data);
         }
 
-        return $this->cache->save($this->keyName, $data, 'uri', $user->getUri());
+        $this->cache->save($this->keyName, $data, 'uri', $user->getUri());
     }
 }

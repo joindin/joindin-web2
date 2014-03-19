@@ -16,7 +16,7 @@ class TalkDb extends BaseDb
         return $data['uri'];
     }
 
-    public function saveSlugToDatabase(TalkEntity $talk)
+    public function save(TalkEntity $talk)
     {
         $data = array(
             'uri' => $talk->getApiUri(),
@@ -37,9 +37,8 @@ class TalkDb extends BaseDb
             'event_uri' => $talk->getEventUri(),
             'slug' => $talk->getUrlFriendlyTalkTitle()
         );
-
+        $this->cache->saveByKeys($this->keyName, $data, $keys);
         $this->cache->save($this->keyName, $data, 'uri', $talk->getApiUri());
         $this->cache->save($this->keyName, $data, 'stub', $talk->getStub());
-        $this->cache->saveByKeys($this->keyName, $data, $keys);
     }
 }

@@ -39,7 +39,7 @@ class TalkApi extends BaseApi
         foreach ($talks['talks'] as $talk) {
             $talkObject = new TalkEntity($talk);
             $collectionData['talks'][] = $talkObject;
-            $this->talkDb->saveSlugToDatabase($talkObject);
+            $this->talkDb->save($talkObject);
         }
 
         return $collectionData;
