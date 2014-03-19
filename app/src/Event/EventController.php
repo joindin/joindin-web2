@@ -23,8 +23,8 @@ class EventController extends BaseController
     {
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
         $cache = new CacheService($keyPrefix);
-        $dbEvent = new EventDb($cache);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, $dbEvent);
+        $eventDb = new EventDb($cache);
+        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
         return $eventApi;
     }
 
@@ -52,8 +52,8 @@ class EventController extends BaseController
 
     public function details($friendly_name)
     {
-        $apiEvent = $this->getEventApi();
-        $event = $apiEvent->getByFriendlyUrl($friendly_name);
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
         if($event) {
             $quicklink = $this->application->request()->headers("host") 
                 . $this->application->urlFor(
@@ -61,7 +61,7 @@ class EventController extends BaseController
                     array("stub" => $event->getStub()
                 ));
 
-            $comments = $apiEvent->getComments($event->getCommentsUri());
+            $comments = $eventApi->getComments($event->getCommentsUri());
             echo $this->render(
                 'Event/details.html.twig',
                 array(
@@ -80,9 +80,9 @@ class EventController extends BaseController
 
     public function map($friendly_name)
     {
-        $apiEvent = $this->getEventApi();
+        $eventApi = $this->getEventApi();
 
-        $event = $apiEvent->getByFriendlyUrl($friendly_name);
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if($event) {
             echo $this->render(
@@ -99,15 +99,15 @@ class EventController extends BaseController
 
      public function schedule($friendly_name)
      {
-        $apiEvent = $this->getEventApi();
-        $event = $apiEvent->getByFriendlyUrl($friendly_name);
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if($event) {
             $keyPrefix = $this->cfg['redis']['keyPrefix'];
             $cache = new CacheService($keyPrefix);
-            $dbTalk = new TalkDb($cache);
-            $apiTalk = new TalkApi($this->cfg, $this->accessToken, $dbTalk);
-            $scheduler = new EventScheduler($apiTalk);
+            $talkDb = new TalkDb($cache);
+            $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+            $scheduler = new EventScheduler($talkApi);
 
             $schedule = $scheduler->getScheduleData($event);
 
@@ -127,8 +127,8 @@ class EventController extends BaseController
 
     public function quicklink($stub)
     {
-        $apiEvent = $this->getEventApi();
-        $event = $apiEvent->getByStub($stub);
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByStub($stub);
         if($event) {
             $this->application->redirect(
                 $this->application->urlFor("event-detail", 
@@ -147,10 +147,10 @@ class EventController extends BaseController
         $request = $this->application->request();
         $comment = $request->post('comment');
 
-        $apiEvent = $this->getEventApi();
-        $event = $apiEvent->getByFriendlyUrl($friendly_name);
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
         if ($event) {
-            $apiEvent->addComment($event, $comment);
+            $eventApi->addComment($event, $comment);
         }
 
         $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
@@ -159,11 +159,11 @@ class EventController extends BaseController
 
     public function attend($friendly_name)
     {
-        $api = $this->getEventApi();
-        $event = $api->getByFriendlyUrl($friendly_name);
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
-            $api->attend($event, $_SESSION['user']);
+            $eventApi->attend($event, $_SESSION['user']);
         }
 
         $url = '/';
