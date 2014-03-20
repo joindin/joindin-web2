@@ -28,14 +28,12 @@ class Application extends Base
         $cache = new Cache($keyPrefix);
         $event_collection = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($cache));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
-//        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
+
         try {
             echo $this->application->render(
                 'Application/index.html.twig',
                 array(
-                    'events' => $hot_events,
-//                    'upcoming_events' => $upcoming_events,
-                    'page' => $page,
+                    'events' => $hot_events
                 )
             );
         } catch (\Twig_Error_Runtime $e) {
