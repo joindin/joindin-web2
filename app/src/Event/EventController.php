@@ -173,6 +173,17 @@ class EventController extends BaseController
         if ($r) {
             $url = $this->application->urlFor("event-detail", array('friendly_name' => $r));
         }
+
+        $keyword = $this->application->request()->get('keyword');
+        $page = $this->application->request()->get('page');
+        if ($keyword) {
+            $url .= 'search/events?keyword=' . $keyword . '&page=' . $page;
+        }
+
+        if ($page && !$keyword) {
+            $url .= 'event?page=' . $page;
+        }
+
         $this->application->redirect($url);
     }
 }
