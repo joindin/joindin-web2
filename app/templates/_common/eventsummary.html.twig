@@ -47,10 +47,16 @@ set eventUrl = urlFor(
             {% include 'Event/_common/attending_string.html.twig' %}
 
             {% if event.isAttending == false and user %}
-                <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}"
-                   class="button">
-                    I'm attending
-                </a>
+                {% set attendingUrl = urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName }) ~ "?" %}
+                {% if page > 0 %}
+                    {% set attendingUrl = attendingUrl ~ "page=" ~ page|escape ~ "&" %}
+                {% endif %}
+
+                {% if keyword is defined %}
+                    {% set attendingUrl  = attendingUrl ~ "keyword=" ~ keyword|escape %}
+                {% endif %}
+
+                <a href="{{ attendingUrl }}" class="button">I'm attending</a>
             {% endif %}
         </p>
     </section>
