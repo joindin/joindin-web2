@@ -7,7 +7,7 @@ class UserEntity
     private $data;
 
     /**
-     * Crate new User model
+     * Create new UserEntity
      *
      * @param stdclass $data Model data retrieved from API
      */

@@ -4,7 +4,7 @@ namespace Event;
 use DateTime;
 
 /**
- * Class EventDay
+ * Class EventSchedulerDay
  *
  * A helper class to support the scheduler service
  *

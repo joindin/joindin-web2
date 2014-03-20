@@ -9,7 +9,7 @@ class TalkEntity
     private $data;
 
     /**
-     * Crate new Event model
+     * Create new EventEntity
      *
      * @param Object $data Model data retrieved from API
      */

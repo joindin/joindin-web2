@@ -5,7 +5,7 @@ use Application\BaseApi;
 use Event\EventEntity;
 
 /**
- * Class Search
+ * Class SearchApi
  * Model to fetch tags or events form the API based on a search parameter (string)
  */
 class SearchApi extends BaseApi
