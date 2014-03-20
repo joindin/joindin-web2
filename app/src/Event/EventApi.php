@@ -2,7 +2,6 @@
 namespace Event;
 
 use Application\BaseApi;
-use Application\CommentEntity;
 
 class EventApi extends BaseApi
 {
@@ -124,7 +123,7 @@ class EventApi extends BaseApi
         $commentData = array();
 
         foreach($comments['comments'] as $comment) {
-            $commentData[] = new CommentEntity($comment);
+            $commentData[] = new EventCommentEntity($comment);
         }
 
         return $commentData;

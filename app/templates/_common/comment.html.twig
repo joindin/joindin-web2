@@ -3,7 +3,7 @@
 <li>
     <div class="media">
         <section>
-            {% if comment.hasRating %}
+            {% if comment.getRating is not null %}
                 {% include '_common/rating.html.twig' with {'rating': comment.getRating} %}
             {% endif %}
 

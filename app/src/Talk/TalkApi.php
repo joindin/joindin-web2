@@ -2,7 +2,6 @@
 namespace Talk;
 
 use Application\BaseApi;
-use Application\CommentEntity;
 
 class TalkApi extends BaseApi
 {
@@ -81,7 +80,7 @@ class TalkApi extends BaseApi
         $commentData = array();
 
         foreach($comments['comments'] as $comment) {
-            $commentData[] = new CommentEntity($comment);
+            $commentData[] = new TalkCommentEntity($comment);
         }
 
         return $commentData;

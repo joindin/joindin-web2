@@ -1,28 +1,18 @@
 <?php
-namespace Application;
+namespace Event;
 
-class CommentEntity
+class EventCommentEntity
 {
     private $data;
 
     /**
-     * Crate new Event model
+     * Create new EventCommentEntity
      *
      * @param Object $data Model data retrieved from API
      */
     public function __construct($data)
     {
         $this->data = $data;
-    }
-
-    public function hasRating()
-    {
-        return (isset($this->data->rating));
-    }
-
-    public function getRating()
-    {
-        return $this->data->rating;
     }
 
     public function getUserDisplayName()
@@ -39,5 +29,4 @@ class CommentEntity
     {
         return $this->data->comment;
     }
-
 }
