@@ -96,7 +96,7 @@ class Event
         }
     }
 
-    public function getHref()
+    public function getWebsiteAddress()
     {
         if (isset($this->data->href)) {
             return $this->data->href;
