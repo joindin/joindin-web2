@@ -1,14 +1,14 @@
 <?php
 namespace Joindin\Model\Db;
 
-use  \Joindin\Service\Cache as CacheService;
+use Joindin\Service\Cache;
 
 class Talk
 {
     protected $keyName = 'talks';
     protected $cache;
 
-    public function __construct(\Joindin\Service\Cache $cache)
+    public function __construct(Cache $cache)
     {
         $this->cache = $cache;
     }

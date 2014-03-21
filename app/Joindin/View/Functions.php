@@ -2,6 +2,7 @@
 namespace Joindin\View\Functions;
 
 use Slim;
+use Twig_SimpleFunction;
 
 /**
  * A group of Twig functions for use in view templates
@@ -12,17 +13,17 @@ use Slim;
  */
 function initialize(\Twig_Environment $env, Slim $app)
 {
-    $env->addFunction(new \Twig_SimpleFunction('urlFor', function ($routeName, $params=array()) use ($app) {
+    $env->addFunction(new Twig_SimpleFunction('urlFor', function ($routeName, $params=array()) use ($app) {
         $url = $app->urlFor($routeName, $params);
         return $url;
     }));
     
-    $env->addFunction(new \Twig_SimpleFunction('hash', function ($value) {
+    $env->addFunction(new Twig_SimpleFunction('hash', function ($value) {
         return md5($value);
     }));
 
     $env->addFunction(
-        new \Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = array()) use ($app) {
+        new Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = array()) use ($app) {
             return $app->urlFor('talk', array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
         })
     );

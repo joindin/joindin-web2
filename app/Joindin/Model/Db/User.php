@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Model\Db;
 
-use  \Joindin\Service\Cache as CacheService;
+use Joindin\Service\Cache;
 
 class User
 {
@@ -10,7 +10,7 @@ class User
 
     public function __construct($keyPrefix)
     {
-        $this->cache = new CacheService($keyPrefix);
+        $this->cache = new Cache($keyPrefix);
     }
 
     public function load($uri)

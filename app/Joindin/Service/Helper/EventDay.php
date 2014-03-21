@@ -1,6 +1,8 @@
 <?php
 namespace Joindin\Service\Helper;
 
+use DateTime;
+
 /**
  * Class EventDay
  *
@@ -46,7 +48,7 @@ class EventDay
      */
     public function getDate()
     {
-        $date = new \DateTime($this->date);
+        $date = new DateTime($this->date);
 
         return $date->format('l, jS F Y');
     }

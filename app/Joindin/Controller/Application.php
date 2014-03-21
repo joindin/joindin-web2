@@ -1,9 +1,9 @@
 <?php
 namespace Joindin\Controller;
 
-use \Joindin\Service\Helper\Config as Config;
-use \Joindin\Service\Cache as Cache;
+use Joindin\Service\Cache;
 use Joindin\Model\Db\Event as DbEvent;
+use Joindin\Model\API\Event as ApiEvent;
 
 class Application extends Base
 {
@@ -26,7 +26,7 @@ class Application extends Base
         $keyPrefix = $this->cfg['redis']['keyPrefix'];
 
         $cache = new Cache($keyPrefix);
-        $event_collection = new \Joindin\Model\API\Event($this->cfg, $this->accessToken, new DbEvent($cache));
+        $event_collection = new ApiEvent($this->cfg, $this->accessToken, new DbEvent($cache));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 //        $upcoming_events = $event_collection->getCollection(12, 1, 'upcoming');
         try {

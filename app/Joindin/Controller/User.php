@@ -1,9 +1,9 @@
 <?php
 namespace Joindin\Controller;
 
-use Joindin\Model\API\Auth as AuthService;
-use Joindin\Model\API\User as UserService;
-use \Joindin\Service\Helper\Config as Config;
+use Joindin\Model\API\Auth as ApiAuth;
+use Joindin\Model\API\User as ApiUser;
+use Joindin\Model\Db\User as DbUser;
 
 class User extends Base
 {
@@ -40,7 +40,7 @@ class User extends Base
             $password = $request->post('password');
             $clientId = $config['client_id'];
 
-            $authService = new AuthService($this->cfg, $this->accessToken);
+            $authService = new ApiAuth($this->cfg, $this->accessToken);
             $result      = $authService->login($username, $password, $clientId);
 
             if (false === $result) {
@@ -52,7 +52,7 @@ class User extends Base
 
                 // now get users details
                 $keyPrefix = $this->cfg['redis']['keyPrefix'];
-                $userService = new UserService($this->cfg, $this->accessToken, new \Joindin\Model\Db\User($keyPrefix));
+                $userService = new ApiUser($this->cfg, $this->accessToken, new DbUser($keyPrefix));
                 $user = $userService->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;

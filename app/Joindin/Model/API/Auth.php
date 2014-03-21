@@ -1,7 +1,7 @@
 <?php
 namespace Joindin\Model\API;
 
-class Auth extends \Joindin\Model\API\JoindIn
+class Auth extends JoindIn
 {
     /**
      * Log in via the API

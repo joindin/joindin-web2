@@ -1,6 +1,10 @@
 <?php
 namespace Joindin\Service;
 
+use Joindin\Model\API\Talk as ApiTalk;
+use Joindin\Model\Event as EventEntity;
+use Joindin\Service\Helper\EventDay;
+
 /**
  * Class Scheduler
  *
@@ -19,7 +23,7 @@ class Scheduler
      *
      * @param \Joindin\Model\API\Talk $apiTalk
      */
-    public function __construct(\Joindin\Model\API\Talk $apiTalk)
+    public function __construct(ApiTalk $apiTalk)
     {
         $this->apiTalk = $apiTalk;
     }
@@ -32,7 +36,7 @@ class Scheduler
      * @return mixed
      * @throws \Exception
      */
-    public function getScheduleData(\Joindin\Model\Event $event)
+    public function getScheduleData(EventEntity $event)
     {
         $talks = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
         $eventDays = $this->getEventDays($talks);
@@ -72,7 +76,7 @@ class Scheduler
 
         $eventDays = array();
         foreach ($talksByDay as $date => $talks) {
-            $eventDays[] = new \Joindin\Service\Helper\EventDay($date, $talks, $tracksByDay[$date]);
+            $eventDays[] = new EventDay($date, $talks, $tracksByDay[$date]);
         }
 
         return $eventDays;

@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Model;
 
-use \Joindin\Model\Event;
+use Joindin\Model\Event;
 
 class EventTest extends \PHPUnit_Framework_TestCase
 {
