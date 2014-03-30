@@ -1,7 +1,7 @@
 <?php
 namespace User;
 
-use Application\baseDb;
+use Application\BaseDb;
 
 class UserDb extends BaseDb
 {
