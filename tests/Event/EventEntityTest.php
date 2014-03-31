@@ -153,7 +153,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         $event->getTags();
         $event->getLatitude();
         $event->getLongitude();
-        $event->getHref();
+        $event->getWebsiteAddress();
         $event->getAttendeeCount();
         $event->getCommentsCount();
         $event->getCommentsUri();
