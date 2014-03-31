@@ -15,6 +15,15 @@
    </phplint>
  </target>
 
+ <target name="phpcs">
+   <phpcodesniffer standard="PSR1" description="Run PSR1 standards over the codebase">
+     <fileset dir="${basedir}/app">
+       <include name="**/*.php"/>
+     </fileset>
+     <formatter type="full" usefile="false"/>
+   </phpcodesniffer>
+ </target>
+
  <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
   <exec command="phpunit -c tests/phpunit.xml" logoutput="/dev/stdout" checkreturn="true" />
  </target>

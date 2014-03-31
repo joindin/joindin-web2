@@ -85,7 +85,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            $event->getHref(),
+            $event->getWebsiteAddress(),
             "Test event href"
         );
 
