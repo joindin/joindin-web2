@@ -17,16 +17,37 @@ class EventCommentEntity
 
     public function getUserDisplayName()
     {
-        return $this->data->user_display_name;
+        if (isset($this->data->user_display_name)) {
+            return $this->data->user_display_name;
+        } else {
+            return null;
+        }
     }
 
     public function getCommentDate()
     {
-        return $this->data->created_date;
+        if (isset($this->data->created_date)) {
+            return $this->data->created_date;
+        } else {
+            return null;
+        }
     }
 
     public function getComment()
     {
-        return $this->data->comment;
+        if (isset($this->data->comment)) {
+            return $this->data->comment;
+        } else {
+            return null;
+        }
+    }
+
+    public function getCommentSource()
+    {
+        if (isset($this->data->source)) {
+            return $this->data->source;
+        } else {
+            return null;
+        }
     }
 }
