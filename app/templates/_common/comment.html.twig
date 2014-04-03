@@ -15,7 +15,7 @@
 
             <p class="meta">
                 at {{ comment.getCommentDate|date('H:i \\o\\n j M Y') }}
-                {% if comment.source %}via {{ comment.source }}{% endif %}
+                {% if comment.getCommentSource is not null %}<br />via {{ comment.getCommentSource }}{% endif %}
             </p>
         </section>
         <section>
