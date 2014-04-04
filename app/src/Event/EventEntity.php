@@ -19,164 +19,164 @@ class EventEntity
 
     public function getName()
     {
-        if (isset($this->data->name)) {
-            return $this->data->name;
-        } else {
+        if (!isset($this->data->name)) {
             return null;
         }
+
+        return $this->data->name;
     }
 
     public function getIcon()
     {
-        if (isset($this->data->icon)) {
-            return $this->data->icon;
-        } else {
+        if (!isset($this->data->icon)) {
             return null;
         }
+
+        return $this->data->icon;
     }
 
     public function getStartDate()
     {
-        if (isset($this->data->start_date)) {
-            return $this->data->start_date;
-        } else {
+        if (!isset($this->data->start_date)) {
             return null;
         }
+
+        return $this->data->start_date;
     }
 
     public function getEndDate()
     {
-        if (isset($this->data->end_date)) {
-            return $this->data->end_date;
-        } else {
+        if (!isset($this->data->end_date)) {
             return null;
         }
+
+        return $this->data->end_date;
     }
 
     public function getLocation()
     {
-        if (isset($this->data->location)) {
-            return $this->data->location;
-        } else {
+        if (!isset($this->data->location)) {
             return null;
         }
+
+        return $this->data->location;
     }
 
     public function getDescription()
     {
-        if (isset($this->data->description)) {
-            return $this->data->description;
-        } else {
+        if (!isset($this->data->description)) {
             return null;
         }
+
+        return $this->data->description;
     }
 
     public function getTags()
     {
-        if (isset($this->data->tags)) {
-            return $this->data->tags;
-        } else {
+        if (!isset($this->data->tags)) {
             return null;
         }
+
+        return $this->data->tags;
     }
 
     public function getLatitude()
     {
-        if (isset($this->data->latitude)) {
-            return $this->data->latitude;
-        } else {
+        if (!isset($this->data->latitude)) {
             return null;
         }
+
+        return $this->data->latitude;
     }
 
     public function getLongitude()
     {
-        if (isset($this->data->longitude)) {
-            return $this->data->longitude;
-        } else {
+        if (!isset($this->data->longitude)) {
             return null;
         }
+
+        return $this->data->longitude;
     }
 
     public function getWebsiteAddress()
     {
-        if (isset($this->data->href)) {
-            return $this->data->href;
-        } else {
+        if (!isset($this->data->href)) {
             return null;
         }
+
+        return $this->data->href;
     }
 
     public function getAttendeeCount()
     {
-        if (isset($this->data->attendee_count)) {
-            return $this->data->attendee_count;
-        } else {
+        if (!isset($this->data->attendee_count)) {
             return null;
         }
+
+        return $this->data->attendee_count;
     }
 
     public function getCommentsCount()
     {
-        if (isset($this->data->event_comments_count)) {
-            return $this->data->event_comments_count;
-        } else {
+        if (!isset($this->data->event_comments_count)) {
             return null;
         }
+
+        return $this->data->event_comments_count;
     }
 
     public function getCommentsUri()
     {
-        if (isset($this->data->comments_uri)) {
-            return $this->data->comments_uri;
-        } else {
+        if (!isset($this->data->comments_uri)) {
             return null;
         }
+
+        return $this->data->comments_uri;
     }
 
     public function getApiUriToMarkAsAttending()
     {
-        if (isset($this->data->attending_uri)) {
-            return $this->data->attending_uri;
-        } else {
+        if (!isset($this->data->attending_uri)) {
             return null;
         }
+
+        return $this->data->attending_uri;
     }
 
     public function getTalksUri()
     {
-        if (isset($this->data->talks_uri)) {
-            return $this->data->talks_uri;
-        } else {
+        if (!isset($this->data->talks_uri)) {
             return null;
         }
+
+        return $this->data->talks_uri;
     }
 
     public function getUri()
     {
-        if (isset($this->data->uri)) {
-            return $this->data->uri;
-        } else {
+        if (!isset($this->data->uri)) {
             return null;
         }
+
+        return $this->data->uri;
     }
 
     public function getVerboseUri()
     {
-        if (isset($this->data->verbose_uri)) {
-            return $this->data->verbose_uri;
-        } else {
+        if (!isset($this->data->verbose_uri)) {
             return null;
         }
+
+        return $this->data->verbose_uri;
     }
 
     public function isAttending()
     {
-        if (isset($this->data->attending)) {
-            return $this->data->attending;
-        } else {
+        if (!isset($this->data->attending)) {
             return null;
         }
+
+        return $this->data->attending;
     }
 
     public function isPastEvent() {
@@ -189,20 +189,20 @@ class EventEntity
 
     public function getUrlFriendlyName()
     {
-        if (isset($this->data->url_friendly_name)) {
-            return $this->data->url_friendly_name;
-        } else {
+        if (!isset($this->data->url_friendly_name)) {
             return null;
         }
+
+        return $this->data->url_friendly_name;
     }
 
     public function getStub()
     {
-        if (isset($this->data->stub)) {
-            return $this->data->stub;
-        } else {
+        if (!isset($this->data->stub)) {
             return null;
         }
+
+        return $this->data->stub;
     }
 
 }
