@@ -1,23 +1,25 @@
 <?php
-namespace Tests\Event;
+namespace Tests\Talk;
 
-use Event\EventCommentEntity;
+use Talk\TalkCommentEntity;
 use stdClass;
 
-class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
+class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase
 {
     private $commentData;
 
     public function setUp()
     {
         $this->commentData = new stdClass();
+        $this->commentData->rating              = 5;
         $this->commentData->comment             = "Test event comment text";
         $this->commentData->user_display_name   = "Test comment display name";
+        $this->commentData->talk_title          = "Test talk title";
         $this->commentData->created_date        = "2014-03-02T08:43:44+01:00";
-        $this->commentData->comment_uri         = "Test comment uri";
-        $this->commentData->verbose_comment_uri = "Test comment verbose uri";
-        $this->commentData->event_uri           = "Test event uri";
-        $this->commentData->event_comments_uri  = "Test comments uri";
+        $this->commentData->uri                 = "Test comment uri";
+        $this->commentData->verbose_uri         = "Test comment verbose uri";
+        $this->commentData->talk_uri            = "Test talk uri";
+        $this->commentData->talk_comments_uri   = "Test comments uri";
         $this->commentData->user_uri            = "Test user uri";
         $this->commentData->source              = "Test comment source";
 
@@ -25,7 +27,12 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testBasicCommentsData()
     {
-        $comment = new EventCommentEntity($this->commentData);
+        $comment = new TalkCommentEntity($this->commentData);
+
+        $this->assertEquals(
+            $comment->getRating(),
+            5
+        );
 
         $this->assertEquals(
             $comment->getUserDisplayName(),
@@ -51,8 +58,9 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testNonExistentTestDataDoesntBreak()
     {
-        $comment = new EventCommentEntity(new stdClass());
+        $comment = new TalkCommentEntity(new stdClass());
 
+        $this->assertNull($comment->getRating());
         $this->assertNull($comment->getUserDisplayName());
         $this->assertNull($comment->getCommentDate());
         $this->assertNull($comment->getComment());

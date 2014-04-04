@@ -34,4 +34,13 @@ class TalkCommentEntity
     {
         return $this->data->comment;
     }
+
+    public function getCommentSource()
+    {
+        if (!isset($this->data->source)) {
+            return null;
+        }
+
+        return $this->data->source;
+    }
 }
