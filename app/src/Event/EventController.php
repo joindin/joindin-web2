@@ -61,7 +61,7 @@ class EventController extends BaseController
                     array("stub" => $event->getStub()
                 ));
 
-            $comments = $eventApi->getComments($event->getCommentsUri());
+            $comments = $eventApi->getComments($event->getCommentsUri(), true);
             echo $this->render(
                 'Event/details.html.twig',
                 array(
