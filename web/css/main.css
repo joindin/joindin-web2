@@ -409,3 +409,8 @@ nav a:hover, #head .userdetails a:hover {
     color: #c00;
     margin: 10px auto;
 }
+
+.comments-closed {
+    font-size: 0.9em;
+    font-style: italic;
+}
