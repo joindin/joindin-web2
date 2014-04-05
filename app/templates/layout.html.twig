@@ -10,7 +10,6 @@
     <link href="/css/font-awesome-custom.css" rel="stylesheet">
     <link href="/css/joindin.css" rel="stylesheet">
 </head>
-
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -114,8 +113,15 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/jquery.rateit.min.js"></script>
 
+<script src="/js/widgets/EventAttendance.js" type="text/javascript"></script>
 
-{% block extra_javascript %}{% endblock %}
+<script type="text/javascript">
+    var localUrl = "{{ localUrl }}";
+    $(".attending").each(function(){
+        var options = {"localUrl": localUrl};
+        var widget = $(this).EventAttendance(options);
+    });
+</script>
 
 {# Begin Google Analytics code #}
 {% if 'live' == slim_mode %}

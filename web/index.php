@@ -48,6 +48,7 @@ $app->view()->appendData(
     array(
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
         'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
+        'localUrl' => $config['slim']['custom']['localUrl']
     )
 );
 
