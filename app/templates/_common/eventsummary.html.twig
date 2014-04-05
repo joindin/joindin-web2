@@ -44,20 +44,22 @@ set eventUrl = urlFor(
                 {{ event.getCommentsCount}} comments
             </a>
 
-            {% include 'Event/_common/attending_string.html.twig' %}
+            <span id="event-{{ event.getUrlFriendlyName|escape }}" class="attending">
+                {% include 'Event/_common/attending_string.html.twig' %}
 
-            {% if event.isAttending == false and user %}
-                {% set attendingUrl = urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName }) ~ "?" %}
-                {% if page > 0 %}
-                    {% set attendingUrl = attendingUrl ~ "page=" ~ page|escape ~ "&" %}
+                {% if event.isAttending == false and user %}
+                    {% set attendingUrl = urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName }) ~ "?" %}
+                    {% if page > 0 %}
+                        {% set attendingUrl = attendingUrl ~ "page=" ~ page|escape ~ "&" %}
+                    {% endif %}
+
+                    {% if keyword is defined %}
+                        {% set attendingUrl  = attendingUrl ~ "keyword=" ~ keyword|escape %}
+                    {% endif %}
+
+                    <a href="{{ attendingUrl }}" data-friendly-name="{{ event.getUrlFriendlyName|escape }}" class="button">I'm attending</a>
                 {% endif %}
-
-                {% if keyword is defined %}
-                    {% set attendingUrl  = attendingUrl ~ "keyword=" ~ keyword|escape %}
-                {% endif %}
-
-                <a href="{{ attendingUrl }}" class="button">I'm attending</a>
-            {% endif %}
+            </span>
         </p>
     </section>
 

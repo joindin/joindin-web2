@@ -12,12 +12,14 @@
             &ndash; {{ event.getEndDate|date('M d Y') }}
         {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
 
-        {% include 'Event/_common/attending_string.html.twig' %}
+        <span id="event-{{ event.getUrlFriendlyName|escape }}" class="attending">
+            {% include 'Event/_common/attending_string.html.twig' %}
 
-        {% if event.isAttending == false and user %}
-            <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}?r={{ event.getUrlFriendlyName |url_encode }}"
-               class="button">I'm attending</a>
-        {% endif %}
+            {% if event.isAttending == false and user %}
+                <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}?r={{ event.getUrlFriendlyName |url_encode }}"
+                   data-friendly-name="{{ event.getUrlFriendlyName|escape }}" class="button">I'm attending</a>
+            {% endif %}
+        </span>
     </p>
 </h2>
 
