@@ -25,7 +25,7 @@ class Search extends Base
      */
     protected function defineRoutes(\Slim $app)
     {
-        $app->get('/search/events', array($this, 'searchEvents'));
+        $app->get('/search/events', array($this, 'searchEvents'))->name('search-events');
     }
 
     /**
@@ -47,7 +47,6 @@ class Search extends Base
      */
     public function searchEvents()
     {
-
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $events = array();
 
