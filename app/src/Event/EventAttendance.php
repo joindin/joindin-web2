@@ -1,5 +1,5 @@
 <?php
-namespace Joindin\Service;
+namespace Event;
 
 /**
  * Class Attendance
@@ -8,13 +8,13 @@ namespace Joindin\Service;
  *
  * @package Joindin\Service
  */
-class Attendance
+class EventAttendance
 {
     protected $event;
     protected $apiEvent;
     protected $user;
 
-    public function __construct(\Joindin\Model\API\Event $apiEvent, \Joindin\Model\Event $event, \Joindin\Model\User $user)
+    public function __construct(EventApi $apiEvent, EventEntity $event, \User\UserEntity $user)
     {
         $this->apiEvent = $apiEvent;
         $this->event = $event;
