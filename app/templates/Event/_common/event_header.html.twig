@@ -17,12 +17,7 @@
 
             {% if event.isAttending == false and user %}
                 <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}?r={{ event.getUrlFriendlyName |url_encode }}"
-               class="button">
-                   {% if event.isPastEvent %}
-                       I attended
-                   {% else %}
-                       I'm attending
-                   {% endif %}
+               data-friendly-name="{{ event.getUrlFriendlyName|escape }}"class="button">I'm attending
                </a>
             {% endif %}
         </span>

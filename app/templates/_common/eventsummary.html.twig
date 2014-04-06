@@ -49,10 +49,9 @@ set eventUrl = urlFor(
 
                 {% if event.isAttending == false and user %}
                     {% set attendingUrl = urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName }) ~ "?" %}
+
                     {% if page > 0 %}
                         {% set attendingUrl = attendingUrl ~ "page=" ~ page|escape ~ "&" %}
-                        I attended
-                    {% else %}
                     {% endif %}
 
                     {% if keyword is defined %}

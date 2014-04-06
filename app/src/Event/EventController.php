@@ -2,7 +2,6 @@
 namespace Event;
 
 use Application\BaseController;
-use Joindin\Service\Attendance as Attendance;
 use Application\CacheService;
 use Talk\TalkDb;
 use Talk\TalkApi;
@@ -164,7 +163,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
-        $attendance = new Attendance($this->getEventApi(), $event, $_SESSION['user']);
+        $attendance = new EventAttendance($this->getEventApi(), $event, $_SESSION['user']);
         $attendance->confirm();
 
         $url = '/';
@@ -190,14 +189,14 @@ class EventController extends BaseController
 
     public function xhrAttend($friendly_name)
     {
-        $response = $this->application->response()->header('Content-Type', 'application/json');
+        $this->application->response()->header('Content-Type', 'application/json');
 
         $api = $this->getEventApi();
         $event = $api->getByFriendlyUrl($friendly_name);
 
-        $attendance = new Attendance($this->getEventApi(), $event, $_SESSION['user']);
+        $attendance = new EventAttendance($this->getEventApi(), $event, $_SESSION['user']);
         $result = $attendance->confirm();
 
-        echo json_encode(array('success' => $result));
+        $this->application->response()->body(json_encode(array('success' => $result)));
     }
 }
