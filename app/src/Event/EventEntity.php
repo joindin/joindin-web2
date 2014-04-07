@@ -205,4 +205,12 @@ class EventEntity
         return $this->data->stub;
     }
 
+    public function getCommentsEnabled()
+    {
+        if (!isset($this->data->comments_enabled)) {
+            return null;
+        }
+
+        return $this->data->comments_enabled;
+    }
 }
