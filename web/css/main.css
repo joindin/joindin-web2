@@ -194,7 +194,7 @@ nav a:hover, #head .userdetails a:hover {
 /* Comments */
 #comments {
     background-color: #d7dcdf;
-    margin: 8px;
+    margin: 8px 0;
     padding: 8px
 }
 
@@ -319,7 +319,7 @@ nav a:hover, #head .userdetails a:hover {
 }
 
 .meta {
-    font-size: 10px;
+    font-size: 11px;
 }
 
 /* Talk type highlights */
@@ -408,9 +408,4 @@ nav a:hover, #head .userdetails a:hover {
 .error {
     color: #c00;
     margin: 10px auto;
-}
-
-.comments-closed {
-    font-size: 0.9em;
-    font-style: italic;
 }
