@@ -112,16 +112,11 @@
     <script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/jquery.rateit.min.js"></script>
+    <script type="text/javascript">
+        var localUrl = "{{ localUrl }}";
+    </script>
 
-<script src="/js/widgets/EventAttendance.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-    var localUrl = "{{ localUrl }}";
-    $(".attending").each(function(){
-        var options = {"localUrl": localUrl};
-        var widget = $(this).EventAttendance(options);
-    });
-</script>
+    <script src="/js/joindin.js" type="text/javascript"></script>
 
 {# Begin Google Analytics code #}
 {% if 'live' == slim_mode %}
