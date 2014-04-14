@@ -58,7 +58,13 @@ set eventUrl = urlFor(
                         {% set attendingUrl  = attendingUrl ~ "keyword=" ~ keyword|escape %}
                     {% endif %}
 
-                    <a href="{{ attendingUrl }}" data-friendly-name="{{ event.getUrlFriendlyName|escape }}" class="button">I'm attending</a>
+                    <a href="{{ attendingUrl }}" data-friendly-name="{{ event.getUrlFriendlyName|escape }}" class="button">
+                        {% if event.isPastEvent %}
+                          I attended
+                        {% else %}
+                          I'm attending
+                        {% endif %}
+                    </a>
                 {% endif %}
             </span>
         </p>
