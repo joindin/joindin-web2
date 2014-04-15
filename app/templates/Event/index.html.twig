@@ -1,12 +1,27 @@
 {% extends '/layout.html.twig' %}
 
 {% block body %}
-    <h1 class="title">Latest events</h1>
+    <h1 class="title">Hot events</h1>
     <div>
         {% for event in events.events %}
             {% include '_common/eventsummary.html.twig' %}
         {% endfor %}
     </div>
-
-    {% include '_common/pagination.html.twig' %}
 {% endblock %}
+
+{% block extraAside %}
+    <div class="extraAside">
+        <form action="/search/events" method="get" style="float: left">
+            <label>Search for an event:<br />
+                <input
+                       type="text"
+                       name="keyword"
+                       value="{{ keyword }}"
+                       />
+            </label>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+{% endblock %}
+
+
