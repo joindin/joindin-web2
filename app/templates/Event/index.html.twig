@@ -8,20 +8,3 @@
         {% endfor %}
     </div>
 {% endblock %}
-
-{% block extraAside %}
-    <div class="extraAside">
-        <form action="/search/events" method="get" style="float: left">
-            <label>Search for an event:<br />
-                <input
-                       type="text"
-                       name="keyword"
-                       value="{{ keyword }}"
-                       />
-            </label>
-            <button type="submit">Search</button>
-        </form>
-    </div>
-{% endblock %}
-
-
