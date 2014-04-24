@@ -1,5 +1,10 @@
 {% extends '/layout.html.twig' %}
 
+{% block extra_javascript %}
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.rateit.min.js"></script>
+{% endblock %}
+
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
     <section>
@@ -41,11 +46,23 @@
             {% if user %}
 
                 <h2>Write a comment</h2>
-                <form id="add-comment" method="POST" action="{{ urlFor('talk-add-comment', {'friendly_name': talk.getUrlFriendlyName}) }}">
+                <form id="add-comment" method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
                 <div>
                     <label for="comment">Your comment:</label>
                     <textarea id="comment" name="comment"></textarea>
                 </div>
+                <div>
+                    <label>Your rating:</label>
+                    <select id="backing2b" name="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <div class="rateit" data-rateit-backingfld="#backing2b" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
+                </div>
+
                 <div>
                     <input type="submit" value="Submit comment">
                 </div>

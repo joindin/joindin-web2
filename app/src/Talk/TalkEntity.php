@@ -116,4 +116,13 @@ class TalkEntity
     {
         return $this->data->comments_enabled;
     }
+
+    public function getCommentsUri()
+    {
+        if (!isset($this->data->comments_uri)) {
+            return null;
+        }
+
+        return $this->data->comments_uri;
+    }
 }

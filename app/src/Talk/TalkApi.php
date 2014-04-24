@@ -85,4 +85,26 @@ class TalkApi extends BaseApi
 
         return $commentData;
     }
+
+    /**
+     * Add a comment
+     *
+     * @param TalkEntity $talk
+     * @param int $rating
+     * @param string $comment
+     */
+    public function addComment($talk, $rating, $comment)
+    {
+        $uri = $talk->getCommentsUri();
+        $params = array(
+            'rating' => $rating,
+            'comment' => $comment,
+        );
+        list ($status, $result) = $this->apiPost($uri, $params);
+
+        if ($status == 201) {
+            return true;
+        }
+        throw new \Exception("Failed to add comment: " . $result);
+    }
 }
