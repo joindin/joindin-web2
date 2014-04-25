@@ -476,3 +476,8 @@ nav a:hover, #head .userdetails a:hover {
     color: #c00;
     margin: 10px auto;
 }
+
+.message {
+    color: #f80;
+    margin: 10px auto;
+}

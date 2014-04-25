@@ -46,6 +46,12 @@
             {% if user %}
 
                 <h2>Write a comment</h2>
+                {% if flash.getMessages.message %}
+                    <div class="message">{{flash.getMessages.message}}</div>
+                {% endif %}
+                {% if flash.getMessages.error %}
+                    <div class="error">{{flash.getMessages.error}}</div>
+                {% endif %}
                 <form id="add-comment" method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
                 <div>
                     <label for="comment">Your comment:</label>

@@ -71,7 +71,9 @@ class TalkController extends BaseController
         $rating = (int) $request->post('rating');
         $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
 
-        if ($comment == '' || $rating = '') {
+        if ($comment == '' || $rating == 0) {
+            $this->application->flash('error', 'Please provide a comment and rating');
+            $url .= '#add-comment';
             $this->application->redirect($url);
         }
 
@@ -90,7 +92,8 @@ class TalkController extends BaseController
             $talkApi->addComment($talk, $rating, $comment);
         }
 
-        
+        $this->application->flash('message', 'Thank you for your comment.');
+        $url .= '#add-comment';
         $this->application->redirect($url);
 
     }
