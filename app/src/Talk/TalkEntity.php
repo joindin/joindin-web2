@@ -112,7 +112,7 @@ class TalkEntity
         return $this->data->stub;
     }
 
-    public function getCommentsEnabled()
+    public function areCommentsEnabled()
     {
         return $this->data->comments_enabled;
     }
