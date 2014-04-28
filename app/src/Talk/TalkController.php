@@ -14,6 +14,7 @@ class TalkController extends BaseController
     {
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
         $app->get('/talk/:talkStub', array($this, 'quick'));
+        $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
     }
 
 
@@ -40,6 +41,7 @@ class TalkController extends BaseController
                 'talk' => $talk,
                 'event' => $event,
                 'comments' => $comments,
+                'talkSlug' => $talkSlug,
             )
         );
     }
@@ -62,6 +64,37 @@ class TalkController extends BaseController
         );
     }
 
+    public function addComment($eventSlug, $talkSlug)
+    {
+        $request = $this->application->request();
+        $comment = trim(strip_tags($request->post('comment')));
+        $rating = (int) $request->post('rating');
+        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
 
+        if ($comment == '' || $rating == 0) {
+            $this->application->flash('error', 'Please provide a comment and rating');
+            $url .= '#add-comment';
+            $this->application->redirect($url);
+        }
 
+        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $eventUri = $event->getUri();
+
+        $talkDb = new TalkDb($cache);
+        $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
+
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        $talk = $talkApi->getTalk($talkUri, true);
+        if ($talk) {
+            $talkApi->addComment($talk, $rating, $comment);
+        }
+
+        $this->application->flash('message', 'Thank you for your comment.');
+        $url .= '#add-comment';
+        $this->application->redirect($url);
+
+    }
 }
