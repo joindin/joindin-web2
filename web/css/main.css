@@ -46,6 +46,73 @@ table {
     border-spacing: 0;
 }
 
+/* RateIt CSS */
+.rateit {
+    display: -moz-inline-box;
+    display: inline-block;
+    position: relative;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.rateit .rateit-range
+{
+    position: relative;
+    display: -moz-inline-box;
+    display: inline-block;
+    background: url(../img/rating.gif);
+    height: 21px;
+    outline: none;
+}
+
+.rateit .rateit-range * {
+    display:block;
+}
+
+/* for IE 6 */
+* html .rateit, * html .rateit .rateit-range
+{
+    display: inline;
+}
+
+/* for IE 7 */
+* + html .rateit, * + html .rateit .rateit-range
+{
+    display: inline;
+}
+
+.rateit .rateit-hover, .rateit .rateit-selected
+{
+    position: absolute;
+    left: 0px;
+}
+
+.rateit .rateit-hover
+{
+    background: url(../img/rating.gif) left -42px;
+}
+
+.rateit .rateit-selected
+{
+    background: url(../img/rating.gif) left -21px;
+}
+
+.rateit .rateit-preset
+{
+    background: url(../img/rating.gif) left -63px;
+}
+
+.rateit button.rateit-reset:hover, .rateit button.rateit-reset:focus
+{
+    background-position: 0 -21px;
+}
+/* End of RateIt CSS */
+
 /*------------------------------------*\
  * Base typography and colours
 \*------------------------------------*/
@@ -194,7 +261,7 @@ nav a:hover, #head .userdetails a:hover {
 /* Comments */
 #comments {
     background-color: #d7dcdf;
-    margin: 8px;
+    margin: 8px 0;
     padding: 8px
 }
 
@@ -407,5 +474,10 @@ nav a:hover, #head .userdetails a:hover {
 
 .error {
     color: #c00;
+    margin: 10px auto;
+}
+
+.message {
+    color: #f80;
     margin: 10px auto;
 }
