@@ -76,7 +76,7 @@ class EventController extends BaseController
                 )
             );
         } else {
-            $events_url = $this->application->urlFor("events");
+            $events_url = $this->application->urlFor("events-index");
             $this->application->redirect($events_url);
         }
 
@@ -97,7 +97,7 @@ class EventController extends BaseController
                 )
             );
         } else {
-            $events_url = $this->application->urlFor("events");
+            $events_url = $this->application->urlFor("events-index");
             $this->application->redirect($events_url);
         }
     }
@@ -124,7 +124,7 @@ class EventController extends BaseController
                 )
             );
         } else {
-            $events_url = $this->application->urlFor("events");
+            $events_url = $this->application->urlFor("events-index");
             $this->application->redirect($events_url);
         }
 
@@ -141,7 +141,7 @@ class EventController extends BaseController
                 301
             );
         } else {
-            $events_url = $this->application->urlFor("events");
+            $events_url = $this->application->urlFor("events-index");
             $this->application->redirect($events_url);
         }
 

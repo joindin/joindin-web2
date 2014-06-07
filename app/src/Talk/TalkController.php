@@ -25,6 +25,18 @@ class TalkController extends BaseController
 
         $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
         $event = $eventApi->getByFriendlyUrl($eventSlug);
+
+        if (!$event) {
+            echo $this->render(
+                'Event/error_404.html.twig',
+                array(
+                    'message' => 'Event was not retrieved, perhaps the slug is invalid?',
+                ),
+                404
+            );
+            return;
+        }
+
         $eventUri = $event->getUri();
 
         $talkDb = new TalkDb($cache);
