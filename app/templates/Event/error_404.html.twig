@@ -1,0 +1,20 @@
+{% extends '/layout.html.twig' %}
+
+{% block body %}
+    <h1 class="title">Error Loading Event</h1>
+    <p>Sorry, an error occurred while loading the event.</p>
+
+    {% if 'development' == slim_mode %}
+        <h2>Details</h2>
+        <p>{{ message }}</p>
+
+        <h2>Solution</h2>
+        <p>If the above details refer to a connection error, please try the following:</p>
+        <ul>
+            <li>If you followed the 'Quick Start for existing platforms' instructions, revisit the
+                <a href="https://github.com/joindin/joindin-web2#quick-start-for-existing-platforms">Redis installation instructions on Github</a></li>
+            <li>If you used the project's vagrant installation method, try running <code>vagrant halt</code> followed by <code>vagrant up</code> to reload the virtual machine</li>
+            <li>If you need help to solve the problem, drop into the <a href="irc://irc.freenode.net/joind.in">joind.in irc channel on freenode</a></li>
+        </ul>
+    {% endif %}
+{%  endblock %}
