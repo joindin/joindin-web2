@@ -32,16 +32,24 @@ class EventController extends BaseController
 
     public function hotEvents()
     {
+
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
+        $perPage = 10;
+        $start = ($page -1) * $perPage;
+
         $eventApi = $this->getEventApi();
         $events = $eventApi->getCollection(
             $this->eventsToShow,
-            null,
+            $start,
             'hot'
         );
 
         echo $this->render(
             'Event/index.html.twig',
             array(
+                'page' => $page,
                 'events' => $events
             )
         );
