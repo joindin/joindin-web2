@@ -111,6 +111,35 @@ table {
 {
     background-position: 0 -21px;
 }
+
+.rating-vote-container #content_rating_container, .rating-vote-container #speaker_rating_container {
+    float: left;
+    clear: none;
+}
+
+.rating-vote-container #speaker_rating_container {
+    margin-left: 2em;
+}
+
+.rating-vote-container label {
+    clear: left;
+}
+
+#comments form div {
+    clear: left;
+}
+
+#comments form input {
+    margin-top: 1em;
+}
+
+#comments div#content_rating_value, #comments div#speaker_rating_value {
+    clear: none;
+    font-size: 80%;
+    font-weight: bold;
+    height: 2em;
+}
+
 /* End of RateIt CSS */
 
 /*------------------------------------*\
@@ -272,7 +301,34 @@ nav a:hover, #head .userdetails a:hover {
 }
 
 #comments section {
-    min-width: 125px; /* Makes the left-most column lined up */
+    min-width: 183px; /* Makes the left-most column lined up */
+    padding-left: 1em;
+}
+
+#comments section .rating-container {
+    background-color: #E3E3E3;
+    padding: 1em 1em 0em;
+    margin-bottom: 1em;
+    cursor: pointer;
+}
+
+#comments section .rating-container .rating-details {
+    display: none;
+}
+
+#comments section .rating-container:hover .rating-details {
+    display: block;
+}
+
+#comments section .rating-container label {
+    display: block;
+    font-weight: bold;
+    font-size: 80%;
+    text-transform: uppercase;
+}
+
+#comments section .rating-container img {
+    padding-bottom: 1em;
 }
 
 #add-comment {

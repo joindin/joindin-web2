@@ -2,13 +2,18 @@
 
 <li>
     <div class="media">
-        <section>
+        <section class="comment-{{ comment.data.id }}">
             {% if comment.getRating is not null %}
                 {% include '_common/rating.html.twig' with {'rating': comment.getRating} %}
             {% endif %}
 
             {% if comment.getUserDisplayName %}
                 {{ comment.getUserDisplayName }}
+                {% for speaker in talk.speakers %}
+                    {%  if speaker.speaker_uri is not null and speaker.speaker_uri == comment.getUserUri %}
+                    <strong>(Speaker)</strong>
+                    {% endif %}
+                {% endfor %}
             {% else %}
                 Anonymous
             {% endif %}

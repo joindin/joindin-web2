@@ -17,11 +17,15 @@ class TalkCommentEntity
 
     public function getRating()
     {
-        if (!isset($this->data->rating)) {
+        if (!isset($this->data->content_rating) && !isset($this->data->speaker_rating)) {
             return null;
         }
 
-        return $this->data->rating;
+        return array(
+            "content" => $this->data->content_rating,
+            "speaker" => $this->data->speaker_rating,
+            "average" => $this->data->rating
+        );
     }
 
     public function getUserDisplayName()
@@ -58,5 +62,14 @@ class TalkCommentEntity
         }
 
         return $this->data->source;
+    }
+
+    public function getUserUri()
+    {
+        if (!isset($this->data->user_uri)) {
+            return null;
+        }
+
+        return $this->data->user_uri;
     }
 }
