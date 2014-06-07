@@ -8,9 +8,11 @@ use Talk\TalkApi;
 
 class EventController extends BaseController
 {
+    private $eventsToShow = 10;
+
     protected function defineRoutes(\Slim $app)
     {
-        $app->get('/event', array($this, 'index'))->name("events");
+        $app->get('/event', array($this, 'index'))->name("events-index");
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
@@ -30,22 +32,25 @@ class EventController extends BaseController
 
     public function index()
     {
+
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
-
         $perPage = 10;
         $start = ($page -1) * $perPage;
 
-        $event_collection = $this->getEventApi();
-
-        $events = $event_collection->getCollection($perPage, $start);
+        $eventApi = $this->getEventApi();
+        $events = $eventApi->getCollection(
+            $this->eventsToShow,
+            $start,
+            'upcoming'
+        );
 
         echo $this->render(
             'Event/index.html.twig',
             array(
-                'events' => $events,
                 'page' => $page,
+                'events' => $events
             )
         );
     }
