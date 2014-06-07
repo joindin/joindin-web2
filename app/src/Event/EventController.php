@@ -12,7 +12,7 @@ class EventController extends BaseController
 
     protected function defineRoutes(\Slim $app)
     {
-        $app->get('/event', array($this, 'hotEvents'))->name("events-index");
+        $app->get('/event', array($this, 'index'))->name("events-index");
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
@@ -30,7 +30,7 @@ class EventController extends BaseController
         return $eventApi;
     }
 
-    public function hotEvents()
+    public function index()
     {
 
         $page = ((int)$this->application->request()->get('page') === 0)
@@ -43,7 +43,7 @@ class EventController extends BaseController
         $events = $eventApi->getCollection(
             $this->eventsToShow,
             $start,
-            'hot'
+            'upcoming'
         );
 
         echo $this->render(
