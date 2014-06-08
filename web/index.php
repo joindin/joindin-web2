@@ -55,7 +55,7 @@ $app->view()->appendData(
 );
 
 // set Twig base folder, view folder and initialize Joindin filters
-\TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
+$app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
