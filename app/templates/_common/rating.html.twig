@@ -1,6 +1,16 @@
-<div class="rating rating-{{ rating }}">
-    <img src="/img/rating-{{ rating }}.gif"
-         title="Rated {{ rating }}"
-         class="float"
-         width="117" height="21" alt="Rated {{ rating }}"/>
-</div>
+{% if style == 'fluid' %}
+    {% set class = 'col-xs-12 col-md-4' %}
+{% else %}
+    {% set class = '' %}
+{% endif %}
+
+{%  if (rating) %}
+        <div class="{{ class }}">
+            <label>Rating: </label>
+            <div class="rating rating-{{ rating }}">
+                <img src="/img/avg-rating-{{ rating }}.png"
+                     title="Rated {{ rating }}"
+                    width="156" height="28" alt="Rated {{ rating }}"/>
+            </div>
+        </div>
+{% endif %}

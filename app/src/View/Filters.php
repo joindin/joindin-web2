@@ -29,7 +29,14 @@ function img_path($suffix, $infix)
         $suffix = 'none.gif';
     }
 
-    return 'http://joind.in/inc/img/' . $infix . '/' . $suffix;
+    $path = '/img/' . $infix . '/' . $suffix;
+
+    // Allow for migration to local images
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
+        return $path;
+    }
+
+    return 'http://joind.in/inc' .$path;
 }
 
 function format_date($date)

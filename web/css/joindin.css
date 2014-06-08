@@ -1,0 +1,244 @@
+body {
+    padding-top: 50px;
+}
+
+.navbar-default {
+    background-image: none;
+    background-color: white;
+    border-radius: 0px;
+    border-bottom: 2px solid #007b97;
+}
+
+nav.navbar a.navbar-brand img {
+    margin-top: -0.3em;
+    max-height: 95%;
+}
+
+h1 {
+    border-bottom: 1px solid #d7dcdf;
+    color: #f90;
+    font-size: 24px;
+    font-weight: normal;
+    margin-bottom: 16px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+aside {
+    background-color: #E3E3E3;
+}
+
+aside section {
+    margin-top: 1em;
+}
+
+ul.pagination li.current a, ul.pagination li.current a:hover, ul.pagination li.current a:active {
+    background-color: transparent;
+    color: inherit;
+    cursor: default;
+}
+
+footer .navbar-default {
+    border-bottom: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+
+footer div.row {
+    margin: 1em;
+}
+
+.event .logo {
+    padding-top: 1em;
+}
+
+.ratings {
+    margin-bottom: 1em;
+}
+
+.avatar {
+    -webkit-border-radius: 50%; /* Can also be 55px */
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 4px solid white;
+    margin-bottom: -0.5em;
+}
+
+.panel h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0.5em;
+}
+
+.panel h3 small {
+    display: block;
+    margin-top: -1em;
+    padding-left: 65px;
+    font-size: 60%;
+}
+
+table.key td {
+    color: white;
+    width: 20%;
+    text-align: center;
+}
+
+.talk-type-talk {
+    background-color: #5A8EC3;
+}
+
+.talk-type-keynote {
+    background-color: #C799CE;
+}
+
+.talk-type-workshop {
+    background-color: #F69159;
+}
+
+.talk-type-socialevent {
+    background-color: #CAAD90;
+}
+
+.talk-type-eventrelated {
+    background-color: #5BB068;
+}
+/* A special case that lets us put the talk type as a label */
+.talk-type-label {
+    padding: 4px;
+    font-size: 8pt;
+}
+
+table.schedule a {
+    color: white;
+}
+
+table.schedule a span.speaker {
+    color: black;
+    font-style: italic;
+}
+
+table.schedule a:hover span.speaker {
+    color: white;
+}
+
+.rateit {
+    display: -moz-inline-box;
+    display: inline-block;
+    position: relative;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.rateit .rateit-range
+{
+    position: relative;
+    display: -moz-inline-box;
+    display: inline-block;
+    background: url(../img/rating.gif);
+    height: 21px;
+    outline: none;
+}
+
+.rateit .rateit-range * {
+    display:block;
+}
+
+/* for IE 6 */
+* html .rateit, * html .rateit .rateit-range
+{
+    display: inline;
+}
+
+/* for IE 7 */
+* + html .rateit, * + html .rateit .rateit-range
+{
+    display: inline;
+}
+
+.rateit .rateit-hover, .rateit .rateit-selected
+{
+    position: absolute;
+    left: 0px;
+}
+
+.rateit .rateit-hover
+{
+    background: url(../img/rating.gif) left -42px;
+}
+
+.rateit .rateit-selected
+{
+    background: url(../img/rating.gif) left -21px;
+}
+
+.rateit .rateit-preset
+{
+    background: url(../img/rating.gif) left -63px;
+}
+
+.rateit button.rateit-reset:hover, .rateit button.rateit-reset:focus
+{
+    background-position: 0 -21px;
+}
+
+.rating-vote-container #content_rating_container, .rating-vote-container #speaker_rating_container {
+    float: left;
+    clear: none;
+}
+
+.rating-vote-container #speaker_rating_container {
+    margin-left: 2em;
+}
+
+.rating-vote-container label {
+    clear: left;
+}
+
+#comments form div {
+    clear: left;
+}
+
+#comments form input {
+    margin-top: 1em;
+}
+
+#comments div#content_rating_value, #comments div#speaker_rating_value {
+    clear: none;
+    font-size: 80%;
+    font-weight: bold;
+    height: 2em;
+}
+
+@media (max-width: 768px) {
+    .event .logo img {
+        max-width: 150%;
+    }
+}
+
+@media (min-width: 992px) {
+    .pull-right-md {
+        float: right;
+    }
+
+    .pull-left-md {
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .pull-right-lg {
+        float: right;
+    }
+
+    .pull-left-lg {
+        float: left;
+    }
+}

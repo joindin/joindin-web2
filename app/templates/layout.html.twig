@@ -3,9 +3,13 @@
 <head>
     <meta charset="utf-8">
     <title>{% block title %}Joind.in{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/joindin.css" rel="stylesheet">
+    {#<link href="/css/main.css" rel="stylesheet">#}
 
     {#<link rel="shortcut icon" href="/images/favicon.ico">#}
     {#<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">#}
@@ -14,79 +18,109 @@
 </head>
 
 <body>
-    <header id="head">
-        <div class="userdetails">
-            <form action="/search/events" method="get" style="float: left">
-                <input type="text" name="keyword" value="{{ keyword }}" placeholder="Search events or talks">
-                <button type="submit">Search</button>
-            </form>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <img src="/img/logo.png" alt="Joind.in"/>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/event">Events</a>
+                    </li>
+                    <li>
+                        <a href="{{ urlFor('apps') }}">Apps</a>
+                    </li>
+                    <li>
+                        <a href="{{ urlFor('about') }}">About</a>
+                    </li>
+
+                    {% if user %}
+                        <li><a href="#">{{ user.getFullName }}</a></li> <!-- This should link to the user profile page in the future -->
+                        <li><a href="{{ urlFor('user-logout') }}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ urlFor('user-login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="text" name="keyword" class="form-control" value="{{ keyword }}" placeholder="Search events or talks">
+                    </div>
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i> Search</button>
+                </form>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container-fluid">
+
+        <div id="row">
+            <div class="container-fluid">
+                <aside class="col-xs-12 col-md-3 pull-right-md">
+                    <div class="container-fluid">
+                        {% block extraAside %}{% endblock %}
+                    </div>
+                </aside>
+                <div class="col-xs-12 col-md-9 pull-left-md">
+                    {% block body %}{% endblock %}
+                </div>
+                <aside class="col-xs-12 col-md-3 pull-right-md">
+                    <div class="container-fluid">
+                        <section>
+                            {% if not user %}
+                                {%  include '_common/login.html.twig' %}
+                            {% endif %}
+                        </section>
+                        <!-- Hidden on XS/SM as it appears right above the footer, duplicating the info -->
+                        <section class="text-center hidden-xs hidden-sm">
+                            <hr>
+                            <img src="/img/logo-combell.png" alt="Combell" />
+                            <p>
+                                <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
+                                <a href="http://www.combell.com/en">hosting</a> by Combell
+                            </p>
+                        </section>
+                    </div>
+                </aside>
+            </div>
         </div>
-        <nav>
-            <ul>
-                <li>
-                    <h1>
-                        <a href="/">
-                            <img src="/img/logo.png"
-                                 alt="Joind.in"
-                                 class="respImage"
-                                 width="120"
-                                 height="30"/>
+    </div>
+
+    <footer>
+        <nav class="navbar navbar-default" role="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="navbar-left">
+                        <a href="http://github.com/joindin"><i class="fa fa-github-alt"></i> Contribute on Github</a>
+                    </div>
+                    <div class="navbar-right">
+                        <a href="http://www.combell.com/en/servers/cloud-server">
+                            Cloud server
                         </a>
-                    </h1>
-                </li>
-
-                <li>
-                    <a href="/event">Events</a>
-                </li>
-                <li>
-                    <a href="{{ urlFor('apps') }}">Apps</a>
-                </li>
-                <li>
-                    <a href="{{ urlFor('about') }}">About</a>
-                </li>
-
-                {% if user %}
-                    <li><a href="#">{{ user.getFullName }}</a></li> <!-- This should link to the user profile page in the future -->
-                    <li><a href="{{ urlFor('user-logout') }}">Logout</a></li>
-                {% else %}
-                    <li><a href="{{ urlFor('user-login') }}">Login</a></li>
-                {% endif %}
-
-            </ul>
+                        <a href="http://www.combell.com/en">hosting</a>
+                        by Combell
+                        <a href="http://www.combell.com/en">
+                            <img src="/img/logo-combell-small.gif" alt="Combell">
+                        </a>
+                    </div>
+                </div>
+            </div>
         </nav>
-    </header>
-
-    <div id="wrapper">
-        <div id="content">
-            {% block body %}{% endblock %}
-        </div>
-        <aside id="aside">
-            <section class="wideOnly">
-                <img src="/img/logo-combell.png" alt=" " />
-                <p>
-                    <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
-                    <a href="http://www.combell.com/en">hosting</a> by Combell
-                </p>
-
-                {% block extraAside %}{% endblock %}
-            </section>
-        </aside>
-    </div>
-
-    <div id="foot">
-        <a href="http://www.combell.com/en/servers/cloud-server">
-            Cloud server
-        </a>
-        <a href="http://www.combell.com/en">hosting</a>
-        by Combell
-        <a href="http://www.combell.com/en">
-            <img src="/img/logo-combell-small.gif"
-                 alt="Combell"
-                 height="22"
-                 width="80"/ >
-        </a>
-    </div>
+    </footer>
 </body>
+<script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 {% block extra_javascript %}{% endblock %}
 
 {# Begin Google Analytics code #}

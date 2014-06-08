@@ -1,32 +1,41 @@
 {# This template should work for both event and talk comments #}
 
-<li>
-    <div class="media">
-        <section>
-            {% if comment.getRating is not null %}
-                {% include '_common/rating.html.twig' with {'rating': comment.getRating} %}
-            {% endif %}
-
+<div class="panel panel-default">
+    <div class="panel-body">
+        {% if comment.getRating is not null %}
+            <div class="col-xs-12 col-sm-4 col-md-12 ratings">
+                {% include '_common/rating.html.twig' with {'rating': comment.getRating, 'style': 'fluid'} %}
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-12">
+                <p>
+                    {{ comment.comment | nl2br }}
+                </p>
+            </div>
+        {% else %}
+            <div class="col-xs-12">
+                <p>
+                    {{ comment.comment | nl2br }}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+    <div class="panel-footer">
+        <h3>
+            <img class="avatar" src="{{ gravatar(comment.getUserEmailhash) }}">
             {% if comment.getUserDisplayName %}
                 {{ comment.getUserDisplayName }}
+                {% for speaker in talk.speakers %}
+                    {%  if speaker.speaker_uri is not null and speaker.speaker_uri == comment.getUserUri %}
+                        <strong>(Speaker)</strong>
+                    {% endif %}
+                {% endfor %}
             {% else %}
                 Anonymous
             {% endif %}
-
-            <p class="meta">
+            <small>
                 at {{ comment.getCommentDate|date('H:i \\o\\n j M Y') }}
-                {% if comment.getCommentSource is not null %}<br />via {{ comment.getCommentSource }}{% endif %}
-            </p>
-        </section>
-        <section>
-
-            <p>
-                {{ comment.comment | nl2br }}
-            </p>
-        </section>
+                <span class="hidden-xs">{% if comment.getCommentSource is not null %} (via {{ comment.getCommentSource }}){% endif %}</span>
+            </small>
+        </h3>
     </div>
-
-    <div class="meta">
-
-    </div>
-</li>
+</div>
