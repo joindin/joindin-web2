@@ -37,6 +37,15 @@ class TalkCommentEntity
         return $this->data->user_display_name;
     }
 
+    public function getUserEmailHash()
+    {
+        if (!isset($this->data->user_email_hash)) {
+            return null;
+        }
+
+        return $this->data->user_email_hash;
+    }
+
     public function getCommentDate()
     {
         if (!isset($this->data->created_date)) {

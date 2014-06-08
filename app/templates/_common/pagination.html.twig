@@ -1,16 +1,27 @@
-<div id="paginator">
-    <ul>
-        <li>
-            {% if events.pagination.prev_page is defined %}
-                <a href="?page={{ page - 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}">&lt;&lt; Previous</a>
-            {% endif %}
-        </li>
-        <li>Page {{ page }}</li>
-        <li>
-            {% if events.pagination.next_page is defined
-                and events.pagination.count >= 10 %}
-                <a href="?page={{ page + 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}">Next &gt;&gt;</a>
-            {% endif %}
-        </li>
-    </ul>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <ul class="pagination">
+                {% if events.pagination.prev_page is defined %}
+                    <li>
+                        <a href="?page={{ page - 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}"><i class="fa fa-arrow-circle-o-left"></i> Previous</a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        <a href="#"><i class="fa fa-arrow-circle-o-left"></i> Prev<span class="hidden-xs">ious</span></a>
+                    </li>
+                {% endif %}
+                <li class="current hidden-xs"><a href="#">Page {{ page }}</a></li>
+                {% if events.pagination.next_page is defined and events.pagination.count >= 10 %}
+                    <li>
+                        <a href="?page={{ page + 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}">Next <i class="fa fa-arrow-circle-o-right"></i></a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        Next <i class="fa fa-arrow-circle-o-right"></i>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </div>

@@ -1,7 +1,6 @@
 {% extends '/layout.html.twig' %}
 
 {% block extra_javascript %}
-    <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery.rateit.min.js"></script>
     <script type="text/javascript">
         $('#content_rating_widget').bind('over', function (event, value) {
@@ -22,6 +21,7 @@
         });
         $('#speaker_rating_widget').bind('rated', function (event, value) { $("#speaker_rating_value").html($("#speaker_rating option[value='"+value+"']").text()) });
     </script>
+    {% include '_common/shorturl-js.html.twig' %}
 {% endblock %}
 
 {% block body %}
@@ -45,68 +45,64 @@
         </p>
 
         <p>{{ talk.getDescription | nl2br }}</p>
-
-
-
     </section>
 
     <section id="comments">
         <h2>Comments</h2>
 
         {% if comments %}
-        <ul>
             {% for comment in comments %}
                 {% include '_common/comment.html.twig' with {'comment': comment, 'talk': talk }%}
             {% endfor %}
-        </ul>
         {% endif %}
 
         {% if talk.areCommentsEnabled %}
+            <h2>Write a comment</h2>
             {% if user %}
-
-                <h2>Write a comment</h2>
                 {% if flash.getMessages.message %}
-                    <div class="message">{{flash.getMessages.message}}</div>
+                    <div class="alert alert-success">{{flash.getMessages.message}}</div>
                 {% endif %}
                 {% if flash.getMessages.error %}
-                    <div class="error">{{flash.getMessages.error}}</div>
+                    <div class="alert alert-danger">{{flash.getMessages.error}}</div>
                 {% endif %}
                 <form id="add-comment" method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
-                <div class="rating-vote-container">
-                    <div id="content_rating_container">
-                        <label for="content_rating">Rate the talk content:</label>
-                        <select id="content_rating" name="content_rating">
-                            <option value="0"></option>
-                            <option value="1">Needed more work</option>
-                            <option value="2">Had potential</option>
-                            <option value="3">Worth hearing</option>
-                            <option value="4">Great info &amp; insight</option>
-                            <option value="5">Brilliant!</option>
-                        </select>
-                        <div class="rateit" id="content_rating_widget" data-rateit-backingfld="#content_rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
-                        <div id="content_rating_value"></div>
+                    <div class="rating-vote-container">
+                        <div id="content_rating_container" class="form-group">
+                            <label for="content_rating">Rate the talk content:</label>
+                            <select id="content_rating" name="content_rating">
+                                <option value="0"></option>
+                                <option value="1">Needed more work</option>
+                                <option value="2">Had potential</option>
+                                <option value="3">Worth hearing</option>
+                                <option value="4">Great info &amp; insight</option>
+                                <option value="5">Brilliant!</option>
+                            </select>
+                            <br>
+                            <div class="rateit" id="content_rating_widget" data-rateit-backingfld="#content_rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
+                            <div id="content_rating_value"></div>
+                        </div>
+                        <div id="speaker_rating_container" class="form-group">
+                            <label for="speaker_rating">Rate the talk delivery:</label>
+                            <select id="speaker_rating" name="speaker_rating">
+                                <option value="0"></option>
+                                <option value="1">Somewhat coherent</option>
+                                <option value="2">Had some issues</option>
+                                <option value="3">Good, not great</option>
+                                <option value="4">Great flow, and presence</option>
+                                <option value="5">Awesome presenter!</option>
+                            </select>
+                            <br>
+                            <div class="rateit" id="speaker_rating_widget" data-rateit-backingfld="#speaker_rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
+                            <div id="speaker_rating_value"></div>
+                        </div>
                     </div>
-                    <div id="speaker_rating_container">
-                        <label for="speaker_rating">Rate the talk delivery:</label>
-                        <select id="speaker_rating" name="speaker_rating">
-                            <option value="0"></option>
-                            <option value="1">Somewhat coherent</option>
-                            <option value="2">Had some issues</option>
-                            <option value="3">Good, not great</option>
-                            <option value="4">Great flow, and presence</option>
-                            <option value="5">Awesome presenter!</option>
-                        </select>
-                        <div class="rateit" id="speaker_rating_widget" data-rateit-backingfld="#speaker_rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
-                        <div id="speaker_rating_value"></div>
+                    <div class="form-group">
+                        <label for="comment">Your comment:</label>
+                        <textarea id="comment" class="form-control" name="comment"></textarea>
                     </div>
-                </div>
-                <div>
-                    <label for="comment">Your comment:</label>
-                    <textarea id="comment" name="comment"></textarea>
-                </div>
-                <div>
-                    <input type="submit" value="Submit comment">
-                </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit comment</button>
+                    </div>
                 </form>
             {% else %}
                 <a href="{{ urlFor('user-login') }}">Login</a> to write a comment
@@ -119,13 +115,22 @@
 {% endblock %}
 
 {% block extraAside %}
-    <p class="extraAside">
-        Short URL to this talk:
-        <a href="/talk/{{ talk.getStub }}">
-            http://joind.in/talk/{{ talk.getStub }}
-        </a>
-    </p>
-    <p class="extraAside">
-        {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating} %}
-    </p>
+    <section>
+        {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
+    </section>
+    <section class="short-url hidden-xs hidden-sm">
+        <form class="">
+            <div class="form-group">
+                <label class="control-label">Short URL:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{{ shortUrlForTalk(talk.getStub) }}">
+                    <span class="input-group-btn">
+                        <a class="btn btn-default clipboard" data-clipboard-text="{{ shortUrlForTalk(talk.getStub) }}" title="Copy to clipboard">
+                            <i class="fa fa-clipboard"></i>
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </section>
 {% endblock %}

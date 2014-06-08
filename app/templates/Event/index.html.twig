@@ -4,9 +4,8 @@
     <h1 class="title">Latest events</h1>
     <div>
         {% for event in events.events %}
-            {% include '_common/eventsummary.html.twig' %}
+            {% include 'Event/_common/summary.html.twig' %}
         {% endfor %}
     </div>
-
     {% include '_common/pagination.html.twig' %}
 {% endblock %}

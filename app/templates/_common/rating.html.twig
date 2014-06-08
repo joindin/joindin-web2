@@ -1,32 +1,36 @@
+{% if style == 'fluid' %}
+    {% set class = 'col-xs-12 col-md-4' %}
+{% else %}
+    {% set class = '' %}
+{% endif %}
+
 {%  if not (rating.average == 0 and (rating.content > 0 or rating.speaker > 0)) %}
-    <div class="rating-container">
-        <label>Overall Rating: </label>
-        <div class="rating rating-{{ rating.average }}">
-            <img src="/img/avg-rating-{{ rating.average }}.gif"
-                 title="Rated {{ rating.average }}"
-                 class="float"
-                 width="156" height="28" alt="Rated {{ rating.average }}"/>
+        <div class="{{ class }}">
+            <label>Overall Rating: </label>
+            <div class="rating rating-{{ rating.average }}">
+                <img src="/img/avg-rating-{{ rating.average }}.gif"
+                     title="Rated {{ rating.average }}"
+                    width="156" height="28" alt="Rated {{ rating.average }}"/>
+            </div>
         </div>
-        <div class="rating-details">
+        <div class="{{ class }}">
             {% if rating.content is not null and rating.speaker is not null %}
                 <label>Content: </label>
                 <div class="rating rating-{{ rating.content }}">
                     <img src="/img/rating-{{ rating.content }}.gif"
                          title="Rated {{ rating.content }}"
-                         class="float"
                          width="117" height="21" alt="Rated {{ rating.content }}"/>
                 </div>
             {% endif %}
-
+        </div>
+        <div class="{{ class }}">
             {% if rating.speaker is not null %}
                 <label>Delivery:</label>
                 <div class="rating rating-{{ rating.speaker }}">
                     <img src="/img/rating-{{ rating.speaker }}.gif"
                          title="Rated {{ rating.speaker }}"
-                         class="float"
                          width="117" height="21" alt="Rated {{ rating.speaker }}"/>
                 </div>
             {% endif %}
         </div>
-    </div>
 {% endif %}

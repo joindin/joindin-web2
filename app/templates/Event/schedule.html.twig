@@ -5,9 +5,9 @@
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
-    <div class="table">
-        <h1>Sessions Key</h1>
-        <table id=key>
+    <div>
+        <label>Sessions Key</label>
+        <table class="key table table-bordered">
             <tr>
                 <td class="talk-type-keynote key">Keynote</td>
                 <td class="talk-type-talk key">Talk</td>
@@ -19,7 +19,7 @@
 
         {% for day in eventDays %}
         <h1>{{ day.date }}</h1>
-        <table>
+        <table class="schedule table table-bordered">
             <thead>
             <tr>
                 {# time column on left side of table #}
@@ -44,16 +44,16 @@
             {% for time, talks in day.talks %}
                 <tr>
                 {% if day.tracks|length <= 1 %}
-                   <td class="time" rowspan="{{ talks|length }}">{{ time }}</td>
+                   <th class="time col-xs-2 col-sm-1" rowspan="{{ talks|length }}">{{ time }}</th>
                     {% for talk in talks %}
                         {% set cell %}
                             {% include '/Event/_common/schedule_cell.html.twig' %}
                         {% endset %}
-                        <td class="{{ talk.getTypeClass }}">{{ cell }}</td>
+                        <td class="{{ talk.getTypeClass }} col-xs-10">{{ cell }}</td>
                         </tr>
                     {% endfor %}
                 {% else %}
-                    <td class="time">{{ time }}</td>
+                    <th class="time col-xs-2 col-sm-1">{{ time }}</th>
                     {% for talk in talks %}
                         {# build an array of tracks the talk is in #}
                         {% set actualTracks = [] %}
@@ -105,7 +105,7 @@
                     {% set trackCellHTMLMap = [] %}
                     {% set titleTrackMap = [] %}
                     {% set titleTypeMap = [] %}
-                    <td class="time">{{ time }}</td>
+                    <th class="time col-xs-2 col-sm-1">{{ time }}</th>
                 {% endif %}
                 </tr>
             {% endfor %}
