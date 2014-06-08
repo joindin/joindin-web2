@@ -26,7 +26,7 @@ if (is_readable($configFile)) {
 }
 
 // initialize Slim
-$app = new Slim(
+$app = new \Slim\Slim(
     array_merge(
         $config['slim'],
         array(

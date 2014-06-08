@@ -3,7 +3,7 @@ namespace View\Functions;
 
 use Twig_Environment;
 use Twig_SimpleFunction;
-use Slim;
+use Slim\Slim;
 
 /**
  * A group of Twig functions for use in view templates

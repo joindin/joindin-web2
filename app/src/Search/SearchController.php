@@ -20,7 +20,7 @@ class SearchController extends BaseController
      * Only one route for
      * @param \Slim $app
      */
-    protected function defineRoutes(\Slim $app)
+    protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/search/events', array($this, 'searchEvents'));
     }

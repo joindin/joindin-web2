@@ -10,7 +10,7 @@ class EventController extends BaseController
 {
     private $eventsToShow = 10;
 
-    protected function defineRoutes(\Slim $app)
+    protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/event', array($this, 'index'))->name("events-index");
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
