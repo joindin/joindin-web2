@@ -33,7 +33,7 @@ $app = new Slim(
     )
 );
 
-$app->configureMode('development', function() use ($app) {
+$app->configureMode('development', function () use ($app) {
     error_reporting(-1);
     ini_set('display_errors', 1);
     ini_set('html_errors', 1);
@@ -59,7 +59,7 @@ $app->view()->appendData(
 $app->view()->setTemplatesDirectory('../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
-$app->configureMode('development', function() use ($app) {
+$app->configureMode('development', function () use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
     $env->addExtension(new \Twig_Extension_Debug());
