@@ -8,6 +8,8 @@ session_start();
 
 // include dependencies
 require '../vendor/Slim/Slim.php';
+\Slim\Slim::registerAutoloader();
+
 require '../vendor/TwigView.php';
 require '../vendor/predis-0.8/autoload.php';
 
