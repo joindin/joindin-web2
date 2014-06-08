@@ -3,6 +3,25 @@
 {% block extra_javascript %}
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery.rateit.min.js"></script>
+    <script type="text/javascript">
+        $('#content_rating_widget').bind('over', function (event, value) {
+            if (value) {
+                $("#content_rating_value").html($("#content_rating option[value='"+value+"']").text());
+            } else {
+                $("#content_rating_value").html($("#content_rating option:selected").text())
+            }
+        });
+        $('#content_rating_widget').bind('rated', function (event, value) { $("#content_rating_value").html($("#content_rating option[value='"+value+"']").text()) });
+
+        $('#speaker_rating_widget').bind('over', function (event, value) {
+            if (value) {
+                $("#speaker_rating_value").html($("#speaker_rating option[value='"+value+"']").text());
+            } else {
+                $("#speaker_rating_value").html($("#speaker_rating option:selected").text())
+            }
+        });
+        $('#speaker_rating_widget').bind('rated', function (event, value) { $("#speaker_rating_value").html($("#speaker_rating option[value='"+value+"']").text()) });
+    </script>
 {% endblock %}
 
 {% block body %}
@@ -37,7 +56,7 @@
         {% if comments %}
         <ul>
             {% for comment in comments %}
-                {% include '_common/comment.html.twig' with {'comment': comment }%}
+                {% include '_common/comment.html.twig' with {'comment': comment, 'talk': talk }%}
             {% endfor %}
         </ul>
         {% endif %}
@@ -53,23 +72,38 @@
                     <div class="error">{{flash.getMessages.error}}</div>
                 {% endif %}
                 <form id="add-comment" method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
+                <div class="rating-vote-container">
+                    <div id="content_rating_container">
+                        <label for="content_rating">Rate the talk content:</label>
+                        <select id="content_rating" name="content_rating">
+                            <option value="0"></option>
+                            <option value="1">Needed more work</option>
+                            <option value="2">Had potential</option>
+                            <option value="3">Worth hearing</option>
+                            <option value="4">Great info &amp; insight</option>
+                            <option value="5">Brilliant!</option>
+                        </select>
+                        <div class="rateit" id="content_rating_widget" data-rateit-backingfld="#content_rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
+                        <div id="content_rating_value"></div>
+                    </div>
+                    <div id="speaker_rating_container">
+                        <label for="speaker_rating">Rate the talk delivery:</label>
+                        <select id="speaker_rating" name="speaker_rating">
+                            <option value="0"></option>
+                            <option value="1">Somewhat coherent</option>
+                            <option value="2">Had some issues</option>
+                            <option value="3">Good, not great</option>
+                            <option value="4">Great flow, and presence</option>
+                            <option value="5">Awesome presenter!</option>
+                        </select>
+                        <div class="rateit" id="speaker_rating_widget" data-rateit-backingfld="#speaker_rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
+                        <div id="speaker_rating_value"></div>
+                    </div>
+                </div>
                 <div>
                     <label for="comment">Your comment:</label>
                     <textarea id="comment" name="comment"></textarea>
                 </div>
-                <div>
-                    <label for"rating">Your rating:</label>
-                    <select id="rating" name="rating">
-                        <option value="0">Rating: None</option>
-                        <option value="1">Rating: 1</option>
-                        <option value="2">Rating: 2</option>
-                        <option value="3">Rating: 3</option>
-                        <option value="4">Rating: 4</option>
-                        <option value="5">Rating: 5</option>
-                    </select>
-                    <div class="rateit" data-rateit-backingfld="#rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
-                </div>
-
                 <div>
                     <input type="submit" value="Submit comment">
                 </div>
@@ -92,7 +126,6 @@
         </a>
     </p>
     <p class="extraAside">
-        Average talk rating:
         {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating} %}
     </p>
 {% endblock %}
