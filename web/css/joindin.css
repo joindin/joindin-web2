@@ -80,9 +80,9 @@ footer div.row {
     font-size: 60%;
 }
 
-table.key td {
+.key {
+    padding: 0.5em;
     color: white;
-    width: 20%;
     text-align: center;
 }
 
