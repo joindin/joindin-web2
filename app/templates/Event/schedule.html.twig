@@ -7,15 +7,14 @@
 
     <div>
         <label>Sessions Key</label>
-        <table class="key table table-bordered">
-            <tr>
-                <td class="talk-type-keynote key">Keynote</td>
-                <td class="talk-type-talk key">Talk</td>
-                <td class="talk-type-workshop key">Workshop</td>
-                <td class="talk-type-socialevent key">Social</td>
-                <td class="talk-type-eventrelated key">Event Related</td>
-            </tr>
-        </table>
+
+        <div class="container-fluid">
+            <div class="col-xs-12 col-md-2 col-md-offset-1 talk-type-keynote key">Keynote</div>
+            <div class="col-xs-12 col-md-2 talk-type-talk key">Talk</div>
+            <div class="col-xs-12 col-md-2 talk-type-workshop key">Workshop</div>
+            <div class="col-xs-12 col-md-2 talk-type-socialevent key">Social</div>
+            <div class="col-xs-12 col-md-2 talk-type-eventrelated key">Event Related</div>
+        </div>
 
         {% for day in eventDays %}
         <h1>{{ day.date }}</h1>
