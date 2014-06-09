@@ -1,0 +1,21 @@
+{
+  "name": "joindin-web2",
+  "version": "0.0.1",
+  "description": "Next generation website for joind.in",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:joindin/joindin-web2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joindin/joindin-web2/issues"
+  },
+  "homepage": "https://github.com/joindin/joindin-web2",
+  "devDependencies": {
+    "gulp": "^3.7.0",
+    "gulp-usemin": "^0.3.5",
+    "gulp-uglify": "^0.3.0",
+    "gulp-minify-css": "^0.3.4",
+    "gulp-rename": "^1.2.0",
+    "gulp-clean": "^0.3.0"
+  }
+}

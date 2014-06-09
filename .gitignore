@@ -12,3 +12,4 @@
 .vagrant
 *.swp
 build/
+node_modules/
