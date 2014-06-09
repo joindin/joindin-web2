@@ -27,3 +27,9 @@ gulp.task('clean', ['rename'], function() {
     return gulp.src('web/layout.src.twig')
         .pipe(clean())
 });
+
+gulp.task('watch', ['default'], function() {
+    gulp.watch('app/templates/layout.src.twig', ['default']);
+    gulp.watch(['web/js/*.js', '!web/js/site.js'], ['default']);
+    gulp.watch(['web/css/*.css', '!web/css/site.css'], ['default']);
+});
