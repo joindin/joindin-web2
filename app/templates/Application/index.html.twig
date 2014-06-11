@@ -1,12 +1,11 @@
 {% extends '/layout.html.twig' %}
 
 {% block body %}
-    <h1 class="title">Hot Events</h1>
-    <div>
-        {% for event in events.events %}
-            {% include '_common/eventsummary.html.twig' %}
-        {% endfor %}
+    <h1>Hot Events</h1>
+    {% for event in events.events %}
+        {% include 'Event/_common/summary.html.twig' %}
+    {% endfor %}
+    <div class="col-xs-12">
+        <a href="/event" class="btn btn-block btn-lg">See more events <i class="fa fa-arrow-circle-o-right"></i></a>
     </div>
-
-    {% include '_common/pagination.html.twig' %}
 {% endblock %}

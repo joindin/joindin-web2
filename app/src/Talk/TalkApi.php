@@ -93,11 +93,12 @@ class TalkApi extends BaseApi
      * @param int $rating
      * @param string $comment
      */
-    public function addComment($talk, $rating, $comment)
+    public function addComment($talk, $content_rating, $speaker_rating, $comment)
     {
         $uri = $talk->getCommentsUri();
         $params = array(
-            'rating' => $rating,
+            'content_rating' => $content_rating,
+            'speaker_rating' => $speaker_rating,
             'comment' => $comment,
         );
         list ($status, $result) = $this->apiPost($uri, $params);

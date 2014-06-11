@@ -13,7 +13,7 @@ class TalkController extends BaseController
     protected function defineRoutes(\Slim $app)
     {
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
-        $app->get('/talk/:talkStub', array($this, 'quick'));
+        $app->get('/talk/:talkStub', array($this, 'quick'))->name('talk-quicklink');
         $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
     }
 
@@ -80,11 +80,12 @@ class TalkController extends BaseController
     {
         $request = $this->application->request();
         $comment = trim(strip_tags($request->post('comment')));
-        $rating = (int) $request->post('rating');
+        $content_rating = (int) $request->post('content_rating');
+        $speaker_rating = (int) $request->post('speaker_rating');
         $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
 
-        if ($comment == '' || $rating == 0) {
-            $this->application->flash('error', 'Please provide a comment and rating');
+        if ($comment == '' || $content_rating == 0 || $speaker_rating == 0) {
+            $this->application->flash('error', 'Please provide a comment and ratings');
             $url .= '#add-comment';
             $this->application->redirect($url);
         }
@@ -101,7 +102,7 @@ class TalkController extends BaseController
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $talk = $talkApi->getTalk($talkUri, true);
         if ($talk) {
-            $talkApi->addComment($talk, $rating, $comment);
+            $talkApi->addComment($talk, $content_rating, $speaker_rating, $comment);
         }
 
         $this->application->flash('message', 'Thank you for your comment.');

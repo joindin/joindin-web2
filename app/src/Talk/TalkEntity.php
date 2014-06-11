@@ -94,7 +94,15 @@ class TalkEntity
 
     public function getAverageRating()
     {
-        return $this->data->average_rating;
+        if (!isset($this->data->average_content_rating) && !isset($this->data->average_speaker_rating)) {
+            return null;
+        }
+
+        return array(
+            "content" => $this->data->average_content_rating,
+            "speaker" => $this->data->average_speaker_rating,
+            "average" => $this->data->average_rating
+        );
     }
 
     public function getCommentUri()

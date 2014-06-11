@@ -1,6 +1,36 @@
-<div class="rating rating-{{ rating }}">
-    <img src="/img/rating-{{ rating }}.gif"
-         title="Rated {{ rating }}"
-         class="float"
-         width="117" height="21" alt="Rated {{ rating }}"/>
-</div>
+{% if style == 'fluid' %}
+    {% set class = 'col-xs-12 col-md-4' %}
+{% else %}
+    {% set class = '' %}
+{% endif %}
+
+{%  if not (rating.average == 0 and (rating.content > 0 or rating.speaker > 0)) %}
+        <div class="{{ class }}">
+            <label>Overall Rating: </label>
+            <div class="rating rating-{{ rating.average }}">
+                <img src="/img/avg-rating-{{ rating.average }}.png"
+                     title="Rated {{ rating.average }}"
+                    width="156" height="28" alt="Rated {{ rating.average }}"/>
+            </div>
+        </div>
+        <div class="{{ class }}">
+            {% if rating.content is not null and rating.speaker is not null %}
+                <label>Content: </label>
+                <div class="rating rating-{{ rating.content }}">
+                    <img src="/img/rating-{{ rating.content }}.png"
+                         title="Rated {{ rating.content }}"
+                         width="117" height="21" alt="Rated {{ rating.content }}"/>
+                </div>
+            {% endif %}
+        </div>
+        <div class="{{ class }}">
+            {% if rating.speaker is not null %}
+                <label>Delivery:</label>
+                <div class="rating rating-{{ rating.speaker }}">
+                    <img src="/img/rating-{{ rating.speaker }}.png"
+                         title="Rated {{ rating.speaker }}"
+                         width="117" height="21" alt="Rated {{ rating.speaker }}"/>
+                </div>
+            {% endif %}
+        </div>
+{% endif %}
