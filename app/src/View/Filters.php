@@ -26,7 +26,7 @@ function initialize(Twig_Environment $env)
 function img_path($suffix, $infix)
 {
     if (!$suffix && $infix = 'event_icons') {
-        $suffix = 'none.gif';
+        $suffix = 'none.png';
     }
 
     $path = '/img/' . $infix . '/' . $suffix;

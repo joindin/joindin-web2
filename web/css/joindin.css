@@ -142,7 +142,7 @@ table.schedule a:hover span.speaker {
     position: relative;
     display: -moz-inline-box;
     display: inline-block;
-    background: url(../img/rating.gif);
+    background: url(../img/rating.png);
     height: 21px;
     outline: none;
 }
@@ -171,17 +171,17 @@ table.schedule a:hover span.speaker {
 
 .rateit .rateit-hover
 {
-    background: url(../img/rating.gif) left -42px;
+    background: url(../img/rating.png) left -42px;
 }
 
 .rateit .rateit-selected
 {
-    background: url(../img/rating.gif) left -21px;
+    background: url(../img/rating.png) left -21px;
 }
 
 .rateit .rateit-preset
 {
-    background: url(../img/rating.gif) left -63px;
+    background: url(../img/rating.png) left -63px;
 }
 
 .rateit button.rateit-reset:hover, .rateit button.rateit-reset:focus
