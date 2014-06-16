@@ -27,7 +27,7 @@ class TalkController extends BaseController
         $event = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
-            echo $this->render(
+            $this->render(
                 'Event/error_404.html.twig',
                 array(
                     'message' => 'Event was not retrieved, perhaps the slug is invalid?',
@@ -47,7 +47,7 @@ class TalkController extends BaseController
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
 
-        echo $this->render(
+        $this->render(
             'Talk/index.html.twig',
             array(
                 'talk' => $talk,
@@ -107,6 +107,5 @@ class TalkController extends BaseController
         $this->application->flash('message', 'Thank you for your comment.');
         $url .= '#add-comment';
         $this->application->redirect($url);
-
     }
 }
