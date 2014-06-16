@@ -1,0 +1,21 @@
+{
+    "name": "joindin/website",
+    "license": "MIT",
+    "autoload": {
+        "psr-0":{
+            "Application": ["app/src/", "tests/"],
+            "Event":       ["app/src/", "tests/"],
+            "Search":      ["app/src/", "tests/"],
+            "Talk":        ["app/src/", "tests/"],
+            "User":        ["app/src/", "tests/"]
+        }
+    },
+    "preferred-install": "dist",
+    "minimum-stability": "stable",
+    "require": {
+        "predis/predis": "~0.8",
+        "slim/slim":     "~2.4",
+        "slim/views":    "~0.1",
+        "twig/twig":     "~1.15"
+    }
+}

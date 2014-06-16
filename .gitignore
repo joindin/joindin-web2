@@ -12,3 +12,5 @@
 .vagrant
 *.swp
 build/
+
+vendor/.git
