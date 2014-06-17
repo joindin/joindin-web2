@@ -178,12 +178,12 @@ class EventController extends BaseController
             $url = $this->application->urlFor('event-detail', array('friendly_name' => $r));
         }
 
-        if ($keyword && is_numeric($page)) {
+        if ($keyword && filter_var($page, FILTER_VALIDATE_INT)) {
             $queryString = http_build_query(array('page' => $page, 'keyword' => $keyword));
             $url = $this->application->urlFor('search-events') . '?' . $queryString;
         }
 
-        if (is_numeric($page) && !$keyword) {
+        if (filter_var($page, FILTER_VALIDATE_INT) && !$keyword) {
             $url = $this->application->urlFor('events') . '?' . http_build_query(array('page' => $page));
         }
 
@@ -199,7 +199,7 @@ class EventController extends BaseController
 
         if ($event) {
             $attendance = new EventAttendance($this->getEventApi());
-            $result = $attendance->confirm($event, $SESSION['user']);
+            $result = $attendance->confirm($event, $_SESSION['user']);
         }
 
         $this->application->response()->body(json_encode(array('success' => $result)));
