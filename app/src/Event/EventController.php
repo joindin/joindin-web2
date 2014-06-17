@@ -164,8 +164,10 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
-        $attendance = new EventAttendance($this->getEventApi(), $event, $_SESSION['user']);
-        $attendance->confirm();
+        if ($event) {
+            $attendance = new EventAttendance($this->getEventApi());
+            $attendance->confirm($event, $_SESSION['user']);
+        }
 
         $url = '/';
         $r = $this->application->request()->get('r');
@@ -195,8 +197,10 @@ class EventController extends BaseController
         $api = $this->getEventApi();
         $event = $api->getByFriendlyUrl($friendly_name);
 
-        $attendance = new EventAttendance($this->getEventApi(), $event, $_SESSION['user']);
-        $result = $attendance->confirm();
+        if ($event) {
+            $attendance = new EventAttendance($this->getEventApi());
+            $result = $attendance->confirm($event, $SESSION['user']);
+        }
 
         $this->application->response()->body(json_encode(array('success' => $result)));
     }
