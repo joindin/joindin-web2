@@ -10,9 +10,7 @@ namespace Event;
  */
 class EventAttendance
 {
-    protected $event;
     protected $apiEvent;
-    protected $user;
 
     public function __construct(EventApi $apiEvent, EventEntity $event, \User\UserEntity $user)
     {
@@ -21,8 +19,8 @@ class EventAttendance
         $this->user = $user;
     }
 
-    public function confirm()
+    public function confirm(EventEntity $event, \User\UserEntity $user)
     {
-        return $this->apiEvent->attend($this->event, $this->user);
+        return $this->apiEvent->attend($event, $user);
     }
 }
