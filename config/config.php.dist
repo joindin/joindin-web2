@@ -6,6 +6,7 @@ $config = array(
             'redis' => array(
                 'keyPrefix' => 'dev-',
             ),
+            'localUrl' => 'http://web2.dev.joind.in:8080',
             'apiUrl' => 'https://api.joind.in',
             'googleAnalyticsId' => '',
         ),
