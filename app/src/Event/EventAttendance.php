@@ -12,11 +12,9 @@ class EventAttendance
 {
     protected $apiEvent;
 
-    public function __construct(EventApi $apiEvent, EventEntity $event, \User\UserEntity $user)
+    public function __construct(EventApi $apiEvent)
     {
         $this->apiEvent = $apiEvent;
-        $this->event = $event;
-        $this->user = $user;
     }
 
     public function confirm(EventEntity $event, \User\UserEntity $user)
