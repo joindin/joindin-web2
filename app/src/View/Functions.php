@@ -24,7 +24,7 @@ function initialize(Twig_Environment $env, Slim $app)
     }));
 
     $env->addFunction(new Twig_SimpleFunction('gravatar', function($email_hash) {
-        $url = 'https://secure.gravatar.com/avatar/' . $email_hash . '?d=mm&s=50';
+        $url = 'https://secure.gravatar.com/avatar/' . $email_hash . '?d=mm&s=40';
         if (empty($email_hash)) {
             $url .= '&f=y';
         }
