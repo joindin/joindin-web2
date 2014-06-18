@@ -9,7 +9,7 @@ class UserController extends BaseController
     /**
      * Routes implemented by this class
      *
-     * @param  Slim   $app Slim application instance
+     * @param \Slim $app Slim application instance
      *
      * @return void
      */
@@ -63,12 +63,7 @@ class UserController extends BaseController
             }
         }
 
-        echo $this->render(
-            'User/login.html.twig',
-            array(
-                'error' => $error,
-            )
-        );
+        $this->render('User/login.html.twig', array('error' => $error));
     }
 
     /**
