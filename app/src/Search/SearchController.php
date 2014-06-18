@@ -60,7 +60,7 @@ class SearchController extends BaseController
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
         }
 
-        echo $this->render(
+        $this->render(
             'Event/search.html.twig',
             array(
                 'events'    => $events,
