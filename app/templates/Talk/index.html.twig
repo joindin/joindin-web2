@@ -28,7 +28,7 @@
             {% if talk.getSpeakers %}
                 &mdash;
                 {% for speaker in talk.getSpeakers %}
-                    {{ speaker.speaker_name }}{% if speaker.last and not speaker.first %}, {% endif %}
+                    {{ speaker.speaker_name }}{% if not speaker.last and not speaker.first %}, {% endif %}
                 {% endfor %}
             {% endif %}
         </h2>
