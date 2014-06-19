@@ -49,7 +49,7 @@
                         <li><a href="{{ urlFor('user-login') }}">Login</a></li>
                     {% endif %}
                 </ul>
-                <form class="navbar-form navbar-right" role="search">
+                <form class="navbar-form navbar-right" role="search" action="/search/events">
                     <div class="form-group">
                         <input type="text" name="keyword" class="form-control" value="{{ keyword }}" placeholder="Search events or talks">
                     </div>
