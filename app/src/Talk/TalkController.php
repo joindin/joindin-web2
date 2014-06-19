@@ -10,7 +10,7 @@ use Slim_Exception_Pass;
 class TalkController extends BaseController
 {
 
-    protected function defineRoutes(\Slim $app)
+    protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
         $app->get('/talk/:talkStub', array($this, 'quick'));

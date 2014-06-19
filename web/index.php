@@ -1,15 +1,9 @@
 <?php
-require_once '../app/src/Application/Autoloader.php';
-
-spl_autoload_register('Application\Autoloader::autoload');
-
 session_cache_limiter(false);
 session_start();
 
 // include dependencies
-require '../vendor/Slim/Slim.php';
-require '../vendor/TwigView.php';
-require '../vendor/predis-0.8/autoload.php';
+require '../vendor/autoload.php';
 
 // include view controller
 require '../app/src/View/Filters.php';
@@ -24,16 +18,16 @@ if (is_readable($configFile)) {
 }
 
 // initialize Slim
-$app = new Slim(
+$app = new \Slim\Slim(
     array_merge(
         $config['slim'],
         array(
-            'view' => new \TwigView(),
+            'view' => new \Slim\Views\Twig(),
         )
     )
 );
 
-$app->configureMode('development', function() use ($app) {
+$app->configureMode('development', function () use ($app) {
     error_reporting(-1);
     ini_set('display_errors', 1);
     ini_set('html_errors', 1);
@@ -55,11 +49,11 @@ $app->view()->appendData(
 );
 
 // set Twig base folder, view folder and initialize Joindin filters
-\TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
+$app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
-$app->configureMode('development', function() use ($app) {
+$app->configureMode('development', function () use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
     $env->addExtension(new \Twig_Extension_Debug());

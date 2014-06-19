@@ -6,7 +6,7 @@ use Event\EventApi;
 
 class ApplicationController extends BaseController
 {
-    protected function defineRoutes(\Slim $app)
+    protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/', array($this, 'index'));
         $app->get('/apps', array($this, 'apps'))->name('apps');
