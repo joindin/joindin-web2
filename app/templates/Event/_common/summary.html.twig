@@ -4,13 +4,13 @@ set eventUrl = urlFor(
 )
 %}
 
-<article class="event">
-    <div class="col-xs-3 col-md-2 col-lg-2 logo">
+<article class="event row">
+    <div class="col-xs-2 col-sm-2 logo text-center">
         <a href="{{ eventUrl }}">
             <img src="{{ event.getIcon|img_path("event_icons") }}">
         </a>
     </div>
-    <div class="col-xs-9 col-md-10 col-lg-10 title">
+    <div class="col-xs-10 col-sm-10 title">
         <section>
             <h3 class="header">
                 <a href="{{ eventUrl }}">{{ event.getName }}</a>

@@ -55,37 +55,34 @@
         </div><!-- /.container-fluid -->
     </nav>
 
-    <div class="container-fluid">
-
-        <div id="row">
-            <div class="container-fluid">
-                <aside class="col-xs-12 col-md-3 pull-right-md">
-                    <div class="container-fluid">
-                        {% block extraAside %}{% endblock %}
-                    </div>
-                </aside>
-                <div class="col-xs-12 col-md-9 pull-left-md">
-                    {% block body %}{% endblock %}
+    <div class="container-fluid">   
+        <div class="row">
+            <aside class="col-xs-12 col-md-3 pull-right-md">
+                <div class="container-fluid">
+                    {% block extraAside %}{% endblock %}
                 </div>
-                <aside class="col-xs-12 col-md-3 pull-right-md">
-                    <div class="container-fluid">
-                        <section>
-                            {% if not user %}
-                                {%  include '_common/login.html.twig' %}
-                            {% endif %}
-                        </section>
-                        <!-- Hidden on XS/SM as it appears right above the footer, duplicating the info -->
-                        <section class="text-center hidden-xs hidden-sm">
-                            <hr>
-                            <img src="/img/logo-combell.png" alt="Combell" />
-                            <p>
-                                <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
-                                <a href="http://www.combell.com/en">hosting</a> by Combell
-                            </p>
-                        </section>
-                    </div>
-                </aside>
+            </aside>
+            <div class="col-xs-12 col-md-9 pull-left-md">
+                {% block body %}{% endblock %}
             </div>
+            <aside class="col-xs-12 col-md-3 pull-right-md">
+                <div class="container-fluid">
+                    <section>
+                        {% if not user %}
+                            {%  include '_common/login.html.twig' %}
+                        {% endif %}
+                    </section>
+                    <!-- Hidden on XS/SM as it appears right above the footer, duplicating the info -->
+                    <section class="text-center hidden-xs hidden-sm">
+                        <hr>
+                        <img src="/img/logo-combell.png" alt="Combell" />
+                        <p>
+                            <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
+                            <a href="http://www.combell.com/en">hosting</a> by Combell
+                        </p>
+                    </section>
+                </div>
+            </aside>
         </div>
     </div>
 
