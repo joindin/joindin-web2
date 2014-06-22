@@ -67,6 +67,34 @@ class BaseApi
             $status = $matches[1];
         }
 
-        return array($status, $result);
+        $headers = $this->extractListOfHeaders($http_response_header);
+
+        return array($status, $result, $headers);
+    }
+
+    /**
+     * Converts an array of headers, including tag, to an associative array.
+     *
+     * By default many header-providing methods return an array with the complete line of a header. Because we want
+     * to be able to locate and return the contents of a specific header we convert the aforementioned array into an
+     * associative array where the key represents the header tag, in lowercase, and the value the contents.
+     *
+     * @param string[] $rawHeaders
+     *
+     * @return string[]
+     */
+    private function extractListOfHeaders(array $rawHeaders)
+    {
+        $headers = array();
+        foreach ($rawHeaders as $header) {
+            $header = explode(':', $header, 2);
+            if (count($header) < 2) {
+                continue;
+            }
+
+            $headers[strtolower($header[0])] = trim($header[1]);
+        }
+
+        return $headers;
     }
 }
