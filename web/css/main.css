@@ -156,14 +156,29 @@ h2 {
     text-align: right;
 }
 
-#login {
+#login,form#event {
     margin-top: 2em;
     margin-bottom: 2em;
 }
 
-#login label {
-    width: 75px;
+#login label, #event label {
+    width: 150px;
     display: inline-block;
+}
+label.required:after {
+    content: '*'
+}
+#event label.full-width {
+    width: auto;
+}
+
+fieldset legend {
+    font-weight: bold;
+    padding: 2px 10px 0;
+}
+fieldset {
+    border: 1px solid #ddd;
+    padding: 5px 10px;
 }
 
 nav li a {

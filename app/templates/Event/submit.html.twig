@@ -1,0 +1,28 @@
+{% extends '/layout.html.twig' %}
+
+{% block body %}
+<h2 class="title">Submit a new event</h2>
+<div>
+    {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+    {{ form_errors(form) }}
+
+    <fieldset>
+        <legend>Event</legend>
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.timezone) }}
+        {{ form_row(form.start_date) }}
+        {{ form_row(form.end_date) }}
+        {{ form_row(form.href) }}
+    </fieldset>
+    <fieldset>
+        <legend>Call for Papers</legend>
+        {{ form_row(form.cfp_start_date, {'label' : 'Start'}) }}
+        {{ form_row(form.cfp_end_date, {'label' : 'End'}) }}
+        {{ form_row(form.cfp_url, {'label' : 'Website'}) }}
+    </fieldset>
+
+    <input type="submit" value="Submit" />
+    {{ form_end(form) }}
+</div>
+{% endblock %}
