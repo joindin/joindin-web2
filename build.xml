@@ -3,7 +3,7 @@
 <project name="joindin-responsive" default="build" basedir=".">
  <property name="basedir" value="."/>
 
- <target name="build" depends="phplint,phpunit" />
+ <target name="build" depends="phplint,phpunit,phpcs" />
 
  <target name="phplint" description="Run php -l over the fileset">
    <phplint haltonfailure="true">
@@ -16,8 +16,11 @@
  </target>
 
  <target name="phpcs">
-   <phpcodesniffer standard="PSR1" description="Run PSR1 standards over the codebase">
+   <phpcodesniffer standard="PSR2" description="Run PSR2 standards over the codebase" haltonerror="true">
      <fileset dir="${basedir}/app">
+       <include name="**/*.php"/>
+     </fileset>
+     <fileset dir="${basedir}/tests">
        <include name="**/*.php"/>
      </fileset>
      <formatter type="full" usefile="false"/>
