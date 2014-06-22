@@ -59,12 +59,12 @@ class EventController extends BaseController
     {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
-        if($event) {
-            $quicklink = $this->application->request()->headers("host") 
+        if ($event) {
+            $quicklink = $this->application->request()->headers("host")
                 . $this->application->urlFor(
-                    "event-quicklink", 
-                    array("stub" => $event->getStub()
-                ));
+                    "event-quicklink",
+                    array("stub" => $event->getStub())
+                );
 
             $comments = $eventApi->getComments($event->getCommentsUri(), true);
             $this->render(
@@ -89,7 +89,7 @@ class EventController extends BaseController
 
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
-        if($event) {
+        if ($event) {
             $this->render(
                 'Event/map.html.twig',
                 array(
@@ -102,12 +102,12 @@ class EventController extends BaseController
         }
     }
 
-     public function schedule($friendly_name)
-     {
+    public function schedule($friendly_name)
+    {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
-        if($event) {
+        if ($event) {
             $keyPrefix = $this->cfg['redis']['keyPrefix'];
             $cache = new CacheService($keyPrefix);
             $talkDb = new TalkDb($cache);
@@ -127,24 +127,21 @@ class EventController extends BaseController
             $events_url = $this->application->urlFor("events-index");
             $this->application->redirect($events_url);
         }
-
-     }
+    }
 
     public function quicklink($stub)
     {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByStub($stub);
-        if($event) {
+        if ($event) {
             $this->application->redirect(
-                $this->application->urlFor("event-detail", 
-                    array("friendly_name" => $event->getUrlFriendlyName())),
+                $this->application->urlFor("event-detail", array("friendly_name" => $event->getUrlFriendlyName())),
                 301
             );
         } else {
             $events_url = $this->application->urlFor("events-index");
             $this->application->redirect($events_url);
         }
-
     }
 
     public function addComment($friendly_name)

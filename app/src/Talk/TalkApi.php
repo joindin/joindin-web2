@@ -53,7 +53,7 @@ class TalkApi extends BaseApi
      */
     public function getTalk($talk_uri, $verbose = false)
     {
-        if($verbose) {
+        if ($verbose) {
             $talk_uri = $talk_uri . '?verbose=yes';
         }
 
@@ -71,7 +71,7 @@ class TalkApi extends BaseApi
      */
     public function getComments($comment_uri, $verbose = false)
     {
-        if($verbose) {
+        if ($verbose) {
             $comment_uri = $comment_uri . '?verbose=yes';
         }
 
@@ -79,7 +79,7 @@ class TalkApi extends BaseApi
 
         $commentData = array();
 
-        foreach($comments['comments'] as $comment) {
+        foreach ($comments['comments'] as $comment) {
             $commentData[] = new TalkCommentEntity($comment);
         }
 

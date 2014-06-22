@@ -179,7 +179,8 @@ class EventEntity
         return $this->data->attending;
     }
 
-    public function isPastEvent() {
+    public function isPastEvent()
+    {
         $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getEndDate());
         $now = new DateTime(null, $endDate->getTimezone());
         $now->setTime(0, 0, 0);
@@ -204,5 +205,4 @@ class EventEntity
 
         return $this->data->stub;
     }
-
 }

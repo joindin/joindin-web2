@@ -58,5 +58,4 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($comment->getComment());
         $this->assertNull($comment->getCommentSource());
     }
-
 }

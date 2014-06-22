@@ -37,7 +37,7 @@ class SearchApi extends BaseApi
         $meta = array_pop($events);
 
         $collectionData = array();
-        if(isset($events['events'])) {
+        if (isset($events['events'])) {
             foreach ($events['events'] as $event) {
                 $collectionData['events'][] = new EventEntity($event);
             }
@@ -82,6 +82,4 @@ class SearchApi extends BaseApi
 
         return $collectionData;
     }
-
-
 }
