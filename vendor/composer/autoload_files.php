@@ -7,4 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     $vendorDir . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/functions.php',
+    $vendorDir . '/guzzlehttp/streams/src/functions.php',
+    $vendorDir . '/guzzlehttp/guzzle/src/functions.php',
 );
