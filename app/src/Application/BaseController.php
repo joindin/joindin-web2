@@ -1,7 +1,7 @@
 <?php
 namespace Application;
 
-use Slim;
+use Slim\Slim;
 use Twig_Error_Runtime;
 
 abstract class BaseController

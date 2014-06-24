@@ -13,7 +13,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    protected function defineRoutes(\Slim $app)
+    protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/user/logout', array($this, 'logout'))->name('user-logout');
         $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
