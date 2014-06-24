@@ -63,7 +63,9 @@ $app->configureMode('development', function () use ($app) {
 // register middlewares
 $app->add(new Middleware\ValidationMiddleware());
 $app->add(new Middleware\FormMiddleware());
+$app->add(new \Application\ServiceProvider());
 $app->add(new \Event\ServiceProvider());
+$app->add(new \Talk\ServiceProvider());
 
 // register routes
 new Application\ApplicationController($app);

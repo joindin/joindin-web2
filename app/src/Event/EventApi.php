@@ -22,18 +22,12 @@ class EventApi
     /**
      * Constructs a new API Client and initializes the associated services.
      *
-     * @param array   $config
-     * @param string  $accessToken
+     * @param Client   $client
      * @param EventDb $eventDb
      */
-    public function __construct(array $config, $accessToken, EventDb $eventDb)
+    public function __construct(Client $client, EventDb $eventDb)
     {
-        $apiClient = new Client(
-            array(
-                'base_url'     => $config['apiUrl'],
-                'access_token' => $accessToken
-            )
-        );
+        $apiClient = $client;
 
         $this->eventService        = $apiClient->getService(new Events());
         $this->eventCommentService = $apiClient->getService(new Comments());
