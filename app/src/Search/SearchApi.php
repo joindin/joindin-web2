@@ -3,6 +3,8 @@ namespace Search;
 
 use Application\BaseApi;
 use Event\EventEntity;
+use GuzzleHttp\Command\Guzzle\GuzzleClient;
+use Joindin\Api\Response;
 
 /**
  * Class SearchApi
@@ -10,6 +12,16 @@ use Event\EventEntity;
  */
 class SearchApi extends BaseApi
 {
+    /** @var GuzzleClient */
+    private $eventService;
+
+    public function __construct($config, $accessToken, GuzzleClient $eventService)
+    {
+        parent::__construct($config, $accessToken);
+
+        $this->eventService = $eventService;
+    }
+
     /**
      * Calls API to search for events by title and returns a collection of events
      *
@@ -21,28 +33,23 @@ class SearchApi extends BaseApi
      */
     public function getEventCollection($keyword, $limit = 10, $start = 1, $filter = null)
     {
-        $url = $this->baseApiUrl . '/v2.1/events'
-            . '?resultsperpage=' . $limit
-            . '&title=' . $keyword
-            . '&start=' . $start;
-
+        $params = array(
+            'resultsperpage' => $limit,
+            'title' => $keyword,
+            'start' => $start
+        );
         if ($filter) {
-            $url .= '&filter=' . $filter;
+            $params['filter'] = $filter;
         }
 
-        $events = (array)json_decode(
-            $this->apiGet($url)
-        );
-
-        $meta = array_pop($events);
+        /** @var Response $response */
+        $response = $this->eventService->list($params);
 
         $collectionData = array();
-        if(isset($events['events'])) {
-            foreach ($events['events'] as $event) {
-                $collectionData['events'][] = new EventEntity($event);
-            }
-            $collectionData['pagination'] = $meta;
+        foreach ($response->getResource() as $event) {
+            $collectionData['events'][] = $event;
         }
+        $collectionData['pagination'] = $response->getMeta();
 
         return $collectionData;
     }

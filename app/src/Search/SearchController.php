@@ -18,7 +18,7 @@ class SearchController extends BaseController
 
     /**
      * Only one route for
-     * @param \Slim $app
+     * @param \Slim\Slim $app
      */
     protected function defineRoutes(\Slim\Slim $app)
     {
@@ -56,7 +56,7 @@ class SearchController extends BaseController
             $perPage = 10;
             $start = ($page -1) * $perPage;
 
-            $event_collection = new SearchApi($this->cfg, $this->accessToken);
+            $event_collection = new SearchApi($this->cfg, $this->accessToken, $this->application->api_event_service);
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
         }
 
