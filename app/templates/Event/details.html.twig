@@ -1,9 +1,5 @@
 {% extends '/layout.html.twig' %}
 
-{% block extra_javascript %}
-    {% include '_common/shorturl-js.html.twig' %}
-{%  endblock %}
-
 {% block body %}
             {% include 'Event/_common/event_header.html.twig' %}
             <p>{{ event.getDescription|format_string|raw }}</p>
@@ -35,19 +31,8 @@
 {% block extraAside %}
     {% if event.getStub %}
         <section class="short-url hidden-xs hidden-sm">
-            <form>
-                <div class="form-group">
-                    <label class="control-label">Short URL:</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" value="{{ shortUrlForEvent(event.getStub) }}">
-                        <span class="input-group-btn">
-                            <a class="btn btn-default clipboard" data-clipboard-text="{{ shortUrlForEvent(event.getStub) }}" title="Copy to clipboard">
-                                <i class="fa fa-clipboard"></i>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </form>
+            <label class="control-label">Short URL:</label>
+            <div>{{ shortUrlForEvent(event.getStub) }}</div>
         </section>
     {% endif %}
     {% if event.getWebsiteAddress %}

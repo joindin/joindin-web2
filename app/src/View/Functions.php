@@ -44,27 +44,17 @@ function initialize(Twig_Environment $env, Slim $app)
 
     $env->addFunction(
         new Twig_SimpleFunction('shortUrlForTalk', function ($talkStub) use ($app) {
-            $scheme = $app->request()->headers('x-forwarded-proto');
-            if (empty($scheme)) {
-                $scheme = 'https';
-                if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off') {
-                    $scheme = 'http';
-                }
-            }
-            return $scheme .'://' . $app->request()->headers('host') . $app->urlFor('talk-quicklink', array('talkStub' => $talkStub));
+            $scheme = $app->request()->getScheme();
+            $host = $app->request()->headers('host');
+            return "$scheme://$host" . $app->urlFor('talk-quicklink', array('talkStub' => $talkStub));
         })
     );
 
     $env->addFunction(
         new Twig_SimpleFunction('shortUrlForEvent', function ($eventStub) use ($app) {
-            $scheme = $app->request()->headers('x-forwarded-proto');
-            if (empty($scheme)) {
-                $scheme = 'https';
-                if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off') {
-                    $scheme = 'http';
-                }
-            }
-            return $scheme .'://' . $app->request()->headers('host') . $app->urlFor('event-quicklink', array('stub' => $eventStub));
+            $scheme = $app->request()->getScheme();
+            $host = $app->request()->headers('host');
+            return "$scheme://$host" . $app->urlFor('event-quicklink', array('stub' => $eventStub));
         })
     );
 }
