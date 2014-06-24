@@ -6,17 +6,11 @@ var rename = require( 'gulp-rename' )
 var clean = require( 'gulp-clean' )
 var header = require( 'gulp-header' )
 
-// order of operation: create-temp-file, usemin, add-comments, remove-temp-file
+// order of operation: usemin, add-comments, remove-temp-file
 
 gulp.task('default', ['remove-temp-file']);
 
-gulp.task('create-temp-file', function() {
-    return gulp.src('app/templates/layout.html.twig')
-        .pipe(rename("layout.temp.twig"))
-        .pipe(gulp.dest('app/templates'));
-});
-
-gulp.task('usemin', ['create-temp-file'], function() {
+gulp.task('usemin', function() {
 
     gulp.src('web/css/site.css')
         .pipe(clean());
@@ -24,7 +18,7 @@ gulp.task('usemin', ['create-temp-file'], function() {
     gulp.src('web/js/site.js')
         .pipe(clean());
 
-    return gulp.src('app/templates/layout.temp.twig')
+    return gulp.src('app/templates/layout.html.twig')
         .pipe(usemin({
             assetsDir: 'web',
             css: [minifyCss(), 'concat'],
@@ -44,9 +38,7 @@ gulp.task('add-comments', ['usemin'], function() {
 })
 
 gulp.task('remove-temp-file', ['add-comments'], function() {
-    gulp.src('app/templates/layout.temp.twig')
-        .pipe(clean())
-    gulp.src('web/layout.temp.twig')
+    gulp.src('web/layout.html.twig')
         .pipe(clean())
 });
 
