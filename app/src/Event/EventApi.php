@@ -1,19 +1,36 @@
 <?php
 namespace Event;
 
-use Application\BaseApi;
+use GuzzleHttp\Command\Guzzle\GuzzleClient;
+use Joindin\Api\Client;
+use Joindin\Api\Description\Event\Comments;
+use Joindin\Api\Description\Events;
+use Joindin\Api\Entity\Event;
+use Joindin\Api\Response;
 
-class EventApi extends BaseApi
+class EventApi
 {
-    /**
-     * @var EventDb
-     */
+    /** @var EventDb */
     protected $eventDb;
 
-    public function __construct($config, $accessToken, EventDb $eventDb)
+    /** @var GuzzleClient  */
+    protected $eventService;
+
+    /** @var GuzzleClient  */
+    protected $eventCommentService;
+
+    public function __construct(array $config, $accessToken, EventDb $eventDb)
     {
-        parent::__construct($config, $accessToken);
-        $this->eventDb = $eventDb;
+        $apiClient = new Client(
+            array(
+                'base_url'     => $config['apiUrl'],
+                'access_token' => $accessToken
+            )
+        );
+
+        $this->eventService        = $apiClient->getService(new Events());
+        $this->eventCommentService = $apiClient->getService(new Comments());
+        $this->eventDb             = $eventDb;
     }
 
     /**
@@ -23,109 +40,71 @@ class EventApi extends BaseApi
      * @param integer $start  Start value for pagination
      * @param string  $filter Filter to apply
      *
-     * @return EventEntity model
+     * @return array
      */
     public function getCollection($limit = 10, $start = 1, $filter = null)
     {
-        $url = $this->baseApiUrl . '/v2.1/events'
-            . '?resultsperpage=' . $limit
-            . '&start=' . $start;
-
-        if ($filter) {
-            $url .= '&filter=' . $filter;
-        }
-
-        return $this->queryEvents($url);
+        return $this->queryEvents(
+            $this->eventService->list(array('resultsperpage' => $limit, 'start' => $start, 'filter' => $filter))
+        );
     }
 
     /**
-     * Look up this friendlyUrl in the DB, get an API endpoint, fetch data
-     * and return us an event
+     * Look up this friendlyUrl in the DB, get an API endpoint, fetch data and return us an event.
      *
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
-     * @return EventEntity The event we found, or false if something went wrong
+     *
+     * @return Event|false The event we found, or false if something went wrong
      */
-    public function getByFriendlyUrl($friendlyUrl) {
-        $event = $this->eventDb->load('url_friendly_name', $friendlyUrl);
-
-        if (!$event) {
-            // don't throw an exception, Slim eats them
-            return false;
-        }
-
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
-
-        return $event;
-
+    public function getByFriendlyUrl($friendlyUrl)
+    {
+        return $this->fetchEventFromDbByProperty('url_friendly_name', $friendlyUrl);
     }
 
     /**
-     * Look up this stub in the DB, get an API endpoint, fetch data
-     * and return us an event
+     * Look up this stub in the DB, get an API endpoint, fetch data and return us an event.
      *
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
-     * @return EventEntity The event we found, or false if something went wrong
+     *
+     * @return Event|false The event we found, or false if something went wrong
      */
-    public function getByStub($stub) {
-        $event = $this->eventDb->load('stub', $stub);
-
-        if (!$event) {
-            return false;
-        }
-
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
-
-        return $event;
+    public function getByStub($stub)
+    {
+        return $this->fetchEventFromDbByProperty('stub', $stub);
     }
 
 	/**
-	 * Get comments for given event
-	 * @param $comment_uri
-	 * @param bool $verbose
-	 * @return Comment[]
+	 * Get comments for given event comment uri.
+     *
+	 * @param string $commentUri
+	 * @param bool   $verbose
+     *
+	 * @return Event\Comment[]
 	 */
-    public function getComments($comment_uri, $verbose = false)
+    public function getComments($commentUri, $verbose = false)
     {
-        if($verbose) {
-            $comment_uri = $comment_uri . '?verbose=yes';
-        }
+        /** @var Response $response */
+        $response = $this->eventCommentService->list(array('url' => $commentUri));
 
-        $comments = (array)json_decode($this->apiGet($comment_uri));
-
-        $commentData = array();
-
-        foreach($comments['comments'] as $comment) {
-            $commentData[] = new EventCommentEntity($comment);
-        }
-
-        return $commentData;
+        return $response->getResource();
     }
 
-    public function addComment($event, $comment)
+    public function addComment(Event $event, $comment)
     {
-        $uri = $event->getCommentsUri();
-        $params = array(
-            'comment' => $comment,
-        );
-        list ($status, $result) = $this->apiPost($uri, $params);
-
-        if ($status == 201) {
-            return true;
+        try {
+            $this->eventCommentService->submit(array('url' => $event->getCommentsUri(), 'comment' => $comment));
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to add comment');
         }
-        throw new \Exception("Failed to add comment: " . $result);
     }
 
-    public function attend(EventEntity $event)
+    public function attend(Event $event)
     {
-        list ($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
-
-        if ($status == 201) {
-            return true;
+        try {
+            $this->eventService->getHttpClient()->post($event->getAttendingUri());
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to mark you as attending');
         }
-
-        throw new \Exception("Failed to mark you as attending: " . $result);
     }
 
     /**
@@ -137,7 +116,7 @@ class EventApi extends BaseApi
      *
      * @see EventFormType::buildForm() for a list of supported fields in the $data array and their constraints.
      *
-     * @return EventEntity
+     * @return Event
      */
     public function submit(array $data)
     {
@@ -163,15 +142,15 @@ class EventApi extends BaseApi
             ? $data['cfp_end_date']->format('Y-m-d')
             : $data['cfp_end_date'];
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
-
-        // if successful, return event entity represented by the URL in the Location header
-        if ($status == 201) {
-            $response = $this->queryEvents($headers['location']);
-            return current($response['events']);
+        try {
+            $response = $this->eventService->submit($data);
+        } catch (\Exception $e) {
+            throw new \Exception('Your event submission was not accepted, the server reports: ' . $e->getMessage());
         }
 
-        throw new \Exception('Your event submission was not accepted, the server reports: ' . $result);
+        $response = $this->queryEvents($response['location']);
+
+        return current($response['events']);
     }
 
     /**
@@ -180,24 +159,21 @@ class EventApi extends BaseApi
      * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
      * Event entities.
      *
-     * @param string $url API Url to query for one or more events. Either a listing can be retrieved or a single event.
+     * @param Response $response
      *
      * @return array
      */
-    private function queryEvents($url)
+    private function queryEvents(Response $response)
     {
-        $events = (array)json_decode($this->apiGet($url));
-        $meta   = array_pop($events);
+        /** @var Event[] $events */
+        $events = $response->getResource();
+        foreach ($events as $event) {
+            $this->saveEventUrl($event);
+        }
 
         $collectionData = array();
-        foreach ($events['events'] as $event) {
-            $thisEvent = new EventEntity($event);
-            $collectionData['events'][] = $thisEvent;
-
-            // save the URL so we can look up by it
-            $this->saveEventUrl($thisEvent);
-        }
-        $collectionData['pagination'] = $meta;
+        $collectionData['events']     = $events;
+        $collectionData['pagination'] = $response->getMeta();
 
         return $collectionData;
     }
@@ -205,12 +181,30 @@ class EventApi extends BaseApi
     /**
      * Take an event and save the url_friendly_name and the API URL for that
      *
-     * @param EventEntity $event The event to take details from
+     * @param Event $event The event to take details from
      *
      * @return void
      */
-    private function saveEventUrl(EventEntity $event)
+    private function saveEventUrl(Event $event)
     {
         $this->eventDb->save($event);
+    }
+
+    /**
+     * @param $propertyName
+     * @param $propertyValue
+     * @return bool|mixed
+     */
+    private function fetchEventFromDbByProperty($propertyName, $propertyValue)
+    {
+        $event = $this->eventDb->load($propertyName, $propertyValue);
+        if (! $event) {
+            return false;
+        }
+
+        /** @var Response $response */
+        $response = $this->eventService->fetch(array('url' => $event['uri']));
+
+        return current($response->getResource());
     }
 }

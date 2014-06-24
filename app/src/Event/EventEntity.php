@@ -3,6 +3,9 @@ namespace Event;
 
 use DateTime;
 
+/**
+ * @deprecated this entity is superceded by \Joindin\Api\Entity\Event
+ */
 class EventEntity
 {
     private $data;
