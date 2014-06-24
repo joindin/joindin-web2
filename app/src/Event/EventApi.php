@@ -150,19 +150,12 @@ class EventApi extends BaseApi
         }
 
         // Convert datetime objects to strings
-        $data['start_date'] = $data['start_date'] instanceof \DateTime
-            ? $data['start_date']->format('Y-m-d')
-            : $data['start_date'];
-        $data['end_date'] = $data['end_date'] instanceof \DateTime
-            ? $data['end_date']->format('Y-m-d')
-            : $data['end_date'];
-        $data['cfp_start_date'] = $data['cfp_start_date'] instanceof \DateTime
-            ? $data['cfp_start_date']->format('Y-m-d')
-            : $data['cfp_start_date'];
-        $data['cfp_end_date'] = $data['cfp_end_date'] instanceof \DateTime
-            ? $data['cfp_end_date']->format('Y-m-d')
-            : $data['cfp_end_date'];
-
+        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        foreach ($dateFields as $dateField) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+                $data[$dateField] = $data[$dateField]->format('Y-m-d');
+            }
+        }
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
         // if successful, return event entity represented by the URL in the Location header
