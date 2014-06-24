@@ -62,10 +62,9 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 To use minified JS and CSS files, you need gulp:
 
 1. Install node and npm.
-2. Install gulp.
-3. In the root of web2, run `node install`.
-4. Run `gulp` to create web/js/site.js and web/css/site.css.
-5. Update config.php to set `useMinifiedFiles` to true.
+2. In the root of web2, run `npm install`.
+3. Run `npm run gulp` to create web/js/site.js and web/css/site.css.
+4. Update config.php to set `$config['slim']['custom']['useMinifiedFiles']` to true.
 
 ## Other Resources
 
