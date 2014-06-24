@@ -15,26 +15,14 @@ class ApplicationController extends BaseController
 
     public function index()
     {
-        $page = ((int)$this->application->request()->get('page') === 0)
-            ? 1
-            : $this->application->request()->get('page');
-
+        $page    = $this->application->request()->get('page');
+        $page    = ((int)$page === 0) ? 1 : $page;
         $perPage = 6;
-        $start = ($page -1) * $perPage;
+        $start   = ($page -1) * $perPage;
 
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $events = $this->getEventApi()->getCollection($perPage, $start, 'hot');
 
-        $cache = new CacheService($keyPrefix);
-        $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
-        $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
-
-        $this->render(
-            'Application/index.html.twig',
-            array(
-                'events' => $hot_events,
-                'page' => $page,
-            )
-        );
+        $this->render('Application/index.html.twig', array('events' => $events, 'page'   => $page));
     }
 
     public function apps()
@@ -48,5 +36,15 @@ class ApplicationController extends BaseController
     public function about()
     {
         $this->render('Application/about.html.twig');
+    }
+
+    /**
+     * Returns the service used to talk to the API for events.
+     *
+     * @return EventApi
+     */
+    protected function getEventApi()
+    {
+        return $this->application->event_api_service;
     }
 }

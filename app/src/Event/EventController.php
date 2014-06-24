@@ -2,15 +2,12 @@
 namespace Event;
 
 use Application\BaseController;
-use Application\CacheService;
 use Joindin\Api\Entity\Event;
 use Slim\Exception\Stop;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator;
-use Talk\TalkDb;
-use Talk\TalkApi;
 
 class EventController extends BaseController
 {
@@ -218,6 +215,7 @@ class EventController extends BaseController
             $status
         );
     }
+
     /**
      * Returns the service used to talk to the API for events.
      *
