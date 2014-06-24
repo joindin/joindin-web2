@@ -1,36 +1,31 @@
-<h2 class="title">
-    <img
-            src="{{ event.getIcon|img_path("event_icons") }}"
-            alt=" "
-            class="logo"/>
-    {{ event.getName }}
+<div class="page-header">
+    <div class="row event">
+        <div class="col-xs-12 col-sm-2 logo text-center">
+            <img src="{{ event.getIcon|img_path("event_icons") }}">
+        </div>
+        <div class="col-xs-12 col-sm-10 title">
+            <h2>
+                {{ event.getName }}
+                <br>
+                <small>
+                    {{ event.getStartDate|date('M d Y') }}
+                    {%  if event.getStartDate|date('M d Y')
+                    is not sameas(event.getEndDate|date('M d Y')) %}
+                        &ndash; {{ event.getEndDate|date('M d Y') }}
+                    {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
 
-    <p class="meta">
-        {{ event.getStartDate|date('M d Y') }}
-        {%  if event.getStartDate|date('M d Y')
-        is not sameas(event.getEndDate|date('M d Y')) %}
-            &ndash; {{ event.getEndDate|date('M d Y') }}
-        {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
+                    {% include 'Event/_common/attending_string.html.twig' %}
 
-        {% include 'Event/_common/attending_string.html.twig' %}
-
-        {% if event.isAttending == false and user %}
-            <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}?r={{ event.getUrlFriendlyName |url_encode }}"
-               class="button">
-                   {% if event.isPastEvent %}
-                       I attended
-                   {% else %}
-                       I'm attending
-                   {% endif %}
-               </a>
-        {% endif %}
-    </p>
-</h2>
-
-<nav>
-    <ul>
-        <li><a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">Details</a></li>
-        <li><a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">Map</a></li>
-        <li><a href="{{ urlFor('event-schedule', {"friendly_name": event.getUrlFriendlyName}) }}">Schedule</a></li>
-    </ul>
-</nav>
+                    {% include 'Event/_common/attending.html.twig' %}
+                </small>
+            </h2>
+            <nav>
+                <ul class="nav nav-pills">
+                    <li><a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">Details</a></li>
+                    <li><a href="{{ urlFor('event-schedule', {"friendly_name": event.getUrlFriendlyName}) }}">Schedule</a></li>
+                    <li><a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">Map</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

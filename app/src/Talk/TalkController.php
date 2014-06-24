@@ -13,7 +13,7 @@ class TalkController extends BaseController
     protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
-        $app->get('/talk/:talkStub', array($this, 'quick'));
+        $app->get('/talk/:talkStub', array($this, 'quick'))->name('talk-quicklink');
         $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
     }
 

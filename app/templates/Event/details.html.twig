@@ -1,54 +1,63 @@
 {% extends '/layout.html.twig' %}
 
+{% block extra_javascript %}
+    {% include '_common/shorturl-js.html.twig' %}
+{%  endblock %}
+
 {% block body %}
-    {% include 'Event/_common/event_header.html.twig' %}
+            {% include 'Event/_common/event_header.html.twig' %}
+            <p>{{ event.getDescription|format_string|raw }}</p>
+            <hr>
+            {% if comments %}
+                <h2>Comments</h2>
+                {% for comment in comments %}
+                    {% include '_common/comment.html.twig' with {'comment': comment} %}
+                {% endfor %}
+            {% endif %}
 
-    <p>{{ event.getDescription|format_string|raw }}</p>
-
-    <div id="comments">
-        {% if comments %}
-            <h2>Comments</h2>
-            <ul>
-            {% for comment in comments %}
-                {% include '_common/comment.html.twig' with {'comment': comment} %}
-            {% endfor %}
-            </ul>
-        {% endif %}
-
-        {% if user %}
             <h2>Write a comment</h2>
-            <form id="add-comment" method="POST" action="{{ urlFor('event-add-comment', {'friendly_name': event.getUrlFriendlyName}) }}">
-            <div>
-                <label for="comment">Your comment:</label>
-                <textarea id="comment" name="comment"></textarea>
-            </div>
-            <div>
-                <input type="submit" value="Submit comment">
-            </div>
-            </form>
-        {% else %}
-            <a href="{{ urlFor('user-login') }}">Login</a> to write a comment
-        {% endif %}
-    </div>
+            {% if user %}
+                <form id="add-comment" role="form" method="POST" action="{{ urlFor('event-add-comment', {'friendly_name': event.getUrlFriendlyName}) }}">
+                    <div class="form-group">
+                        <label for="comment">Your comment:</label>
+                        <textarea id="comment" class="form-control" name="comment"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit comment</button>
+                    </div>
+                </form>
+            {% else %}
+                <a href="{{ urlFor('user-login') }}">Login</a> to write a comment
+            {% endif %}
 {% endblock %}
 
 
 {% block extraAside %}
     {% if event.getStub %}
-        <div class="extraAside">
-            <p>
-                Short URL to this event:
-                <a href="{{ urlFor('event-quicklink', {"stub": event.getStub}) }}">
-                    {{ quicklink }}
-                </a>
-            </p>
-        </div>
+        <section class="short-url hidden-xs hidden-sm">
+            <form>
+                <div class="form-group">
+                    <label class="control-label">Short URL:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ shortUrlForEvent(event.getStub) }}">
+                        <span class="input-group-btn">
+                            <a class="btn btn-default clipboard" data-clipboard-text="{{ shortUrlForEvent(event.getStub) }}" title="Copy to clipboard">
+                                <i class="fa fa-clipboard"></i>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </section>
     {% endif %}
     {% if event.getWebsiteAddress %}
         <div class="extraAside">
             <p>
+                <label>Event Website:</label>
+                <br>
+                <i class="fa fa-external-link-square"></i>
                 <a href="{{ event.getWebsiteAddress }}">
-                    Visit event website
+                    {{ event.getWebsiteAddress }}
                 </a>
             </p>
         </div>
