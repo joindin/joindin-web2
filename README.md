@@ -57,6 +57,16 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
        **Create a local copy of the API from the [GitHub project](https://github.com/joindin/joindin-api) and then you can log in to it from your web2 installation**
  
 
+## Minification
+
+To use minified JS and CSS files, you need gulp:
+
+1. Install node and npm.
+2. Install gulp.
+3. In the root of web2, run `node install`.
+4. Run `gulp` to create web/js/site.js and web/css/site.css.
+5. Update config.php to set `useMinifiedFiles` to true.
+
 ## Other Resources
 
 * The main website http://joind.in
