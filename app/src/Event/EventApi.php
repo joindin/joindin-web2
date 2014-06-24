@@ -22,16 +22,15 @@ class EventApi
     /**
      * Constructs a new API Client and initializes the associated services.
      *
-     * @param Client   $client
-     * @param EventDb $eventDb
+     * @param EventDb      $cache
+     * @param GuzzleClient $eventService
+     * @param GuzzleClient $eventCommentService
      */
-    public function __construct(Client $client, EventDb $eventDb)
+    public function __construct(EventDb $cache, GuzzleClient $eventService, GuzzleClient $eventCommentService)
     {
-        $apiClient = $client;
-
-        $this->eventService        = $apiClient->getService(new Events());
-        $this->eventCommentService = $apiClient->getService(new Comments());
-        $this->cache               = $eventDb;
+        $this->cache               = $cache;
+        $this->eventService        = $eventService;
+        $this->eventCommentService = $eventCommentService;
     }
 
     /**
