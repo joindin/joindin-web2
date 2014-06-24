@@ -11,7 +11,7 @@ use Joindin\Api\Response;
 class EventApi
 {
     /** @var EventDb */
-    protected $eventDb;
+    protected $cache;
 
     /** @var GuzzleClient  */
     protected $eventService;
@@ -19,6 +19,13 @@ class EventApi
     /** @var GuzzleClient  */
     protected $eventCommentService;
 
+    /**
+     * Constructs a new API Client and initializes the associated services.
+     *
+     * @param array   $config
+     * @param string  $accessToken
+     * @param EventDb $eventDb
+     */
     public function __construct(array $config, $accessToken, EventDb $eventDb)
     {
         $apiClient = new Client(
@@ -30,7 +37,7 @@ class EventApi
 
         $this->eventService        = $apiClient->getService(new Events());
         $this->eventCommentService = $apiClient->getService(new Comments());
-        $this->eventDb             = $eventDb;
+        $this->cache               = $eventDb;
     }
 
     /**
@@ -44,9 +51,16 @@ class EventApi
      */
     public function getCollection($limit = 10, $start = 1, $filter = null)
     {
-        return $this->queryEvents(
-            $this->eventService->list(array('resultsperpage' => $limit, 'start' => $start, 'filter' => $filter))
+        /** @var Response $response */
+        $response = $this->eventService->list(
+            array('resultsperpage' => $limit, 'start' => $start, 'filter' => $filter)
         );
+
+        /** @var Event[] $events */
+        $events = $response->getResource();
+        $this->storeEventsInCache($events);
+
+        return array('events' => $events, 'pagination' => $response->getMeta());
     }
 
     /**
@@ -129,18 +143,12 @@ class EventApi
         }
 
         // Convert datetime objects to strings
-        $data['start_date'] = $data['start_date'] instanceof \DateTime
-            ? $data['start_date']->format('Y-m-d')
-            : $data['start_date'];
-        $data['end_date'] = $data['end_date'] instanceof \DateTime
-            ? $data['end_date']->format('Y-m-d')
-            : $data['end_date'];
-        $data['cfp_start_date'] = $data['cfp_start_date'] instanceof \DateTime
-            ? $data['cfp_start_date']->format('Y-m-d')
-            : $data['cfp_start_date'];
-        $data['cfp_end_date'] = $data['cfp_end_date'] instanceof \DateTime
-            ? $data['cfp_end_date']->format('Y-m-d')
-            : $data['cfp_end_date'];
+        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        foreach ($dateFields as $dateField) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+                $data[$dateField] = $data[$dateField]->format('Y-m-d');
+            }
+        }
 
         try {
             $response = $this->eventService->submit($data);
@@ -148,46 +156,13 @@ class EventApi
             throw new \Exception('Your event submission was not accepted, the server reports: ' . $e->getMessage());
         }
 
-        $response = $this->queryEvents($response['location']);
+        /** @var Response $response */
+        $response = $this->eventService->fetch(array('url' => $response['location']));
+        $event = current($response->getResource());
 
-        return current($response['events']);
-    }
+        $this->storeEventsInCache(array($event));
 
-    /**
-     * Returns a response array containing an 'events' and 'pagination' element.
-     *
-     * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
-     * Event entities.
-     *
-     * @param Response $response
-     *
-     * @return array
-     */
-    private function queryEvents(Response $response)
-    {
-        /** @var Event[] $events */
-        $events = $response->getResource();
-        foreach ($events as $event) {
-            $this->saveEventUrl($event);
-        }
-
-        $collectionData = array();
-        $collectionData['events']     = $events;
-        $collectionData['pagination'] = $response->getMeta();
-
-        return $collectionData;
-    }
-
-    /**
-     * Take an event and save the url_friendly_name and the API URL for that
-     *
-     * @param Event $event The event to take details from
-     *
-     * @return void
-     */
-    private function saveEventUrl(Event $event)
-    {
-        $this->eventDb->save($event);
+        return $event;
     }
 
     /**
@@ -197,7 +172,7 @@ class EventApi
      */
     private function fetchEventFromDbByProperty($propertyName, $propertyValue)
     {
-        $event = $this->eventDb->load($propertyName, $propertyValue);
+        $event = $this->cache->load($propertyName, $propertyValue);
         if (! $event) {
             return false;
         }
@@ -206,5 +181,19 @@ class EventApi
         $response = $this->eventService->fetch(array('url' => $event['uri']));
 
         return current($response->getResource());
+    }
+
+    /**
+     * Stores the events in the Event Cache.
+     *
+     * @param Event[] $events
+     *
+     * @return void
+     */
+    private function storeEventsInCache(array $events)
+    {
+        foreach ($events as $event) {
+            $this->cache->save($event);
+        }
     }
 }

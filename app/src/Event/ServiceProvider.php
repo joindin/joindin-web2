@@ -7,7 +7,7 @@ use Slim\Middleware as SlimMiddleware;
 use Talk\TalkApi;
 use Talk\TalkDb;
 
-class Middleware extends SlimMiddleware
+class ServiceProvider extends SlimMiddleware
 {
     protected $customConfig = array();
     protected $accessToken;
