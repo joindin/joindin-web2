@@ -129,7 +129,7 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Submits a new event to the API.
+     * Submits a new event to the API and returns it or null if it is pending acceptance.
      *
      * @param array $data
      *
@@ -137,7 +137,7 @@ class EventApi extends BaseApi
      *
      * @see EventFormType::buildForm() for a list of supported fields in the $data array and their constraints.
      *
-     * @return EventEntity
+     * @return EventEntity|null
      */
     public function submit(array $data)
     {
@@ -169,6 +169,9 @@ class EventApi extends BaseApi
         if ($status == 201) {
             $response = $this->queryEvents($headers['location']);
             return current($response['events']);
+        }
+        if ($status == 202) {
+            return null;
         }
 
         throw new \Exception('Your event submission was not accepted, the server reports: ' . $result);

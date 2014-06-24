@@ -1,52 +1,62 @@
 <?php
-namespace Application;
+namespace Tests\Event;
 
-use Event\EventDb;
-use Event\EventApi;
+use Event\EventCommentEntity;
+use stdClass;
 
-class ApplicationController extends BaseController
+class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
 {
-    protected function defineRoutes(\Slim\Slim $app)
+    private $commentData;
+
+    public function setUp()
     {
-        $app->get('/', array($this, 'index'));
-        $app->get('/apps', array($this, 'apps'))->name('apps');
-        $app->get('/about', array($this, 'about'))->name('about');
+        $this->commentData = new stdClass();
+        $this->commentData->comment             = "Test event comment text";
+        $this->commentData->user_display_name   = "Test comment display name";
+        $this->commentData->created_date        = "2014-03-02T08:43:44+01:00";
+        $this->commentData->comment_uri         = "Test comment uri";
+        $this->commentData->verbose_comment_uri = "Test comment verbose uri";
+        $this->commentData->event_uri           = "Test event uri";
+        $this->commentData->event_comments_uri  = "Test comments uri";
+        $this->commentData->user_uri            = "Test user uri";
+        $this->commentData->source              = "Test comment source";
+
     }
 
-    public function index()
+    public function testBasicCommentsData()
     {
-        $page = ((int)$this->application->request()->get('page') === 0)
-            ? 1
-            : $this->application->request()->get('page');
+        $comment = new EventCommentEntity($this->commentData);
 
-        $perPage = 6;
-        $start = ($page -1) * $perPage;
-
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
-
-        $cache = new CacheService($keyPrefix);
-        $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
-        $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
-
-        $this->render(
-            'Application/index.html.twig',
-            array(
-                'events' => $hot_events,
-                'page' => $page,
-            )
+        $this->assertEquals(
+            $comment->getUserDisplayName(),
+            "Test comment display name"
         );
+
+        $this->assertEquals(
+            $comment->getCommentDate(),
+            "2014-03-02T08:43:44+01:00"
+        );
+
+        $this->assertEquals(
+            $comment->getComment(),
+            "Test event comment text"
+        );
+
+        $this->assertEquals(
+            $comment->getCommentSource(),
+            "Test comment source"
+        );
+
     }
 
-    public function apps()
+    public function testNonExistentTestDataDoesntBreak()
     {
-        $this->render('Application/apps.html.twig');
+        $comment = new EventCommentEntity(new stdClass());
+
+        $this->assertNull($comment->getUserDisplayName());
+        $this->assertNull($comment->getCommentDate());
+        $this->assertNull($comment->getComment());
+        $this->assertNull($comment->getCommentSource());
     }
 
-    /**
-     * Render the about page
-     */
-    public function about()
-    {
-        $this->render('Application/about.html.twig');
-    }
 }
