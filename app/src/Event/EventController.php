@@ -78,8 +78,8 @@ class EventController extends BaseController
         $this->render('Event/map.html.twig', array('event' => $event));
     }
 
-     public function schedule($friendly_name)
-     {
+    public function schedule($friendly_name)
+    {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
@@ -87,10 +87,12 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        $schedule = $this->getEventScheduler()->getScheduleData($event);
+        /** @var EventScheduler $eventScheduler */
+        $eventScheduler = $this->application->event_scheduler;
+        $schedule = $eventScheduler->getScheduleData($event);
 
         $this->render('Event/schedule.html.twig', array('event' => $event, 'eventDays' => $schedule));
-     }
+    }
 
     public function quicklink($stub)
     {
@@ -216,50 +218,13 @@ class EventController extends BaseController
             $status
         );
     }
-
-    /**
-     * @todo move to a DIC
-     *
-     * @return EventScheduler
-     */
-    private function getEventScheduler()
-    {
-        return new EventScheduler($this->getTalkApi());
-    }
-
     /**
      * Returns the service used to talk to the API for events.
-     *
-     * @todo move to a DIC
      *
      * @return EventApi
      */
     protected function getEventApi()
     {
-        return new EventApi($this->cfg, $this->accessToken, new EventDb($this->getCache()));
-    }
-
-    /**
-     * Returns the service used to talk to the API for talks.
-     *
-     * @todo move to a DIC
-     *
-     * @return TalkApi
-     */
-    private function getTalkApi()
-    {
-        return new TalkApi($this->cfg, $this->accessToken, new EventDb($this->getCache()));
-    }
-
-    /**
-     * Returns the cache used by API services.
-     *
-     * @todo move to a DIC
-     *
-     * @return CacheService
-     */
-    private function getCache()
-    {
-        return new CacheService($this->cfg['redis']['keyPrefix']);
+        return $this->application->event_api_service;
     }
 }
