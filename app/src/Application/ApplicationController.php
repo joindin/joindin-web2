@@ -1,7 +1,6 @@
 <?php
 namespace Application;
 
-use Event\EventDb;
 use Event\EventApi;
 
 class ApplicationController extends BaseController
