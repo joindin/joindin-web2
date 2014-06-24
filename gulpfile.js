@@ -6,10 +6,25 @@ var rename = require( 'gulp-rename' )
 var clean = require( 'gulp-clean' )
 var header = require( 'gulp-header' )
 
-gulp.task('default', ['usemin', 'rename', 'add-comments', 'clean']);
+// order of operation: create-temp-file, usemin, add-comments, remove-temp-file
 
-gulp.task('usemin', function() {
-    return gulp.src('app/templates/layout.src.twig')
+gulp.task('default', ['remove-temp-file']);
+
+gulp.task('create-temp-file', function() {
+    return gulp.src('app/templates/layout.html.twig')
+        .pipe(rename("layout.temp.twig"))
+        .pipe(gulp.dest('app/templates'));
+});
+
+gulp.task('usemin', ['create-temp-file'], function() {
+
+    gulp.src('web/css/site.css')
+        .pipe(clean());
+
+    gulp.src('web/js/site.js')
+        .pipe(clean());
+
+    return gulp.src('app/templates/layout.temp.twig')
         .pipe(usemin({
             assetsDir: 'web',
             css: [minifyCss(), 'concat'],
@@ -18,17 +33,7 @@ gulp.task('usemin', function() {
         .pipe(gulp.dest('web'));
 });
 
-gulp.task('rename', ['usemin'], function() {
-    return gulp.src('web/layout.src.twig')
-        .pipe(rename("layout.html.twig"))
-        .pipe(gulp.dest('app/templates'));
-});
-
-gulp.task('add-comments', ['rename'], function() {
-    gulp.src('app/templates/layout.html.twig')
-        .pipe(header("<!-- This file is generated — do not edit by hand! -->\n"))
-        .pipe(gulp.dest('app/templates'));
-
+gulp.task('add-comments', ['usemin'], function() {
     gulp.src('web/js/site.js')
         .pipe(header("/* This file is generated — do not edit by hand! */\n"))
         .pipe(gulp.dest('web/js'));
@@ -38,8 +43,10 @@ gulp.task('add-comments', ['rename'], function() {
         .pipe(gulp.dest('web/css'));
 })
 
-gulp.task('clean', ['rename'], function() {
-    return gulp.src('web/layout.src.twig')
+gulp.task('remove-temp-file', ['add-comments'], function() {
+    gulp.src('app/templates/layout.temp.twig')
+        .pipe(clean())
+    gulp.src('web/layout.temp.twig')
         .pipe(clean())
 });
 

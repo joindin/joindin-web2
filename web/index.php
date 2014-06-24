@@ -52,6 +52,7 @@ $app->view()->appendData(
 $app->view()->appendData(
     array(
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
+        'use_minified_files' => $config['slim']['custom']['useMinifiedFiles'],
         'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
     )
 );

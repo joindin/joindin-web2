@@ -6,7 +6,16 @@
     <title>{% block title %}Joind.in{% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/site.css"/>
+{% if use_minified_files %}
+    <link href="/css/site.css" rel="stylesheet" />
+{% else %}
+    <!-- build:css /css/site.css -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/css/font-awesome-custom.css" rel="stylesheet">
+    <link href="/css/joindin.css" rel="stylesheet">
+    <!-- endbuild -->
+{% endif %}
 </head>
 
 <body>
@@ -107,8 +116,17 @@
             </div>
         </nav>
     </footer>
-</body>
-<script src="/js/site.js"></script>
+
+{% if use_minified_files %}
+    <script src="/js/site.js"></script>
+{% else %}
+    <!-- build:js /js/site.js -->
+    <script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.rateit.min.js"></script>
+    <!-- endbuild -->
+{% endif %}
+
 
 {% block extra_javascript %}{% endblock %}
 
@@ -130,4 +148,5 @@
     </script>
 {% endif %}
 {# End Google Analytics code #}
+</body>
 </html>
