@@ -2,6 +2,8 @@
 namespace Search;
 
 use Application\BaseController;
+use Application\CacheService;
+use Event\EventDb;
 
 /**
  * Class SearchController
@@ -58,6 +60,13 @@ class SearchController extends BaseController
 
             $event_collection = new SearchApi($this->cfg, $this->accessToken);
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
+
+            // Save to our data store
+            $cache = new CacheService($this->cfg['redis']['keyPrefix']);
+            $eventDb = new EventDb($cache);
+            foreach ($events['events'] as $event) {
+                $eventDb->save($event);
+            }
         }
 
         $this->render(
