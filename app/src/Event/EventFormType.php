@@ -164,11 +164,10 @@ class EventFormType extends AbstractType
         array_pop($timezones); // Remove UTC from the end of the list
 
         $result = [];
-        foreach($timezones as $timezone) {
+        foreach ($timezones as $timezone) {
             $result[$timezone] = $timezone;
         }
 
         return $result;
     }
-
-} 
+}

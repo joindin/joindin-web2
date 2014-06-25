@@ -105,7 +105,7 @@ class EventController extends BaseController
         $schedule = $scheduler->getScheduleData($event);
 
         $this->render('Event/schedule.html.twig', array('event' => $event, 'eventDays' => $schedule));
-     }
+    }
 
     public function quicklink($stub)
     {
