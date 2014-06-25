@@ -3,7 +3,7 @@ var usemin = require('gulp-usemin');
 var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
 var rename = require( 'gulp-rename' )
-var clean = require( 'gulp-clean' )
+var rimraf = require( 'gulp-rimraf' )
 var header = require( 'gulp-header' )
 
 // order of operation: usemin, add-comments, remove-temp-file
@@ -13,10 +13,10 @@ gulp.task('default', ['remove-temp-file']);
 gulp.task('usemin', function() {
 
     gulp.src('web/css/site.css')
-        .pipe(clean());
+        .pipe(rimraf(), { read: false });
 
     gulp.src('web/js/site.js')
-        .pipe(clean());
+        .pipe(rimraf(), { read: false });
 
     return gulp.src('app/templates/layout.html.twig')
         .pipe(usemin({
@@ -38,8 +38,8 @@ gulp.task('add-comments', ['usemin'], function() {
 })
 
 gulp.task('remove-temp-file', ['add-comments'], function() {
-    gulp.src('web/layout.html.twig')
-        .pipe(clean())
+    return gulp.src('web/layout.html.twig', { read: false })
+        .pipe(rimraf())
 });
 
 gulp.task('watch', ['default'], function() {
