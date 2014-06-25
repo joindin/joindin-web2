@@ -9,15 +9,15 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-		$this->mockConfig = array('apiUrl' => 'http://example.com');
+        $this->mockConfig = array('apiUrl' => 'http://example.com');
         $this->mockCache = $this->getMock(
             'Application\CacheService'
         );
 
         $this->mockDbEvent = $this->getMock(
-			'Event\EventDb',
-			null,
-			array($this->mockCache)
+            'Event\EventDb',
+            null,
+            array($this->mockCache)
         );
 
     }
@@ -118,9 +118,9 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEventApi->expects($this->once())
             ->method('apiPost')
             ->with(
-                    'http://example.com/comments/123',
-                    array('comment'=>'comment')
-              )
+                'http://example.com/comments/123',
+                array('comment'=>'comment')
+            )
             ->will($this->returnValue(array('201', 'result')));
 
         // The test

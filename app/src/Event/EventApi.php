@@ -45,7 +45,8 @@ class EventApi extends BaseApi
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
      * @return EventEntity The event we found, or false if something went wrong
      */
-    public function getByFriendlyUrl($friendlyUrl) {
+    public function getByFriendlyUrl($friendlyUrl)
+    {
         $event = $this->eventDb->load('url_friendly_name', $friendlyUrl);
 
         if (!$event) {
@@ -67,7 +68,8 @@ class EventApi extends BaseApi
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
      * @return EventEntity The event we found, or false if something went wrong
      */
-    public function getByStub($stub) {
+    public function getByStub($stub)
+    {
         $event = $this->eventDb->load('stub', $stub);
 
         if (!$event) {
@@ -80,15 +82,15 @@ class EventApi extends BaseApi
         return $event;
     }
 
-	/**
-	 * Get comments for given event
-	 * @param $comment_uri
-	 * @param bool $verbose
-	 * @return Comment[]
-	 */
+    /**
+     * Get comments for given event
+     * @param $comment_uri
+     * @param bool $verbose
+     * @return Comment[]
+     */
     public function getComments($comment_uri, $verbose = false)
     {
-        if($verbose) {
+        if ($verbose) {
             $comment_uri = $comment_uri . '?verbose=yes';
         }
 
@@ -96,7 +98,7 @@ class EventApi extends BaseApi
 
         $commentData = array();
 
-        foreach($comments['comments'] as $comment) {
+        foreach ($comments['comments'] as $comment) {
             $commentData[] = new EventCommentEntity($comment);
         }
 

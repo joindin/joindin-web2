@@ -14,7 +14,7 @@ use Slim\Slim;
  */
 function initialize(Twig_Environment $env, Slim $app)
 {
-    $env->addFunction(new Twig_SimpleFunction('urlFor', function ($routeName, $params=array()) use ($app) {
+    $env->addFunction(new Twig_SimpleFunction('urlFor', function ($routeName, $params = array()) use ($app) {
         $url = $app->urlFor($routeName, $params);
         return $url;
     }));
@@ -23,10 +23,38 @@ function initialize(Twig_Environment $env, Slim $app)
         return md5($value);
     }));
 
+    $env->addFunction(new Twig_SimpleFunction('gravatar', function ($email_hash) {
+        $url = 'https://secure.gravatar.com/avatar/' . $email_hash . '?d=mm&s=40';
+        if (empty($email_hash)) {
+            $url .= '&f=y';
+        }
+
+        return $url;
+    }));
+
+    $env->addFunction(new Twig_SimpleFunction('getCurrentUrl', function () {
+        return $_SERVER['REQUEST_URI'];
+    }));
+
     $env->addFunction(
         new Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = array()) use ($app) {
             return $app->urlFor('talk', array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
         })
     );
-}
 
+    $env->addFunction(
+        new Twig_SimpleFunction('shortUrlForTalk', function ($talkStub) use ($app) {
+            $scheme = $app->request()->getScheme();
+            $host = $app->request()->headers('host');
+            return "$scheme://$host" . $app->urlFor('talk-quicklink', array('talkStub' => $talkStub));
+        })
+    );
+
+    $env->addFunction(
+        new Twig_SimpleFunction('shortUrlForEvent', function ($eventStub) use ($app) {
+            $scheme = $app->request()->getScheme();
+            $host = $app->request()->headers('host');
+            return "$scheme://$host" . $app->urlFor('event-quicklink', array('stub' => $eventStub));
+        })
+    );
+}

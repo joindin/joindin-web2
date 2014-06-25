@@ -87,8 +87,8 @@ class EventController extends BaseController
         $this->render('Event/map.html.twig', array('event' => $event));
     }
 
-     public function schedule($friendly_name)
-     {
+    public function schedule($friendly_name)
+    {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 

@@ -12,11 +12,11 @@ abstract class BaseController
     protected $accessToken;
     protected $cfg;
 
-    function __construct(Slim $app)
+    public function __construct(Slim $app)
     {
         $this->application = $app;
         $this->defineRoutes($app);
-		$this->cfg = $this->getConfig();
+        $this->cfg = $this->getConfig();
 
         $this->accessToken = isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null;
     }
