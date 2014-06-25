@@ -34,7 +34,6 @@ mkdir -p $TARGET \
 && git archive $LAUNCHREF | tar xC $TARGET \
 && (echo $TARGET ; echo $LAUNCHREF) > $TARGET/release.txt \
 && ln -s $TARGETBASE/config.php $TARGET/config/config.php \
-&& cd $TARGETBASE && phing minify && cd - \
 && ln -s $TARGET $TARGETBASE/www.new \
 && mv -Tf $TARGETBASE/www.new $TARGETBASE/www
 "
