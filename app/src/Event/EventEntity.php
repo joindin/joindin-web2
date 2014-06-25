@@ -179,6 +179,15 @@ class EventEntity
         return $this->data->attending;
     }
 
+    public function areCommentsEnabled()
+    {
+        if (!isset($this->data->comments_enabled)) {
+            return false;
+        }
+
+        return (bool)$this->data->comments_enabled;
+    }
+
     public function isPastEvent() {
         $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getEndDate());
         $now = new DateTime(null, $endDate->getTimezone());

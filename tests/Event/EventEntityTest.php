@@ -32,7 +32,8 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
 		$this->eventData->attending            = "Test event attending";
         $this->eventData->attending_uri        = "Test event attending uri";
 		$this->eventData->url_friendly_name    = "Test event url friendly name";
-		$this->eventData->stub                 = "Test event stub";
+        $this->eventData->stub                 = "Test event stub";
+		$this->eventData->comments_enabled     = "1";
     }
 
     public function testBasicEventData()
@@ -138,6 +139,11 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
             $event->getApiUriToMarkAsAttending(),
             "Test event attending uri"
         );
+
+        $this->assertEquals(
+            true,
+            $event->areCommentsEnabled()
+        );
     }
 
     public function testNonExistentTestDataDoesntBreak()
@@ -164,5 +170,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         $event->isAttending();
         $event->getUrlFriendlyName();
         $event->getStub();
+        
+        $this->assertEquals(false, $event->areCommentsEnabled());
     }
 }
