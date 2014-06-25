@@ -28,7 +28,7 @@ class ApplicationController extends BaseController
         $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
         $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
 
-        echo $this->render(
+        $this->render(
             'Application/index.html.twig',
             array(
                 'events' => $hot_events,
@@ -39,7 +39,7 @@ class ApplicationController extends BaseController
 
     public function apps()
     {
-        echo $this->render('Application/apps.html.twig');
+        $this->render('Application/apps.html.twig');
     }
 
     /**
@@ -47,8 +47,6 @@ class ApplicationController extends BaseController
      */
     public function about()
     {
-        echo $this->render(
-            'Application/about.html.twig'
-        );
+        $this->render('Application/about.html.twig');
     }
 }

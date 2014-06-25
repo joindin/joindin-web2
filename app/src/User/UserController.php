@@ -9,7 +9,7 @@ class UserController extends BaseController
     /**
      * Routes implemented by this class
      *
-     * @param  Slim   $app Slim application instance
+     * @param \Slim $app Slim application instance
      *
      * @return void
      */
@@ -37,6 +37,7 @@ class UserController extends BaseController
             // make a call to the api with granttype=password
             $username = $request->post('username');
             $password = $request->post('password');
+            $redirect = $request->post('redirect');
             $clientId = $config['client_id'];
 
             $authApi = new AuthApi($this->cfg, $this->accessToken);
@@ -56,19 +57,18 @@ class UserController extends BaseController
                 $user = $userApi->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;
-                    $this->application->redirect('/');
+                    if (empty($redirect) || strpos($redirect, '/user/login') === 0) {
+                        $this->application->redirect('/');
+                    } else {
+                        $this->application->redirect($redirect);
+                    }
                 } else {
                     unset($_SESSION['access_token']);
                 }
             }
         }
 
-        echo $this->render(
-            'User/login.html.twig',
-            array(
-                'error' => $error,
-            )
-        );
+        $this->render('User/login.html.twig', array('error' => $error));
     }
 
     /**

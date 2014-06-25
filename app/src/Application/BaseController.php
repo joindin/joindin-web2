@@ -31,7 +31,7 @@ abstract class BaseController
     protected function render($template, $data = array(), $status = null)
     {
         try {
-            echo $this->application->render($template, $data, $status);
+            $this->application->render($template, $data, $status);
         } catch (Twig_Error_Runtime $e) {
             $this->application->render(
                 'Error/app_load_error.html.twig',

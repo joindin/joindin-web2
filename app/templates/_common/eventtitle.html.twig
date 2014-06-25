@@ -6,10 +6,6 @@
         </h3>
 
         <p class="meta">
-
-        </p>
-
-        <p class="meta">
             {{ event.getStartDate|date('M d Y') }}
             {%  if event.getStartDate|date('M d Y')
                     is not sameas(event.getEndDate|date('M d Y')) %}

@@ -46,7 +46,7 @@ class EventController extends BaseController
             'upcoming'
         );
 
-        echo $this->render(
+        $this->render(
             'Event/index.html.twig',
             array(
                 'page' => $page,
@@ -67,7 +67,7 @@ class EventController extends BaseController
                 ));
 
             $comments = $eventApi->getComments($event->getCommentsUri(), true);
-            echo $this->render(
+            $this->render(
                 'Event/details.html.twig',
                 array(
                     'event' => $event,
@@ -90,7 +90,7 @@ class EventController extends BaseController
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if($event) {
-            echo $this->render(
+            $this->render(
                 'Event/map.html.twig',
                 array(
                     'event' => $event
@@ -116,7 +116,7 @@ class EventController extends BaseController
 
             $schedule = $scheduler->getScheduleData($event);
 
-            echo $this->render(
+            $this->render(
                 'Event/schedule.html.twig',
                 array(
                     'event' => $event,
