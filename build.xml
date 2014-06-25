@@ -7,7 +7,7 @@
 
  <target name="phplint" description="Run php -l over the fileset">
    <phplint haltonfailure="true">
-     <fileset dir="${basedir}">
+     <fileset dir="${basedir}/app">
        <patternset>
          <include name="**/*.php"/>
        </patternset>
