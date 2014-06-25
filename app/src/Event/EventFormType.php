@@ -54,12 +54,30 @@ class EventFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array('constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 5)))))
-            ->add('description', 'textarea', array('constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 5)))))
+            ->add(
+                'name',
+                'text',
+                [
+                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
+                    'attr'        => ['class' => 'form-group form-control']
+                ]
+            )
+            ->add(
+                'description',
+                'textarea',
+                [
+                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
+                    'attr'        => ['class' => 'form-group form-control']
+                ]
+            )
             ->add(
                 'timezone',
                 'choice',
-                array('choices' => $this->getListOfTimezones(), 'constraints' => array(new Assert\NotBlank()))
+                [
+                    'choices'     => $this->getListOfTimezones(),
+                    'constraints' => [new Assert\NotBlank()],
+                    'attr'        => ['class' => 'form-group form-control']
+                ]
             )
             ->add('start_date', 'date', $this->getOptionsForDateWidget('Start'))
             ->add('end_date', 'date', $this->getOptionsForDateWidget('End'))
@@ -87,17 +105,17 @@ class EventFormType extends AbstractType
      */
     private function getOptionsForUrlWidget($label, $required = true)
     {
-        $constraints = array(new Assert\Url());
+        $constraints = [new Assert\Url()];
         if ($required) {
             $constraints[] = new Assert\NotBlank();
         }
 
-        return array(
-            'label'    => $label,
-            'required' => $required,
-            'attr'     => array('placeholder' => 'http://example.org'),
-            'constraints' => $constraints
-        );
+        return [
+            'label'       => $label,
+            'required'    => $required,
+            'constraints' => $constraints,
+            'attr'        => ['class' => 'form-group form-control', 'placeholder' => 'http://example.org']
+        ];
     }
 
     /**
@@ -117,17 +135,18 @@ class EventFormType extends AbstractType
      */
     private function getOptionsForDateWidget($label, $required = true)
     {
-        $constraints = array(new Assert\Date());
+        $constraints = [new Assert\Date()];
         if ($required) {
             $constraints[] = new Assert\NotBlank();
         }
 
-        return array(
-            'label'    => $label,
-            'required' => $required,
-            'widget'   => 'single_text', // force date widgets to show a single HTML5 'date' input
-            'constraints' => $constraints
-        );
+        return [
+            'label'       => $label,
+            'required'    => $required,
+            'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
+            'constraints' => $constraints,
+            'attr'        => ['class' => 'form-group form-control']
+        ];
     }
 
     /**
@@ -144,7 +163,7 @@ class EventFormType extends AbstractType
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
 
-        $result = array();
+        $result = [];
         foreach($timezones as $timezone) {
             $result[$timezone] = $timezone;
         }
