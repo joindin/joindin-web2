@@ -1,17 +1,9 @@
 <?php
-require_once '../app/src/Application/Autoloader.php';
-
-spl_autoload_register('Application\Autoloader::autoload');
-
 session_cache_limiter(false);
 session_start();
 
 // include dependencies
-require '../vendor/Slim/Slim.php';
-\Slim\Slim::registerAutoloader();
-
-require '../vendor/TwigView.php';
-require '../vendor/predis-0.8/autoload.php';
+require '../vendor/autoload.php';
 
 // include view controller
 require '../app/src/View/Filters.php';
@@ -30,7 +22,7 @@ $app = new \Slim\Slim(
     array_merge(
         $config['slim'],
         array(
-            'view' => new \TwigView(),
+            'view' => new \Slim\Views\Twig(),
         )
     )
 );
