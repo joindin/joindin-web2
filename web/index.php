@@ -1,9 +1,9 @@
 <?php
-session_cache_limiter(false);
-session_start();
-
 // include dependencies
 require '../vendor/autoload.php';
+
+session_cache_limiter(false);
+session_start();
 
 // include view controller
 require '../app/src/View/Filters.php';
