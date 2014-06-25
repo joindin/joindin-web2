@@ -32,6 +32,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         $this->eventData->attending            = "Test event attending";
         $this->eventData->attending_uri        = "Test event attending uri";
         $this->eventData->stub                 = "Test event stub";
+        $this->eventData->url_friendly_name    = "Test event url friendly name";
         $this->eventData->comments_enabled     = "1";
     }
 
