@@ -1,0 +1,9 @@
+{% if event.isAttending == false and user %}
+    <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" class="btn btn-xs btn-primary">
+        {% if event.isPastEvent %}
+            I went to this event
+        {% else %}
+            I will be attending
+        {% endif %}
+    </a>
+{% endif %}

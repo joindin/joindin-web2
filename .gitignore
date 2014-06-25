@@ -12,3 +12,6 @@
 .vagrant
 *.swp
 build/
+node_modules/
+web/css/site.css
+web/js/site.js
