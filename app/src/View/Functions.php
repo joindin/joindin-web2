@@ -14,7 +14,7 @@ use Slim\Slim;
  */
 function initialize(Twig_Environment $env, Slim $app)
 {
-    $env->addFunction(new Twig_SimpleFunction('urlFor', function ($routeName, $params=array()) use ($app) {
+    $env->addFunction(new Twig_SimpleFunction('urlFor', function ($routeName, $params = array()) use ($app) {
         $url = $app->urlFor($routeName, $params);
         return $url;
     }));
@@ -23,7 +23,7 @@ function initialize(Twig_Environment $env, Slim $app)
         return md5($value);
     }));
 
-    $env->addFunction(new Twig_SimpleFunction('gravatar', function($email_hash) {
+    $env->addFunction(new Twig_SimpleFunction('gravatar', function ($email_hash) {
         $url = 'https://secure.gravatar.com/avatar/' . $email_hash . '?d=mm&s=40';
         if (empty($email_hash)) {
             $url .= '&f=y';
@@ -32,7 +32,7 @@ function initialize(Twig_Environment $env, Slim $app)
         return $url;
     }));
 
-    $env->addFunction(new Twig_SimpleFunction('getCurrentUrl', function() {
+    $env->addFunction(new Twig_SimpleFunction('getCurrentUrl', function () {
         return $_SERVER['REQUEST_URI'];
     }));
 
@@ -58,4 +58,3 @@ function initialize(Twig_Environment $env, Slim $app)
         })
     );
 }
-

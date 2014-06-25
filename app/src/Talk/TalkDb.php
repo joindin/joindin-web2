@@ -33,7 +33,7 @@ class TalkDb extends BaseDb
             $data = array_merge($savedTalk, $data);
         }
 
-		$keys = array(
+        $keys = array(
             'event_uri' => $talk->getEventUri(),
             'slug' => $talk->getUrlFriendlyTalkTitle()
         );
