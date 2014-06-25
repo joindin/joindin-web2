@@ -14,7 +14,7 @@ use Slim\Slim;
  */
 function initialize(Twig_Environment $env, Slim $app)
 {
-    $env->addFunction(new Twig_SimpleFunction('urlFor', function ($routeName, $params=array()) use ($app) {
+    $env->addFunction(new Twig_SimpleFunction('urlFor', function ($routeName, $params = array()) use ($app) {
         $url = $app->urlFor($routeName, $params);
         return $url;
     }));
@@ -58,4 +58,3 @@ function initialize(Twig_Environment $env, Slim $app)
         })
     );
 }
-

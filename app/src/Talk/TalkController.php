@@ -72,7 +72,10 @@ class TalkController extends BaseController
         }
 
         $this->application->redirect(
-            $this->application->urlFor('talk', array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk['slug']))
+            $this->application->urlFor(
+                'talk',
+                array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk['slug'])
+            )
         );
     }
 
