@@ -43,6 +43,7 @@ $app->view()->appendData(
     array('slim_mode' => $config['slim']['mode'])
 );
 
+// Other variables needed by the main layout.html.twig template
 $app->view()->appendData(
     array(
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
