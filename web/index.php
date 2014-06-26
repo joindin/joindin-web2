@@ -17,6 +17,9 @@ if (is_readable($configFile)) {
     include realpath(__DIR__ . '/../config/config.php.dist');
 }
 
+// Wrap the Config Data with the Application Config object
+$config['slim']['custom'] = new \Application\Config($config['slim']['custom']);
+
 // initialize Slim
 $app = new \Slim\Slim(
     array_merge(

@@ -23,7 +23,7 @@ class EventController extends BaseController
 
     protected function getEventApi()
     {
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
         $cache = new CacheService($keyPrefix);
         $eventDb = new EventDb($cache);
         $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
@@ -108,7 +108,7 @@ class EventController extends BaseController
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
-            $keyPrefix = $this->cfg['redis']['keyPrefix'];
+            $keyPrefix = $this->cfg['redisKeyPrefix'];
             $cache = new CacheService($keyPrefix);
             $talkDb = new TalkDb($cache);
             $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
