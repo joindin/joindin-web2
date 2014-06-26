@@ -18,17 +18,17 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 
 1. Clone repository to any location
 
-        git clone https://github.com/joindin/responsive
-        cd responsive
+        git clone https://github.com/joindin/joindin-web2
+        cd joindin-web2
         
 1. Create a vhost entry for the site. The docroot should be `/web`.
 
         <VirtualHost *:80>
             ServerName joindin.local
     
-            DocumentRoot "/home/exampleuser/www/responsive/web"
+            DocumentRoot "/home/exampleuser/www/joindin-web2/web"
     
-            <Directory "/home/exampleuser/www/responsive">
+            <Directory "/home/exampleuser/www/joindin-web2">
                 Options FollowSymLinks
                 AllowOverride All
             </Directory>
