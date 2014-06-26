@@ -1,16 +1,4 @@
-.idea/
-.idea/.name
-.idea/codeStyleSettings.xml
-.idea/encodings.xml
-.idea/joind.in-responsive.iml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/workspace.xml
-.idea/libraries/sass_stdlib.xml
-.idea/scopes/scope_settings.xml
 .vagrant
-*.swp
 build/
 node_modules/
 web/css/site.css
