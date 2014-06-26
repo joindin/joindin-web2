@@ -3,9 +3,7 @@ $config = array(
     'slim' => array(
         'mode' => 'development',
         'custom' => array(
-            'redis' => array(
-                'keyPrefix' => 'dev-',
-            ),
+            'redisPrefix' => 'dev-',
             'apiUrl' => 'https://api.joind.in',
             'googleAnalyticsId' => '',
             'useMinifiedFiles' => false,
