@@ -20,6 +20,7 @@ class Config implements \ArrayAccess
         throw new \Exception("You cannot unset a config value!");
     }
     public function offsetGet($key) {
-        return isset($this->settings[$key]) ? $this->settings[$key] : null;
+
+        return array_key_exists($key, $this->settings) ? $this->settings[$key] : null;
     }
 }
