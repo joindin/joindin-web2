@@ -18,8 +18,6 @@ class SearchApi extends BaseApi
     public function __construct($config, $accessToken, GuzzleClient $eventService)
     {
         parent::__construct($config, $accessToken);
-
-        $this->eventService = $eventService;
     }
 
     /**

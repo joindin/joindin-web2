@@ -115,7 +115,7 @@ class EventApi
     }
 
     /**
-     * Submits a new event to the API.
+     * Submits a new event to the API and returns it or null if it is pending acceptance.
      *
      * @param array $data
      *
@@ -123,7 +123,7 @@ class EventApi
      *
      * @see EventFormType::buildForm() for a list of supported fields in the $data array and their constraints.
      *
-     * @return Event
+     * @return Event|null
      */
     public function submit(array $data)
     {
@@ -147,6 +147,10 @@ class EventApi
             $response = $this->eventService->submit($data);
         } catch (\Exception $e) {
             throw new \Exception('Your event submission was not accepted, the server reports: ' . $e->getMessage());
+        }
+        
+        if (! $response) {
+            return null;
         }
 
         /** @var Response $response */

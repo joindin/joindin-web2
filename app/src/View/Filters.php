@@ -6,30 +6,32 @@ use Twig_Filter_Function;
 
 function initialize(Twig_Environment $env)
 {
+    $env->addFilter('img_path', new Twig_Filter_Function('\View\Filters\img_path'));
     $env->addFilter(
-        'img_path', new Twig_Filter_Function('\View\Filters\img_path')
-    );
-    $env->addFilter(
-        'link', new Twig_Filter_Function(
-            '\View\Filters\link', array('is_safe' => array('html'))
+        'link',
+        new Twig_Filter_Function(
+            '\View\Filters\link',
+            array('is_safe' => array('html'))
         )
     );
-    $env->addFilter(
-        'format_date',
-        new Twig_Filter_Function('\View\Filters\format_date')
-    );
-    $env->addFilter(
-        'format_string', new Twig_Filter_Function('\View\Filters\format_string')
-    );
+    $env->addFilter('format_date', new Twig_Filter_Function('\View\Filters\format_date'));
+    $env->addFilter('format_string', new Twig_Filter_Function('\View\Filters\format_string'));
 }
 
 function img_path($suffix, $infix)
 {
     if (!$suffix && $infix = 'event_icons') {
-        $suffix = 'none.gif';
+        $suffix = 'none.png';
     }
 
-    return 'http://joind.in/inc/img/' . $infix . '/' . $suffix;
+    $path = '/img/' . $infix . '/' . $suffix;
+
+    // Allow for migration to local images
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
+        return $path;
+    }
+
+    return 'http://joind.in/inc' .$path;
 }
 
 function format_date($date)

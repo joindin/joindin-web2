@@ -1,9 +1,9 @@
 <?php
-session_cache_limiter(false);
-session_start();
-
 // include dependencies
 require '../vendor/autoload.php';
+
+session_cache_limiter(false);
+session_start();
 
 // include view controller
 require '../app/src/View/Filters.php';
@@ -41,9 +41,14 @@ $app->view()->appendData(
 );
 
 // Other variables needed by the main layout.html.twig template
+$useMinifiedFiles = false;
+if (array_key_exists('useMinifiedFiles', $config['slim']['custom'])) {
+    $useMinifiedFiles = $config['slim']['custom']['useMinifiedFiles'];
+}
 $app->view()->appendData(
     array(
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
+        'use_minified_files' => $useMinifiedFiles,
         'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
     )
 );

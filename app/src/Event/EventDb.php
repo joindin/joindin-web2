@@ -21,5 +21,4 @@ class EventDb extends BaseDb
         $this->cache->save($this->keyName, $data, 'url_friendly_name', $event->getUrlFriendlyName());
         $this->cache->save($this->keyName, $data, 'stub', $event->getStub());
     }
-
 }

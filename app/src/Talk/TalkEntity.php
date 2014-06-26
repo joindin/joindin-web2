@@ -49,7 +49,7 @@ class TalkEntity
 
     public function getEndDateTime()
     {
-        if(!$this->data->duration) {
+        if (!$this->data->duration) {
             return null;
         }
 
@@ -81,7 +81,7 @@ class TalkEntity
 
     public function getApiUri($verbose = false)
     {
-        if($verbose) {
+        if ($verbose) {
             return $this->data->verbose_uri;
         }
         return $this->data->uri;

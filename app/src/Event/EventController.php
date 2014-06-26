@@ -156,6 +156,11 @@ class EventController extends BaseController
                 if ($event instanceof Event) {
                     $this->redirectToDetailPage($event->getUrlFriendlyName());
                 }
+
+                // held for moderation
+                if ($event === null) {
+                    $this->redirectToListPage();
+                }
             }
         }
 
@@ -163,13 +168,14 @@ class EventController extends BaseController
     }
 
     /**
-     * Submits the form data to the API and returns the newly created event or false if an error occurred.
+     * Submits the form data to the API and returns the newly created event, false if there is an error or null
+     * if it is held for moderation.
      *
      * Should an error occur will this method append an error message to the form's error collection.
      *
      * @param Form $form
      *
-     * @return Event|false
+     * @return Event|null|false
      */
     private function addEventUsingForm(Form $form)
     {

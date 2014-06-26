@@ -1,28 +1,76 @@
 {% extends '/layout.html.twig' %}
 
 {% block body %}
-<h2 class="title">Submit a new event</h2>
-<div>
-    {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
-    {{ form_errors(form) }}
+    {% if user %}
+        <style>
+            label.required:after {
+                content: ' *'
+            }
+        </style>
+        <h1 class="title">Submit a new event</h1>
+        <p>
+            Submit your event here to be included on joind.in. All events must be approved by our team of volunteers
+            before they appear on the site. The site is aimed at events with sessions, where organisers are looking to
+            use this as a tool to gather feedback.
+        </p>
+        <p>
+            Please supply a description of your event in English, we will consider which events fit our intended
+            criteria (community event, clear description, intent to gather feedback) before approving; you may
+            <a href="{{ urlFor('about') }}">contact us</a> if you have any questions.
+        </p>
 
-    <fieldset>
-        <legend>Event</legend>
-        {{ form_row(form.name) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.timezone) }}
-        {{ form_row(form.start_date) }}
-        {{ form_row(form.end_date) }}
-        {{ form_row(form.href) }}
-    </fieldset>
-    <fieldset>
-        <legend>Call for Papers</legend>
-        {{ form_row(form.cfp_start_date, {'label' : 'Start'}) }}
-        {{ form_row(form.cfp_end_date, {'label' : 'End'}) }}
-        {{ form_row(form.cfp_url, {'label' : 'Website'}) }}
-    </fieldset>
+        {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <fieldset class="col-md-6">
+                <legend>Event information</legend>
+                {{ form_row(form.name) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.href) }}
+            </fieldset>
+            <fieldset class="col-md-6">
+                <legend>Date and Time</legend>
+                {{ form_row(form.timezone) }}
+                <div class="row">
+                    <div class="col-sm-6">
+                    {{ form_row(form.start_date) }}
+                    </div>
+                    <div class="col-sm-6">
+                    {{ form_row(form.end_date) }}
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="col-offset-md-6 col-md-6">
+                <legend>Call for Papers</legend>
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form_row(form.cfp_start_date, {'label' : 'Start'}) }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form_row(form.cfp_end_date, {'label' : 'End'}) }}
+                    </div>
+                </div>
+                {{ form_row(form.cfp_url, {'label' : 'Website'}) }}
+            </fieldset>
+        </div>
+        <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+        {{ form_end(form) }}
+    {% else %}
+        <h1>Login</h1>
+        {{ include('_common/login.html.twig') }}
+    {% endif %}
+{% endblock %}
 
-    <input type="submit" value="Submit" />
-    {{ form_end(form) }}
-</div>
+{% block extraAside %}
+    <h3>Submission Tips & Terms</h3>
+    <p>
+        Here's a few useful definitions when submitting events:
+    </p>
+    <dl>
+        <dt>Call for Papers</dt>
+        <dd>
+            If your event is going to have a time for session submissions, check the box and specify the range. This
+            will show in the event detail page.
+        </dd>
+    </dl>
 {% endblock %}
