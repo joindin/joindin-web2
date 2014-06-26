@@ -224,7 +224,13 @@ table.schedule a:hover span.speaker {
     height: 2em;
 }
 
+.apps img {
+    border: 1px solid #ccc;
+}
 
+.apps {
+    margin-bottom: 10px;
+}
 
 @media (max-width: 768px) {
     .event .logo img {
