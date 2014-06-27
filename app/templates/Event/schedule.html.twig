@@ -6,42 +6,21 @@
     {% include 'Event/_common/event_header.html.twig' %}
 
     <div>
-        <label>Sessions Key</label>
-
-        <div class="container-fluid">
-            <div class="col-xs-12 col-md-2 col-md-offset-1 talk-type-keynote key">Keynote</div>
-            <div class="col-xs-12 col-md-2 talk-type-talk key">Talk</div>
-            <div class="col-xs-12 col-md-2 talk-type-workshop key">Workshop</div>
-            <div class="col-xs-12 col-md-2 talk-type-socialevent key">Social</div>
-            <div class="col-xs-12 col-md-2 talk-type-eventrelated key">Event Related</div>
-        </div>
-
         {% for day in eventDays %}
-        <h1>{{ day.date }}</h1>
-        <table class="schedule table table-bordered">
-            <thead>
-            <tr>
-                {# time column on left side of table #}
-                <th></th>
-                {% if day.tracks %}
-                    {% for track in day.tracks %}
-                    <th>{{ track }}</th>
-                    {% endfor %}
-                {% else %}
-                    <th>Sessions</th>
-                {% endif %}
-                {# if multi-track, repeat time column on right side of table #}
-                {% if day.tracks|length > 1 %}
-                    <th></th>
-                {% endif %}
-            </tr>
-            </thead>
-            <tbody>
+        <h2>{{ day.date }}</h2>
+        <div class="schedule" style="height: {{ 40 + (day.getEndTime - day.getStartTime) / 40 }}px">
+            {% if day.tracks %}
+                {% set trackWidth = "(100% - 50px) / #{day.tracks|length}" %}
+                
+                {% for trackNum, track in day.tracks %}
+                <div class="trackTitle" style="text-align: center; width: calc({{ trackWidth }}); left: calc(50px + ({{ trackNum }} * {{ trackWidth }}))">{{ track }}</div>
+                {% endfor %}
+            {% endif %}
+
             {% set trackCellHTMLMap = [] %}
             {% set titleTrackMap = [] %}
             {% set titleTypeMap = [] %}
             {% for time, talks in day.talks %}
-                <tr>
                 {% if day.tracks|length <= 1 %}
                    <th class="time col-xs-2 col-sm-1" rowspan="{{ talks|length }}">{{ time }}</th>
                     {% for talk in talks %}
@@ -49,10 +28,10 @@
                             {% include '/Event/_common/schedule_cell.html.twig' %}
                         {% endset %}
                         <td class="{{ talk.getTypeClass }} col-xs-10">{{ cell }}</td>
-                        </tr>
                     {% endfor %}
                 {% else %}
-                    <th class="time col-xs-2 col-sm-1">{{ time }}</th>
+                    {% set trackTop = 30 + ("#{day.date} #{time}:00"|date("U") - day.getStartTime) / 40 %}
+                    <div class="trackTime" style="top: {{ trackTop }}px">{{ time }}</div>
                     {% for talk in talks %}
                         {# build an array of tracks the talk is in #}
                         {% set actualTracks = [] %}
@@ -61,8 +40,8 @@
                         {% endfor %}
 
                         {# skip keynote talks, as they will span all tracks (columns) #}
-                        {% if talk.type != "Keynote" %}
-                            {% for track in day.tracks %}
+                        {% if talk.tracks|length > 0 %}
+                            {% for trackNum, track in day.tracks %}
                                 {% if track in actualTracks %}
                                     {# if track is a number, Twig won't allow this value
                                        to be used as an array key, so append an empty space
@@ -70,22 +49,19 @@
                                     {% set trackName = track~" " %}
                                     {% set title = talk.title %}
                                     {% set cell %}
-                                        <td class="{{ talk.getTypeClass }}">
+                                        <div class="trackTalk {{ talk.getTypeClass }}" style="top: {{ trackTop }}px; left: calc(50px + ({{ trackNum }} * ({{ trackWidth }}))); width: calc({{ trackWidth }} - 3px); height: {{ (talk.getDuration * 1.5) - 3 }}px;">
                                             {% include '/Event/_common/schedule_cell.html.twig' %}
-                                        </td>
+                                        </div>
                                     {% endset %}
                                     {% set trackCellHTMLMap = trackCellHTMLMap|merge({ (trackName) : cell }) %}
                                     {% set titleTrackMap = titleTrackMap|merge({  (title)  : trackName }) %}
                                     {% set titleTypeMap = titleTypeMap|merge({ (title) : talk.type }) %}
                                 {% endif %}
                             {% endfor %}
-                        {% endif %}
-
-                        {# if a talk has no tracks, or is a Keynote, span all tracks (columns) in table #}
-                        {% if talk.tracks|length == 0 or talk.type == "Keynote" %}
-                            <td class="{{ talk.getTypeClass }}" colspan={{ day.tracks|length }}>
+                        {% else %}
+                            <div class="trackTalk {{ talk.getTypeClass }}" style="top: {{ trackTop }}px; left: 50px; width: calc(100% - 53px); height: {{ (talk.getDuration * 1.5) - 3 }}px">
                                 {% include '/Event/_common/schedule_cell.html.twig' %}
-                            </td>
+                            </div>
                         {% endif %}
                     {% endfor %}
 
@@ -104,12 +80,9 @@
                     {% set trackCellHTMLMap = [] %}
                     {% set titleTrackMap = [] %}
                     {% set titleTypeMap = [] %}
-                    <th class="time col-xs-2 col-sm-1">{{ time }}</th>
                 {% endif %}
-                </tr>
             {% endfor %}
-            </tbody>
-        </table>
+        </div>
         {% endfor %}
     </div>
 {% endblock %}
