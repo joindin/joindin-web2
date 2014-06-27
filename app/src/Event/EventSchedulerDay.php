@@ -27,6 +27,16 @@ class EventSchedulerDay
     private $tracks;
 
     /**
+     * @var Timestamp $startTime
+     */
+    private $startTime;
+
+    /**
+     * @var Timestamp $endTime
+     */
+    private $endTime;
+
+    /**
      * Constructor
      *
      * @param $date String
@@ -38,6 +48,17 @@ class EventSchedulerDay
         $this->date = $date;
         $this->talks = $talks;
         $this->tracks = $tracks;
+
+        foreach ($talks as $time => $time_talks) {
+            if (!isset($this->startTime)) {
+                $this->startTime = strtotime("$date $time");
+                $this->endTime = strtotime("$date $time +".$time_talks[0]->getDuration()." minutes");
+            }
+            foreach ($time_talks as $talk) {
+                $end_time = strtotime("$date $time +".$talk->getDuration()." minutes");
+                if ($end_time > $this->endTime) $this->endTime = $end_time;
+            }
+        }
     }
 
     /**
@@ -70,5 +91,25 @@ class EventSchedulerDay
     public function getTracks()
     {
         return $this->tracks;
+    }
+
+    /**
+     * Get startTime
+     *
+     * @return Timestamp
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
+
+    /**
+     * Get endTime
+     *
+     * @return Timestamp
+     */
+    public function getEndTime()
+    {
+        return $this->endTime;
     }
 }
