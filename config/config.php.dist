@@ -12,6 +12,7 @@ $config = array(
         ),
         'oauth' => array(
             'client_id' => 'web2',
+            'client_secret' => 'web2secret',
         ),
     ),
 );
