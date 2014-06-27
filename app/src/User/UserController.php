@@ -39,9 +39,10 @@ class UserController extends BaseController
             $password = $request->post('password');
             $redirect = $request->post('redirect');
             $clientId = $config['client_id'];
+            $clientSecret = $config['client_secret'];
 
             $authApi = new AuthApi($this->cfg, $this->accessToken);
-            $result = $authApi->login($username, $password, $clientId);
+            $result = $authApi->login($username, $password, $clientId, $clientSecret);
 
             if (false === $result) {
                 $error = true;
