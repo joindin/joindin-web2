@@ -51,11 +51,12 @@ class EventSchedulerDay
 
         foreach ($talks as $time => $time_talks) {
             if (!isset($this->startTime)) {
-                $this->startTime = strtotime("$date $time");
-                $this->endTime = strtotime("$date $time +".$time_talks[0]->getDuration()." minutes");
+                $this->startTime = $this->endTime = strtotime("$date $time");
             }
             foreach ($time_talks as $talk) {
-                $end_time = strtotime("$date $time +".$talk->getDuration()." minutes");
+                $duration = $talk->getDuration();
+                if (empty($duration)) $duration = 45;
+                $end_time = strtotime("$date $time +$duration minutes");
                 if ($end_time > $this->endTime) $this->endTime = $end_time;
             }
         }

@@ -21,6 +21,7 @@
                 }
                 
                 {% for talk in talks %}
+                    {% set duration = (talk.getDuration > 0 ? talk.getDuration : 45) %}
                     {% if talk.tracks|length > 0 %}
                         {% set talkTrack = talk.tracks|first %}
                         {% for trackNum, track in day.tracks %}
@@ -29,7 +30,7 @@
                                     top: {{ trackTop }}px;
                                     left: calc(50px + ({{ trackNum }} * ({{ trackWidth }})));
                                     width: calc({{ trackWidth }} - 3px);
-                                    height: {{ (talk.getDuration * 1.5) - 3 }}px;
+                                    height: {{ (duration * 1.5) - 3 }}px;
                                 }
                             {% endif %}
                         {% endfor %}
@@ -38,7 +39,7 @@
                             top: {{ trackTop }}px;
                             left: 50px;
                             width: calc(100% - 53px);
-                            height: {{ (talk.getDuration * 1.5) - 3 }}px;
+                            height: {{ (duration * 1.5) - 3 }}px;
                         }
                     {% endif %}
                 {% endfor %}
