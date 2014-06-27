@@ -27,7 +27,7 @@
                 {% for speaker in talk.getSpeakers %}
                     {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
-                <small>{{ talk.startDate|date('d F Y \\a\\t H:i') }} &mdash; {{ talk.language }}</small>
+                <small>{{ talk.getStartDateTime()|date('d F Y \\a\\t H:i') }} &mdash; {{ talk.language }}</small>
             </h4>
         {% endif %}
 
