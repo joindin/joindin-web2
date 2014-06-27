@@ -32,7 +32,6 @@ class EventController extends BaseController
 
     public function index()
     {
-
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
