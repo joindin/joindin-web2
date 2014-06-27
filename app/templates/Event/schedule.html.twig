@@ -8,78 +8,81 @@
     <div>
         {% for day in eventDays %}
         <h2>{{ day.date }}</h2>
-        <div class="schedule" style="height: {{ 40 + (day.getEndTime - day.getStartTime) / 40 }}px">
-            {% if day.tracks %}
+        {% set dayID = "schedule-#{day.date|date("Y-m-d")}" %}
+        
+        {% if day.tracks|length > 1 %}
+            {% set trackWidth = "(100% - 50px) / #{day.tracks|length}" %}
+            <style type="text/css">
+            @media (min-width: 768px) {
+            {% for time, talks in day.talks %}
+                {% set trackTop = 30 + ("#{day.date} #{time}:00"|date("U") - day.getStartTime) / 40 %}
+                div#{{ dayID }} div#time-{{ time|replace({":": "-"}) }} {
+                    top: {{ trackTop }}px;
+                }
+                
+                {% for talk in talks %}
+                    {% if talk.tracks|length > 0 %}
+                        {% set talkTrack = talk.tracks|first %}
+                        {% for trackNum, track in day.tracks %}
+                            {% if track == talkTrack.track_name %}
+                                div#{{ dayID }} div#talk-{{ talk.getURLFriendlyTalkTitle }} {
+                                    top: {{ trackTop }}px;
+                                    left: calc(50px + ({{ trackNum }} * ({{ trackWidth }})));
+                                    width: calc({{ trackWidth }} - 3px);
+                                    height: {{ (talk.getDuration * 1.5) - 3 }}px;
+                                }
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        div#{{ dayID }} div#talk-{{ talk.getURLFriendlyTalkTitle }} {
+                            top: {{ trackTop }}px;
+                            left: 50px;
+                            width: calc(100% - 53px);
+                            height: {{ (talk.getDuration * 1.5) - 3 }}px;
+                        }
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            }
+            </style>
+        {% endif %}
+        
+        {% set scheduleClass = (day.tracks|length > 1) ? "schedule-grid" : "schedule-plain" %}
+        <div id="{{ dayID }}" class="schedule {{ scheduleClass }}" style="height: {{ 40 + (day.getEndTime - day.getStartTime) / 40 }}px">
+            {% if day.tracks|length > 1 %}
                 {% set trackWidth = "(100% - 50px) / #{day.tracks|length}" %}
                 
                 {% for trackNum, track in day.tracks %}
-                <div class="trackTitle" style="text-align: center; width: calc({{ trackWidth }}); left: calc(50px + ({{ trackNum }} * {{ trackWidth }}))">{{ track }}</div>
+                <div class="trackTitle" style="text-align: center; width: calc({{ trackWidth }} - 3px); left: calc(50px + ({{ trackNum }} * {{ trackWidth }}))">{{ track }}</div>
                 {% endfor %}
             {% endif %}
 
-            {% set trackCellHTMLMap = [] %}
-            {% set titleTrackMap = [] %}
-            {% set titleTypeMap = [] %}
             {% for time, talks in day.talks %}
                 {% if day.tracks|length <= 1 %}
-                   <th class="time col-xs-2 col-sm-1" rowspan="{{ talks|length }}">{{ time }}</th>
+                   <div class="trackTime">{{ time }}</div>
                     {% for talk in talks %}
-                        {% set cell %}
-                            {% include '/Event/_common/schedule_cell.html.twig' %}
-                        {% endset %}
-                        <td class="{{ talk.getTypeClass }} col-xs-10">{{ cell }}</td>
+                        <div class="trackTalk">
+                        {% include '/Event/_common/schedule_cell.html.twig' %}
+                        </div>
                     {% endfor %}
                 {% else %}
-                    {% set trackTop = 30 + ("#{day.date} #{time}:00"|date("U") - day.getStartTime) / 40 %}
-                    <div class="trackTime" style="top: {{ trackTop }}px">{{ time }}</div>
+                    <div id="time-{{ time|replace({":": "-"}) }}" class="trackTime">{{ time }}</div>
                     {% for talk in talks %}
-                        {# build an array of tracks the talk is in #}
-                        {% set actualTracks = [] %}
-                        {% for talkTrack in talk.tracks %}
-                            {%  set actualTracks = actualTracks|merge({ (loop.index0): talkTrack.track_name}) %}
-                        {% endfor %}
-
-                        {# skip keynote talks, as they will span all tracks (columns) #}
-                        {% if talk.tracks|length > 0 %}
-                            {% for trackNum, track in day.tracks %}
-                                {% if track in actualTracks %}
-                                    {# if track is a number, Twig won't allow this value
-                                       to be used as an array key, so append an empty space
-                                       to make Twig think it is a string #}
-                                    {% set trackName = track~" " %}
-                                    {% set title = talk.title %}
-                                    {% set cell %}
-                                        <div class="trackTalk {{ talk.getTypeClass }}" style="top: {{ trackTop }}px; left: calc(50px + ({{ trackNum }} * ({{ trackWidth }}))); width: calc({{ trackWidth }} - 3px); height: {{ (talk.getDuration * 1.5) - 3 }}px;">
-                                            {% include '/Event/_common/schedule_cell.html.twig' %}
-                                        </div>
-                                    {% endset %}
-                                    {% set trackCellHTMLMap = trackCellHTMLMap|merge({ (trackName) : cell }) %}
-                                    {% set titleTrackMap = titleTrackMap|merge({  (title)  : trackName }) %}
-                                    {% set titleTypeMap = titleTypeMap|merge({ (title) : talk.type }) %}
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            <div class="trackTalk {{ talk.getTypeClass }}" style="top: {{ trackTop }}px; left: 50px; width: calc(100% - 53px); height: {{ (talk.getDuration * 1.5) - 3 }}px">
+                        {% if talk.tracks|length == 0 %}
+                            <div id="talk-{{ talk.getURLFriendlyTalkTitle }}" class="trackTalk {{ talk.getTypeClass }}">
                                 {% include '/Event/_common/schedule_cell.html.twig' %}
                             </div>
-                        {% endif %}
-                    {% endfor %}
-
-                    {# if a trackCellHTMLMap array was created for the current time slot, output column cells #}
-                    {% for track in day.tracks if trackCellHTMLMap  %}
-                        {# again, ensure trackName is a string value #}
-                        {% set trackName = track~" " %}
-                        {% if trackName in titleTrackMap %}
-                            {{ trackCellHTMLMap[trackName] }}
                         {% else %}
-                            <td></td>
+                            {% set talkTrack = talk.tracks|first %}
+                            {% for trackNum, track in day.tracks %}
+                                {% if track == talkTrack.track_name %}
+                                    <div id="talk-{{ talk.getURLFriendlyTalkTitle }}" class="trackTalk {{ talk.getTypeClass }}">
+                                        {% include '/Event/_common/schedule_cell.html.twig' %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
                     {% endfor %}
-
-                    {# reset map arrays for next loop iteration #}
-                    {% set trackCellHTMLMap = [] %}
-                    {% set titleTrackMap = [] %}
-                    {% set titleTypeMap = [] %}
                 {% endif %}
             {% endfor %}
         </div>

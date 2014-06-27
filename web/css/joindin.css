@@ -93,55 +93,79 @@ footer div.row {
     text-align: center;
 }
 
-.talk-type-talk {
-    border-color: #5A8EC3;
-    background-color: rgba(90, 190, 195, 0.2);
-}
+div.schedule-plain div.trackTalk span.talkSpeakers:before { content: "("; }
+div.schedule-plain div.trackTalk span.talkSpeakers:after { content: ")"; }
 
-.talk-type-keynote {
-    border-color: #C799CE;
-    background-color: rgba(199, 153, 206, 0.2);
+@media (max-width: 767px) {
+    div.schedule-grid div.trackTalk span.talkSpeakers:before { content: "("; }
+    div.schedule-grid div.trackTalk span.talkSpeakers:after { content: ")"; }
+    div.schedule-grid div.trackTitle { display: none; }
+    div.schedule-grid div.trackTime { margin-top: 10px; }
 }
+@media (min-width: 768px) {
+    .talk-type-talk {
+        border-color: #5A8EC3;
+        background-color: rgba(90, 190, 195, 0.2);
+    }
 
-.talk-type-workshop {
-    border-color: #F69159;
-    background-color: rgba(246, 145, 89, 0.2);
-}
+    .talk-type-keynote {
+        border-color: #C799CE;
+        background-color: rgba(199, 153, 206, 0.2);
+    }
 
-.talk-type-socialevent {
-    border-color: #CAAD90;
-    background-color: rgba(202, 173, 144, 0.2);
-}
+    .talk-type-workshop {
+        border-color: #F69159;
+        background-color: rgba(246, 145, 89, 0.2);
+    }
 
-.talk-type-eventrelated {
-    border-color: #5BB068;
-    background-color: rgba(88, 128, 104, 0.2);
-}
-/* A special case that lets us put the talk type as a label */
-.talk-type-label {
-    padding: 4px;
-    font-size: 8pt;
-}
+    .talk-type-socialevent {
+        border-color: #CAAD90;
+        background-color: rgba(202, 173, 144, 0.2);
+    }
 
-div.schedule {
-    position: relative;
-}
-div.schedule > * {
-    position: absolute;
-    box-sizing: border-box;
-}
-div.schedule > div.trackTitle {
-    top: 0px;
-}
-div.schedule > div.trackTime {
-    left: 0px;
-}
-div.schedule > div.trackTalk {
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px;
-    overflow: hidden;
-    padding: 3px;
+    .talk-type-eventrelated {
+        border-color: #5BB068;
+        background-color: rgba(88, 128, 104, 0.2);
+    }
+    /* A special case that lets us put the talk type as a label */
+    .talk-type-label {
+        padding: 4px;
+        font-size: 8pt;
+    }
+
+    div.schedule-grid {
+        position: relative;
+    }
+    div.schedule-grid > * {
+        position: absolute;
+        box-sizing: border-box;
+    }
+    div.schedule-grid > div.trackTitle {
+        top: 0px;
+        height: 27px;
+        line-height: 27px;
+        vertical-align: middle;
+        background-color: black;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        overflow: hidden;
+    }
+    div.schedule-grid > div.trackTime {
+        left: 0px;
+    }
+    div.schedule-grid > div.trackTalk {
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 5px;
+        overflow: hidden;
+        padding: 3px;
+    }
+    div.schedule-grid > div.trackTalk span.talkSpeakers {
+        display: block;
+        margin-top: 5px;
+        font-style: italic;
+    }
 }
 
 table.schedule a {
