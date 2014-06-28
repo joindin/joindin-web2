@@ -14,42 +14,45 @@
             {% set trackWidth = "(100% - 50px) / #{day.tracks|length}" %}
             <style type="text/css">
             @media (min-width: 768px) {
-            {% for time, talks in day.talks %}
-                {% set trackTop = 30 + ("#{day.date} #{time}:00"|date("U") - day.getStartTime) / 40 %}
-                div#{{ dayID }} div#time-{{ time|replace({":": "-"}) }} {
-                    top: {{ trackTop }}px;
-                }
-                
-                {% for talk in talks %}
-                    {% set duration = (talk.getDuration > 0 ? talk.getDuration : 45) %}
-                    {% if talk.tracks|length > 0 %}
-                        {% set talkTrack = talk.tracks|first %}
-                        {% for trackNum, track in day.tracks %}
-                            {% if track == talkTrack.track_name %}
-                                div#{{ dayID }} div#talk-{{ talk.getURLFriendlyTalkTitle }} {
-                                    top: {{ trackTop }}px;
-                                    left: calc(50px + ({{ trackNum }} * ({{ trackWidth }})));
-                                    width: calc({{ trackWidth }} - 3px);
-                                    height: {{ (duration * 1.5) - 3 }}px;
-                                }
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        div#{{ dayID }} div#talk-{{ talk.getURLFriendlyTalkTitle }} {
-                            top: {{ trackTop }}px;
-                            left: 50px;
-                            width: calc(100% - 53px);
-                            height: {{ (duration * 1.5) - 3 }}px;
-                        }
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
+				div#{{ dayID }} {
+					height: {{ 40 + (day.getEndTime - day.getStartTime) / 40 }}px;
+				}
+				{% for time, talks in day.talks %}
+					{% set trackTop = 30 + ("#{day.date} #{time}:00"|date("U") - day.getStartTime) / 40 %}
+					div#{{ dayID }} div#time-{{ time|replace({":": "-"}) }} {
+						top: {{ trackTop }}px;
+					}
+					
+					{% for talk in talks %}
+						{% set duration = (talk.getDuration > 0 ? talk.getDuration : 45) %}
+						{% if talk.tracks|length > 0 %}
+							{% set talkTrack = talk.tracks|first %}
+							{% for trackNum, track in day.tracks %}
+								{% if track == talkTrack.track_name %}
+									div#{{ dayID }} div#talk-{{ talk.getURLFriendlyTalkTitle }} {
+										top: {{ trackTop }}px;
+										left: calc(50px + ({{ trackNum }} * ({{ trackWidth }})));
+										width: calc({{ trackWidth }} - 3px);
+										height: {{ (duration * 1.5) - 3 }}px;
+									}
+								{% endif %}
+							{% endfor %}
+						{% else %}
+							div#{{ dayID }} div#talk-{{ talk.getURLFriendlyTalkTitle }} {
+								top: {{ trackTop }}px;
+								left: 50px;
+								width: calc(100% - 53px);
+								height: {{ (duration * 1.5) - 3 }}px;
+							}
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
             }
             </style>
         {% endif %}
         
         {% set scheduleClass = (day.tracks|length > 1) ? "schedule-grid" : "schedule-plain" %}
-        <div id="{{ dayID }}" class="schedule {{ scheduleClass }}" style="height: {{ 40 + (day.getEndTime - day.getStartTime) / 40 }}px">
+        <div id="{{ dayID }}" class="schedule {{ scheduleClass }}">
             {% if day.tracks|length > 1 %}
                 {% set trackWidth = "(100% - 50px) / #{day.tracks|length}" %}
                 
