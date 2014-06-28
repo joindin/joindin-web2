@@ -104,28 +104,43 @@ div.schedule-plain div.trackTalk span.talkSpeakers:after { content: ")"; }
 }
 @media (min-width: 768px) {
     .talk-type-talk {
-        border-color: #5A8EC3;
-        background-color: rgba(90, 190, 195, 0.2);
+        border-color: #f2cc4e;
+        background-color: rgba(242, 204, 78, 0.2);
+    }
+    .talk-type-talk:hover {
+        background-color: rgba(242, 204, 78, 0.4);
     }
 
     .talk-type-keynote {
-        border-color: #C799CE;
-        background-color: rgba(199, 153, 206, 0.2);
+        border-color: #8eb03e;
+        background-color: rgba(142, 176, 62, 0.2);
+    }
+    .talk-type-keynote:hover {
+        background-color: rgba(142, 176, 62, 0.4);
     }
 
     .talk-type-workshop {
-        border-color: #F69159;
-        background-color: rgba(246, 145, 89, 0.2);
+        border-color: #582c8f;
+        background-color: rgba(88, 44, 143, 0.2);
+    }
+    .talk-type-workshop:hover {
+        background-color: rgba(88, 44, 143, 0.4);
     }
 
     .talk-type-socialevent {
-        border-color: #CAAD90;
-        background-color: rgba(202, 173, 144, 0.2);
+        border-color: #703116;
+        background-color: rgba(112, 49, 22, 0.2);
+    }
+    .talk-type-socialevent:hover {
+        background-color: rgba(112, 49, 22, 0.4);
     }
 
     .talk-type-eventrelated {
-        border-color: #5BB068;
-        background-color: rgba(88, 128, 104, 0.2);
+        border-color: #eb6522;
+        background-color: rgba(235, 101, 34, 0.2);
+    }
+    .talk-type-eventrelated:hover {
+        background-color: rgba(235, 101, 34, 0.4);
     }
     /* A special case that lets us put the talk type as a label */
     .talk-type-label {
@@ -161,25 +176,22 @@ div.schedule-plain div.trackTalk span.talkSpeakers:after { content: ")"; }
         overflow: hidden;
         padding: 3px;
     }
+    div.schedule-grid > div.trackTalk:hover {
+        border-width: 2px;
+        padding: 2px;
+    }
     div.schedule-grid > div.trackTalk span.talkSpeakers {
         display: block;
         margin-top: 5px;
         font-style: italic;
+        font-size: 90%;
+        color: #606060;
+    }
+    div.schedule-grid > div.trackTalk span.talkSpeakers > a {
+        color: #395B8B;
     }
 }
 
-table.schedule a {
-    color: white;
-}
-
-table.schedule a span.speaker {
-    color: black;
-    font-style: italic;
-}
-
-table.schedule a:hover span.speaker {
-    color: white;
-}
 
 .rateit {
     display: -moz-inline-box;
