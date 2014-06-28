@@ -55,9 +55,13 @@ class EventSchedulerDay
             }
             foreach ($time_talks as $talk) {
                 $duration = $talk->getDuration();
-                if (empty($duration)) $duration = 45;
+                if (empty($duration)) {
+                    $duration = 45;
+                }
                 $end_time = strtotime("$date $time +$duration minutes");
-                if ($end_time > $this->endTime) $this->endTime = $end_time;
+                if ($end_time > $this->endTime) {
+                    $this->endTime = $end_time;
+                }
             }
         }
     }
