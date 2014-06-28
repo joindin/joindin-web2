@@ -3,18 +3,9 @@
 <span class="talkSpeakers">
     {% for speaker in talk.speakers %}
         {% if speaker.speaker_uri %}
-            <a href="{{ speaker.speaker_uri }}">
-            {% if loop.last %}
-                {{ speaker.speaker_name }}</a>
-            {% else %}
-                {{ speaker.speaker_name }}</a>,
-            {% endif %}
+            <a href="{{ speaker.speaker_uri }}">{{ speaker.speaker_name }}</a>{{ (loop.last ? "" : ",") }}
         {% else %}
-            {% if loop.last %}
-                {{ speaker.speaker_name }}
-            {% else %}
-                {{ speaker.speaker_name }},
-            {% endif %}
+            {{ speaker.speaker_name }}{{ (loop.last ? "" : ",") }}
         {% endif %}
     {% endfor %}
 </span>
