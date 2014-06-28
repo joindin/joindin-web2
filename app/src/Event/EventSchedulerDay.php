@@ -27,12 +27,12 @@ class EventSchedulerDay
     private $tracks;
 
     /**
-     * @var Timestamp $startTime
+     * @var integer $startTime
      */
     private $startTime;
 
     /**
-     * @var Timestamp $endTime
+     * @var integer $endTime
      */
     private $endTime;
 
@@ -97,7 +97,7 @@ class EventSchedulerDay
     /**
      * Get startTime
      *
-     * @return Timestamp
+     * @return integer
      */
     public function getStartTime()
     {
@@ -107,7 +107,7 @@ class EventSchedulerDay
     /**
      * Get endTime
      *
-     * @return Timestamp
+     * @return integer
      */
     public function getEndTime()
     {
