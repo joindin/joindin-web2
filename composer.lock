@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ffd409fc13e00bd61476f36b153a4984",
+    "hash": "f554c5db864193e388695f91d41ea962",
     "packages": [
         {
             "name": "guzzlehttp/command",
@@ -208,7 +208,7 @@
         },
         {
             "name": "joindin/api-client",
-            "version": "dev-master",
+            "version": "0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mvriel/joindin-api-client.git",
@@ -1188,9 +1188,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "joindin/api-client": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": [
 
     ],

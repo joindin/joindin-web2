@@ -25,6 +25,6 @@
         "symfony/validator":     "~2.5",
         "symfony/security-csrf": "~2.5",
         "symfony/twig-bridge":   "~2.5",
-        "joindin/api-client":    "dev-master@dev"
+        "joindin/api-client":    "~0.1"
     }
 }
