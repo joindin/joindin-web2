@@ -22,7 +22,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     private $fixture;
 
     /** @var CacheService */
-    private $mockCache;
+    private $appCacheMock;
 
     /** @var EventDb */
     private $cacheMock;
@@ -37,8 +37,9 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     {
         $guzzleClientClass = 'GuzzleHttp\Command\Guzzle\GuzzleClient';
 
-        $this->mockCache               = $this->getMock('Application\CacheService', ['load', 'save']);
-        $this->cacheMock               = $this->getMock('Event\EventDb', [], [$this->mockCache]);
+        $this->appCacheMock            = $this->getMock('Application\CacheService', []);
+        $this->cacheMock               = $this->getMock('Event\EventDb', ['load', 'save'], [$this->appCacheMock]);
+        $this->eventCommentServiceMock = $this->getMock($guzzleClientClass, ['getCollection', 'submit'], [], '', false);
         $this->eventServiceMock        = $this->getMock(
             $guzzleClientClass,
             ['getCollection', 'fetch', 'getHttpClient'],
@@ -46,7 +47,6 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->eventCommentServiceMock = $this->getMock($guzzleClientClass, ['getCollection', 'submit'], [], '', false);
 
         $this->fixture = new EventApi($this->cacheMock, $this->eventServiceMock, $this->eventCommentServiceMock);
     }
