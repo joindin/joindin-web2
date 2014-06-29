@@ -97,13 +97,13 @@ class EventApi
         return $event;
     }
 
-	/**
-	 * Get comments for given event comment uri.
+    /**
+     * Get comments for given event comment uri.
      *
-	 * @param string $commentUri
+     * @param string $commentUri
      *
-	 * @return Event\Comment[]
-	 */
+     * @return Event\Comment[]
+     */
     public function getComments($commentUri)
     {
         /** @var Response $response */
