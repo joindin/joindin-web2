@@ -1186,12 +1186,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/mvriel/joindin-api-client.git",
-            "reference": "cc54affdacb5618a07ec766e4cb15fc49e09cf86"
+            "reference": "35b7542f5c42a950204fd6fae04d310425873738"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/mvriel/joindin-api-client/zipball/cc54affdacb5618a07ec766e4cb15fc49e09cf86",
-            "reference": "cc54affdacb5618a07ec766e4cb15fc49e09cf86",
+            "url": "https://api.github.com/repos/mvriel/joindin-api-client/zipball/35b7542f5c42a950204fd6fae04d310425873738",
+            "reference": "35b7542f5c42a950204fd6fae04d310425873738",
             "shasum": ""
         },
         "require": {
@@ -1199,7 +1199,7 @@
             "guzzlehttp/guzzle-services": "~0.3",
             "symfony/serializer": "~2.5"
         },
-        "time": "2014-06-18 19:42:40",
+        "time": "2014-06-26 06:18:42",
         "type": "library",
         "installation-source": "source",
         "autoload": {
