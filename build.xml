@@ -35,12 +35,4 @@
   <exec command="scripts/jenkinslaunch.sh" checkreturn="true" />
  </target>
 
- <target name="minify" description="Run gulp to minify the JS and CSS" depends="installnpm" >
-  <exec command="npm run gulp" logoutput="/dev/stdout" checkreturn="true" />
- </target>
-
- <target name="installnpm" description="Install npm dependencies">
-  <exec command="npm install" logoutput="/dev/stdout" checkreturn="true" />
- </target>
-
 </project>
