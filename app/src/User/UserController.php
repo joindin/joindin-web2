@@ -51,7 +51,7 @@ class UserController extends BaseController
                 $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $keyPrefix = $this->cfg['redis']['keyPrefix'];
+                $keyPrefix = $this->cfg['redisKeyPrefix'];
                 $cache = new CacheService($keyPrefix);
                 $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
                 $user = $userApi->getUser($result->user_uri);

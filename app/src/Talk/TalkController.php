@@ -20,7 +20,7 @@ class TalkController extends BaseController
 
     public function index($eventSlug, $talkSlug)
     {
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
         $cache = new CacheService($keyPrefix);
 
         $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
@@ -60,7 +60,7 @@ class TalkController extends BaseController
 
     public function quick($talkStub)
     {
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
         $cache = new CacheService($keyPrefix);
         $talkDb = new TalkDb($cache);
         $talk = $talkDb->load('stub', $talkStub);
@@ -92,7 +92,7 @@ class TalkController extends BaseController
             $this->application->redirect($url);
         }
 
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
         $cache = new CacheService($keyPrefix);
         $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
         $event = $eventApi->getByFriendlyUrl($eventSlug);

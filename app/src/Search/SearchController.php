@@ -62,7 +62,7 @@ class SearchController extends BaseController
             $events = $event_collection->getEventCollection($keyword, $perPage, $start);
 
             // Save to our data store
-            $cache = new CacheService($this->cfg['redis']['keyPrefix']);
+            $cache = new CacheService($this->cfg['redisKeyPrefix']);
             $eventDb = new EventDb($cache);
             foreach ($events['events'] as $event) {
                 $eventDb->save($event);
