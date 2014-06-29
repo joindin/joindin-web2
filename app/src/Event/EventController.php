@@ -29,13 +29,11 @@ class EventController extends BaseController
 
     public function index()
     {
-        $page    = $this->application->request()->get('page');
-        $page    = ((int)$page === 0) ? 1 : $page;
-        $perPage = $this->eventsToShow;
-        $start   = ($page -1) * $perPage;
+        $page  = $this->application->request()->get('page', 1);
+        $start = ($page - 1) * $this->eventsToShow;
 
         $eventApi = $this->getEventApi();
-        $events = $eventApi->getCollection($perPage, $start, 'upcoming');
+        $events = $eventApi->getCollection($this->eventsToShow, $start, 'upcoming');
 
         $this->render('Event/index.html.twig', array('page' => $page, 'events' => $events));
     }
@@ -84,9 +82,7 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        /** @var EventScheduler $eventScheduler */
-        $eventScheduler = $this->application->event_scheduler;
-        $schedule = $eventScheduler->getScheduleData($event);
+        $schedule = $this->getEventScheduler()->getScheduleData($event);
 
         $this->render('Event/schedule.html.twig', array('event' => $event, 'eventDays' => $schedule));
     }
@@ -229,6 +225,16 @@ class EventController extends BaseController
      */
     protected function getEventApi()
     {
-        return $this->application->event_api_service;
+        return $this->application->container->get(ServiceProvider::SERVICE_API_EVENT);
+    }
+
+    /**
+     * Returns a service to construct the event schedule with.
+     *
+     * @return EventScheduler
+     */
+    private function getEventScheduler()
+    {
+        return $this->application->container->get(ServiceProvider::SERVICE_SCHEDULER);
     }
 }

@@ -2,6 +2,7 @@
 namespace Application;
 
 use Event\EventApi;
+use Event\ServiceProvider as EventServiceProvider;
 
 class ApplicationController extends BaseController
 {
@@ -14,10 +15,9 @@ class ApplicationController extends BaseController
 
     public function index()
     {
-        $page    = $this->application->request()->get('page');
-        $page    = ((int)$page === 0) ? 1 : $page;
+        $page    = $this->application->request()->get('page', 1);
         $perPage = 6;
-        $start   = ($page -1) * $perPage;
+        $start   = ($page - 1) * $perPage;
 
         $events = $this->getEventApi()->getCollection($perPage, $start, 'hot');
 
@@ -44,6 +44,6 @@ class ApplicationController extends BaseController
      */
     protected function getEventApi()
     {
-        return $this->application->event_api_service;
+        return $this->application->container->get(EventServiceProvider::SERVICE_API_EVENT);
     }
 }
