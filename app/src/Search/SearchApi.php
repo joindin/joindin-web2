@@ -2,7 +2,6 @@
 namespace Search;
 
 use Application\BaseApi;
-use Event\EventEntity;
 use GuzzleHttp\Command\Guzzle\GuzzleClient;
 use Joindin\Api\Response;
 
@@ -27,6 +26,7 @@ class SearchApi extends BaseApi
      * @param int $limit
      * @param int $start
      * @param null $filter
+     *
      * @return array
      */
     public function getEventCollection($keyword, $limit = 10, $start = 1, $filter = null)

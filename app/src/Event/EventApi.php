@@ -2,9 +2,6 @@
 namespace Event;
 
 use GuzzleHttp\Command\Guzzle\GuzzleClient;
-use Joindin\Api\Client;
-use Joindin\Api\Description\Event\Comments;
-use Joindin\Api\Description\Events;
 use Joindin\Api\Entity\Event;
 use Joindin\Api\Response;
 
@@ -13,10 +10,10 @@ class EventApi
     /** @var EventDb */
     protected $cache;
 
-    /** @var GuzzleClient  */
+    /** @var GuzzleClient */
     protected $eventService;
 
-    /** @var GuzzleClient  */
+    /** @var GuzzleClient */
     protected $eventCommentService;
 
     /**
@@ -45,7 +42,7 @@ class EventApi
     public function getCollection($limit = 10, $start = 1, $filter = null)
     {
         /** @var Response $response */
-        $response = $this->eventService->list(
+        $response = $this->eventService->getCollection(
             array('resultsperpage' => $limit, 'start' => $start, 'filter' => $filter)
         );
 
@@ -61,7 +58,7 @@ class EventApi
      *
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
      *
-     * @return Event|false The event we found, or false if something went wrong
+     * @return Event|null The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl)
     {
@@ -73,44 +70,82 @@ class EventApi
      *
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
      *
-     * @return Event|false The event we found, or false if something went wrong
+     * @return Event|null The event we found, or false if something went wrong
      */
     public function getByStub($stub)
     {
         return $this->fetchEventFromDbByProperty('stub', $stub);
     }
 
+    /**
+     * Retrieves an event using its API url.
+     *
+     * @param string $url
+     *
+     * @return Event|null
+     */
+    public function getByUrl($url)
+    {
+        $event = $this->fetchEventFromApi($url);
+        if (! $event) {
+            return null;
+        }
+
+        // store event in cache to be able to retrieve it with the other methods as well.
+        $this->storeEventsInCache(array($event));
+
+        return $event;
+    }
+
 	/**
 	 * Get comments for given event comment uri.
      *
 	 * @param string $commentUri
-	 * @param bool   $verbose
      *
 	 * @return Event\Comment[]
 	 */
-    public function getComments($commentUri, $verbose = false)
+    public function getComments($commentUri)
     {
         /** @var Response $response */
-        $response = $this->eventCommentService->list(array('url' => $commentUri));
+        $response = $this->eventCommentService->getCollection(array('url' => $commentUri));
 
         return $response->getResource();
     }
 
+    /**
+     * Adds a comment on the given event.
+     *
+     * @param Event  $event
+     * @param string $comment
+     *
+     * @throws \Exception if the API failed to submit the new comment.
+     *
+     * @return void
+     */
     public function addComment(Event $event, $comment)
     {
         try {
             $this->eventCommentService->submit(array('url' => $event->getCommentsUri(), 'comment' => $comment));
         } catch (\Exception $e) {
-            throw new \Exception('Failed to add comment');
+            throw new \Exception('Failed to add comment', 0, $e);
         }
     }
 
+    /**
+     * Marks the current user as attending the given event.
+     *
+     * @param Event $event
+     *
+     * @throws \Exception if the API failed to accept this request.
+     *
+     * @return void
+     */
     public function attend(Event $event)
     {
         try {
             $this->eventService->getHttpClient()->post($event->getAttendingUri());
         } catch (\Exception $e) {
-            throw new \Exception('Failed to mark you as attending');
+            throw new \Exception('Failed to mark you as attending', 0, $e);
         }
     }
 
@@ -127,55 +162,56 @@ class EventApi
      */
     public function submit(array $data)
     {
-        // convert timezone variable into appropriate sub-elements for api.
-        if (isset($data['timezone'])) {
-            list($tz_continent, $tz_place) = explode('/', $data['timezone']);
-            unset($data['timezone']);
-            $data['tz_continent'] = $tz_continent;
-            $data['tz_place'] = $tz_place;
-        }
-
-        // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
-        foreach ($dateFields as $dateField) {
-            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
-                $data[$dateField] = $data[$dateField]->format('Y-m-d');
-            }
-        }
+        $data = $this->splitTimezone($data);
+        $data = $this->convertDateTimeFieldsToString($data);
 
         try {
             $response = $this->eventService->submit($data);
         } catch (\Exception $e) {
             throw new \Exception('Your event submission was not accepted, the server reports: ' . $e->getMessage());
         }
-        
+
+        // if the response is empty or an empty array; then the event was pending
         if (! $response) {
             return null;
         }
 
-        /** @var Response $response */
-        $response = $this->eventService->fetch(array('url' => $response['location']));
-        $event = current($response->getResource());
-
-        $this->storeEventsInCache(array($event));
-
-        return $event;
+        return $this->getByUrl($response['location']);
     }
 
     /**
-     * @param $propertyName
-     * @param $propertyValue
-     * @return bool|mixed
+     * Queries the cache with the given key and value and fetches the event using the returned URL.
+     *
+     * @param string $key
+     * @param string $value
+     *
+     * @return Event|null
      */
-    private function fetchEventFromDbByProperty($propertyName, $propertyValue)
+    private function fetchEventFromDbByProperty($key, $value)
     {
-        $event = $this->cache->load($propertyName, $propertyValue);
+        $event = $this->cache->load($key, $value);
         if (! $event) {
-            return false;
+            return null;
         }
 
-        /** @var Response $response */
-        $response = $this->eventService->fetch(array('url' => $event['uri']));
+        return $this->fetchEventFromApi($event['uri']);
+    }
+
+    /**
+     * Attempts to fetch an event from the API.
+     *
+     * @param string $url
+     *
+     * @return Event|null
+     */
+    private function fetchEventFromApi($url)
+    {
+        try {
+            /** @var Response $response */
+            $response = $this->eventService->fetch(array('url' => $url));
+        } catch (\Exception $e) {
+            return null;
+        }
 
         return current($response->getResource());
     }
@@ -192,5 +228,46 @@ class EventApi
         foreach ($events as $event) {
             $this->cache->save($event);
         }
+    }
+
+    /**
+     * Checks submitted data for a timezone field and split it into tz_continent and tz_place.
+     *
+     * @param mixed[] $data
+     *
+     * @return mixed[]
+     */
+    private function splitTimezone(array $data)
+    {
+        if (! isset($data['timezone'])) {
+            return $data;
+        }
+
+        list($tz_continent, $tz_place) = explode('/', $data['timezone']);
+        unset($data['timezone']);
+        $data['tz_continent'] = $tz_continent;
+        $data['tz_place'] = $tz_place;
+
+        return $data;
+    }
+
+    /**
+     * Convert datetime objects to their string representation when submitting data.
+     *
+     * @param mixed[] $data
+     *
+     * @return mixed[]
+     */
+    private function convertDateTimeFieldsToString(array $data)
+    {
+        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+
+        foreach ($dateFields as $dateField) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+                $data[$dateField] = $data[$dateField]->format('Y-m-d');
+            }
+        }
+
+        return $data;
     }
 }
