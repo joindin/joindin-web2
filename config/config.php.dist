@@ -8,7 +8,6 @@ $config = array(
             ),
             'apiUrl' => 'https://api.joind.in',
             'googleAnalyticsId' => '',
-            'useMinifiedFiles' => false,
         ),
         'oauth' => array(
             'client_id' => 'web2',
