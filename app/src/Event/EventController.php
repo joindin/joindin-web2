@@ -23,6 +23,7 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
+        $app->get('/event/:friendly_name/talk-comments', array($this, 'talkComments'))->name("event-talk-comments");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
         $app->get('/event/xhr-attend/:friendly_name', array($this, 'xhrAttend'));
@@ -87,6 +88,27 @@ class EventController extends BaseController
         }
 
         $this->render('Event/map.html.twig', array('event' => $event));
+    }
+
+    public function talkComments($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            $comments = $eventApi->getTalkComments($event->getAllTalkCommentsUri(), true);
+
+            $this->render(
+                'Event/talk-comments.html.twig',
+                array(
+                    'event' => $event,
+                    'talkComments' => $comments,
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events-index");
+            $this->application->redirect($events_url);
+        }
     }
 
     public function schedule($friendly_name)

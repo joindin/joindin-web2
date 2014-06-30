@@ -2,6 +2,7 @@
 namespace Event;
 
 use Application\BaseApi;
+use Talk\TalkCommentEntity;
 
 class EventApi extends BaseApi
 {
@@ -218,5 +219,28 @@ class EventApi extends BaseApi
     private function saveEventUrl(EventEntity $event)
     {
         $this->eventDb->save($event);
+    }
+
+    /**
+     * Get comments for all the talks of a given event
+     * @param $comment_uri
+     * @param bool $verbose
+     * @return Comment[]
+     */
+    public function getTalkComments($comment_uri, $verbose = false)
+    {
+        if ($verbose) {
+            $comment_uri = $comment_uri . '?verbose=yes';
+        }
+
+        $comments = (array)json_decode($this->apiGet($comment_uri));
+
+        $commentData = array();
+
+        foreach ($comments['comments'] as $comment) {
+            $commentData[] = new TalkCommentEntity($comment);
+        }
+
+        return $commentData;
     }
 }
