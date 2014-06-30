@@ -1,0 +1,13 @@
+{% extends '/layout.html.twig' %}
+
+{% block body %}
+            {% include 'Event/_common/event_header.html.twig' %}
+
+            <hr>
+            {% if talkComments %}
+                <h2>Recent comments</h2>
+                {% for talkComment in talkComments %}
+                    {% include '_common/comment.html.twig' with {'comment': talkComment, 'showTalkTitle': true} %}
+                {% endfor %}
+            {% endif %}
+{% endblock %}
