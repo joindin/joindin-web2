@@ -1,13 +1,13 @@
 <?php
 // include dependencies
-require '../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 session_cache_limiter(false);
 session_start();
 
 // include view controller
-require '../app/src/View/Filters.php';
-require '../app/src/View/Functions.php';
+require __DIR__.'/../app/src/View/Filters.php';
+require __DIR__.'/../app/src/View/Functions.php';
 
 $config = array();
 $configFile = realpath(__DIR__ . '/../config/config.php');
@@ -53,7 +53,7 @@ $app->view()->appendData(
 
 // set Twig base folder, view folder and initialize Joindin filters
 $app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
-$app->view()->setTemplatesDirectory('../app/templates');
+$app->view()->setTemplatesDirectory(__DIR__.'/../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
 $app->configureMode('development', function () use ($app) {
