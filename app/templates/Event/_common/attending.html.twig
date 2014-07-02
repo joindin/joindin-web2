@@ -1,9 +1,19 @@
 {% if event.isAttending == false and user %}
-    <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" class="btn btn-xs btn-primary">
+    {% set attendingUrl = urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName }) ~ "?" %}
+
+    {% if page > 0 %}
+        {% set attendingUrl = attendingUrl ~ "page=" ~ page|escape ~ "&" %}
+    {% endif %}
+
+    {% if keyword is defined %}
+        {% set attendingUrl  = attendingUrl ~ "keyword=" ~ keyword|escape %}
+    {% endif %}
+
+    <a href="{{ attendingUrl }}" data-friendly-name="{{ event.getUrlFriendlyName|escape }}" class="attending btn btn-xs btn-primary">
         {% if event.isPastEvent %}
-            I went to this event
+          I went to this event
         {% else %}
-            I will be attending
+          I will be attending
         {% endif %}
     </a>
 {% endif %}

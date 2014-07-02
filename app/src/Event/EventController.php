@@ -2,8 +2,11 @@
 namespace Event;
 
 use Application\BaseController;
+use Application\CacheService;
 use Talk\TalkDb;
 use Talk\TalkApi;
+use Event\EventDb;
+use Event\EventApi;
 
 class EventController extends BaseController
 {
@@ -184,7 +187,7 @@ class EventController extends BaseController
         }
 
         if (filter_var($page, FILTER_VALIDATE_INT) && !$keyword) {
-            $url = $this->application->urlFor('events') . '?' . http_build_query(array('page' => $page));
+            $url = $this->application->urlFor('events-index') . '?' . http_build_query(array('page' => $page));
         }
 
         $this->application->redirect($url);
