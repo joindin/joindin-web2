@@ -9,7 +9,7 @@
             {% include '_common/comment.html.twig' with {
                 'comment': talkComment,
                 'showTalkTitle': true,
-                'talkLink': urlForTalk(event.getUrlFriendlyName(), 'TODO:get-talk-slug')
+                'talkLink': urlForTalk(event.getUrlFriendlyName(), talkComment.getUrlFriendlyTalkTitle())
             } %}
         {% endfor %}
     {% endif %}

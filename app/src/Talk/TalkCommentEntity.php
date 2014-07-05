@@ -77,4 +77,13 @@ class TalkCommentEntity
 
         return $this->data->talk_title;
     }
+
+    public function getUrlFriendlyTalkTitle()
+    {
+        if (!isset($this->data->url_friendly_talk_title)) {
+            return null;
+        }
+
+        return $this->data->url_friendly_talk_title;
+    }
 }
