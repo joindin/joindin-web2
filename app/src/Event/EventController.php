@@ -92,17 +92,30 @@ class EventController extends BaseController
 
     public function talkComments($friendly_name)
     {
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
+        $perPage = $this->eventsToShow;
+        $start = ($page -1) * $perPage;
+
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
-            $comments = $eventApi->getTalkComments($event->getAllTalkCommentsUri(), true);
+            $comments = $eventApi->getTalkComments(
+                $event->getAllTalkCommentsUri(),
+                $this->eventsToShow,
+                $start,
+                true
+            );
 
             $this->render(
                 'Event/talk-comments.html.twig',
                 array(
                     'event' => $event,
-                    'talkComments' => $comments,
+                    'page' => $page,
+                    'talkComments' => $comments['comments'],
+                    'pagination' => $comments['pagination']
                 )
             );
         } else {

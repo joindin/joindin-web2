@@ -3,14 +3,14 @@
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
-    {% if talkComments %}
-        <h2>Recent comments</h2>
-        {% for talkComment in talkComments %}
-            {% include '_common/comment.html.twig' with {
-                'comment': talkComment,
-                'showTalkTitle': true,
-                'talkLink': urlForTalk(event.getUrlFriendlyName(), talkComment.getUrlFriendlyTalkTitle())
-            } %}
-        {% endfor %}
-    {% endif %}
+    <h2>Recent comments</h2>
+    {% for talkComment in talkComments %}
+        {% include '_common/comment.html.twig' with {
+            'comment': talkComment,
+            'showTalkTitle': true,
+            'talkLink': urlForTalk(event.getUrlFriendlyName(), talkComment.getUrlFriendlyTalkTitle())
+        } %}
+    {% endfor %}
+
+    {% include '_common/pagination.html.twig' %}
 {% endblock %}
