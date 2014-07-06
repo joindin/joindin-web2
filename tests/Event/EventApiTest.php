@@ -202,4 +202,72 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         $mockEventApi->attend($mockEventObj);
     }
+
+    public function testDefaultGetTalkCommentsParametersAreSet()
+    {
+        $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events/1/talk_comments?resultsperpage=10&start=1')
+            ->will($this->returnValue(json_encode(array('comments' => array(), 'meta' => array()))));
+
+        $mockEvent->getTalkComments($comment_uri);
+    }
+
+    public function testGetTalkCommentsWithLimitSetsParamsCorrectly()
+    {
+        $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events/1/talk_comments?resultsperpage=75&start=1')
+            ->will($this->returnValue(json_encode(array('comments' => array(), 'meta' => array()))));
+
+        $mockEvent->getTalkComments($comment_uri, 75);
+    }
+
+    public function testGetTalkCommentsWithStartValueSetsParamsCorrectly()
+    {
+        $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events/1/talk_comments?resultsperpage=32&start=6')
+            ->will($this->returnValue(json_encode(array('comments' => array(), 'meta' => array()))));
+
+        $mockEvent->getTalkComments($comment_uri, 32, 6);
+    }
+
+    public function testGetTalkCommentsWithVerboseSetsAllParamsCorrectly()
+    {
+        $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events/1/talk_comments?resultsperpage=16&start=3&verbose=yes')
+            ->will($this->returnValue(json_encode(array('comments' => array(), 'meta' => array()))));
+
+        $mockEvent->getTalkComments($comment_uri, 16, 3, true);
+    }
 }
