@@ -13,7 +13,7 @@ use Talk\TalkApi;
 
 class EventController extends BaseController
 {
-    private $eventsToShow = 10;
+    private $itemsPerPage = 10;
 
     protected function defineRoutes(\Slim\Slim $app)
     {
@@ -37,12 +37,11 @@ class EventController extends BaseController
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
-        $perPage = 10;
-        $start = ($page -1) * $perPage;
+        $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
         $events = $eventApi->getCollection(
-            $this->eventsToShow,
+            $this->itemsPerPage,
             $start,
             'upcoming'
         );
@@ -95,8 +94,7 @@ class EventController extends BaseController
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
-        $perPage = $this->eventsToShow;
-        $start = ($page -1) * $perPage;
+        $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
@@ -104,7 +102,7 @@ class EventController extends BaseController
         if ($event) {
             $comments = $eventApi->getTalkComments(
                 $event->getAllTalkCommentsUri(),
-                $this->eventsToShow,
+                $this->itemsPerPage,
                 $start,
                 true
             );
@@ -114,8 +112,7 @@ class EventController extends BaseController
                 array(
                     'event' => $event,
                     'page' => $page,
-                    'talkComments' => $comments['comments'],
-                    'pagination' => $comments['pagination']
+                    'talkComments' => $comments,
                 )
             );
         } else {

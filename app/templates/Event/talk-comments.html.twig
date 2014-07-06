@@ -4,13 +4,12 @@
     {% include 'Event/_common/event_header.html.twig' %}
 
     <h2>Recent comments</h2>
-    {% for talkComment in talkComments %}
+    {% for comment in talkComments.comments %}
         {% include '_common/comment.html.twig' with {
-            'comment': talkComment,
             'showTalkTitle': true,
-            'talkLink': urlForTalk(event.getUrlFriendlyName(), talkComment.getUrlFriendlyTalkTitle())
+            'talkLink': urlForTalk(event.getUrlFriendlyName(), comment.getUrlFriendlyTalkTitle())
         } %}
     {% endfor %}
 
-    {% include '_common/pagination.html.twig' %}
+    {% include '_common/pagination.html.twig' with {'pagination': talkComments.pagination} %}
 {% endblock %}
