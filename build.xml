@@ -3,7 +3,7 @@
 <project name="joindin-responsive" default="build" basedir=".">
  <property name="basedir" value="."/>
 
- <target name="build" depends="phplint,phpunit,phpcs,minify" />
+ <target name="build" depends="phplint,phpunit,phpcs" />
 
  <target name="phplint" description="Run php -l over the fileset">
    <phplint haltonfailure="true">
@@ -33,14 +33,6 @@
 
  <target name="launch">
   <exec command="scripts/jenkinslaunch.sh" checkreturn="true" />
- </target>
-
- <target name="minify" description="Run gulp to minify the JS and CSS" depends="installnpm" >
-  <exec command="npm run gulp" logoutput="/dev/stdout" checkreturn="true" />
- </target>
-
- <target name="installnpm" description="Install npm dependencies">
-  <exec command="npm install" logoutput="/dev/stdout" checkreturn="true" />
  </target>
 
 </project>

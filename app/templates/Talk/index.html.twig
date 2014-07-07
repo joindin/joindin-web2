@@ -16,22 +16,24 @@
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
     <section>
-        <h2>
-            {% if talk.getType != 'Talk' %}
-                <span class="talk-type-label {{ talk.getTypeClass }}">{{ talk.getType }}</span>
-            {% endif %}
-
+        <h3>
             {{ talk.getTitle }}
-
-            {% if talk.getSpeakers %}
-                &mdash;
-                {% for speaker in talk.getSpeakers %}
-                    {{ speaker.speaker_name }}{% if not speaker.last and not speaker.first %}, {% endif %}
-                {% endfor %}
+            {% if talk.getType != 'Talk' %}
+                <span class="label talk-type-label {{ talk.getTypeClass }}">{{ talk.getType }}</span>
             {% endif %}
-        </h2>
-        <p>
-        </p>
+        </h3>
+        {% if talk.getSpeakers %}
+            <h4>
+                {% for speaker in talk.getSpeakers %}
+                    {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+                <small>{{ talk.getStartDateTime()|date('j F Y \\a\\t H:i') }} &mdash; {{ talk.language }}</small>
+            </h4>
+        {% endif %}
+
+        <ul class="list-inline">
+            {% if talk.slidesLink is not empty %}<li><a href="{{ talk.slidesLink }}">View Slides</a></li>{% endif %}
+        </ul>
 
         <p>{{ talk.getDescription | nl2br }}</p>
     </section>
@@ -56,7 +58,7 @@
                 {% endif %}
                 <form id="add-comment" method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
                     <div class="rating-vote-container">
-                        <div id="ating_container" class="form-group">
+                        <div id="rating_container" class="form-group">
                             <label for="rating">Rate the talk:</label>
                             <select id="rating" name="rating">
                                 <option value="0"></option>

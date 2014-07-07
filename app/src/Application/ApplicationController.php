@@ -22,7 +22,7 @@ class ApplicationController extends BaseController
         $perPage = 6;
         $start = ($page -1) * $perPage;
 
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
 
         $cache = new CacheService($keyPrefix);
         $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));

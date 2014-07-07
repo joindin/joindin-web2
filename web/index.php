@@ -17,6 +17,9 @@ if (is_readable($configFile)) {
     include realpath(__DIR__ . '/../config/config.php.dist');
 }
 
+// Wrap the Config Data with the Application Config object
+$config['slim']['custom'] = new \Application\Config($config['slim']['custom']);
+
 // initialize Slim
 $app = new \Slim\Slim(
     array_merge(
@@ -41,14 +44,9 @@ $app->view()->appendData(
 );
 
 // Other variables needed by the main layout.html.twig template
-$useMinifiedFiles = false;
-if (array_key_exists('useMinifiedFiles', $config['slim']['custom'])) {
-    $useMinifiedFiles = $config['slim']['custom']['useMinifiedFiles'];
-}
 $app->view()->appendData(
     array(
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
-        'use_minified_files' => $useMinifiedFiles,
         'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
     )
 );
