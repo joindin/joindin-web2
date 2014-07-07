@@ -58,7 +58,7 @@
                 {% endif %}
                 <form id="add-comment" method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
                     <div class="rating-vote-container">
-                        <div id="ating_container" class="form-group">
+                        <div id="rating_container" class="form-group">
                             <label for="rating">Rate the talk:</label>
                             <select id="rating" name="rating">
                                 <option value="0"></option>

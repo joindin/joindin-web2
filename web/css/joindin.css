@@ -191,19 +191,6 @@ table.schedule a:hover span.speaker {
     background-position: 0 -21px;
 }
 
-.rating-vote-container #content_rating_container, .rating-vote-container #speaker_rating_container {
-    float: left;
-    clear: none;
-}
-
-.rating-vote-container #speaker_rating_container {
-    margin-left: 2em;
-}
-
-.rating-vote-container label {
-    clear: left;
-}
-
 #comments form div {
     clear: left;
 }
@@ -212,7 +199,7 @@ table.schedule a:hover span.speaker {
     margin-top: 1em;
 }
 
-#comments div#content_rating_value, #comments div#speaker_rating_value {
+#comments div#rating_value {
     clear: none;
     font-size: 80%;
     font-weight: bold;
