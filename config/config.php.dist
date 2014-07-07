@@ -13,5 +13,8 @@ $config = array(
         'oauth' => array(
             'client_id' => 'web2',
         ),
+        'twig' => array(
+            'cache' => '/tmp/joindin-twig-cache'
+        )
     ),
 );
