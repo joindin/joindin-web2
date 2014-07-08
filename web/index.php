@@ -30,6 +30,10 @@ $app = new \Slim\Slim(
     )
 );
 
+$app->configureMode('live', function () use ($app) {
+    $app->config('debug', 0);
+});
+
 $app->configureMode('development', function () use ($app) {
     error_reporting(-1);
     ini_set('display_errors', 1);
