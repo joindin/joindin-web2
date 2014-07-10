@@ -27,7 +27,7 @@
                             Anonymous
                         {% endif %}
                         <small>
-                            at {{ comment.getCommentDate|date('H:i \\o\\n j M Y') }}
+                            at {{ comment.getCommentDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }}
                             <span class="hidden-xs">{% if comment.getCommentSource is not null %} (via {{ comment.getCommentSource }}){% endif %}</span>
                         </small>
                     </div>
