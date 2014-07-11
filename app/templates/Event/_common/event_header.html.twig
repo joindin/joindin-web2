@@ -8,10 +8,10 @@
                 {{ event.getName }}
                 <br>
                 <small>
-                    {{ event.getStartDate|date('M d Y') }}
-                    {%  if event.getStartDate|date('M d Y')
-                    is not sameas(event.getEndDate|date('M d Y')) %}
-                        &ndash; {{ event.getEndDate|date('M d Y') }}
+                    {{ event.getStartDate|date('M d Y', event.getFullTimezone) }}
+                    {%  if event.getStartDate|date('M d Y', event.getFullTimezone)
+                    is not sameas(event.getEndDate|date('M d Y', event.getFullTimezone)) %}
+                        &ndash; {{ event.getEndDate|date('M d Y', event.getFullTimezone) }}
                     {% endif %} at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
 
                     {% include 'Event/_common/attending_string.html.twig' %}
