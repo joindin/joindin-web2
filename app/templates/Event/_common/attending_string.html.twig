@@ -1,12 +1,13 @@
 {% if 0 != event.getAttendeeCount %}
     | <span class="{{ event.getUrlFriendlyName|escape }}-attending-count">{{ event.getAttendeeCount|escape }}</span>
+    <span class="{{ event.getUrlFriendlyName|escape }}-attending-string">
     {% if event.isPastEvent() %}
         attended
     {% else %}
         attending
     {% endif %}
+    </span>
 
-    <span class="{{ event.getUrlFriendlyName|escape }}-user-attending">
     {% if event.isAttending() %}
         <span class="label label-success">including you</span>
     {% endif %}

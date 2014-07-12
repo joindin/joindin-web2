@@ -7,21 +7,54 @@ $(function(){
         var dataAttr = $(this).data();
         var getUrl = localUrl + '/event/xhr-attend/' + dataAttr.friendlyName;
 
-        $.ajax({
-            "type": "GET",
-            "url": getUrl,
-            "success": function (result) {
-                if (result.success) {
-                    var eventName = $(this).data().friendlyName;
-                    var eventAttendingCountSpan = $('.' + eventName + '-attending-count');
-                    var eventAttendingCount = parseInt(eventAttendingCountSpan.text());
-                    eventAttendingCountSpan.html(++eventAttendingCount);
-                    this.remove();
-                    $('.' + eventName + '-user-attending').html('including you');
-                    $('.' + eventName + '-user-attending').addClass('label label-success');
-                }
-            }.bind(this),
-            "dataType": "json"
-        });
+        if (!$(this).hasClass('label-success')) {
+            $.ajax({
+                "type": "GET",
+                "url": getUrl,
+                "success": function (result) {
+                    if (result.success) {
+
+                        var eventName = $(this).data().friendlyName;
+
+                        var eventAttendingCountSpan = $('.' + eventName + '-attending-count');
+
+                        if (eventAttendingCountSpan.length  == 0) {
+                            $(this).before("<span class='" + eventName + "-attending-count'></span>");
+                            eventAttendingCountSpan = $('.' + eventName + '-attending-count');
+                        }
+
+                        var existingEventAttendingCount = parseInt(eventAttendingCountSpan.html());
+
+                        var eventAttendingCount = 0;
+                        if (existingEventAttendingCount > 0) {
+                            eventAttendingCount = existingEventAttendingCount;
+                        }
+
+                        eventAttendingCountSpan.html(++eventAttendingCount);
+
+                        var attendanceString  = 'attending ';
+                        if($.trim($(this).html()) == 'I went to this event') {
+                            attendanceString = 'attended ';
+                        }
+
+                        var eventAttendingString = $('.' + eventName + '-attending-string');
+
+                        if (eventAttendingString.length  == 0) {
+                            $(this).before("<span class='" + eventName + "-attending-string'></span>");
+                            eventAttendingString = $('.' + eventName + '-attending-string');
+                        }
+
+                        eventAttendingString.html(attendanceString);
+                        eventAttendingString.removeClass('hide');
+
+                        $(this).html('including you');
+                        $(this).removeClass('btn btn-xs btn-primary');
+                        $(this).addClass('label label-success');
+                        $(this).css('cursor', 'default');
+                    }
+                }.bind(this),
+                "dataType": "json"
+            });
+        }
     });
 });
