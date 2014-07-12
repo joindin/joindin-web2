@@ -5,6 +5,8 @@ use Application\BaseController;
 use Application\CacheService;
 use Talk\TalkDb;
 use Talk\TalkApi;
+use Event\EventDb;
+use Event\EventApi;
 
 class EventController extends BaseController
 {
@@ -18,6 +20,7 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
+        $app->get('/event/xhr-attend/:friendly_name', array($this, 'xhrAttend'));
         $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
     }
 
@@ -165,14 +168,43 @@ class EventController extends BaseController
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
-            $eventApi->attend($event, $_SESSION['user']);
+            $attendance = new EventAttendance($this->getEventApi());
+            $attendance->confirm($event, $_SESSION['user']);
         }
 
         $url = '/';
         $r = $this->application->request()->get('r');
+        $keyword = $this->application->request()->get('keyword');
+        $page = $this->application->request()->get('page');
+
         if ($r) {
-            $url = $this->application->urlFor("event-detail", array('friendly_name' => $r));
+            $url = $this->application->urlFor('event-detail', array('friendly_name' => $r));
         }
+
+        if ($keyword && filter_var($page, FILTER_VALIDATE_INT)) {
+            $queryString = http_build_query(array('page' => $page, 'keyword' => $keyword));
+            $url = $this->application->urlFor('search-events') . '?' . $queryString;
+        }
+
+        if (filter_var($page, FILTER_VALIDATE_INT) && !$keyword) {
+            $url = $this->application->urlFor('events-index') . '?' . http_build_query(array('page' => $page));
+        }
+
         $this->application->redirect($url);
+    }
+
+    public function xhrAttend($friendly_name)
+    {
+        $this->application->response()->header('Content-Type', 'application/json');
+
+        $api = $this->getEventApi();
+        $event = $api->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            $attendance = new EventAttendance($this->getEventApi());
+            $result = $attendance->confirm($event, $_SESSION['user']);
+        }
+
+        $this->application->response()->body(json_encode(array('success' => $result)));
     }
 }
