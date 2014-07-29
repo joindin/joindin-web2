@@ -20,7 +20,7 @@ class DateTransformer implements DataTransformerInterface
         if ($value) {
             $d = strtotime($value);
             if ($d) {
-                $value = date('Y-m-d', $d);
+                $value = date($format, $d);
             }
         }
         return $value;
