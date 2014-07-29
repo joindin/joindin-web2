@@ -67,7 +67,10 @@ class EventForm extends AbstractType
                 'textarea',
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
-                    'attr'        => ['class' => 'form-group form-control']
+                    'attr'        => [
+                                        'class' => 'form-group form-control',
+                                        'rows' => '10',
+                                     ]
                 ]
             )
             ->add(
@@ -81,10 +84,10 @@ class EventForm extends AbstractType
             )
             ->add('start_date', 'text', $this->getOptionsForDateWidget('Start date'))
             ->add('end_date', 'text', $this->getOptionsForDateWidget('End date'))
-            ->add('href', 'url', $this->getOptionsForUrlWidget('Website'))
-            ->add('cfp_start_date', 'text', $this->getOptionsForDateWidget('Call for Papers start', false))
-            ->add('cfp_end_date', 'text', $this->getOptionsForDateWidget('Call for Papers end', false))
-            ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for Papers website', false))
+            ->add('href', 'url', $this->getOptionsForUrlWidget('Website URL'))
+            ->add('cfp_start_date', 'text', $this->getOptionsForDateWidget('Opening date', false))
+            ->add('cfp_end_date', 'text', $this->getOptionsForDateWidget('Closing date', false))
+            ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
         ;
     }
 

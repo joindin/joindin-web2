@@ -29,7 +29,7 @@
                 {{ form_row(form.href) }}
             </fieldset>
             <fieldset class="col-sm-6">
-                <legend>Date and Time</legend>
+                <legend>Date and time</legend>
                 {{ form_row(form.timezone) }}
                 <div class="row">
                     <div class="col-sm-6">
@@ -41,16 +41,16 @@
                 </div>
             </fieldset>
             <fieldset class="col-offset-sm-6 col-sm-6">
-                <legend>Call for Papers</legend>
+                <legend>Call for papers</legend>
                 <div class="row">
                     <div class="col-sm-6">
-                        {{ form_row(form.cfp_start_date, {'label' : 'Start'}) }}
+                        {{ form_row(form.cfp_start_date) }}
                     </div>
                     <div class="col-sm-6">
-                        {{ form_row(form.cfp_end_date, {'label' : 'End'}) }}
+                        {{ form_row(form.cfp_end_date) }}
                     </div>
                 </div>
-                {{ form_row(form.cfp_url, {'label' : 'Website'}) }}
+                {{ form_row(form.cfp_url) }}
             </fieldset>
         </div>
         <div class="row">
@@ -66,15 +66,21 @@
 {% endblock %}
 
 {% block extraAside %}
-    <h3>Submission Tips & Terms</h3>
+    <h3>Submission tips</h3>
     <p>
         Here's a few useful definitions when submitting events:
     </p>
     <dl>
+        <dt>English</dt>
+        <dd>
+            Please ensure that the description is in English with a translation below if required.
+        </dd>
+    </dl>
+    <dl>
         <dt>Call for Papers</dt>
         <dd>
-            If your event is going to have a time for session submissions, check the box and specify the range. This
-            will show in the event detail page.
+            If your event is going to have a time for session submissions, please enter the dates
+            that your Call for papers opens and closes. This will show in the event detail page.
         </dd>
     </dl>
 {% endblock %}
