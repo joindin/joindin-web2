@@ -13,13 +13,13 @@
 {% endspaceless %}
 {% endblock form_errors %}
 
-{# Errors class after the element & set has-error class as required #}
+{# form-group class on containing div & set has-error class as required. Also
+render the errors after the widget. #}
 {% block form_row %}
 {% spaceless %}
     <div class="form-group {% if errors|length > 0 %}has-error{% endif %}">
         {{ form_label(form) }}
         {{ form_widget(form) }}
-        {# {{ form_widget(form, { 'attr': {'class': 'form-control'} }) }} #}
         {{ form_errors(form) }}
     </div>
 {% endspaceless %}
