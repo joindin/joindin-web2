@@ -27,40 +27,14 @@ render the errors after the widget. #}
 
 {# Elements need a form-control class #}
 {% block widget_attributes %}
-{% spaceless %}
-    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
-    id="{{ id }}" name="{{ full_name }}"
-    {%- if read_only %} readonly="readonly"{% endif -%}
-    {%- if disabled %} disabled="disabled"{% endif -%}
-    {%- if required %} required="required"{% endif -%}
-    {%- for attrname, attrvalue in attr -%}
-        {{- " " -}}
-        {%- if attrname in ['placeholder', 'title'] -%}
-            {{- attrname }}="{{ attrvalue|trans({}, translation_domain) }}"
-        {%- elseif attrvalue is sameas(true) -%}
-            {{- attrname }}="{{ attrname }}"
-        {%- elseif attrvalue is not sameas(false) -%}
-            {{- attrname }}="{{ attrvalue }}"
-        {%- endif -%}
-    {%- endfor -%}
-{% endspaceless %}
+{% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
+{{ parent() }}
 {% endblock widget_attributes %}
 
 {# Labels need a control-label class #}
 {% block form_label %}
-{% spaceless %}
-    {% if label is not sameas(false) %}
-        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' control-label')|trim}) %}
-        {% if not compound %}
-            {% set label_attr = label_attr|merge({'for': id}) %}
-        {% endif %}
-        {% if required %}
-            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
-        {% endif %}
-        {% if label is empty %}
-            {% set label = name|humanize %}
-        {% endif %}
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
-    {% endif %}
-{% endspaceless %}
+{% if label is not sameas(false) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' control-label')|trim}) %}
+{% endif %}
+{{ parent() }}
 {% endblock form_label %}
