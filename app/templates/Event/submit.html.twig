@@ -22,13 +22,13 @@
         {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
         {{ form_errors(form) }}
         <div class="row">
-            <fieldset class="col-md-6">
+            <fieldset class="col-sm-6">
                 <legend>Event information</legend>
                 {{ form_row(form.name) }}
                 {{ form_row(form.description) }}
                 {{ form_row(form.href) }}
             </fieldset>
-            <fieldset class="col-md-6">
+            <fieldset class="col-sm-6">
                 <legend>Date and Time</legend>
                 {{ form_row(form.timezone) }}
                 <div class="row">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="col-offset-md-6 col-md-6">
+            <fieldset class="col-offset-sm-6 col-sm-6">
                 <legend>Call for Papers</legend>
                 <div class="row">
                     <div class="col-sm-6">
