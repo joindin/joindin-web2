@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Usage (extraneous use of variables is made to illustrate which parts are used):
  *
  * ```
- * $formType = new EventFormType();
+ * $formType = new EventForm();
  * $factory  = $this->application->formFactory;
  * $form     = $factory->create($formType);
  * $formName = $form->getName();
@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * }
  * ```
  */
-class EventFormType extends AbstractType
+class EventForm extends AbstractType
 {
     /**
      * Returns the name of this form type.

@@ -63,7 +63,7 @@ class FormMiddleware extends Middleware
      *
      * ```
      *   $factory            = $this->application->formFactory;
-     *   $formTypeDefinition = new EventFormType();
+     *   $formTypeDefinition = new EventForm();
      *   $form               = $factory->create($formTypeDefinition);
      * ```
      *

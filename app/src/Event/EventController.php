@@ -160,7 +160,7 @@ class EventController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new EventFormType());
+        $form    = $factory->create(new EventForm());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
