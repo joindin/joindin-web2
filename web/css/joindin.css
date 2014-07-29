@@ -257,3 +257,9 @@ table.schedule a:hover span.speaker {
         float: left;
     }
 }
+
+form label + ul {
+    padding-left: 0;
+    list-style-type: none;
+    color: #d9534f;
+}
