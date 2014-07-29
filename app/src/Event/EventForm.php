@@ -5,6 +5,7 @@ namespace Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Form\DataTransformer\DateTransformer;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -82,11 +83,35 @@ class EventForm extends AbstractType
                     'attr'        => ['class' => 'form-group form-control']
                 ]
             )
-            ->add('start_date', 'text', $this->getOptionsForDateWidget('Start date'))
-            ->add('end_date', 'text', $this->getOptionsForDateWidget('End date'))
+            ->add(
+                $builder->create(
+                    'start_date',
+                    'text',
+                    $this->getOptionsForDateWidget('Start date')
+                )->addViewTransformer(new DateTransformer())
+            )
+            ->add(
+                $builder->create(
+                    'end_date',
+                    'text',
+                    $this->getOptionsForDateWidget('End date')
+                )->addViewTransformer(new DateTransformer())
+            )
             ->add('href', 'url', $this->getOptionsForUrlWidget('Website URL'))
-            ->add('cfp_start_date', 'text', $this->getOptionsForDateWidget('Opening date', false))
-            ->add('cfp_end_date', 'text', $this->getOptionsForDateWidget('Closing date', false))
+            ->add(
+                $builder->create(
+                    'cfp_start_date',
+                    'text',
+                    $this->getOptionsForDateWidget('Opening date', false)
+                )->addViewTransformer(new DateTransformer())
+            )
+            ->add(
+                $builder->create(
+                    'cfp_end_date',
+                    'text',
+                    $this->getOptionsForDateWidget('Closing date', false)
+                )->addViewTransformer(new DateTransformer())
+            )
             ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
         ;
     }
