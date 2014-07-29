@@ -79,11 +79,11 @@ class EventFormType extends AbstractType
                     'attr'        => ['class' => 'form-group form-control']
                 ]
             )
-            ->add('start_date', 'date', $this->getOptionsForDateWidget('Start'))
-            ->add('end_date', 'date', $this->getOptionsForDateWidget('End'))
+            ->add('start_date', 'text', $this->getOptionsForDateWidget('Start date'))
+            ->add('end_date', 'text', $this->getOptionsForDateWidget('End date'))
             ->add('href', 'url', $this->getOptionsForUrlWidget('Website'))
-            ->add('cfp_start_date', 'date', $this->getOptionsForDateWidget('Call for Papers start', false))
-            ->add('cfp_end_date', 'date', $this->getOptionsForDateWidget('Call for Papers end', false))
+            ->add('cfp_start_date', 'text', $this->getOptionsForDateWidget('Call for Papers start', false))
+            ->add('cfp_end_date', 'text', $this->getOptionsForDateWidget('Call for Papers end', false))
             ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for Papers website', false))
         ;
     }
@@ -143,9 +143,16 @@ class EventFormType extends AbstractType
         return [
             'label'       => $label,
             'required'    => $required,
-            'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
+            // 'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
             'constraints' => $constraints,
-            'attr'        => ['class' => 'form-group form-control']
+            'attr'        => [
+                                'class'                     => 'form-group form-control date-picker',
+                                'data-provide'              => 'datepicker',
+                                'data-date-format'          => 'd MM yyyy',
+                                'data-date-week-start'      => '1',
+                                'data-date-autoclose'       => '1',
+                                'data-date-today-highlight' => true,
+                             ]
         ];
     }
 
