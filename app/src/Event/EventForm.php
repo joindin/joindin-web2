@@ -60,7 +60,6 @@ class EventForm extends AbstractType
                 'text',
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
-                    'attr'        => ['class' => 'form-group form-control']
                 ]
             )
             ->add(
@@ -69,7 +68,6 @@ class EventForm extends AbstractType
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
                     'attr'        => [
-                                        'class' => 'form-group form-control',
                                         'rows' => '10',
                                      ]
                 ]
@@ -80,7 +78,6 @@ class EventForm extends AbstractType
                 [
                     'choices'     => $this->getListOfTimezones(),
                     'constraints' => [new Assert\NotBlank()],
-                    'attr'        => ['class' => 'form-group form-control']
                 ]
             )
             ->add(
@@ -142,7 +139,7 @@ class EventForm extends AbstractType
             'label'       => $label,
             'required'    => $required,
             'constraints' => $constraints,
-            'attr'        => ['class' => 'form-group form-control', 'placeholder' => 'http://example.org']
+            'attr'        => ['placeholder' => 'http://example.org']
         ];
     }
 
@@ -174,7 +171,7 @@ class EventForm extends AbstractType
             // 'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
             'constraints' => $constraints,
             'attr'        => [
-                                'class'                     => 'form-group form-control date-picker',
+                                'class'                     => 'date-picker',
                                 'data-provide'              => 'datepicker',
                                 'data-date-format'          => 'd MM yyyy',
                                 'data-date-week-start'      => '1',
