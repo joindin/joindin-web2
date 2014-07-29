@@ -194,12 +194,6 @@ class EventForm extends AbstractType
     {
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
-
-        $result = [];
-        foreach ($timezones as $timezone) {
-            $result[$timezone] = $timezone;
-        }
-
-        return $result;
+        return array_combine($timezones, $timezones);
     }
 }
