@@ -149,6 +149,11 @@ class EventApi extends BaseApi
             if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
                 $data[$dateField] = $data[$dateField]->format('Y-m-d');
             }
+            if (isset($data[$dateField])) {
+                if (!strtotime($data[$dateField])) {
+                    unset($data[$dateField]);
+                }
+            }
         }
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
