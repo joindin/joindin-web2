@@ -179,7 +179,13 @@ class EventController extends BaseController
             }
         }
 
-        $this->render('Event/submit.html.twig', array( 'form' => $form->createView()));
+        $this->render(
+            'Event/submit.html.twig',
+            array(
+                'form'      => $form->createView(),
+                'timezones' => EventForm::getNestedListOfTimezones(),
+            )
+        );
     }
 
     /**

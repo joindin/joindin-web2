@@ -54,6 +54,7 @@ class EventForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        list ($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
         $builder
             ->add(
                 'name',
@@ -73,10 +74,20 @@ class EventForm extends AbstractType
                 ]
             )
             ->add(
-                'timezone',
+                'tz_continent',
                 'choice',
                 [
-                    'choices'     => $this->getListOfTimezones(),
+                    'label'       => 'Timezone',
+                    'choices'     => array("Select a continent") + $continents,
+                    'constraints' => [new Assert\NotBlank()],
+                ]
+            )
+            ->add(
+                'tz_place',
+                'choice',
+                [
+                    'label'       => 'Timezone city',
+                    'choices'     => array('Select a city') + $cities,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -182,18 +193,51 @@ class EventForm extends AbstractType
     }
 
     /**
-     * Returns an associative array with timezones.
+     * Returns an array containing associative arrays of timezone continents & cities.
      *
-     * Both the key and value contain the name of the timezone so that the select box will pass a string value and
-     * not a numeric value. Although PHP recognizes 'UTC' as timezone we explicitly remove that because it does not
-     * fit with the Joind.in API.
+     * Both the key and value contain the name of the timezone continent/city so that the select box will pass a string
+     * value and not a numeric value. Although PHP recognizes 'UTC' as timezone we explicitly remove that because
+     * it does not fit with the Joind.in API.
      *
      * @return string[]
      */
-    public function getListOfTimezones()
+    public function getListOfTimezoneContinentsAndCities()
     {
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
-        return array_combine($timezones, $timezones);
+
+        foreach ($timezones as $timezone) {
+            list($continent, $city) = explode('/', $timezone, 2);
+            $continents[$continent] = $continent;
+            $cities[$city] = $city;
+        }
+
+        return array($continents, $cities);
+    }
+
+    /**
+     * Returns a nested list of timezones: continent => comma separated list of cities
+     *
+     * Although PHP recognizes 'UTC' as timezone we explicitly remove that because
+     * it does not fit with the Joind.in API.
+     *
+     * @return string[]
+     */
+    public static function getNestedListOfTimezones()
+    {
+        $timezones = \DateTimeZone::listIdentifiers();
+        array_pop($timezones); // Remove UTC from the end of the list
+
+        $result = array();
+        foreach ($timezones as $timezone) {
+            list($continent, $city) = explode('/', $timezone, 2);
+            $result[$continent][] = $city;
+        }
+
+        foreach ($result as $continent => $cities) {
+            $result[$continent] = '"' .implode('", "', $cities) . '"';
+        }
+
+        return $result;
     }
 }

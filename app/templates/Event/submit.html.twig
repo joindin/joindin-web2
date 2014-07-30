@@ -30,7 +30,14 @@
             </fieldset>
             <fieldset class="col-sm-6">
                 <legend>Date and time</legend>
-                {{ form_row(form.timezone) }}
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form_row(form.tz_continent) }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form_row(form.tz_place) }}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-6">
                     {{ form_row(form.start_date) }}
@@ -83,4 +90,44 @@
             that your Call for papers opens and closes. This will show in the event detail page.
         </dd>
     </dl>
+{% endblock %}
+{% block extra_javascript %}
+    <script type="text/javascript">
+        {# /* Ensure that we don't forget the current city when we initialise the city list
+           for the current continent */ #}
+        var current_city = $("#event_tz_place").val();
+        $("#event_tz_place").html('<option value="">Select a city</option>');
+        update_city_list($("#event_tz_continent").val());
+        if (current_city.length > 1) {
+            $("#event_tz_place").val(current_city);
+        }
+
+        $("#event_tz_continent").change(function() {
+            update_city_list($(this).val());
+        });
+
+        function update_city_list(val)
+        {
+            switch(val){
+                {% for continent, cities in timezones %}
+
+                case "{{continent}}":
+                     populate_city_select([{{cities|raw}}]);
+                    break;
+                {% endfor %}
+
+                default: //default child option is blank
+                    $("#event_tz_place").html('<option value="">Select a city</option>');
+                    break;
+            }
+        }
+
+        function populate_city_select(cities)
+        {
+            $("#event_tz_place").html('<option value="">Select a city</option>');
+            $(cities).each(function (i) {
+                $("#event_tz_place").append('<option value="' + cities[i] + '">' + cities[i] + '</option>');
+            });
+        }
+    </script>
 {% endblock %}
