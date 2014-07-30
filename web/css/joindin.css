@@ -88,43 +88,105 @@ footer div.row {
     text-align: center;
 }
 
-.talk-type-talk {
-    background-color: #5A8EC3;
+div.schedule-plain div.trackTalk span.talkSpeakers:before { content: "("; }
+div.schedule-plain div.trackTalk span.talkSpeakers:after { content: ")"; }
+
+@media (max-width: 767px) {
+    div.schedule-grid div.trackTalk span.talkSpeakers:before { content: "("; }
+    div.schedule-grid div.trackTalk span.talkSpeakers:after { content: ")"; }
+    div.schedule-grid div.trackTitle { display: none; }
+    div.schedule-grid div.trackTime { margin-top: 10px; }
+}
+@media (min-width: 768px) {
+    .talk-type-talk {
+        border-color: #f2cc4e;
+        background-color: rgba(242, 204, 78, 0.2);
+    }
+    .talk-type-talk:hover {
+        background-color: rgba(242, 204, 78, 0.4);
+    }
+
+    .talk-type-keynote {
+        border-color: #8eb03e;
+        background-color: rgba(142, 176, 62, 0.2);
+    }
+    .talk-type-keynote:hover {
+        background-color: rgba(142, 176, 62, 0.4);
+    }
+
+    .talk-type-workshop {
+        border-color: #582c8f;
+        background-color: rgba(88, 44, 143, 0.2);
+    }
+    .talk-type-workshop:hover {
+        background-color: rgba(88, 44, 143, 0.4);
+    }
+
+    .talk-type-socialevent {
+        border-color: #703116;
+        background-color: rgba(112, 49, 22, 0.2);
+    }
+    .talk-type-socialevent:hover {
+        background-color: rgba(112, 49, 22, 0.4);
+    }
+
+    .talk-type-eventrelated {
+        border-color: #eb6522;
+        background-color: rgba(235, 101, 34, 0.2);
+    }
+    .talk-type-eventrelated:hover {
+        background-color: rgba(235, 101, 34, 0.4);
+    }
+    /* A special case that lets us put the talk type as a label */
+    .talk-type-label {
+        padding: 4px;
+        font-size: 8pt;
+    }
+
+    div.schedule-grid {
+        position: relative;
+    }
+    div.schedule-grid > * {
+        position: absolute;
+        box-sizing: border-box;
+    }
+    div.schedule-grid > div.trackTitle {
+        top: 0px;
+        height: 27px;
+        line-height: 27px;
+        vertical-align: middle;
+        background-color: black;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        overflow: hidden;
+    }
+    div.schedule-grid > div.trackTime {
+        left: 0px;
+    }
+    div.schedule-grid > div.trackTalk {
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 5px;
+        overflow: hidden;
+        padding: 3px;
+    }
+    div.schedule-grid > div.trackTalk:hover {
+        border-width: 2px;
+        padding: 2px;
+    }
+    div.schedule-grid > div.trackTalk span.talkSpeakers {
+        display: block;
+        margin-top: 5px;
+        font-style: italic;
+        font-size: 90%;
+        color: #606060;
+    }
+    div.schedule-grid > div.trackTalk span.talkSpeakers > a {
+        color: #395B8B;
+    }
 }
 
-.talk-type-keynote {
-    background-color: #C799CE;
-}
-
-.talk-type-workshop {
-    background-color: #F69159;
-}
-
-.talk-type-socialevent {
-    background-color: #CAAD90;
-}
-
-.talk-type-eventrelated {
-    background-color: #5BB068;
-}
-/* A special case that lets us put the talk type as a label */
-.talk-type-label {
-    padding: 4px;
-    font-size: 8pt;
-}
-
-table.schedule a {
-    color: white;
-}
-
-table.schedule a span.speaker {
-    color: black;
-    font-style: italic;
-}
-
-table.schedule a:hover span.speaker {
-    color: white;
-}
 
 .rateit {
     display: -moz-inline-box;
