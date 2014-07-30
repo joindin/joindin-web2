@@ -82,10 +82,10 @@
                             <label class="control-label" for="addr">Latitude &amp; longitude</label>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    {{form_widget(form.event_lat)}}
+                                    {{form_widget(form.latitude)}}
                                 </div>
                                 <div class="col-sm-6">
-                                    {{form_widget(form.event_long)}}
+                                    {{form_widget(form.longitude)}}
                                 </div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
            background-color: #ffffff;
            top: 130px;
            left: 20px;
-           height: 130px;
+           height: 180px;
            width: 80%;
            border: 1px solid #ccc;
            overflow: scroll;
@@ -245,8 +245,8 @@
             $('#map').joindIn_map({
                 draggable: true,
                 moveMapCallback: function(elem, options){
-                    $('#event_event_lat').val(options.lat);
-                    $('#event_event_long').val(options.lon);
+                    $('#event_latitude').val(options.lat);
+                    $('#event_longitude').val(options.lon);
                 }
             });
         });

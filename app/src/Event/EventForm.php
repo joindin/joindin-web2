@@ -130,7 +130,7 @@ class EventForm extends AbstractType
                 ]
             )
             ->add(
-                'event_lat',
+                'latitude',
                 'text',
                 [
                     'label' => 'Latitude',
@@ -138,7 +138,7 @@ class EventForm extends AbstractType
                 ]
             )
             ->add(
-                'event_long',
+                'longitude',
                 'text',
                 [
                     'label' => 'Longitude',
