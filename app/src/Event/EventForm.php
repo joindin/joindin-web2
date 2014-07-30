@@ -121,6 +121,30 @@ class EventForm extends AbstractType
                 )->addViewTransformer(new DateTransformer())
             )
             ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
+            ->add(
+                'location',
+                'text',
+                [
+                    'label' => 'Venue name',
+                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 3])],
+                ]
+            )
+            ->add(
+                'event_lat',
+                'text',
+                [
+                    'label' => 'Latitude',
+                    'attr' => ['readonly' => 'readonly'],
+                ]
+            )
+            ->add(
+                'event_long',
+                'text',
+                [
+                    'label' => 'Longitude',
+                    'attr' => ['readonly' => 'readonly'],
+                ]
+            )
         ;
     }
 
