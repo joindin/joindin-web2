@@ -103,12 +103,13 @@
         </div>
         {{ form_end(form) }}
     {% else %}
-        <h1>Login</h1>
-        {{ include('_common/login.html.twig') }}
+        <h1>Login required</h1>
+        <p>In order to submit an event, please log in.</p>
     {% endif %}
 {% endblock %}
 
 {% block extraAside %}
+    {% if user %}
     <h3>Submission tips</h3>
     <p>
         Here's a few useful definitions when submitting events:
@@ -126,6 +127,7 @@
             that your Call for papers opens and closes. This will show in the event detail page.
         </dd>
     </dl>
+    {% endif %}
 {% endblock %}
 
 {% block extra_styles %}
