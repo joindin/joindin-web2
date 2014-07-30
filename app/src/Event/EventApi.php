@@ -143,14 +143,6 @@ class EventApi extends BaseApi
      */
     public function submit(array $data)
     {
-        // convert timezone variable into appropriate sub-elements for api.
-        if (isset($data['timezone'])) {
-            list($tz_continent, $tz_place) = explode('/', $data['timezone']);
-            unset($data['timezone']);
-            $data['tz_continent'] = $tz_continent;
-            $data['tz_place'] = $tz_place;
-        }
-
         // Convert datetime objects to strings
         $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
         foreach ($dateFields as $dateField) {
