@@ -56,6 +56,7 @@ class EventForm extends AbstractType
     {
         list ($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
         $builder
+            ->add('addr', 'hidden', ['mapped' => false])
             ->add(
                 'name',
                 'text',
