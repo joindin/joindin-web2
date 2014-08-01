@@ -1,9 +1,0 @@
-[submodule "puppet/modules/puppi"]
-	path = puppet/modules/puppi
-	url = https://github.com/example42/puppi
-[submodule "puppet/modules/apache"]
-	path = puppet/modules/apache
-	url = https://github.com/example42/puppet-apache
-[submodule "puppet/modules/php"]
-	path = puppet/modules/php
-	url = https://github.com/example42/puppet-php
