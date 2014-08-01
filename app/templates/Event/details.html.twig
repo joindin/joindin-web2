@@ -14,6 +14,12 @@
             {% if event.areCommentsEnabled %}
                 <h2>Write a comment</h2>
                 {% if user %}
+                    {% if flash.getMessages.message %}
+                        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+                    {% endif %}
+                    {% if flash.getMessages.error %}
+                        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+                    {% endif %}
                     <form id="add-comment" role="form" method="POST" action="{{ urlFor('event-add-comment', {'friendly_name': event.getUrlFriendlyName}) }}">
                         <div class="form-group">
                             <label for="comment">Your comment:</label>

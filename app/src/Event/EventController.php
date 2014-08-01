@@ -5,6 +5,7 @@ use Application\BaseController;
 use Application\CacheService;
 use Talk\TalkDb;
 use Talk\TalkApi;
+use Exception;
 
 class EventController extends BaseController
 {
@@ -148,14 +149,25 @@ class EventController extends BaseController
     {
         $request = $this->application->request();
         $comment = $request->post('comment');
+        $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
+        $url .= '#add-comment';
 
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
         if ($event) {
-            $eventApi->addComment($event, $comment);
+            try {
+                $eventApi->addComment($event, $comment);
+            } catch (Exception $e) {
+                if (stripos($e->getMessage(), 'duplicate comment') !== false) {
+                    // duplicate comment
+                    $this->application->flash('error', 'Duplicate comment.');
+                    $this->application->redirect($url);
+                }
+                throw $e;
+            }
         }
 
-        $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
+        $this->application->flash('message', 'Thank you for your comment.');
         $this->application->redirect($url);
     }
 
