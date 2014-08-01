@@ -6,6 +6,7 @@ use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
 use Slim_Exception_Pass;
+use Exception;
 
 class TalkController extends BaseController
 {
@@ -104,7 +105,16 @@ class TalkController extends BaseController
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $talk = $talkApi->getTalk($talkUri, true);
         if ($talk) {
-            $talkApi->addComment($talk, $rating, $comment);
+            try {
+                $talkApi->addComment($talk, $rating, $comment);
+            } catch (Exception $e) {
+                if (stripos($e->getMessage(), 'duplicate comment') !== false) {
+                    // duplicate comment
+                    $this->application->flash('error', 'Duplicate comment.');
+                    $this->application->redirect($url);
+                }
+                throw $e;
+            }
         }
 
         $this->application->flash('message', 'Thank you for your comment.');
