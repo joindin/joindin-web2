@@ -137,7 +137,7 @@ class EventApi extends BaseApi
      *
      * @throws \Exception if a status code other than 201 is returned.
      *
-     * @see EventForm::buildForm() for a list of supported fields in the $data array and their constraints.
+     * @see EventFormType::buildForm() for a list of supported fields in the $data array and their constraints.
      *
      * @return EventEntity|null
      */

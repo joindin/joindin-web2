@@ -160,7 +160,7 @@ class EventController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new EventForm());
+        $form    = $factory->create(new EventFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -183,7 +183,7 @@ class EventController extends BaseController
             'Event/submit.html.twig',
             array(
                 'form'      => $form->createView(),
-                'timezones' => EventForm::getNestedListOfTimezones(),
+                'timezones' => EventFormType::getNestedListOfTimezones(),
             )
         );
     }

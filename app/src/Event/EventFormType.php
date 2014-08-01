@@ -13,7 +13,7 @@ use Form\DataTransformer\DateTransformer;
  * Usage (extraneous use of variables is made to illustrate which parts are used):
  *
  * ```
- * $formType = new EventForm();
+ * $formType = new EventFormType();
  * $factory  = $this->application->formFactory;
  * $form     = $factory->create($formType);
  * $formName = $form->getName();
@@ -29,7 +29,7 @@ use Form\DataTransformer\DateTransformer;
  * }
  * ```
  */
-class EventForm extends AbstractType
+class EventFormType extends AbstractType
 {
     /**
      * Returns the name of this form type.
