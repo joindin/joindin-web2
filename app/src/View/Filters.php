@@ -31,7 +31,7 @@ function img_path($suffix, $infix)
         return $path;
     }
 
-    return 'http://joind.in/inc' .$path;
+    return 'https://joind.in/inc' .$path;
 }
 
 function format_date($date)
