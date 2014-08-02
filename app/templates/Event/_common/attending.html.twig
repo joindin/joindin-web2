@@ -1,5 +1,5 @@
 {% if event.isAttending == false and user %}
-    <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" class="btn btn-xs btn-primary">
+    <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" data-friendly-name="{{ event.getUrlFriendlyName|escape }}" class="attending btn btn-xs btn-primary">
         {% if event.isPastEvent %}
             I went to this event
         {% else %}
