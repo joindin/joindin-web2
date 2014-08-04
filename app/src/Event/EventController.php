@@ -19,7 +19,7 @@ class EventController extends BaseController
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
-        $app->map('/events/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
+        $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
