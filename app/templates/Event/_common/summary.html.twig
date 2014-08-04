@@ -25,10 +25,10 @@ set eventUrl = urlFor(
             </p>
 
             <p class="meta">
-                {{ event.getStartDate|date('M d Y') }}
-                {%  if event.getStartDate|date('M d Y')
-                        is not sameas(event.getEndDate|date('M d Y')) %}
-                    &ndash; {{ event.getEndDate|date('M d Y') }}
+                {{ event.getStartDate|date('M d Y', event.getFullTimezone) }}
+                {%  if event.getStartDate|date('M d Y', event.getFullTimezone)
+                        is not sameas(event.getEndDate|date('M d Y', event.getFullTimezone)) %}
+                    &ndash; {{ event.getEndDate|date('M d Y', event.getFullTimezone) }}
 
                 {% endif %}
 

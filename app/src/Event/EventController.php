@@ -20,13 +20,13 @@ class EventController extends BaseController
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
         $app->map('/events/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
-        $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
-
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
+        $app->get('/event/xhr-attend/:friendly_name', array($this, 'xhrAttend'));
+        $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
     }
 
     public function index()
@@ -251,5 +251,19 @@ class EventController extends BaseController
             $this->application->urlFor('event-detail', array('friendly_name' => $friendlyName)),
             $status
         );
+    }
+
+    public function xhrAttend($friendly_name)
+    {
+        $this->application->response()->header('Content-Type', 'application/json');
+
+        $api = $this->getEventApi();
+        $event = $api->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            $result = $this->getEventApi()->attend($event, $_SESSION['user']);
+        }
+
+        $this->application->response()->body(json_encode(array('success' => $result)));
     }
 }

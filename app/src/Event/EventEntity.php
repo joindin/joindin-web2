@@ -26,6 +26,15 @@ class EventEntity
         return $this->data->name;
     }
 
+    public function getFullTimezone()
+    {
+        if (!isset($this->data->tz_continent) || !isset($this->data->tz_place)) {
+            return null;
+        }
+
+        return $this->data->tz_continent . "/" . $this->data->tz_place;
+    }
+
     public function getIcon()
     {
         if (!isset($this->data->icon)) {
