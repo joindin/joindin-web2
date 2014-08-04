@@ -164,6 +164,11 @@ class EventController extends BaseController
                     $this->application->flash('error', 'Duplicate comment.');
                     $this->application->redirect($url);
                 }
+                if (stripos($e->getMessage(), 'comment failed spam check') !== false) {
+                    // spam comment
+                    $this->application->flash('error', 'Comment failed the spam check.');
+                    $this->application->redirect($url);
+                }
                 throw $e;
             }
         }
