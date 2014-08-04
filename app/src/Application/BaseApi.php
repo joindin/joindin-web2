@@ -26,6 +26,11 @@ class BaseApi
             )
         );
         
+        // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+        $contextOpts['http']['header'] .= "\r\nForwarded: for=$ip;user-agent=\"$agent\"";
+
         if ($this->accessToken) {
             $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
         }
