@@ -19,12 +19,11 @@ class EventApi extends BaseApi
     /**
      * Get the latest events
      *
-     * @param $limit Number of events to get per page
-     * @param $start Start value for pagination
-     * @param $filter Filter to apply
-     * @param $metaOnly Only return meta data?
+     * @param integer $limit  Number of events to get per page
+     * @param integer $start  Start value for pagination
+     * @param string  $filter Filter to apply
      *
-     * @return EventModel model
+     * @return EventEntity model
      */
     public function getCollection($limit = 10, $start = 1, $filter = null)
     {
@@ -36,33 +35,7 @@ class EventApi extends BaseApi
             $url .= '&filter=' . $filter;
         }
 
-        $events = (array)json_decode(
-            $this->apiGet($url)
-        );
-
-        $meta = array_pop($events);
-
-        $collectionData = array();
-        foreach ($events['events'] as $event) {
-            $thisEvent = new EventEntity($event);
-            $collectionData['events'][] = $thisEvent;
-
-            // save the URL so we can look up by it
-            $this->saveEventUrl($thisEvent);
-        }
-        $collectionData['pagination'] = $meta;
-
-        return $collectionData;
-    }
-
-    /**
-     * Take an event and save the url_friendly_name and the API URL for that
-     *
-     * @param EventEntity $event The event to take details from
-     */
-    protected function saveEventUrl(EventEntity $event)
-    {
-        $this->eventDb->save($event);
+        return $this->queryEvents($url);
     }
 
     /**
@@ -155,5 +128,84 @@ class EventApi extends BaseApi
         }
 
         throw new \Exception("Failed to mark you as attending: " . $result);
+    }
+
+    /**
+     * Submits a new event to the API and returns it or null if it is pending acceptance.
+     *
+     * @param array $data
+     *
+     * @throws \Exception if a status code other than 201 is returned.
+     *
+     * @see EventFormType::buildForm() for a list of supported fields in the $data array and their constraints.
+     *
+     * @return EventEntity|null
+     */
+    public function submit(array $data)
+    {
+        // Convert datetime objects to strings
+        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        foreach ($dateFields as $dateField) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+                $data[$dateField] = $data[$dateField]->format('Y-m-d');
+            }
+            if (isset($data[$dateField])) {
+                if (!strtotime($data[$dateField])) {
+                    unset($data[$dateField]);
+                }
+            }
+        }
+        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
+
+        // if successful, return event entity represented by the URL in the Location header
+        if ($status == 201) {
+            $response = $this->queryEvents($headers['location']);
+            return current($response['events']);
+        }
+        if ($status == 202) {
+            return null;
+        }
+
+        throw new \Exception('Your event submission was not accepted, the server reports: ' . $result);
+    }
+
+    /**
+     * Returns a response array containing an 'events' and 'pagination' element.
+     *
+     * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
+     * Event entities.
+     *
+     * @param string $url API Url to query for one or more events. Either a listing can be retrieved or a single event.
+     *
+     * @return array
+     */
+    private function queryEvents($url)
+    {
+        $events = (array)json_decode($this->apiGet($url));
+        $meta   = array_pop($events);
+
+        $collectionData = array();
+        foreach ($events['events'] as $event) {
+            $thisEvent = new EventEntity($event);
+            $collectionData['events'][] = $thisEvent;
+
+            // save the URL so we can look up by it
+            $this->saveEventUrl($thisEvent);
+        }
+        $collectionData['pagination'] = $meta;
+
+        return $collectionData;
+    }
+
+    /**
+     * Take an event and save the url_friendly_name and the API URL for that
+     *
+     * @param EventEntity $event The event to take details from
+     *
+     * @return void
+     */
+    private function saveEventUrl(EventEntity $event)
+    {
+        $this->eventDb->save($event);
     }
 }

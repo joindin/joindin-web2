@@ -257,3 +257,13 @@ table.schedule a:hover span.speaker {
         float: left;
     }
 }
+
+form {
+    margin: 0 0 10px;
+}
+
+form ul.errors {
+    padding-left: 0;
+    list-style-type: none;
+    color: #d9534f;
+}
