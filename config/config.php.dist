@@ -10,6 +10,7 @@ $config = array(
         ),
         'oauth' => array(
             'client_id' => 'web2',
+            'client_secret' => 'web2secret',
         ),
         'twig' => array(
             'cache' => '/tmp/joindin-twig-cache'

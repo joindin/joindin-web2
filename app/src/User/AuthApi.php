@@ -10,16 +10,19 @@ class AuthApi extends BaseApi
      *
      * @param  string $username username
      * @param  string $password password
+     * @param  string $clientId OAuth client ID
+     * @param  string $clientSecret OAuth client secret
      * @return mixed            stdClass of token and user's URI
      */
-    public function login($username, $password, $clientId)
+    public function login($username, $password, $clientId, $clientSecret)
     {
         $url = $this->baseApiUrl . '/v2.1/token';
         $params = array(
-            'grant_type' => 'password',
-            'client_id'  => $clientId,
-            'username'   => $username,
-            'password'   => $password,
+            'grant_type'    => 'password',
+            'client_id'     => $clientId,
+            'client_secret' => $clientSecret,
+            'username'      => $username,
+            'password'      => $password,
         );
 
         list($status, $result) = $this->apiPost($url, $params);
