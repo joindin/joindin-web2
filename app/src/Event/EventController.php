@@ -130,6 +130,7 @@ class EventController extends BaseController
         }
 
         $eventApi->addComment($event, $comment);
+        $this->redirectToDetailPage($friendly_name);
     }
 
     public function attend($friendly_name)
