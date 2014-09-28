@@ -30,6 +30,7 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
         $app->get('/event/:friendly_name/talk-comments', array($this, 'talkComments'))->name("event-talk-comments");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
+        $app->map('/event/:friendly_name/edit', array($this, 'edit'))->via('GET', 'POST')->name('event-edit');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
         $app->get('/event/xhr-attend/:friendly_name', array($this, 'xhrAttend'));
         $app->get('/event/xhr-unattend/:friendly_name', array($this, 'xhrUnattend'));
@@ -102,6 +103,7 @@ class EventController extends BaseController
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
+                'editable' => $this->userIsAllowedToEdit($event),
             )
         );
     }
@@ -115,7 +117,10 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        $this->render('Event/map.html.twig', array('event' => $event));
+        $this->render('Event/map.html.twig', array(
+            'event' => $event,
+            'editable' => $this->userIsAllowedToEdit($event)
+        ));
     }
 
     public function talkComments($friendly_name)
@@ -149,6 +154,8 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
+                    'editable' => $this->userIsAllowedToEdit($event),
+
                 )
             );
         } else {
@@ -172,7 +179,11 @@ class EventController extends BaseController
 
         $schedule = $scheduler->getScheduleData($event);
 
-        $this->render('Event/schedule.html.twig', array('event' => $event, 'eventDays' => $schedule));
+        $this->render('Event/schedule.html.twig', array(
+            'event' => $event,
+            'eventDays' => $schedule,
+            'editable' => $this->userIsAllowedToEdit($event),
+        ));
     }
 
     public function quicklink($stub)
@@ -296,6 +307,85 @@ class EventController extends BaseController
     }
 
     /**
+     * Action used to display a form to edit an event and with which the form can be submitted
+     *
+     * @return void
+     */
+    public function edit($friendly_name)
+    {
+        $request = $this->application->request();
+
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+        if (! $event) {
+            $this->redirectToListPage();
+        }
+
+        if (! $this->userIsAllowedToEdit($event)) {
+            $this->redirectToDetailPage($event->getUrlFriendlyName());
+        }
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new EventFormType(), $event->setTags(implode(', ', $event->getTags())));
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $event = $this->editEventUsingForm($form, $event);
+
+                if ($event instanceof EventEntity) {
+                    $this->redirectToDetailPage($event->getUrlFriendlyName());
+                }
+
+                // held for moderation
+                if ($event === null) {
+                    $this->redirectToListPage();
+                }
+            }
+        }
+
+        $this->render(
+            'Event/edit.html.twig',
+            array(
+                'event'     => $event,
+                'form'      => $form->createView(),
+                'timezones' => EventFormType::getNestedListOfTimezones(),
+            )
+        );
+
+
+    }
+
+    /**
+     * @param array $event
+     *
+     * @return bool
+     */
+    protected function userIsAllowedToEdit($event)
+    {
+        if (! isset($_SESSION['user'])) {
+            return false;
+        }
+
+        if (isset($event['can_edit'])) {
+            return $event['can_edit'];
+        }
+
+        $user       = $_SESSION['user'];
+        $allowed    = false;
+        $eventArray = $event->toArray();
+
+        foreach ($eventArray['hosts'] as $host) {
+            if ($host->host_uri == $user->getUri()) {
+                $allowed = true;
+            }
+        }
+
+        return $allowed;
+    }
+
+    /**
      * Submits the form data to the API and returns the newly created event, false if there is an error or null
      * if it is held for moderation.
      *
@@ -309,6 +399,33 @@ class EventController extends BaseController
     {
         $eventApi = $this->getEventApi();
         $values = $form->getData();
+
+        $result = false;
+        try {
+            $result = $eventApi->edit($values);
+        } catch (\Exception $e) {
+            $form->addError(
+                new FormError('An error occurred while submitting your event: ' . $e->getMessage())
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Submits the form data to the API and returns the edited event, false if there is an error or null
+     * if it is held for moderation.
+     *
+     * Should an error occur will this method append an error message to the form's error collection.
+     *
+     * @param Form $form
+     *
+     * @return EventEntity|null|false
+     */
+    private function editEventUsingForm(Form $form)
+    {
+        $eventApi = $this->getEventApi();
+        $values = $form->getData()->toArray();
 
         $result = false;
         try {

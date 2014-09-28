@@ -37,6 +37,9 @@
                     <li><a href="{{ urlFor('event-schedule', {"friendly_name": event.getUrlFriendlyName}) }}">Schedule</a></li>
                     <li><a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">Map</a></li>
                     <li><a href="{{ urlFor('event-talk-comments', {"friendly_name": event.getUrlFriendlyName}) }}">Recent comments</a></li>
+                    {% if editable %}
+                    <li><a href="{{ urlFor('event-edit', {"friendly_name": event.getUrlFriendlyName}) }}">Edit</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>

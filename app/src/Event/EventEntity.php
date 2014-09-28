@@ -26,6 +26,13 @@ class EventEntity
         return $this->data->name;
     }
 
+    public function setName($name)
+    {
+        $this->data->name = $name;
+
+        return $this;
+    }
+
     public function getFullTimezone()
     {
         if (!isset($this->data->tz_continent) || !isset($this->data->tz_place)) {
@@ -53,6 +60,13 @@ class EventEntity
         return $this->data->start_date;
     }
 
+    public function setStartDate($date)
+    {
+        $this->data->start_date = $date;
+
+        return $this;
+    }
+
     public function getEndDate()
     {
         if (!isset($this->data->end_date)) {
@@ -60,6 +74,13 @@ class EventEntity
         }
 
         return $this->data->end_date;
+    }
+
+    public function setEndDate($date)
+    {
+        $this->data->end_date = $date;
+
+        return $this;
     }
 
     public function getLocation()
@@ -80,6 +101,15 @@ class EventEntity
         return $this->data->description;
     }
 
+    public function setDescription($description)
+    {
+        $this->data->description = $description;
+
+        return $this;
+    }
+    /**
+     * @return array|null
+     */
     public function getTags()
     {
         if (!isset($this->data->tags)) {
@@ -98,6 +128,13 @@ class EventEntity
         return $this->data->latitude;
     }
 
+    public function setLatitude($latitude)
+    {
+        $this->data->latitude = $latitude;
+
+        return $this;
+    }
+
     public function getLongitude()
     {
         if (!isset($this->data->longitude)) {
@@ -105,6 +142,13 @@ class EventEntity
         }
 
         return $this->data->longitude;
+    }
+
+    public function setLongitude($longitude)
+    {
+        $this->data->longitude = $longitude;
+
+        return $this;
     }
 
     public function getWebsiteAddress()
@@ -244,42 +288,6 @@ class EventEntity
         return $this->data->tz_continent . '/' . $this->data->tz_place;
     }
 
-    /**
-     * Returns the date when the Call for Papers opens in YYYY-MM-DD format or null if not available.
-     *
-     * @return string|null
-     */
-    public function getCallForPapersStartDate()
-    {
-        return isset($this->data->cfp_start_date) && $this->data->cfp_start_date
-            ? $this->data->cfp_start_date
-            : null;
-    }
-
-    /**
-     * Returns the date when the Call for Papers closes in YYYY-MM-DD format or null if not available.
-     *
-     * @return string|null
-     */
-    public function getCallForPapersEndDate()
-    {
-        return isset($this->data->cfp_end_date) && $this->data->cfp_end_date
-            ? $this->data->cfp_end_date
-            : null;
-    }
-
-    /**
-     * Returns the URL of the website where the Call for Papers information is stored or null if not available,
-     *
-     * @return string|null
-     */
-    public function getCallForPapersWebsiteAddress()
-    {
-        return isset($this->data->cfp_url) && $this->data->cfp_url
-            ? $this->data->cfp_url
-            : null;
-    }
-
     public function getAllTalkCommentsUri()
     {
         if (!isset($this->data->all_talk_comments_uri)) {
@@ -287,5 +295,148 @@ class EventEntity
         }
 
         return $this->data->all_talk_comments_uri;
+    }
+
+    /**
+     * Returns the continent for the set timezone
+     *
+     * @return string
+     */
+    public function getTzContinent()
+    {
+        $tz = explode('/', $this->getTimezone());
+        return $tz[0];
+    }
+
+    /**
+     * Set the Timezone continent
+     *
+     * @param string $tzContinent
+     */
+    public function setTzContinent($tzContinent)
+    {
+        $this->data->tz_continent = $tzContinent;
+    }
+
+    /**
+     * Returns the city for the set timezone
+     *
+     * @return string
+     */
+    public function getTzPlace()
+    {
+        $tz = explode('/', $this->getTimezone());
+        if (! isset($tz[1])) {
+            return '';
+        }
+
+        return $tz[1];
+    }
+
+    /**
+     * Set the Timezone place
+     *
+     * @param string $tzPlace
+     */
+    public function setTzPlace($tzPlace)
+    {
+        $this->data->tz_place = $tzPlace;
+    }
+
+    /**
+     * Returns the URL
+     *
+     * This is required by Symfonys PropertyAccessor
+     *
+     * @return string
+     */
+    public function getHref()
+    {
+        return $this->getUri();
+    }
+
+    /**
+     * Wrapper to getCallForPapersStartDate
+     * This is also required by Symfonys PropertyAccessor. As
+     * ```getCallForPaperStartDate``` has been in existence before creating this
+     * method it simply calls this one.
+     *
+     * @return mixed
+     */
+    public function getCfPStartDate()
+    {
+        return isset($this->data->cfp_start_date) && $this->data->cfp_start_date
+            ? $this->data->cfp_start_date
+            : null;
+    }
+
+    public function setCfpStartDate($date)
+    {
+        $this->data->cfp_start_date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Wrapper to getCallForPapersEndDate
+     * This is also required by Symfonys PropertyAccessor. As
+     * ```getCallForPapesEndDate``` has been in existence before creating this
+     * method it simply calls this one.
+     *
+     * @return mixed
+     */
+    public function getCfPEndDate()
+    {
+        return isset($this->data->cfp_end_date) && $this->data->cfp_end_date
+            ? $this->data->cfp_end_date
+            : null;
+    }
+
+    public function setCfpEndDate($date)
+    {
+        $this->data->cfp_end_date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Wrapper to getCallForPapersWebsiteAddress
+     *
+     * @return string
+     */
+    public function getCfpUrl()
+    {
+        return isset($this->data->cfp_url) && $this->data->cfp_url
+            ? $this->data->cfp_url
+            : null;
+    }
+
+    public function setCfpUrl($cfpUrl)
+    {
+        $this->data->cfp_url = $cfpUrl;
+
+        return $this;
+    }
+
+    public function setTags($tags)
+    {
+        $this->data->tags = $tags;
+
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->data->ID;
+    }
+
+    public function toArray()
+    {
+        return (array) $this->data;
+    }
+
+    public function getEventSlug()
+    {
+        return $this->getUrlFriendlyName();
     }
 }
