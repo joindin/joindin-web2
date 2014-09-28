@@ -103,6 +103,7 @@ class EventController extends BaseController
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
+                'editable' => $this->userIsAllowedToEdit($event),
             )
         );
     }
@@ -152,6 +153,8 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
+                    'editable' => $this->userIsAllowedToEdit($event),
+
                 )
             );
         } else {
@@ -349,6 +352,39 @@ class EventController extends BaseController
     }
 
     /**
+
+
+    }
+
+    /**
+     * @param array $event
+     *
+     * @return bool
+     */
+    protected function userIsAllowedToEdit($event)
+    {
+        if (! isset($_SESSION['user'])) {
+            return false;
+        }
+
+        if (isset($event['can_edit'])) {
+            return $event['can_edit'];
+        }
+
+        $user       = $_SESSION['user'];
+        $allowed    = false;
+        $eventArray = $event->toArray();
+
+        foreach ($eventArray['hosts'] as $host) {
+            if ($host->host_uri == $user->getUri()) {
+                $allowed = true;
+            }
+        }
+
+        return $allowed;
+    }
+
+    /**
      * Submits the form data to the API and returns the newly created event, false if there is an error or null
      * if it is held for moderation.
      *
@@ -362,6 +398,33 @@ class EventController extends BaseController
     {
         $eventApi = $this->getEventApi();
         $values = $form->getData();
+
+        $result = false;
+        try {
+            $result = $eventApi->edit($values);
+        } catch (\Exception $e) {
+            $form->addError(
+                new FormError('An error occurred while submitting your event: ' . $e->getMessage())
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Submits the form data to the API and returns the edited event, false if there is an error or null
+     * if it is held for moderation.
+     *
+     * Should an error occur will this method append an error message to the form's error collection.
+     *
+     * @param Form $form
+     *
+     * @return EventEntity|null|false
+     */
+    private function editEventUsingForm(Form $form)
+    {
+        $eventApi = $this->getEventApi();
+        $values = $form->getData()->toArray();
 
         $result = false;
         try {

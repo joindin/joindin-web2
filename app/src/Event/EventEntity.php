@@ -473,5 +473,7 @@ class EventEntity
     public function getCanEdit()
     {
         return $this->data->can_edit;
+    {
+        return $this->getUrlFriendlyName();
     }
 }
