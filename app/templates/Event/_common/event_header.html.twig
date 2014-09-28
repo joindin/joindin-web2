@@ -19,6 +19,16 @@
                     {% include 'Event/_common/attending.html.twig' %}
                 </small>
             </h2>
+
+            {% if event.getTags %}
+            <p>
+                {% for tag in event.getTags %}
+                    <span class="label label-default">{{ tag }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            </p>
             <nav>
                 <ul class="nav nav-pills">
                     <li><a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">Details</a></li>
