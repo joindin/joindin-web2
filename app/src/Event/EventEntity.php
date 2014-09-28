@@ -26,6 +26,13 @@ class EventEntity
         return $this->data->name;
     }
 
+    public function setName($name)
+    {
+        $this->data->name = $name;
+
+        return $this;
+    }
+
     public function getFullTimezone()
     {
         if (!isset($this->data->tz_continent) || !isset($this->data->tz_place)) {
@@ -53,6 +60,13 @@ class EventEntity
         return $this->data->start_date;
     }
 
+    public function setStartDate($date)
+    {
+        $this->data->start_date = $date;
+
+        return $this;
+    }
+
     public function getEndDate()
     {
         if (!isset($this->data->end_date)) {
@@ -60,6 +74,13 @@ class EventEntity
         }
 
         return $this->data->end_date;
+    }
+
+    public function setEndDate($date)
+    {
+        $this->data->end_date = $date;
+
+        return $this;
     }
 
     public function getLocation()
@@ -80,6 +101,15 @@ class EventEntity
         return $this->data->description;
     }
 
+    public function setDescription($description)
+    {
+        $this->data->description = $description;
+
+        return $this;
+    }
+    /**
+     * @return array|null
+     */
     public function getTags()
     {
         if (!isset($this->data->tags)) {
@@ -98,6 +128,13 @@ class EventEntity
         return $this->data->latitude;
     }
 
+    public function setLatitude($latitude)
+    {
+        $this->data->latitude = $latitude;
+
+        return $this;
+    }
+
     public function getLongitude()
     {
         if (!isset($this->data->longitude)) {
@@ -105,6 +142,13 @@ class EventEntity
         }
 
         return $this->data->longitude;
+    }
+
+    public function setLongitude($longitude)
+    {
+        $this->data->longitude = $longitude;
+
+        return $this;
     }
 
     public function getWebsiteAddress()
@@ -288,4 +332,103 @@ class EventEntity
 
         return $this->data->all_talk_comments_uri;
     }
+
+    /**
+     * Returns the continent for the set timezone
+     *
+     * @return string
+     */
+    public function getTzContinent()
+    {
+        return 'Europe';
+    }
+
+    /**
+     * Returns the city for the set timezone
+     *
+     * @return string
+     */
+    public function getTzPlace()
+    {
+        return 'Berlin';
+    }
+
+    /**
+     * Returns the URL
+     *
+     * @return string
+     */
+    public function getHref()
+    {
+        return $this->getUri();
+    }
+
+    /**
+     * Wrapper to getCallForPapersStartDate
+     *
+     * @return mixed
+     */
+    public function getCfPStartDate()
+    {
+        return $this->getCallForPapersStartDate();
+    }
+
+    public function setCfpStartDate($date)
+    {
+        $this->data->cfp_start_date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Wrapper to getCallForPapersEndDate
+     *
+     * @return mixed
+     */
+    public function getCfPEndDate()
+    {
+        return $this->getCallForPapersEndDate();
+    }
+
+    public function setCfpEndDate($date)
+    {
+        $this->data->cfp_end_date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Wrapper to getCallForPapersWebsiteAddress
+     *
+     * @return string
+     */
+    public function getCfpUrl()
+    {
+        return $this->getCallForPapersWebsiteAddress();
+    }
+
+    public function setCfpUrl($cfpUrl)
+    {
+        $this->data->cfp_url = $cfpUrl;
+
+        return $this;
+    }
+
+    public function setTags($tags)
+    {
+        $this->data->tags = $tags;
+
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->data->ID;
+    }
+
+    public function toArray()
+    {
+        return (array) $this->data;
+    }
+
 }
