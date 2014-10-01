@@ -119,7 +119,7 @@ class EventController extends BaseController
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
-            $eventApi->attend($event, $_SESSION['user']);
+            $eventApi->attend($event);
         }
 
         $friendlyUrl = $this->application->request()->get('r');
@@ -231,7 +231,7 @@ class EventController extends BaseController
      */
     protected function getEventApi()
     {
-        return $this->application->container->get(ServiceProvider::SERVICE_API_EVENT);
+        return $this->application->container->get(ServiceProvider::SERVICE_API);
     }
 
     /**
@@ -251,8 +251,14 @@ class EventController extends BaseController
         $api = $this->getEventApi();
         $event = $api->getByFriendlyUrl($friendly_name);
 
+        $result = false;
         if ($event) {
-            $result = $this->getEventApi()->attend($event, $_SESSION['user']);
+            try {
+                $this->getEventApi()->attend($event);
+                $result = true;
+            } catch (\Exception $e) {
+                $result = false;
+            }
         }
 
         $this->application->response()->body(json_encode(array('success' => $result)));

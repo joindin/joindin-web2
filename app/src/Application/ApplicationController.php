@@ -44,6 +44,6 @@ class ApplicationController extends BaseController
      */
     protected function getEventApi()
     {
-        return $this->application->container->get(EventServiceProvider::SERVICE_API_EVENT);
+        return $this->application->container->get(EventServiceProvider::SERVICE_API);
     }
 }
