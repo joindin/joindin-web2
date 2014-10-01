@@ -28,13 +28,23 @@ class ServiceProvider extends SlimMiddleware
                 $accessToken = $_SESSION['access_token'];
             }
 
-            return new Client(
-                array('base_url' => $this->customConfig['apiUrl'], 'access_token' => $accessToken)
+            $client = new Client(array('base_url' => $this->customConfig['apiUrl'], 'access_token' => $accessToken));
+
+            // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
+            $client->setDefaultOption(
+                'headers/Forwarded',
+                sprintf(
+                    'for=%s;user-agent="%s"',
+                    $_SERVER['REMOTE_ADDR'],
+                    isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown'
+                )
             );
+
+            return $client;
         };
 
         $cacheService = function () {
-            return new CacheService($this->customConfig['redis']['keyPrefix']);
+            return new CacheService($this->customConfig['redisKeyPrefix']);
         };
 
         $this->app->container->singleton(self::SERVICE_API_CLIENT, $apiClient);

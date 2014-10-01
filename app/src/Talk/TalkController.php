@@ -89,7 +89,7 @@ class TalkController extends BaseController
             $this->application->redirect($url);
         }
 
-        $cache = new CacheService($this->cfg['redis']['keyPrefix']);
+        $cache = new CacheService($this->cfg['redisKeyPrefix']);
         $event = $this->getEventApi()->getByFriendlyUrl($eventSlug);
 
         $talkDb = new TalkDb($cache);
