@@ -17,6 +17,9 @@ if (is_readable($configFile)) {
     include realpath(__DIR__ . '/../config/config.php.dist');
 }
 
+// Wrap the Config Data with the Application Config object
+$config['slim']['custom'] = new \Application\Config($config['slim']['custom']);
+
 // initialize Slim
 $app = new \Slim\Slim(
     array_merge(
@@ -41,14 +44,9 @@ $app->view()->appendData(
 );
 
 // Other variables needed by the main layout.html.twig template
-$useMinifiedFiles = false;
-if (array_key_exists('useMinifiedFiles', $config['slim']['custom'])) {
-    $useMinifiedFiles = $config['slim']['custom']['useMinifiedFiles'];
-}
 $app->view()->appendData(
     array(
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
-        'use_minified_files' => $useMinifiedFiles,
         'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
     )
 );
@@ -59,10 +57,17 @@ $app->view()->setTemplatesDirectory('../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
 
+$cacheFolder = '/tmp/joindin-twig-cache';
+if (isset($config['slim']['twig']['cache'])) {
+    $cacheFolder = $config['slim']['twig']['cache'];
+}
+$app->view()->getEnvironment()->setCache(rtrim($cacheFolder, '/') . '/' . $config['slim']['mode']);
+
 $app->configureMode('development', function () use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
     $env->addExtension(new \Twig_Extension_Debug());
+    $env->setCache(false); // disable this line to tests performance with views
 });
 
 // register middlewares

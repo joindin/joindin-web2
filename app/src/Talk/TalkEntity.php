@@ -125,4 +125,14 @@ class TalkEntity
 
         return $this->data->comments_uri;
     }
+
+    public function getSlidesLink()
+    {
+        return $this->data->slides_link;
+    }
+
+    public function getLanguage()
+    {
+        return $this->data->language;
+    }
 }

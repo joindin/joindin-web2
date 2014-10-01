@@ -39,9 +39,10 @@ class UserController extends BaseController
             $password = $request->post('password');
             $redirect = $request->post('redirect');
             $clientId = $config['client_id'];
+            $clientSecret = $config['client_secret'];
 
             $authApi = new AuthApi($this->cfg, $this->accessToken);
-            $result = $authApi->login($username, $password, $clientId);
+            $result = $authApi->login($username, $password, $clientId, $clientSecret);
 
             if (false === $result) {
                 $error = true;
@@ -51,7 +52,7 @@ class UserController extends BaseController
                 $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $keyPrefix = $this->cfg['redis']['keyPrefix'];
+                $keyPrefix = $this->cfg['redisKeyPrefix'];
                 $cache = new CacheService($keyPrefix);
                 $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
                 $user = $userApi->getUser($result->user_uri);

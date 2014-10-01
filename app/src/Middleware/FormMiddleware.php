@@ -31,7 +31,7 @@ use Symfony\Component\Translation\Translator;
  */
 class FormMiddleware extends Middleware
 {
-    const DEFAULT_LAYOUT = 'form_div_layout.html.twig';
+    const DEFAULT_LAYOUT = '_common/joindin_form_div_layout.html.twig';
 
     const SERVICE_FORM_FACTORY = 'formFactory';
 

@@ -23,3 +23,20 @@ current issues with the "hackathon" or "easypick" issues.
 
 If you have any problems, ask on the IRC channel or send an email to
 the mailing list.
+
+## JIRA Smart Commits
+
+If you want have your commit messages perform actions in JIRA. JIRA
+has [documentation](https://confluence.atlassian.com/display/FISHEYE/Using+Smart+Commits)
+on their extensive list of commands, but here is an example of what
+you can use in your commit message:
+
+```
+JOINDIN-<number> #close <message>
+```
+
+An example would be:
+
+```
+JOINDIN-445 #close Fixed.
+```

@@ -1,0 +1,40 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{# Add an 'errors' class to the UL #}
+{% block form_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+    <ul class="errors">
+        {% for error in errors %}
+            <li>{{ error.message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}
+
+{# form-group class on containing div & set has-error class as required. Also
+render the errors after the widget. #}
+{% block form_row %}
+{% spaceless %}
+    <div class="form-group {% if errors|length > 0 %}has-error{% endif %}">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_row %}
+
+{# Elements need a form-control class #}
+{% block widget_attributes %}
+{% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
+{{ parent() }}
+{% endblock widget_attributes %}
+
+{# Labels need a control-label class #}
+{% block form_label %}
+{% if label is not sameas(false) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' control-label')|trim}) %}
+{% endif %}
+{{ parent() }}
+{% endblock form_label %}

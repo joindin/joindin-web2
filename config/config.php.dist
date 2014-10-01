@@ -2,16 +2,18 @@
 $config = array(
     'slim' => array(
         'mode' => 'development',
+        'debug' => 1,
         'custom' => array(
-            'redis' => array(
-                'keyPrefix' => 'dev-',
-            ),
+            'redisKeyPrefix' => 'dev-',
             'apiUrl' => 'https://api.joind.in',
             'googleAnalyticsId' => '',
-            'useMinifiedFiles' => false,
         ),
         'oauth' => array(
             'client_id' => 'web2',
+            'client_secret' => 'web2secret',
         ),
+        'twig' => array(
+            'cache' => '/tmp/joindin-twig-cache'
+        )
     ),
 );

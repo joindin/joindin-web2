@@ -5,6 +5,7 @@ namespace Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Form\DataTransformer\DateTransformer;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -53,13 +54,14 @@ class EventFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        list ($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
         $builder
+            ->add('addr', 'hidden', ['mapped' => false])
             ->add(
                 'name',
                 'text',
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
-                    'attr'        => ['class' => 'form-group form-control']
                 ]
             )
             ->add(
@@ -67,24 +69,83 @@ class EventFormType extends AbstractType
                 'textarea',
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
-                    'attr'        => ['class' => 'form-group form-control']
+                    'attr'        => [
+                                        'rows' => '10',
+                                     ]
                 ]
             )
             ->add(
-                'timezone',
+                'tz_continent',
                 'choice',
                 [
-                    'choices'     => $this->getListOfTimezones(),
+                    'label'       => 'Timezone',
+                    'choices'     => array("Select a continent") + $continents,
                     'constraints' => [new Assert\NotBlank()],
-                    'attr'        => ['class' => 'form-group form-control']
                 ]
             )
-            ->add('start_date', 'date', $this->getOptionsForDateWidget('Start'))
-            ->add('end_date', 'date', $this->getOptionsForDateWidget('End'))
-            ->add('href', 'url', $this->getOptionsForUrlWidget('Website'))
-            ->add('cfp_start_date', 'date', $this->getOptionsForDateWidget('Call for Papers start', false))
-            ->add('cfp_end_date', 'date', $this->getOptionsForDateWidget('Call for Papers end', false))
-            ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for Papers website', false))
+            ->add(
+                'tz_place',
+                'choice',
+                [
+                    'label'       => 'Timezone city',
+                    'choices'     => array('Select a city') + $cities,
+                    'constraints' => [new Assert\NotBlank()],
+                ]
+            )
+            ->add(
+                $builder->create(
+                    'start_date',
+                    'text',
+                    $this->getOptionsForDateWidget('Start date')
+                )->addViewTransformer(new DateTransformer())
+            )
+            ->add(
+                $builder->create(
+                    'end_date',
+                    'text',
+                    $this->getOptionsForDateWidget('End date')
+                )->addViewTransformer(new DateTransformer())
+            )
+            ->add('href', 'url', $this->getOptionsForUrlWidget('Website URL'))
+            ->add(
+                $builder->create(
+                    'cfp_start_date',
+                    'text',
+                    $this->getOptionsForDateWidget('Opening date', false)
+                )->addViewTransformer(new DateTransformer())
+            )
+            ->add(
+                $builder->create(
+                    'cfp_end_date',
+                    'text',
+                    $this->getOptionsForDateWidget('Closing date', false)
+                )->addViewTransformer(new DateTransformer())
+            )
+            ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
+            ->add(
+                'location',
+                'text',
+                [
+                    'label' => 'Venue name',
+                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 3])],
+                ]
+            )
+            ->add(
+                'latitude',
+                'text',
+                [
+                    'label' => 'Latitude',
+                    'attr' => ['readonly' => 'readonly'],
+                ]
+            )
+            ->add(
+                'longitude',
+                'text',
+                [
+                    'label' => 'Longitude',
+                    'attr' => ['readonly' => 'readonly'],
+                ]
+            )
         ;
     }
 
@@ -114,7 +175,7 @@ class EventFormType extends AbstractType
             'label'       => $label,
             'required'    => $required,
             'constraints' => $constraints,
-            'attr'        => ['class' => 'form-group form-control', 'placeholder' => 'http://example.org']
+            'attr'        => ['placeholder' => 'http://example.org']
         ];
     }
 
@@ -143,29 +204,63 @@ class EventFormType extends AbstractType
         return [
             'label'       => $label,
             'required'    => $required,
-            'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
+            // 'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
             'constraints' => $constraints,
-            'attr'        => ['class' => 'form-group form-control']
+            'attr'        => [
+                                'class'                     => 'date-picker',
+                                'data-provide'              => 'datepicker',
+                                'data-date-format'          => 'd MM yyyy',
+                                'data-date-week-start'      => '1',
+                                'data-date-autoclose'       => '1',
+                                'data-date-today-highlight' => true,
+                             ]
         ];
     }
 
     /**
-     * Returns an associative array with timezones.
+     * Returns an array containing associative arrays of timezone continents & cities.
      *
-     * Both the key and value contain the name of the timezone so that the select box will pass a string value and
-     * not a numeric value. Although PHP recognizes 'UTC' as timezone we explicitly remove that because it does not
-     * fit with the Joind.in API.
+     * Both the key and value contain the name of the timezone continent/city so that the select box will pass a string
+     * value and not a numeric value. Although PHP recognizes 'UTC' as timezone we explicitly remove that because
+     * it does not fit with the Joind.in API.
      *
      * @return string[]
      */
-    public function getListOfTimezones()
+    public function getListOfTimezoneContinentsAndCities()
     {
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
 
-        $result = [];
         foreach ($timezones as $timezone) {
-            $result[$timezone] = $timezone;
+            list($continent, $city) = explode('/', $timezone, 2);
+            $continents[$continent] = $continent;
+            $cities[$city] = $city;
+        }
+
+        return array($continents, $cities);
+    }
+
+    /**
+     * Returns a nested list of timezones: continent => comma separated list of cities
+     *
+     * Although PHP recognizes 'UTC' as timezone we explicitly remove that because
+     * it does not fit with the Joind.in API.
+     *
+     * @return string[]
+     */
+    public static function getNestedListOfTimezones()
+    {
+        $timezones = \DateTimeZone::listIdentifiers();
+        array_pop($timezones); // Remove UTC from the end of the list
+
+        $result = array();
+        foreach ($timezones as $timezone) {
+            list($continent, $city) = explode('/', $timezone, 2);
+            $result[$continent][] = $city;
+        }
+
+        foreach ($result as $continent => $cities) {
+            $result[$continent] = '"' .implode('", "', $cities) . '"';
         }
 
         return $result;

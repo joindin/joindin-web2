@@ -22,15 +22,22 @@
         {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
         {{ form_errors(form) }}
         <div class="row">
-            <fieldset class="col-md-6">
+            <fieldset class="col-sm-6">
                 <legend>Event information</legend>
                 {{ form_row(form.name) }}
                 {{ form_row(form.description) }}
                 {{ form_row(form.href) }}
             </fieldset>
-            <fieldset class="col-md-6">
-                <legend>Date and Time</legend>
-                {{ form_row(form.timezone) }}
+            <fieldset class="col-sm-6">
+                <legend>Date and time</legend>
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{ form_row(form.tz_continent) }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form_row(form.tz_place) }}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-6">
                     {{ form_row(form.start_date) }}
@@ -40,37 +47,210 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="col-offset-md-6 col-md-6">
-                <legend>Call for Papers</legend>
+            <fieldset class="col-offset-sm-6 col-sm-6">
+                <legend>Call for papers</legend>
                 <div class="row">
                     <div class="col-sm-6">
-                        {{ form_row(form.cfp_start_date, {'label' : 'Start'}) }}
+                        {{ form_row(form.cfp_start_date) }}
                     </div>
                     <div class="col-sm-6">
-                        {{ form_row(form.cfp_end_date, {'label' : 'End'}) }}
+                        {{ form_row(form.cfp_end_date) }}
                     </div>
                 </div>
-                {{ form_row(form.cfp_url, {'label' : 'Website'}) }}
+                {{ form_row(form.cfp_url) }}
             </fieldset>
         </div>
-        <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+        <div class="row">
+            <fieldset class="col-sm-12" class="location">
+                <legend>Location</legend>
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{form_row(form.location)}}
+                        <div class="form-group">
+                            <label class="control-label" for="addr">Venue location</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="addr" name="addr">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" id="addr_search_button">Search</button>
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <ul id="addr_selection"></ul>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Latitude &amp; longitude</label>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    {{form_widget(form.latitude)}}
+                                </div>
+                                <div class="col-sm-6">
+                                    {{form_widget(form.longitude)}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="map" class="osmMap" data-lat="0.0" data-lon="0.0" data-zoom="10"></div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+            </div>
+        </div>
         {{ form_end(form) }}
     {% else %}
-        <h1>Login</h1>
-        {{ include('_common/login.html.twig') }}
+        <h1>Login required</h1>
+        <p>In order to submit an event, please log in.</p>
     {% endif %}
 {% endblock %}
 
 {% block extraAside %}
-    <h3>Submission Tips & Terms</h3>
+    {% if user %}
+    <h3>Submission tips</h3>
     <p>
         Here's a few useful definitions when submitting events:
     </p>
     <dl>
-        <dt>Call for Papers</dt>
+        <dt>English</dt>
         <dd>
-            If your event is going to have a time for session submissions, check the box and specify the range. This
-            will show in the event detail page.
+            Please ensure that the description is in English with a translation below if required.
         </dd>
     </dl>
+    <dl>
+        <dt>Call for Papers</dt>
+        <dd>
+            If your event is going to have a time for session submissions, please enter the dates
+            that your Call for papers opens and closes. This will show in the event detail page.
+        </dd>
+    </dl>
+    {% endif %}
+{% endblock %}
+
+{% block extra_styles %}
+    <link href="/leaflet/leaflet.css" rel="stylesheet">
+    <!--[if lte IE 8]><link rel="stylesheet" href="/leaflet/leaflet.ie.css" /><![endif]-->
+    <style>
+        #addr_selection {
+           z-index: 100;
+           display: none;
+           position: absolute;
+           background-color: #ffffff;
+           top: 130px;
+           left: 20px;
+           height: 180px;
+           width: 80%;
+           border: 1px solid #ccc;
+           overflow: scroll;
+           margin-left: 0;
+           padding-left: 20px;
+           text-indent: -15px;
+           list-style-type: none;
+        }
+
+        #map {
+            width:100%;
+            height: 260px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %}
+
+{% block extra_javascript %}
+    <script type="text/javascript" src="/leaflet/leaflet.js"></script>
+    <script type="text/javascript" src="/js/joindin-map.js"></script>
+    <script type="text/javascript" src="/js/typeahead.bundle.min.js"></script>
+
+    <script type="text/javascript">
+        {# /* Ensure that we don't forget the current city when we initialise the city list
+           for the current continent */ #}
+        var current_city = $("#event_tz_place").val();
+        $("#event_tz_place").html('<option value="">Select a city</option>');
+        update_city_list($("#event_tz_continent").val());
+        if (current_city.length > 1) {
+            $("#event_tz_place").val(current_city);
+        }
+
+        $("#event_tz_continent").change(function() {
+            update_city_list($(this).val());
+        });
+
+        function update_city_list(val)
+        {
+            switch(val){
+                {% for continent, cities in timezones %}
+
+                case "{{continent}}":
+                     populate_city_select([{{cities|raw}}]);
+                    break;
+                {% endfor %}
+
+                default: //default child option is blank
+                    $("#event_tz_place").html('<option value="">Select a city</option>');
+                    break;
+            }
+        }
+
+        function populate_city_select(cities)
+        {
+            $("#event_tz_place").html('<option value="">Select a city</option>');
+            $(cities).each(function (i) {
+                $("#event_tz_place").append('<option value="' + cities[i] + '">' + cities[i] + '</option>');
+            });
+        }
+
+        $(document).ready(function(){
+            // Setup the click handler for the search button.
+            $('#addr_search_button').click(function(){
+                $.getJSON('http://nominatim.openstreetmap.org/search?format=json&limit=5&q=' + $('#addr').val(), function(data) {
+                    var items = [];
+
+                    var $addrSelector = $('#addr_selection');
+                    $addrSelector.empty();
+                    $.each(data, function(key, val) {
+                        var newLI = $('<li><a href="#" data-lat="'+ val.lat +'" data-lon="'+ val.lon +'">' + val.display_name + '</a></li>');
+                        $addrSelector.append(newLI);
+                    });
+                    $addrSelector.show(100);
+                });
+            });
+            
+            // Return within search text input should trigger a search
+            $('#addr').keypress(function(e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    $('#addr_search_button').click();
+                    return false;
+                }
+            });
+            $('#addr').keyup(function(e) {
+                if (e.keyCode == 27) {
+                    e.preventDefault();
+                    $('#addr_selection').hide();
+                    return false;
+                }
+            });
+            // Setup the click handler for clicking on items in the results list.
+            $('#addr_selection').on('click', 'li a', function(e){
+                e.preventDefault();
+                var $clicked = $(e.currentTarget);
+                $('#map').joindIn_map('moveMap', {lat: $clicked.attr('data-lat'),lon: $clicked.attr('data-lon')});
+                $('#addr_selection').hide();
+            });
+            
+            // Initialise the OSM Map
+            $('#map').joindIn_map({
+                draggable: true,
+                moveMapCallback: function(elem, options){
+                    $('#event_latitude').val(options.lat);
+                    $('#event_longitude').val(options.lon);
+                }
+            });
+        });
+    </script>
 {% endblock %}
