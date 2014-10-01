@@ -27,6 +27,7 @@ return array(
     'Predis' => array($vendorDir . '/predis/predis/lib'),
     'Middleware' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Joindin' => array($vendorDir . '/joindin/api-client/src', $vendorDir . '/joindin/api-client/tests/unit'),
+    'Form' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Event' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Application' => array($baseDir . '/app/src', $baseDir . '/tests'),
 );
