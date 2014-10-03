@@ -26,6 +26,7 @@ class EventController extends BaseController
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
         $app->get('/event/xhr-attend/:friendly_name', array($this, 'xhrAttend'));
+        $app->get('/event/xhr-unattend/:friendly_name', array($this, 'xhrUnattend'));
         $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
     }
 
@@ -262,6 +263,20 @@ class EventController extends BaseController
 
         if ($event) {
             $result = $this->getEventApi()->attend($event, $_SESSION['user']);
+        }
+
+        $this->application->response()->body(json_encode(array('success' => $result)));
+    }
+
+    public function xhrUnattend($friendly_name)
+    {
+        $this->application->response()->header('Content-Type', 'application/json');
+
+        $api = $this->getEventApi();
+        $event = $api->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            $result = $this->getEventApi()->unattend($event, $_SESSION['user']);
         }
 
         $this->application->response()->body(json_encode(array('success' => $result)));
