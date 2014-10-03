@@ -28,6 +28,7 @@ class EventController extends BaseController
         $app->get('/event/xhr-attend/:friendly_name', array($this, 'xhrAttend'));
         $app->get('/event/xhr-unattend/:friendly_name', array($this, 'xhrUnattend'));
         $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
+        $app->get('/event/unattend/:friendly_name', array($this, 'unattend'))->name("event-unattend");
     }
 
     public function index()
@@ -140,6 +141,23 @@ class EventController extends BaseController
 
         if ($event) {
             $eventApi->attend($event, $_SESSION['user']);
+        }
+
+        $friendlyUrl = $this->application->request()->get('r');
+        if ($friendlyUrl) {
+            $this->redirectToDetailPage($friendlyUrl);
+        }
+
+        $this->application->redirect('/');
+    }
+
+    public function unattend($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            $eventApi->unattend($event, $_SESSION['user']);
         }
 
         $friendlyUrl = $this->application->request()->get('r');

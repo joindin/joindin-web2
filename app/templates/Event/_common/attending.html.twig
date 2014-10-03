@@ -2,11 +2,13 @@
 
     {% if event.isAttending %}
         {% set attendingClasses = 'label label-success' %}
+        {% set attendingUrl = urlFor('event-unattend', {"friendly_name": event.getUrlFriendlyName}) %}
     {% else %}
         {% set attendingClasses = 'btn btn-xs btn-primary' %}
+        {% set attendingUrl = urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) %}
     {% endif %}
 
-    <a href="{{ urlFor('event-attend', {"friendly_name": event.getUrlFriendlyName}) }}" data-is-past="{% if event.isPastEvent %}true{% else %}false{% endif %}" data-friendly-name="{{ event.getUrlFriendlyName|escape }}" class="attending {{ attendingClasses }}">
+    <a href="{{ attendingUrl }}" data-is-past="{% if event.isPastEvent %}true{% else %}false{% endif %}" data-friendly-name="{{ event.getUrlFriendlyName|escape }}" class="attending {{ attendingClasses }}">
         {% if event.isAttending %}
             including you
         {% elseif event.isPastEvent %}
