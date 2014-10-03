@@ -8,4 +8,11 @@
     <div class="col-xs-12">
         <a href="/event" class="btn btn-block btn-lg">See more events <i class="fa fa-arrow-circle-o-right"></i></a>
     </div>
+    <h1>Currently Open Call for Papers</h1>
+    {% for event in cfp_events.events %}
+        {% include 'Event/_common/summary_cfp.html.twig' %}
+    {% endfor %}
+    <div class="col-xs-12">
+        <a href="{{ urlFor( 'event-call-for-papers' ) }}" class="btn btn-block btn-lg">See more Call for Papers <i class="fa fa-arrow-circle-o-right"></i></a>
+    </div>
 {% endblock %}

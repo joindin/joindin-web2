@@ -1,0 +1,37 @@
+{%
+set eventUrl = urlFor(
+    'event-detail', {"friendly_name": event.getUrlFriendlyName}
+)
+%}
+
+<article class="event title-only">
+    <div class="col-xs-10 col-sm-10 title">
+        <section>
+            <h3 class="header">
+                <a href="{{ eventUrl }}">{{ event.getName }}</a>
+            </h3>
+            <p class="meta">
+                {{ event.getStartDate|date('M d Y', event.getFullTimezone) }}
+                {%  if event.getStartDate|date('M d Y', event.getFullTimezone)
+                        is not sameas(event.getEndDate|date('M d Y', event.getFullTimezone)) %}
+                    &ndash; {{ event.getEndDate|date('M d Y', event.getFullTimezone) }}
+
+                {% endif %}
+
+                {% if event.getLocation %}
+                    @ {{event.getLocation|escape}}
+                {% endif %}
+
+                {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
+                        {% if "now"|date('c') < event.getCallForPapersStartDate %}
+                            {# not open yet #}
+                            | Call for papers starts {{ event.getCallForPapersStartDate |date('M d Y', event.getFullTimezone) }}
+                        {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
+                            {# still open #}
+                            | Call for papers ends {{ event.getCallForPapersEndDate |date('M d Y', event.getFullTimezone) }}
+                        {% endif %}
+                {% endif %}
+            </p>
+        </section>
+    </div>
+</article>
