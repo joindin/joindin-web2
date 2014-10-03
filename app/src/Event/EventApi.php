@@ -22,10 +22,11 @@ class EventApi extends BaseApi
      * @param integer $limit  Number of events to get per page
      * @param integer $start  Start value for pagination
      * @param string  $filter Filter to apply
+     * @param bool  $verbose get verbose result
      *
      * @return EventEntity model
      */
-    public function getCollection($limit = 10, $start = 1, $filter = null)
+    public function getCollection($limit = 10, $start = 1, $filter = null, $verbose = false)
     {
         $url = $this->baseApiUrl . '/v2.1/events'
             . '?resultsperpage=' . $limit
@@ -33,6 +34,10 @@ class EventApi extends BaseApi
 
         if ($filter) {
             $url .= '&filter=' . $filter;
+        }
+
+        if ($verbose) {
+            $url .= '&verbose=yes';
         }
 
         return $this->queryEvents($url);

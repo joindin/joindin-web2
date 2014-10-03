@@ -45,6 +45,18 @@ set eventUrl = urlFor(
                 {% include 'Event/_common/attending_string.html.twig' %}
 
                 {% include 'Event/_common/attending.html.twig' %}
+
+                {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
+                    <p class="cfp-dates">
+                        {% if "now"|date('c') < event.getCallForPapersStartDate %}
+                            {# not open yet #}
+                            Call for papers starts {{ event.getCallForPapersStartDate |date('M d Y', event.getFullTimezone) }}
+                        {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
+                            {# still open #}
+                            Call for papers ends {{ event.getCallForPapersEndDate |date('M d Y', event.getFullTimezone) }}
+                        {% endif %}
+                    </p>
+                {% endif %}
             </p>
         </section>
     </div>

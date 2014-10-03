@@ -20,6 +20,7 @@ class EventController extends BaseController
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
+        $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
@@ -29,7 +30,7 @@ class EventController extends BaseController
         $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
     }
 
-    public function index()
+    public function index($filter = 'upcoming')
     {
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -41,16 +42,23 @@ class EventController extends BaseController
         $events = $eventApi->getCollection(
             $this->eventsToShow,
             $start,
-            'upcoming'
+            $filter,
+            ($filter == "cfp") ? true : false
         );
 
         $this->render(
             'Event/index.html.twig',
             array(
                 'page' => $page,
-                'events' => $events
+                'events' => $events,
+                'filter' => $filter
             )
         );
+    }
+
+    public function callForPapers()
+    {
+        $this->index('cfp');
     }
 
     public function details($friendly_name)
