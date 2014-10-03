@@ -176,7 +176,7 @@ class EventApi
             return null;
         }
 
-        return $this->getByUrl($response['location']);
+        return $this->getByUrl($response['url']);
     }
 
     /**

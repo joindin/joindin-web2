@@ -25,7 +25,10 @@ class Event implements MapperInterface
         'attending_uri',
         'website_uri',
         'humane_website_uri',
-        'attendees_uri'
+        'attendees_uri',
+        'location',
+        'longitude',
+        'latitude'
     );
 
     /**

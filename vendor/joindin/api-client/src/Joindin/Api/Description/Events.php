@@ -45,6 +45,9 @@ final class Events extends Description
                     'cfp_url'        => array('type' => 'string', 'location' => 'json', 'required' => false),
                     'cfp_start_date' => array('type' => 'string', 'location' => 'json', 'required' => false),
                     'cfp_end_date'   => array('type' => 'string', 'location' => 'json', 'required' => false),
+                    'location'       => array('type' => 'string', 'location' => 'json', 'required' => true),
+                    'latitude'       => array('type' => 'string', 'location' => 'json', 'required' => false),
+                    'longitude'      => array('type' => 'string', 'location' => 'json', 'required' => false),
                 )
             ),
             'fetch' => array(

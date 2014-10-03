@@ -26,6 +26,8 @@ class Event
     private $websiteUri;
     private $humaneWebsiteUri;
     private $attendeesUri;
+    private $longitude;
+    private $latitude;
 
     /**
      * @param mixed $attendeeCount
@@ -379,5 +381,35 @@ class Event
         return $this->websiteUri;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
 
+    /**
+     * @param mixed $latitude
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param mixed $longitude
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+    }
 }
