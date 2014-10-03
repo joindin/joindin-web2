@@ -63,3 +63,36 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 * Issues list: http://joindin.jira.com/ (good bug reports ALWAYS welcome!)
 * CI Environment: lots of output and information about tests, deploys etc: http://jenkins.joind.in
 * Community: We hang out on IRC, pop in with questions or comments! #joind.in on Freenode
+
+## Global .gitignore
+
+git has the capability to define a global gitignore, which means you can set a local file to ignore everything you don't 
+want to be commited by accident. This is not only recommended for this project, but for all your projects.
+
+You can define this gitignore file with the following command. The gitignore is expected to be in `~/.gitignore_global`.
+Of course you can use every filename you want.  
+
+    $ git config --global core.excludesfile ~/.gitignore_global
+
+Octocat gives [a good starting point](https://gist.github.com/octocat/9257657) to what to put in.
+
+Beside this, we recommend to add meta data to all the IDEs:
+
+    # Eclipse
+    .classpath
+    .project
+    .settings/
+    
+    # Intellij
+    .idea/
+    *.iml
+    *.iws
+        
+    # Maven
+    log/
+    target/
+
+    # Netbeans
+    nbproject/private/
+
+More on ignoring files, [can be find on github](https://help.github.com/articles/ignoring-files/).
