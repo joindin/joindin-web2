@@ -130,6 +130,17 @@ class EventApi extends BaseApi
         throw new \Exception("Failed to mark you as attending: " . $result);
     }
 
+    public function unattend(EventEntity $event)
+    {
+        list ($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
+
+        if ($status == 200) {
+            return true;
+        }
+
+        throw new \Exception("Failed to unmark you as attending: " . $result);
+    }
+
     /**
      * Submits a new event to the API and returns it or null if it is pending acceptance.
      *
