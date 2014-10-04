@@ -2,7 +2,7 @@
 
 {% block body %}
             {% include 'Event/_common/event_header.html.twig' %}
-            <p>{{ event.getDescription|format_string|raw }}</p>
+            <p>{{ event.getDescription|nl2br }}</p>
             <hr>
             {% if comments %}
                 <h2>Comments</h2>
