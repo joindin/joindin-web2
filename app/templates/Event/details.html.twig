@@ -36,7 +36,11 @@
     {% if event.getStub %}
         <section class="short-url">
             <label class="control-label">Short URL:</label>
-            <div>{{ shortUrlForEvent(event.getStub) }}</div>
+            <br>
+            <i class="fa fa-external-link-square"></i>
+            <a href="{{ shortUrlForEvent(event.getStub) }}">
+                {{ shortUrlForEvent(event.getStub) }}
+            </a>
         </section>
     {% endif %}
     {% if event.getWebsiteAddress %}
