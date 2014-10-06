@@ -57,17 +57,16 @@ $app->view()->setTemplatesDirectory('../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
 
-$cacheFolder = '/tmp/joindin-twig-cache';
 if (isset($config['slim']['twig']['cache'])) {
-    $cacheFolder = $config['slim']['twig']['cache'];
+    $app->view()->getEnvironment()->setCache($config['slim']['twig']['cache']);
+} else {
+    $app->view()->getEnvironment()->setCache(false);
 }
-$app->view()->getEnvironment()->setCache(rtrim($cacheFolder, '/') . '/' . $config['slim']['mode']);
 
 $app->configureMode('development', function () use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
     $env->addExtension(new \Twig_Extension_Debug());
-    $env->setCache(false); // disable this line to tests performance with views
 });
 
 // register middlewares
