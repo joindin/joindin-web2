@@ -53,3 +53,8 @@
     {% endif %}
 {% endblock %}
 
+{% block extra_meta %}
+    {{ parent() }}
+    <link rel="canonical" href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}" />
+    {% if event.getStub %}<link rel="shortlink" href="{{ shortUrlForEvent(event.getStub) }}" />{% endif %}
+{% endblock %}
