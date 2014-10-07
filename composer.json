@@ -14,6 +14,9 @@
     },
     "preferred-install": "dist",
     "minimum-stability": "stable",
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/mvriel/joindin-api-client"}
+    ],
     "require": {
         "predis/predis":         "~0.8",
         "slim/slim":             "~2.4",
@@ -22,6 +25,7 @@
         "symfony/form":          "~2.5",
         "symfony/validator":     "~2.5",
         "symfony/security-csrf": "~2.5",
-        "symfony/twig-bridge":   "~2.5"
+        "symfony/twig-bridge":   "~2.5",
+        "joindin/api-client":    "~0.1"
     }
 }

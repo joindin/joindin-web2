@@ -1,205 +1,361 @@
 <?php
 namespace Tests\Event;
 
+use Application\CacheService;
+use Event\EventApi;
+use Event\EventDb;
+use GuzzleHttp\Command\Guzzle\GuzzleClient;
+use Joindin\Api\Entity\Event;
+use Joindin\Api\Response;
+
 class EventApiTest extends \PHPUnit_Framework_TestCase
 {
-    private $mockConfig;
-    private $mockCache;
-    private $mockDbEvent;
+    const EXAMPLE_FILTER = 'abc';
+    const EXAMPLE_START = 2;
+    const EXAMPLE_LIMIT = 1;
+    const EXAMPLE_FRIENDLY_URL = 'abc123';
+    const EXAMPLE_EVENT_URL = 'http://example.org/example';
+    const EXAMPLE_STUB = 'stub123';
+    const EXAMPLE_EVENT_COMMENTS_URL = 'http://example.org/comments';
+
+    /** @var EventApi */
+    private $fixture;
+
+    /** @var CacheService */
+    private $appCacheMock;
+
+    /** @var EventDb */
+    private $cacheMock;
+
+    /** @var GuzzleClient */
+    private $eventServiceMock;
+
+    /** @var GuzzleClient */
+    private $eventCommentServiceMock;
 
     public function setUp()
     {
-        $this->mockConfig = array('apiUrl' => 'http://example.com');
-        $this->mockCache = $this->getMock(
-            'Application\CacheService'
+        $guzzleClientClass = 'GuzzleHttp\Command\Guzzle\GuzzleClient';
+
+        $this->appCacheMock            = $this->getMock('Application\CacheService', []);
+        $this->cacheMock               = $this->getMock('Event\EventDb', ['load', 'save'], [$this->appCacheMock]);
+        $this->eventCommentServiceMock = $this->getMock($guzzleClientClass, ['getCollection', 'submit'], [], '', false);
+        $this->eventServiceMock        = $this->getMock(
+            $guzzleClientClass,
+            ['getCollection', 'fetch', 'getHttpClient'],
+            [],
+            '',
+            false
         );
 
-        $this->mockDbEvent = $this->getMock(
-            'Event\EventDb',
+        $this->fixture = new EventApi($this->cacheMock, $this->eventServiceMock, $this->eventCommentServiceMock);
+    }
+
+    /**
+     * @covers Event\EventApi::__construct
+     * @covers Event\EventApi::getCollection
+     * @covers Event\EventApi::storeEventsInCache
+     */
+    public function testRetrieveCollectionOfEvents()
+    {
+        // Arrange
+        $event = new Event();
+
+        $this->thenCacheStoresEvent($event);
+        $this->whenRetrievingEventsFromApiGivenResponseIsReturned(
+            $this->givenApiClientResponseWithResource($event)
+        );
+
+        // Act
+        $result = $this->fixture->getCollection(self::EXAMPLE_LIMIT, self::EXAMPLE_START, self::EXAMPLE_FILTER);
+
+        // Assert
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('events', $result);
+        $this->assertArrayHasKey('pagination', $result);
+        $this->assertSame([$event], $result['events']);
+    }
+
+    /**
+     * @covers Event\EventApi::__construct
+     * @covers Event\EventApi::getByFriendlyUrl
+     * @covers Event\EventApi::fetchEventFromDbByProperty
+     * @covers Event\EventApi::fetchEventFromApi
+     */
+    public function testRetrieveEventByFriendlyUrl()
+    {
+        // Arrange
+        $event = new Event();
+
+        $this->givenCacheReturnsItemWherePropertyAndValueAreGiven(
+            ['uri' => self::EXAMPLE_EVENT_URL],
+            'url_friendly_name',
+            self::EXAMPLE_FRIENDLY_URL
+        );
+
+        $this->whenFetchingEventFromApiGivenResponseIsReturned(
+            self::EXAMPLE_EVENT_URL,
+            $this->givenApiClientResponseWithResource($event)
+        );
+
+        // Act
+        $result = $this->fixture->getByFriendlyUrl(self::EXAMPLE_FRIENDLY_URL);
+
+        // Assert
+        $this->assertInstanceOf('Joindin\Api\Entity\Event', $result);
+        $this->assertSame($event, $result);
+    }
+
+    /**
+     * @covers Event\EventApi::__construct
+     * @covers Event\EventApi::getByFriendlyUrl
+     * @covers Event\EventApi::fetchEventFromDbByProperty
+     * @covers Event\EventApi::fetchEventFromApi
+     */
+    public function testRetrieveEventFailsIfNotInCache()
+    {
+        // Arrange
+        $this->givenCacheReturnsItemWherePropertyAndValueAreGiven(
             null,
-            array($this->mockCache)
+            'url_friendly_name',
+            self::EXAMPLE_FRIENDLY_URL
         );
 
-    }
+        // Act
+        $result = $this->fixture->getByFriendlyUrl(self::EXAMPLE_FRIENDLY_URL);
 
-    public function testDefaultGetCollectionParametersAreSet()
-    {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
-        );
-
-        $mockEvent->expects($this->once())
-            ->method('apiGet')
-            ->with('http://example.com/v2.1/events?resultsperpage=10&start=1')
-            ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
-
-        $mockEvent->getCollection();
-    }
-
-    public function testGetCollectionWithLimitSetsParamsCorrectly()
-    {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
-        );
-
-        $mockEvent->expects($this->once())
-            ->method('apiGet')
-            ->with('http://example.com/v2.1/events?resultsperpage=75&start=1')
-            ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
-
-        $mockEvent->getCollection(75);
-    }
-
-    public function testGetCollectionWithPageValueSetsParamsCorrectly()
-    {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
-        );
-
-        $mockEvent->expects($this->once())
-            ->method('apiGet')
-            ->with('http://example.com/v2.1/events?resultsperpage=32&start=6')
-            ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
-
-        $mockEvent->getCollection(32, 6);
-    }
-
-    public function testGetCollectionWithFilterSetsAllParamsCorrectly()
-    {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
-        );
-
-        $mockEvent->expects($this->once())
-            ->method('apiGet')
-            ->with('http://example.com/v2.1/events?resultsperpage=16&start=3&filter=samoflange')
-            ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
-
-        $mockEvent->getCollection(16, 3, 'samoflange');
+        // Assert
+        $this->assertSame(null, $result);
     }
 
     /**
-     * Test that addComment() posts the correct data to the API
+     * @covers Event\EventApi::__construct
+     * @covers Event\EventApi::getByStub
+     * @covers Event\EventApi::fetchEventFromDbByProperty
+     * @covers Event\EventApi::fetchEventFromApi
      */
-    public function testAddCommentPostsAComment()
+    public function testRetrieveEventByStub()
     {
-        // The object containing the event details (in this case, we only
-        // need to mock the comments_uri and its getter
-        $mockEventObj = $this->getMock(
-            'Event\EventEntity',
-            array('getCommentsUri'),
-            array(
-                (object) array('comments_uri'=>'http://example.com/comments/123')
-            )
+        // Arrange
+        $event = new Event();
+
+        $this->givenCacheReturnsItemWherePropertyAndValueAreGiven(
+            ['uri' => self::EXAMPLE_EVENT_URL],
+            'stub',
+            self::EXAMPLE_STUB
         );
 
-        $mockEventObj->expects($this->once())
-            ->method('getCommentsUri')
-            ->will($this->returnValue('http://example.com/comments/123'));
-
-
-        // We need to create the Event API class, and mock the call to the
-        // joind.in API to return a known result and check we're making the
-        // correct call
-        $mockEventApi = $this->getMock(
-            'Event\EventApi',
-            array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+        $this->whenFetchingEventFromApiGivenResponseIsReturned(
+            self::EXAMPLE_EVENT_URL,
+            $this->givenApiClientResponseWithResource($event)
         );
 
-        $mockEventApi->expects($this->once())
-            ->method('apiPost')
-            ->with(
-                'http://example.com/comments/123',
-                array('comment'=>'comment')
-            )
-            ->will($this->returnValue(array('201', 'result')));
+        // Act
+        $result = $this->fixture->getByStub(self::EXAMPLE_STUB);
 
-        // The test
-        $this->assertTrue(
-            $mockEventApi->addComment($mockEventObj, 'comment')
-        );
+        // Assert
+        $this->assertInstanceOf('Joindin\Api\Entity\Event', $result);
+        $this->assertSame($event, $result);
     }
 
     /**
-     * If the API is down, then post comment should throw an exception
+     * @covers Event\EventApi::__construct
+     * @covers Event\EventApi::getComments
+     * @covers Event\EventApi::storeEventsInCache
      */
-    public function testPostCommentThrowsExceptionIfAPIReturnsBadStatus()
+    public function testRetrieveCollectionOfCommentsForCommentUri()
     {
-        // The object containing the event details (in this case, we only
-        // need to mock the comments_uri and its getter
-        $mockEventObj = $this->getMock(
-            'Event\EventEntity',
-            array('getCommentsUri'),
-            array(
-                (object) array('comments_uri'=>'http://example.com/comments/123')
-            )
+        // Arrange
+        $comment = new Event\Comment();
+
+        $this->whenRetrievingCommentsFromApiGivenResponseIsReturned(
+            self::EXAMPLE_EVENT_COMMENTS_URL,
+            $this->givenApiClientResponseWithResource($comment)
         );
 
-        $mockEventObj->expects($this->once())
-            ->method('getCommentsUri')
-            ->will($this->returnValue('http://example.com/comments/123'));
+        // Act
+        $result = $this->fixture->getComments(self::EXAMPLE_EVENT_COMMENTS_URL);
 
-
-        // We need to create the Event API class, and mock the call to the
-        // joind.in API to return a known (failed) result and check we're making the
-        // correct call
-        $mockEventApi = $this->getMock(
-            'Event\EventApi',
-            array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent)
-        );
-
-        $mockEventApi->expects($this->once())
-            ->method('apiPost')
-            ->with(
-                'http://example.com/comments/123',
-                array('comment'=>'comment')
-            )
-            ->will($this->returnValue(array('500', 'no result')));
-
-        // The test
-        $this->setExpectedException('Exception');
-        $mockEventApi->addComment($mockEventObj, 'comment');
+        // Assert
+        $this->assertInternalType('array', $result);
+        $this->assertSame([$comment], $result);
     }
 
-    public function testAttendThrowsExceptionIfAPIReturnsBadStatus()
+    /**
+     * @covers Event\EventApi::__construct
+     * @covers Event\EventApi::addComment
+     */
+    public function testAddCommentToEvent()
     {
-        $mockEventObj = $this->getMock(
-            'Event\EventEntity',
-            array('getApiUriToMarkAsAttending'),
-            array(
-                (object) array('attending_uri'=>'http://example.com/events/1/attending')
-            )
-        );
+        // Arrange
+        $commentsUri = 'http://example.org/comments';
+        $comment = 'This is a comment';
 
-        $mockEventObj->expects($this->once())
-            ->method('getApiUriToMarkAsAttending')
-            ->will($this->returnValue('http://example.com/events/1/attending'));
+        $event = new Event();
+        $event->setCommentsUri($commentsUri);
 
+        $this->thenCommentIsSubmittedAtUri($comment, $commentsUri);
 
-        $mockEventApi = $this->getMock(
-            'Event\EventApi',
-            array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent)
-        );
+        // Act
+        $this->fixture->addComment($event, $comment);
+    }
 
-        $mockEventApi->expects($this->once())
-            ->method('apiPost')
+    /**
+     * @covers Event\EventApi::__construct
+     * @covers Event\EventApi::addComment
+     * @expectedException Exception
+     * @expectedExceptionMessage Failed to add comment
+     */
+    public function testFailureToAddCommentShouldThrowException()
+    {
+        // Arrange
+        $event = new Event();
+        $this->thenSubmittingACommentThrowsException();
+
+        // Act
+        $this->fixture->addComment($event, 'This is a comment');
+    }
+
+    /**
+     * @covers Event\EventApi::__construct
+     * @covers Event\EventApi::attend
+     */
+    public function testMarkUserAsAttending()
+    {
+        // Arrange
+        $event = new Event();
+        $event->setAttendingUri('http://example.org/attend');
+
+        $this->thenEventIsNotifiedThatCurrentUserAttends($event);
+
+        // Act
+        $this->fixture->attend($event);
+    }
+
+    /**
+     * Initializes the event service mock to return the given response when a collection is requested.
+     *
+     * @param Response $response
+     *
+     * @return void
+     */
+    private function whenRetrievingEventsFromApiGivenResponseIsReturned($response)
+    {
+        $this->eventServiceMock->expects($this->any())
+            ->method('getCollection')
             ->with(
-                'http://example.com/events/1/attending'
+                [
+                    'resultsperpage' => self::EXAMPLE_LIMIT,
+                    'start' => self::EXAMPLE_START,
+                    'filter' => self::EXAMPLE_FILTER
+                ]
             )
-            ->will($this->returnValue(array('500', 'no result')));
+            ->will($this->returnValue($response));
+    }
 
-        $this->setExpectedException('Exception');
-        $mockEventApi->attend($mockEventObj);
+    /**
+     * Initializes the event comment service mock to return the given response when a collection is requested.
+     *
+     * @param string   $url
+     * @param Response $response
+     *
+     * @return void
+     */
+    private function whenRetrievingCommentsFromApiGivenResponseIsReturned($url, $response)
+    {
+        $this->eventCommentServiceMock->expects($this->any())
+            ->method('getCollection')
+            ->with([ 'url' => $url ])
+            ->will($this->returnValue($response));
+    }
+
+    /**
+     * Initializes the event service mock to return the given response when an event with the given url is fetched.
+     *
+     * @param string   $url
+     * @param Response $response
+     *
+     * @return void
+     */
+    private function whenFetchingEventFromApiGivenResponseIsReturned($url, Response $response)
+    {
+        $this->eventServiceMock->expects($this->any())
+            ->method('fetch')
+            ->with([ 'url' => $url ])
+            ->will($this->returnValue($response));
+    }
+
+    /**
+     * @param mixed $resource
+     *
+     * @return Response
+     */
+    private function givenApiClientResponseWithResource($resource)
+    {
+        return new Response([$resource], ['this_page' => 'url']);
+    }
+
+    /**
+     * @param $property
+     * @param $value
+     * @param $item
+     */
+    private function givenCacheReturnsItemWherePropertyAndValueAreGiven($item, $property, $value)
+    {
+        $this->cacheMock->expects($this->any())
+            ->method('load')
+            ->with($property, $value)
+            ->will($this->returnValue($item));
+    }
+
+    /**
+     * @param Event $event
+     */
+    private function thenCacheStoresEvent(Event $event)
+    {
+        $this->cacheMock->expects($this->any())
+            ->method('save')
+            ->with($event);
+    }
+
+    /**
+     * Initializes the event comment service mock to expect the given argument to be submitted.
+     *
+     * @param string $comment
+     * @param string $commentsUri
+     *
+     * @return void
+     */
+    private function thenCommentIsSubmittedAtUri($comment, $commentsUri)
+    {
+        $this->eventCommentServiceMock->expects($this->any())
+            ->method('submit')
+            ->with(['url' => $commentsUri, 'comment' => $comment]);
+    }
+
+    private function thenSubmittingACommentThrowsException()
+    {
+        $this->eventCommentServiceMock->expects($this->any())
+            ->method('submit')
+            ->will($this->throwException(new \Exception('Just any exception')));
+    }
+
+    /**
+     * Initializes the event service mock to expect a post request to the given attending url.
+     *
+     * @param Event $event
+     *
+     * @return void
+     */
+    private function thenEventIsNotifiedThatCurrentUserAttends(Event $event)
+    {
+        $clientMock = $this->getMockForAbstractClass('\GuzzleHttp\ClientInterface');
+        $clientMock->expects($this->once())
+            ->method('post')
+            ->with($event->getAttendingUri());
+
+        $this->eventServiceMock->expects($this->any())
+            ->method('getHttpClient')
+            ->will($this->returnValue($clientMock));
     }
 }

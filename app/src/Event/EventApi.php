@@ -1,19 +1,33 @@
 <?php
 namespace Event;
 
-use Application\BaseApi;
+use GuzzleHttp\Command\Guzzle\GuzzleClient;
+use Joindin\Api\Entity\Event;
+use Joindin\Api\Response;
 
-class EventApi extends BaseApi
+class EventApi
 {
-    /**
-     * @var EventDb
-     */
-    protected $eventDb;
+    /** @var EventDb */
+    protected $cache;
 
-    public function __construct($config, $accessToken, EventDb $eventDb)
+    /** @var GuzzleClient */
+    protected $eventService;
+
+    /** @var GuzzleClient */
+    protected $eventCommentService;
+
+    /**
+     * Constructs a new API Client and initializes the associated services.
+     *
+     * @param EventDb      $cache
+     * @param GuzzleClient $eventService
+     * @param GuzzleClient $eventCommentService
+     */
+    public function __construct(EventDb $cache, GuzzleClient $eventService, GuzzleClient $eventCommentService)
     {
-        parent::__construct($config, $accessToken);
-        $this->eventDb = $eventDb;
+        $this->cache               = $cache;
+        $this->eventService        = $eventService;
+        $this->eventCommentService = $eventCommentService;
     }
 
     /**
@@ -23,111 +37,116 @@ class EventApi extends BaseApi
      * @param integer $start  Start value for pagination
      * @param string  $filter Filter to apply
      *
-     * @return EventEntity model
+     * @return array
      */
     public function getCollection($limit = 10, $start = 1, $filter = null)
     {
-        $url = $this->baseApiUrl . '/v2.1/events'
-            . '?resultsperpage=' . $limit
-            . '&start=' . $start;
+        /** @var Response $response */
+        $response = $this->eventService->getCollection(
+            array('resultsperpage' => $limit, 'start' => $start, 'filter' => $filter)
+        );
 
-        if ($filter) {
-            $url .= '&filter=' . $filter;
-        }
+        /** @var Event[] $events */
+        $events = $response->getResource();
+        $this->storeEventsInCache($events);
 
-        return $this->queryEvents($url);
+        return array('events' => $events, 'pagination' => $response->getMeta());
     }
 
     /**
-     * Look up this friendlyUrl in the DB, get an API endpoint, fetch data
-     * and return us an event
+     * Look up this friendlyUrl in the DB, get an API endpoint, fetch data and return us an event.
      *
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
-     * @return EventEntity The event we found, or false if something went wrong
+     *
+     * @return Event|null The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl)
     {
-        $event = $this->eventDb->load('url_friendly_name', $friendlyUrl);
-
-        if (!$event) {
-            // don't throw an exception, Slim eats them
-            return false;
-        }
-
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
-
-        return $event;
-
+        return $this->fetchEventFromDbByProperty('url_friendly_name', $friendlyUrl);
     }
 
     /**
-     * Look up this stub in the DB, get an API endpoint, fetch data
-     * and return us an event
+     * Look up this stub in the DB, get an API endpoint, fetch data and return us an event.
      *
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
-     * @return EventEntity The event we found, or false if something went wrong
+     *
+     * @return Event|null The event we found, or false if something went wrong
      */
     public function getByStub($stub)
     {
-        $event = $this->eventDb->load('stub', $stub);
+        return $this->fetchEventFromDbByProperty('stub', $stub);
+    }
 
-        if (!$event) {
-            return false;
+    /**
+     * Retrieves an event using its API url.
+     *
+     * @param string $url
+     *
+     * @return Event|null
+     */
+    public function getByUrl($url)
+    {
+        $event = $this->fetchEventFromApi($url);
+        if (! $event) {
+            return null;
         }
 
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
+        // store event in cache to be able to retrieve it with the other methods as well.
+        $this->storeEventsInCache(array($event));
 
         return $event;
     }
 
     /**
-     * Get comments for given event
-     * @param $comment_uri
-     * @param bool $verbose
-     * @return Comment[]
+     * Get comments for given event comment uri.
+     *
+     * @param string $commentUri
+     *
+     * @return Event\Comment[]
      */
-    public function getComments($comment_uri, $verbose = false)
+    public function getComments($commentUri)
     {
-        if ($verbose) {
-            $comment_uri = $comment_uri . '?verbose=yes';
-        }
+        /** @var Response $response */
+        $response = $this->eventCommentService->getCollection(array('url' => $commentUri));
 
-        $comments = (array)json_decode($this->apiGet($comment_uri));
-
-        $commentData = array();
-
-        foreach ($comments['comments'] as $comment) {
-            $commentData[] = new EventCommentEntity($comment);
-        }
-
-        return $commentData;
+        return $response->getResource();
     }
 
-    public function addComment($event, $comment)
+    /**
+     * Adds a comment on the given event.
+     *
+     * @param Event  $event
+     * @param string $comment
+     *
+     * @throws \Exception if the API failed to submit the new comment.
+     *
+     * @return void
+     */
+    public function addComment(Event $event, $comment)
     {
-        $uri = $event->getCommentsUri();
-        $params = array(
-            'comment' => $comment,
-        );
-        list ($status, $result) = $this->apiPost($uri, $params);
-
-        if ($status == 201) {
-            return true;
+        try {
+            $this->eventCommentService->submit(array('url' => $event->getCommentsUri(), 'comment' => $comment));
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to add comment', 0, $e);
         }
-        throw new \Exception("Failed to add comment: " . $result);
     }
 
-    public function attend(EventEntity $event)
+    /**
+     * Marks the current user as attending the given event.
+     *
+     * @param Event $event
+     *
+     * @throws \Exception if the API failed to accept this request.
+     *
+     * @return void
+     */
+    public function attend(Event $event)
     {
-        list ($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
-
-        if ($status == 201) {
-            return true;
+        try {
+            $this->eventService->getHttpClient()->post($event->getAttendingUri());
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to mark you as attending', 0, $e);
         }
-
-        throw new \Exception("Failed to mark you as attending: " . $result);
     }
 
     public function unattend(EventEntity $event)
@@ -150,73 +169,116 @@ class EventApi extends BaseApi
      *
      * @see EventFormType::buildForm() for a list of supported fields in the $data array and their constraints.
      *
-     * @return EventEntity|null
+     * @return Event|null
      */
     public function submit(array $data)
     {
-        // Convert datetime objects to strings
+        $data = $this->splitTimezone($data);
+        $data = $this->convertDateTimeFieldsToString($data);
+
+        try {
+            $response = $this->eventService->submit($data);
+        } catch (\Exception $e) {
+            throw new \Exception('Your event submission was not accepted, the server reports: ' . $e->getMessage());
+        }
+
+        // if the response is empty or an empty array; then the event was pending
+        if (! $response) {
+            return null;
+        }
+
+        return $this->getByUrl($response['url']);
+    }
+
+    /**
+     * Queries the cache with the given key and value and fetches the event using the returned URL.
+     *
+     * @param string $key
+     * @param string $value
+     *
+     * @return Event|null
+     */
+    private function fetchEventFromDbByProperty($key, $value)
+    {
+        $event = $this->cache->load($key, $value);
+        if (! $event) {
+            return null;
+        }
+
+        return $this->fetchEventFromApi($event['uri']);
+    }
+
+    /**
+     * Attempts to fetch an event from the API.
+     *
+     * @param string $url
+     *
+     * @return Event|null
+     */
+    private function fetchEventFromApi($url)
+    {
+        try {
+            /** @var Response $response */
+            $response = $this->eventService->fetch(array('url' => $url));
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        return current($response->getResource());
+    }
+
+    /**
+     * Stores the events in the Event Cache.
+     *
+     * @param Event[] $events
+     *
+     * @return void
+     */
+    private function storeEventsInCache(array $events)
+    {
+        foreach ($events as $event) {
+            $this->cache->save($event);
+        }
+    }
+
+    /**
+     * Checks submitted data for a timezone field and split it into tz_continent and tz_place.
+     *
+     * @param mixed[] $data
+     *
+     * @return mixed[]
+     */
+    private function splitTimezone(array $data)
+    {
+        if (! isset($data['timezone'])) {
+            return $data;
+        }
+
+        list($tz_continent, $tz_place) = explode('/', $data['timezone']);
+        unset($data['timezone']);
+        $data['tz_continent'] = $tz_continent;
+        $data['tz_place'] = $tz_place;
+
+        return $data;
+    }
+
+    /**
+     * Convert datetime objects to their string representation when submitting data.
+     *
+     * @param mixed[] $data
+     *
+     * @return mixed[]
+     */
+    private function convertDateTimeFieldsToString(array $data)
+    {
         $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+
         foreach ($dateFields as $dateField) {
             if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
                 $data[$dateField] = $data[$dateField]->format('Y-m-d');
             }
-            if (isset($data[$dateField])) {
-                if (!strtotime($data[$dateField])) {
-                    unset($data[$dateField]);
-                }
-            }
-        }
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
-
-        // if successful, return event entity represented by the URL in the Location header
-        if ($status == 201) {
-            $response = $this->queryEvents($headers['location']);
-            return current($response['events']);
-        }
-        if ($status == 202) {
-            return null;
         }
 
-        throw new \Exception('Your event submission was not accepted, the server reports: ' . $result);
-    }
-
-    /**
-     * Returns a response array containing an 'events' and 'pagination' element.
-     *
-     * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
-     * Event entities.
-     *
-     * @param string $url API Url to query for one or more events. Either a listing can be retrieved or a single event.
-     *
-     * @return array
-     */
-    private function queryEvents($url)
-    {
-        $events = (array)json_decode($this->apiGet($url));
-        $meta   = array_pop($events);
-
-        $collectionData = array();
-        foreach ($events['events'] as $event) {
-            $thisEvent = new EventEntity($event);
-            $collectionData['events'][] = $thisEvent;
-
-            // save the URL so we can look up by it
-            $this->saveEventUrl($thisEvent);
-        }
-        $collectionData['pagination'] = $meta;
-
-        return $collectionData;
-    }
-
-    /**
-     * Take an event and save the url_friendly_name and the API URL for that
-     *
-     * @param EventEntity $event The event to take details from
-     *
-     * @return void
-     */
-    private function saveEventUrl(EventEntity $event)
-    {
-        $this->eventDb->save($event);
+        return $data;
     }
 }

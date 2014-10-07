@@ -2,14 +2,12 @@
 namespace Event;
 
 use Application\BaseController;
-use Application\CacheService;
+use Joindin\Api\Entity\Event;
 use Slim\Exception\Stop;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator;
-use Talk\TalkDb;
-use Talk\TalkApi;
 
 class EventController extends BaseController
 {
@@ -33,26 +31,13 @@ class EventController extends BaseController
 
     public function index()
     {
-        $page = ((int)$this->application->request()->get('page') === 0)
-            ? 1
-            : $this->application->request()->get('page');
-        $perPage = 10;
-        $start = ($page -1) * $perPage;
+        $page  = $this->application->request()->get('page', 1);
+        $start = ($page - 1) * $this->eventsToShow;
 
         $eventApi = $this->getEventApi();
-        $events = $eventApi->getCollection(
-            $this->eventsToShow,
-            $start,
-            'upcoming'
-        );
+        $events = $eventApi->getCollection($this->eventsToShow, $start, 'upcoming');
 
-        $this->render(
-            'Event/index.html.twig',
-            array(
-                'page' => $page,
-                'events' => $events
-            )
-        );
+        $this->render('Event/index.html.twig', array('page' => $page, 'events' => $events));
     }
 
     public function details($friendly_name)
@@ -63,16 +48,17 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        $quicklink = $this->application->request()->headers("host")
-            . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
+        $currentHost   = $this->application->request()->headers('host');
+        $quicklinkPath = $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
+        $quicklinkUrl  = $currentHost . $quicklinkPath;
 
         $comments = $eventApi->getComments($event->getCommentsUri(), true);
         $this->render(
             'Event/details.html.twig',
             array(
-                'event' => $event,
-                'quicklink' => $quicklink,
-                'comments' => $comments,
+                'event'     => $event,
+                'quicklink' => $quicklinkUrl,
+                'comments'  => $comments,
             )
         );
     }
@@ -92,19 +78,13 @@ class EventController extends BaseController
     public function schedule($friendly_name)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if (! $event) {
             $this->redirectToListPage();
         }
 
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $talkDb = new TalkDb($cache);
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $scheduler = new EventScheduler($talkApi);
-
-        $schedule = $scheduler->getScheduleData($event);
+        $schedule = $this->getEventScheduler()->getScheduleData($event);
 
         $this->render('Event/schedule.html.twig', array('event' => $event, 'eventDays' => $schedule));
     }
@@ -112,7 +92,7 @@ class EventController extends BaseController
     public function quicklink($stub)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByStub($stub);
+        $event    = $eventApi->getByStub($stub);
         if (! $event) {
             $this->redirectToListPage();
         }
@@ -127,11 +107,12 @@ class EventController extends BaseController
 
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
-        if (! $event) {
-            $this->redirectToDetailPage($friendly_name);
+
+        if ($event) {
+            $eventApi->addComment($event, $comment);
         }
 
-        $eventApi->addComment($event, $comment);
+        $this->redirectToDetailPage($friendly_name);
     }
 
     public function attend($friendly_name)
@@ -140,7 +121,7 @@ class EventController extends BaseController
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
-            $eventApi->attend($event, $_SESSION['user']);
+            $eventApi->attend($event);
         }
 
         $friendlyUrl = $this->application->request()->get('r');
@@ -187,7 +168,7 @@ class EventController extends BaseController
             if ($form->isValid()) {
                 $event = $this->addEventUsingForm($form);
 
-                if ($event instanceof EventEntity) {
+                if ($event instanceof Event) {
                     $this->redirectToDetailPage($event->getUrlFriendlyName());
                 }
 
@@ -215,7 +196,7 @@ class EventController extends BaseController
      *
      * @param Form $form
      *
-     * @return EventEntity|null|false
+     * @return Event|null|false
      */
     private function addEventUsingForm(Form $form)
     {
@@ -232,16 +213,6 @@ class EventController extends BaseController
         }
 
         return $result;
-    }
-
-    protected function getEventApi()
-    {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $eventDb = new EventDb($cache);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
-
-        return $eventApi;
     }
 
     /**
@@ -272,6 +243,26 @@ class EventController extends BaseController
         );
     }
 
+    /**
+     * Returns the service used to talk to the API for events.
+     *
+     * @return EventApi
+     */
+    protected function getEventApi()
+    {
+        return $this->application->container->get(ServiceProvider::SERVICE_API);
+    }
+
+    /**
+     * Returns a service to construct the event schedule with.
+     *
+     * @return EventScheduler
+     */
+    private function getEventScheduler()
+    {
+        return $this->application->container->get(ServiceProvider::SERVICE_SCHEDULER);
+    }
+
     public function xhrAttend($friendly_name)
     {
         $this->application->response()->header('Content-Type', 'application/json');
@@ -279,8 +270,14 @@ class EventController extends BaseController
         $api = $this->getEventApi();
         $event = $api->getByFriendlyUrl($friendly_name);
 
+        $result = false;
         if ($event) {
-            $result = $this->getEventApi()->attend($event, $_SESSION['user']);
+            try {
+                $this->getEventApi()->attend($event);
+                $result = true;
+            } catch (\Exception $e) {
+                $result = false;
+            }
         }
 
         $this->application->response()->body(json_encode(array('success' => $result)));

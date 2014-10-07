@@ -5,7 +5,7 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
-use Slim_Exception_Pass;
+use Slim\Exception\Pass;
 
 class TalkController extends BaseController
 {
@@ -17,15 +17,12 @@ class TalkController extends BaseController
         $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
     }
 
-
     public function index($eventSlug, $talkSlug)
     {
         $keyPrefix = $this->cfg['redisKeyPrefix'];
         $cache = new CacheService($keyPrefix);
 
-        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
-
+        $event = $this->getEventApi()->getByFriendlyUrl($eventSlug);
         if (!$event) {
             $this->render(
                 'Event/error_404.html.twig',
@@ -68,7 +65,7 @@ class TalkController extends BaseController
         $eventDb = new EventDb($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
-            throw new Slim_Exception_Pass('Page not found', 404);
+            throw new Pass('Page not found', 404);
         }
 
         $this->application->redirect(
@@ -92,14 +89,11 @@ class TalkController extends BaseController
             $this->application->redirect($url);
         }
 
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
-        $eventUri = $event->getUri();
+        $cache = new CacheService($this->cfg['redisKeyPrefix']);
+        $event = $this->getEventApi()->getByFriendlyUrl($eventSlug);
 
         $talkDb = new TalkDb($cache);
-        $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
+        $talkUri = $talkDb->getUriFor($talkSlug, $event->getUri());
 
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $talk = $talkApi->getTalk($talkUri, true);
@@ -110,5 +104,15 @@ class TalkController extends BaseController
         $this->application->flash('message', 'Thank you for your comment.');
         $url .= '#add-comment';
         $this->application->redirect($url);
+    }
+
+    /**
+     * Returns the service used to talk to the API for events.
+     *
+     * @return EventApi
+     */
+    protected function getEventApi()
+    {
+        return $this->application->event_api_service;
     }
 }

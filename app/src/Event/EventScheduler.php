@@ -1,6 +1,7 @@
 <?php
 namespace Event;
 
+use Joindin\Api\Entity\Event;
 use Talk\TalkApi;
 
 /**
@@ -29,15 +30,13 @@ class EventScheduler
      * Builds schedule data into an array structure
      * for schedule view
      *
-     * @param EventEntity $event
+     * @param Event $event
      * @return array
      */
-    public function getScheduleData(EventEntity $event)
+    public function getScheduleData(Event $event)
     {
         $talks = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
-        $eventDays = $this->getEventDays($talks);
-
-        return $eventDays;
+        return $this->getEventDays($talks);
     }
 
     /**

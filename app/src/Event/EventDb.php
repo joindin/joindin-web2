@@ -2,12 +2,13 @@
 namespace Event;
 
 use Application\BaseDb;
+use Joindin\Api\Entity\Event;
 
 class EventDb extends BaseDb
 {
     protected $keyName = 'events';
 
-    public function save(EventEntity $event)
+    public function save(Event $event)
     {
         $data = array(
             "url_friendly_name" => $event->getUrlFriendlyName(),

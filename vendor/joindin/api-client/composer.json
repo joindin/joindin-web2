@@ -1,0 +1,11 @@
+{
+    "name": "joindin/api-client",
+    "autoload": {
+        "psr-0":{ "Joindin": ["src/", "tests/unit/"] }
+    },
+    "require": {
+        "guzzlehttp/guzzle" : "~4.1",
+        "guzzlehttp/guzzle-services" : "~0.3",
+        "symfony/serializer" : "~2.5"
+    }
+}
