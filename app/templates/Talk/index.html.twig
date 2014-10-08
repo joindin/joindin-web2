@@ -92,7 +92,7 @@
 {% endblock %}
 
 {% block extraAside %}
-    <section class="hidden-xs hidden-sm">
+    <section>
         {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
     </section>
     <section class="short-url">
