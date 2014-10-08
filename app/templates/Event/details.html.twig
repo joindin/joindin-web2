@@ -2,7 +2,7 @@
 
 {% block body %}
             {% include 'Event/_common/event_header.html.twig' %}
-            <p>{{ event.getDescription|format_string|raw }}</p>
+            <p>{{ event.getDescription|nl2br }}</p>
             <hr>
             {% if event.areCommentsEnabled %}
                 <h2>Write a comment</h2>
@@ -53,3 +53,8 @@
     {% endif %}
 {% endblock %}
 
+{% block extra_meta %}
+    {{ parent() }}
+    <link rel="canonical" href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}" />
+    {% if event.getStub %}<link rel="shortlink" href="{{ shortUrlForEvent(event.getStub) }}" />{% endif %}
+{% endblock %}
