@@ -23,7 +23,6 @@ class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase
         $this->commentData->user_uri            = "Test user uri";
         $this->commentData->source              = "Test comment source";
         $this->commentData->talk_title          = "Test talk title";
-        $this->commentData->url_friendly_talk_title = "Test url friendly talk title";
     }
 
     public function testBasicCommentsData()
@@ -60,10 +59,6 @@ class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase
             "Test talk title"
         );
 
-        $this->assertEquals(
-            $comment->getUrlFriendlyTalkTitle(),
-            "Test url friendly talk title"
-        );
     }
 
     public function testNonExistentTestDataDoesntBreak()
@@ -76,6 +71,5 @@ class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($comment->getComment());
         $this->assertNull($comment->getCommentSource());
         $this->assertNull($comment->getTalkTitle());
-        $this->assertNull($comment->getUrlFriendlyTalkTitle());
     }
 }
