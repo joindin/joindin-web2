@@ -344,11 +344,21 @@ class EventController extends BaseController
     private function getTalkSlugsForTalkComments(array $comments)
     {
         $talkDb = $this->getTalkDb();
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $slugs = array();
 
         foreach ($comments as $comment) {
-            $slugs[$comment->getTalkUri()] = $talkDb->getSlugFor($comment->getTalkUri());
-            # TODO fetch from API if not found from cache?
+            $slug = $talkDb->getSlugFor($comment->getTalkUri());
+
+            // not found in cache, fetch from api
+            if (empty($slug)) {
+                $talk = $talkApi->getTalk($comment->getTalkUri());
+                $talkDb->save($talk);
+
+                $slug = $talk->getUrlFriendlyTalkTitle();
+            }
+
+            $slugs[$comment->getTalkUri()] = $slug;
         }
 
         return $slugs;
@@ -361,6 +371,7 @@ class EventController extends BaseController
     {
         $keyPrefix = $this->cfg['redisKeyPrefix'];
         $cache = new CacheService($keyPrefix);
+
         return new TalkDb($cache);
     }
 }
