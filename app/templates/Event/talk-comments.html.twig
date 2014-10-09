@@ -5,9 +5,10 @@
 
     <h2>Recent comments</h2>
     {% for comment in talkComments.comments %}
+        {% set talkSlug = talkSlugs[comment.getTalkUri()] %}
         {% include '_common/comment.html.twig' with {
             'showTalkTitle': true,
-            'talkLink': urlForTalk(event.getUrlFriendlyName(), 'TODO:get-talk-slug')
+            'talkLink': urlForTalk(event.getUrlFriendlyName(), talkSlug)
         } %}
     {% endfor %}
 

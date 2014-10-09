@@ -59,6 +59,10 @@ class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase
             "Test talk title"
         );
 
+        $this->assertEquals(
+            $comment->getTalkUri(),
+            "Test talk uri"
+        );
     }
 
     public function testNonExistentTestDataDoesntBreak()
@@ -71,5 +75,6 @@ class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($comment->getComment());
         $this->assertNull($comment->getCommentSource());
         $this->assertNull($comment->getTalkTitle());
+        $this->assertNull($comment->getTalkUri());
     }
 }

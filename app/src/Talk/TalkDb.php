@@ -16,6 +16,13 @@ class TalkDb extends BaseDb
         return $data['uri'];
     }
 
+    public function getSlugFor($talkUri)
+    {
+        $talk = $this->load('uri', $talkUri);
+
+        return $talk['slug'];
+    }
+
     public function save(TalkEntity $talk)
     {
         $data = array(

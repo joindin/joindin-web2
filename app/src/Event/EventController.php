@@ -107,12 +107,15 @@ class EventController extends BaseController
                 true
             );
 
+            $slugs = $this->getTalkSlugsForTalkComments($comments['comments']);
+
             $this->render(
                 'Event/talk-comments.html.twig',
                 array(
                     'event' => $event,
                     'page' => $page,
                     'talkComments' => $comments,
+                    'talkSlugs' => $slugs,
                 )
             );
         } else {
@@ -331,5 +334,33 @@ class EventController extends BaseController
         }
 
         $this->application->response()->body(json_encode(array('success' => $result)));
+    }
+
+    /**
+     * @param array $comments
+     *
+     * @return array
+     */
+    private function getTalkSlugsForTalkComments(array $comments)
+    {
+        $talkDb = $this->getTalkDb();
+        $slugs = array();
+
+        foreach ($comments as $comment) {
+            $slugs[$comment->getTalkUri()] = $talkDb->getSlugFor($comment->getTalkUri());
+            # TODO fetch from API if not found from cache?
+        }
+
+        return $slugs;
+    }
+
+    /**
+     * @return TalkDb
+     */
+    private function getTalkDb()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        return new TalkDb($cache);
     }
 }
