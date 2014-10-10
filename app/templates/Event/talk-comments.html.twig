@@ -12,5 +12,9 @@
         } %}
     {% endfor %}
 
-    {% include '_common/pagination.html.twig' with {'pagination': talkComments.pagination} %}
+    {% if talkComments.comments is defined and talkComments.comments is not empty %}
+        {% include '_common/pagination.html.twig' with {'pagination': talkComments.pagination} %}
+    {% else %}
+        <p>No comments yet.</p>
+    {% endif %}
 {% endblock %}

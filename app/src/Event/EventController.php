@@ -107,7 +107,11 @@ class EventController extends BaseController
                 true
             );
 
-            $slugs = $this->getTalkSlugsForTalkComments($comments['comments'], $event);
+            // If we have comments, fetch talk slugs for the talks so that we can create links to them in the template
+            $slugs = array();
+            if (array_key_exists('comments', $comments) && $comments['pagination']->count > 0) {
+                $slugs = $this->getTalkSlugsForTalkComments($comments['comments'], $event);
+            }
 
             $this->render(
                 'Event/talk-comments.html.twig',
@@ -379,7 +383,12 @@ class EventController extends BaseController
     {
         $talkDb  = $this->getTalkDb();
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $talks = $talkApi->getCollection($event->getTalksUri());
+
+        // Fetch talks from the API
+        $talks = $talkApi->getCollection(
+            $event->getTalksUri(),
+            array('resultsperpage' => 100) // Make sure we get all talks with a single request
+        );
 
         /** @var \Talk\TalkEntity $talk */
         foreach ($talks['talks'] as $talk) {

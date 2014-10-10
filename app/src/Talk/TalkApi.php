@@ -28,10 +28,10 @@ class TalkApi extends BaseApi
      *
      * @return TalkEntity model
      */
-    public function getCollection($talks_uri)
+    public function getCollection($talks_uri, $queryParams = array())
     {
         $talks = (array)json_decode(
-            $this->apiGet($talks_uri)
+            $this->apiGet($talks_uri, $queryParams)
         );
 
         $collectionData = array();
