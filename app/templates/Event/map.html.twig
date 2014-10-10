@@ -1,33 +1,29 @@
 {% extends '/layout.html.twig' %}
 
-{% block extra_javascript %}
-    <script type="text/javascript" src="/js/ulayers.js"></script>
-    <script>
-        var map;
+{% block extra_styles %}
+<link href="/leaflet/leaflet.css" rel="stylesheet">
+<!--[if lte IE 8]><link rel="stylesheet" href="/leaflet/leaflet.ie.css" /><![endif]-->
+{% endblock %}
 
-        $(document).ready(function(){
-            map = new uLayers.Map('map', uLayers.OSM);
-            map.setOrigin(
-                    {lat: {{ event.getLatitude }}, lon: {{ event.getLongitude }} },
-                    14
-            );
-            map.addMarker(
-                    {lat: {{ event.getLatitude }}, lon: {{ event.getLongitude }} }
-            );
-        });
+{% block extra_javascript %}
+    <!-- leaflet -->
+    <script type="text/javascript" src="/leaflet/leaflet.js"></script>
+    <script>
+        /** OpenStreetMap */
+        var map = L.map('streetmap').setView([{{ event.getLatitude }}, {{ event.getLongitude }}], 14);
+        L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([{{ event.getLatitude }}, {{ event.getLongitude }}]).addTo(map)
+                .bindPopup('<b>{{ location.finalName }}</b>');
     </script>
 {% endblock %}
 
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
-    <div id="map" style="border: 1px solid black; height: 300px;">
+    <div id="streetmap" style="border: 1px solid black; height: 300px;">
     </div>
-
-    <p class="meta">
-        &copy; <a href="http://www.openstreetmap.org">OpenStreetMap</a>
-        contributors,
-        <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>
-    </p>
 {% endblock %}
 
