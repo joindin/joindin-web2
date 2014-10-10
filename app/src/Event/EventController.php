@@ -107,7 +107,7 @@ class EventController extends BaseController
                 true
             );
 
-            $slugs = $this->getTalkSlugsForTalkComments($comments['comments']);
+            $slugs = $this->getTalkSlugsForTalkComments($comments['comments'], $event);
 
             $this->render(
                 'Event/talk-comments.html.twig',
@@ -341,24 +341,51 @@ class EventController extends BaseController
      *
      * @return array
      */
-    private function getTalkSlugsForTalkComments(array $comments)
+    private function getTalkSlugsForTalkComments(array $comments, EventEntity $event)
     {
-        $talkDb = $this->getTalkDb();
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $slugs = array();
+        $slugs = $this->getTalkSlugsFromDb($comments);
 
+        // If we didn't get all slugs from cache, need to fetch from API
+        if (in_array(null, $slugs)) {
+            $slugs = $this->getTalkSlugsFromApi($event);
+        }
+
+        return $slugs;
+    }
+
+    /**
+     * @param array $comments
+     *
+     * @return array
+     */
+    private function getTalkSlugsFromDb(array $comments)
+    {
+        $talkDb  = $this->getTalkDb();
+        $slugs   = array();
+
+        /** @var \Talk\TalkCommentEntity $comment */
         foreach ($comments as $comment) {
-            $slug = $talkDb->getSlugFor($comment->getTalkUri());
+            $slugs[$comment->getTalkUri()] = $talkDb->getSlugFor($comment->getTalkUri());
+        }
 
-            // not found in cache, fetch from api
-            if (empty($slug)) {
-                $talk = $talkApi->getTalk($comment->getTalkUri());
-                $talkDb->save($talk);
+        return $slugs;
+    }
 
-                $slug = $talk->getUrlFriendlyTalkTitle();
-            }
+    /**
+     * @param array       $slugs
+     * @param EventEntity $event
+     */
+    private function getTalkSlugsFromApi(EventEntity $event)
+    {
+        $talkDb  = $this->getTalkDb();
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        $talks = $talkApi->getCollection($event->getTalksUri());
 
-            $slugs[$comment->getTalkUri()] = $slug;
+        /** @var \Talk\TalkEntity $talk */
+        foreach ($talks['talks'] as $talk) {
+            $talkDb->save($talk); // Save to cache so we will get a hit next time
+
+            $slugs[$talk->getApiUri()] = $talk->getUrlFriendlyTalkTitle();
         }
 
         return $slugs;
