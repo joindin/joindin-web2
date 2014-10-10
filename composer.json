@@ -4,6 +4,8 @@
     "autoload": {
         "psr-0":{
             "Application": ["app/src/", "tests/"],
+            "Form":        ["app/src/", "tests/"],
+            "Middleware":  ["app/src/", "tests/"],
             "Event":       ["app/src/", "tests/"],
             "Search":      ["app/src/", "tests/"],
             "Talk":        ["app/src/", "tests/"],
@@ -13,9 +15,13 @@
     "preferred-install": "dist",
     "minimum-stability": "stable",
     "require": {
-        "predis/predis": "~0.8",
-        "slim/slim":     "~2.4",
-        "slim/views":    "~0.1",
-        "twig/twig":     "~1.15"
+        "predis/predis":         "~0.8",
+        "slim/slim":             "~2.4",
+        "slim/views":            "~0.1",
+        "twig/twig":             "~1.15",
+        "symfony/form":          "~2.5",
+        "symfony/validator":     "~2.5",
+        "symfony/security-csrf": "~2.5",
+        "symfony/twig-bridge":   "~2.5"
     }
 }

@@ -56,12 +56,22 @@ $app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
+
+if (isset($config['slim']['twig']['cache'])) {
+    $app->view()->getEnvironment()->setCache($config['slim']['twig']['cache']);
+} else {
+    $app->view()->getEnvironment()->setCache(false);
+}
+
 $app->configureMode('development', function () use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
     $env->addExtension(new \Twig_Extension_Debug());
 });
 
+// register middlewares
+$app->add(new Middleware\ValidationMiddleware());
+$app->add(new Middleware\FormMiddleware());
 
 // register routes
 new Application\ApplicationController($app);

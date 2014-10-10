@@ -223,4 +223,60 @@ class EventEntity
 
         return $this->data->stub;
     }
+
+    /**
+     * Returns the timezone in Continent/Place format or null if the timezone is not provided.
+     *
+     * @see \DateTimeZone::listIdentifiers() for a list of supported timezones.
+     *
+     * @return string|null
+     */
+    public function getTimezone()
+    {
+        if (! isset($this->data->tz_continent)
+            || ! isset($this->data->tz_place)
+            || ! $this->data->tz_continent
+            || ! $this->data->tz_place
+        ) {
+            return null;
+        }
+
+        return $this->data->tz_continent . '/' . $this->data->tz_place;
+    }
+
+    /**
+     * Returns the date when the Call for Papers opens in YYYY-MM-DD format or null if not available.
+     *
+     * @return string|null
+     */
+    public function getCallForPapersStartDate()
+    {
+        return isset($this->data->cfp_start_date) && $this->data->cfp_start_date
+            ? $this->data->cfp_start_date
+            : null;
+    }
+
+    /**
+     * Returns the date when the Call for Papers closes in YYYY-MM-DD format or null if not available.
+     *
+     * @return string|null
+     */
+    public function getCallForPapersEndDate()
+    {
+        return isset($this->data->cfp_end_date) && $this->data->cfp_end_date
+            ? $this->data->cfp_end_date
+            : null;
+    }
+
+    /**
+     * Returns the URL of the website where the Call for Papers information is stored or null if not available,
+     *
+     * @return string|null
+     */
+    public function getCallForPapersWebsiteAddress()
+    {
+        return isset($this->data->cfp_url) && $this->data->cfp_url
+            ? $this->data->cfp_url
+            : null;
+    }
 }

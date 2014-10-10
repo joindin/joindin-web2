@@ -15,7 +15,6 @@ function initialize(Twig_Environment $env)
         )
     );
     $env->addFilter('format_date', new Twig_Filter_Function('\View\Filters\format_date'));
-    $env->addFilter('format_string', new Twig_Filter_Function('\View\Filters\format_string'));
 }
 
 function img_path($suffix, $infix)
@@ -31,17 +30,12 @@ function img_path($suffix, $infix)
         return $path;
     }
 
-    return 'http://joind.in/inc' .$path;
+    return 'https://joind.in/inc' .$path;
 }
 
 function format_date($date)
 {
     return date('D M dS Y', strtotime($date));
-}
-
-function format_string($string)
-{
-    return nl2br($string);
 }
 
 function link($url, $label = '', $class = '')
