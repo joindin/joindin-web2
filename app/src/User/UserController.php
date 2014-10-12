@@ -18,6 +18,7 @@ class UserController extends BaseController
         $app->get('/user/logout', array($this, 'logout'))->name('user-logout');
         $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
         $app->map('/user/register', array($this, 'register'))->via('GET', 'POST')->name('user-register');
+        $app->map('/user/password', array($this, 'password'))->via('GET', 'POST')->name('user-password');
     }
 
     /**
@@ -52,9 +53,7 @@ class UserController extends BaseController
                 $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $keyPrefix = $this->cfg['redisKeyPrefix'];
-                $cache = new CacheService($keyPrefix);
-                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+                $userApi = $this->getUserApi();
                 $user = $userApi->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;
@@ -89,6 +88,53 @@ class UserController extends BaseController
     }
 
     /**
+     * New password page.
+     *
+     * @return void.
+     */
+    public function password()
+    {
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */ 
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new PasswordFormType());
+
+        $error = false;
+        if ($request->isPost()) { 
+            $form->submit($request->post($form->getName()));
+    
+            if ($form->isValid()) {
+                $data    = $form->getData();
+                $userApi = $this->getUserApi();
+                $result  = $userApi->setPassword($data['password']);
+
+                if (false === $result) {
+                    $error = true;     
+                } else {
+                    session_regenerate_id(true);
+                    $_SESSION['access_token'] = $result->access_token;
+                    $this->accessToken = $_SESSION['access_token'];
+
+                    $this->render(
+                        'User/passwordChanged.html.twig'
+                    );
+
+                    return;
+                }
+            }
+        }
+
+        $this->render(
+            'User/password.html.twig',
+            array(
+                'form'  => $form->createView(),
+                'error' => $error,
+            )
+        );
+    }
+
+    /**
      * Log out
      *
      * @return void
@@ -103,5 +149,17 @@ class UserController extends BaseController
         }
         session_regenerate_id(true);
         $this->application->redirect('/');
+    }
+
+    /**
+     *
+     */
+    protected function getUserApi() {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $userDb = new UserDb($cache);
+        $userApi = new UserApi($this->cfg, $this->accessToken, $userDb);
+
+        return $userApi;
     }
 }

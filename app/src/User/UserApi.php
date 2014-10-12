@@ -35,4 +35,24 @@ class UserApi extends BaseApi
         }
         return false;
     }
+
+    /**
+     * Change the user's password
+     *
+     * @param  string $password The new password
+     *
+     * @return mixed the access token or false  
+     */
+    public function setPassword($password)
+    {
+        $result = false; // $this->apiPost(...);
+
+        if ($result) {
+             $data = json_decode($result);
+             if ($data) {
+             }
+        }
+        return false;
+    }
 }
+

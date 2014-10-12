@@ -43,7 +43,8 @@
                     </li>
 
                     {% if user %}
-                        <li><a href="#">{{ user.getFullName }}</a></li> <!-- This should link to the user profile page in the future -->
+                        <!-- This should link to the user profile page in the future -->
+                        <li><a href="{{ urlFor('user-password') }}">{{ user.getFullName }}</a></li>
                         <li><a href="{{ urlFor('user-logout') }}">Logout</a></li>
                     {% else %}
                         <li><a href="{{ urlFor('user-login') }}">Login</a></li>
