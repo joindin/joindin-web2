@@ -309,6 +309,7 @@ class EventController extends BaseController
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
         $form    = $factory->create(new EventFormType(), $event->setTags(implode(', ',$event->getTags())));
+        //$form->add('event_slug', 'hidden');
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
 
@@ -334,6 +335,7 @@ class EventController extends BaseController
                 'timezones' => EventFormType::getNestedListOfTimezones(),
             )
         );
+
 
     }
 

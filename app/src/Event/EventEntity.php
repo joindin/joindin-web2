@@ -431,4 +431,9 @@ class EventEntity
         return (array) $this->data;
     }
 
+    public function getEventSlug()
+    {
+        return $this->getUrlFriendlyName();
+    }
+
 }
