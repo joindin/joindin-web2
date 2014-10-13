@@ -166,6 +166,13 @@ class EventApi extends BaseApi
                 }
             }
         }
+        // Convert comma-separated values into array
+        $commaSeparatedFields = array('tags');
+        foreach ($commaSeparatedFields as $commaSeparatedField) {
+            $data[$commaSeparatedField] = array_map(function($item){
+                return trim($item);
+            }, explode(',', $data[$commaSeparatedField]));
+        }
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
         // if successful, return event entity represented by the URL in the Location header
