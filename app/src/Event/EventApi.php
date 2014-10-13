@@ -169,7 +169,7 @@ class EventApi extends BaseApi
         // Convert comma-separated values into array
         $commaSeparatedFields = array('tags');
         foreach ($commaSeparatedFields as $commaSeparatedField) {
-            $data[$commaSeparatedField] = array_map(function($item){
+            $data[$commaSeparatedField] = array_map(function ($item) {
                 return trim($item);
             }, explode(',', $data[$commaSeparatedField]));
         }
