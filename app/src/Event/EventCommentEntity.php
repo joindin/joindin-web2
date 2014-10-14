@@ -24,6 +24,15 @@ class EventCommentEntity
         return $this->data->user_display_name;
     }
 
+    public function getGravatarHash()
+    {
+        if (!isset($this->data->gravatar_hash)) {
+            return null;
+        }
+
+        return $this->data->gravatar_hash;
+    }
+
     public function getCommentDate()
     {
         if (!isset($this->data->created_date)) {
