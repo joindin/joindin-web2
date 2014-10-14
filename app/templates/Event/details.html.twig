@@ -4,13 +4,6 @@
             {% include 'Event/_common/event_header.html.twig' %}
             <p>{{ event.getDescription|nl2br }}</p>
             <hr>
-            {% if comments %}
-                <h2>Comments</h2>
-                {% for comment in comments %}
-                    {% include '_common/comment.html.twig' with {'comment': comment} %}
-                {% endfor %}
-            {% endif %}
-
             {% if event.areCommentsEnabled %}
                 <h2>Write a comment</h2>
                 {% if user %}
@@ -34,6 +27,13 @@
                 {% endif %}
             {% else %}
                 <p>Comments are closed</p>
+            {% endif %}
+    
+            {% if comments %}
+                <h2>Comments</h2>
+                {% for comment in comments %}
+                    {% include '_common/comment.html.twig' with {'comment': comment} %}
+                {% endfor %}
             {% endif %}
 {% endblock %}
 
