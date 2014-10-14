@@ -91,10 +91,10 @@
 {% endblock %}
 
 {% block extraAside %}
-    <section class="hidden-xs hidden-sm">
+    <section>
         {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
     </section>
-    <section class="short-url hidden-xs hidden-sm">
+    <section class="short-url">
         <label class="control-label">Short URL:</label>
         <p><a href="{{ shortUrlForTalk(talk.getStub) }}">{{ shortUrlForTalk(talk.getStub) }}</a></p>
     </section>
