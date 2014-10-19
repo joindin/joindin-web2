@@ -59,4 +59,14 @@ class EventCommentEntity
 
         return $this->data->source;
     }
+
+    public function getCommentHash()
+    {
+        if (!isset($this->data->user_display_name) || !isset($this->data->created_date)) {
+            return null;
+        }
+
+        $hash = md5($this->data->user_display_name . $this->data->created_date);
+        return (substr($hash, 0, 6));
+    }
 }
