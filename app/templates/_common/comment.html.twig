@@ -1,6 +1,6 @@
 {# This template should work for both event and talk comments #}
 
-<div class="panel panel-default comment">
+<div class="panel panel-default comment"{% if comment.getCommentHash %} id="comment-{{comment.getCommentHash }}"{% endif %}>
     <div class="panel-heading clearfix">
         <div class="col-xs-12 col-sm-6">
             <div class="row">
@@ -27,7 +27,8 @@
                             Anonymous
                         {% endif %}
                         <small>
-                            at {{ comment.getCommentDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }}
+                            at
+                            <a href="#comment-{{ comment.getCommentHash }}">{{ comment.getCommentDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }}</a>
                             <span class="hidden-xs">{% if comment.getCommentSource is not null %} (via {{ comment.getCommentSource }}){% endif %}</span>
                         </small>
                     </div>
