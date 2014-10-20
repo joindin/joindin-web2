@@ -43,15 +43,32 @@ class UserApi extends BaseApi
      *
      * @return mixed the access token or false  
      */
-    public function setPassword($password)
+    public function setPassword($clientId, $clientSecret, $password)
     {
-        $result = false; // $this->apiPost(...);
+        $url = $this->baseApiUrl . '/v2.1/password';
+        $params = array(
+            'grant_type'    => 'password',
+            'client_id'     => $clientId,
+            'client_secret' => $clientSecret,
+            'password'      => $password,
+        );
 
-        if ($result) {
-             $data = json_decode($result);
-             if ($data) {
-             }
+        list($status, $result) = $this->apiPost($url, $params);
+        switch ($status) {
+            case 200:
+                if ($result) {
+                     $data = json_decode($result);
+                     if ($data) {
+                         if (isset($data->access_token)) {
+                             return $data;
+                         }
+                     }
+                }
+                break;
+            default:
+                break;
         }
+
         return false;
     }
 }

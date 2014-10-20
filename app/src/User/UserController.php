@@ -94,6 +94,7 @@ class UserController extends BaseController
      */
     public function password()
     {
+        $config  = $this->application->config('oauth');
         $request = $this->application->request();
 
         /** @var FormFactoryInterface $factory */ 
@@ -105,9 +106,12 @@ class UserController extends BaseController
             $form->submit($request->post($form->getName()));
     
             if ($form->isValid()) {
+                $clientId     = $config['client_id'];
+                $clientSecret = $config['client_secret'];
+
                 $data    = $form->getData();
                 $userApi = $this->getUserApi();
-                $result  = $userApi->setPassword($data['password']);
+                $result  = $userApi->setPassword($clientId, $clientSecret, $data['password']);
 
                 if (false === $result) {
                     $error = true;     
@@ -117,7 +121,11 @@ class UserController extends BaseController
                     $this->accessToken = $_SESSION['access_token'];
 
                     $this->render(
-                        'User/passwordChanged.html.twig'
+                        'User/password.html.twig',
+                        array(
+                            'form'    => $form->createView(),
+                            'success' => true,
+                        )
                     );
 
                     return;
