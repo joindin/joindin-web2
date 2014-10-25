@@ -2,15 +2,6 @@
 
 <div class="panel panel-default comment">
     <div class="panel-heading clearfix">
-        {% if showTalkTitle and talkLink %}
-            <div class="col-xs-12">
-                <div class="row">
-                    <h3>
-                        <div><a href="{{ talkLink }}">{{ comment.getTalkTitle }}</a></div>
-                    </h3>
-                </div>
-            </div>
-        {% endif %}
         <div class="col-xs-12 col-sm-6">
             <div class="row">
                 <h3>
@@ -49,6 +40,11 @@
             <p>
                 {{ comment.comment | nl2br }}
             </p>
+            {% if showTalkTitle and talkLink %}
+            <div class="commented-on">
+                on <a href="{{ talkLink }}">{{ comment.getTalkTitle }}</a>
+            </div>
+            {% endif %}
         </div>
     {% endif %}
 </div>
