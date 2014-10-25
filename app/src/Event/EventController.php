@@ -14,7 +14,7 @@ use Exception;
 
 class EventController extends BaseController
 {
-    private $eventsToShow = 10;
+    private $itemsPerPage = 10;
 
     protected function defineRoutes(\Slim\Slim $app)
     {
@@ -24,6 +24,7 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
+        $app->get('/event/:friendly_name/talk-comments', array($this, 'talkComments'))->name("event-talk-comments");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->get('/e/:stub', array($this, 'quicklink'))->name("event-quicklink");
         $app->get('/event/xhr-attend/:friendly_name', array($this, 'xhrAttend'));
@@ -37,12 +38,11 @@ class EventController extends BaseController
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
-        $perPage = 10;
-        $start = ($page -1) * $perPage;
+        $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
         $events = $eventApi->getCollection(
-            $this->eventsToShow,
+            $this->itemsPerPage,
             $start,
             'upcoming'
         );
@@ -88,6 +88,45 @@ class EventController extends BaseController
         }
 
         $this->render('Event/map.html.twig', array('event' => $event));
+    }
+
+    public function talkComments($friendly_name)
+    {
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
+        $start = ($page -1) * $this->itemsPerPage;
+
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            $comments = $eventApi->getTalkComments(
+                $event->getAllTalkCommentsUri(),
+                $this->itemsPerPage,
+                $start,
+                true
+            );
+
+            // If we have comments, fetch talk slugs for the talks so that we can create links to them in the template
+            $slugs = array();
+            if (array_key_exists('comments', $comments) && $comments['pagination']->count > 0) {
+                $slugs = $this->getTalkSlugsForTalkComments($comments['comments'], $event);
+            }
+
+            $this->render(
+                'Event/talk-comments.html.twig',
+                array(
+                    'event' => $event,
+                    'page' => $page,
+                    'talkComments' => $comments,
+                    'talkSlugs' => $slugs,
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events-index");
+            $this->application->redirect($events_url);
+        }
     }
 
     public function schedule($friendly_name)
@@ -316,5 +355,76 @@ class EventController extends BaseController
         }
 
         $this->application->response()->body(json_encode(array('success' => $result)));
+    }
+
+    /**
+     * @param array $comments
+     *
+     * @return array
+     */
+    private function getTalkSlugsForTalkComments(array $comments, EventEntity $event)
+    {
+        $slugs = $this->getTalkSlugsFromDb($comments);
+
+        // If we didn't get all slugs from cache, need to fetch from API
+        if (in_array(null, $slugs)) {
+            $slugs = $this->getTalkSlugsFromApi($event);
+        }
+
+        return $slugs;
+    }
+
+    /**
+     * @param array $comments
+     *
+     * @return array
+     */
+    private function getTalkSlugsFromDb(array $comments)
+    {
+        $talkDb  = $this->getTalkDb();
+        $slugs   = array();
+
+        /** @var \Talk\TalkCommentEntity $comment */
+        foreach ($comments as $comment) {
+            $slugs[$comment->getTalkUri()] = $talkDb->getSlugFor($comment->getTalkUri());
+        }
+
+        return $slugs;
+    }
+
+    /**
+     * @param array       $slugs
+     * @param EventEntity $event
+     */
+    private function getTalkSlugsFromApi(EventEntity $event)
+    {
+        $talkDb  = $this->getTalkDb();
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+
+        // Fetch talks from the API
+        $talks = $talkApi->getCollection(
+            $event->getTalksUri(),
+            array('resultsperpage' => 100) // Make sure we get all talks with a single request
+        );
+
+        /** @var \Talk\TalkEntity $talk */
+        foreach ($talks['talks'] as $talk) {
+            $talkDb->save($talk); // Save to cache so we will get a hit next time
+
+            $slugs[$talk->getApiUri()] = $talk->getUrlFriendlyTalkTitle();
+        }
+
+        return $slugs;
+    }
+
+    /**
+     * @return TalkDb
+     */
+    private function getTalkDb()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+
+        return new TalkDb($cache);
     }
 }

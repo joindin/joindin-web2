@@ -2,6 +2,7 @@
 namespace Event;
 
 use Application\BaseApi;
+use Talk\TalkCommentEntity;
 
 class EventApi extends BaseApi
 {
@@ -218,5 +219,41 @@ class EventApi extends BaseApi
     private function saveEventUrl(EventEntity $event)
     {
         $this->eventDb->save($event);
+    }
+
+    /**
+     * Get comments for all the talks of a given event
+     *
+     * @param string $comment_uri
+     * @param int   $limit
+     * @param int   $start
+     * @param bool  $verbose
+     *
+     * @return array An array with two keys:
+     *              'comments' holds the actual talk comment entities
+     *              'pagination' holds pagination related meta data
+     */
+    public function getTalkComments($comment_uri, $limit = 10, $start = 1, $verbose = false)
+    {
+        $comment_uri .= '?resultsperpage=' . $limit
+                      . '&start=' . $start;
+
+        if ($verbose) {
+            $comment_uri = $comment_uri . '&verbose=yes';
+        }
+
+        $comments = (array)json_decode($this->apiGet($comment_uri));
+
+        $meta = array_pop($comments);
+
+        $commentData = array();
+
+        foreach ($comments['comments'] as $comment) {
+            $commentData['comments'][] = new TalkCommentEntity($comment);
+        }
+
+        $commentData['pagination'] = $meta;
+
+        return $commentData;
     }
 }

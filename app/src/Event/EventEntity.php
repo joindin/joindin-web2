@@ -279,4 +279,13 @@ class EventEntity
             ? $this->data->cfp_url
             : null;
     }
+
+    public function getAllTalkCommentsUri()
+    {
+        if (!isset($this->data->all_talk_comments_uri)) {
+            return null;
+        }
+
+        return $this->data->all_talk_comments_uri;
+    }
 }

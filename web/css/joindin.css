@@ -267,3 +267,7 @@ form ul.errors {
     list-style-type: none;
     color: #d9534f;
 }
+
+.commented-on {
+    font-style: italic;
+}
