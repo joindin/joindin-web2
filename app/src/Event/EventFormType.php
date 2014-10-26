@@ -75,6 +75,14 @@ class EventFormType extends AbstractType
                 ]
             )
             ->add(
+                'tags',
+                'text',
+                [
+                    'required' => false,
+                    'attr'        => ['placeholder' => 'comma separated, tag, list']
+                ]
+            )
+            ->add(
                 'tz_continent',
                 'choice',
                 [
