@@ -35,16 +35,17 @@
             </div>
         </div>
     </div>
-    {% if comment.comment is not empty %}
-        <div class="panel-body">
+    <div class="panel-body">
+        {% if comment.comment is not empty %}
             <p>
                 {{ comment.comment | nl2br }}
             </p>
-            {% if showTalkTitle and talkLink %}
+        {% endif %}
+
+        {% if showTalkTitle and talkLink %}
             <div class="commented-on">
                 on <a href="{{ talkLink }}">{{ comment.getTalkTitle }}</a>
             </div>
-            {% endif %}
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
