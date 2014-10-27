@@ -71,11 +71,7 @@ class TalkCommentEntity
 
     public function getCommentHash()
     {
-        if (!isset($this->data->user_display_name) && !isset($this->data->created_date)) {
-            return null;
-        }
-
-        $hash = md5($this->data->user_display_name . $this->data->created_date);
+        $hash = md5($this->data->uri);
         return (substr($hash, 0, 6));
     }
 }
