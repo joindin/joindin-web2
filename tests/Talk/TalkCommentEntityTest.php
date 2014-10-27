@@ -65,7 +65,7 @@ class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $comment->getCommentHash(),
-            "753d1a"
+            "80c0c6"
         );
     }
 
