@@ -1,46 +1,48 @@
 {# This template should work for both event and talk comments #}
 
-<div class="panel panel-default comment"{% if comment.getCommentHash %} id="comment-{{ comment.getCommentHash }}"{% endif %}>
-    <div class="panel-heading clearfix">
-        <div class="col-xs-12 col-sm-6">
-            <div class="row">
-                <h3>
-                    {% include '_common/rating.html.twig' with {'rating': comment.getRating, 'style': 'fluid'} %}
-                </h3>
+<div class="comment" {% if comment.getCommentHash %} id="comment-{{ comment.getCommentHash }}"{% endif %}>
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <div class="col-xs-12 col-sm-6">
+                <div class="row">
+                    <h3>
+                        {% include '_common/rating.html.twig' with {'rating': comment.getRating, 'style': 'fluid'} %}
+                    </h3>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="row">
+                    <h3>
+                        <div class="avatar pull-right">
+                            <img src="{{ gravatar(comment.getGravatarHash) }}">
+                        </div>
+                        <div class="meta pull-right-sm pull-right-md pull-left-xs">
+                            {% if comment.getUserDisplayName %}
+                                {{ comment.getUserDisplayName }}
+                                {% for speaker in talk.speakers %}
+                                    {%  if speaker.speaker_uri is not null and speaker.speaker_uri == comment.getUserUri %}
+                                        <strong>(Speaker)</strong>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                Anonymous
+                            {% endif %}
+                            <small>
+                                at
+                                <a href="#comment-{{ comment.getCommentHash }}">{{ comment.getCommentDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }}</a>
+                                <span class="hidden-xs">{% if comment.getCommentSource is not null %} (via {{ comment.getCommentSource }}){% endif %}</span>
+                            </small>
+                        </div>
+                    </h3>
+                </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6">
-            <div class="row">
-                <h3>
-                    <div class="avatar pull-right">
-                        <img src="{{ gravatar(comment.getGravatarHash) }}">
-                    </div>
-                    <div class="meta pull-right-sm pull-right-md pull-left-xs">
-                        {% if comment.getUserDisplayName %}
-                            {{ comment.getUserDisplayName }}
-                            {% for speaker in talk.speakers %}
-                                {%  if speaker.speaker_uri is not null and speaker.speaker_uri == comment.getUserUri %}
-                                    <strong>(Speaker)</strong>
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            Anonymous
-                        {% endif %}
-                        <small>
-                            at
-                            <a href="#comment-{{ comment.getCommentHash }}">{{ comment.getCommentDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }}</a>
-                            <span class="hidden-xs">{% if comment.getCommentSource is not null %} (via {{ comment.getCommentSource }}){% endif %}</span>
-                        </small>
-                    </div>
-                </h3>
+        {% if comment.comment is not empty %}
+            <div class="panel-body">
+                <p>
+                    {{ comment.comment | nl2br }}
+                </p>
             </div>
-        </div>
+        {% endif %}
     </div>
-    {% if comment.comment is not empty %}
-        <div class="panel-body">
-            <p>
-                {{ comment.comment | nl2br }}
-            </p>
-        </div>
-    {% endif %}
 </div>

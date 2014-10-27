@@ -267,3 +267,11 @@ form ul.errors {
     list-style-type: none;
     color: #d9534f;
 }
+
+.comment:before {
+  display: block;
+  content: " ";
+  margin-top: -60px;
+  height: 60px;
+  visibility: hidden;
+}
