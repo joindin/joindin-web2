@@ -62,6 +62,10 @@ class EventCommentEntity
 
     public function getCommentHash()
     {
+        if (!isset($this->data->comment_uri)) {
+            return null;
+        }
+
         $hash = md5($this->data->comment_uri);
         return (substr($hash, 0, 6));
     }

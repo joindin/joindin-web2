@@ -89,6 +89,10 @@ class TalkCommentEntity
 
     public function getCommentHash()
     {
+        if (!isset($this->data->uri)) {
+            return null;
+        }
+
         $hash = md5($this->data->uri);
         return (substr($hash, 0, 6));
     }
