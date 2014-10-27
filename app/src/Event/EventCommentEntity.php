@@ -62,7 +62,7 @@ class EventCommentEntity
 
     public function getCommentHash()
     {
-        if (!isset($this->data->user_display_name) || !isset($this->data->created_date)) {
+        if (!isset($this->data->user_display_name) && !isset($this->data->created_date)) {
             return null;
         }
 
