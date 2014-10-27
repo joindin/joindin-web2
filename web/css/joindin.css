@@ -268,15 +268,14 @@ form ul.errors {
     color: #d9534f;
 }
 
-<<<<<<< HEAD
 .commented-on {
     font-style: italic;
-=======
+}
+
 .comment:before {
   display: block;
   content: " ";
   margin-top: -60px;
   height: 60px;
   visibility: hidden;
->>>>>>> mgdm-491-comment-links
 }
