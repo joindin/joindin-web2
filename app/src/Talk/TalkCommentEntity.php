@@ -86,4 +86,10 @@ class TalkCommentEntity
 
         return $this->data->talk_uri;
     }
+
+    public function getCommentHash()
+    {
+        $hash = md5($this->data->uri);
+        return (substr($hash, 0, 6));
+    }
 }

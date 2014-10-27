@@ -47,6 +47,10 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
             "Test comment source"
         );
 
+        $this->assertEquals(
+            $comment->getCommentHash(),
+            "753d1a"
+        );
     }
 
     public function testNonExistentTestDataDoesntBreak()
@@ -57,5 +61,6 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($comment->getCommentDate());
         $this->assertNull($comment->getComment());
         $this->assertNull($comment->getCommentSource());
+        $this->assertNull($comment->getCommentHash());
     }
 }
