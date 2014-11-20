@@ -98,4 +98,33 @@ $(function(){
             });
         }
     });
+
+    // Check URL hash on page load and every time it changes
+    checkUrlHash();
+    $(window).on('hashchange', checkUrlHash);
+
+    /**
+     * Get hash part from URL and if it starts with "comment", highlight the comment with that id
+     */
+    function checkUrlHash() {
+        var hash = window.location.hash.substr(1);
+
+        if (hash.length && hash.indexOf('comment') == 0) {
+            highlightComment(hash);
+        }
+    }
+
+    /**
+     * Find panel element inside the comment container and change the bootstrap panel style
+     * from "default" (gray) to "info" (light blue) + add "flash" class to highlight the given comment.
+     *
+     * @param elementId
+     */
+    function highlightComment(elementId) {
+        $('#' + elementId)
+            .find('.panel')
+            .removeClass('panel-default')
+            .addClass('panel-info')
+            .addClass('flash');
+    }
 });
