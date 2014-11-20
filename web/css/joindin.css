@@ -72,7 +72,7 @@ h6, .h6 {
     padding: 10px;
 }
 
-.sidebar h1, .sidebar h2, .sidebar h3, .sidebar h4, .sidebar h5, .sidebar h6 {
+.sidebar section > h1, .sidebar section > h2, .sidebar section > h3, .sidebar section > h4, .sidebar section > h5, .sidebar section > h6 {
     margin-top: 0;
     padding-bottom: 2px;
     border-bottom: 1px solid #d7dcdf;
@@ -87,10 +87,13 @@ h6, .h6 {
 }
 */
 
-aside section {
+aside > div > section {
     margin-top: 20px;
     display: inline-block;
     width: 100%;
+}
+aside > div > section > article {
+    margin-top: 10px;
 }
 
 aside .sponsor img {
