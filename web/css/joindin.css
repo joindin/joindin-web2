@@ -35,15 +35,10 @@ ul.pagination li.current a, ul.pagination li.current a:hover, ul.pagination li.c
     cursor: default;
 }
 
-footer .navbar-default {
-    border-bottom: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    margin-bottom: 0;
-}
-
-footer div.row {
-    margin: 1em;
+footer {
+    border-top: 1px solid #d7dcdf;
+    margin: 5px 0;
+    padding-top: 5px;
 }
 
 .event .logo {
