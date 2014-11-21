@@ -62,22 +62,23 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-12 col-sm-8">
+            <aside class="col-xs-12 col-sm-4 pull-right-sm sidebar">
+                {% block topAside %}{% endblock %}
+            </aside>
+            <div class="col-xs-12 col-sm-8" >
                 {% block body %}{% endblock %}
             </div>
-            <aside class="col-xs-12 col-sm-4 sidebar">
-                <div class="container-fluid">
-                    {% block extraAside %}{% endblock %}
+            <aside class="col-xs-12 col-sm-4 pull-right-sm sidebar">
+                {% block extraAside %}{% endblock %}
 
-                    <!-- Hidden on XS/SM as it appears right above the footer, duplicating the info -->
-                    <section class="text-center hidden-xs hidden-sm box">
-                        <img src="/img/logo-combell.png" alt="Combell" />
-                        <p>
-                            <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
-                            <a href="http://www.combell.com/en">hosting</a> by Combell
-                        </p>
-                    </section>
-                </div>
+                <!-- Hidden on XS/SM as it appears right above the footer, duplicating the info -->
+                <section class="text-center hidden-xs hidden-sm box">
+                    <img src="/img/logo-combell.png" alt="Combell" />
+                    <p>
+                        <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
+                        <a href="http://www.combell.com/en">hosting</a> by Combell
+                    </p>
+                </section>
             </aside>
         </div>
     </div>

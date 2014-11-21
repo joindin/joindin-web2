@@ -87,12 +87,12 @@ h6, .h6 {
 }
 */
 
-aside > div > section {
+aside > section {
     margin-top: 20px;
     display: inline-block;
     width: 100%;
 }
-aside > div > section > article {
+aside > section > article {
     margin-top: 10px;
 }
 
@@ -292,7 +292,7 @@ table.schedule a:hover span.speaker {
     }
 }
 
-@media (min-width: 768px) and (max-width: 992px) {
+@media (min-width: 768px) {
     .pull-right-sm {
         float: right;
     }
