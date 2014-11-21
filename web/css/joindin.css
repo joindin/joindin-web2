@@ -279,33 +279,3 @@ form ul.errors {
   height: 60px;
   visibility: hidden;
 }
-
-/* flash effect to highlight selected comment */
-.flash {
-    -moz-animation: flash 4s ease-out;
-    -moz-animation-iteration-count: 1;
-
-    -webkit-animation: flash 4s ease-out;
-    -webkit-animation-iteration-count: 1;
-
-    -ms-animation: flash 4s ease-out;
-    -ms-animation-iteration-count: 1;
-}
-
-@-webkit-keyframes flash {
-    0% { background-color: none; }
-    50% { background-color: #fbf8b2; }
-    100% { background-color: none; }
-}
-
-@-moz-keyframes flash {
-    0% { background-color: none; }
-    50% { background-color: #fbf8b2; }
-    100% { background-color: none; }
-}
-
-@-ms-keyframes flash {
-    0% { background-color: none; }
-    50% { background-color: #fbf8b2; }
-    100% { background-color: none; }
-}

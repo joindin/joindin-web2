@@ -116,15 +116,22 @@ $(function(){
 
     /**
      * Find panel element inside the comment container and change the bootstrap panel style
-     * from "default" (gray) to "info" (light blue) + add "flash" class to highlight the given comment.
+     * from "default" (gray) to "info" (light blue) to highlight the given comment.
      *
      * @param elementId
      */
     function highlightComment(elementId) {
+        // First remove highlight style from any previously highlighted comment
+        $('.comment-highlight')
+            .removeClass('panel-info')
+            .addClass('panel-default')
+            .removeClass('comment-highlight');
+
+        // Then add highlight style to the given comment
         $('#' + elementId)
             .find('.panel')
             .removeClass('panel-default')
             .addClass('panel-info')
-            .addClass('flash');
+            .addClass('comment-highlight');
     }
 });
