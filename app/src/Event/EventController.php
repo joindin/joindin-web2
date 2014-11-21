@@ -34,7 +34,7 @@ class EventController extends BaseController
         $app->get('/event/unattend/:friendly_name', array($this, 'unattend'))->name("event-unattend");
     }
 
-    public function index($filter = 'upcoming')
+    public function index()
     {
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -45,8 +45,31 @@ class EventController extends BaseController
         $events = $eventApi->getCollection(
             $this->itemsPerPage,
             $start,
-            $filter,
-            ($filter == "cfp") ? true : false
+            'upcoming'
+        );
+
+        $this->render(
+            'Event/index.html.twig',
+            array(
+                'page' => $page,
+                'events' => $events
+            )
+        );
+    }
+
+    public function callForPapers()
+    {
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
+        $start = ($page -1) * $this->itemsPerPage;
+
+        $eventApi = $this->getEventApi();
+        $events = $eventApi->getCollection(
+            $this->itemsPerPage,
+            $start,
+            'cfp',
+            true
         );
 
         $this->render(
@@ -54,14 +77,8 @@ class EventController extends BaseController
             array(
                 'page' => $page,
                 'events' => $events,
-                'filter' => $filter
             )
         );
-    }
-
-    public function callForPapers()
-    {
-        $this->index('cfp');
     }
 
     public function details($friendly_name)
