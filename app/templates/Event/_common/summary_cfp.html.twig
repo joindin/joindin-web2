@@ -4,26 +4,12 @@ set eventUrl = urlFor(
 )
 %}
 
-<article class="event row">
-    <div class="col-xs-2 col-sm-2 logo text-center">
-        <a href="{{ eventUrl }}">
-            <img src="{{ event.getIcon|img_path("event_icons") }}">
-        </a>
-    </div>
+<article class="event title-only">
     <div class="col-xs-10 col-sm-10 title">
         <section>
             <h3 class="header">
                 <a href="{{ eventUrl }}">{{ event.getName }}</a>
             </h3>
-
-            <p class="meta">
-
-            </p>
-
-            <p class="wideOnly">
-                {{ event.getDescription | slice(0, 200)}}&hellip;
-            </p>
-
             <p class="meta">
                 {{ event.getStartDate|date('M d Y', event.getFullTimezone) }}
                 {%  if event.getStartDate|date('M d Y', event.getFullTimezone)
@@ -36,31 +22,14 @@ set eventUrl = urlFor(
                     @ {{event.getLocation|escape}}
                 {% endif %}
 
-                |
-
-                <a href="{{ eventUrl }}#comments">
-                    {{ event.getCommentsCount}}
-                    {% if event.getCommentsCount == 1 %}
-                        comment
-                    {% else %}
-                        comments
-                    {% endif %}
-                </a>
-
-                {% include 'Event/_common/attending_string.html.twig' %}
-
-                {% include 'Event/_common/attending.html.twig' %}
-
                 {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
-                    <p class="cfp-dates">
                         {% if "now"|date('c') < event.getCallForPapersStartDate %}
                             {# not open yet #}
-                            Call for papers starts {{ event.getCallForPapersStartDate |date('M d Y', event.getFullTimezone) }}
+                            | Call for papers starts {{ event.getCallForPapersStartDate |date('M d Y', event.getFullTimezone) }}
                         {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
                             {# still open #}
-                            Call for papers ends {{ event.getCallForPapersEndDate |date('M d Y', event.getFullTimezone) }}
+                            | Call for papers ends {{ event.getCallForPapersEndDate |date('M d Y', event.getFullTimezone) }}
                         {% endif %}
-                    </p>
                 {% endif %}
             </p>
         </section>
