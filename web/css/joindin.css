@@ -89,8 +89,8 @@ aside > section > article {
 
 @media (min-width: 768px) {
     /* additional 10px of separation when asides are rendered as a sidebar */
-    aside > section {
-        margin-left: 10px;
+    .sidebar {
+        padding-left: 20px;
     }
 }
 aside .sponsor img {
