@@ -79,13 +79,43 @@ class UserController extends BaseController
      */
     public function register()
     {
-        // TODO: Implement!
-        // This  method exists so that the named route can be defined
-        // for the login page text.
-        
-        // For now, we just redirect to the legacy site
-        header("Location: https://joind.in/user/register");
-        exit;
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new RegisterFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $user = $this->registerUserUsingForm($form);
+
+                // TODO: redirect somewhere more useful?
+                $this->application->redirect('/');
+            }
+        }
+
+        $this->render(
+            'User/register.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
+    }
+
+    /**
+     * Submits the form data to the API and returns info for use by register()!
+     *
+     * Should an error occur will this method append an error message to the form's error collection.
+     *
+     * @param Form $form
+     *
+     * @return mixed
+     */
+    protected function registerUserUsingForm($form)
+    {
+        throw new \Exception("Need to write the Registration bit!");
     }
 
     /**

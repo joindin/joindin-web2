@@ -1,0 +1,39 @@
+{% extends '/layout.html.twig' %}
+
+{% block body %}
+        <style>
+            label.required:after {
+                content: ' *'
+            }
+        </style>
+
+        <h1 class="title">Register a new account</h1>
+        <p></p>
+
+        {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <fieldset class="col-sm-12">
+                <legend>Your information</legend>
+                {{ form_row(form.username) }}
+                {{ form_row(form.password) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.full_name) }}
+            </fieldset>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary pull-right" value="Register" />
+            </div>
+        </div>
+        {{ form_end(form) }}
+{% endblock %}
+
+{% block extraAside %}
+{% endblock %}
+
+{% block extra_styles %}
+{% endblock %}
+
+{% block extra_javascript %}
+{% endblock %}
