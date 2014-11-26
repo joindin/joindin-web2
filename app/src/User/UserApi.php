@@ -35,4 +35,29 @@ class UserApi extends BaseApi
         }
         return false;
     }
+
+    /**
+     * Takes the fields from the registration form, and passes them though
+     * to the API to register a new user
+     *
+     * @param  Form $data   The fields from the registration form
+     *
+     * @see RegisterFormType::buildForm() for a list of supported fields in the $data array and their constraints.
+     *
+     * @throws \Exception if a status code other than 201 is returned.
+     *
+     * @return bool         True if the user is created
+     */
+    public function register($data) {
+
+        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
+
+        if ($status == 201) {
+            // user URI in $headers['location'] but the user is pending so it's not useful
+            return true; 
+        }
+
+        $message = json_decode($result);
+        throw new \Exception('User could not be saved, server reports: ' . $message[0]);
+    }
 }

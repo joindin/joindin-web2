@@ -57,7 +57,7 @@ class RegisterFormType extends AbstractType
                 'email',
                 'text',
                 [
-                    'required' => false,
+                    'required' => true,
                     'constraints' => [new Assert\Email()],
                 ]
             )
@@ -65,8 +65,15 @@ class RegisterFormType extends AbstractType
                 'full_name',
                 'text',
                 [
-                    'required' => false,
+                    'required' => true,
                     'constraints' => [new Assert\Length(['max' => 200])],
+                ]
+            )
+            ->add(
+                'twitter_username',
+                'text',
+                [
+                    'required' => false
                 ]
             )
         ;

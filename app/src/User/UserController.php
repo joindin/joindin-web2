@@ -3,6 +3,7 @@ namespace User;
 
 use Application\BaseController;
 use Application\CacheService;
+use Symfony\Component\Form\FormError;
 
 class UserController extends BaseController
 {
@@ -89,10 +90,12 @@ class UserController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                $user = $this->registerUserUsingForm($form);
+                $success = $this->registerUserUsingForm($form);
 
-                // TODO: redirect somewhere more useful?
-                $this->application->redirect('/');
+                if($success) {
+                    $this->application->flash('message', "User created succesfully. Please check your email to verify your account before logging in");
+                    $this->application->redirect('/');
+                }
             }
         }
 
@@ -115,7 +118,21 @@ class UserController extends BaseController
      */
     protected function registerUserUsingForm($form)
     {
-        throw new \Exception("Need to write the Registration bit!");
+        $values = $form->getData();
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+
+        $result = false;
+        try {
+            $result = $userApi->register($values);
+        } catch (\Exception $e) {
+            $form->addError(
+                new FormError('An error occurred while registering you: ' . $e->getMessage())
+            );
+        }
+
+        return $result;
     }
 
     /**
