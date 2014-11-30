@@ -2,6 +2,9 @@
 
 {% block body %}
     <h1>Hot Events</h1>
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+    {% endif %}
     {% for event in events.events %}
         {% include 'Event/_common/summary.html.twig' %}
     {% endfor %}
