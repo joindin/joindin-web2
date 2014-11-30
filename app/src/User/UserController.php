@@ -93,8 +93,8 @@ class UserController extends BaseController
             if ($form->isValid()) {
                 $success = $this->registerUserUsingForm($form);
 
-                if($success) {
-                    $this->application->flash('message', "User created succesfully. Please check your email to verify your account before logging in");
+                if ($success) {
+                    $this->application->flash('message', "User created successfully. Please check your email to verify your account before logging in");
                     $this->application->redirect('/');
                 }
             }
