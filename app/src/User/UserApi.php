@@ -60,4 +60,25 @@ class UserApi extends BaseApi
         $message = json_decode($result);
         throw new \Exception('User could not be saved, server reports: ' . $message[0]);
     }
+
+    /**
+     * Send the offered verification token to the API
+     *
+     * @param  string $token    The verification token we sent by email
+     *
+     * @throws \Exception       if a status code other than 201 is returned.
+     *
+     * @return bool             True if the user is now verified
+     */
+    public function verify($token) {
+        $data = array("token" => $token);
+
+        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
+
+        if ($status == 204) {
+            return true; 
+        }
+
+        throw new \Exception('Verification failed');
+    }
 }

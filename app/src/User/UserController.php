@@ -19,6 +19,7 @@ class UserController extends BaseController
         $app->get('/user/logout', array($this, 'logout'))->name('user-logout');
         $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
         $app->map('/user/register', array($this, 'register'))->via('GET', 'POST')->name('user-register');
+        $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
     }
 
     /**
@@ -151,4 +152,31 @@ class UserController extends BaseController
         session_regenerate_id(true);
         $this->application->redirect('/');
     }
+
+    /**
+     * Accept a user's email verification
+     *
+     * @return void
+     */
+    public function verification()
+    {
+        $request = $this->application->request();
+
+        $token = $request->get('token');
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+
+        $result = false;
+        try {
+            $result = $userApi->verify($token);
+            $this->application->flash('message', "You can now log in");
+        } catch (\Exception $e) {
+            $this->application->flash('error', "Verification failed. Try requesting a fresh token");
+        }
+
+        $this->application->redirect('/user/login');
+
+    }
+
 }
