@@ -36,9 +36,15 @@ class TalkController extends BaseController
 
         $talkDb = new TalkDb($cache);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
+        if (!$talkUri) {
+            return Slim::getInstance()->notFound();
+        }
 
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $talk = $talkApi->getTalk($talkUri, true);
+        if (!$talk) {
+            return Slim::getInstance()->notFound();
+        }
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
 
