@@ -7,6 +7,7 @@ use Event\EventDb;
 use Event\EventApi;
 use Slim_Exception_Pass;
 use Exception;
+use Slim\Slim;
 
 class TalkController extends BaseController
 {
@@ -28,14 +29,7 @@ class TalkController extends BaseController
         $event = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
-            $this->render(
-                'Event/error_404.html.twig',
-                array(
-                    'message' => 'Event was not retrieved, perhaps the slug is invalid?',
-                ),
-                404
-            );
-            return;
+            return Slim::getInstance()->notFound();
         }
 
         $eventUri = $event->getUri();
