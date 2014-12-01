@@ -105,8 +105,8 @@
                         {% for comment in talkComments %}
                             <section>
                                 {% set event = attribute(talkEvents, comment.getTalkUri) %}
-                                {% set urlFriendTalkTitle = attribute(urlFriendlyTalkTitles, comment.getTalkUri) %}
-                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': urlFriendlyTalkTitle }) }}">{{ comment.getTalkTitle }}</a></h4>
+                                {% set talkSlug = attribute(urlFriendlyTalkTitles, comment.getTalkUri) %}
+                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talkSlug }) }}">{{ comment.getTalkTitle }}</a></h4>
                                 {% if comment.getRating %}
                                     <div class="pull-right rating rating-{{ comment.getRating }}">
                                         <img src="/img/avg-rating-{{ comment.getRating }}.png"
