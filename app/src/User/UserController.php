@@ -4,6 +4,11 @@ namespace User;
 use Application\BaseController;
 use Application\CacheService;
 use Symfony\Component\Form\FormError;
+use Slim\Slim;
+use Talk\TalkDb;
+use Talk\TalkApi;
+use Event\EventDb;
+use Event\EventApi;
 
 class UserController extends BaseController
 {
@@ -22,6 +27,7 @@ class UserController extends BaseController
         $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
         $app->map('/user/resend-verification', array($this, 'resendVerification'))
             ->via('GET', 'POST')->name('user-resend-verification');
+        $app->map('/user/:username', array($this, 'profile'))->via('GET', 'POST')->name('user-profile');
     }
 
     /**
@@ -224,6 +230,122 @@ class UserController extends BaseController
             'User/emailverification.html.twig',
             array(
                 'form' => $form->createView(),
+            )
+        );
+    }
+
+    /**
+     * User profile page
+     *
+     * @param  string $username User's username
+     * @return void
+     */
+    public function profile($username)
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $userDb = new UserDb($cache);
+        $userApi = new UserApi($this->cfg, $this->accessToken, $userDb);
+
+        $userUri = $userDb->load('username', $username);
+        if ($userUri) {
+            $user = $userApi->getUser($userUri);
+        } else {
+            $user = $userApi->getUserByUsername($username);
+            if (!$user) {
+                Slim::getInstance()->notFound();
+            }
+            $userDb->save($user);
+        }
+
+        $talkDb = new TalkDb($cache);
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        $eventDb = new EventDb($cache);
+        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
+
+        $talkCollection = $talkApi->getCollection($user->getTalksUri().'?verbose=yes');
+        $talks = false;
+        $talkEvents = array();
+        $eventStubNames = array();
+        if (isset($talkCollection['talks'])) {
+            $talks = $talkCollection['talks'];
+            // need the full web2 url for each talk - we can get this via the db
+            foreach ($talks as $talk) {
+                $event = $eventApi->getEvent($talk->getEventUri());
+                if ($event) {
+                    $eventDb->save($event);
+                    $talkEvents[$talk->getApiUri()] = $event;
+                    $talkDb->save($talk, $event->getUri());
+                }
+            }
+        }
+
+        $eventsCollection = $eventApi->queryEvents($user->getAttendedEventsUri());
+        $events = false;
+        if (isset($eventsCollection['events'])) {
+            $events = $eventsCollection['events'];
+        }
+
+        $hostedEventsCollection = $eventApi->queryEvents($user->getHostedEventsUri());
+        $hostedEvents = false;
+        if (isset($hostedEventsCollection['events'])) {
+            $hostedEvents = $hostedEventsCollection['events'];
+        }
+
+        $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true);
+        $urlFriendlyTalkTitles = array(); // look up a url-friendly-talk-title from a talk-uri
+        foreach ($talkComments as $comment) {
+            $talk = $talkApi->getTalk($comment->getTalkUri());
+            if ($talk) {
+                $urlFriendlyTalkTitles[$comment->getTalkUri()] = $talk->getUrlFriendlyTalkTitle();
+                $talkDb->save($talk, $talk->getEventUri());
+                $event = $eventApi->getEvent($talk->getEventUri());
+                if ($event) {
+                    $eventDb->save($event);
+                    $talkEvents[$comment->getTalkUri()] = $event;
+                }
+            }
+        }
+
+        // summary page  - only need 5 items
+        $moreTalks = false;
+        if ($talks) {
+            $moreTalks = count($talks) > 5 ? true : false;
+            $talks = array_splice($talks, 0, 5);
+        }
+
+        $moreEvents = false;
+        if ($events) {
+            $moreEvents = count($events) > 5 ? true : false;
+            $events = array_splice($events, 0, 5);
+        }
+        
+        $moreHostedEvents = false;
+        if ($hostedEvents) {
+            $moreHostedEvents = count($hostedEvents) > 5 ? true : false;
+            $hostedEvents = array_splice($hostedEvents, 0, 5);
+        }
+
+        $moreTalkComments = false;
+        if ($talkComments) {
+            $moreTalkComments = count($talkComments) > 5 ? true : false;
+            $talkComments = array_splice($talkComments, 0, 5);
+        }
+
+        echo $this->render(
+            'User/profile.html.twig',
+            array(
+                'thisUser'              => $user,
+                'talks'                 => $talks,
+                'talkEvents'            => $talkEvents,
+                'urlFriendlyTalkTitles' => $urlFriendlyTalkTitles,
+                'moreTalks'             => $moreTalks,
+                'events'                => $events,
+                'moreEvents'            => $moreEvents,
+                'hostedEvents'          => $hostedEvents,
+                'moreHostedEvents'      => $moreHostedEvents,
+                'talkComments'          => $talkComments,
+                'moreTalkComments'      => $moreTalkComments,
             )
         );
     }
