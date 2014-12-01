@@ -51,6 +51,7 @@ class RegisterFormType extends AbstractType
                     'required' => true,
                     'first_options'  => array('label' => 'Password'),
                     'second_options' => array('label' => 'Repeat Password'),
+                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
                 ]
             )
             ->add(
@@ -58,7 +59,7 @@ class RegisterFormType extends AbstractType
                 'text',
                 [
                     'required' => true,
-                    'constraints' => [new Assert\Email()],
+                    'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
             ->add(
@@ -66,7 +67,7 @@ class RegisterFormType extends AbstractType
                 'text',
                 [
                     'required' => true,
-                    'constraints' => [new Assert\Length(['max' => 200])],
+                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 200])],
                 ]
             )
             ->add(
