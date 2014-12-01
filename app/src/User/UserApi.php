@@ -48,13 +48,14 @@ class UserApi extends BaseApi
      *
      * @return bool         True if the user is created
      */
-    public function register($data) {
+    public function register($data)
+    {
 
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
 
         if ($status == 201) {
             // user URI in $headers['location'] but the user is pending so it's not useful
-            return true; 
+            return true;
         }
 
         $message = json_decode($result);
@@ -70,13 +71,14 @@ class UserApi extends BaseApi
      *
      * @return bool             True if the user is now verified
      */
-    public function verify($token) {
+    public function verify($token)
+    {
         $data = array("token" => $token);
 
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
 
         if ($status == 204) {
-            return true; 
+            return true;
         }
 
         throw new \Exception('Verification failed');
@@ -91,17 +93,17 @@ class UserApi extends BaseApi
      *
      * return bool  True if successful
      */
-    public function reverify($email) {
+    public function reverify($email)
+    {
         $data = array("email" => $email);
 
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
 
         if ($status == 202) {
-            return true; 
+            return true;
         }
 
         $message = json_decode($result);
         throw new \Exception("The server says: " . $message[0]);
     }
-
 }

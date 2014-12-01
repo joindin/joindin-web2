@@ -20,7 +20,8 @@ class UserController extends BaseController
         $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
         $app->map('/user/register', array($this, 'register'))->via('GET', 'POST')->name('user-register');
         $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
-        $app->map('/user/resend-verification', array($this, 'resend_verification'))->via('GET', 'POST')->name('user-resend-verification');
+        $app->map('/user/resend-verification', array($this, 'resendVerification'))
+            ->via('GET', 'POST')->name('user-resend-verification');
     }
 
     /**
@@ -95,7 +96,9 @@ class UserController extends BaseController
                 $success = $this->registerUserUsingForm($form);
 
                 if ($success) {
-                    $this->application->flash('message', "User created successfully. Please check your email to verify your account before logging in");
+                    $this->application->flash(
+                        'message', 
+                        "User created successfully. Please check your email to verify your account before logging in");
                     $this->application->redirect('/');
                 }
             }
@@ -180,7 +183,7 @@ class UserController extends BaseController
 
     }
 
-    public function resend_verification()
+    public function resendVerification()
     {
         $request = $this->application->request();
 
@@ -203,7 +206,7 @@ class UserController extends BaseController
                 $result = false;
                 try {
                     $result = $userApi->reverify($email);
-                    if($result) {
+                    if ($result) {
                         $this->application->flash('message', 'Please check your email');
                         $this->application->redirect('/user/login');
                     }
@@ -223,5 +226,4 @@ class UserController extends BaseController
             )
         );
     }
-
 }
