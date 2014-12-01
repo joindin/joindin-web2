@@ -223,7 +223,7 @@ class EventApi extends BaseApi
      *
      * @return array
      */
-    private function queryEvents($url)
+    public function queryEvents($url)
     {
         $events = (array)json_decode($this->apiGet($url));
         $meta   = array_pop($events);
