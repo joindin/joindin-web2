@@ -13,9 +13,10 @@
                 <div>
                     <h2>{{ thisUser.getFullname }}</h2>
                     <section class="user-details">
+                        {% if thisUser.getTwitterUsername %}
                         Twitter: <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
-                            @{{ thisUser.getTwitterUsername }}
-                        </a>
+                            @{{ thisUser.getTwitterUsername }}</a>
+                        {% endif %}
                     </section>
                 </div>
             </div>
