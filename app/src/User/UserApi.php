@@ -134,7 +134,7 @@ class UserApi extends BaseApi
             if ($data) {
                 if (isset($data->users)) {
                     foreach ($data->users as $userData) {
-                        if ($userData->username == $username) {
+                        if (strtolower($userData->username) == strtolower($username)) {
                             $user = new UserEntity($userData);
                             return $user;
                         }
