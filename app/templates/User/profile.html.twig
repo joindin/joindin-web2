@@ -3,7 +3,6 @@
 {% block title %}{{ thisUser.getFullname }} - Joind.in{% endblock %}
 
 {% block body %}
-
     <section class="page-header">
         <div class="row user-profile">
             <div class="col-xs-12">
@@ -23,9 +22,11 @@
         </div>
     </section>
 
+    {% set blockCount = 0 %}
     <section class="user-profile-panels">
         <div class="row">
             {% if talks %}
+            {% set blockCount = blockCount + 1 %}
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -62,6 +63,7 @@
             {% endif %}
 
             {% if events %}
+            {% set blockCount = blockCount + 1 %}
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -96,6 +98,11 @@
             {% endif %}
 
             {% if talkComments %}
+            {% set blockCount = blockCount + 1 %}
+            {% if blockCount is not even %}
+        </div>
+        <div class="row">
+            {% endif %}
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -133,6 +140,11 @@
             {% endif %}
 
             {% if hostedEvents %}
+            {% set blockCount = blockCount + 1 %}
+            {% if blockCount is not even %}
+        </div>
+        <div class="row">
+            {% endif %}
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
