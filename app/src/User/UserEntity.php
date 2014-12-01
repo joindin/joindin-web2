@@ -43,7 +43,8 @@ class UserEntity
      */
     public function getTwitterUsername()
     {
-        return $this->data->twitter_username;
+        $name = str_replace('@', '', $this->data->twitter_username);
+        return $name;
     }
     
     /**
