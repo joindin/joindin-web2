@@ -20,6 +20,7 @@ class UserController extends BaseController
         $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
         $app->map('/user/register', array($this, 'register'))->via('GET', 'POST')->name('user-register');
         $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
+        $app->map('/user/resend-verification', array($this, 'resend_verification'))->via('GET', 'POST')->name('user-resend-verification');
     }
 
     /**
@@ -172,11 +173,55 @@ class UserController extends BaseController
             $result = $userApi->verify($token);
             $this->application->flash('message', "You can now log in");
         } catch (\Exception $e) {
-            $this->application->flash('error', "Verification failed. Try requesting a fresh token");
+            $this->application->flash('error', "Sorry, that token didn't match our records");
         }
 
         $this->application->redirect('/user/login');
 
+    }
+
+    public function resend_verification()
+    {
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new EmailVerificationFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+
+                $values = $form->getData();
+                $email = $values['email'];
+
+                $keyPrefix = $this->cfg['redisKeyPrefix'];
+                $cache = new CacheService($keyPrefix);
+                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+
+                $result = false;
+                try {
+                    $result = $userApi->reverify($email);
+                    if($result) {
+                        $this->application->flash('message', 'Please check your email');
+                        $this->application->redirect('/user/login');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError(
+                        new FormError('An error occurred: ' . $e->getMessage())
+                    );
+                }
+
+            }
+        }
+
+        $this->render(
+            'User/emailverification.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
     }
 
 }

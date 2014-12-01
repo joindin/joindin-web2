@@ -14,5 +14,8 @@
         <input type="submit" class="btn btn-primary" value="Log in">
         <a class="btn btn-link" href="{{ urlFor('user-register') }}">or register now</a>
     </div>
+    <div>
+        Problems logging in? <a class="btn btn-link" href="{{ urlFor('user-resend-verification') }}">Resend welcome email</a>
+    </div>
     <input type="hidden" name="redirect" value="{{ getCurrentUrl() }}">
 </form>

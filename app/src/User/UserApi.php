@@ -81,4 +81,27 @@ class UserApi extends BaseApi
 
         throw new \Exception('Verification failed');
     }
+
+    /**
+     * Get the backend to send a new verification token to this email
+     *
+     * @param email $email  The email address of the user who needs a new token
+     *
+     * @throws \Exception   If an error occurs (not a 202 response)
+     *
+     * return bool  True if successful
+     */
+    public function reverify($email) {
+        $data = array("email" => $email);
+
+        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
+
+        if ($status == 202) {
+            return true; 
+        }
+
+        $message = json_decode($result);
+        throw new \Exception("The server says: " . $message[0]);
+    }
+
 }
