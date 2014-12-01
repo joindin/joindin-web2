@@ -95,4 +95,34 @@ class UserEntity
     {
         return $this->data->attended_events_uri;
     }
+
+    /**
+     * Getter for hosted_events_uri
+     *
+     * @return mixed
+     */
+    public function getHostedEventsUri()
+    {
+        return $this->data->hosted_events_uri;
+    }
+
+    /**
+     * Getter for talk_comments_uri
+     *
+     * @return mixed
+     */
+    public function getTalkCommentsUri()
+    {
+        return $this->data->talk_comments_uri;
+    }
+
+    /**
+     * Getter for gravatar_hash
+     *
+     * @return string|null
+     */
+    public function getGravatarHash()
+    {
+        return $this->data->gravatar_hash;
+    }
 }
