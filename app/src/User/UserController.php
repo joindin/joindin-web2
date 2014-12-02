@@ -266,7 +266,7 @@ class UserController extends BaseController
         $eventInfo = array(); // look up an event's name and url_friendly_name from its uri
         $talkInfo = array(); // look up a talk's url_friendly_talk_title from its uri
 
-        $talkCollection = $talkApi->getCollection($user->getTalksUri(), ['verbose' => 'yes', 'resultsperpage' => 6]);
+        $talkCollection = $talkApi->getCollection($user->getTalksUri(), ['verbose' => 'yes', 'resultsperpage' => 5]);
         $talks = false;
         if (isset($talkCollection['talks'])) {
             $talks = $talkCollection['talks'];
@@ -283,19 +283,19 @@ class UserController extends BaseController
             }
         }
 
-        $eventsCollection = $eventApi->queryEvents($user->getAttendedEventsUri() . '?verbose=yes&resultsperpage=6');
+        $eventsCollection = $eventApi->queryEvents($user->getAttendedEventsUri() . '?verbose=yes&resultsperpage=5');
         $events = false;
         if (isset($eventsCollection['events'])) {
             $events = $eventsCollection['events'];
         }
 
-        $hostedEventsCollection = $eventApi->queryEvents($user->getHostedEventsUri() . '?verbose=yes&resultsperpage=6');
+        $hostedEventsCollection = $eventApi->queryEvents($user->getHostedEventsUri() . '?verbose=yes&resultsperpage=5');
         $hostedEvents = false;
         if (isset($hostedEventsCollection['events'])) {
             $hostedEvents = $hostedEventsCollection['events'];
         }
 
-        $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 6);
+        $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 5);
         foreach ($talkComments as $comment) {
             if (isset($talkInfo[$comment->getTalkUri()])) {
                 continue;
@@ -317,31 +317,6 @@ class UserController extends BaseController
             }
         }
 
-        // summary page  - only need 5 items
-        $moreTalks = false;
-        if ($talks) {
-            $moreTalks = count($talks) > 5 ? true : false;
-            $talks = array_splice($talks, 0, 5);
-        }
-
-        $moreEvents = false;
-        if ($events) {
-            $moreEvents = count($events) > 5 ? true : false;
-            $events = array_splice($events, 0, 5);
-        }
-        
-        $moreHostedEvents = false;
-        if ($hostedEvents) {
-            $moreHostedEvents = count($hostedEvents) > 5 ? true : false;
-            $hostedEvents = array_splice($hostedEvents, 0, 5);
-        }
-
-        $moreTalkComments = false;
-        if ($talkComments) {
-            $moreTalkComments = count($talkComments) > 5 ? true : false;
-            $talkComments = array_splice($talkComments, 0, 5);
-        }
-
         echo $this->render(
             'User/profile.html.twig',
             array(
@@ -349,13 +324,9 @@ class UserController extends BaseController
                 'talks'            => $talks,
                 'eventInfo'        => $eventInfo,
                 'talkInfo'         => $talkInfo,
-                'moreTalks'        => $moreTalks,
                 'events'           => $events,
-                'moreEvents'       => $moreEvents,
                 'hostedEvents'     => $hostedEvents,
-                'moreHostedEvents' => $moreHostedEvents,
                 'talkComments'     => $talkComments,
-                'moreTalkComments' => $moreTalkComments,
             )
         );
     }

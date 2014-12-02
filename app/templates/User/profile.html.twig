@@ -30,7 +30,7 @@
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title">{% if moreTalks %}Recent talks{% else %}Talks{% endif %}</h2>
+                        <h2 class="panel-title">Talks</h2>
                     </div>
                     <div class="panel-body">
                         {% for talk in talks %}
@@ -54,9 +54,7 @@
                             </section>
                         {% endfor %}
                         {# Todo: Implement sub-page for more talks #}
-                        {# {% if moreTalks %}
-                            <p class="more">More talks by {{ thisUser.getFullname }}</p>
-                        {% endif %} #}
+                        {# <p class="more">View all talks by {{ thisUser.getFullname }}</p> #}
                     </div>
                 </div>
             </div>
@@ -67,7 +65,7 @@
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title">{% if moreEvents %}Recently attended events{% else %}Attended events{% endif %}</h2>
+                        <h2 class="panel-title">Attended events</h2>
                     </div>
                     <div class="panel-body">
                         {% for event in events %}
@@ -89,9 +87,7 @@
                             </section>
                         {% endfor %}
                         {# Todo: Implement sub-page for more events #}
-                        {# {% if moreEvents %}
-                            <p class="more">More events attended by {{ thisUser.getFullname }}</p>
-                        {% endif %} #}
+                        {# <p class="more">View all events attended by {{ thisUser.getFullname }}</p> #}
                     </div>
                 </div>
             </div>
@@ -106,7 +102,7 @@
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title">{% if moreTalkComments %}Recent comments{% else %}Comments{% endif %}</h2>
+                        <h2 class="panel-title">Comments</h2>
                     </div>
                     <div class="panel-body">
                         {% for comment in talkComments %}
@@ -131,9 +127,7 @@
                             </section>
                         {% endfor %}
                         {# Todo: Implement sub-page for more events #}
-                        {# {% if moreTalkComments %}
-                            <p class="more">More comments by {{ thisUser.getFullname }}</p>
-                        {% endif %} #}
+                        {# <p class="more">View all comments by {{ thisUser.getFullname }}</p> #}
                     </div>
                 </div>
             </div>
@@ -148,7 +142,7 @@
             <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title">{% if moreHostedEvents %}Recently hosted events{% else %}Hosted events{% endif %}</h2>
+                        <h2 class="panel-title">Hosted events</h2>
                     </div>
                     <div class="panel-body">
                         {% for event in hostedEvents %}
@@ -170,9 +164,7 @@
                             </section>
                         {% endfor %}
                         {# Todo: Implement sub-page for more hosted events #}
-                        {# {% if moreHostedEvents %}
-                            <p class="more">More events hosted by {{ thisUser.getFullname }}</p>
-                        {% endif %} #}
+                        {# <p class="more">View all events hosted by {{ thisUser.getFullname }}</p> #}
                     </div>
                 </div>
             </div>
