@@ -73,7 +73,7 @@ class EventController extends BaseController
         );
 
         $this->render(
-            'Event/index.html.twig',
+            'Event/call-for-papers.html.twig',
             array(
                 'page' => $page,
                 'events' => $events,
