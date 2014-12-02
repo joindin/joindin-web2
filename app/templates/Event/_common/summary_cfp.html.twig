@@ -23,10 +23,10 @@ set eventUrl = urlFor(
         {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
                 {% if "now"|date('c') < event.getCallForPapersStartDate %}
                     {# not open yet #}
-                    | Call for papers starts {{ event.getCallForPapersStartDate |date('M d Y', event.getFullTimezone) }}
+                    <br>Call for papers starts {{ event.getCallForPapersStartDate |date('M d Y', event.getFullTimezone) }}
                 {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
                     {# still open #}
-                    | Call for papers ends {{ event.getCallForPapersEndDate |date('M d Y', event.getFullTimezone) }}
+                    <br>Call for papers ends {{ event.getCallForPapersEndDate |date('M d Y', event.getFullTimezone) }}
                 {% endif %}
         {% endif %}
     </p>
