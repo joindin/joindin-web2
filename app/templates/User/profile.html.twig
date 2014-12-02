@@ -35,8 +35,8 @@
                     <div class="panel-body">
                         {% for talk in talks %}
                             <section>
-                                {% set event = attribute(talkEvents, talk.getApiUri) %}
-                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle }) }}">{{ talk.getTitle }}</a></h4>
+                                {% set event = attribute(eventInfo, talk.getApiUri) %}
+                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.getUrlFriendlyTalkTitle }) }}">{{ talk.getTitle }}</a></h4>
                                 {% if talk.getAverageRating %}
                                     <div class="pull-right rating rating-{{ talk.getAverageRating }}">
                                         <img src="/img/avg-rating-{{ talk.getAverageRating }}.png"
@@ -47,7 +47,7 @@
                                 {% endif %}
                                 <small>
                                     at
-                                    <a href="{{ urlFor('event-detail', {'friendly_name': event.getUrlFriendlyName}) }}">{{ event.name }}</a>
+                                    <a href="{{ urlFor('event-detail', {'friendly_name': event.url_friendly_name}) }}">{{ event.name }}</a>
                                     <br>
                                     on {{ talk.getStartDateTime|date('j M Y') }}
                                 </small>
@@ -111,9 +111,9 @@
                     <div class="panel-body">
                         {% for comment in talkComments %}
                             <section>
-                                {% set event = attribute(talkEvents, comment.getTalkUri) %}
-                                {% set talkSlug = attribute(urlFriendlyTalkTitles, comment.getTalkUri) %}
-                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talkSlug }) }}">{{ comment.getTalkTitle }}</a></h4>
+                                {% set event = attribute(eventInfo, comment.getTalkUri) %}
+                                {% set talk = attribute(talkInfo, comment.getTalkUri) %}
+                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.url_friendly_talk_title }) }}">{{ comment.getTalkTitle }}</a></h4>
                                 {% if comment.getRating %}
                                     <div class="pull-right rating rating-{{ comment.getRating }}">
                                         <img src="/img/avg-rating-{{ comment.getRating }}.png"
@@ -124,7 +124,7 @@
                                 {% endif %}
                                 <small>
                                     at
-                                    <a href="{{ urlFor('event-detail', {'friendly_name': event.getUrlFriendlyName}) }}">{{ event.name }}</a>
+                                    <a href="{{ urlFor('event-detail', {'friendly_name': event.url_friendly_name}) }}">{{ event.name }}</a>
                                     <br>
                                     on {{ comment.getCommentDate|date('j M Y') }}
                                 </small>

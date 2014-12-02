@@ -263,46 +263,56 @@ class UserController extends BaseController
         $eventDb = new EventDb($cache);
         $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
 
-        $talkCollection = $talkApi->getCollection($user->getTalksUri().'?verbose=yes');
+        $eventInfo = array(); // look up an event's name and url_friendly_name from its uri
+        $talkInfo = array(); // look up a talk's url_friendly_talk_title from its uri
+
+        $talkCollection = $talkApi->getCollection($user->getTalksUri(), ['verbose' => 'yes', 'resultsperpage' => 6]);
         $talks = false;
-        $talkEvents = array();
-        $eventStubNames = array();
         if (isset($talkCollection['talks'])) {
             $talks = $talkCollection['talks'];
-            // need the full web2 url for each talk - we can get this via the db
             foreach ($talks as $talk) {
-                $event = $eventApi->getEvent($talk->getEventUri());
-                if ($event) {
-                    $eventDb->save($event);
-                    $talkEvents[$talk->getApiUri()] = $event;
-                    $talkDb->save($talk, $event->getUri());
+                // look up event's name & url_friendly_name from the API
+                if (!isset($eventInfo[$talk->getEventUri()])) {
+                    $event = $eventApi->getEvent($talk->getEventUri());
+                    if ($event) {
+                        $eventDb->save($event);
+                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
+                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
+                    }
                 }
             }
         }
 
-        $eventsCollection = $eventApi->queryEvents($user->getAttendedEventsUri());
+        $eventsCollection = $eventApi->queryEvents($user->getAttendedEventsUri() . '?verbose=yes&resultsperpage=6');
         $events = false;
         if (isset($eventsCollection['events'])) {
             $events = $eventsCollection['events'];
         }
 
-        $hostedEventsCollection = $eventApi->queryEvents($user->getHostedEventsUri());
+        $hostedEventsCollection = $eventApi->queryEvents($user->getHostedEventsUri() . '?verbose=yes&resultsperpage=6');
         $hostedEvents = false;
         if (isset($hostedEventsCollection['events'])) {
             $hostedEvents = $hostedEventsCollection['events'];
         }
 
-        $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true);
-        $urlFriendlyTalkTitles = array(); // look up a url-friendly-talk-title from a talk-uri
+        $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 6);
         foreach ($talkComments as $comment) {
+            if (isset($talkInfo[$comment->getTalkUri()])) {
+                continue;
+            }
             $talk = $talkApi->getTalk($comment->getTalkUri());
             if ($talk) {
-                $urlFriendlyTalkTitles[$comment->getTalkUri()] = $talk->getUrlFriendlyTalkTitle();
+                $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 $talkDb->save($talk, $talk->getEventUri());
-                $event = $eventApi->getEvent($talk->getEventUri());
-                if ($event) {
-                    $eventDb->save($event);
-                    $talkEvents[$comment->getTalkUri()] = $event;
+
+                // look up event's name & url_friendly_name from the API
+                if (!isset($eventInfo[$talk->getEventUri()])) {
+                    $event = $eventApi->getEvent($talk->getEventUri());
+                    if ($event) {
+                        $eventDb->save($event);
+                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
+                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
+                    }
                 }
             }
         }
@@ -335,17 +345,17 @@ class UserController extends BaseController
         echo $this->render(
             'User/profile.html.twig',
             array(
-                'thisUser'              => $user,
-                'talks'                 => $talks,
-                'talkEvents'            => $talkEvents,
-                'urlFriendlyTalkTitles' => $urlFriendlyTalkTitles,
-                'moreTalks'             => $moreTalks,
-                'events'                => $events,
-                'moreEvents'            => $moreEvents,
-                'hostedEvents'          => $hostedEvents,
-                'moreHostedEvents'      => $moreHostedEvents,
-                'talkComments'          => $talkComments,
-                'moreTalkComments'      => $moreTalkComments,
+                'thisUser'         => $user,
+                'talks'            => $talks,
+                'eventInfo'        => $eventInfo,
+                'talkInfo'         => $talkInfo,
+                'moreTalks'        => $moreTalks,
+                'events'           => $events,
+                'moreEvents'       => $moreEvents,
+                'hostedEvents'     => $hostedEvents,
+                'moreHostedEvents' => $moreHostedEvents,
+                'talkComments'     => $talkComments,
+                'moreTalkComments' => $moreTalkComments,
             )
         );
     }
