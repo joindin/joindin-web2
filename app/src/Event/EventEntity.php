@@ -288,42 +288,6 @@ class EventEntity
         return $this->data->tz_continent . '/' . $this->data->tz_place;
     }
 
-    /**
-     * Returns the date when the Call for Papers opens in YYYY-MM-DD format or null if not available.
-     *
-     * @return string|null
-     */
-    public function getCallForPapersStartDate()
-    {
-        return isset($this->data->cfp_start_date) && $this->data->cfp_start_date
-            ? $this->data->cfp_start_date
-            : null;
-    }
-
-    /**
-     * Returns the date when the Call for Papers closes in YYYY-MM-DD format or null if not available.
-     *
-     * @return string|null
-     */
-    public function getCallForPapersEndDate()
-    {
-        return isset($this->data->cfp_end_date) && $this->data->cfp_end_date
-            ? $this->data->cfp_end_date
-            : null;
-    }
-
-    /**
-     * Returns the URL of the website where the Call for Papers information is stored or null if not available,
-     *
-     * @return string|null
-     */
-    public function getCallForPapersWebsiteAddress()
-    {
-        return isset($this->data->cfp_url) && $this->data->cfp_url
-            ? $this->data->cfp_url
-            : null;
-    }
-
     public function getAllTalkCommentsUri()
     {
         if (!isset($this->data->all_talk_comments_uri)) {
@@ -340,7 +304,18 @@ class EventEntity
      */
     public function getTzContinent()
     {
-        return 'Europe';
+        $tz = explode('/', $this->getTimezone());
+        return $tz[0];
+    }
+
+    /**
+     * Set the Timezone continent
+     *
+     * @param string $tzContinent
+     */
+    public function setTzContinent($tzContinent)
+    {
+        $this->data->tz_continent = $tzContinent;
     }
 
     /**
@@ -350,11 +325,28 @@ class EventEntity
      */
     public function getTzPlace()
     {
-        return 'Berlin';
+        $tz = explode('/', $this->getTimezone());
+        if (! isset($tz[1])) {
+            return '';
+        }
+
+        return $tz[1];
+    }
+
+    /**
+     * Set the Timezone place
+     *
+     * @param string $tzPlace
+     */
+    public function setTzPlace($tzPlace)
+    {
+        $this->data->tz_place = $tzPlace;
     }
 
     /**
      * Returns the URL
+     *
+     * This is required by Symfonys PropertyAccessor
      *
      * @return string
      */
@@ -365,12 +357,17 @@ class EventEntity
 
     /**
      * Wrapper to getCallForPapersStartDate
+     * This is also required by Symfonys PropertyAccessor. As
+     * ```getCallForPaperStartDate``` has been in existence before creating this
+     * method it simply calls this one.
      *
      * @return mixed
      */
     public function getCfPStartDate()
     {
-        return $this->getCallForPapersStartDate();
+        return isset($this->data->cfp_start_date) && $this->data->cfp_start_date
+            ? $this->data->cfp_start_date
+            : null;
     }
 
     public function setCfpStartDate($date)
@@ -382,12 +379,17 @@ class EventEntity
 
     /**
      * Wrapper to getCallForPapersEndDate
+     * This is also required by Symfonys PropertyAccessor. As
+     * ```getCallForPapesEndDate``` has been in existence before creating this
+     * method it simply calls this one.
      *
      * @return mixed
      */
     public function getCfPEndDate()
     {
-        return $this->getCallForPapersEndDate();
+        return isset($this->data->cfp_end_date) && $this->data->cfp_end_date
+            ? $this->data->cfp_end_date
+            : null;
     }
 
     public function setCfpEndDate($date)
@@ -404,7 +406,9 @@ class EventEntity
      */
     public function getCfpUrl()
     {
-        return $this->getCallForPapersWebsiteAddress();
+        return isset($this->data->cfp_url) && $this->data->cfp_url
+            ? $this->data->cfp_url
+            : null;
     }
 
     public function setCfpUrl($cfpUrl)
