@@ -83,11 +83,6 @@ class EventFormType extends AbstractType
                 ]
             )
             ->add(
-                'tags',
-                'text',
-                []
-            )
-            ->add(
                 'tz_continent',
                 'choice',
                 [
