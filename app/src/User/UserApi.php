@@ -59,7 +59,13 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        throw new \Exception('User could not be saved, server reports: ' . $message[0]);
+        if (is_array($message)) {
+            $message = current($message);
+        } else {
+            $message = 'User could not be saved';
+        }
+
+        throw new \Exception($message);
     }
 
     /**
@@ -104,6 +110,11 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        throw new \Exception("The server says: " . $message[0]);
+        if (is_array($message)) {
+            $message = current($message);
+        } else {
+            $message = "Unknown error";
+        }
+        throw new \Exception($message);
     }
 }
