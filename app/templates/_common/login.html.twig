@@ -5,6 +5,9 @@
     {% if flash.getMessages.message %}
         <div class="alert alert-success">{{flash.getMessages.message}}</div>
     {% endif %}
+    {% if flash.getMessages.error %}
+        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+    {% endif %}
     <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" class="form-control" name="username">

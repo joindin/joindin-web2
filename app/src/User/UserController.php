@@ -175,9 +175,9 @@ class UserController extends BaseController
         $result = false;
         try {
             $result = $userApi->verify($token);
-            $this->application->flash('message', "You can now log in");
+            $this->application->flash('message', "Thank you for verifying your email address. You can now log in.");
         } catch (\Exception $e) {
-            $this->application->flash('error', "Sorry, that token didn't match our records");
+            $this->application->flash('error', "Sorry, your verification link was invalid.");
         }
 
         $this->application->redirect('/user/login');
@@ -208,7 +208,7 @@ class UserController extends BaseController
                 try {
                     $result = $userApi->reverify($email);
                     if ($result) {
-                        $this->application->flash('message', 'Please check your email');
+                        $this->application->flash('message', 'We have resent your welcome email. Please check your email to verify your account before logging in.');
                         $this->application->redirect('/user/login');
                     }
                 } catch (\Exception $e) {
