@@ -101,6 +101,7 @@ class EventController extends BaseController
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
+                'editable' => $this->userIsAllowedToEdit($event),
             )
         );
     }
@@ -114,7 +115,10 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        $this->render('Event/map.html.twig', array('event' => $event));
+        $this->render('Event/map.html.twig', array(
+            'event' => $event,
+            'editable' => $this->userIsAllowedToEdit($event)
+        ));
     }
 
     public function talkComments($friendly_name)
@@ -148,6 +152,8 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
+                    'editable' => $this->userIsAllowedToEdit($event),
+
                 )
             );
         } else {
@@ -173,7 +179,11 @@ class EventController extends BaseController
 
         $schedule = $scheduler->getScheduleData($event);
 
-        $this->render('Event/schedule.html.twig', array('event' => $event, 'eventDays' => $schedule));
+        $this->render('Event/schedule.html.twig', array(
+            'event' => $event,
+            'eventDays' => $schedule,
+            'editable' => $this->userIsAllowedToEdit($event),
+        ));
     }
 
     public function quicklink($stub)
@@ -306,10 +316,13 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
+        if (! $this->userIsAllowedToEdit($event)) {
+            $this->redirectToDetailPage($event->getUrlFriendlyName());
+        }
+
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
         $form    = $factory->create(new EventFormType(), $event->setTags(implode(', ',$event->getTags())));
-        //$form->add('event_slug', 'hidden');
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
 
@@ -337,6 +350,24 @@ class EventController extends BaseController
         );
 
 
+    }
+
+    protected function userIsAllowedToEdit($event)
+    {
+        if (! isset($_SESSION['user'])) {
+            return false;
+        }
+        $user       = $_SESSION['user'];
+        $allowed    = false;
+        $eventArray = $event->toArray();
+
+        foreach ($eventArray['hosts'] as $host) {
+            if ($host->host_uri == $user->getUri()) {
+                $allowed = true;
+            }
+        }
+
+        return $allowed;
     }
 
     /**
