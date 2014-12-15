@@ -1,5 +1,5 @@
 <form method="POST" action="{{ urlFor('user-login') }}">
-    {% if error %}
+    {% if error | getErrorParam() %}
         <p class="alert alert-danger">Failed to log in.</p>
     {% endif %}
     <div class="form-group">
