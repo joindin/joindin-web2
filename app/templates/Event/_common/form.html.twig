@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div id="map" class="osmMap" data-lat="0.0" data-lon="0.0" data-zoom="10"></div>
+                        <div id="map" class="osmMap" data-lat="{{ form.latitude.vars['value']|default('0.0') }}" data-lon="{{ form.longitude.vars['value']|default('0.0') }}" data-zoom="10"></div>
                     </div>
                 </div>
             </fieldset>
