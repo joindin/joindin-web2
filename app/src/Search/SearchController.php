@@ -19,6 +19,11 @@ class SearchController extends BaseController
     protected $limit;
 
     /**
+     * @var integer The number of search results to show per page
+     */
+    protected $itemsPerPage = 10;
+
+    /**
      * Only one route for
      * @param \Slim $app
      */
@@ -55,11 +60,10 @@ class SearchController extends BaseController
             : $this->application->request()->get('page');
 
         if (!empty($keyword)) {
-            $perPage = 10;
-            $start = ($page -1) * $perPage;
+            $start = ($page -1) * $this->itemsPerPage;
 
             $event_collection = new SearchApi($this->cfg, $this->accessToken);
-            $events = $event_collection->getEventCollection($keyword, $perPage, $start);
+            $events = $event_collection->getEventCollection($keyword, $this->itemsPerPage, $start);
 
             if (isset($events['events'])) {
                 // Save to our data store
