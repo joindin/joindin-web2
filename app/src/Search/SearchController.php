@@ -3,6 +3,7 @@ namespace Search;
 
 use Application\BaseController;
 use Application\CacheService;
+use Event\EventApi;
 use Event\EventDb;
 
 /**
@@ -62,17 +63,13 @@ class SearchController extends BaseController
         if (!empty($keyword)) {
             $start = ($page -1) * $this->itemsPerPage;
 
-            $event_collection = new SearchApi($this->cfg, $this->accessToken);
-            $events = $event_collection->getEventCollection($keyword, $this->itemsPerPage, $start);
-
-            if (isset($events['events'])) {
-                // Save to our data store
-                $cache = new CacheService($this->cfg['redisKeyPrefix']);
-                $eventDb = new EventDb($cache);
-                foreach ($events['events'] as $event) {
-                    $eventDb->save($event);
-                }
-            }
+            $eventApi = $this->getEventApi();
+            $events = $eventApi->getCollection(
+                $this->itemsPerPage,
+                $start,
+                null,
+                array('title' => $keyword)
+            );
         }
 
         $this->render(
@@ -83,5 +80,18 @@ class SearchController extends BaseController
                 'keyword'   => $keyword
             )
         );
+    }
+
+    /**
+     * @return EventApi
+     */
+    protected function getEventApi()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $eventDb = new EventDb($cache);
+        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
+
+        return $eventApi;
     }
 }

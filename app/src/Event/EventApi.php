@@ -20,14 +20,15 @@ class EventApi extends BaseApi
     /**
      * Get the latest events
      *
-     * @param integer $limit  Number of events to get per page
-     * @param integer $start  Start value for pagination
-     * @param string  $filter Filter to apply
-     * @param bool  $verbose get verbose result
+     * @param integer $limit   Number of events to get per page
+     * @param integer $start   Start value for pagination
+     * @param string  $filter  Filter to apply
+     * @param bool    $verbose get verbose result
+     * @param array   $params  Additional query params as key => value pairs
      *
      * @return EventEntity model
      */
-    public function getCollection($limit = 10, $start = 1, $filter = null, $verbose = false)
+    public function getCollection($limit = 10, $start = 1, $filter = null, $verbose = false, array $params = array())
     {
         $url = $this->baseApiUrl . '/v2.1/events'
             . '?resultsperpage=' . $limit
@@ -35,6 +36,10 @@ class EventApi extends BaseApi
 
         if ($filter) {
             $url .= '&filter=' . $filter;
+        }
+
+        foreach ($params as $key => $value) {
+            $url .= '&' . $key . '=' . $value;
         }
 
         if ($verbose) {
