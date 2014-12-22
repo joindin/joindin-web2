@@ -21,6 +21,7 @@ class EventController extends BaseController
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
+        $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
@@ -52,6 +53,30 @@ class EventController extends BaseController
             array(
                 'page' => $page,
                 'events' => $events
+            )
+        );
+    }
+
+    public function callForPapers()
+    {
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
+        $start = ($page -1) * $this->itemsPerPage;
+
+        $eventApi = $this->getEventApi();
+        $events = $eventApi->getCollection(
+            $this->itemsPerPage,
+            $start,
+            'cfp',
+            true
+        );
+
+        $this->render(
+            'Event/call-for-papers.html.twig',
+            array(
+                'page' => $page,
+                'events' => $events,
             )
         );
     }

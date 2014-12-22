@@ -39,15 +39,16 @@
 
 
 {% block extraAside %}
-    {% if event.getStub %}
+    {% if event.getStub or event.getWebsiteAddress %}
         <section class="short-url">
+    {% endif %}
+    {% if event.getStub  %}
             <label class="control-label">Short URL:</label>
             <br>
             <i class="fa fa-external-link-square"></i>
             <a href="{{ shortUrlForEvent(event.getStub) }}">
                 {{ shortUrlForEvent(event.getStub) }}
             </a>
-        </section>
     {% endif %}
     {% if event.getWebsiteAddress %}
         <div class="extraAside">
@@ -61,6 +62,10 @@
             </p>
         </div>
     {% endif %}
+    {% if event.getStub or event.getWebsiteAddress %}
+        </section>
+    {% endif %}
+
 {% endblock %}
 
 {% block extra_meta %}
