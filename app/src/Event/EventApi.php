@@ -20,33 +20,29 @@ class EventApi extends BaseApi
     /**
      * Get the latest events
      *
-     * @param integer $limit   Number of events to get per page
-     * @param integer $start   Start value for pagination
-     * @param string  $filter  Filter to apply
-     * @param bool    $verbose get verbose result
-     * @param array   $params  Additional query params as key => value pairs
+     * @param integer $limit       Number of events to get per page
+     * @param integer $start       Start value for pagination
+     * @param string  $filter      Filter to apply
+     * @param bool    $verbose     get verbose result
+     * @param array   $queryParams Additional query params as key => value pairs
      *
      * @return EventEntity model
      */
-    public function getCollection($limit = 10, $start = 1, $filter = null, $verbose = false, array $params = array())
+    public function getCollection($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
-        $url = $this->baseApiUrl . '/v2.1/events'
-            . '?resultsperpage=' . $limit
-            . '&start=' . $start;
+        $url = $this->baseApiUrl . '/v2.1/events';
+        $queryParams['resultsperpage'] = $limit;
+        $queryParams['start'] = $start;
 
         if ($filter) {
-            $url .= '&filter=' . $filter;
-        }
-
-        foreach ($params as $key => $value) {
-            $url .= '&' . $key . '=' . $value;
+            $queryParams['filter'] = $filter;
         }
 
         if ($verbose) {
-            $url .= '&verbose=yes';
+            $queryParams['verbose'] = 'yes';
         }
 
-        return $this->queryEvents($url);
+        return $this->queryEvents($url, $queryParams);
     }
 
     /**
@@ -202,13 +198,14 @@ class EventApi extends BaseApi
      * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
      * Event entities.
      *
-     * @param string $url API Url to query for one or more events. Either a listing can be retrieved or a single event.
+     * @param string $url         API Url to query for one or more events. Either a listing can be retrieved or a single event.
+     * @param array  $queryParams
      *
      * @return array
      */
-    private function queryEvents($url)
+    private function queryEvents($url, array $queryParams = [])
     {
-        $events = (array)json_decode($this->apiGet($url));
+        $events = (array)json_decode($this->apiGet($url, $queryParams));
         $meta   = array_pop($events);
 
         $collectionData = array();
