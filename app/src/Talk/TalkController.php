@@ -68,7 +68,7 @@ class TalkController extends BaseController
         $eventDb = new EventDb($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
-            return Slim::getInstance()->notFound();
+            return \Slim\Slim::getInstance()->notFound();
         }
 
         $this->application->redirect(
