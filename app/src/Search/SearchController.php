@@ -79,6 +79,7 @@ class SearchController extends BaseController
                 $this->itemsPerPage,
                 $start,
                 null,
+                false,
                 $apiQueryParams
             );
         }
