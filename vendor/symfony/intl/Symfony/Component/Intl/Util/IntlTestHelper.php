@@ -40,11 +40,7 @@ class IntlTestHelper
         //   * the intl extension is not loaded
 
         if (IcuVersion::compare(Intl::getIcuVersion(), Intl::getIcuStubVersion(), '!=', 1)) {
-            $testCase->markTestSkipped('Please change ICU version to ' . Intl::getIcuStubVersion());
-        }
-
-        if (IcuVersion::compare(Intl::getIcuDataVersion(), Intl::getIcuStubVersion(), '!=', 1)) {
-            $testCase->markTestSkipped('Please change the Icu component to version 1.0.x or 1.' . IcuVersion::normalize(Intl::getIcuStubVersion(), 1) . '.x');
+            $testCase->markTestSkipped('Please change ICU version to '.Intl::getIcuStubVersion());
         }
 
         // Normalize the default locale in case this is not done explicitly
@@ -74,14 +70,9 @@ class IntlTestHelper
             $testCase->markTestSkipped('The intl extension is not available.');
         }
 
-        // ... and only if the version is *one specific version* ...
+        // ... and only if the version is *one specific version*
         if (IcuVersion::compare(Intl::getIcuVersion(), Intl::getIcuStubVersion(), '!=', 1)) {
-            $testCase->markTestSkipped('Please change ICU version to ' . Intl::getIcuStubVersion());
-        }
-
-        // ... and only if the data in the Icu component matches that version.
-        if (IcuVersion::compare(Intl::getIcuDataVersion(), Intl::getIcuStubVersion(), '!=', 1)) {
-            $testCase->markTestSkipped('Please change the Icu component to version 1.0.x or 1.' . IcuVersion::normalize(Intl::getIcuStubVersion(), 1) . '.x');
+            $testCase->markTestSkipped('Please change ICU version to '.Intl::getIcuStubVersion());
         }
 
         // Normalize the default locale in case this is not done explicitly
@@ -94,7 +85,6 @@ class IntlTestHelper
         //     there is no need to add control structures to your tests that
         //     change the test depending on the ICU version.
         //   * always use the C intl classes
-        //   * always use the binary resource bundles (any locale is allowed)
     }
 
     /**
@@ -124,5 +114,7 @@ class IntlTestHelper
     /**
      * Must not be instantiated.
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 }

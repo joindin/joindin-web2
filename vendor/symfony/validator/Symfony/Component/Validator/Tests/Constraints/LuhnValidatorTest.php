@@ -13,39 +13,32 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Luhn;
 use Symfony\Component\Validator\Constraints\LuhnValidator;
+use Symfony\Component\Validator\Validation;
 
-class LuhnValidatorTest extends \PHPUnit_Framework_TestCase
+class LuhnValidatorTest extends AbstractConstraintValidatorTest
 {
-    protected $context;
-    protected $validator;
-
-    protected function setUp()
+    protected function getApiVersion()
     {
-        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
-        $this->validator = new LuhnValidator();
-        $this->validator->initialize($this->context);
+        return Validation::API_VERSION_2_5;
     }
 
-    protected function tearDown()
+    protected function createValidator()
     {
-        $this->context = null;
-        $this->validator = null;
+        return new LuhnValidator();
     }
 
     public function testNullIsValid()
     {
-        $this->context->expects($this->never())
-            ->method('addViolation');
-
         $this->validator->validate(null, new Luhn());
+
+        $this->assertNoViolation();
     }
 
     public function testEmptyStringIsValid()
     {
-        $this->context->expects($this->never())
-            ->method('addViolation');
-
         $this->validator->validate('', new Luhn());
+
+        $this->assertNoViolation();
     }
 
     /**
@@ -53,10 +46,9 @@ class LuhnValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidNumbers($number)
     {
-        $this->context->expects($this->never())
-            ->method('addViolation');
-
         $this->validator->validate($number, new Luhn());
+
+        $this->assertNoViolation();
     }
 
     public function getValidNumbers()
@@ -86,23 +78,28 @@ class LuhnValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getInvalidNumbers
      */
-    public function testInvalidNumbers($number)
+    public function testInvalidNumbers($number, $code)
     {
-        $constraint = new Luhn();
-
-        $this->context->expects($this->once())
-            ->method('addViolation')
-            ->with($constraint->message);
+        $constraint = new Luhn(array(
+            'message' => 'myMessage',
+        ));
 
         $this->validator->validate($number, $constraint);
+
+        $this->buildViolation('myMessage')
+            ->setParameter('{{ value }}', '"'.$number.'"')
+            ->setCode($code)
+            ->assertRaised();
     }
 
     public function getInvalidNumbers()
     {
         return array(
-            array('1234567812345678'),
-            array('4222222222222222'),
-            array('0000000000000000'),
+            array('1234567812345678', Luhn::CHECKSUM_FAILED_ERROR),
+            array('4222222222222222', Luhn::CHECKSUM_FAILED_ERROR),
+            array('0000000000000000', Luhn::CHECKSUM_FAILED_ERROR),
+            array('000000!000000000', Luhn::INVALID_CHARACTERS_ERROR),
+            array('42-22222222222222', Luhn::INVALID_CHARACTERS_ERROR),
         );
     }
 

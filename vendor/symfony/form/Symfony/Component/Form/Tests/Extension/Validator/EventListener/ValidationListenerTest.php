@@ -66,7 +66,7 @@ class ValidationListenerTest extends \PHPUnit_Framework_TestCase
 
     private function getConstraintViolation($code = null)
     {
-        return new ConstraintViolation($this->message, $this->messageTemplate, $this->params, null, 'prop.path', null, null, $code);
+        return new ConstraintViolation($this->message, $this->messageTemplate, $this->params, null, 'prop.path', null, null, $code, new Form());
     }
 
     private function getBuilder($name = 'name', $propertyPath = null, $dataClass = null)
@@ -109,7 +109,7 @@ class ValidationListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testMapViolationAllowsNonSyncIfInvalid()
     {
-        $violation = $this->getConstraintViolation(Form::ERR_INVALID);
+        $violation = $this->getConstraintViolation(Form::NOT_SYNCHRONIZED_ERROR);
         $form = $this->getForm('street');
 
         $this->validator->expects($this->once())
@@ -157,5 +157,31 @@ class ValidationListenerTest extends \PHPUnit_Framework_TestCase
             ->method('mapViolation');
 
         $this->listener->validateForm(new FormEvent($form, null));
+    }
+
+    public function testValidatorInterfaceSinceSymfony25()
+    {
+        // Mock of ValidatorInterface since apiVersion 2.5
+        $validator = $this->getMock('Symfony\Component\Validator\Validator\ValidatorInterface');
+
+        $listener = new ValidationListener($validator, $this->violationMapper);
+        $this->assertAttributeSame($validator, 'validator', $listener);
+    }
+
+    public function testValidatorInterfaceUntilSymfony24()
+    {
+        // Mock of ValidatorInterface until apiVersion 2.4
+        $validator = $this->getMock('Symfony\Component\Validator\ValidatorInterface');
+
+        $listener = new ValidationListener($validator, $this->violationMapper);
+        $this->assertAttributeSame($validator, 'validator', $listener);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidValidatorInterface()
+    {
+        new ValidationListener(null, $this->violationMapper);
     }
 }

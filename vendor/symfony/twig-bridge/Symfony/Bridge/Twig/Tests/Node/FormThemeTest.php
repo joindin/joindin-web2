@@ -20,7 +20,7 @@ class FormThemeTest extends \PHPUnit_Framework_TestCase
         $form = new \Twig_Node_Expression_Name('form', 0);
         $resources = new \Twig_Node(array(
             new \Twig_Node_Expression_Constant('tpl1', 0),
-            new \Twig_Node_Expression_Constant('tpl2', 0)
+            new \Twig_Node_Expression_Constant('tpl2', 0),
         ));
 
         $node = new FormThemeNode($form, $resources, 0);
@@ -36,7 +36,7 @@ class FormThemeTest extends \PHPUnit_Framework_TestCase
             new \Twig_Node_Expression_Constant(0, 0),
             new \Twig_Node_Expression_Constant('tpl1', 0),
             new \Twig_Node_Expression_Constant(1, 0),
-            new \Twig_Node_Expression_Constant('tpl2', 0)
+            new \Twig_Node_Expression_Constant('tpl2', 0),
         ), 0);
 
         $node = new FormThemeNode($form, $resources, 0);
@@ -66,7 +66,7 @@ class FormThemeTest extends \PHPUnit_Framework_TestCase
 
     protected function getVariableGetter($name)
     {
-        if (version_compare(phpversion(), '5.4.0RC1', '>=')) {
+        if (PHP_VERSION_ID >= 50400) {
             return sprintf('(isset($context["%s"]) ? $context["%s"] : null)', $name, $name);
         }
 

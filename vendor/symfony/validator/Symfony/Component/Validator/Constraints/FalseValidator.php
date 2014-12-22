@@ -35,6 +35,8 @@ class FalseValidator extends ConstraintValidator
             return;
         }
 
-        $this->context->addViolation($constraint->message);
+        $this->buildViolation($constraint->message)
+            ->setParameter('{{ value }}', $this->formatValue($value))
+            ->addViolation();
     }
 }

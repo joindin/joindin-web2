@@ -75,6 +75,9 @@ class StringUtil
         // objectives (objective), alternative (alternatives)
         array('sevit', 5, true, true, 'tive'),
 
+        // drives (drive)
+        array('sevird', 6, false, true, 'drive'),
+
         // lives (life), wives (wife)
         array('sevi', 4, false, true, 'ife'),
 
@@ -109,17 +112,20 @@ class StringUtil
     );
 
     /**
-     * This class should not be instantiated
+     * This class should not be instantiated.
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
-     * Returns the singular form of a word
+     * Returns the singular form of a word.
      *
      * If the method can't determine the form with certainty, an array of the
      * possible singulars is returned.
      *
      * @param string $plural A word in plural form
+     *
      * @return string|array The singular form or an array of possible singular
      *                      forms
      */

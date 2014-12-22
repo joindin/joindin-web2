@@ -25,6 +25,22 @@ class DateValidator extends ConstraintValidator
     const PATTERN = '/^(\d{4})-(\d{2})-(\d{2})$/';
 
     /**
+     * Checks whether a date is valid.
+     *
+     * @param int $year  The year
+     * @param int $month The month
+     * @param int $day   The day
+     *
+     * @return bool Whether the date is valid
+     *
+     * @internal
+     */
+    public static function checkDate($year, $month, $day)
+    {
+        return checkdate($month, $day, $year);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function validate($value, Constraint $constraint)
@@ -43,8 +59,20 @@ class DateValidator extends ConstraintValidator
 
         $value = (string) $value;
 
-        if (!preg_match(static::PATTERN, $value, $matches) || !checkdate($matches[2], $matches[3], $matches[1])) {
-            $this->context->addViolation($constraint->message, array('{{ value }}' => $value));
+        if (!preg_match(static::PATTERN, $value, $matches)) {
+            $this->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $this->formatValue($value))
+                ->setCode(Date::INVALID_FORMAT_ERROR)
+                ->addViolation();
+
+            return;
+        }
+
+        if (!self::checkDate($matches[1], $matches[2], $matches[3])) {
+            $this->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $this->formatValue($value))
+                ->setCode(Date::INVALID_DATE_ERROR)
+                ->addViolation();
         }
     }
 }
