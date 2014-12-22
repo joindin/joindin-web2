@@ -32,13 +32,9 @@ class NullValidator extends ConstraintValidator
         }
 
         if (null !== $value) {
-            if (is_object($value)) {
-                $value = get_class($value);
-            } elseif (is_array($value)) {
-                $value = 'Array';
-            }
-
-            $this->context->addViolation($constraint->message, array('{{ value }}' => $value));
+            $this->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $this->formatValue($value))
+                ->addViolation();
         }
     }
 }

@@ -24,8 +24,8 @@ class DiffOperation extends AbstractOperation
     protected function processDomain($domain)
     {
         $this->messages[$domain] = array(
-            'all'      => array(),
-            'new'      => array(),
+            'all' => array(),
+            'new' => array(),
             'obsolete' => array(),
         );
 
@@ -33,6 +33,9 @@ class DiffOperation extends AbstractOperation
             if ($this->target->has($id, $domain)) {
                 $this->messages[$domain]['all'][$id] = $message;
                 $this->result->add(array($id => $message), $domain);
+                if (null !== $keyMetadata = $this->source->getMetadata($id, $domain)) {
+                    $this->result->setMetadata($id, $keyMetadata, $domain);
+                }
             } else {
                 $this->messages[$domain]['obsolete'][$id] = $message;
             }
@@ -43,6 +46,9 @@ class DiffOperation extends AbstractOperation
                 $this->messages[$domain]['all'][$id] = $message;
                 $this->messages[$domain]['new'][$id] = $message;
                 $this->result->add(array($id => $message), $domain);
+                if (null !== $keyMetadata = $this->target->getMetadata($id, $domain)) {
+                    $this->result->setMetadata($id, $keyMetadata, $domain);
+                }
             }
         }
     }

@@ -28,7 +28,6 @@ use Symfony\Component\Translation\PluralizationRules;
  */
 class PluralizationRulesTest  extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * We test failed langcode here.
      *
@@ -60,7 +59,7 @@ class PluralizationRulesTest  extends \PHPUnit_Framework_TestCase
      */
     public function successLangcodes()
     {
-      return array(
+        return array(
         array('1' , array('ay','bo', 'cgg','dz','id', 'ja', 'jbo', 'ka','kk','km','ko','ky')),
         array('2' , array('nl', 'fr', 'en', 'de', 'de_GE')),
         array('3' , array('be','bs','cs','hr')),
@@ -80,7 +79,7 @@ class PluralizationRulesTest  extends \PHPUnit_Framework_TestCase
      */
     public function failingLangcodes()
     {
-      return array(
+        return array(
         array('1' , array('fa')),
         array('2' , array('jbo')),
         array('3' , array('cbs')),
@@ -93,9 +92,9 @@ class PluralizationRulesTest  extends \PHPUnit_Framework_TestCase
     /**
      * We validate only on the plural coverage. Thus the real rules is not tested.
      *
-     * @param string  $nplural       plural expected
-     * @param array   $matrix        containing langcodes and their plural index values.
-     * @param bool    $expectSuccess
+     * @param string $nplural       plural expected
+     * @param array  $matrix        containing langcodes and their plural index values.
+     * @param bool   $expectSuccess
      */
     protected function validateMatrix($nplural, $matrix, $expectSuccess = true)
     {
@@ -113,7 +112,7 @@ class PluralizationRulesTest  extends \PHPUnit_Framework_TestCase
     {
         $matrix = array();
         foreach ($langCodes as $langCode) {
-            for ($count=0; $count<200; $count++) {
+            for ($count = 0; $count<200; $count++) {
                 $plural = PluralizationRules::get($count, $langCode);
                 $matrix[$langCode][$count] = $plural;
             }

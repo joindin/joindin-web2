@@ -36,7 +36,9 @@ class TrueValidator extends ConstraintValidator
         }
 
         if (true !== $value && 1 !== $value && '1' !== $value) {
-            $this->context->addViolation($constraint->message);
+            $this->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $this->formatValue($value))
+                ->addViolation();
         }
     }
 }

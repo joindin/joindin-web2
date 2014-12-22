@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+2.6.0
+-----
+
+ * added "html5" option to Date, Time and DateTimeFormType to be able to
+   enable/disable HTML5 input date when widget option is "single_text"
+ * added "label_format" option with possible placeholders "%name%" and "%id%"
+ * [BC BREAK] drop support for model_timezone and view_timezone options in TimeType, DateType and BirthdayType
+
 2.5.0
 ------
 
@@ -15,6 +23,7 @@ CHANGELOG
  * ObjectChoiceList now compares choices by their value, if a value path is
    given
  * you can now pass interface names in the "data_class" option
+ * [BC BREAK] added `FormInterface::getTransformationFailure()`
 
 2.4.0
 -----
