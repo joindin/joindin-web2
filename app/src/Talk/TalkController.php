@@ -5,7 +5,6 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
-use Slim_Exception_Pass;
 use Exception;
 
 class TalkController extends BaseController
@@ -69,7 +68,7 @@ class TalkController extends BaseController
         $eventDb = new EventDb($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
-            throw new Slim_Exception_Pass('Page not found', 404);
+            return \Slim\Slim::getInstance()->notFound();
         }
 
         $this->application->redirect(
