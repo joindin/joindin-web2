@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Validator;
 use Talk\TalkDb;
 use Talk\TalkApi;
 use Exception;
+use Slim\Slim;
 
 class EventController extends BaseController
 {
@@ -86,7 +87,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (! $event) {
-            $this->redirectToListPage();
+            return Slim::getInstance()->notFound();
         }
 
         $quicklink = $this->application->request()->headers("host")
