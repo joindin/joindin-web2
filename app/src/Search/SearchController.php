@@ -30,7 +30,7 @@ class SearchController extends BaseController
      */
     protected function defineRoutes(\Slim\Slim $app)
     {
-        $app->get('/search/events', array($this, 'searchEvents'));
+        $app->get('/search/events', array($this, 'searchEvents'))->name("search-events");
     }
 
     /**

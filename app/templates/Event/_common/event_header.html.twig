@@ -23,7 +23,9 @@
             {% if event.getTags %}
             <p>
                 {% for tag in event.getTags %}
-                    <span class="label label-default">{{ tag }}</span>
+                    <a href="{{ urlFor('search-events') }}?tag={{ tag }}">
+                        <span class="label label-default">{{ tag }}</span>
+                    </a>
                 {% endfor %}
             </p>
             {% endif %}
