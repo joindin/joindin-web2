@@ -1,7 +1,10 @@
 {% extends '/layout.html.twig' %}
 
 {% block body %}
-    <h2 class="title">Search results for keyword "{{ keyword }}"</h2>
+    <h2 class="title">Search results for
+        {% if keyword is not empty %}keyword "{{ keyword }}"{% endif %}
+        {% if tag is not empty %}tag "{{ tag }}"{% endif %}
+    </h2>
     {% if events is empty %}
         <p>Sorry, no results found</p>
     {% else %}

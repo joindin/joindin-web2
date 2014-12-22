@@ -54,13 +54,24 @@ class SearchController extends BaseController
     {
 
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
+        $tag = $this->sanitizeKeyword($this->application->request()->get('tag'));
         $events = array();
 
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
 
+        $apiQueryParams = array();
+
         if (!empty($keyword)) {
+            $apiQueryParams['title'] = $keyword;
+        }
+
+        if (!empty($tag)) {
+            $apiQueryParams['tags'] = $tag;
+        }
+
+        if (!empty($apiQueryParams)) {
             $start = ($page -1) * $this->itemsPerPage;
 
             $eventApi = $this->getEventApi();
@@ -68,7 +79,7 @@ class SearchController extends BaseController
                 $this->itemsPerPage,
                 $start,
                 null,
-                array('title' => $keyword)
+                $apiQueryParams
             );
         }
 
@@ -77,7 +88,8 @@ class SearchController extends BaseController
             array(
                 'events'    => $events,
                 'page'      => $page,
-                'keyword'   => $keyword
+                'keyword'   => $keyword,
+                'tag'       => $tag
             )
         );
     }
