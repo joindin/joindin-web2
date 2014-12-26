@@ -109,7 +109,7 @@ $(function(){
     function checkUrlHash() {
         var hash = window.location.hash.substr(1);
 
-        if (hash.length && hash.indexOf('comment') == 0) {
+        if (hash.length && hash.indexOf('comment-') == 0) {
             highlightComment(hash);
         }
     }
