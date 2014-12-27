@@ -439,5 +439,4 @@ class EventEntity
     {
         return $this->getUrlFriendlyName();
     }
-
 }
