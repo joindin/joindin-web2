@@ -26,7 +26,7 @@ class EventApi extends BaseApi
      * @param bool    $verbose     get verbose result
      * @param array   $queryParams Additional query params as key => value pairs
      *
-     * @return EventEntity model
+     * @return array
      */
     public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
