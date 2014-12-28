@@ -6,18 +6,18 @@ set talkUrl = urlFor(
 
 <article class="talk row">
     <div class="col-xs-12 title">
-        <div class="rating">
-            {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
-        </div>
         <section>
             <h3 class="header">
                 <a href="{{ talkUrl }}">{{ talk.getTitle }}</a>
             </h3>
 
-            <p class="meta">
-                {# talk.getStartDateTime()|date('j F Y \\a\\t H:i', event.getFullTimezone) #}
+            {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
 
-                {# TODO event name & link #}
+            <p class="meta">
+                {{ talk.getStartDateTime|date('M d Y') }}
+
+                at
+                <a href="{{ urlFor('event-detail', {'friendly_name': event.url_friendly_name}) }}">{{ event.name }}</a>
 
                 |
 
@@ -30,8 +30,8 @@ set talkUrl = urlFor(
                     {% endif %}
                 </a>
 
-                |
-
+                <br/>
+                by
                 {% for speaker in talk.getSpeakers %}
                     {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
                 {% endfor %}

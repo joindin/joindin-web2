@@ -280,11 +280,11 @@ table.schedule a:hover span.speaker {
     margin-bottom: 10px;
 }
 
-@media (max-width: 768px) {
-    .event .logo img {
-        max-width: 150%;
-    }
+.event .logo img {
+    max-width: 150%;
+}
 
+@media (max-width: 768px) {
     .pull-right-xs {
         float: right;
     }
@@ -387,13 +387,6 @@ form ul.errors {
     line-height: 1;
 }
 
-.talk .rating {
-    float: left;
-}
-.talk .rating + section {
-    margin-left: 165px;
-}
-
-.talk section h3 {
-    margin-top: 0;
+.search-results .talk .rating {
+    float: right;
 }

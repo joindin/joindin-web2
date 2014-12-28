@@ -96,6 +96,7 @@ class SearchController extends BaseController
     {
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $events = array();
+        $eventInfo = array();
         $talks = array();
 
         $page = ((int)$this->application->request()->get('page') === 0)
@@ -110,10 +111,11 @@ class SearchController extends BaseController
         $this->render(
             'Application/search.html.twig',
             array(
-                'events'  => $events,
-                'talks'   => $talks,
-                'page'    => $page,
-                'keyword' => $keyword
+                'events'    => $events,
+                'eventInfo' => $eventInfo,
+                'talks'     => $talks,
+                'page'      => $page,
+                'keyword'   => $keyword
             )
         );
     }
