@@ -30,6 +30,10 @@ class TalkApi extends BaseApi
      */
     public function getCollection($talks_uri, $queryParams = array())
     {
+        if (empty($talks_uri)) {
+            $talks_uri = $this->baseApiUrl . '/v2.1/talks';
+        }
+
         $talks = (array)json_decode(
             $this->apiGet($talks_uri, $queryParams)
         );

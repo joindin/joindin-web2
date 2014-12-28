@@ -5,6 +5,8 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventApi;
 use Event\EventDb;
+use Talk\TalkApi;
+use Talk\TalkDb;
 
 /**
  * Class SearchController
@@ -25,12 +27,12 @@ class SearchController extends BaseController
     protected $itemsPerPage = 10;
 
     /**
-     * Only one route for
      * @param \Slim $app
      */
     protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/search/events', array($this, 'searchEvents'))->name("search-events");
+        $app->get('/search', array($this, 'search'))->name("search");
     }
 
     /**
@@ -72,6 +74,59 @@ class SearchController extends BaseController
             ? 1
             : $this->application->request()->get('page');
 
+        if (!empty($keyword) || !empty($tag)) {
+            $events = $this->searchEventsByTitleAndTag($page, $keyword, $tag);
+        }
+
+        $this->render(
+            'Event/search.html.twig',
+            array(
+                'events'  => $events,
+                'page'    => $page,
+                'keyword' => $keyword,
+                'tag'     => $tag
+            )
+        );
+    }
+
+    /**
+     * Search both events and talks
+     */
+    public function search()
+    {
+        $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
+        $events = array();
+        $talks = array();
+
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
+
+        if (!empty($keyword)) {
+            $events = $this->searchEventsByTitleAndTag($page, $keyword);
+            $talks = $this->searchTalksByTitle($page, $keyword);
+        }
+
+        $this->render(
+            'Application/search.html.twig',
+            array(
+                'events'  => $events,
+                'talks'   => $talks,
+                'page'    => $page,
+                'keyword' => $keyword
+            )
+        );
+    }
+
+    /**
+     * @param int    $page
+     * @param string $keyword
+     * @param string $tag
+     *
+     * @return array
+     */
+    private function searchEventsByTitleAndTag($page, $keyword, $tag = null)
+    {
         $apiQueryParams = array();
 
         if (!empty($keyword)) {
@@ -82,27 +137,37 @@ class SearchController extends BaseController
             $apiQueryParams['tags'] = $tag;
         }
 
-        if (!empty($apiQueryParams)) {
-            $start = ($page -1) * $this->itemsPerPage;
+        $start = ($page - 1) * $this->itemsPerPage;
 
-            $eventApi = $this->getEventApi();
-            $events = $eventApi->getEvents(
-                $this->itemsPerPage,
-                $start,
-                null,
-                false,
-                $apiQueryParams
-            );
+        return $this->getEventApi()->getEvents(
+            $this->itemsPerPage,
+            $start,
+            null,
+            false,
+            $apiQueryParams
+        );
+    }
+
+    /**
+     * @param int    $page
+     * @param string $keyword
+     *
+     * @return array
+     */
+    private function searchTalksByTitle($page, $keyword)
+    {
+        $apiQueryParams = array();
+
+        if (!empty($keyword)) {
+            $apiQueryParams['title'] = $keyword;
         }
 
-        $this->render(
-            'Event/search.html.twig',
-            array(
-                'events'    => $events,
-                'page'      => $page,
-                'keyword'   => $keyword,
-                'tag'       => $tag
-            )
+        $apiQueryParams['resultsperpage'] = $this->itemsPerPage;
+        $apiQueryParams['start'] = ($page - 1) * $this->itemsPerPage;
+
+        return $this->getTalkApi()->getCollection(
+            null, // pass empty $talks_uri so the base api url will be used
+            $apiQueryParams
         );
     }
 
@@ -117,5 +182,18 @@ class SearchController extends BaseController
         $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
 
         return $eventApi;
+    }
+
+    /**
+     * @return TalkApi
+     */
+    protected function getTalkApi()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $talkDb = new TalkDb($cache);
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+
+        return $talkApi;
     }
 }
