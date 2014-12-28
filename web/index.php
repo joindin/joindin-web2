@@ -69,6 +69,15 @@ $app->configureMode('development', function () use ($app) {
     $env->addExtension(new \Twig_Extension_Debug());
 });
 
+// register error handlers
+$app->error(function (\Exception $e) use ($app) {
+    $app->render('Error/error.html.twig', ['exception' => $e]);
+});
+
+$app->notFound(function () use ($app) {
+    $app->render('Error/404.html.twig');
+});
+
 // register middlewares
 $app->add(new Middleware\ValidationMiddleware());
 $app->add(new Middleware\FormMiddleware());

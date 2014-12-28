@@ -36,7 +36,7 @@ class RepeatedTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
     public function testSetOptions()
     {
         $form = $this->factory->create('repeated', null, array(
-            'type'    => 'text',
+            'type' => 'text',
             'options' => array('label' => 'Global'),
         ));
 
@@ -50,9 +50,9 @@ class RepeatedTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
     {
         $form = $this->factory->create('repeated', null, array(
             // the global required value cannot be overridden
-            'type'           => 'text',
-            'first_options'  => array('label' => 'Test', 'required' => false),
-            'second_options' => array('label' => 'Test2')
+            'type' => 'text',
+            'first_options' => array('label' => 'Test', 'required' => false),
+            'second_options' => array('label' => 'Test2'),
         ));
 
         $this->assertEquals('Test', $form['first']->getConfig()->getOption('label'));
@@ -65,11 +65,44 @@ class RepeatedTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
     {
         $form = $this->factory->create('repeated', null, array(
             'required' => false,
-            'type'     => 'text',
+            'type' => 'text',
         ));
 
         $this->assertFalse($form['first']->isRequired());
         $this->assertFalse($form['second']->isRequired());
+    }
+
+    /**
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testSetInvalidOptions()
+    {
+        $this->factory->create('repeated', null, array(
+            'type' => 'text',
+            'options' => 'bad value',
+        ));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testSetInvalidFirstOptions()
+    {
+        $this->factory->create('repeated', null, array(
+            'type' => 'text',
+            'first_options' => 'bad value',
+        ));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testSetInvalidSecondOptions()
+    {
+        $this->factory->create('repeated', null, array(
+            'type' => 'text',
+            'second_options' => 'bad value',
+        ));
     }
 
     public function testSetErrorBubblingToTrue()
@@ -110,9 +143,9 @@ class RepeatedTypeTest extends \Symfony\Component\Form\Test\TypeTestCase
     public function testSetOptionsPerChildAndOverwrite()
     {
         $form = $this->factory->create('repeated', null, array(
-            'type'           => 'text',
-            'options'        => array('label' => 'Label'),
-            'second_options' => array('label' => 'Second label')
+            'type' => 'text',
+            'options' => array('label' => 'Label'),
+            'second_options' => array('label' => 'Second label'),
         ));
 
         $this->assertEquals('Label', $form['first']->getConfig()->getOption('label'));

@@ -1,0 +1,18 @@
+{% extends '/layout.html.twig' %}
+
+{% block body %}
+    <h1 class="title">Error</h1>
+    <p>We're sorry, but an error occurred.</p>
+
+    {% if 'development' == slim_mode %}
+        <h2>Message</h2>
+        <p>{{ exception.getMessage }}</p>
+        <div>
+            <i>Code</i>: {{ exception.getCode }}<br>
+            <i>File</i>: {{ exception.getFile }}<br>
+            <i>Line</i>: {{ exception.getLine }}<br>
+        </div>
+        <h2>Trace</h2>
+        <pre>{{ exception.getTraceAsString }}</pre>
+    {% endif %}
+{%  endblock %}

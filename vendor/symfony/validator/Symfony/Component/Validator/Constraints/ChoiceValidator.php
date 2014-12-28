@@ -63,25 +63,42 @@ class ChoiceValidator extends ConstraintValidator
         if ($constraint->multiple) {
             foreach ($value as $_value) {
                 if (!in_array($_value, $choices, $constraint->strict)) {
-                    $this->context->addViolation($constraint->multipleMessage, array('{{ value }}' => $_value));
+                    $this->buildViolation($constraint->multipleMessage)
+                        ->setParameter('{{ value }}', $this->formatValue($_value))
+                        ->setCode(Choice::NO_SUCH_CHOICE_ERROR)
+                        ->setInvalidValue($_value)
+                        ->addViolation();
+
+                    return;
                 }
             }
 
             $count = count($value);
 
             if ($constraint->min !== null && $count < $constraint->min) {
-                $this->context->addViolation($constraint->minMessage, array('{{ limit }}' => $constraint->min), null, (int) $constraint->min);
+                $this->buildViolation($constraint->minMessage)
+                    ->setParameter('{{ limit }}', $constraint->min)
+                    ->setPlural((int) $constraint->min)
+                    ->setCode(Choice::TOO_FEW_ERROR)
+                    ->addViolation();
 
                 return;
             }
 
             if ($constraint->max !== null && $count > $constraint->max) {
-                $this->context->addViolation($constraint->maxMessage, array('{{ limit }}' => $constraint->max), null, (int) $constraint->max);
+                $this->buildViolation($constraint->maxMessage)
+                    ->setParameter('{{ limit }}', $constraint->max)
+                    ->setPlural((int) $constraint->max)
+                    ->setCode(Choice::TOO_MANY_ERROR)
+                    ->addViolation();
 
                 return;
             }
         } elseif (!in_array($value, $choices, $constraint->strict)) {
-            $this->context->addViolation($constraint->message, array('{{ value }}' => $value));
+            $this->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $this->formatValue($value))
+                ->setCode(Choice::NO_SUCH_CHOICE_ERROR)
+                ->addViolation();
         }
     }
 }

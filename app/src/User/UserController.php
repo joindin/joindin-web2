@@ -4,6 +4,11 @@ namespace User;
 use Application\BaseController;
 use Application\CacheService;
 use Symfony\Component\Form\FormError;
+use Slim\Slim;
+use Talk\TalkDb;
+use Talk\TalkApi;
+use Event\EventDb;
+use Event\EventApi;
 
 class UserController extends BaseController
 {
@@ -22,6 +27,7 @@ class UserController extends BaseController
         $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
         $app->map('/user/resend-verification', array($this, 'resendVerification'))
             ->via('GET', 'POST')->name('user-resend-verification');
+        $app->map('/user/:username', array($this, 'profile'))->via('GET', 'POST')->name('user-profile');
     }
 
     /**
@@ -224,6 +230,103 @@ class UserController extends BaseController
             'User/emailverification.html.twig',
             array(
                 'form' => $form->createView(),
+            )
+        );
+    }
+
+    /**
+     * User profile page
+     *
+     * @param  string $username User's username
+     * @return void
+     */
+    public function profile($username)
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $userDb = new UserDb($cache);
+        $userApi = new UserApi($this->cfg, $this->accessToken, $userDb);
+
+        $userUri = $userDb->load('username', $username);
+        if ($userUri) {
+            $user = $userApi->getUser($userUri);
+        } else {
+            $user = $userApi->getUserByUsername($username);
+            if (!$user) {
+                Slim::getInstance()->notFound();
+            }
+            $userDb->save($user);
+        }
+
+        $talkDb = new TalkDb($cache);
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        $eventDb = new EventDb($cache);
+        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
+
+        $eventInfo = array(); // look up an event's name and url_friendly_name from its uri
+        $talkInfo = array(); // look up a talk's url_friendly_talk_title from its uri
+
+        $talkCollection = $talkApi->getCollection($user->getTalksUri(), ['verbose' => 'yes', 'resultsperpage' => 5]);
+        $talks = false;
+        if (isset($talkCollection['talks'])) {
+            $talks = $talkCollection['talks'];
+            foreach ($talks as $talk) {
+                // look up event's name & url_friendly_name from the API
+                if (!isset($eventInfo[$talk->getEventUri()])) {
+                    $event = $eventApi->getEvent($talk->getEventUri());
+                    if ($event) {
+                        $eventDb->save($event);
+                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
+                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
+                    }
+                }
+            }
+        }
+
+        $eventsCollection = $eventApi->queryEvents($user->getAttendedEventsUri() . '?verbose=yes&resultsperpage=5');
+        $events = false;
+        if (isset($eventsCollection['events'])) {
+            $events = $eventsCollection['events'];
+        }
+
+        $hostedEventsCollection = $eventApi->queryEvents($user->getHostedEventsUri() . '?verbose=yes&resultsperpage=5');
+        $hostedEvents = false;
+        if (isset($hostedEventsCollection['events'])) {
+            $hostedEvents = $hostedEventsCollection['events'];
+        }
+
+        $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 5);
+        foreach ($talkComments as $comment) {
+            if (isset($talkInfo[$comment->getTalkUri()])) {
+                continue;
+            }
+            $talk = $talkApi->getTalk($comment->getTalkUri());
+            if ($talk) {
+                $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
+                $talkDb->save($talk, $talk->getEventUri());
+
+                // look up event's name & url_friendly_name from the API
+                if (!isset($eventInfo[$talk->getEventUri()])) {
+                    $event = $eventApi->getEvent($talk->getEventUri());
+                    if ($event) {
+                        $eventDb->save($event);
+                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
+                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
+                    }
+                }
+            }
+        }
+
+        echo $this->render(
+            'User/profile.html.twig',
+            array(
+                'thisUser'         => $user,
+                'talks'            => $talks,
+                'eventInfo'        => $eventInfo,
+                'talkInfo'         => $talkInfo,
+                'events'           => $events,
+                'hostedEvents'     => $hostedEvents,
+                'talkComments'     => $talkComments,
             )
         );
     }

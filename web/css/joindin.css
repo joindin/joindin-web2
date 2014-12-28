@@ -345,3 +345,47 @@ form ul.errors {
   height: 60px;
   visibility: hidden;
 }
+
+.user-profile-panels h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.user-profile-panels section {
+    margin-bottom: 10px;
+}
+.user-profile-panels section .rating {
+    margin-top: 2px;
+    margin-left: 5px;
+}
+
+.user-profile-panels .panel-body {
+    padding-bottom: 5px;
+    min-height: 345px;
+}
+.user-profile-panels .more {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.user-profile img {
+    margin-right: 20px;
+}
+
+.user-profile img {
+    height: 100px;
+    width: 100px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.user-details {
+    color: #777;
+    font-weight: 400;
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+
+

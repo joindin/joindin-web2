@@ -21,7 +21,8 @@
         "twig/twig": "~1.12"
     },
     "require-dev": {
-        "symfony/form": "~2.2",
+        "symfony/finder": "~2.3",
+        "symfony/form": "~2.6",
         "symfony/http-kernel": "~2.2",
         "symfony/routing": "~2.2",
         "symfony/templating": "~2.1",
@@ -30,9 +31,11 @@
         "symfony/security": "~2.4",
         "symfony/stopwatch": "~2.2",
         "symfony/console": "~2.2",
+        "symfony/var-dumper": "~2.6",
         "symfony/expression-language": "~2.4"
     },
     "suggest": {
+        "symfony/finder": "",
         "symfony/form": "For using the FormExtension",
         "symfony/http-kernel": "For using the HttpKernelExtension",
         "symfony/routing": "For using the RoutingExtension",
@@ -41,6 +44,7 @@
         "symfony/yaml": "For using the YamlExtension",
         "symfony/security": "For using the SecurityExtension",
         "symfony/stopwatch": "For using the StopwatchExtension",
+        "symfony/var-dumper": "For using the DumpExtension",
         "symfony/expression-language": "For using the ExpressionExtension"
     },
     "autoload": {
@@ -50,7 +54,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.5-dev"
+            "dev-master": "2.6-dev"
         }
     }
 }

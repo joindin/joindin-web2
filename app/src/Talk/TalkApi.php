@@ -69,13 +69,18 @@ class TalkApi extends BaseApi
      * @param bool $verbose
      * @return Comment[]
      */
-    public function getComments($comment_uri, $verbose = false)
+    public function getComments($comment_uri, $verbose = false, $limitTo = null)
     {
+        $params = [];
         if ($verbose) {
-            $comment_uri = $comment_uri . '?verbose=yes';
+            $params['verbose'] = 'yes';
         }
 
-        $comments = (array)json_decode($this->apiGet($comment_uri));
+        if ($limitTo) {
+            $params['resultsperpage'] = $limitTo   ;
+        }
+        
+        $comments = (array)json_decode($this->apiGet($comment_uri, $params));
 
         $commentData = array();
 

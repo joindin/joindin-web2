@@ -117,4 +117,31 @@ class UserApi extends BaseApi
         }
         throw new \Exception($message);
     }
+
+    /**
+     * Retrieve a user
+     *
+     * @param  string $username User's username
+     * @return mixed            stdClass of user data or false
+     */
+    public function getUserByUsername($username)
+    {
+        $url = $this->baseApiUrl . '/v2.1/users';
+        $result = $this->apiGet($url, ['username' => $username, 'verbose'=>'yes']);
+
+        if ($result) {
+            $data = json_decode($result);
+            if ($data) {
+                if (isset($data->users)) {
+                    foreach ($data->users as $userData) {
+                        if (strtolower($userData->username) == strtolower($username)) {
+                            $user = new UserEntity($userData);
+                            return $user;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

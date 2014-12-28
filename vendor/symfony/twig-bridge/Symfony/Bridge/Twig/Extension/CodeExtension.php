@@ -11,10 +11,6 @@
 
 namespace Symfony\Bridge\Twig\Extension;
 
-if (!defined('ENT_SUBSTITUTE')) {
-    define('ENT_SUBSTITUTE', 8);
-}
-
 /**
  * Twig extension relate to PHP code and used by the profiler and the default exception templates.
  *
@@ -35,8 +31,8 @@ class CodeExtension extends \Twig_Extension
      */
     public function __construct($fileLinkFormat, $rootDir, $charset)
     {
-        $this->fileLinkFormat = empty($fileLinkFormat) ? ini_get('xdebug.file_link_format') : $fileLinkFormat;
-        $this->rootDir = str_replace('\\', '/', $rootDir).'/';
+        $this->fileLinkFormat = $fileLinkFormat ?: ini_get('xdebug.file_link_format') ?: get_cfg_var('xdebug.file_link_format');
+        $this->rootDir = str_replace('\\', '/', dirname($rootDir)).'/';
         $this->charset = $charset;
     }
 
@@ -96,7 +92,7 @@ class CodeExtension extends \Twig_Extension
                 $formattedValue = sprintf("<em>object</em>(<abbr title=\"%s\">%s</abbr>)", $item[1], $short);
             } elseif ('array' === $item[0]) {
                 $formattedValue = sprintf("<em>array</em>(%s)", is_array($item[1]) ? $this->formatArgs($item[1]) : $item[1]);
-            } elseif ('string'  === $item[0]) {
+            } elseif ('string' === $item[0]) {
                 $formattedValue = sprintf("'%s'", htmlspecialchars($item[1], ENT_QUOTES, $this->charset));
             } elseif ('null' === $item[0]) {
                 $formattedValue = '<em>null</em>';
@@ -156,27 +152,35 @@ class CodeExtension extends \Twig_Extension
     /**
      * Formats a file path.
      *
-     * @param string  $file An absolute file path
-     * @param int     $line The line number
-     * @param string  $text Use this text for the link rather than the file path
+     * @param string $file An absolute file path
+     * @param int    $line The line number
+     * @param string $text Use this text for the link rather than the file path
      *
      * @return string
      */
     public function formatFile($file, $line, $text = null)
     {
+        $file = trim($file);
+
         if (null === $text) {
-            $file = trim($file);
-            $text = $file;
+            $text = str_replace('\\', '/', $file);
             if (0 === strpos($text, $this->rootDir)) {
-                $text = str_replace($this->rootDir, '', str_replace('\\', '/', $text));
-                $text = sprintf('<abbr title="%s">kernel.root_dir</abbr>/%s', $this->rootDir, $text);
+                $text = substr($text, strlen($this->rootDir));
+                $text = explode('/', $text, 2);
+                $text = sprintf('<abbr title="%s%2$s">%s</abbr>%s', $this->rootDir, $text[0], isset($text[1]) ? '/'.$text[1] : '');
             }
         }
 
         $text = "$text at line $line";
 
         if (false !== $link = $this->getFileLink($file, $line)) {
-            return sprintf('<a href="%s" title="Click to open this file" class="file_link">%s</a>', htmlspecialchars($link, ENT_QUOTES | ENT_SUBSTITUTE, $this->charset), $text);
+            if (PHP_VERSION_ID >= 50400) {
+                $flags = ENT_QUOTES | ENT_SUBSTITUTE;
+            } else {
+                $flags = ENT_QUOTES;
+            }
+
+            return sprintf('<a href="%s" title="Click to open this file" class="file_link">%s</a>', htmlspecialchars($link, $flags, $this->charset), $text);
         }
 
         return $text;
@@ -185,8 +189,8 @@ class CodeExtension extends \Twig_Extension
     /**
      * Returns the link for a given file/line pair.
      *
-     * @param string  $file An absolute file path
-     * @param int     $line The line number
+     * @param string $file An absolute file path
+     * @param int    $line The line number
      *
      * @return string A link of false
      */

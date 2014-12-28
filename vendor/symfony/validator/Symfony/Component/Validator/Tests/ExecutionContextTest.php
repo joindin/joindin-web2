@@ -283,13 +283,13 @@ class ExecutionContextTest extends \PHPUnit_Framework_TestCase
         $constraints = new Collection(array(
             'shelves' => new All(array('constraints' => array(
                 new Collection(array(
-                    'name'  => new ConstraintA(),
+                    'name' => new ConstraintA(),
                     'books' => new All(array('constraints' => array(
-                        new ConstraintA()
-                    )))
-                ))
+                        new ConstraintA(),
+                    ))),
+                )),
             ))),
-            'name' => new ConstraintA()
+            'name' => new ConstraintA(),
         ));
         $data = array(
             'shelves' => array(
@@ -310,7 +310,7 @@ class ExecutionContextTest extends \PHPUnit_Framework_TestCase
             '[shelves][0][books][1]',
             '[shelves][1][books][0]',
             '[shelves][1][books][2]',
-            '[name]'
+            '[name]',
         );
 
         $visitor = new ValidationVisitor('Root', $this->metadataFactory, new ConstraintValidatorFactory(), $this->translator);

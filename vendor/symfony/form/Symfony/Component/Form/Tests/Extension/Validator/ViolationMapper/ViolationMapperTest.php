@@ -169,7 +169,7 @@ class ViolationMapperTest extends \PHPUnit_Framework_TestCase
         $child = $this->getForm('address', 'address', null, array(), false, false);
         // even though "street" is synchronized, it should not have any errors
         // due to its parent not being synchronized
-        $grandChild = $this->getForm('street' , 'street');
+        $grandChild = $this->getForm('street', 'street');
 
         $parent->add($child);
         $child->add($grandChild);
@@ -761,14 +761,14 @@ class ViolationMapperTest extends \PHPUnit_Framework_TestCase
             array(self::LEVEL_2, 'address', '[address]', 'street', '[office][street]', 'data[address][office][street].prop'),
 
             // Edge cases which must not occur
-            array(self::LEVEL_1, 'address', 'address', 'street', 'street', 'children[address][street]'),
-            array(self::LEVEL_1, 'address', 'address', 'street', 'street', 'children[address][street].prop'),
-            array(self::LEVEL_1, 'address', 'address', 'street', '[street]', 'children[address][street]'),
-            array(self::LEVEL_1, 'address', 'address', 'street', '[street]', 'children[address][street].prop'),
-            array(self::LEVEL_1, 'address', '[address]', 'street', 'street', 'children[address][street]'),
-            array(self::LEVEL_1, 'address', '[address]', 'street', 'street', 'children[address][street].prop'),
-            array(self::LEVEL_1, 'address', '[address]', 'street', '[street]', 'children[address][street]'),
-            array(self::LEVEL_1, 'address', '[address]', 'street', '[street]', 'children[address][street].prop'),
+            array(self::LEVEL_2, 'address', 'address', 'street', 'street', 'children[address][street]'),
+            array(self::LEVEL_2, 'address', 'address', 'street', 'street', 'children[address][street].prop'),
+            array(self::LEVEL_2, 'address', 'address', 'street', '[street]', 'children[address][street]'),
+            array(self::LEVEL_2, 'address', 'address', 'street', '[street]', 'children[address][street].prop'),
+            array(self::LEVEL_2, 'address', '[address]', 'street', 'street', 'children[address][street]'),
+            array(self::LEVEL_2, 'address', '[address]', 'street', 'street', 'children[address][street].prop'),
+            array(self::LEVEL_2, 'address', '[address]', 'street', '[street]', 'children[address][street]'),
+            array(self::LEVEL_2, 'address', '[address]', 'street', '[street]', 'children[address][street].prop'),
 
             array(self::LEVEL_0, 'address', 'person.address', 'street', 'street', 'children[person].children[address].children[street]'),
             array(self::LEVEL_0, 'address', 'person.address', 'street', 'street', 'children[person].children[address].data.street'),

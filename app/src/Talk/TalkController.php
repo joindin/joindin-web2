@@ -5,8 +5,8 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
-use Slim_Exception_Pass;
 use Exception;
+use Slim\Slim;
 
 class TalkController extends BaseController
 {
@@ -28,23 +28,22 @@ class TalkController extends BaseController
         $event = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
-            $this->render(
-                'Event/error_404.html.twig',
-                array(
-                    'message' => 'Event was not retrieved, perhaps the slug is invalid?',
-                ),
-                404
-            );
-            return;
+            return Slim::getInstance()->notFound();
         }
 
         $eventUri = $event->getUri();
 
         $talkDb = new TalkDb($cache);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
+        if (!$talkUri) {
+            return Slim::getInstance()->notFound();
+        }
 
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $talk = $talkApi->getTalk($talkUri, true);
+        if (!$talk) {
+            return Slim::getInstance()->notFound();
+        }
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true);
 
@@ -69,7 +68,7 @@ class TalkController extends BaseController
         $eventDb = new EventDb($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
-            throw new Slim_Exception_Pass('Page not found', 404);
+            return \Slim\Slim::getInstance()->notFound();
         }
 
         $this->application->redirect(

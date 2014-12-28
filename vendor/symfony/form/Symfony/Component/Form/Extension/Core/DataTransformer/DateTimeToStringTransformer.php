@@ -53,10 +53,10 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      *
      * @see \DateTime::format() for supported formats
      *
-     * @param string  $inputTimezone  The name of the input timezone
-     * @param string  $outputTimezone The name of the output timezone
-     * @param string  $format         The date format
-     * @param bool    $parseUsingPipe Whether to parse by appending a pipe "|" to the parse format
+     * @param string $inputTimezone  The name of the input timezone
+     * @param string $outputTimezone The name of the output timezone
+     * @param string $format         The date format
+     * @param bool   $parseUsingPipe Whether to parse by appending a pipe "|" to the parse format
      *
      * @throws UnexpectedTypeException if a timezone is not a string
      */
@@ -69,7 +69,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         // The pipe in the parser pattern only works as of PHP 5.3.7
         // See http://bugs.php.net/54316
         $this->parseUsingPipe = null === $parseUsingPipe
-            ? version_compare(phpversion(), '5.3.7', '>=')
+            ? PHP_VERSION_ID >= 50307
             : $parseUsingPipe;
 
         // See http://php.net/manual/en/datetime.createfromformat.php
@@ -161,16 +161,16 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
 
                 // Check which of the date parts are present in the pattern
                 preg_match(
-                    '/(' .
-                    '(?P<day>[djDl])|' .
-                    '(?P<month>[FMmn])|' .
-                    '(?P<year>[Yy])|' .
-                    '(?P<hour>[ghGH])|' .
-                    '(?P<minute>i)|' .
-                    '(?P<second>s)|' .
-                    '(?P<dayofyear>z)|' .
-                    '(?P<timestamp>U)|' .
-                    '[^djDlFMmnYyghGHiszU]' .
+                    '/('.
+                    '(?P<day>[djDl])|'.
+                    '(?P<month>[FMmn])|'.
+                    '(?P<year>[Yy])|'.
+                    '(?P<hour>[ghGH])|'.
+                    '(?P<minute>i)|'.
+                    '(?P<second>s)|'.
+                    '(?P<dayofyear>z)|'.
+                    '(?P<timestamp>U)|'.
+                    '[^djDlFMmnYyghGHiszU]'.
                     ')*/',
                     $this->parseFormat,
                     $matches

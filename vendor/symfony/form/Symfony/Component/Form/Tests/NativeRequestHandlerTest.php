@@ -82,7 +82,7 @@ class NativeRequestHandlerTest extends AbstractRequestHandlerTest
             'type' => '',
             'tmp_name' => '',
             'error' => UPLOAD_ERR_NO_FILE,
-            'size' => 0
+            'size' => 0,
         )));
 
         $form->expects($this->once())
@@ -203,7 +203,7 @@ class NativeRequestHandlerTest extends AbstractRequestHandlerTest
 
     protected function getRequestHandler()
     {
-        return new NativeRequestHandler();
+        return new NativeRequestHandler($this->serverParams);
     }
 
     protected function getMockFile()

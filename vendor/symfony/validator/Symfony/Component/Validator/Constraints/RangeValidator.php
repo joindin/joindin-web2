@@ -33,28 +33,48 @@ class RangeValidator extends ConstraintValidator
             return;
         }
 
-        if (!is_numeric($value)) {
-            $this->context->addViolation($constraint->invalidMessage, array(
-                '{{ value }}' => $value,
-            ));
+        if (!is_numeric($value) && !$value instanceof \DateTime && !$value instanceof \DateTimeInterface) {
+            $this->buildViolation($constraint->invalidMessage)
+                ->setParameter('{{ value }}', $this->formatValue($value, self::PRETTY_DATE))
+                ->setCode(Range::INVALID_VALUE_ERROR)
+                ->addViolation();
 
             return;
         }
 
-        if (null !== $constraint->max && $value > $constraint->max) {
-            $this->context->addViolation($constraint->maxMessage, array(
-                '{{ value }}' => $value,
-                '{{ limit }}' => $constraint->max,
-            ));
+        $min = $constraint->min;
+        $max = $constraint->max;
+
+        // Convert strings to DateTimes if comparing another DateTime
+        // This allows to compare with any date/time value supported by
+        // the DateTime constructor:
+        // http://php.net/manual/en/datetime.formats.php
+        if ($value instanceof \DateTime || $value instanceof \DateTimeInterface) {
+            if (is_string($min)) {
+                $min = new \DateTime($min);
+            }
+
+            if (is_string($max)) {
+                $max = new \DateTime($max);
+            }
+        }
+
+        if (null !== $constraint->max && $value > $max) {
+            $this->buildViolation($constraint->maxMessage)
+                ->setParameter('{{ value }}', $this->formatValue($value, self::PRETTY_DATE))
+                ->setParameter('{{ limit }}', $this->formatValue($max, self::PRETTY_DATE))
+                ->setCode(Range::BEYOND_RANGE_ERROR)
+                ->addViolation();
 
             return;
         }
 
-        if (null !== $constraint->min && $value < $constraint->min) {
-            $this->context->addViolation($constraint->minMessage, array(
-                '{{ value }}' => $value,
-                '{{ limit }}' => $constraint->min,
-            ));
+        if (null !== $constraint->min && $value < $min) {
+            $this->buildViolation($constraint->minMessage)
+                ->setParameter('{{ value }}', $this->formatValue($value, self::PRETTY_DATE))
+                ->setParameter('{{ limit }}', $this->formatValue($min, self::PRETTY_DATE))
+                ->setCode(Range::BELOW_RANGE_ERROR)
+                ->addViolation();
         }
     }
 }

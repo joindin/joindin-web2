@@ -47,13 +47,13 @@ class ArrayLoader implements LoaderInterface
      * This function takes an array by reference and will modify it
      *
      * @param array  &$messages The array that will be flattened
-     * @param array  $subnode Current subnode being parsed, used internally for recursive calls
-     * @param string $path    Current path being parsed, used internally for recursive calls
+     * @param array  $subnode   Current subnode being parsed, used internally for recursive calls
+     * @param string $path      Current path being parsed, used internally for recursive calls
      */
     private function flatten(array &$messages, array $subnode = null, $path = null)
     {
         if (null === $subnode) {
-            $subnode =& $messages;
+            $subnode = & $messages;
         }
         foreach ($subnode as $key => $value) {
             if (is_array($value)) {

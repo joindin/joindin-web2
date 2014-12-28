@@ -19,7 +19,9 @@ class FormUtil
     /**
      * This class should not be instantiated
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Returns whether the given data is empty.
@@ -28,7 +30,7 @@ class FormUtil
      * a form and needs to be consistent. PHP's keyword `empty` cannot
      * be used as it also considers 0 and "0" to be empty.
      *
-     * @param  mixed $data
+     * @param mixed $data
      *
      * @return bool
      */
