@@ -387,5 +387,13 @@ form ul.errors {
     line-height: 1;
 }
 
+.talk .rating {
+    float: left;
+}
+.talk .rating + section {
+    margin-left: 165px;
+}
 
-
+.talk section h3 {
+    margin-top: 0;
+}

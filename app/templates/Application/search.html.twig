@@ -1,0 +1,29 @@
+{% extends '/layout.html.twig' %}
+
+{% block body %}
+    <h2 class="title">Search results for keyword "{{ keyword }}"</h2>
+
+    <h3>Events</h3>
+    {% if events is empty %}
+        <p>Sorry, no events found</p>
+    {% else %}
+    <div>
+        {% for event in events.events %}
+            {% include 'Event/_common/summary.html.twig' %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h3>Talks</h3>
+    {% if talks is empty %}
+        <p>Sorry, no talks found</p>
+    {% else %}
+        <div>
+            {% for talk in talks.talks %}
+                {% include 'Talk/_common/summary.html.twig' %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% include '_common/pagination.html.twig' with {'pagination': events.pagination} %}
+{% endblock %}

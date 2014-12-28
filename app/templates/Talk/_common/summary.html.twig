@@ -1,0 +1,41 @@
+{%
+set talkUrl = urlFor(
+    'talk-quicklink', {"talkStub": talk.getStub}
+)
+%}
+
+<article class="talk row">
+    <div class="col-xs-12 title">
+        <div class="rating">
+            {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
+        </div>
+        <section>
+            <h3 class="header">
+                <a href="{{ talkUrl }}">{{ talk.getTitle }}</a>
+            </h3>
+
+            <p class="meta">
+                {# talk.getStartDateTime()|date('j F Y \\a\\t H:i', event.getFullTimezone) #}
+
+                {# TODO event name & link #}
+
+                |
+
+                <a href="{{ talkUrl }}#comments">
+                    {{ talk.getCommentCount}}
+                    {% if talk.getCommentCount == 1 %}
+                        comment
+                    {% else %}
+                        comments
+                    {% endif %}
+                </a>
+
+                |
+
+                {% for speaker in talk.getSpeakers %}
+                    {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        </section>
+    </div>
+</article>
