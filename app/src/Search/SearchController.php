@@ -98,6 +98,7 @@ class SearchController extends BaseController
         $events = array();
         $eventInfo = array();
         $talks = array();
+        $eventInfo = array();
 
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -107,7 +108,7 @@ class SearchController extends BaseController
             $events = $this->searchEventsByTitleAndTag($page, $keyword);
             $talks = $this->searchTalksByTitle($page, $keyword);
         }
-
+        
         $this->render(
             'Application/search.html.twig',
             array(

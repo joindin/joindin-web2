@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-sm-6">
             <h3>Events</h3>
-            {% if events is empty %}
+            {% if events.events is empty %}
                 <p>Sorry, no events found</p>
             {% else %}
                 <div>
@@ -19,7 +19,7 @@
         </div>
         <div class="col-sm-6">
             <h3>Talks</h3>
-            {% if talks is empty %}
+            {% if talks.talks is empty %}
                 <p>Sorry, no talks found</p>
             {% else %}
                 <div>
