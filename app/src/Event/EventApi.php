@@ -98,7 +98,9 @@ class EventApi extends BaseApi
 
         $talk_list = (array)json_decode($this->apiGet($event_uri, $params));
         if (isset($talk_list['events']) && isset($talk_list['events'][0])) {
-            return new EventEntity($talk_list['events'][0]);
+            $event = new EventEntity($talk_list['events'][0]);
+            $this->eventDb->save($event);
+            return $event;
         }
         
         return false;
