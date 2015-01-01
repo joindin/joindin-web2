@@ -235,17 +235,9 @@ class UserController extends BaseController
     public function profile($username)
     {
         $userApi = $this->getUserApi();
-        $userDb = new UserDb($this->getCache());
-
-        $userInfo = $userDb->load('username', $username);
-        if ($userInfo) {
-            $user = $userApi->getUser($userInfo['uri']);
-        } else {
-            $user = $userApi->getUserByUsername($username);
-            if (!$user) {
-                Slim::getInstance()->notFound();
-            }
-            $userDb->save($user);
+        $user = $userApi->getUserByUsername($username);
+        if (!$user) {
+            Slim::getInstance()->notFound();
         }
 
         $cache = $this->getCache();
