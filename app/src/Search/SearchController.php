@@ -99,6 +99,7 @@ class SearchController extends BaseController
         $eventInfo = array();
         $talks = array();
         $eventInfo = array();
+        $pagination = array();
 
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -107,16 +108,20 @@ class SearchController extends BaseController
         if (!empty($keyword)) {
             $events = $this->searchEventsByTitleAndTag($page, $keyword);
             $talks = $this->searchTalksByTitle($page, $keyword);
+
+            // combine pagination data for events and talks
+            $pagination = $this->combinePaginationData([$events['pagination'], $talks['pagination']]);
         }
         
         $this->render(
             'Application/search.html.twig',
             array(
-                'events'    => $events,
-                'eventInfo' => $eventInfo,
-                'talks'     => $talks,
-                'page'      => $page,
-                'keyword'   => $keyword
+                'events'     => $events,
+                'eventInfo'  => $eventInfo,
+                'talks'      => $talks,
+                'page'       => $page,
+                'pagination' => $pagination,
+                'keyword'    => $keyword
             )
         );
     }
@@ -198,5 +203,40 @@ class SearchController extends BaseController
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
 
         return $talkApi;
+    }
+
+    /**
+     * @param array $paginations
+     *
+     * @return array
+     */
+    private function combinePaginationData(array $paginations)
+    {
+        $result = [
+            'count' => 0,
+            'total' => 0,
+        ];
+
+        foreach ($paginations as $pagination) {
+            $result['count'] = max(
+                $result['count'],
+                $pagination->count
+            );
+
+            $result['total'] = max(
+                $result['total'],
+                $pagination->total
+            );
+
+            if (isset($pagination->prev_page)) {
+                $result['prev_page'] = $pagination->prev_page;
+            }
+
+            if (isset($pagination->next_page)) {
+                $result['next_page'] = $pagination->next_page;
+            }
+        }
+
+        return $result;
     }
 }

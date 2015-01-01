@@ -8,7 +8,11 @@
         <div class="col-sm-6">
             <h3>Events</h3>
             {% if events.events is empty %}
-                <p>Sorry, no events found</p>
+                {% if page > 1 %}
+                    <p>No more events found</p>
+                {% else %}
+                    <p>Sorry, no events found</p>
+                {% endif %}
             {% else %}
                 <div>
                     {% for event in events.events %}
@@ -20,7 +24,11 @@
         <div class="col-sm-6">
             <h3>Talks</h3>
             {% if talks.talks is empty %}
-                <p>Sorry, no talks found</p>
+                {% if page > 1 %}
+                    <p>No more talks found</p>
+                {% else %}
+                    <p>Sorry, no talks found</p>
+                {% endif %}
             {% else %}
                 <div>
                     {% for talk in talks.talks %}
@@ -32,5 +40,5 @@
         </div>
     </div>
 
-    {% include '_common/pagination.html.twig' with {'pagination': events.pagination} %}
+    {% include '_common/pagination.html.twig' with {'pagination': pagination} %}
 {% endblock %}
