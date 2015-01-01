@@ -54,18 +54,14 @@ class EventApi extends BaseApi
      */
     public function getByFriendlyUrl($friendlyUrl)
     {
-        $event = $this->eventDb->load('url_friendly_name', $friendlyUrl);
+        $item = $this->eventDb->load('url_friendly_name', $friendlyUrl);
 
-        if (!$event) {
+        if (!$item) {
             // don't throw an exception, Slim eats them
             return false;
         }
 
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
-
-        return $event;
-
+        return $this->getEvent($item['uri']);
     }
 
     /**
@@ -77,16 +73,13 @@ class EventApi extends BaseApi
      */
     public function getByStub($stub)
     {
-        $event = $this->eventDb->load('stub', $stub);
+        $item = $this->eventDb->load('stub', $stub);
 
-        if (!$event) {
+        if (!$item) {
             return false;
         }
 
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
-
-        return $event;
+        return $this->getEvent($item['uri']);
     }
 
     /**
