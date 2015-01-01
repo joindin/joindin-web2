@@ -243,8 +243,7 @@ class UserController extends BaseController
         $cache = $this->getCache();
         $talkDb = new TalkDb($cache);
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $eventDb = new EventDb($cache);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
+        $eventApi = $this->getEventApi();
 
         $eventInfo = array(); // look up an event's name and url_friendly_name from its uri
         $talkInfo = array(); // look up a talk's url_friendly_talk_title from its uri
@@ -258,7 +257,6 @@ class UserController extends BaseController
                 if (!isset($eventInfo[$talk->getEventUri()])) {
                     $event = $eventApi->getEvent($talk->getEventUri());
                     if ($event) {
-                        $eventDb->save($event);
                         $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
                         $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
                     }
@@ -292,7 +290,6 @@ class UserController extends BaseController
                 if (!isset($eventInfo[$talk->getEventUri()])) {
                     $event = $eventApi->getEvent($talk->getEventUri());
                     if ($event) {
-                        $eventDb->save($event);
                         $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
                         $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
                     }
@@ -330,5 +327,14 @@ class UserController extends BaseController
     {
         $cache = $this->getCache();
         return new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+    }
+
+    /**
+     * @return EventApi
+     */
+    private function getEventApi()
+    {
+        $eventDb = new EventDb($this->getCache());
+        return new EventApi($this->cfg, $this->accessToken, $eventDb);
     }
 }
