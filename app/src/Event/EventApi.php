@@ -236,23 +236,11 @@ class EventApi extends BaseApi
             $collectionData['events'][] = $thisEvent;
 
             // save the URL so we can look up by it
-            $this->saveEventUrl($thisEvent);
+            $this->eventDb->save($event);
         }
         $collectionData['pagination'] = $meta;
 
         return $collectionData;
-    }
-
-    /**
-     * Take an event and save the url_friendly_name and the API URL for that
-     *
-     * @param EventEntity $event The event to take details from
-     *
-     * @return void
-     */
-    private function saveEventUrl(EventEntity $event)
-    {
-        $this->eventDb->save($event);
     }
 
     /**
