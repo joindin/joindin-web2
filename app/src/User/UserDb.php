@@ -23,5 +23,6 @@ class UserDb extends BaseDb
         }
 
         $this->cache->save($this->keyName, $data, 'uri', $user->getUri());
+        $this->cache->save($this->keyName, $data, 'username', $user->getUsername());
     }
 }
