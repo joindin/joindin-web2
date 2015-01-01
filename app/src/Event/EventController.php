@@ -43,7 +43,7 @@ class EventController extends BaseController
         $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
-        $events = $eventApi->getCollection(
+        $events = $eventApi->getFilteredCollection(
             $this->itemsPerPage,
             $start,
             'upcoming'
@@ -66,7 +66,7 @@ class EventController extends BaseController
         $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
-        $events = $eventApi->getCollection(
+        $events = $eventApi->getFilteredCollection(
             $this->itemsPerPage,
             $start,
             'cfp',

@@ -26,8 +26,8 @@ class ApplicationController extends BaseController
 
         $cache = new CacheService($keyPrefix);
         $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
-        $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
-        $cfp_events = $event_collection->getCollection(10, 0, 'cfp', true);
+        $hot_events = $event_collection->getFilteredCollection($perPage, $start, 'hot');
+        $cfp_events = $event_collection->getFilteredCollection(10, 0, 'cfp', true);
 
         $this->render(
             'Application/index.html.twig',

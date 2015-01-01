@@ -18,7 +18,7 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Get the latest events
+     * Get a paginated list of events, optionally applying a filter
      *
      * @param integer $limit       Number of events to get per page
      * @param integer $start       Start value for pagination
@@ -28,7 +28,7 @@ class EventApi extends BaseApi
      *
      * @return EventEntity model
      */
-    public function getCollection($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
+    public function getFilteredCollection($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
         $url = $this->baseApiUrl . '/v2.1/events';
         $queryParams['resultsperpage'] = $limit;
