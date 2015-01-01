@@ -129,9 +129,9 @@ class UserApi extends BaseApi
     public function getUserByUsername($username)
     {
         // do we already know this username's API URL?
-        $userUri = $this->userDb->load('username', $username);
-        if ($userUri) {
-            return $this->getUser($userUri['uri']);
+        $userInfo = $this->userDb->load('username', $username);
+        if ($userInfo) {
+            return $this->getUser($userInfo['uri']);
         }
 
         // fetch via filtering the users collection
