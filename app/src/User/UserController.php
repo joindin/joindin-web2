@@ -266,13 +266,13 @@ class UserController extends BaseController
             }
         }
 
-        $eventsCollection = $eventApi->queryEvents($user->getAttendedEventsUri() . '?verbose=yes&resultsperpage=5');
+        $eventsCollection = $eventApi->getCollection($user->getAttendedEventsUri() . '?verbose=yes&resultsperpage=5');
         $events = false;
         if (isset($eventsCollection['events'])) {
             $events = $eventsCollection['events'];
         }
 
-        $hostedEventsCollection = $eventApi->queryEvents($user->getHostedEventsUri() . '?verbose=yes&resultsperpage=5');
+        $hostedEventsCollection = $eventApi->getCollection($user->getHostedEventsUri() . '?verbose=yes&resultsperpage=5');
         $hostedEvents = false;
         if (isset($hostedEventsCollection['events'])) {
             $hostedEvents = $hostedEventsCollection['events'];

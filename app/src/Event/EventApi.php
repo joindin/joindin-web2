@@ -42,7 +42,7 @@ class EventApi extends BaseApi
             $queryParams['verbose'] = 'yes';
         }
 
-        return $this->queryEvents($url, $queryParams);
+        return $this->getCollection($url, $queryParams);
     }
 
     /**
@@ -204,7 +204,7 @@ class EventApi extends BaseApi
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 201) {
-            $response = $this->queryEvents($headers['location']);
+            $response = $this->getCollection($headers['location']);
             return current($response['events']);
         }
         if ($status == 202) {
@@ -225,9 +225,9 @@ class EventApi extends BaseApi
      *
      * @return array
      */
-    public function queryEvents($url, array $queryParams = [])
+    public function getCollection($uri, array $queryParams = array())
     {
-        $events = (array)json_decode($this->apiGet($url, $queryParams));
+        $events = (array)json_decode($this->apiGet($uri, $queryParams));
         $meta   = array_pop($events);
 
         $collectionData = array();
