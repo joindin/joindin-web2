@@ -62,9 +62,7 @@ class UserController extends BaseController
                 $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $keyPrefix = $this->cfg['redisKeyPrefix'];
-                $cache = new CacheService($keyPrefix);
-                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+                $userApi = $this->getUserApi();
                 $user = $userApi->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;
@@ -131,9 +129,7 @@ class UserController extends BaseController
     protected function registerUserUsingForm($form)
     {
         $values = $form->getData();
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+        $userApi = $this->getUserApi();
 
         $result = false;
         try {
@@ -174,9 +170,7 @@ class UserController extends BaseController
         $request = $this->application->request();
 
         $token = $request->get('token');
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+        $userApi = $this->getUserApi();
 
         $result = false;
         try {
@@ -206,9 +200,7 @@ class UserController extends BaseController
                 $values = $form->getData();
                 $email = $values['email'];
 
-                $keyPrefix = $this->cfg['redisKeyPrefix'];
-                $cache = new CacheService($keyPrefix);
-                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+                $userApi = $this->getUserApi();
 
                 $result = false;
                 try {
@@ -242,10 +234,8 @@ class UserController extends BaseController
      */
     public function profile($username)
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $userDb = new UserDb($cache);
-        $userApi = new UserApi($this->cfg, $this->accessToken, $userDb);
+        $userApi = $this->getUserApi();
+        $userDb = new UserDb($this->getCache());
 
         $userInfo = $userDb->load('username', $username);
         if ($userInfo) {
@@ -258,6 +248,7 @@ class UserController extends BaseController
             $userDb->save($user);
         }
 
+        $cache = $this->getCache();
         $talkDb = new TalkDb($cache);
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $eventDb = new EventDb($cache);
@@ -329,5 +320,23 @@ class UserController extends BaseController
                 'talkComments'     => $talkComments,
             )
         );
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $cache = $this->getCache();
+        return new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
     }
 }
