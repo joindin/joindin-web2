@@ -28,6 +28,8 @@ class UserApi extends BaseApi
                 if (isset($data->users) && isset($data->users[0])) {
                     $user = new UserEntity($data->users[0]);
 
+                    $this->userDb->save($user);
+
                     return $user;
                 }
 
@@ -136,6 +138,7 @@ class UserApi extends BaseApi
                     foreach ($data->users as $userData) {
                         if (strtolower($userData->username) == strtolower($username)) {
                             $user = new UserEntity($userData);
+                            $this->userDb->save($user);
                             return $user;
                         }
                     }
