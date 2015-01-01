@@ -7,7 +7,7 @@ class UserDb extends BaseDb
 {
     protected $keyName = 'users';
 
-    public function save($user)
+    public function save(UserEntity $user)
     {
         $data = array(
             'uri'  => $user->getUri(),
