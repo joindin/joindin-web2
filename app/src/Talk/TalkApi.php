@@ -35,10 +35,10 @@ class TalkApi extends BaseApi
         );
 
         $collectionData = array();
-        foreach ($talks['talks'] as $talk) {
-            $talkObject = new TalkEntity($talk);
-            $collectionData['talks'][] = $talkObject;
-            $this->talkDb->save($talkObject);
+        foreach ($talks['talks'] as $item) {
+            $talk = new TalkEntity($item);
+            $collectionData['talks'][] = $talk;
+            $this->talkDb->save($talk);
         }
 
         return $collectionData;
@@ -57,9 +57,9 @@ class TalkApi extends BaseApi
             $talk_uri = $talk_uri . '?verbose=yes';
         }
 
-        $talk = (array)json_decode($this->apiGet($talk_uri));
+        $collection = (array)json_decode($this->apiGet($talk_uri));
 
-        return new TalkEntity($talk['talks'][0]);
+        return new TalkEntity($collection['talks'][0]);
     }
 
     /**
