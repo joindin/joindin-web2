@@ -247,9 +247,9 @@ class UserController extends BaseController
         $userDb = new UserDb($cache);
         $userApi = new UserApi($this->cfg, $this->accessToken, $userDb);
 
-        $userUri = $userDb->load('username', $username);
-        if ($userUri) {
-            $user = $userApi->getUser($userUri);
+        $userInfo = $userDb->load('username', $username);
+        if ($userInfo) {
+            $user = $userApi->getUser($userInfo['uri']);
         } else {
             $user = $userApi->getUserByUsername($username);
             if (!$user) {
