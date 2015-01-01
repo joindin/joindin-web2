@@ -231,9 +231,9 @@ class EventApi extends BaseApi
         $meta   = array_pop($events);
 
         $collectionData = array();
-        foreach ($events['events'] as $event) {
-            $thisEvent = new EventEntity($event);
-            $collectionData['events'][] = $thisEvent;
+        foreach ($events['events'] as $item) {
+            $event = new EventEntity($item);
+            $collectionData['events'][] = $event;
 
             // save the URL so we can look up by it
             $this->eventDb->save($event);
