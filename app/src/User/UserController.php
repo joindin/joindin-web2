@@ -241,8 +241,7 @@ class UserController extends BaseController
         }
 
         $cache = $this->getCache();
-        $talkDb = new TalkDb($cache);
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        $talkApi = $this->getTalkApi();
         $eventApi = $this->getEventApi();
 
         $eventInfo = array(); // look up an event's name and url_friendly_name from its uri
@@ -284,7 +283,6 @@ class UserController extends BaseController
             $talk = $talkApi->getTalk($comment->getTalkUri());
             if ($talk) {
                 $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
-                $talkDb->save($talk, $talk->getEventUri());
 
                 // look up event's name & url_friendly_name from the API
                 if (!isset($eventInfo[$talk->getEventUri()])) {
@@ -327,6 +325,15 @@ class UserController extends BaseController
     {
         $cache = $this->getCache();
         return new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+    }
+
+    /**
+     * @return TalkApi
+     */
+    private function getTalkApi()
+    {
+        $talkDb = new TalkDb($this->getCache());
+        return new TalkApi($this->cfg, $this->accessToken, $talkDb);
     }
 
     /**
