@@ -164,8 +164,7 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
+        $cache = $this->getCache();
         $talkDb = new TalkDb($cache);
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
         $scheduler = new EventScheduler($talkApi);
@@ -319,8 +318,7 @@ class EventController extends BaseController
 
     protected function getEventApi()
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
+        $cache = $this->getCache();
         $eventDb = new EventDb($cache);
         $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
 
@@ -444,13 +442,19 @@ class EventController extends BaseController
     }
 
     /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
      * @return TalkDb
      */
     private function getTalkDb()
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-
-        return new TalkDb($cache);
+        return new TalkDb($this->getCache());
     }
 }
