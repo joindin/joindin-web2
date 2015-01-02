@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator;
 use Talk\TalkDb;
 use Talk\TalkApi;
+use User\UserDb;
+use User\UserApi;
 use Exception;
 use Slim\Slim;
 
@@ -170,7 +172,30 @@ class EventController extends BaseController
 
         $schedule = $scheduler->getScheduleData($event);
 
-        $this->render('Event/schedule.html.twig', array('event' => $event, 'eventDays' => $schedule));
+        // get list of usernames
+        $userApi = $this->getUserApi();
+        $usernames = [];
+        foreach ($schedule as $day) {
+            foreach ($day->getTalks() as $timeslot) {
+                foreach ($timeslot as $talk) {
+                    foreach ($talk->getSpeakers() as $speakerInfo) {
+                        if (isset($speakerInfo->speaker_uri)) {
+                            $name = $userApi->getUsername($speakerInfo->speaker_uri);
+                            $usernames[$speakerInfo->speaker_uri] = $name;
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->render(
+            'Event/schedule.html.twig',
+            [
+                'event' => $event,
+                'eventDays' => $schedule,
+                'usernames' => $usernames
+            ]
+        );
     }
 
     public function quicklink($stub)
@@ -461,5 +486,14 @@ class EventController extends BaseController
     private function getTalkApi()
     {
         return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb());
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
 }

@@ -7,7 +7,7 @@
         {% endif %}
 
         {% if speaker.speaker_uri %}
-            <a href="{{ speaker.speaker_uri }}">{{ speaker.speaker_name }}</a>{{comma}}
+            <a href="{{ urlFor('user-profile', {'username': usernames[speaker.speaker_uri]}) }}">{{ speaker.speaker_name }}</a>{{comma}}
         {% else %}
             {{ speaker.speaker_name }}{{comma}}
         {% endif %}
