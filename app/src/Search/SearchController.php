@@ -3,6 +3,7 @@ namespace Search;
 
 use Application\BaseController;
 use Application\CacheService;
+use Event\EventApi;
 use Event\EventDb;
 
 /**
@@ -19,12 +20,17 @@ class SearchController extends BaseController
     protected $limit;
 
     /**
+     * @var integer The number of search results to show per page
+     */
+    protected $itemsPerPage = 10;
+
+    /**
      * Only one route for
      * @param \Slim $app
      */
     protected function defineRoutes(\Slim\Slim $app)
     {
-        $app->get('/search/events', array($this, 'searchEvents'));
+        $app->get('/search/events', array($this, 'searchEvents'))->name("search-events");
     }
 
     /**
@@ -39,6 +45,17 @@ class SearchController extends BaseController
     }
 
     /**
+     * Sanitize a tag
+     *
+     * @param string $tag
+     * @return bool
+     */
+    protected function sanitizeTag($tag)
+    {
+        return preg_replace("/[^A-Za-z0-9]/", '', $tag);
+    }
+
+    /**
      * Searches events on a kewyord
      *
      * Will return a list of $limit events
@@ -48,27 +65,34 @@ class SearchController extends BaseController
     {
 
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
+        $tag = $this->sanitizeTag($this->application->request()->get('tag'));
         $events = array();
 
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
 
+        $apiQueryParams = array();
+
         if (!empty($keyword)) {
-            $perPage = 10;
-            $start = ($page -1) * $perPage;
+            $apiQueryParams['title'] = $keyword;
+        }
 
-            $event_collection = new SearchApi($this->cfg, $this->accessToken);
-            $events = $event_collection->getEventCollection($keyword, $perPage, $start);
+        if (!empty($tag)) {
+            $apiQueryParams['tags'] = $tag;
+        }
 
-            if (isset($events['events'])) {
-                // Save to our data store
-                $cache = new CacheService($this->cfg['redisKeyPrefix']);
-                $eventDb = new EventDb($cache);
-                foreach ($events['events'] as $event) {
-                    $eventDb->save($event);
-                }
-            }
+        if (!empty($apiQueryParams)) {
+            $start = ($page -1) * $this->itemsPerPage;
+
+            $eventApi = $this->getEventApi();
+            $events = $eventApi->getCollection(
+                $this->itemsPerPage,
+                $start,
+                null,
+                false,
+                $apiQueryParams
+            );
         }
 
         $this->render(
@@ -76,8 +100,22 @@ class SearchController extends BaseController
             array(
                 'events'    => $events,
                 'page'      => $page,
-                'keyword'   => $keyword
+                'keyword'   => $keyword,
+                'tag'       => $tag
             )
         );
+    }
+
+    /**
+     * @return EventApi
+     */
+    protected function getEventApi()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $eventDb = new EventDb($cache);
+        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
+
+        return $eventApi;
     }
 }
