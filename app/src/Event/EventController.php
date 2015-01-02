@@ -165,8 +165,7 @@ class EventController extends BaseController
         }
 
         $cache = $this->getCache();
-        $talkDb = new TalkDb($cache);
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        $talkApi = $this->getTalkApi();
         $scheduler = new EventScheduler($talkApi);
 
         $schedule = $scheduler->getScheduleData($event);
@@ -422,8 +421,7 @@ class EventController extends BaseController
      */
     private function getTalkSlugsFromApi(EventEntity $event)
     {
-        $talkDb  = $this->getTalkDb();
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        $talkApi = $this->getTalkApi();
 
         // Fetch talks from the API
         $talks = $talkApi->getCollection(
@@ -433,7 +431,6 @@ class EventController extends BaseController
 
         /** @var \Talk\TalkEntity $talk */
         foreach ($talks['talks'] as $talk) {
-            $talkDb->save($talk); // Save to cache so we will get a hit next time
 
             $slugs[$talk->getApiUri()] = $talk->getUrlFriendlyTalkTitle();
         }
@@ -456,5 +453,13 @@ class EventController extends BaseController
     private function getTalkDb()
     {
         return new TalkDb($this->getCache());
+    }
+
+    /**
+     * @return TalkApi
+     */
+    private function getTalkApi()
+    {
+        return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb());
     }
 }
