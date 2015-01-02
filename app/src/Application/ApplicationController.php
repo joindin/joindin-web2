@@ -22,10 +22,7 @@ class ApplicationController extends BaseController
         $perPage = 6;
         $start = ($page -1) * $perPage;
 
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-
-        $cache = new CacheService($keyPrefix);
-        $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
+        $event_collection = $this->getEventApi();
         $hot_events = $event_collection->getFilteredCollection($perPage, $start, 'hot');
         $cfp_events = $event_collection->getFilteredCollection(10, 0, 'cfp', true);
 
@@ -50,5 +47,23 @@ class ApplicationController extends BaseController
     public function about()
     {
         $this->render('Application/about.html.twig');
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
+     * @return EventApi
+     */
+    private function getEventApi()
+    {
+        $eventDb = new EventDb($this->getCache());
+        return new EventApi($this->cfg, $this->accessToken, $eventDb);
     }
 }
