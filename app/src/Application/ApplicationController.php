@@ -23,8 +23,8 @@ class ApplicationController extends BaseController
         $start = ($page -1) * $perPage;
 
         $eventApi = $this->getEventApi();
-        $hotEvents = $eventApi->getFilteredCollection($perPage, $start, 'hot');
-        $cfpEvents = $eventApi->getFilteredCollection(10, 0, 'cfp', true);
+        $hotEvents = $eventApi->getEvents($perPage, $start, 'hot');
+        $cfpEvents = $eventApi->getEvents(10, 0, 'cfp', true);
 
         $this->render(
             'Application/index.html.twig',

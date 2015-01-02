@@ -28,7 +28,7 @@ class EventApi extends BaseApi
      *
      * @return EventEntity model
      */
-    public function getFilteredCollection($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
+    public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
         $url = $this->baseApiUrl . '/v2.1/events';
         $queryParams['resultsperpage'] = $limit;
