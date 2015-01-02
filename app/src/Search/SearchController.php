@@ -86,7 +86,7 @@ class SearchController extends BaseController
             $start = ($page -1) * $this->itemsPerPage;
 
             $eventApi = $this->getEventApi();
-            $events = $eventApi->getCollection(
+            $events = $eventApi->getEvents(
                 $this->itemsPerPage,
                 $start,
                 null,
