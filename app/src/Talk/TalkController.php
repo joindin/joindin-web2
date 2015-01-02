@@ -28,17 +28,8 @@ class TalkController extends BaseController
             return Slim::getInstance()->notFound();
         }
 
-        $eventUri = $event->getUri();
-
-        $cache = $this->getCache();
-        $talkDb = new TalkDb($cache);
-        $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
-        if (!$talkUri) {
-            return Slim::getInstance()->notFound();
-        }
-
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $talk = $talkApi->getTalk($talkUri, true);
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if (!$talk) {
             return Slim::getInstance()->notFound();
         }
@@ -91,14 +82,9 @@ class TalkController extends BaseController
 
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($eventSlug);
-        $eventUri = $event->getUri();
 
-        $cache = $this->getCache();
-        $talkDb = new TalkDb($cache);
-        $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
-
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $talk = $talkApi->getTalk($talkUri, true);
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if ($talk) {
             try {
                 $talkApi->addComment($talk, $rating, $comment);
@@ -138,5 +124,14 @@ class TalkController extends BaseController
     {
         $eventDb = new EventDb($this->getCache());
         return new EventApi($this->cfg, $this->accessToken, $eventDb);
+    }
+
+    /**
+     * @return TalkApi
+     */
+    private function getTalkApi()
+    {
+        $talkDb = new TalkDb($this->getCache());
+        return new TalkApi($this->cfg, $this->accessToken, $talkDb);
     }
 }

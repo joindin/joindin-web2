@@ -45,6 +45,23 @@ class TalkApi extends BaseApi
     }
 
     /**
+     * Gets a talk when we know the slug and event's uri.
+     *
+     * @param  string $talkSlug
+     * @param  string $eventUri
+     * @return TalkEntity
+     */
+    public function getTalkBySlug($talkSlug, $eventUri)
+    {
+        $talkUri = $this->talkDb->getUriFor($talkSlug, $eventUri);
+        if (!$talkUri) {
+            return false;
+        }
+
+        return $this->getTalk($talkUri, true);
+    }
+
+    /**
      * Gets talk data from api on single talk
      *
      * @param string $talk_uri  API talk uri
