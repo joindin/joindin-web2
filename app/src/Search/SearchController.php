@@ -45,6 +45,17 @@ class SearchController extends BaseController
     }
 
     /**
+     * Sanitize a tag
+     *
+     * @param string $tag
+     * @return bool
+     */
+    protected function sanitizeTag($tag)
+    {
+        return preg_replace("/[^A-Za-z0-9]/", '', $tag);
+    }
+
+    /**
      * Searches events on a kewyord
      *
      * Will return a list of $limit events
@@ -54,7 +65,7 @@ class SearchController extends BaseController
     {
 
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
-        $tag = $this->sanitizeKeyword($this->application->request()->get('tag'));
+        $tag = $this->sanitizeTag($this->application->request()->get('tag'));
         $events = array();
 
         $page = ((int)$this->application->request()->get('page') === 0)
