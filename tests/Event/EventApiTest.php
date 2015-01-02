@@ -22,7 +22,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testDefaultGetCollectionParametersAreSet()
+    public function testDefaultgetEventsParametersAreSet()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -36,10 +36,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection();
+        $mockEvent->getEvents();
     }
 
-    public function testGetCollectionWithLimitSetsParamsCorrectly()
+    public function testgetEventsWithLimitSetsParamsCorrectly()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -53,10 +53,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection(75);
+        $mockEvent->getEvents(75);
     }
 
-    public function testGetCollectionWithPageValueSetsParamsCorrectly()
+    public function testgetEventsWithPageValueSetsParamsCorrectly()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -70,10 +70,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection(32, 6);
+        $mockEvent->getEvents(32, 6);
     }
 
-    public function testGetCollectionWithFilterSetsAllParamsCorrectly()
+    public function testgetEventsWithFilterSetsAllParamsCorrectly()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -87,10 +87,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection(16, 3, 'samoflange');
+        $mockEvent->getEvents(16, 3, 'samoflange');
     }
 
-    public function testGetCollectionWithVerboseSetsAllParamsCorrectly()
+    public function testgetEventsWithVerboseSetsAllParamsCorrectly()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -104,10 +104,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection(16, 3, null, true);
+        $mockEvent->getEvents(16, 3, null, true);
     }
 
-    public function testGetCollectionWithQueryParamsPassesThemThroughCorrectly()
+    public function testgetEventsWithQueryParamsPassesThemThroughCorrectly()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -121,7 +121,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection(16, 3, null, false, array('title' => 'test', 'tags' => 'php'));
+        $mockEvent->getEvents(16, 3, null, false, array('title' => 'test', 'tags' => 'php'));
     }
 
     /**
