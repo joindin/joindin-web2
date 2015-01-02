@@ -21,10 +21,7 @@ class TalkController extends BaseController
 
     public function index($eventSlug, $talkSlug)
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-
-        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
+        $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
@@ -33,6 +30,7 @@ class TalkController extends BaseController
 
         $eventUri = $event->getUri();
 
+        $cache = $this->getCache();
         $talkDb = new TalkDb($cache);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
         if (!$talkUri) {
@@ -60,8 +58,7 @@ class TalkController extends BaseController
 
     public function quick($talkStub)
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
+        $cache = $this->getCache();
         $talkDb = new TalkDb($cache);
         $talk = $talkDb->load('stub', $talkStub);
 
@@ -92,12 +89,11 @@ class TalkController extends BaseController
             $this->application->redirect($url);
         }
 
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
+        $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($eventSlug);
         $eventUri = $event->getUri();
 
+        $cache = $this->getCache();
         $talkDb = new TalkDb($cache);
         $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
 
@@ -124,5 +120,23 @@ class TalkController extends BaseController
         $this->application->flash('message', 'Thank you for your comment.');
         $url .= '#add-comment';
         $this->application->redirect($url);
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
+     * @return EventApi
+     */
+    private function getEventApi()
+    {
+        $eventDb = new EventDb($this->getCache());
+        return new EventApi($this->cfg, $this->accessToken, $eventDb);
     }
 }
