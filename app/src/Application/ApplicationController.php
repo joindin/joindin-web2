@@ -22,15 +22,15 @@ class ApplicationController extends BaseController
         $perPage = 6;
         $start = ($page -1) * $perPage;
 
-        $event_collection = $this->getEventApi();
-        $hot_events = $event_collection->getFilteredCollection($perPage, $start, 'hot');
-        $cfp_events = $event_collection->getFilteredCollection(10, 0, 'cfp', true);
+        $eventApi = $this->getEventApi();
+        $hotEvents = $eventApi->getFilteredCollection($perPage, $start, 'hot');
+        $cfpEvents = $eventApi->getFilteredCollection(10, 0, 'cfp', true);
 
         $this->render(
             'Application/index.html.twig',
             array(
-                'events' => $hot_events,
-                'cfp_events' => $cfp_events,
+                'events' => $hotEvents,
+                'cfp_events' => $cfpEvents,
                 'page' => $page,
             )
         );
