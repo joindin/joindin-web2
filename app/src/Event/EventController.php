@@ -96,12 +96,24 @@ class EventController extends BaseController
             . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
 
         $comments = $eventApi->getComments($event->getCommentsUri(), true);
+
+        $userApi = $this->getUserApi();
+        $usernames = [];
+        foreach ($comments as $comment) {
+            $uri = $comment->getUserUri();
+            if ($uri) {
+                $name = $userApi->getUsername($uri);
+                $usernames[$uri] = $name;
+            }
+        }
+        
         $this->render(
             'Event/details.html.twig',
             array(
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
+                'usernames' => $usernames,
             )
         );
     }
@@ -138,9 +150,20 @@ class EventController extends BaseController
 
             // If we have comments, fetch talk slugs for the talks so that we can create links to them in the template
             $slugs = array();
+            $usernames = array();
             if (array_key_exists('comments', $comments) && $comments['pagination']->count > 0) {
                 $slugs = $this->getTalkSlugsForTalkComments($comments['comments'], $event);
+    
+                $userApi = $this->getUserApi();
+                foreach ($comments['comments'] as $comment) {
+                    $uri = $comment->getUserUri();
+                    if ($uri) {
+                        $name = $userApi->getUsername($uri);
+                        $usernames[$uri] = $name;
+                    }
+                }
             }
+
 
             $this->render(
                 'Event/talk-comments.html.twig',
@@ -149,6 +172,7 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
+                    'usernames' => $usernames,
                 )
             );
         } else {
