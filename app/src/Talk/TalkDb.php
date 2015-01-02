@@ -13,14 +13,22 @@ class TalkDb extends BaseDb
             'event_uri' => $eventUri,
             'slug' => $slug
         ));
-        return $data['uri'];
+
+        if ($data) {
+            return $data['uri'];
+        }
+
+        return null;
     }
 
     public function getSlugFor($talkUri)
     {
         $talk = $this->load('uri', $talkUri);
+        if ($talk) {
+            return $talk['slug'];
+        }
 
-        return $talk['slug'];
+        return null;
     }
 
     public function save(TalkEntity $talk)
