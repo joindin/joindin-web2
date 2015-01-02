@@ -170,19 +170,18 @@ class EventController extends BaseController
         $talkApi = $this->getTalkApi();
         $scheduler = new EventScheduler($talkApi);
 
-        $schedule = $scheduler->getScheduleData($event);
+        $talks = $talkApi->getCollection($event->getTalksUri().'?start=0&resultsperpage=1000');
+        $schedule = $scheduler->getEventDays($talks);
 
         // get list of usernames
         $userApi = $this->getUserApi();
         $usernames = [];
-        foreach ($schedule as $day) {
-            foreach ($day->getTalks() as $timeslot) {
-                foreach ($timeslot as $talk) {
-                    foreach ($talk->getSpeakers() as $speakerInfo) {
-                        if (isset($speakerInfo->speaker_uri)) {
-                            $name = $userApi->getUsername($speakerInfo->speaker_uri);
-                            $usernames[$speakerInfo->speaker_uri] = $name;
-                        }
+        if (isset($talks['talks'])) {
+            foreach ($talks['talks'] as $talk) {
+                foreach ($talk->getSpeakers() as $speakerInfo) {
+                    if (isset($speakerInfo->speaker_uri)) {
+                        $name = $userApi->getUsername($speakerInfo->speaker_uri);
+                        $usernames[$speakerInfo->speaker_uri] = $name;
                     }
                 }
             }

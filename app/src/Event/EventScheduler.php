@@ -26,34 +26,6 @@ class EventScheduler
     }
 
     /**
-     * Builds schedule data into an array structure
-     * for schedule view
-     *
-     * @param EventEntity $event
-     * @return array
-     */
-    public function getScheduleData(EventEntity $event)
-    {
-        $talks = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
-        $eventDays = $this->getEventDays($talks);
-
-        return $eventDays;
-    }
-
-    /**
-     * Retrieves talk collection from API
-     *
-     * @param $talks_uri
-     * @return array
-     */
-    public function getTalks($talks_uri)
-    {
-        $talks = $this->talkApi->getCollection($talks_uri);
-
-        return $talks;
-    }
-
-    /**
      * Get an array of populated EventSchedulerDay objects
      *
      * @param $talks
