@@ -4,7 +4,9 @@
             <ul class="pagination">
                 {% if pagination.prev_page is defined %}
                     <li>
-                        <a href="?page={{ page - 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}"><i class="fa fa-arrow-circle-o-left"></i> Previous</a>
+                        <a href="?page={{ page - 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}{% if tag is defined %}&tag={{ tag }}{% endif %}">
+                            <i class="fa fa-arrow-circle-o-left"></i> Previous
+                        </a>
                     </li>
                 {% else %}
                     <li class="disabled">
@@ -14,7 +16,9 @@
                 <li class="current hidden-xs"><a href="#">Page {{ page }}</a></li>
                 {% if pagination.next_page is defined and pagination.count >= 10 %}
                     <li>
-                        <a href="?page={{ page + 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}">Next <i class="fa fa-arrow-circle-o-right"></i></a>
+                        <a href="?page={{ page + 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}{% if tag is defined %}&tag={{ tag }}{% endif %}">
+                            Next <i class="fa fa-arrow-circle-o-right"></i>
+                        </a>
                     </li>
                 {% else %}
                     <li class="disabled">
