@@ -390,3 +390,7 @@ form ul.errors {
 .search-results .talk .rating {
     float: right;
 }
+
+.nowrap {
+    white-space: nowrap;
+}

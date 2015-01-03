@@ -22,11 +22,11 @@ set eventUrl = urlFor(
                 {{ talk.getStartDateTime|date('M d Y') }}
 
                 at
-                <a href="{{ eventUrl }}">{{ event.getName }}</a>
+                <a href="{{ eventUrl }}" class="nowrap">{{ event.getName }}</a>
 
                 |
 
-                <a href="{{ talkUrl }}#comments">
+                <a href="{{ talkUrl }}#comments" class="nowrap">
                     {{ talk.getCommentCount}}
                     {% if talk.getCommentCount == 1 %}
                         comment
@@ -39,7 +39,9 @@ set eventUrl = urlFor(
                     <br/>
                     by
                     {% for speaker in talk.getSpeakers %}
-                        {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
+                        <span class="nowrap">
+                            {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
+                        </span>
                     {% endfor %}
                 {% endif %}
             </p>
