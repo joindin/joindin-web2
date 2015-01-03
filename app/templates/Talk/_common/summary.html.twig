@@ -3,6 +3,11 @@ set talkUrl = urlFor(
     'talk-quicklink', {"talkStub": talk.getStub}
 )
 %}
+{%
+set eventUrl = urlFor(
+    'event-detail', {"friendly_name": event.getUrlFriendlyName}
+)
+%}
 
 <article class="talk row">
     <div class="col-xs-12 title">
@@ -17,7 +22,7 @@ set talkUrl = urlFor(
                 {{ talk.getStartDateTime|date('M d Y') }}
 
                 at
-                <a href="{{ urlFor('event-detail', {'friendly_name': event.url_friendly_name}) }}">{{ event.name }}</a>
+                <a href="{{ eventUrl }}">{{ event.getName }}</a>
 
                 |
 

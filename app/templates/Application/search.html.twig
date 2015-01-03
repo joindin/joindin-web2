@@ -33,7 +33,7 @@
                 <div>
                     {% for talk in talks.talks %}
                         {% include 'Talk/_common/summary.html.twig'
-                        with {'event': attribute(eventInfo, talk.getApiUri) } %}
+                        with {'event': attribute(eventInfo, talk.getEventUri) } %}
                     {% endfor %}
                 </div>
             {% endif %}

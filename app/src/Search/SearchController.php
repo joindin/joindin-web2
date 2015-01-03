@@ -96,7 +96,6 @@ class SearchController extends BaseController
     {
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $events = array();
-        $eventInfo = array();
         $talks = array();
         $eventInfo = array();
         $pagination = array();
@@ -111,6 +110,10 @@ class SearchController extends BaseController
 
             // combine pagination data for events and talks
             $pagination = $this->combinePaginationData([$events['pagination'], $talks['pagination']]);
+        }
+
+        if (!empty($talks['talks'])) {
+            $eventInfo = $this->getEventInfoForTalks($talks['talks']);
         }
         
         $this->render(
@@ -203,6 +206,23 @@ class SearchController extends BaseController
         $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
 
         return $talkApi;
+    }
+
+    /**
+     * @param array $talks Array of talk entities
+     *
+     * @return array An array of event entities where event uri is the key
+     */
+    private function getEventInfoForTalks(array $talks)
+    {
+        $eventApi = $this->getEventApi();
+
+        $events = [];
+        foreach ($talks as $talk) {
+            $events[$talk->getEventUri()] = $eventApi->getEvent($talk->getEventUri());
+        }
+
+        return $events;
     }
 
     /**
