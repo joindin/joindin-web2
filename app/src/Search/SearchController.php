@@ -109,7 +109,9 @@ class SearchController extends BaseController
             $talks = $this->searchTalksByTitle($page, $keyword);
 
             // combine pagination data for events and talks
-            $pagination = $this->combinePaginationData([$events['pagination'], $talks['pagination']]);
+            $pagination = $this->combinePaginationData(
+                [$events['pagination'], $talks['pagination']]
+            );
         }
 
         if (!empty($talks['talks'])) {
@@ -167,17 +169,14 @@ class SearchController extends BaseController
      */
     private function searchTalksByTitle($page, $keyword)
     {
-        $apiQueryParams = array();
-
-        if (!empty($keyword)) {
-            $apiQueryParams['title'] = $keyword;
-        }
-
-        $apiQueryParams['resultsperpage'] = $this->itemsPerPage;
-        $apiQueryParams['start'] = ($page - 1) * $this->itemsPerPage;
+        $apiQueryParams = [
+            'title' => $keyword,
+            'resultsperpage' => $this->itemsPerPage,
+            'start' => ($page - 1) * $this->itemsPerPage
+        ];
 
         return $this->getTalkApi()->getCollection(
-            null, // pass empty $talks_uri so the base api url will be used
+            null, // pass empty $talks_uri so the base talks uri will be used
             $apiQueryParams
         );
     }
@@ -219,7 +218,8 @@ class SearchController extends BaseController
 
         $events = [];
         foreach ($talks as $talk) {
-            $events[$talk->getEventUri()] = $eventApi->getEvent($talk->getEventUri());
+            $eventUri = $talk->getEventUri();
+            $events[$eventUri] = $eventApi->getEvent($eventUri);
         }
 
         return $events;
@@ -248,12 +248,14 @@ class SearchController extends BaseController
                 $pagination->total
             );
 
+            // prev_page & next_page only currently checked if they are defined,
+            // so the contents does not really matter
             if (isset($pagination->prev_page)) {
-                $result['prev_page'] = $pagination->prev_page;
+                $result['prev_page'] = true;
             }
 
             if (isset($pagination->next_page)) {
-                $result['next_page'] = $pagination->next_page;
+                $result['next_page'] = true;
             }
         }
 
