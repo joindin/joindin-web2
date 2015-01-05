@@ -27,7 +27,7 @@ class UserController extends BaseController
         $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
         $app->map('/user/resend-verification', array($this, 'resendVerification'))
             ->via('GET', 'POST')->name('user-resend-verification');
-        $app->map('/user/:username', array($this, 'profile'))->via('GET', 'POST')->name('user-profile');
+        $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
     }
 
     /**
