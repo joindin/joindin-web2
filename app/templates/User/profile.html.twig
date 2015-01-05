@@ -53,8 +53,10 @@
                                 </small>
                             </section>
                         {% endfor %}
-                        {# Todo: Implement sub-page for more talks #}
-                        {# <p class="more">View all talks by {{ thisUser.getFullname }}</p> #}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-talks', {'username': thisUser.getUsername}) }}">
+                                View all talks by {{ thisUser.getFullname }}</a>
+                        </p>
                     </div>
                 </div>
             </div>

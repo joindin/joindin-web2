@@ -28,6 +28,7 @@ class UserController extends BaseController
         $app->map('/user/resend-verification', array($this, 'resendVerification'))
             ->via('GET', 'POST')->name('user-resend-verification');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
+        $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
     }
 
     /**
@@ -310,6 +311,53 @@ class UserController extends BaseController
                 'events'           => $events,
                 'hostedEvents'     => $hostedEvents,
                 'talkComments'     => $talkComments,
+            )
+        );
+    }
+
+    /*
+     * User profile talks detail page
+     *
+     * @param  string $username User's username
+     * @return void
+     */
+    public function profileTalks($username)
+    {
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+        if (!$user) {
+            Slim::getInstance()->notFound();
+        }
+
+        $talkApi = $this->getTalkApi();
+        $eventApi = $this->getEventApi();
+
+        $talkCollection = $talkApi->getCollection($user->getTalksUri(), ['verbose' => 'yes', 'resultsperpage' => 0]);
+        if (!isset($talkCollection['talks'])) {
+            $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
+        }
+
+        $eventInfo = array();
+        if (isset($talkCollection['talks'])) {
+            $talks = $talkCollection['talks'];
+            foreach ($talks as $talk) {
+                // look up event's name & url_friendly_name from the API
+                if (!isset($eventInfo[$talk->getEventUri()])) {
+                    $event = $eventApi->getEvent($talk->getEventUri());
+                    if ($event) {
+                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
+                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
+                    }
+                }
+            }
+        }
+
+        echo $this->render(
+            'User/profile-talks.html.twig',
+            array(
+                'thisUser'  => $user,
+                'talks'     => $talks,
+                'eventInfo' => $eventInfo,
             )
         );
     }

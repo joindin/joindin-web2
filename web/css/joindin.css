@@ -362,7 +362,7 @@ form ul.errors {
     padding-bottom: 5px;
     min-height: 345px;
 }
-.user-profile-panels .more {
+.user-profile-panels .more, .user-details .more {
     margin-top: 15px;
     margin-bottom: 0;
 }
