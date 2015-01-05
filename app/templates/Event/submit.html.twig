@@ -23,94 +23,8 @@
             <a href="{{ urlFor('about') }}">contact us</a> if you have any questions.
         </p>
 
-        {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
-        {{ form_errors(form) }}
-        <div class="row">
-            <fieldset class="col-sm-6">
-                <legend>Event information</legend>
-                {{ form_row(form.name) }}
-                {{ form_row(form.description) }}
-                {{ form_row(form.href) }}
-                {{ form_row(form.tags) }}
-            </fieldset>
-            <fieldset class="col-sm-6">
-                <legend>Date and time</legend>
-                <div class="row">
-                    <div class="col-sm-6">
-                        {{ form_row(form.tz_continent) }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form_row(form.tz_place) }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                    {{ form_row(form.start_date) }}
-                    </div>
-                    <div class="col-sm-6">
-                    {{ form_row(form.end_date) }}
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="col-offset-sm-6 col-sm-6">
-                <legend>Call for papers</legend>
-                <div class="row">
-                    <div class="col-sm-6">
-                        {{ form_row(form.cfp_start_date) }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form_row(form.cfp_end_date) }}
-                    </div>
-                </div>
-                {{ form_row(form.cfp_url) }}
-            </fieldset>
-        </div>
-        <div class="row">
-            <fieldset class="col-sm-12" class="location">
-                <legend>Location</legend>
-                <div class="row">
-                    <div class="col-sm-6">
-                        {{form_row(form.location)}}
-                        <div class="form-group">
-                            <label class="control-label" for="addr">Venue location</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="addr" name="addr">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" id="addr_search_button">Search</button>
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <ul id="addr_selection"></ul>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Latitude &amp; longitude</label>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    {{form_widget(form.latitude)}}
-                                </div>
-                                <div class="col-sm-6">
-                                    {{form_widget(form.longitude)}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div id="map" class="osmMap" data-lat="0.0" data-lon="0.0" data-zoom="10"></div>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <input type="submit" class="btn btn-primary pull-right" value="Submit" />
-            </div>
-        </div>
-        {{ form_end(form) }}
-    {% else %}
-        <h1>Login required</h1>
-        <p>In order to submit an event, please log in.</p>
     {% endif %}
+    {{ block('form') }}
 {% endblock %}
 
 {% block extraAside %}
@@ -141,5 +55,4 @@
         </dl>
     </section>
     {% endif %}
-    {{ block('form') }}
 {% endblock %}
