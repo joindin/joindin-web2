@@ -240,7 +240,6 @@ class UserController extends BaseController
             Slim::getInstance()->notFound();
         }
 
-        $cache = $this->getCache();
         $talkApi = $this->getTalkApi();
         $eventApi = $this->getEventApi();
 
