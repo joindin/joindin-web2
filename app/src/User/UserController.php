@@ -31,6 +31,7 @@ class UserController extends BaseController
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
         $app->get('/user/:username/hosted', array($this, 'profileHosted'))->name('user-profile-hosted');
+        $app->get('/user/:username/comments', array($this, 'profileComments'))->name('user-profile-comments');
     }
 
     /**
@@ -427,6 +428,59 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'events'   => $hostedEventsCollection['events'],
                 'type'     => 'hosted',
+            )
+        );
+    }
+
+    /*
+     * User profile comments detail page
+     *
+     * @param  string $username User's username
+     * @return void
+     */
+    public function profileComments($username)
+    {
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+        if (!$user) {
+            Slim::getInstance()->notFound();
+        }
+
+        $talkApi = $this->getTalkApi();
+        $eventApi = $this->getEventApi();
+        $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 0);
+        if (!$talkComments) {
+            $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
+        }
+
+        $talkInfo = array();
+        $eventInfo = array();
+        foreach ($talkComments as $comment) {
+            if (isset($talkInfo[$comment->getTalkUri()])) {
+                continue;
+            }
+            $talk = $talkApi->getTalk($comment->getTalkUri());
+            if ($talk) {
+                $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
+
+                // look up event's name & url_friendly_name from the API
+                if (!isset($eventInfo[$talk->getEventUri()])) {
+                    $event = $eventApi->getEvent($talk->getEventUri());
+                    if ($event) {
+                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
+                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
+                    }
+                }
+            }
+        }
+
+        echo $this->render(
+            'User/profile-comments.html.twig',
+            array(
+                'thisUser'     => $user,
+                'talkComments' => $talkComments,
+                'eventInfo'    => $eventInfo,
+                'talkInfo'     => $talkInfo,
             )
         );
     }

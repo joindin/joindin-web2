@@ -130,8 +130,10 @@
                                 </small>
                             </section>
                         {% endfor %}
-                        {# Todo: Implement sub-page for more events #}
-                        {# <p class="more">View all comments by {{ thisUser.getFullname }}</p> #}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-comments', {'username': thisUser.getUsername}) }}">
+                                View all comments by {{ thisUser.getFullname }}</a>
+                        </p>
                     </div>
                 </div>
             </div>

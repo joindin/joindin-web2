@@ -103,7 +103,7 @@ class TalkApi extends BaseApi
             $params['verbose'] = 'yes';
         }
 
-        if ($limitTo) {
+        if (null !== $limitTo) {
             $params['resultsperpage'] = $limitTo   ;
         }
         
