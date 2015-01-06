@@ -255,13 +255,9 @@ class UserController extends BaseController
         if (isset($talkCollection['talks'])) {
             $talks = $talkCollection['talks'];
             foreach ($talks as $talk) {
-                // look up event's name & url_friendly_name from the API
-                if (!isset($eventInfo[$talk->getEventUri()])) {
-                    $event = $eventApi->getEvent($talk->getEventUri());
-                    if ($event) {
-                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
-                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
-                    }
+                // look up event's name & url_friendly_name from the DB orAPI
+                if (!isset($eventInfo[$talk->getApiUri()])) {
+                    $eventInfo[$talk->getApiUri()] = $this->lookupEventInfo($talk->getEventUri());
                 }
             }
         }
@@ -293,13 +289,9 @@ class UserController extends BaseController
             if ($talk) {
                 $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
 
-                // look up event's name & url_friendly_name from the API
-                if (!isset($eventInfo[$talk->getEventUri()])) {
-                    $event = $eventApi->getEvent($talk->getEventUri());
-                    if ($event) {
-                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
-                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
-                    }
+                // look up event's name & url_friendly_name from the DB orAPI
+                if (!isset($eventInfo[$talk->getApiUri()])) {
+                    $eventInfo[$talk->getApiUri()] = $this->lookupEventInfo($talk->getEventUri());
                 }
             }
         }
@@ -333,7 +325,6 @@ class UserController extends BaseController
         }
 
         $talkApi = $this->getTalkApi();
-        $eventApi = $this->getEventApi();
 
         $talkCollection = $talkApi->getCollection($user->getTalksUri(), ['verbose' => 'yes', 'resultsperpage' => 0]);
         if (!isset($talkCollection['talks'])) {
@@ -344,13 +335,9 @@ class UserController extends BaseController
         if (isset($talkCollection['talks'])) {
             $talks = $talkCollection['talks'];
             foreach ($talks as $talk) {
-                // look up event's name & url_friendly_name from the API
-                if (!isset($eventInfo[$talk->getEventUri()])) {
-                    $event = $eventApi->getEvent($talk->getEventUri());
-                    if ($event) {
-                        $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
-                        $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
-                    }
+                // look up event's name & url_friendly_name from the DB orAPI
+                if (!isset($eventInfo[$talk->getApiUri()])) {
+                    $eventInfo[$talk->getApiUri()] = $this->lookupEventInfo($talk->getEventUri());
                 }
             }
         }
@@ -464,7 +451,7 @@ class UserController extends BaseController
                 $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
 
                 // look up event's name & url_friendly_name from the API
-                if (!isset($eventInfo[$talk->getEventUri()])) {
+                if (!isset($eventInfo[$talk->getApiUri()])) {
                     $event = $eventApi->getEvent($talk->getEventUri());
                     if ($event) {
                         $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
@@ -484,6 +471,28 @@ class UserController extends BaseController
             )
         );
     }
+
+    protected function lookupEventInfo($eventUri)
+    {
+        $eventDb = $this->getEventDb();
+        $eventApi = $this->getEventApi();
+
+        $eventInfo = array();
+        $eventData = $eventDb->load('uri', $eventUri);
+        if (isset($eventData['name'])) {
+            $eventInfo['url_friendly_name'] = $eventData['url_friendly_name'];
+            $eventInfo['name'] = $eventData['name'];
+        } else {
+            $event = $eventApi->getEvent($eventUri);
+            if ($event) {
+                $eventInfo['url_friendly_name'] = $event->getUrlFriendlyName();
+                $eventInfo['name'] = $event->getName();
+            }
+        }
+
+        return $eventInfo;
+    }
+
 
     /**
      * @return CacheService
@@ -513,11 +522,19 @@ class UserController extends BaseController
     }
 
     /**
+     * @return EventDb
+     */
+    private function getEventDb()
+    {
+        return new EventDb($this->getCache());
+    }
+
+    /**
      * @return EventApi
      */
     private function getEventApi()
     {
-        $eventDb = new EventDb($this->getCache());
+        $eventDb = $this->getEventDb();
         return new EventApi($this->cfg, $this->accessToken, $eventDb);
     }
 }
