@@ -167,8 +167,10 @@
                                 </small>
                             </section>
                         {% endfor %}
-                        {# Todo: Implement sub-page for more hosted events #}
-                        {# <p class="more">View all events hosted by {{ thisUser.getFullname }}</p> #}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-hosted', {'username': thisUser.getUsername}) }}">
+                                View all events hosted by {{ thisUser.getFullname }}</a>
+                        </p>
                     </div>
                 </div>
             </div>

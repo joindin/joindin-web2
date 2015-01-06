@@ -30,6 +30,7 @@ class UserController extends BaseController
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
+        $app->get('/user/:username/hosted', array($this, 'profileHosted'))->name('user-profile-hosted');
     }
 
     /**
@@ -392,6 +393,40 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'events'   => $eventsCollection['events'],
                 'type'     => 'attended',
+            )
+        );
+    }
+
+    /*
+     * User profile hosted events detail page
+     *
+     * @param  string $username User's username
+     * @return void
+     */
+    public function profileHosted($username)
+    {
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+        if (!$user) {
+            Slim::getInstance()->notFound();
+        }
+
+        $eventApi = $this->getEventApi();
+        $hostedEventsCollection = $eventApi->getCollection(
+            $user->getHostedEventsUri(),
+            ['verbose' => 'yes', 'resultsperpage' => 5]
+        );
+        if (!isset($hostedEventsCollection['events'])) {
+            $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
+        }
+
+
+        echo $this->render(
+            'User/profile-events.html.twig',
+            array(
+                'thisUser' => $user,
+                'events'   => $hostedEventsCollection['events'],
+                'type'     => 'hosted',
             )
         );
     }
