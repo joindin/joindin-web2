@@ -113,7 +113,7 @@
                             <section>
                                 {% set event = attribute(eventInfo, comment.getTalkUri) %}
                                 {% set talk = attribute(talkInfo, comment.getTalkUri) %}
-                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.url_friendly_talk_title }) }}">{{ comment.getTalkTitle }}</a></h4>
+                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.url_friendly_talk_title }) }}#comment-{{ comment.getCommentHash }}">{{ comment.getTalkTitle }}</a></h4>
                                 {% if comment.getRating %}
                                     <div class="pull-right rating rating-{{ comment.getRating }}">
                                         <img src="/img/avg-rating-{{ comment.getRating }}.png"
