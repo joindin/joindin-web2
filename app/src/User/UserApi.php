@@ -28,6 +28,8 @@ class UserApi extends BaseApi
                 if (isset($data->users) && isset($data->users[0])) {
                     $user = new UserEntity($data->users[0]);
 
+                    $this->userDb->save($user);
+
                     return $user;
                 }
 
@@ -126,6 +128,13 @@ class UserApi extends BaseApi
      */
     public function getUserByUsername($username)
     {
+        // do we already know this username's API URL?
+        $userInfo = $this->userDb->load('username', $username);
+        if ($userInfo) {
+            return $this->getUser($userInfo['uri']);
+        }
+
+        // fetch via filtering the users collection
         $url = $this->baseApiUrl . '/v2.1/users';
         $result = $this->apiGet($url, ['username' => $username, 'verbose'=>'yes']);
 
@@ -136,6 +145,7 @@ class UserApi extends BaseApi
                     foreach ($data->users as $userData) {
                         if (strtolower($userData->username) == strtolower($username)) {
                             $user = new UserEntity($userData);
+                            $this->userDb->save($user);
                             return $user;
                         }
                     }

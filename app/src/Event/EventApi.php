@@ -18,7 +18,7 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Get the latest events
+     * Get a paginated list of events, optionally applying a filter
      *
      * @param integer $limit       Number of events to get per page
      * @param integer $start       Start value for pagination
@@ -28,7 +28,7 @@ class EventApi extends BaseApi
      *
      * @return EventEntity model
      */
-    public function getCollection($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
+    public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
         $url = $this->baseApiUrl . '/v2.1/events';
         $queryParams['resultsperpage'] = $limit;
@@ -42,7 +42,7 @@ class EventApi extends BaseApi
             $queryParams['verbose'] = 'yes';
         }
 
-        return $this->queryEvents($url, $queryParams);
+        return $this->getCollection($url, $queryParams);
     }
 
     /**
@@ -54,18 +54,14 @@ class EventApi extends BaseApi
      */
     public function getByFriendlyUrl($friendlyUrl)
     {
-        $event = $this->eventDb->load('url_friendly_name', $friendlyUrl);
+        $item = $this->eventDb->load('url_friendly_name', $friendlyUrl);
 
-        if (!$event) {
+        if (!$item) {
             // don't throw an exception, Slim eats them
             return false;
         }
 
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
-
-        return $event;
-
+        return $this->getEvent($item['uri']);
     }
 
     /**
@@ -77,16 +73,13 @@ class EventApi extends BaseApi
      */
     public function getByStub($stub)
     {
-        $event = $this->eventDb->load('stub', $stub);
+        $item = $this->eventDb->load('stub', $stub);
 
-        if (!$event) {
+        if (!$item) {
             return false;
         }
 
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
-
-        return $event;
+        return $this->getEvent($item['uri']);
     }
 
     /**
@@ -105,7 +98,9 @@ class EventApi extends BaseApi
 
         $talk_list = (array)json_decode($this->apiGet($event_uri, $params));
         if (isset($talk_list['events']) && isset($talk_list['events'][0])) {
-            return new EventEntity($talk_list['events'][0]);
+            $event = new EventEntity($talk_list['events'][0]);
+            $this->eventDb->save($event);
+            return $event;
         }
         
         return false;
@@ -204,7 +199,7 @@ class EventApi extends BaseApi
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 201) {
-            $response = $this->queryEvents($headers['location']);
+            $response = $this->getCollection($headers['location']);
             return current($response['events']);
         }
         if ($status == 202) {
@@ -225,34 +220,22 @@ class EventApi extends BaseApi
      *
      * @return array
      */
-    public function queryEvents($url, array $queryParams = [])
+    public function getCollection($uri, array $queryParams = array())
     {
-        $events = (array)json_decode($this->apiGet($url, $queryParams));
+        $events = (array)json_decode($this->apiGet($uri, $queryParams));
         $meta   = array_pop($events);
 
         $collectionData = array();
-        foreach ($events['events'] as $event) {
-            $thisEvent = new EventEntity($event);
-            $collectionData['events'][] = $thisEvent;
+        foreach ($events['events'] as $item) {
+            $event = new EventEntity($item);
+            $collectionData['events'][] = $event;
 
             // save the URL so we can look up by it
-            $this->saveEventUrl($thisEvent);
+            $this->eventDb->save($event);
         }
         $collectionData['pagination'] = $meta;
 
         return $collectionData;
-    }
-
-    /**
-     * Take an event and save the url_friendly_name and the API URL for that
-     *
-     * @param EventEntity $event The event to take details from
-     *
-     * @return void
-     */
-    private function saveEventUrl(EventEntity $event)
-    {
-        $this->eventDb->save($event);
     }
 
     /**

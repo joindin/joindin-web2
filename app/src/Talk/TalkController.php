@@ -21,26 +21,15 @@ class TalkController extends BaseController
 
     public function index($eventSlug, $talkSlug)
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-
-        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
+        $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
             return Slim::getInstance()->notFound();
         }
 
-        $eventUri = $event->getUri();
-
-        $talkDb = new TalkDb($cache);
-        $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
-        if (!$talkUri) {
-            return Slim::getInstance()->notFound();
-        }
-
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $talk = $talkApi->getTalk($talkUri, true);
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if (!$talk) {
             return Slim::getInstance()->notFound();
         }
@@ -60,8 +49,7 @@ class TalkController extends BaseController
 
     public function quick($talkStub)
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
+        $cache = $this->getCache();
         $talkDb = new TalkDb($cache);
         $talk = $talkDb->load('stub', $talkStub);
 
@@ -92,17 +80,11 @@ class TalkController extends BaseController
             $this->application->redirect($url);
         }
 
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
+        $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($eventSlug);
-        $eventUri = $event->getUri();
 
-        $talkDb = new TalkDb($cache);
-        $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
-
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $talk = $talkApi->getTalk($talkUri, true);
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if ($talk) {
             try {
                 $talkApi->addComment($talk, $rating, $comment);
@@ -124,5 +106,32 @@ class TalkController extends BaseController
         $this->application->flash('message', 'Thank you for your comment.');
         $url .= '#add-comment';
         $this->application->redirect($url);
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
+     * @return EventApi
+     */
+    private function getEventApi()
+    {
+        $eventDb = new EventDb($this->getCache());
+        return new EventApi($this->cfg, $this->accessToken, $eventDb);
+    }
+
+    /**
+     * @return TalkApi
+     */
+    private function getTalkApi()
+    {
+        $talkDb = new TalkDb($this->getCache());
+        return new TalkApi($this->cfg, $this->accessToken, $talkDb);
     }
 }

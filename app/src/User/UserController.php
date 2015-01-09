@@ -62,9 +62,7 @@ class UserController extends BaseController
                 $this->accessToken = $_SESSION['access_token'];
 
                 // now get users details
-                $keyPrefix = $this->cfg['redisKeyPrefix'];
-                $cache = new CacheService($keyPrefix);
-                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+                $userApi = $this->getUserApi();
                 $user = $userApi->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;
@@ -131,9 +129,7 @@ class UserController extends BaseController
     protected function registerUserUsingForm($form)
     {
         $values = $form->getData();
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+        $userApi = $this->getUserApi();
 
         $result = false;
         try {
@@ -174,9 +170,7 @@ class UserController extends BaseController
         $request = $this->application->request();
 
         $token = $request->get('token');
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+        $userApi = $this->getUserApi();
 
         $result = false;
         try {
@@ -206,9 +200,7 @@ class UserController extends BaseController
                 $values = $form->getData();
                 $email = $values['email'];
 
-                $keyPrefix = $this->cfg['redisKeyPrefix'];
-                $cache = new CacheService($keyPrefix);
-                $userApi = new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+                $userApi = $this->getUserApi();
 
                 $result = false;
                 try {
@@ -242,26 +234,15 @@ class UserController extends BaseController
      */
     public function profile($username)
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $userDb = new UserDb($cache);
-        $userApi = new UserApi($this->cfg, $this->accessToken, $userDb);
-
-        $userInfo = $userDb->load('username', $username);
-        if ($userInfo) {
-            $user = $userApi->getUser($userInfo['uri']);
-        } else {
-            $user = $userApi->getUserByUsername($username);
-            if (!$user) {
-                Slim::getInstance()->notFound();
-            }
-            $userDb->save($user);
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+        if (!$user) {
+            Slim::getInstance()->notFound();
         }
 
-        $talkDb = new TalkDb($cache);
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $eventDb = new EventDb($cache);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
+        $cache = $this->getCache();
+        $talkApi = $this->getTalkApi();
+        $eventApi = $this->getEventApi();
 
         $eventInfo = array(); // look up an event's name and url_friendly_name from its uri
         $talkInfo = array(); // look up a talk's url_friendly_talk_title from its uri
@@ -275,7 +256,6 @@ class UserController extends BaseController
                 if (!isset($eventInfo[$talk->getEventUri()])) {
                     $event = $eventApi->getEvent($talk->getEventUri());
                     if ($event) {
-                        $eventDb->save($event);
                         $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
                         $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
                     }
@@ -283,13 +263,13 @@ class UserController extends BaseController
             }
         }
 
-        $eventsCollection = $eventApi->queryEvents($user->getAttendedEventsUri() . '?verbose=yes&resultsperpage=5');
+        $eventsCollection = $eventApi->getCollection($user->getAttendedEventsUri() . '?verbose=yes&resultsperpage=5');
         $events = false;
         if (isset($eventsCollection['events'])) {
             $events = $eventsCollection['events'];
         }
 
-        $hostedEventsCollection = $eventApi->queryEvents($user->getHostedEventsUri() . '?verbose=yes&resultsperpage=5');
+        $hostedEventsCollection = $eventApi->getCollection($user->getHostedEventsUri() . '?verbose=yes&resultsperpage=5');
         $hostedEvents = false;
         if (isset($hostedEventsCollection['events'])) {
             $hostedEvents = $hostedEventsCollection['events'];
@@ -303,13 +283,11 @@ class UserController extends BaseController
             $talk = $talkApi->getTalk($comment->getTalkUri());
             if ($talk) {
                 $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
-                $talkDb->save($talk, $talk->getEventUri());
 
                 // look up event's name & url_friendly_name from the API
                 if (!isset($eventInfo[$talk->getEventUri()])) {
                     $event = $eventApi->getEvent($talk->getEventUri());
                     if ($event) {
-                        $eventDb->save($event);
                         $eventInfo[$talk->getApiUri()]['url_friendly_name'] = $event->getUrlFriendlyName();
                         $eventInfo[$talk->getApiUri()]['name'] = $event->getName();
                     }
@@ -329,5 +307,41 @@ class UserController extends BaseController
                 'talkComments'     => $talkComments,
             )
         );
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $cache = $this->getCache();
+        return new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+    }
+
+    /**
+     * @return TalkApi
+     */
+    private function getTalkApi()
+    {
+        $talkDb = new TalkDb($this->getCache());
+        return new TalkApi($this->cfg, $this->accessToken, $talkDb);
+    }
+
+    /**
+     * @return EventApi
+     */
+    private function getEventApi()
+    {
+        $eventDb = new EventDb($this->getCache());
+        return new EventApi($this->cfg, $this->accessToken, $eventDb);
     }
 }

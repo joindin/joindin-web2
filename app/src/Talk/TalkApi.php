@@ -35,13 +35,30 @@ class TalkApi extends BaseApi
         );
 
         $collectionData = array();
-        foreach ($talks['talks'] as $talk) {
-            $talkObject = new TalkEntity($talk);
-            $collectionData['talks'][] = $talkObject;
-            $this->talkDb->save($talkObject);
+        foreach ($talks['talks'] as $item) {
+            $talk = new TalkEntity($item);
+            $collectionData['talks'][] = $talk;
+            $this->talkDb->save($talk);
         }
 
         return $collectionData;
+    }
+
+    /**
+     * Gets a talk when we know the slug and event's uri.
+     *
+     * @param  string $talkSlug
+     * @param  string $eventUri
+     * @return TalkEntity
+     */
+    public function getTalkBySlug($talkSlug, $eventUri)
+    {
+        $talkUri = $this->talkDb->getUriFor($talkSlug, $eventUri);
+        if (!$talkUri) {
+            return false;
+        }
+
+        return $this->getTalk($talkUri, true);
     }
 
     /**
@@ -57,9 +74,11 @@ class TalkApi extends BaseApi
             $talk_uri = $talk_uri . '?verbose=yes';
         }
 
-        $talk = (array)json_decode($this->apiGet($talk_uri));
+        $collection = (array)json_decode($this->apiGet($talk_uri));
 
-        return new TalkEntity($talk['talks'][0]);
+        $talk = new TalkEntity($collection['talks'][0]);
+        $this->talkDb->save($talk);
+        return $talk;
     }
 
     /**
