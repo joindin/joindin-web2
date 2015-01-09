@@ -121,7 +121,6 @@ class EventScheduler
         $tracksByDay = array();
 
         foreach ($talks as $talk) {
-
             $dateTime = $talk->getStartDateTime();
             $date = $dateTime->format('d-m-Y');
 

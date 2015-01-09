@@ -215,14 +215,14 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Submit an edited event to the API and returns it or NULL if something happend
+     * Submit an edited event to the API and return it.
+     *
+     * If something happened NULL is returned
      *
      * @param array $data
      *
      * @throws \Exception if a status code other than 201 is returned.
-     *
      * @see EventFormType::buildForm() for a list of supported fields in the $data array
-     *
      * @return EventEntity|null
      */
     public function edit(array $data)
@@ -260,11 +260,12 @@ class EventApi extends BaseApi
 
     /**
      * Returns a response array containing an 'events' and 'pagination' element.
-     *
+
      * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
      * Event entities.
      *
-     * @param string $url         API Url to query for one or more events. Either a listing can be retrieved or a single event.
+     * @param string $url API Url to query for one or more events. Either a
+     *                    listing can be retrieved or a single event.
      * @param array  $queryParams
      *
      * @return array
