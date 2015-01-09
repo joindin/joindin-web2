@@ -352,11 +352,21 @@ class EventController extends BaseController
 
     }
 
+    /**
+     * @param array $event
+     *
+     * @return bool
+     */
     protected function userIsAllowedToEdit($event)
     {
         if (! isset($_SESSION['user'])) {
             return false;
         }
+
+        if (isset($event['can_edit'])) {
+            return $event['can_edit'];
+        }
+
         $user       = $_SESSION['user'];
         $allowed    = false;
         $eventArray = $event->toArray();
