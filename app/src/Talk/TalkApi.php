@@ -24,15 +24,21 @@ class TalkApi extends BaseApi
     /**
      * Get all talks associated with an event
      *
-     * @param $talks_uri  API talk uri
+     * @param string $talks_uri   API talk uri
+     * @param array  $queryParams
      *
-     * @return TalkEntity model
+     * @return array
      */
-    public function getCollection($talks_uri, $queryParams = array())
+    public function getCollection($talks_uri, array $queryParams = [])
     {
+        if (empty($talks_uri)) {
+            $talks_uri = $this->baseApiUrl . '/v2.1/talks';
+        }
+
         $talks = (array)json_decode(
             $this->apiGet($talks_uri, $queryParams)
         );
+        $meta = array_pop($talks);
 
         $collectionData = array();
         foreach ($talks['talks'] as $item) {
@@ -40,6 +46,8 @@ class TalkApi extends BaseApi
             $collectionData['talks'][] = $talk;
             $this->talkDb->save($talk);
         }
+
+        $collectionData['pagination'] = $meta;
 
         return $collectionData;
     }

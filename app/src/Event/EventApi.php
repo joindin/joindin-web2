@@ -26,7 +26,7 @@ class EventApi extends BaseApi
      * @param bool    $verbose     get verbose result
      * @param array   $queryParams Additional query params as key => value pairs
      *
-     * @return EventEntity model
+     * @return array
      */
     public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
@@ -96,9 +96,9 @@ class EventApi extends BaseApi
             $params['verbose'] = 'yes';
         }
 
-        $talk_list = (array)json_decode($this->apiGet($event_uri, $params));
-        if (isset($talk_list['events']) && isset($talk_list['events'][0])) {
-            $event = new EventEntity($talk_list['events'][0]);
+        $event_list = (array)json_decode($this->apiGet($event_uri, $params));
+        if (isset($event_list['events']) && isset($event_list['events'][0])) {
+            $event = new EventEntity($event_list['events'][0]);
             $this->eventDb->save($event);
             return $event;
         }
