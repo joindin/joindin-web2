@@ -29,6 +29,7 @@ class UserController extends BaseController
             ->via('GET', 'POST')->name('user-resend-verification');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
+        $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
     }
 
     /**
@@ -358,6 +359,39 @@ class UserController extends BaseController
                 'thisUser'  => $user,
                 'talks'     => $talks,
                 'eventInfo' => $eventInfo,
+            )
+        );
+    }
+
+    /*
+     * User profile attended events detail page
+     *
+     * @param  string $username User's username
+     * @return void
+     */
+    public function profileEvents($username)
+    {
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+        if (!$user) {
+            Slim::getInstance()->notFound();
+        }
+
+        $eventApi = $this->getEventApi();
+        $eventsCollection = $eventApi->getCollection(
+            $user->getAttendedEventsUri(),
+            ['verbose' => 'yes', 'resultsperpage' => 0]
+        );
+        if (!isset($eventsCollection['events'])) {
+            $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
+        }
+
+        echo $this->render(
+            'User/profile-events.html.twig',
+            array(
+                'thisUser' => $user,
+                'events'   => $eventsCollection['events'],
+                'type'     => 'attended',
             )
         );
     }

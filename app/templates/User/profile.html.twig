@@ -88,8 +88,10 @@
                                 </small>
                             </section>
                         {% endfor %}
-                        {# Todo: Implement sub-page for more events #}
-                        {# <p class="more">View all events attended by {{ thisUser.getFullname }}</p> #}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-events', {'username': thisUser.getUsername}) }}">
+                                View all events attended by {{ thisUser.getFullname }}</a>
+                        </p>
                     </div>
                 </div>
             </div>

@@ -391,6 +391,21 @@ form ul.errors {
     float: right;
 }
 
+.user-profile-panels .logo {
+    position: relative;
+    float: left;
+    width: 70px;
+}
+
+.user-profile-panels .logo img {
+    width: 100%;
+    max-width: 50px;
+}
+
+.user-profile-panels .title h3, .user-profile-panels .title h4 {
+    margin-top: 0;
+}
+
 .nowrap {
     white-space: nowrap;
 }
