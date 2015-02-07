@@ -34,7 +34,7 @@ class TalkController extends BaseController
             return Slim::getInstance()->notFound();
         }
 
-        $comments = $talkApi->getComments($talk->getCommentUri(), true);
+        $comments = $talkApi->getComments($talk->getCommentUri(), true, 0);
 
         $this->render(
             'Talk/index.html.twig',
