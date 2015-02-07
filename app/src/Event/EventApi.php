@@ -115,7 +115,7 @@ class EventApi extends BaseApi
     public function getComments($comment_uri, $verbose = false)
     {
         if ($verbose) {
-            $comment_uri = $comment_uri . '?verbose=yes';
+            $comment_uri = $comment_uri . '?verbose=yes&resultsperpage=0';
         }
 
         $comments = (array)json_decode($this->apiGet($comment_uri));
