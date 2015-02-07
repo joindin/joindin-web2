@@ -96,4 +96,13 @@ class TalkCommentEntity
         $hash = md5($this->data->uri);
         return (substr($hash, 0, 6));
     }
+
+    public function getUserUri()
+    {
+        if (!isset($this->data->user_uri)) {
+            return null;
+        }
+
+        return $this->data->user_uri;
+    }
 }

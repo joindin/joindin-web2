@@ -1,12 +1,16 @@
 <p><a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.title }}</a></p>
 <p>{% for speaker in talk.speakers %}
-    <a href="{{ speaker.speaker_uri }}">
-        <span class="speaker">
-        {% if loop.last %}
-            {{ speaker.speaker_name }}</a>
-        {% else %}
-            {{ speaker.speaker_name }}</a>,
+    <span class="speaker">
+        {% set comma = "" %}
+        {% if not loop.last %}
+            {% set comma = "," %}
         {% endif %}
-        </span>
+
+        {% if speaker.speaker_uri %}
+            <a href="{{ urlFor('user-profile', {'username': usernames[speaker.speaker_uri]}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+        {% else %}
+            {{ speaker.speaker_name }}{{comma}}
+        {% endif %}
+    </span>
     {% endfor %}
 </p>

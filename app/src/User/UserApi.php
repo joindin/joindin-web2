@@ -154,4 +154,27 @@ class UserApi extends BaseApi
         }
         return false;
     }
+
+    /**
+     * Get a user's username
+     *
+     * @param  string $uri
+     * @return string|null
+     */
+    public function getUsername($uri)
+    {
+        // do we already know it?
+        $userInfo = $this->userDb->load('uri', $uri);
+        if ($userInfo) {
+            return $userInfo['username'];
+        }
+
+        // get from API
+        $user = $this->getUser($uri);
+        if ($user) {
+            return $user->getUsername();
+        }
+
+        return null;
+    }
 }

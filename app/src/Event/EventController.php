@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator;
 use Talk\TalkDb;
 use Talk\TalkApi;
+use User\UserDb;
+use User\UserApi;
 use Exception;
 use Slim\Slim;
 
@@ -94,12 +96,24 @@ class EventController extends BaseController
             . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
 
         $comments = $eventApi->getComments($event->getCommentsUri(), true);
+
+        $userApi = $this->getUserApi();
+        $usernames = [];
+        foreach ($comments as $comment) {
+            $uri = $comment->getUserUri();
+            if ($uri) {
+                $name = $userApi->getUsername($uri);
+                $usernames[$uri] = $name;
+            }
+        }
+        
         $this->render(
             'Event/details.html.twig',
             array(
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
+                'usernames' => $usernames,
             )
         );
     }
@@ -136,9 +150,20 @@ class EventController extends BaseController
 
             // If we have comments, fetch talk slugs for the talks so that we can create links to them in the template
             $slugs = array();
+            $usernames = array();
             if (array_key_exists('comments', $comments) && $comments['pagination']->count > 0) {
                 $slugs = $this->getTalkSlugsForTalkComments($comments['comments'], $event);
+    
+                $userApi = $this->getUserApi();
+                foreach ($comments['comments'] as $comment) {
+                    $uri = $comment->getUserUri();
+                    if ($uri) {
+                        $name = $userApi->getUsername($uri);
+                        $usernames[$uri] = $name;
+                    }
+                }
             }
+
 
             $this->render(
                 'Event/talk-comments.html.twig',
@@ -147,6 +172,7 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
+                    'usernames' => $usernames,
                 )
             );
         } else {
@@ -168,9 +194,31 @@ class EventController extends BaseController
         $talkApi = $this->getTalkApi();
         $scheduler = new EventScheduler($talkApi);
 
-        $schedule = $scheduler->getScheduleData($event);
+        $talks = $talkApi->getCollection($event->getTalksUri().'?start=0&resultsperpage=1000');
+        $schedule = $scheduler->getEventDays($talks);
 
-        $this->render('Event/schedule.html.twig', array('event' => $event, 'eventDays' => $schedule));
+        // get list of usernames
+        $userApi = $this->getUserApi();
+        $usernames = [];
+        if (isset($talks['talks'])) {
+            foreach ($talks['talks'] as $talk) {
+                foreach ($talk->getSpeakers() as $speakerInfo) {
+                    if (isset($speakerInfo->speaker_uri)) {
+                        $name = $userApi->getUsername($speakerInfo->speaker_uri);
+                        $usernames[$speakerInfo->speaker_uri] = $name;
+                    }
+                }
+            }
+        }
+
+        $this->render(
+            'Event/schedule.html.twig',
+            [
+                'event' => $event,
+                'eventDays' => $schedule,
+                'usernames' => $usernames
+            ]
+        );
     }
 
     public function quicklink($stub)
@@ -461,5 +509,14 @@ class EventController extends BaseController
     private function getTalkApi()
     {
         return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb());
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
 }

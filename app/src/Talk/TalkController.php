@@ -5,6 +5,8 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
+use User\UserDb;
+use User\UserApi;
 use Exception;
 use Slim\Slim;
 
@@ -36,6 +38,16 @@ class TalkController extends BaseController
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true, 0);
 
+        $usernames = [];
+        $userApi = $this->getUserApi();
+        foreach ($comments as $comment) {
+            $uri = $comment->getUserUri();
+            if ($uri) {
+                $name = $userApi->getUsername($uri);
+                $usernames[$uri] = $name;
+            }
+        }
+
         $this->render(
             'Talk/index.html.twig',
             array(
@@ -43,6 +55,7 @@ class TalkController extends BaseController
                 'event' => $event,
                 'comments' => $comments,
                 'talkSlug' => $talkSlug,
+                'usernames' => $usernames,
             )
         );
     }
@@ -133,5 +146,14 @@ class TalkController extends BaseController
     {
         $talkDb = new TalkDb($this->getCache());
         return new TalkApi($this->cfg, $this->accessToken, $talkDb);
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
 }
