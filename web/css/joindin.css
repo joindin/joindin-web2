@@ -183,12 +183,12 @@ table.schedule a {
     color: white;
 }
 
-table.schedule a span.speaker {
+table.schedule span.speaker a {
     color: black;
     font-style: italic;
 }
 
-table.schedule a:hover span.speaker {
+table.schedule span.speaker a:hover {
     color: white;
 }
 
