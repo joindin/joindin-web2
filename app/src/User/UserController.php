@@ -537,7 +537,7 @@ class UserController extends BaseController
      */
     private function getTalkApi()
     {
-        return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb());
+        return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb(), $this->getUserApi());
     }
 
     /**

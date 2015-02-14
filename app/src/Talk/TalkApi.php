@@ -2,24 +2,29 @@
 namespace Talk;
 
 use Application\BaseApi;
+use User\UserApi;
 
 class TalkApi extends BaseApi
 {
-
     /**
      * @var TalkDb
      */
     protected $talkDb;
 
     /**
+     * @var UserApi
+     */
+    protected $userApi;
+
+    /**
      * @param TalkDb $talkDb
      */
-    public function __construct($config, $accessToken, TalkDb $talkDb)
+    public function __construct($config, $accessToken, TalkDb $talkDb, UserApi $userApi)
     {
         parent::__construct($config, $accessToken);
         $this->talkDb = $talkDb;
+        $this->userApi = $userApi;
     }
-
 
     /**
      * Get all talks associated with an event
@@ -43,6 +48,13 @@ class TalkApi extends BaseApi
         $collectionData = array();
         foreach ($talks['talks'] as $item) {
             $talk = new TalkEntity($item);
+
+            foreach ($talk->getSpeakers() as $speakerInfo) {
+                if (isset($speakerInfo->speaker_uri)) {
+                    $speakerInfo->username = $this->userApi->getUsername($speakerInfo->speaker_uri);
+                }
+            }
+
             $collectionData['talks'][] = $talk;
             $this->talkDb->save($talk);
         }

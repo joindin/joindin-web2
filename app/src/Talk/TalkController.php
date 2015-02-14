@@ -5,6 +5,8 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
+use User\UserDb;
+use User\UserApi;
 use Exception;
 use Slim\Slim;
 
@@ -132,6 +134,15 @@ class TalkController extends BaseController
     private function getTalkApi()
     {
         $talkDb = new TalkDb($this->getCache());
-        return new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        return new TalkApi($this->cfg, $this->accessToken, $talkDb, $this->getUserApi());
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
 }

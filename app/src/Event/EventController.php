@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator;
 use Talk\TalkDb;
 use Talk\TalkApi;
+use User\UserDb;
+use User\UserApi;
 use Exception;
 use Slim\Slim;
 
@@ -460,6 +462,15 @@ class EventController extends BaseController
      */
     private function getTalkApi()
     {
-        return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb());
+        return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb(), $this->getUserApi());
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
 }

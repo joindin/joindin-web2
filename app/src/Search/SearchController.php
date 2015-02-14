@@ -7,6 +7,8 @@ use Event\EventApi;
 use Event\EventDb;
 use Talk\TalkApi;
 use Talk\TalkDb;
+use User\UserDb;
+use User\UserApi;
 
 /**
  * Class SearchController
@@ -202,9 +204,18 @@ class SearchController extends BaseController
         $keyPrefix = $this->cfg['redisKeyPrefix'];
         $cache = new CacheService($keyPrefix);
         $talkDb = new TalkDb($cache);
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
+        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb, $this->getUserApi());
 
         return $talkApi;
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
 
     /**
