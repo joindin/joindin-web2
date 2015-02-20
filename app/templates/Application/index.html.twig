@@ -19,7 +19,9 @@
         <h2>Welcome</h2>
         <p>Welcome to joind.in! This is the site where event attendees can leave feedback on an event and its sessions. Do you have an opinion? Then <a href="{{ urlFor('user-register') }}">register an account</a> and share it!</p>
     </section>
+{% endblock %}
 
+{% block extraAside %}
     <section>
         <h2>Open Calls for Papers</h2>
         {% if cfp_events.events %}
@@ -32,9 +34,5 @@
         {% else %}
         <p>There are no events with an open call for papers.</p>
         {% endif %}
-
     </section>
-{% endblock %}
-
-{% block extraAside %}
 {% endblock %}
