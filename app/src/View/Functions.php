@@ -3,6 +3,7 @@ namespace View\Functions;
 
 use Twig_Environment;
 use Twig_SimpleFunction;
+use Twig_SimpleFilter;
 use Slim\Slim;
 use Slim\Views\TwigExtension;
 
@@ -40,6 +41,10 @@ function initialize(Twig_Environment $env, Slim $app)
     $env->addFunction(new Twig_SimpleFunction('getCurrentUrl', function () {
         return $_SERVER['REQUEST_URI'];
     }));
+
+	$env->addFilter(new Twig_SimpleFilter('getErrorParam', function () {
+		return isset($_GET['login']) && $_GET['login'] == 'failed' ? true : false;
+	}));
 
     $env->addFunction(
         new Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = array()) use ($app) {

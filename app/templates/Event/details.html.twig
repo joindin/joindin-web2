@@ -23,7 +23,8 @@
                         </div>
                     </form>
                 {% else %}
-                    <a href="{{ urlFor('user-login') }}">Login</a> to write a comment
+                    <p>Please log in to comment on this event.</p>
+                    {%  include '_common/login.html.twig' %}
                 {% endif %}
             {% else %}
                 <p>Comments are closed</p>

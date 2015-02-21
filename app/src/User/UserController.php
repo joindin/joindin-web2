@@ -60,6 +60,7 @@ class UserController extends BaseController
 
             if (false === $result) {
                 $error = true;
+				$this->loginRedirect($redirect, $error);
             } else {
                 session_regenerate_id(true);
                 $_SESSION['access_token'] = $result->access_token;
@@ -70,11 +71,7 @@ class UserController extends BaseController
                 $user = $userApi->getUser($result->user_uri);
                 if ($user) {
                     $_SESSION['user'] = $user;
-                    if (empty($redirect) || strpos($redirect, '/user/login') === 0) {
-                        $this->application->redirect('/');
-                    } else {
-                        $this->application->redirect($redirect);
-                    }
+                    $this->loginRedirect($redirect, $error);
                 } else {
                     unset($_SESSION['access_token']);
                 }
@@ -83,6 +80,24 @@ class UserController extends BaseController
 
         $this->render('User/login.html.twig', array('error' => $error));
     }
+
+	protected function loginRedirect($redirect, $error = false)
+	{
+		$params = '/?login=failed';
+		if ($error) {
+			if (strpos($redirect, 'login=failed') !== 0) {
+				$params = '';
+			}
+		}
+
+		if (empty($redirect) || strpos($redirect, '/user/login') === 0) {
+			if (!$error) {
+				$this->application->redirect('/');
+			}
+		} else {
+			$this->application->redirect($redirect . $params);
+		}
+	}
 
     /**
      * Registration page
