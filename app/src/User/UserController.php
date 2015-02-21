@@ -59,7 +59,11 @@ class UserController extends BaseController
             $result = $authApi->login($username, $password, $clientId, $clientSecret);
 
             if (false === $result) {
-                $error = true;
+                $this->application->flash('error', "Failed to log in");
+                if (empty($redirect)) {
+                    $redirect = '/user/login';
+                }
+                $this->application->redirect($redirect);
             } else {
                 session_regenerate_id(true);
                 $_SESSION['access_token'] = $result->access_token;
@@ -81,7 +85,7 @@ class UserController extends BaseController
             }
         }
 
-        $this->render('User/login.html.twig', array('error' => $error));
+        $this->render('User/login.html.twig');
     }
 
     /**
