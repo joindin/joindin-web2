@@ -321,7 +321,7 @@ class EventController extends BaseController
     {
         $cache = $this->getCache();
         $eventDb = new EventDb($cache);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
+        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
 
         return $eventApi;
     }

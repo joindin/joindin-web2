@@ -553,6 +553,6 @@ class UserController extends BaseController
      */
     private function getEventApi()
     {
-        return new EventApi($this->cfg, $this->accessToken, $this->getEventDb());
+        return new EventApi($this->cfg, $this->accessToken, $this->getEventDb(), $this->getUserApi());
     }
 }
