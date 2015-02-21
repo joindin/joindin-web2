@@ -209,6 +209,11 @@ class EventController extends BaseController
                     $this->application->flash('error', 'Comment failed the spam check.');
                     $this->application->redirect($url);
                 }
+                if (stripos($e->getMessage(), 'The field \"comment\" is required') !== false) {
+                    // spam comment
+                    $this->application->flash('error', 'You must provide a comment.');
+                    $this->application->redirect($url);
+                }
                 throw $e;
             }
         }
