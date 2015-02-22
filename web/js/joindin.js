@@ -8,8 +8,12 @@ $(function(){
 
         var url = '/event/' + id + '/star';
 
-        $.post(url, function(){
-            element.toggleClass('starred');
+        $.post(url, function(data) {
+            if (data.starred) {
+                element.addClass('starred');
+            } else {
+                element.removeClass('starred');
+            }
             if(element.hasClass('starred')) {
                 element.html('&#10029;');
             } else {

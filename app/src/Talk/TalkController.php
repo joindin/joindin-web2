@@ -77,7 +77,7 @@ class TalkController extends BaseController
         }
         
         $this->application->status(200);
-        echo  '{ "done": true }';
+        echo json_encode($result);
     }
 
     public function quick($talkStub)
