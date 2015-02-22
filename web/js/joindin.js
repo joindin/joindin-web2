@@ -9,11 +9,11 @@ $(function(){
         var url = '/event/' + id + '/star';
 
         $.post(url, function(){
-            $(this).toggleClass('starred');
-            if($(this).hasClass('starred')) {
-                $(this).html('&#10029;');
+            element.toggleClass('starred');
+            if(element.hasClass('starred')) {
+                element.html('&#10029;');
             } else {
-                $(this).html('&#10025;');
+                element.html('&#10025;');
             }
         });
      });
