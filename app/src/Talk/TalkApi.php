@@ -172,6 +172,6 @@ class TalkApi extends BaseApi
             }
         }
     
-        throw new \Exception("Failed to toggle star: " . $result);
+        throw new \Exception("Failed to toggle star: $status, $result");
     }
 }
