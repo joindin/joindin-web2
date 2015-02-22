@@ -71,8 +71,8 @@ class TalkController extends BaseController
         try {
             $result = $talkApi->toggleStar($talk);
         } catch (Exception $e) {
-            $this->application->status(500);
-            echo  '{ "message": "Failed to toggle star" }';
+            $reason = $e->getMessage();
+            $this->application->halt(500, '{ "message": "Failed to toggle star: ' . $reason .'" }');
         }
         
         $this->application->status(200);
