@@ -151,4 +151,27 @@ class TalkApi extends BaseApi
         }
         throw new \Exception("Failed to add comment: " . $result);
     }
+
+    /**
+     * Star or unstar based on current setting of starred
+     *
+     * @param  TalkEntity $talk
+     */
+    public function toggleStar($talk)
+    {
+        if ($talk->getStarred()) {
+            list ($status, $result) = $this->apiDelete($talk->getStarredUri(), []);
+            if ($status == 200) {
+                return true;
+            }
+
+        } else {
+            list ($status, $result) = $this->apiPost($talk->getStarredUri(), []);
+            if ($status == 201) {
+                return true;
+            }
+        }
+    
+        throw new \Exception("Failed to toggle star: " . $result);
+    }
 }
