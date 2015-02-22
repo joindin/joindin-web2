@@ -280,8 +280,20 @@ table.schedule span.speaker a:hover {
     margin-bottom: 10px;
 }
 
+.event .logo {
+    float: left;
+    margin-top: 12px;
+    padding: 0 10px;
+    width: 90px;
+}
+
+.event .description {
+    postion:relative;
+    margin-left: 90px;
+}
+
 .event .logo img {
-    max-width: 150%;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
