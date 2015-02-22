@@ -56,6 +56,7 @@ $(function(){
                         $(this).html('including you');
                         $(this).removeClass('btn btn-xs btn-primary');
                         $(this).addClass('label label-success');
+                        $(this).blur();
                     }
                 }.bind(this),
                 "dataType": "json"
@@ -92,6 +93,7 @@ $(function(){
                         }
                         $(this).addClass('btn btn-xs btn-primary');
                         $(this).removeClass('label label-success');
+                        $(this).blur();
                     }
                 }.bind(this),
                 "dataType": "json"
