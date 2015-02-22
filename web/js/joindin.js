@@ -1,5 +1,23 @@
 $(function(){
 
+
+    // stars
+    $('.star').click(function() {
+        var id = $(this).parents('div').attr('id');
+        var element = $(this);
+
+        var url = '/event/' + id + '/star';
+
+        $.post(url, function(){
+            $(this).toggleClass('starred');
+            if($(this).hasClass('starred')) {
+                $(this).html('&#10029;');
+            } else {
+                $(this).html('&#10025;');
+            }
+        });
+     });
+
     function modifyAttendingCount(eventName, byAmount)
     {
         var eventAttendingCountSpan = $('.' + eventName + '-attending-count');

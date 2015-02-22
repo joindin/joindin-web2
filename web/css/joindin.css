@@ -409,3 +409,18 @@ form ul.errors {
 .nowrap {
     white-space: nowrap;
 }
+
+a.star, table.schedule a.star {
+    font-size: 2.5em;
+    float: right;
+    text-decoration: none;
+    color: #000;
+}
+
+a.star:hover {
+    text-decoration: none;
+}
+
+a.starred, table.schedule a.starred {
+    color: #fff;
+}
