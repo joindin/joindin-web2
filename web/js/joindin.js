@@ -19,6 +19,7 @@ $(function(){
             } else {
                 element.html('&#10025;');
             }
+            element.blur();
         });
      });
 
