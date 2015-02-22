@@ -57,14 +57,14 @@ class TalkController extends BaseController
         $this->application->contentType('application/json');
 
         if (!$event) {
-            $this->application->status(404);
+            $this->application->notFound();
             return;
         }
 
         $talkApi = $this->getTalkApi();
         $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if (!$talk) {
-            $this->application->status(404);
+            $this->application->notFound();
             return;
         }
 
@@ -73,9 +73,11 @@ class TalkController extends BaseController
         } catch (Exception $e) {
             $this->application->status(500);
             echo 'Failed to toggle star';
+            echo  '{ "message": "Failed to toggle star" }';
         }
         
         $this->application->status(200);
+        echo  '{ "done": true }';
     }
 
     public function quick($talkStub)
