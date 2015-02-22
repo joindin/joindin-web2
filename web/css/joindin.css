@@ -37,6 +37,15 @@ nav.navbar a.navbar-brand img {
     height: 40px;
 }
 
+.navbar-nav>li>a {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+form.navbar-form {
+    margin-top: 10px;
+}
+
 h1 {
     border-bottom: 1px solid #d7dcdf;
     color: #f90;
