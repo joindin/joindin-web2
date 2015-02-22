@@ -411,10 +411,11 @@ form ul.errors {
 }
 
 a.star, table.schedule a.star {
-    font-size: 2.5em;
+    font-size: 3em;
     float: right;
     text-decoration: none;
     color: #000;
+    line-height: 0.5em;
 }
 
 a.star:hover {
