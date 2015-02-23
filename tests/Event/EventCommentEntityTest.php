@@ -11,6 +11,7 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->commentData = new stdClass();
+        $this->commentData->rating              = 5;
         $this->commentData->comment             = "Test event comment text";
         $this->commentData->user_display_name   = "Test comment display name";
         $this->commentData->created_date        = "2014-03-02T08:43:44+01:00";
@@ -38,6 +39,11 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
+            $comment->getRating(),
+            5
+        );
+
+        $this->assertEquals(
             $comment->getComment(),
             "Test event comment text"
         );
@@ -59,6 +65,7 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($comment->getUserDisplayName());
         $this->assertNull($comment->getCommentDate());
+        $this->assertNull($comment->getRating());        
         $this->assertNull($comment->getComment());
         $this->assertNull($comment->getCommentSource());
         $this->assertNull($comment->getCommentHash());

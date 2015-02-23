@@ -24,6 +24,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         $this->eventData->longitude            = "Test event longitude";
         $this->eventData->href                 = "Test event href";
         $this->eventData->attendee_count       = "Test event attendee count";
+        $this->eventData->average_rating       =  5;        
         $this->eventData->event_comments_count = "Test event event comments count";
         $this->eventData->comments_uri         = "Test event comments uri";
         $this->eventData->talks_uri            = "Test event talks uri";
@@ -94,6 +95,11 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $event->getAttendeeCount(),
             "Test event attendee count"
+        );
+
+        $this->assertEquals(
+            $event->getAverageRating(),
+            5
         );
 
         $this->assertEquals(

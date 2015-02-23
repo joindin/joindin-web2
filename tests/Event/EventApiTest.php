@@ -157,13 +157,13 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->method('apiPost')
             ->with(
                 'http://example.com/comments/123',
-                array('comment'=>'comment')
+                array('rating'=>5, 'comment'=>'comment')
             )
             ->will($this->returnValue(array('201', 'result')));
 
         // The test
         $this->assertTrue(
-            $mockEventApi->addComment($mockEventObj, 'comment')
+            $mockEventApi->addComment($mockEventObj, 5, 'comment')
         );
     }
 
@@ -200,13 +200,13 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->method('apiPost')
             ->with(
                 'http://example.com/comments/123',
-                array('comment'=>'comment')
+                array('rating'=>5, 'comment'=>'comment')
             )
             ->will($this->returnValue(array('500', 'no result')));
 
         // The test
         $this->setExpectedException('Exception');
-        $mockEventApi->addComment($mockEventObj, 'comment');
+        $mockEventApi->addComment($mockEventObj, 5, 'comment');
     }
 
     public function testAttendThrowsExceptionIfAPIReturnsBadStatus()
