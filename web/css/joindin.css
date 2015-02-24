@@ -265,6 +265,10 @@ table.schedule span.speaker a:hover {
     margin-top: 1em;
 }
 
+#comments #login-form form input {
+	margin-top: 0;
+}
+
 #comments div#rating_value {
     clear: none;
     font-size: 80%;

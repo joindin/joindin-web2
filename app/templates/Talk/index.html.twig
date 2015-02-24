@@ -75,7 +75,10 @@
                     </div>
                 </form>
             {% else %}
-                <a href="{{ urlFor('user-login') }}">Login</a> to write a comment
+                <p>Log in to write a comment.</p>
+					<div class="well" id="login-form">
+						{% include '_common/login.html.twig' %}
+					</div>
             {% endif %}
         {% else %}
             <p>Comments are closed.</p>
