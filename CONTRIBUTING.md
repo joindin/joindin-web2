@@ -24,6 +24,14 @@ current issues with the "hackathon" or "easypick" issues.
 If you have any problems, ask on the IRC channel or send an email to
 the mailing list.
 
+## Issue tracker management
+
+If you start working on an issue, please assign yourself to it and mark the issue as "in progress".
+
+## Linking branches to JIRA
+
+If you include the JOINDIN-nnn issue number in the commit message, then JIRA will pick it up and display your branch on the issue.
+
 ## JIRA Smart Commits
 
 If you want have your commit messages perform actions in JIRA. JIRA
