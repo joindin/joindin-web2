@@ -33,6 +33,15 @@ class TalkCommentEntity
         return $this->data->user_display_name;
     }
 
+    public function getUsername()
+    {
+        if (!isset($this->data->username)) {
+            return null;
+        }
+
+        return $this->data->username;
+    }
+
     public function getGravatarHash()
     {
         if (!isset($this->data->gravatar_hash)) {
