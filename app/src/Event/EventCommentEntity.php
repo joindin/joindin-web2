@@ -24,6 +24,15 @@ class EventCommentEntity
         return $this->data->user_display_name;
     }
 
+    public function getGravatarHash()
+    {
+        if (!isset($this->data->gravatar_hash)) {
+            return null;
+        }
+
+        return $this->data->gravatar_hash;
+    }
+
     public function getCommentDate()
     {
         if (!isset($this->data->created_date)) {
@@ -49,5 +58,15 @@ class EventCommentEntity
         }
 
         return $this->data->source;
+    }
+
+    public function getCommentHash()
+    {
+        if (!isset($this->data->comment_uri)) {
+            return null;
+        }
+
+        $hash = md5($this->data->comment_uri);
+        return (substr($hash, 0, 6));
     }
 }

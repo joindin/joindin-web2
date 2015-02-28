@@ -22,7 +22,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testDefaultGetCollectionParametersAreSet()
+    public function testDefaultgetEventsParametersAreSet()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -30,15 +30,16 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             array($this->mockConfig, null, $this->mockDbEvent)
         );
 
+        $expectedParams = ['resultsperpage' => 10, 'start' => 1];
         $mockEvent->expects($this->once())
             ->method('apiGet')
-            ->with('http://example.com/v2.1/events?resultsperpage=10&start=1')
+            ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection();
+        $mockEvent->getEvents();
     }
 
-    public function testGetCollectionWithLimitSetsParamsCorrectly()
+    public function testgetEventsWithLimitSetsParamsCorrectly()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -46,15 +47,16 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             array($this->mockConfig, null, $this->mockDbEvent)
         );
 
+        $expectedParams = ['resultsperpage' => 75, 'start' => 1];
         $mockEvent->expects($this->once())
             ->method('apiGet')
-            ->with('http://example.com/v2.1/events?resultsperpage=75&start=1')
+            ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection(75);
+        $mockEvent->getEvents(75);
     }
 
-    public function testGetCollectionWithPageValueSetsParamsCorrectly()
+    public function testgetEventsWithPageValueSetsParamsCorrectly()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -62,15 +64,16 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             array($this->mockConfig, null, $this->mockDbEvent)
         );
 
+        $expectedParams = ['resultsperpage' => 32, 'start' => 6];
         $mockEvent->expects($this->once())
             ->method('apiGet')
-            ->with('http://example.com/v2.1/events?resultsperpage=32&start=6')
+            ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection(32, 6);
+        $mockEvent->getEvents(32, 6);
     }
 
-    public function testGetCollectionWithFilterSetsAllParamsCorrectly()
+    public function testgetEventsWithFilterSetsAllParamsCorrectly()
     {
         $mockEvent = $this->getMock(
             'Event\EventApi',
@@ -78,12 +81,47 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             array($this->mockConfig, null, $this->mockDbEvent)
         );
 
+        $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'filter' => 'samoflange'];
         $mockEvent->expects($this->once())
             ->method('apiGet')
-            ->with('http://example.com/v2.1/events?resultsperpage=16&start=3&filter=samoflange')
+            ->with('http://example.com/v2.1/events', $expectedParams)
             ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
 
-        $mockEvent->getCollection(16, 3, 'samoflange');
+        $mockEvent->getEvents(16, 3, 'samoflange');
+    }
+
+    public function testgetEventsWithVerboseSetsAllParamsCorrectly()
+    {
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'verbose' => 'yes'];
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events', $expectedParams)
+            ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
+
+        $mockEvent->getEvents(16, 3, null, true);
+    }
+
+    public function testgetEventsWithQueryParamsPassesThemThroughCorrectly()
+    {
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'title' => 'test', 'tags' => 'php'];
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events', $expectedParams)
+            ->will($this->returnValue(json_encode(array('events' => array(), 'meta' => array()))));
+
+        $mockEvent->getEvents(16, 3, null, false, array('title' => 'test', 'tags' => 'php'));
     }
 
     /**
@@ -201,5 +239,73 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('Exception');
         $mockEventApi->attend($mockEventObj);
+    }
+
+    public function testDefaultGetTalkCommentsParametersAreSet()
+    {
+        $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events/1/talk_comments?resultsperpage=10&start=1')
+            ->will($this->returnValue(json_encode(array('comments' => array(), 'meta' => array()))));
+
+        $mockEvent->getTalkComments($comment_uri);
+    }
+
+    public function testGetTalkCommentsWithLimitSetsParamsCorrectly()
+    {
+        $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events/1/talk_comments?resultsperpage=75&start=1')
+            ->will($this->returnValue(json_encode(array('comments' => array(), 'meta' => array()))));
+
+        $mockEvent->getTalkComments($comment_uri, 75);
+    }
+
+    public function testGetTalkCommentsWithStartValueSetsParamsCorrectly()
+    {
+        $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events/1/talk_comments?resultsperpage=32&start=6')
+            ->will($this->returnValue(json_encode(array('comments' => array(), 'meta' => array()))));
+
+        $mockEvent->getTalkComments($comment_uri, 32, 6);
+    }
+
+    public function testGetTalkCommentsWithVerboseSetsAllParamsCorrectly()
+    {
+        $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
+        $mockEvent = $this->getMock(
+            'Event\EventApi',
+            array('apiGet'),
+            array($this->mockConfig, null, $this->mockDbEvent)
+        );
+
+        $mockEvent->expects($this->once())
+            ->method('apiGet')
+            ->with('http://example.com/v2.1/events/1/talk_comments?resultsperpage=16&start=3&verbose=yes')
+            ->will($this->returnValue(json_encode(array('comments' => array(), 'meta' => array()))));
+
+        $mockEvent->getTalkComments($comment_uri, 16, 3, true);
     }
 }

@@ -70,9 +70,17 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
                         break;
                     }
 
-                    $this->elements[] = $elements[$i];
-                    $this->isIndex[] = true;
-                    $this->mapsForm[] = true;
+                    // All the following index items (regardless if .children is
+                    // explicitly used) are children and grand-children
+                    for (; $i < $l && $path->isIndex($i); ++$i) {
+                        $this->elements[] = $elements[$i];
+                        $this->isIndex[] = true;
+                        $this->mapsForm[] = true;
+                    }
+
+                    // Rewind the pointer as the last element above didn't match
+                    // (even if the pointer was moved forward)
+                    --$i;
                 } elseif ('data' === $elements[$i] && $path->isProperty($i)) {
                     // Skip element "data"
                     ++$i;
@@ -198,9 +206,9 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
      * In this example, "address" and "office" map to forms, while
      * "street does not.
      *
-     * @param  int     $index The element index.
+     * @param int $index The element index.
      *
-     * @return bool    Whether the element maps to a form.
+     * @return bool Whether the element maps to a form.
      *
      * @throws OutOfBoundsException If the offset is invalid.
      */

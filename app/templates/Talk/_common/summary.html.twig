@@ -1,0 +1,50 @@
+{%
+set talkUrl = urlFor(
+    'talk-quicklink', {"talkStub": talk.getStub}
+)
+%}
+{%
+set eventUrl = urlFor(
+    'event-detail', {"friendly_name": event.getUrlFriendlyName}
+)
+%}
+
+<article class="talk row">
+    <div class="col-xs-12 title">
+        <section>
+            <h3 class="header">
+                <a href="{{ talkUrl }}">{{ talk.getTitle }}</a>
+            </h3>
+
+            {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
+
+            <p class="meta">
+                {{ talk.getStartDateTime|date('M d Y') }}
+
+                at
+                <a href="{{ eventUrl }}" class="nowrap">{{ event.getName }}</a>
+
+                |
+
+                <a href="{{ talkUrl }}#comments" class="nowrap">
+                    {{ talk.getCommentCount}}
+                    {% if talk.getCommentCount == 1 %}
+                        comment
+                    {% else %}
+                        comments
+                    {% endif %}
+                </a>
+
+                {% if talk.getSpeakers %}
+                    <br/>
+                    by
+                    {% for speaker in talk.getSpeakers %}
+                        <span class="nowrap">
+                            {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
+                        </span>
+                    {% endfor %}
+                {% endif %}
+            </p>
+        </section>
+    </div>
+</article>

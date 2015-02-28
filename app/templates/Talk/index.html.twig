@@ -40,13 +40,6 @@
 
     <section id="comments">
         <h2>Comments</h2>
-
-        {% if comments %}
-            {% for comment in comments %}
-                {% include '_common/comment.html.twig' with {'comment': comment, 'talk': talk }%}
-            {% endfor %}
-        {% endif %}
-
         {% if talk.areCommentsEnabled %}
             <h2>Write a comment</h2>
             {% if user %}
@@ -87,6 +80,12 @@
         {% else %}
             <p>Comments are closed.</p>
         {% endif %}
+        
+        {% if comments %}
+            {% for comment in comments %}
+                {% include '_common/comment.html.twig' with {'comment': comment, 'talk': talk }%}
+            {% endfor %}
+        {% endif %}
     </section>
 
 {% endblock %}
@@ -95,7 +94,7 @@
     <section>
         {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
     </section>
-    <section class="short-url hidden-xs hidden-sm">
+    <section class="short-url">
         <label class="control-label">Short URL:</label>
         <p><a href="{{ shortUrlForTalk(talk.getStub) }}">{{ shortUrlForTalk(talk.getStub) }}</a></p>
     </section>

@@ -115,8 +115,12 @@ class DateTimeType extends AbstractType
                 'months',
                 'days',
                 'empty_value',
+                'placeholder',
                 'required',
                 'translation_domain',
+                'html5',
+                'invalid_message',
+                'invalid_message_parameters',
             )));
 
             $timeOptions = array_intersect_key($options, array_flip(array(
@@ -126,8 +130,12 @@ class DateTimeType extends AbstractType
                 'with_minutes',
                 'with_seconds',
                 'empty_value',
+                'placeholder',
                 'required',
                 'translation_domain',
+                'html5',
+                'invalid_message',
+                'invalid_message_parameters',
             )));
 
             if (null !== $options['date_widget']) {
@@ -180,10 +188,11 @@ class DateTimeType extends AbstractType
     {
         $view->vars['widget'] = $options['widget'];
 
-        // Change the input to a HTML5 date input if
+        // Change the input to a HTML5 datetime input if
         //  * the widget is set to "single_text"
         //  * the format matches the one expected by HTML5
-        if ('single_text' === $options['widget'] && self::HTML5_FORMAT === $options['format']) {
+        //  * the html5 is set to true
+        if ($options['html5'] && 'single_text' === $options['widget'] && self::HTML5_FORMAT === $options['format']) {
             $view->vars['type'] = 'datetime';
         }
     }
@@ -208,32 +217,34 @@ class DateTimeType extends AbstractType
         };
 
         $resolver->setDefaults(array(
-            'input'          => 'datetime',
+            'input' => 'datetime',
             'model_timezone' => null,
-            'view_timezone'  => null,
-            'format'         => self::HTML5_FORMAT,
-            'date_format'    => null,
-            'widget'         => null,
-            'date_widget'    => $dateWidget,
-            'time_widget'    => $timeWidget,
-            'with_minutes'   => true,
-            'with_seconds'   => false,
+            'view_timezone' => null,
+            'format' => self::HTML5_FORMAT,
+            'date_format' => null,
+            'widget' => null,
+            'date_widget' => $dateWidget,
+            'time_widget' => $timeWidget,
+            'with_minutes' => true,
+            'with_seconds' => false,
+            'html5' => true,
             // Don't modify \DateTime classes by reference, we treat
             // them like immutable value objects
-            'by_reference'   => false,
+            'by_reference' => false,
             'error_bubbling' => false,
             // If initialized with a \DateTime object, FormType initializes
             // this option to "\DateTime". Since the internal, normalized
             // representation is not \DateTime, but an array, we need to unset
             // this option.
-            'data_class'     => null,
-            'compound'       => $compound,
+            'data_class' => null,
+            'compound' => $compound,
         ));
 
         // Don't add some defaults in order to preserve the defaults
         // set in DateType and TimeType
         $resolver->setOptional(array(
-            'empty_value',
+            'empty_value', // deprecated
+            'placeholder',
             'years',
             'months',
             'days',
@@ -243,7 +254,7 @@ class DateTimeType extends AbstractType
         ));
 
         $resolver->setAllowedValues(array(
-            'input'       => array(
+            'input' => array(
                 'datetime',
                 'string',
                 'timestamp',
@@ -262,7 +273,7 @@ class DateTimeType extends AbstractType
                 'choice',
             ),
             // This option will overwrite "date_widget" and "time_widget" options
-            'widget'     => array(
+            'widget' => array(
                 null, // default, don't overwrite options
                 'single_text',
                 'text',

@@ -29,10 +29,10 @@ class DateTimeToArrayTransformer extends BaseDateTimeTransformer
     /**
      * Constructor.
      *
-     * @param string  $inputTimezone  The input timezone
-     * @param string  $outputTimezone The output timezone
-     * @param array   $fields         The date fields
-     * @param bool    $pad            Whether to use padding
+     * @param string $inputTimezone  The input timezone
+     * @param string $outputTimezone The output timezone
+     * @param array  $fields         The date fields
+     * @param bool   $pad            Whether to use padding
      *
      * @throws UnexpectedTypeException if a timezone is not a string
      */
@@ -63,12 +63,12 @@ class DateTimeToArrayTransformer extends BaseDateTimeTransformer
     {
         if (null === $dateTime) {
             return array_intersect_key(array(
-                'year'    => '',
-                'month'   => '',
-                'day'     => '',
-                'hour'    => '',
-                'minute'  => '',
-                'second'  => '',
+                'year' => '',
+                'month' => '',
+                'day' => '',
+                'hour' => '',
+                'minute' => '',
+                'second' => '',
             ), array_flip($this->fields));
         }
 
@@ -86,12 +86,12 @@ class DateTimeToArrayTransformer extends BaseDateTimeTransformer
         }
 
         $result = array_intersect_key(array(
-            'year'    => $dateTime->format('Y'),
-            'month'   => $dateTime->format('m'),
-            'day'     => $dateTime->format('d'),
-            'hour'    => $dateTime->format('H'),
-            'minute'  => $dateTime->format('i'),
-            'second'  => $dateTime->format('s'),
+            'year' => $dateTime->format('Y'),
+            'month' => $dateTime->format('m'),
+            'day' => $dateTime->format('d'),
+            'hour' => $dateTime->format('H'),
+            'minute' => $dateTime->format('i'),
+            'second' => $dateTime->format('s'),
         ), array_flip($this->fields));
 
         if (!$this->pad) {

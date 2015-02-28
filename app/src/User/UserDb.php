@@ -7,7 +7,7 @@ class UserDb extends BaseDb
 {
     protected $keyName = 'users';
 
-    public function save($user)
+    public function save(UserEntity $user)
     {
         $data = array(
             'uri'  => $user->getUri(),
@@ -23,5 +23,6 @@ class UserDb extends BaseDb
         }
 
         $this->cache->save($this->keyName, $data, 'uri', $user->getUri());
+        $this->cache->save($this->keyName, $data, 'username', $user->getUsername());
     }
 }

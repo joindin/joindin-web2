@@ -1,4 +1,12 @@
 <?php
+
+// To help the built-in PHP dev server, check if the request was actually for
+// something which should probably be served as a static file
+
+if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
+	return false;
+}
+
 // include dependencies
 require '../vendor/autoload.php';
 
@@ -57,17 +65,25 @@ $app->view()->setTemplatesDirectory('../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
 
-$cacheFolder = '/tmp/joindin-twig-cache';
 if (isset($config['slim']['twig']['cache'])) {
-    $cacheFolder = $config['slim']['twig']['cache'];
+    $app->view()->getEnvironment()->setCache($config['slim']['twig']['cache']);
+} else {
+    $app->view()->getEnvironment()->setCache(false);
 }
-$app->view()->getEnvironment()->setCache(rtrim($cacheFolder, '/') . '/' . $config['slim']['mode']);
 
 $app->configureMode('development', function () use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
     $env->addExtension(new \Twig_Extension_Debug());
-    $env->setCache(false); // disable this line to tests performance with views
+});
+
+// register error handlers
+$app->error(function (\Exception $e) use ($app) {
+    $app->render('Error/error.html.twig', ['exception' => $e]);
+});
+
+$app->notFound(function () use ($app) {
+    $app->render('Error/404.html.twig');
 });
 
 // register middlewares

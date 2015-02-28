@@ -135,4 +135,9 @@ class TalkEntity
     {
         return $this->data->language;
     }
+
+    public function getCommentCount()
+    {
+        return $this->data->comment_count;
+    }
 }

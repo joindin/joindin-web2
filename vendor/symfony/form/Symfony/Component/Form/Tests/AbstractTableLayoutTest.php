@@ -43,7 +43,7 @@ abstract class AbstractTableLayoutTest extends AbstractLayoutTest
     public function testLabelIsNotRenderedWhenSetToFalse()
     {
         $form = $this->factory->createNamed('name', 'text', null, array(
-            'label' => false
+            'label' => false,
         ));
         $html = $this->renderRow($form->createView());
 
@@ -194,7 +194,7 @@ abstract class AbstractTableLayoutTest extends AbstractLayoutTest
 
     public function testCollection()
     {
-        $form = $this->factory->createNamed('name', 'collection', array('a', 'b'), array(
+        $form = $this->factory->createNamed('names', 'collection', array('a', 'b'), array(
             'type' => 'text',
         ));
 
@@ -203,7 +203,7 @@ abstract class AbstractTableLayoutTest extends AbstractLayoutTest
     [
         ./tr[./td/input[@type="text"][@value="a"]]
         /following-sibling::tr[./td/input[@type="text"][@value="b"]]
-        /following-sibling::tr[@style="display: none"][./td[@colspan="2"]/input[@type="hidden"][@id="name__token"]]
+        /following-sibling::tr[@style="display: none"][./td[@colspan="2"]/input[@type="hidden"][@id="names__token"]]
     ]
     [count(./tr[./td/input])=3]
 '
@@ -212,13 +212,13 @@ abstract class AbstractTableLayoutTest extends AbstractLayoutTest
 
     public function testEmptyCollection()
     {
-        $form = $this->factory->createNamed('name', 'collection', array(), array(
+        $form = $this->factory->createNamed('names', 'collection', array(), array(
             'type' => 'text',
         ));
 
         $this->assertWidgetMatchesXpath($form->createView(), array(),
 '/table
-    [./tr[@style="display: none"][./td[@colspan="2"]/input[@type="hidden"][@id="name__token"]]]
+    [./tr[@style="display: none"][./td[@colspan="2"]/input[@type="hidden"][@id="names__token"]]]
     [count(./tr[./td/input])=1]
 '
         );
@@ -400,9 +400,9 @@ abstract class AbstractTableLayoutTest extends AbstractLayoutTest
     public function testRepeatedWithCustomOptions()
     {
         $form = $this->factory->createNamed('name', 'repeated', 'foobar', array(
-            'type'           => 'password',
-            'first_options'  => array('label' => 'Test', 'required' => false),
-            'second_options' => array('label' => 'Test2')
+            'type' => 'password',
+            'first_options' => array('label' => 'Test', 'required' => false),
+            'second_options' => array('label' => 'Test2'),
         ));
 
         $this->assertWidgetMatchesXpath($form->createView(), array(),
@@ -440,7 +440,7 @@ abstract class AbstractTableLayoutTest extends AbstractLayoutTest
     public function testCollectionRowWithCustomBlock()
     {
         $collection = array('one', 'two', 'three');
-        $form = $this->factory->createNamedBuilder('name', 'collection', $collection)
+        $form = $this->factory->createNamedBuilder('names', 'collection', $collection)
             ->getForm();
 
         $this->assertWidgetMatchesXpath($form->createView(), array(),
@@ -472,7 +472,7 @@ abstract class AbstractTableLayoutTest extends AbstractLayoutTest
         // tag is missing. If someone renders a form with table layout
         // manually, she should call form_rest() explicitly within the <table>
         // tag.
-        $this->assertMatchesXpath('<form>' . $html,
+        $this->assertMatchesXpath('<form>'.$html,
 '/form
     [
         ./tr
@@ -532,17 +532,5 @@ abstract class AbstractTableLayoutTest extends AbstractLayoutTest
 
         // foo="foo"
         $this->assertContains('<table id="form" foo="foo">', $html);
-    }
-
-    public function testWidgetContainerAttributeHiddenIfFalse()
-    {
-        $form = $this->factory->createNamed('form', 'form', null, array(
-            'attr' => array('foo' => false),
-        ));
-
-        $html = $this->renderWidget($form->createView());
-
-        // no foo
-        $this->assertContains('<table id="form">', $html);
     }
 }

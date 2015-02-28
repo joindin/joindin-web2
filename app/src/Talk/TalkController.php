@@ -5,7 +5,10 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
-use Slim_Exception_Pass;
+use User\UserDb;
+use User\UserApi;
+use Exception;
+use Slim\Slim;
 
 class TalkController extends BaseController
 {
@@ -20,32 +23,20 @@ class TalkController extends BaseController
 
     public function index($eventSlug, $talkSlug)
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-
-        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
+        $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
-            $this->render(
-                'Event/error_404.html.twig',
-                array(
-                    'message' => 'Event was not retrieved, perhaps the slug is invalid?',
-                ),
-                404
-            );
-            return;
+            return Slim::getInstance()->notFound();
         }
 
-        $eventUri = $event->getUri();
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        if (!$talk) {
+            return Slim::getInstance()->notFound();
+        }
 
-        $talkDb = new TalkDb($cache);
-        $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
-
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $talk = $talkApi->getTalk($talkUri, true);
-
-        $comments = $talkApi->getComments($talk->getCommentUri(), true);
+        $comments = $talkApi->getComments($talk->getCommentUri(), true, 0);
 
         $this->render(
             'Talk/index.html.twig',
@@ -60,15 +51,14 @@ class TalkController extends BaseController
 
     public function quick($talkStub)
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
+        $cache = $this->getCache();
         $talkDb = new TalkDb($cache);
         $talk = $talkDb->load('stub', $talkStub);
 
         $eventDb = new EventDb($cache);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
-            throw new Slim_Exception_Pass('Page not found', 404);
+            return \Slim\Slim::getInstance()->notFound();
         }
 
         $this->application->redirect(
@@ -92,23 +82,67 @@ class TalkController extends BaseController
             $this->application->redirect($url);
         }
 
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
+        $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($eventSlug);
-        $eventUri = $event->getUri();
 
-        $talkDb = new TalkDb($cache);
-        $talkUri = $talkDb->getUriFor($talkSlug, $eventUri);
-
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb);
-        $talk = $talkApi->getTalk($talkUri, true);
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if ($talk) {
-            $talkApi->addComment($talk, $rating, $comment);
+            try {
+                $talkApi->addComment($talk, $rating, $comment);
+            } catch (Exception $e) {
+                if (stripos($e->getMessage(), 'duplicate comment') !== false) {
+                    // duplicate comment
+                    $this->application->flash('error', 'Duplicate comment.');
+                    $this->application->redirect($url);
+                }
+                if (stripos($e->getMessage(), 'comment failed spam check') !== false) {
+                    // spam comment
+                    $this->application->flash('error', 'Comment failed the spam check.');
+                    $this->application->redirect($url);
+                }
+                throw $e;
+            }
         }
 
         $this->application->flash('message', 'Thank you for your comment.');
         $url .= '#add-comment';
         $this->application->redirect($url);
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
+     * @return EventApi
+     */
+    private function getEventApi()
+    {
+        $eventDb = new EventDb($this->getCache());
+        return new EventApi($this->cfg, $this->accessToken, $eventDb);
+    }
+
+    /**
+     * @return TalkApi
+     */
+    private function getTalkApi()
+    {
+        $talkDb = new TalkDb($this->getCache());
+        return new TalkApi($this->cfg, $this->accessToken, $talkDb, $this->getUserApi());
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
 }

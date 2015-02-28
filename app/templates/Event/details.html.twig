@@ -2,18 +2,17 @@
 
 {% block body %}
             {% include 'Event/_common/event_header.html.twig' %}
-            <p>{{ event.getDescription|format_string|raw }}</p>
+            <p>{{ event.getDescription|nl2br }}</p>
             <hr>
-            {% if comments %}
-                <h2>Comments</h2>
-                {% for comment in comments %}
-                    {% include '_common/comment.html.twig' with {'comment': comment} %}
-                {% endfor %}
-            {% endif %}
-
             {% if event.areCommentsEnabled %}
                 <h2>Write a comment</h2>
                 {% if user %}
+                    {% if flash.getMessages.message %}
+                        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+                    {% endif %}
+                    {% if flash.getMessages.error %}
+                        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+                    {% endif %}
                     <form id="add-comment" role="form" method="POST" action="{{ urlFor('event-add-comment', {'friendly_name': event.getUrlFriendlyName}) }}">
                         <div class="form-group">
                             <label for="comment">Your comment:</label>
@@ -29,15 +28,27 @@
             {% else %}
                 <p>Comments are closed</p>
             {% endif %}
+    
+            {% if comments %}
+                <h2>Comments</h2>
+                {% for comment in comments %}
+                    {% include '_common/comment.html.twig' with {'comment': comment} %}
+                {% endfor %}
+            {% endif %}
 {% endblock %}
 
 
 {% block extraAside %}
-    {% if event.getStub %}
-        <section class="short-url hidden-xs hidden-sm">
+    {% if event.getStub or event.getWebsiteAddress %}
+        <section class="short-url">
+    {% endif %}
+    {% if event.getStub  %}
             <label class="control-label">Short URL:</label>
-            <div>{{ shortUrlForEvent(event.getStub) }}</div>
-        </section>
+            <br>
+            <i class="fa fa-external-link-square"></i>
+            <a href="{{ shortUrlForEvent(event.getStub) }}">
+                {{ shortUrlForEvent(event.getStub) }}
+            </a>
     {% endif %}
     {% if event.getWebsiteAddress %}
         <div class="extraAside">
@@ -51,5 +62,14 @@
             </p>
         </div>
     {% endif %}
+    {% if event.getStub or event.getWebsiteAddress %}
+        </section>
+    {% endif %}
+
 {% endblock %}
 
+{% block extra_meta %}
+    {{ parent() }}
+    <link rel="canonical" href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}" />
+    {% if event.getStub %}<link rel="shortlink" href="{{ shortUrlForEvent(event.getStub) }}" />{% endif %}
+{% endblock %}

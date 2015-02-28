@@ -7,14 +7,16 @@
             {% include 'Event/_common/summary.html.twig' %}
         {% endfor %}
     </div>
-    {% include '_common/pagination.html.twig' %}
+    {% include '_common/pagination.html.twig' with {'pagination': events.pagination} %}
 {% endblock %}
 
 {% block extraAside %}
-    <h3>Submit your event</h3>
-    <p>
-        Know of an event happening? Let us know! We love to get the word out about
-        events the community would be interested in and you can help us spread the word!
-    </p>
-    <a href="{{ urlFor('event-submit') }}" class="btn btn-warning col-xs-12">Submit</a>
+    <section>
+        <h3>Submit your event</h3>
+        <p>
+            Know of an event happening? Let us know! We love to get the word out about
+            events the community would be interested in and you can help us spread the word!
+        </p>
+        <a href="{{ urlFor('event-submit') }}" class="btn btn-warning col-xs-12">Submit</a>
+    </section>
 {% endblock %}

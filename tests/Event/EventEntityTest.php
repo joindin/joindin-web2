@@ -34,6 +34,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         $this->eventData->stub                 = "Test event stub";
         $this->eventData->url_friendly_name    = "Test event url friendly name";
         $this->eventData->comments_enabled     = "1";
+        $this->eventData->all_talk_comments_uri = "Test event all talk comments uri";
     }
 
     public function testBasicEventData()
@@ -144,6 +145,11 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
             true,
             $event->areCommentsEnabled()
         );
+
+        $this->assertEquals(
+            $event->getAllTalkCommentsUri(),
+            "Test event all talk comments uri"
+        );
     }
 
     public function testNonExistentTestDataDoesntBreak()
@@ -170,7 +176,8 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         $event->isAttending();
         $event->getUrlFriendlyName();
         $event->getStub();
-        
+        $event->getAllTalkCommentsUri();
+
         $this->assertEquals(false, $event->areCommentsEnabled());
     }
 }

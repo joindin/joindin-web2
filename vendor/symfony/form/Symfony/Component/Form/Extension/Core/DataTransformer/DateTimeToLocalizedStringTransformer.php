@@ -32,12 +32,12 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
      *
      * @see BaseDateTimeTransformer::formats for available format options
      *
-     * @param string  $inputTimezone  The name of the input timezone
-     * @param string  $outputTimezone The name of the output timezone
-     * @param int     $dateFormat     The date format
-     * @param int     $timeFormat     The time format
-     * @param int     $calendar       One of the \IntlDateFormatter calendar constants
-     * @param string  $pattern        A pattern to pass to \IntlDateFormatter
+     * @param string $inputTimezone  The name of the input timezone
+     * @param string $outputTimezone The name of the output timezone
+     * @param int    $dateFormat     The date format
+     * @param int    $timeFormat     The time format
+     * @param int    $calendar       One of the \IntlDateFormatter calendar constants
+     * @param string $pattern        A pattern to pass to \IntlDateFormatter
      *
      * @throws UnexpectedTypeException If a format is not supported or if a timezone is not a string
      */
@@ -152,6 +152,8 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
      * Returns a preconfigured IntlDateFormatter instance
      *
      * @return \IntlDateFormatter
+     *
+     * @throws TransformationFailedException in case the date formatter can not be constructed.
      */
     protected function getIntlDateFormatter()
     {
@@ -162,6 +164,12 @@ class DateTimeToLocalizedStringTransformer extends BaseDateTimeTransformer
         $pattern = $this->pattern;
 
         $intlDateFormatter = new \IntlDateFormatter(\Locale::getDefault(), $dateFormat, $timeFormat, $timezone, $calendar, $pattern);
+
+        // new \intlDateFormatter may return null instead of false in case of failure, see https://bugs.php.net/bug.php?id=66323
+        if (!$intlDateFormatter) {
+            throw new TransformationFailedException(intl_get_error_message(), intl_get_error_code());
+        }
+
         $intlDateFormatter->setLenient(false);
 
         return $intlDateFormatter;

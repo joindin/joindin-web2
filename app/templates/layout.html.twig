@@ -1,3 +1,6 @@
+{# default to sidebar_col_width of 3 if not set #}
+{% if not sidebar_col_width %} {% set sidebar_col_width = 3 %} {% endif %}
+{% set main_col_width = 12 - sidebar_col_width %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,6 +8,7 @@
     <title>{% block title %}Joind.in{% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block extra_meta %}{% endblock %}
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="/css/font-awesome-custom.css" rel="stylesheet">
@@ -44,13 +48,14 @@
 
                     {% if user %}
                         <!-- This should link to the user profile page in the future -->
-                        <li><a href="{{ urlFor('user-password') }}">{{ user.getFullName }}</a></li>
+                         <li><a href="{{ urlFor('user-password') }}">Change password</a></li>
+                         <li><a href="{{ urlFor('user-profile', {'username': user.getUsername} ) }}">{{ user.getFullName }}</a></li>
                         <li><a href="{{ urlFor('user-logout') }}">Logout</a></li>
                     {% else %}
                         <li><a href="{{ urlFor('user-login') }}">Login</a></li>
                     {% endif %}
                 </ul>
-                <form class="navbar-form navbar-right" role="search" action="/search/events">
+                <form class="navbar-form navbar-right" role="search" action="{{ urlFor('search') }}">
                     <div class="form-group">
                         <input type="text" name="keyword" class="form-control" value="{{ keyword }}" placeholder="Search events or talks">
                     </div>
@@ -60,58 +65,47 @@
         </div><!-- /.container-fluid -->
     </nav>
 
-    <div class="container-fluid">   
+    <div class="container-fluid">
         <div class="row">
-            <aside class="col-xs-12 col-md-3 pull-right-md">
-                <div class="container-fluid">
-                    {% block extraAside %}{% endblock %}
-                </div>
+            <aside class="col-xs-12 col-sm-{{ sidebar_col_width }} pull-right-sm sidebar">
+                {% block topAside %}{% endblock %}
             </aside>
-            <div class="col-xs-12 col-md-9 pull-left-md">
+            <div class="col-xs-12 col-sm-{{ main_col_width }}" >
                 {% block body %}{% endblock %}
             </div>
-            <aside class="col-xs-12 col-md-3 pull-right-md">
-                <div class="container-fluid">
-                    <section>
-                        {% if not user %}
-                            <h3>Login</h3>
-                            {%  include '_common/login.html.twig' %}
-                        {% endif %}
-                    </section>
-                    <!-- Hidden on XS/SM as it appears right above the footer, duplicating the info -->
-                    <section class="text-center hidden-xs hidden-sm">
-                        <hr>
-                        <img src="/img/logo-combell.png" alt="Combell" />
-                        <p>
-                            <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
-                            <a href="http://www.combell.com/en">hosting</a> by Combell
-                        </p>
-                    </section>
-                </div>
+            <aside class="col-xs-12 col-sm-{{ sidebar_col_width }} pull-right-sm sidebar">
+                {% block extraAside %}{% endblock %}
+
+                <!-- Hidden on XS as it appears right above the footer, duplicating the info -->
+                <section class="text-center hidden-xs box sponsor">
+                    <img src="/img/logo-combell.png" alt="Combell" />
+                    <p>
+                        <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
+                        <a href="http://www.combell.com/en">hosting</a> by Combell
+                    </p>
+                </section>
             </aside>
         </div>
     </div>
 
-    <footer>
-        <nav class="navbar navbar-default" role="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="navbar-left">
-                        <a href="http://github.com/joindin"><i class="fa fa-github-alt"></i> Contribute on Github</a>
-                    </div>
-                    <div class="navbar-right">
-                        <a href="http://www.combell.com/en/servers/cloud-server">
-                            Cloud server
-                        </a>
-                        <a href="http://www.combell.com/en">hosting</a>
-                        by Combell
-                        <a href="http://www.combell.com/en">
-                            <img src="/img/logo-combell-small.png" alt="Combell">
-                        </a>
-                    </div>
+    <footer class="container-fluid" role="footer">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <a href="http://github.com/joindin"><i class="fa fa-github-alt"></i> Contribute on Github</a>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="pull-right">
+                    <a href="http://www.combell.com/en/servers/cloud-server">
+                        Cloud server
+                    </a>
+                    <a href="http://www.combell.com/en">hosting</a>
+                    by Combell
+                    <a href="http://www.combell.com/en">
+                        <img src="/img/logo-combell-small.png" alt="Combell">
+                    </a>
                 </div>
             </div>
-        </nav>
+        </div>
     </footer>
 
     <script type="text/javascript">

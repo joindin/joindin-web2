@@ -26,8 +26,10 @@ function initialize(Twig_Environment $env, Slim $app)
         return md5($value);
     }));
 
-    $env->addFunction(new Twig_SimpleFunction('gravatar', function ($email_hash) {
-        $url = 'https://secure.gravatar.com/avatar/' . $email_hash . '?d=mm&s=40';
+    $env->addFunction(new Twig_SimpleFunction('gravatar', function ($email_hash, $size = 40) {
+        $size = ((int)$size == 0) ? 20 : (int)$size;
+
+        $url = 'https://secure.gravatar.com/avatar/' . $email_hash . '?d=mm&s=' . $size;
         if (empty($email_hash)) {
             $url .= '&f=y';
         }

@@ -2,9 +2,11 @@
     <div class="row">
         <div class="col-xs-12 text-center">
             <ul class="pagination">
-                {% if events.pagination.prev_page is defined %}
+                {% if pagination.prev_page %}
                     <li>
-                        <a href="?page={{ page - 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}"><i class="fa fa-arrow-circle-o-left"></i> Previous</a>
+                        <a href="?page={{ page - 1 }}{% if keyword %}&amp;keyword={{ keyword }}{% endif %}{% if tag %}&amp;tag={{ tag }}{% endif %}">
+                            <i class="fa fa-arrow-circle-o-left"></i> Previous
+                        </a>
                     </li>
                 {% else %}
                     <li class="disabled">
@@ -12,9 +14,11 @@
                     </li>
                 {% endif %}
                 <li class="current hidden-xs"><a href="#">Page {{ page }}</a></li>
-                {% if events.pagination.next_page is defined and events.pagination.count >= 10 %}
+                {% if pagination.next_page and pagination.count >= 10 %}
                     <li>
-                        <a href="?page={{ page + 1 }}{% if keyword is defined %}&keyword={{ keyword }}{% endif %}">Next <i class="fa fa-arrow-circle-o-right"></i></a>
+                        <a href="?page={{ page + 1 }}{% if keyword %}&amp;keyword={{ keyword }}{% endif %}{% if tag %}&amp;tag={{ tag }}{% endif %}">
+                            Next <i class="fa fa-arrow-circle-o-right"></i>
+                        </a>
                     </li>
                 {% else %}
                     <li class="disabled">

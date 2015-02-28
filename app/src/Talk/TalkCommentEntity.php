@@ -33,13 +33,22 @@ class TalkCommentEntity
         return $this->data->user_display_name;
     }
 
-    public function getUserEmailHash()
+    public function getUsername()
     {
-        if (!isset($this->data->user_email_hash)) {
+        if (!isset($this->data->username)) {
             return null;
         }
 
-        return $this->data->user_email_hash;
+        return $this->data->username;
+    }
+
+    public function getGravatarHash()
+    {
+        if (!isset($this->data->gravatar_hash)) {
+            return null;
+        }
+
+        return $this->data->gravatar_hash;
     }
 
     public function getCommentDate()
@@ -67,5 +76,33 @@ class TalkCommentEntity
         }
 
         return $this->data->source;
+    }
+
+    public function getTalkTitle()
+    {
+        if (!isset($this->data->talk_title)) {
+            return null;
+        }
+
+        return $this->data->talk_title;
+    }
+
+    public function getTalkUri()
+    {
+        if (!isset($this->data->talk_uri)) {
+            return null;
+        }
+
+        return $this->data->talk_uri;
+    }
+
+    public function getCommentHash()
+    {
+        if (!isset($this->data->uri)) {
+            return null;
+        }
+
+        $hash = md5($this->data->uri);
+        return (substr($hash, 0, 6));
     }
 }

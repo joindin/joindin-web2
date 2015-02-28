@@ -2,6 +2,7 @@
 namespace Event;
 
 use Application\BaseApi;
+use Talk\TalkCommentEntity;
 
 class EventApi extends BaseApi
 {
@@ -17,25 +18,31 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Get the latest events
+     * Get a paginated list of events, optionally applying a filter
      *
-     * @param integer $limit  Number of events to get per page
-     * @param integer $start  Start value for pagination
-     * @param string  $filter Filter to apply
+     * @param integer $limit       Number of events to get per page
+     * @param integer $start       Start value for pagination
+     * @param string  $filter      Filter to apply
+     * @param bool    $verbose     get verbose result
+     * @param array   $queryParams Additional query params as key => value pairs
      *
-     * @return EventEntity model
+     * @return array
      */
-    public function getCollection($limit = 10, $start = 1, $filter = null)
+    public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
-        $url = $this->baseApiUrl . '/v2.1/events'
-            . '?resultsperpage=' . $limit
-            . '&start=' . $start;
+        $url = $this->baseApiUrl . '/v2.1/events';
+        $queryParams['resultsperpage'] = $limit;
+        $queryParams['start'] = $start;
 
         if ($filter) {
-            $url .= '&filter=' . $filter;
+            $queryParams['filter'] = $filter;
         }
 
-        return $this->queryEvents($url);
+        if ($verbose) {
+            $queryParams['verbose'] = 'yes';
+        }
+
+        return $this->getCollection($url, $queryParams);
     }
 
     /**
@@ -47,18 +54,14 @@ class EventApi extends BaseApi
      */
     public function getByFriendlyUrl($friendlyUrl)
     {
-        $event = $this->eventDb->load('url_friendly_name', $friendlyUrl);
+        $item = $this->eventDb->load('url_friendly_name', $friendlyUrl);
 
-        if (!$event) {
+        if (!$item) {
             // don't throw an exception, Slim eats them
             return false;
         }
 
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
-
-        return $event;
-
+        return $this->getEvent($item['uri']);
     }
 
     /**
@@ -70,16 +73,37 @@ class EventApi extends BaseApi
      */
     public function getByStub($stub)
     {
-        $event = $this->eventDb->load('stub', $stub);
+        $item = $this->eventDb->load('stub', $stub);
 
-        if (!$event) {
+        if (!$item) {
             return false;
         }
 
-        $event_list = json_decode($this->apiGet($event['verbose_uri']));
-        $event = new EventEntity($event_list->events[0]);
+        return $this->getEvent($item['uri']);
+    }
 
-        return $event;
+    /**
+     * Gets event data from api on single talk
+     *
+     * @param string $event_uri  API talk uri
+     * @param bool $verbose  Return verbose data?
+     * @return TalkEntity
+     */
+    public function getEvent($event_uri, $verbose = true)
+    {
+        $params = array();
+        if ($verbose) {
+            $params['verbose'] = 'yes';
+        }
+
+        $event_list = (array)json_decode($this->apiGet($event_uri, $params));
+        if (isset($event_list['events']) && isset($event_list['events'][0])) {
+            $event = new EventEntity($event_list['events'][0]);
+            $this->eventDb->save($event);
+            return $event;
+        }
+        
+        return false;
     }
 
     /**
@@ -91,7 +115,7 @@ class EventApi extends BaseApi
     public function getComments($comment_uri, $verbose = false)
     {
         if ($verbose) {
-            $comment_uri = $comment_uri . '?verbose=yes';
+            $comment_uri = $comment_uri . '?verbose=yes&resultsperpage=0';
         }
 
         $comments = (array)json_decode($this->apiGet($comment_uri));
@@ -130,6 +154,17 @@ class EventApi extends BaseApi
         throw new \Exception("Failed to mark you as attending: " . $result);
     }
 
+    public function unattend(EventEntity $event)
+    {
+        list ($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
+
+        if ($status == 200) {
+            return true;
+        }
+
+        throw new \Exception("Failed to unmark you as attending: " . $result);
+    }
+
     /**
      * Submits a new event to the API and returns it or null if it is pending acceptance.
      *
@@ -155,11 +190,16 @@ class EventApi extends BaseApi
                 }
             }
         }
+        // Convert comma-separated tags list into array
+        $data['tags'] = array_map(function ($item) {
+            return trim($item);
+        }, explode(',', $data['tags']));
+
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 201) {
-            $response = $this->queryEvents($headers['location']);
+            $response = $this->getCollection($headers['location']);
             return current($response['events']);
         }
         if ($status == 202) {
@@ -175,22 +215,23 @@ class EventApi extends BaseApi
      * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
      * Event entities.
      *
-     * @param string $url API Url to query for one or more events. Either a listing can be retrieved or a single event.
+     * @param string $url         API Url to query for one or more events. Either a listing can be retrieved or a single event.
+     * @param array  $queryParams
      *
      * @return array
      */
-    private function queryEvents($url)
+    public function getCollection($uri, array $queryParams = array())
     {
-        $events = (array)json_decode($this->apiGet($url));
+        $events = (array)json_decode($this->apiGet($uri, $queryParams));
         $meta   = array_pop($events);
 
         $collectionData = array();
-        foreach ($events['events'] as $event) {
-            $thisEvent = new EventEntity($event);
-            $collectionData['events'][] = $thisEvent;
+        foreach ($events['events'] as $item) {
+            $event = new EventEntity($item);
+            $collectionData['events'][] = $event;
 
             // save the URL so we can look up by it
-            $this->saveEventUrl($thisEvent);
+            $this->eventDb->save($event);
         }
         $collectionData['pagination'] = $meta;
 
@@ -198,14 +239,38 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Take an event and save the url_friendly_name and the API URL for that
+     * Get comments for all the talks of a given event
      *
-     * @param EventEntity $event The event to take details from
+     * @param string $comment_uri
+     * @param int   $limit
+     * @param int   $start
+     * @param bool  $verbose
      *
-     * @return void
+     * @return array An array with two keys:
+     *              'comments' holds the actual talk comment entities
+     *              'pagination' holds pagination related meta data
      */
-    private function saveEventUrl(EventEntity $event)
+    public function getTalkComments($comment_uri, $limit = 10, $start = 1, $verbose = false)
     {
-        $this->eventDb->save($event);
+        $comment_uri .= '?resultsperpage=' . $limit
+                      . '&start=' . $start;
+
+        if ($verbose) {
+            $comment_uri = $comment_uri . '&verbose=yes';
+        }
+
+        $comments = (array)json_decode($this->apiGet($comment_uri));
+
+        $meta = array_pop($comments);
+
+        $commentData = array();
+
+        foreach ($comments['comments'] as $comment) {
+            $commentData['comments'][] = new TalkCommentEntity($comment);
+        }
+
+        $commentData['pagination'] = $meta;
+
+        return $commentData;
     }
 }

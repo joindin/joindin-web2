@@ -10,52 +10,9 @@ You can either install joind.in on an existing PHP platform, or use our vagrant 
 
 ## Quick start with Vagrant
 
-The virtual machine has been moved to a different repo. To use it [fork the joindin-vm](https://github.com/joindin/joindin-vm) repository and follow the instructions in there. 
+To get you going without much hassle we created a vagrant-setup. To use it [fork the joindin-vm](https://github.com/joindin/joindin-vm) repository and follow the instructions in there.
 
 This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-web2). 
-
-## Quick Start for existing platforms
-
-1. Clone repository to any location
-
-        git clone https://github.com/joindin/joindin-web2
-        cd joindin-web2
-        
-1. Create a vhost entry for the site. The docroot should be `/web`.
-
-        <VirtualHost *:80>
-            ServerName joindin.local
-    
-            DocumentRoot "/home/exampleuser/www/joindin-web2/web"
-    
-            <Directory "/home/exampleuser/www/joindin-web2">
-                Options FollowSymLinks
-                AllowOverride All
-            </Directory>
-        </VirtualHost>
-
-1. Add hostname to /etc/hosts.
-
-        echo "127.0.0.1 joindin.local" | sudo tee -a /etc/hosts
-
-1. Enjoy the site!
-
-1. Set up Redis: instructions can be found at http://redis.io/topics/quickstart but to be honest, your favourite package manager should do a good enough job
-
-1. Enjoy the site!
-
-## Configuration
-
-1. Copy the file config/config.php.dist to config/config.php
-
-        cp config/config.php.dist config/config.php
-
-1. Change the value of `apiUrl` to the URL of your development API if you don't want to use the production API.
-
-       Note that if you are connecting to the production API, you will find that you won't be able to log in as you don't have the correct oauth client_id.
-
-       **Create a local copy of the API from the [GitHub project](https://github.com/joindin/joindin-api) and then you can log in to it from your web2 installation**
- 
 
 ## Other Resources
 

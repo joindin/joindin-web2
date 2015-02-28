@@ -35,6 +35,8 @@ mkdir -p $TARGET \
 && (echo $TARGET ; echo $LAUNCHREF) > $TARGET/web/release.txt \
 && ln -s $TARGETBASE/config.php $TARGET/config/config.php \
 && ln -s $TARGET $TARGETBASE/www.new \
-&& mv -Tf $TARGETBASE/www.new $TARGETBASE/www
+&& mv -Tf $TARGETBASE/www.new $TARGETBASE/www \
+&& rm -rf /tmp/joindin-twig-cache/live \
+&& rm -rf /tmp/joindin-twig-cache/test
 "
 
