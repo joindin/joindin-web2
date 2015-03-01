@@ -3,6 +3,7 @@ namespace Event;
 
 use Application\BaseApi;
 use Talk\TalkCommentEntity;
+use User\UserApi;
 
 class EventApi extends BaseApi
 {
@@ -11,10 +12,16 @@ class EventApi extends BaseApi
      */
     protected $eventDb;
 
-    public function __construct($config, $accessToken, EventDb $eventDb)
+    /**
+     * @var UserApi
+     */
+    protected $userApi;
+
+    public function __construct($config, $accessToken, EventDb $eventDb, UserApi $userApi)
     {
         parent::__construct($config, $accessToken);
         $this->eventDb = $eventDb;
+        $this->userApi = $userApi;
     }
 
     /**
@@ -265,8 +272,11 @@ class EventApi extends BaseApi
 
         $commentData = array();
 
-        foreach ($comments['comments'] as $comment) {
-            $commentData['comments'][] = new TalkCommentEntity($comment);
+        foreach ($comments['comments'] as $item) {
+            if (isset($item->user_uri)) {
+                $item->username = $this->userApi->getUsername($item->user_uri);
+            }
+            $commentData['comments'][] = new TalkCommentEntity($item);
         }
 
         $commentData['pagination'] = $meta;

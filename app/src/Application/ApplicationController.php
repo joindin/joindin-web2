@@ -3,6 +3,8 @@ namespace Application;
 
 use Event\EventDb;
 use Event\EventApi;
+use User\UserDb;
+use User\UserApi;
 
 class ApplicationController extends BaseController
 {
@@ -64,6 +66,15 @@ class ApplicationController extends BaseController
     private function getEventApi()
     {
         $eventDb = new EventDb($this->getCache());
-        return new EventApi($this->cfg, $this->accessToken, $eventDb);
+        return new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
 }

@@ -125,7 +125,7 @@ class TalkController extends BaseController
     private function getEventApi()
     {
         $eventDb = new EventDb($this->getCache());
-        return new EventApi($this->cfg, $this->accessToken, $eventDb);
+        return new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
     }
 
     /**

@@ -191,7 +191,7 @@ class SearchController extends BaseController
         $keyPrefix = $this->cfg['redisKeyPrefix'];
         $cache = new CacheService($keyPrefix);
         $eventDb = new EventDb($cache);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb);
+        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
 
         return $eventApi;
     }
