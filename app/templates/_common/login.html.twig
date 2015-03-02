@@ -1,7 +1,4 @@
 <form method="POST" action="{{ urlFor('user-login') }}">
-    {% if error %}
-        <p class="alert alert-danger">Failed to log in.</p>
-    {% endif %}
     {% if flash.getMessages.message %}
         <div class="alert alert-success">{{flash.getMessages.message}}</div>
     {% endif %}
