@@ -184,6 +184,15 @@ class SearchController extends BaseController
     }
 
     /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
      * @return EventApi
      */
     protected function getEventApi()
