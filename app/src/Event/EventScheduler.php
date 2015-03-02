@@ -61,7 +61,7 @@ class EventScheduler
      */
     public function getEventDays($talks)
     {
-        if (empty($talks)) {
+        if (empty($talks) || empty($talks['talks'])) {
             return array();
         }
 
