@@ -64,7 +64,7 @@ function initialize(Twig_Environment $env, Slim $app)
     );
 
     $env->addFunction(
-        new Twig_SimpleFunction('dateRange', function ($start, $end, $format = 'd.m.Y', $separator = ' - ') use ($app){
+        new Twig_SimpleFunction('dateRange', function ($start, $end, $format = 'd.m.Y', $separator = ' - ') use ($app) {
             $formatter = new \Org_Heigl\DateRange\DateRangeFormatter();
             $formatter->setFormat($format);
             $formatter->setSeparator($separator);
