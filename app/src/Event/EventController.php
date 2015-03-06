@@ -405,7 +405,7 @@ class EventController extends BaseController
             $result = $eventApi->edit($values);
         } catch (\Exception $e) {
             $form->addError(
-                new FormError('An error occurred while submitting your event: ' . $e->getMessage())
+                new FormError('An error occurred while editing your event: ' . $e->getMessage())
             );
         }
 
