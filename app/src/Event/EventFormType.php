@@ -83,7 +83,7 @@ class EventFormType extends AbstractType
                                      ]
                 ]
             )
-            ->add(
+            ->add($builder->create(
                 $builder->create(
                     'tags',
                     'text',

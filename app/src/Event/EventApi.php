@@ -246,10 +246,7 @@ class EventApi extends BaseApi
                 }
             }
         }
-        // Convert comma-separated tags list into array
-        $data['tags'] = array_map(function ($item) {
-            return trim($item);
-        }, explode(',', $data['tags']));
+
 
         list ($status, $result, $headers) = $this->apiPut($data['uri'], $data);
         // if successful, return event entity represented by the URL in the Location header
