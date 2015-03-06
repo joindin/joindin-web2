@@ -55,7 +55,15 @@ class EventFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         list ($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
+
+        $timezone = null;
+        if (isset($options['data'])) {
+            $timezone = $options['data']->getFullTimezone();
+        }
+        
+        $dateTransformer = new DateTransformer($timezone);
         $builder
             ->add('addr', 'hidden', ['mapped' => false])
             ->add(
@@ -107,14 +115,14 @@ class EventFormType extends AbstractType
                     'start_date',
                     'text',
                     $this->getOptionsForDateWidget('Start date')
-                )->addViewTransformer(new DateTransformer())
+                )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'end_date',
                     'text',
                     $this->getOptionsForDateWidget('End date')
-                )->addViewTransformer(new DateTransformer())
+                )->addViewTransformer($dateTransformer)
             )
             ->add('href', 'url', $this->getOptionsForUrlWidget('Website URL'))
             ->add(
@@ -122,14 +130,14 @@ class EventFormType extends AbstractType
                     'cfp_start_date',
                     'text',
                     $this->getOptionsForDateWidget('Opening date', false)
-                )->addViewTransformer(new DateTransformer())
+                )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'cfp_end_date',
                     'text',
                     $this->getOptionsForDateWidget('Closing date', false)
-                )->addViewTransformer(new DateTransformer())
+                )->addViewTransformer($dateTransformer)
             )
             ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
             ->add(
