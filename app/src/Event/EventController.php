@@ -523,7 +523,6 @@ class EventController extends BaseController
 
         /** @var \Talk\TalkEntity $talk */
         foreach ($talks['talks'] as $talk) {
-
             $slugs[$talk->getApiUri()] = $talk->getUrlFriendlyTalkTitle();
         }
 

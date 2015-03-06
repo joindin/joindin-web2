@@ -215,7 +215,8 @@ class UserController extends BaseController
                     if ($result) {
                         $this->application->flash(
                             'message',
-                            'We have resent your welcome email. Please check your email to verify your account before logging in.'
+                            'We have resent your welcome email. Please check your ' .
+                            'email to verify your account before logging in.'
                         );
                         $this->application->redirect('/user/login');
                     }

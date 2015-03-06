@@ -15,7 +15,7 @@ class EventTagsTransformer implements DataTransformerInterface
 
     public function reverseTransform($value)
     {
-        if ( is_Array($value)) {
+        if (is_Array($value)) {
             return $value;
         }
         return array_map('trim', explode(',', $value));
