@@ -103,7 +103,6 @@ class EventController extends BaseController
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
-                'editable' => $this->userIsAllowedToEdit($event),
             )
         );
     }
@@ -119,7 +118,6 @@ class EventController extends BaseController
 
         $this->render('Event/map.html.twig', array(
             'event' => $event,
-            'editable' => $this->userIsAllowedToEdit($event)
         ));
     }
 
@@ -154,7 +152,6 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
-                    'editable' => $this->userIsAllowedToEdit($event),
 
                 )
             );
@@ -182,7 +179,6 @@ class EventController extends BaseController
         $this->render('Event/schedule.html.twig', array(
             'event' => $event,
             'eventDays' => $schedule,
-            'editable' => $this->userIsAllowedToEdit($event),
         ));
     }
 
@@ -321,7 +317,7 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        if (! $this->userIsAllowedToEdit($event)) {
+        if (! $event->getCanEdit()) {
             $this->redirectToDetailPage($event->getUrlFriendlyName());
         }
 
@@ -355,34 +351,6 @@ class EventController extends BaseController
         );
 
 
-    }
-
-    /**
-     * @param array $event
-     *
-     * @return bool
-     */
-    protected function userIsAllowedToEdit($event)
-    {
-        if (! isset($_SESSION['user'])) {
-            return false;
-        }
-
-        if (isset($event['can_edit'])) {
-            return $event['can_edit'];
-        }
-
-        $user       = $_SESSION['user'];
-        $allowed    = false;
-        $eventArray = $event->toArray();
-
-        foreach ($eventArray['hosts'] as $host) {
-            if ($host->host_uri == $user->getUri()) {
-                $allowed = true;
-            }
-        }
-
-        return $allowed;
     }
 
     /**
