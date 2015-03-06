@@ -103,7 +103,6 @@ class EventController extends BaseController
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
-                'editable' => $this->userIsAllowedToEdit($event),
             )
         );
     }
@@ -153,7 +152,6 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
-                    'editable' => $this->userIsAllowedToEdit($event),
 
                 )
             );
@@ -354,34 +352,6 @@ class EventController extends BaseController
     /**
 
 
-    }
-
-    /**
-     * @param array $event
-     *
-     * @return bool
-     */
-    protected function userIsAllowedToEdit($event)
-    {
-        if (! isset($_SESSION['user'])) {
-            return false;
-        }
-
-        if (isset($event['can_edit'])) {
-            return $event['can_edit'];
-        }
-
-        $user       = $_SESSION['user'];
-        $allowed    = false;
-        $eventArray = $event->toArray();
-
-        foreach ($eventArray['hosts'] as $host) {
-            if ($host->host_uri == $user->getUri()) {
-                $allowed = true;
-            }
-        }
-
-        return $allowed;
     }
 
     /**
