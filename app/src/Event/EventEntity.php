@@ -352,7 +352,7 @@ class EventEntity
      */
     public function getHref()
     {
-        return $this->getUri();
+        return $this->data->href;
     }
 
     /**
