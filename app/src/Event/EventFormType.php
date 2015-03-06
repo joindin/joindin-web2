@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Form\DataTransformer\DateTransformer;
+use Form\DataTransformer\EventTagsTransformer;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -74,13 +75,14 @@ class EventFormType extends AbstractType
                                      ]
                 ]
             )
-            ->add(
-                'tags',
-                'text',
-                [
-                    'required' => false,
-                    'attr'        => ['placeholder' => 'comma separated, tag, list']
-                ]
+            ->add($builder->create(
+                    'tags',
+                    'text',
+                    [
+                        'required' => false,
+                        'attr'        => ['placeholder' => 'comma separated, tag, list']
+                    ]
+                )->addViewTransformer(new EventTagsTransformer())
             )
             ->add(
                 'tz_continent',
