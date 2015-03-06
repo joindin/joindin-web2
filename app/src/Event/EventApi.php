@@ -251,7 +251,7 @@ class EventApi extends BaseApi
         list ($status, $result, $headers) = $this->apiPut($data['uri'], $data);
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
-            $response = $this->queryEvents($headers['location']);
+            $response = $this->getCollection($headers['location']);
             return current($response['events']);
         }
         if ($status == 202) {
