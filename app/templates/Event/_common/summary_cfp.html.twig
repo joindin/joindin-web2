@@ -9,7 +9,7 @@ set eventUrl = urlFor(
         <a href="{{ eventUrl }}">{{ event.getName }}</a>
     </h3>
     <p class="meta">
-        {{ dateRange(event.getStartDate, event.getEndDate, 'M d Y') }}
+        {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
 
         {% if event.getLocation %}
             @ {{event.getLocation|escape}}
@@ -18,10 +18,10 @@ set eventUrl = urlFor(
         {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
                 {% if "now"|date('c') < event.getCallForPapersStartDate %}
                     {# not open yet #}
-                    <br>Call for papers starts {{ event.getCallForPapersStartDate |date('M d Y', event.getFullTimezone) }}
+                    <br>Call for papers starts {{ event.getCallForPapersStartDate |date('j M Y', event.getFullTimezone) }}
                 {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
                     {# still open #}
-                    <br>Call for papers ends {{ event.getCallForPapersEndDate |date('M d Y', event.getFullTimezone) }}
+                    <br>Call for papers ends {{ event.getCallForPapersEndDate |date('j M Y', event.getFullTimezone) }}
                 {% endif %}
         {% endif %}
     </p>

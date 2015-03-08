@@ -9,7 +9,7 @@
                 <br>
                 <small>
 
-                    {{ dateRange(event.getStartDate, event.getEndDate, 'M d Y') }}
+                    {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
 
                     at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
 
