@@ -204,7 +204,6 @@ class UserController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-
                 $values = $form->getData();
                 $email = $values['email'];
 
