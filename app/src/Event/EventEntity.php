@@ -51,6 +51,11 @@ class EventEntity
         return $this->data->icon;
     }
 
+    public function setIcon($icon)
+    {
+        $this->data->icon = $icon;
+    }
+
     public function getStartDate()
     {
         if (!isset($this->data->start_date)) {
@@ -92,6 +97,11 @@ class EventEntity
         return $this->data->location;
     }
 
+    public function setLocation($location)
+    {
+        $this->data->location = $location;
+    }
+
     public function getDescription()
     {
         if (!isset($this->data->description)) {
@@ -117,6 +127,13 @@ class EventEntity
         }
 
         return $this->data->tags;
+    }
+
+    public function setTags($tags)
+    {
+        $this->data->tags = $tags;
+
+        return $this;
     }
 
     public function getLatitude()
@@ -268,6 +285,11 @@ class EventEntity
         return $this->data->stub;
     }
 
+    public function setStub($stub)
+    {
+        $this->data->stub = $stub;
+    }
+
     /**
      * Returns the timezone in Continent/Place format or null if the timezone is not provided.
      *
@@ -356,6 +378,16 @@ class EventEntity
     }
 
     /**
+     * Set the HREF value
+     *
+     * @param string $href
+     */
+    public function setHref($href)
+    {
+        $this->data->href;
+    }
+
+    /**
      * Wrapper to getCallForPapersStartDate
      * This is also required by Symfonys PropertyAccessor. As
      * ```getCallForPaperStartDate``` has been in existence before creating this
@@ -414,13 +446,6 @@ class EventEntity
     public function setCfpUrl($cfpUrl)
     {
         $this->data->cfp_url = $cfpUrl;
-
-        return $this;
-    }
-
-    public function setTags($tags)
-    {
-        $this->data->tags = $tags;
 
         return $this;
     }
