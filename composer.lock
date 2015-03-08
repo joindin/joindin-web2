@@ -4,8 +4,60 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "95a2e959ed9be26f8e267d565b14d6c0",
+    "hash": "7eb95d0a89e4804643bfe933751c9c93",
     "packages": [
+        {
+            "name": "org_heigl/daterange",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/heiglandreas/org.heigl.daterange.git",
+                "reference": "3f6a4b70834a52c7a66906b1e54d09d6d85fdfff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/heiglandreas/org.heigl.daterange/zipball/3f6a4b70834a52c7a66906b1e54d09d6d85fdfff",
+                "reference": "3f6a4b70834a52c7a66906b1e54d09d6d85fdfff",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.7@dev",
+                "squizlabs/php_codesniffer": "~2.0@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Org_Heigl\\DateRange\\": "src/",
+                    "Org_Heigl\\DateRangeTest\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Heigl",
+                    "email": "andreas@heigl.org",
+                    "homepage": "http://andreas.heigl.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Provides a way to display dateranges",
+            "homepage": "http://github.com/heiglandreas/daterange",
+            "keywords": [
+                "date",
+                "daterange",
+                "datetime",
+                "range"
+            ],
+            "time": "2015-03-03 07:31:14"
+        },
         {
             "name": "predis/predis",
             "version": "v0.8.5",
