@@ -19,7 +19,7 @@ set eventUrl = urlFor(
             {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
 
             <p class="meta">
-                {{ talk.getStartDateTime|date('M d Y') }}
+                {{ talk.getStartDateTime|date('j M Y') }}
 
                 at
                 <a href="{{ eventUrl }}" class="nowrap">{{ event.getName }}</a>

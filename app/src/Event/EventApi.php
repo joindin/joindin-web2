@@ -219,10 +219,13 @@ class EventApi extends BaseApi
     /**
      * Returns a response array containing an 'events' and 'pagination' element.
      *
-     * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
+     * Each event in this response is also stored in the cache so that a relation
+     * can be made between the API URLs and
      * Event entities.
      *
-     * @param string $url         API Url to query for one or more events. Either a listing can be retrieved or a single event.
+     *
+     * @param string $url API Url to query for one or more events. Either
+     *                    a listing can be retrieved or a single event.
      * @param array  $queryParams
      *
      * @return array

@@ -6,4 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Org_Heigl\\DateRange\\' => array($vendorDir . '/org_heigl/daterange/src'),
+    'Org_Heigl\\DateRangeTest\\' => array($vendorDir . '/org_heigl/daterange/tests'),
 );
