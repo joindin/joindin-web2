@@ -254,12 +254,8 @@ class EventApi extends BaseApi
             $response = $this->getCollection($headers['location']);
             return current($response['events']);
         }
-        if ($status == 202) {
-            return null;
-        }
 
         throw new \Exception('Your event submission was not accepted, the server reports: ' . $result);
-
     }
 
     /**
