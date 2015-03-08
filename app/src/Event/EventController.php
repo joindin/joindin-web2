@@ -152,7 +152,6 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
-
                 )
             );
         } else {
