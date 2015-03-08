@@ -333,11 +333,6 @@ class EventController extends BaseController
                 if ($event instanceof EventEntity) {
                     $this->redirectToDetailPage($event->getUrlFriendlyName());
                 }
-
-                // held for moderation
-                if ($event === null) {
-                    $this->redirectToListPage();
-                }
             }
         }
 
