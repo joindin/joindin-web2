@@ -24,6 +24,7 @@ matrix:
   fast_finish : true
   allow_failures:
       - php: 7.0
+      - php: hhvm-nightly
 
 after_script:
  - ./.travis.after.sh

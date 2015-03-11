@@ -47,7 +47,7 @@ class DateRangeFormatterTest extends \PHPUnit_Framework_TestCase
         $formatter = new DateRangeFormatter();
         $formatter->setFormat($format);
 
-        $sweetsThief = function(DateRangeFormatter $formatter) {
+        $sweetsThief = function (DateRangeFormatter $formatter) {
             return $formatter->testableParts;
         };
 
@@ -170,6 +170,7 @@ class DateRangeFormatterTest extends \PHPUnit_Framework_TestCase
         return array(
             array('d.m.Y', '12.2.2014', '13.2.2014', '12. - 13.02.2014'),
             array('m/d/Y', '12.2.2014', '13.2.2014', '02/12/ - 02/13/2014'),
+            array('d.m.Y', '12.2.2014', '12.2.2014', '12.02.2014'),
         );
     }
 

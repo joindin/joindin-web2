@@ -161,16 +161,15 @@ class DateRangeFormatter
     public function getDateRange(DateTimeInterface $start, DateTimeInterface $end)
     {
         $arrays = $this->splitFormat($this->getDiffPoint($start, $end));
-
+        if (! $arrays[1]) {
+            return $start->format($arrays[0]);
+        }
         $string = '';
         $string .= $start->format($arrays[0]);
         $string .= $this->combine;
         $string .= $end->format($arrays[0]);
-
-        if ($arrays[1]) {
-            $string .= $end->format($arrays[1]);
-        }
-
+        $string .= $end->format($arrays[1]);
+        
         return $string;
     }
 }

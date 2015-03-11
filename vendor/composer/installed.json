@@ -860,17 +860,17 @@
     },
     {
         "name": "org_heigl/daterange",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/heiglandreas/org.heigl.daterange.git",
-            "reference": "3f6a4b70834a52c7a66906b1e54d09d6d85fdfff"
+            "reference": "0e91a092bb8d63b715497796d719b876372050c5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/heiglandreas/org.heigl.daterange/zipball/3f6a4b70834a52c7a66906b1e54d09d6d85fdfff",
-            "reference": "3f6a4b70834a52c7a66906b1e54d09d6d85fdfff",
+            "url": "https://api.github.com/repos/heiglandreas/org.heigl.daterange/zipball/0e91a092bb8d63b715497796d719b876372050c5",
+            "reference": "0e91a092bb8d63b715497796d719b876372050c5",
             "shasum": ""
         },
         "require": {
@@ -882,7 +882,7 @@
             "phpunit/phpunit": "~4.7@dev",
             "squizlabs/php_codesniffer": "~2.0@dev"
         },
-        "time": "2015-03-03 07:31:14",
+        "time": "2015-03-08 21:09:01",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
