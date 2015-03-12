@@ -608,4 +608,50 @@ class UserController extends BaseController
             )
         );
     }
+
+    public function remindUsername()
+    {
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new EmailInputFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getData();
+                $email = $values['email'];
+
+                $userApi = $this->getUserApi();
+
+                $result = false;
+                try {
+                    $result = $userApi->usernameReminder($email);
+                    if ($result) {
+                        $this->application->flash(
+                            'message',
+                            'Check your email to find a reminder of your username.'
+                        );
+                        $this->application->redirect('/user/login');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError(
+                        new FormError('An error occurred: ' . $e->getMessage())
+                    );
+                }
+
+            }
+        }
+
+        $this->render(
+            'User/username-reminder.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
+    }
+
+
 }
