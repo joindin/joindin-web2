@@ -177,4 +177,33 @@ class UserApi extends BaseApi
 
         return null;
     }
+
+    /**
+     * Ask the API to email the user to remind them of their username
+     *
+     * @param email $email  The email address of the user to remind
+     *
+     * @throws \Exception   If an error occurs (not a 202 response)
+     *
+     * return bool  True if successful
+     */
+    public function usernameReminder($email)
+    {
+        $data = array("email" => $email);
+
+        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/reminders/username', $data);
+
+        if ($status == 202) {
+            return true;
+        }
+
+        $message = json_decode($result);
+        if (is_array($message)) {
+            $message = current($message);
+        } else {
+            $message = "Unknown error";
+        }
+        throw new \Exception($message);
+    }
+
 }

@@ -27,6 +27,8 @@ class UserController extends BaseController
         $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
         $app->map('/user/resend-verification', array($this, 'resendVerification'))
             ->via('GET', 'POST')->name('user-resend-verification');
+        $app->map('/user/username-reminder', array($this, 'remindUsername'))
+            ->via('GET', 'POST')->name('user-username-reminder');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
@@ -198,7 +200,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new EmailVerificationFormType());
+        $form    = $factory->create(new EmailInputFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -562,4 +564,50 @@ class UserController extends BaseController
     {
         return new EventApi($this->cfg, $this->accessToken, $this->getEventDb(), $this->getUserApi());
     }
+
+    public function remindUsername()
+    {
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new EmailInputFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getData();
+                $email = $values['email'];
+
+                $userApi = $this->getUserApi();
+
+                $result = false;
+                try {
+                    $result = $userApi->usernameReminder($email);
+                    if ($result) {
+                        $this->application->flash(
+                            'message',
+                            'Check your email to find a reminder of your username.'
+                        );
+                        $this->application->redirect('/user/login');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError(
+                        new FormError('An error occurred: ' . $e->getMessage())
+                    );
+                }
+
+            }
+        }
+
+        $this->render(
+            'User/username-reminder.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
+    }
+
+
 }
