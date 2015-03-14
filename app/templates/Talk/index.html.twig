@@ -25,7 +25,16 @@
         {% if talk.getSpeakers %}
             <h4>
                 {% for speaker in talk.getSpeakers %}
-                    {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
+                    {% set comma = "" %}
+                    {% if not loop.last %}
+                        {% set comma = "," %}
+                    {% endif %}
+
+                    {% if speaker.username %}
+                        <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+                    {% else %}
+                        {{ speaker.speaker_name }}{{comma}}
+                    {% endif %}
                 {% endfor %}
                 <small>{{ talk.getStartDateTime()|date('j F Y \\a\\t H:i', event.getFullTimezone) }} &mdash; {{ talk.language }}</small>
             </h4>
