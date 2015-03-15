@@ -608,7 +608,6 @@ class UserController extends BaseController
             )
         );
     }
-
     public function remindUsername()
     {
         $request = $this->application->request();
@@ -652,6 +651,5 @@ class UserController extends BaseController
             )
         );
     }
-
 
 }
