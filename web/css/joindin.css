@@ -29,16 +29,21 @@ body {
     font-size: 14px;
 }
 
-.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
-    margin-left: 0;
+nav.navbar a.navbar-brand {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
-.navbar-brand {
-    padding: 5px;
-    width: 170px;
+nav.navbar a.navbar-brand img {
+    height: 40px;
 }
 
-nav.navbar a.navbar-brand img {
-    height: 100%;
+.navbar-nav>li>a {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+form.navbar-form {
+    margin-top: 10px;
 }
 
 h1 {
@@ -280,8 +285,20 @@ table.schedule span.speaker a:hover {
     margin-bottom: 10px;
 }
 
+.event .logo {
+    float: left;
+    margin-top: 12px;
+    padding: 0 10px;
+    width: 90px;
+}
+
+.event .description {
+    postion:relative;
+    margin-left: 90px;
+}
+
 .event .logo img {
-    max-width: 150%;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
