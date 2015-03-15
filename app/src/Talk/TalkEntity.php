@@ -140,4 +140,14 @@ class TalkEntity
     {
         return $this->data->comment_count;
     }
+
+    public function getStarred()
+    {
+        return $this->data->starred;
+    }
+
+    public function getStarredUri()
+    {
+        return $this->data->starred_uri;
+    }
 }

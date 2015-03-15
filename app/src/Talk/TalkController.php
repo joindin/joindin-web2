@@ -16,6 +16,7 @@ class TalkController extends BaseController
     protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
+        $app->post('/event/:eventSlug/:talkSlug/star', array($this, 'star'))->name('talk-star');
         $app->get('/talk/:talkStub', array($this, 'quick'))->name('talk-quicklink');
         $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
     }
@@ -47,6 +48,35 @@ class TalkController extends BaseController
                 'talkSlug' => $talkSlug,
             )
         );
+    }
+
+    public function star($eventSlug, $talkSlug)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $this->application->contentType('application/json');
+
+        if (!$event) {
+            $this->application->notFound();
+            return;
+        }
+
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        if (!$talk) {
+            $this->application->notFound();
+            return;
+        }
+
+        try {
+            $result = $talkApi->toggleStar($talk);
+        } catch (Exception $e) {
+            $reason = $e->getMessage();
+            $this->application->halt(500, '{ "message": "Failed to toggle star: ' . $reason .'" }');
+        }
+        
+        $this->application->status(200);
+        echo json_encode($result);
     }
 
     public function quick($talkStub)
