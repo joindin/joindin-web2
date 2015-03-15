@@ -191,7 +191,10 @@ class UserApi extends BaseApi
     {
         $data = array("email" => $email);
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/reminders/username', $data);
+        list ($status, $result, $headers) = $this->apiPost(
+            $this->baseApiUrl . '/v2.1/emails/reminders/username',
+            $data
+        );
 
         if ($status == 202) {
             return true;
@@ -205,5 +208,4 @@ class UserApi extends BaseApi
         }
         throw new \Exception($message);
     }
-
 }
