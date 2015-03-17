@@ -442,3 +442,7 @@ a.star:hover {
 a.starred, table.schedule a.starred {
     color: #fff;
 }
+
+.event-details {
+    color: #777;
+}
