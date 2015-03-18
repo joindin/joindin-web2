@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Form\DataTransformer\DateTransformer;
+use Form\DataTransformer\EventTagsTransformer;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -54,7 +55,15 @@ class EventFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         list ($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
+
+        $timezone = null;
+        if (isset($options['data'])) {
+            $timezone = $options['data']->getFullTimezone();
+        }
+        
+        $dateTransformer = new DateTransformer($timezone);
         $builder
             ->add('addr', 'hidden', ['mapped' => false])
             ->add(
@@ -75,12 +84,14 @@ class EventFormType extends AbstractType
                 ]
             )
             ->add(
-                'tags',
-                'text',
-                [
-                    'required' => false,
-                    'attr'        => ['placeholder' => 'comma separated, tag, list']
-                ]
+                $builder->create(
+                    'tags',
+                    'text',
+                    [
+                        'required' => false,
+                        'attr'        => ['placeholder' => 'comma separated, tag, list']
+                    ]
+                )->addViewTransformer(new EventTagsTransformer())
             )
             ->add(
                 'tz_continent',
@@ -105,14 +116,14 @@ class EventFormType extends AbstractType
                     'start_date',
                     'text',
                     $this->getOptionsForDateWidget('Start date')
-                )->addViewTransformer(new DateTransformer())
+                )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'end_date',
                     'text',
                     $this->getOptionsForDateWidget('End date')
-                )->addViewTransformer(new DateTransformer())
+                )->addViewTransformer($dateTransformer)
             )
             ->add('href', 'url', $this->getOptionsForUrlWidget('Website URL'))
             ->add(
@@ -120,14 +131,14 @@ class EventFormType extends AbstractType
                     'cfp_start_date',
                     'text',
                     $this->getOptionsForDateWidget('Opening date', false)
-                )->addViewTransformer(new DateTransformer())
+                )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'cfp_end_date',
                     'text',
                     $this->getOptionsForDateWidget('Closing date', false)
-                )->addViewTransformer(new DateTransformer())
+                )->addViewTransformer($dateTransformer)
             )
             ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
             ->add(

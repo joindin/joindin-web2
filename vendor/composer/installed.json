@@ -857,5 +857,59 @@
         ],
         "description": "Symfony Twig Bridge",
         "homepage": "http://symfony.com"
+    },
+    {
+        "name": "org_heigl/daterange",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/heiglandreas/org.heigl.daterange.git",
+            "reference": "0e91a092bb8d63b715497796d719b876372050c5"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/heiglandreas/org.heigl.daterange/zipball/0e91a092bb8d63b715497796d719b876372050c5",
+            "reference": "0e91a092bb8d63b715497796d719b876372050c5",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5"
+        },
+        "require-dev": {
+            "codeclimate/php-test-reporter": "dev-master",
+            "mockery/mockery": "~0.9",
+            "phpunit/phpunit": "~4.7@dev",
+            "squizlabs/php_codesniffer": "~2.0@dev"
+        },
+        "time": "2015-03-08 21:09:01",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Org_Heigl\\DateRange\\": "src/",
+                "Org_Heigl\\DateRangeTest\\": "tests/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Andreas Heigl",
+                "email": "andreas@heigl.org",
+                "homepage": "http://andreas.heigl.org",
+                "role": "Developer"
+            }
+        ],
+        "description": "Provides a way to display dateranges",
+        "homepage": "http://github.com/heiglandreas/daterange",
+        "keywords": [
+            "date",
+            "daterange",
+            "datetime",
+            "range"
+        ]
     }
 ]

@@ -62,4 +62,19 @@ function initialize(Twig_Environment $env, Slim $app)
             return "$scheme://$host" . $app->urlFor('event-quicklink', array('stub' => $eventStub));
         })
     );
+
+    $env->addFunction(
+        new Twig_SimpleFunction('dateRange', function ($start, $end, $format = 'd.m.Y', $separator = ' - ') use ($app) {
+            $formatter = new \Org_Heigl\DateRange\DateRangeFormatter();
+            $formatter->setFormat($format);
+            $formatter->setSeparator($separator);
+            if (! $start instanceof \DateTimeInterface) {
+                $start = new \DateTime($start);
+            }
+            if (! $end instanceof \DateTimeInterface) {
+                $end = new \DateTime($end);
+            }
+            return $formatter->getDateRange($start, $end);
+        })
+    );
 }

@@ -1,7 +1,4 @@
 <form method="POST" action="{{ urlFor('user-login') }}">
-    {% if error %}
-        <p class="alert alert-danger">Failed to log in.</p>
-    {% endif %}
     {% if flash.getMessages.message %}
         <div class="alert alert-success">{{flash.getMessages.message}}</div>
     {% endif %}
@@ -22,6 +19,7 @@
     </div>
     <div>
         Problems logging in? <a class="btn btn-link" href="{{ urlFor('user-resend-verification') }}">Resend welcome email</a>
+        <a class="btn btn-link" href="{{ urlFor('user-username-reminder') }}">Forgotten username</a>
     </div>
     <input type="hidden" name="redirect" value="{{ getCurrentUrl() }}">
 </form>

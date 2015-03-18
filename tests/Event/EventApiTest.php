@@ -6,6 +6,8 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     private $mockConfig;
     private $mockCache;
     private $mockDbEvent;
+    private $mockUserDb;
+    private $mockUserApi;
 
     public function setUp()
     {
@@ -20,6 +22,17 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             array($this->mockCache)
         );
 
+        $this->mockUserDb = $this->getMock(
+            'User\UserDb',
+            null,
+            array($this->mockCache)
+        );
+
+        $this->mockUserApi = $this->getMock(
+            'User\UserApi',
+            null,
+            array($this->mockConfig, null, $this->mockUserDb)
+        );
     }
 
     public function testDefaultgetEventsParametersAreSet()
@@ -27,7 +40,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $expectedParams = ['resultsperpage' => 10, 'start' => 1];
@@ -44,7 +57,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $expectedParams = ['resultsperpage' => 75, 'start' => 1];
@@ -61,7 +74,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $expectedParams = ['resultsperpage' => 32, 'start' => 6];
@@ -78,7 +91,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'filter' => 'samoflange'];
@@ -95,7 +108,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'verbose' => 'yes'];
@@ -112,7 +125,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'title' => 'test', 'tags' => 'php'];
@@ -150,7 +163,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEventApi = $this->getMock(
             'Event\EventApi',
             array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $mockEventApi->expects($this->once())
@@ -193,7 +206,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEventApi = $this->getMock(
             'Event\EventApi',
             array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $mockEventApi->expects($this->once())
@@ -227,7 +240,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEventApi = $this->getMock(
             'Event\EventApi',
             array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $mockEventApi->expects($this->once())
@@ -247,7 +260,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $mockEvent->expects($this->once())
@@ -264,7 +277,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $mockEvent->expects($this->once())
@@ -281,7 +294,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $mockEvent->expects($this->once())
@@ -298,7 +311,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent = $this->getMock(
             'Event\EventApi',
             array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent)
+            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
         );
 
         $mockEvent->expects($this->once())

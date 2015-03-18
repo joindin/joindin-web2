@@ -123,8 +123,12 @@ class TalkApi extends BaseApi
 
         $commentData = array();
 
-        foreach ($comments['comments'] as $comment) {
-            $commentData[] = new TalkCommentEntity($comment);
+        foreach ($comments['comments'] as $item) {
+            if (isset($item->user_uri)) {
+                $item->username = $this->userApi->getUsername($item->user_uri);
+            }
+
+            $commentData[] = new TalkCommentEntity($item);
         }
 
         return $commentData;
@@ -150,5 +154,28 @@ class TalkApi extends BaseApi
             return true;
         }
         throw new \Exception("Failed to add comment: " . $result);
+    }
+
+    /**
+     * Star or unstar based on current setting of starred
+     *
+     * @param  TalkEntity $talk
+     */
+    public function toggleStar($talk)
+    {
+        if ($talk->getStarred()) {
+            list ($status, $result) = $this->apiDelete($talk->getStarredUri(), []);
+            if ($status == 200) {
+                return ['starred' => false];
+            }
+
+        } else {
+            list ($status, $result) = $this->apiPost($talk->getStarredUri(), []);
+            if ($status == 201) {
+                return ['starred' => true];
+            }
+        }
+    
+        throw new \Exception("Failed to toggle star: $status, $result");
     }
 }

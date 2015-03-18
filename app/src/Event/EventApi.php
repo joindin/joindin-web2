@@ -3,6 +3,7 @@ namespace Event;
 
 use Application\BaseApi;
 use Talk\TalkCommentEntity;
+use User\UserApi;
 
 class EventApi extends BaseApi
 {
@@ -11,10 +12,16 @@ class EventApi extends BaseApi
      */
     protected $eventDb;
 
-    public function __construct($config, $accessToken, EventDb $eventDb)
+    /**
+     * @var UserApi
+     */
+    protected $userApi;
+
+    public function __construct($config, $accessToken, EventDb $eventDb, UserApi $userApi)
     {
         parent::__construct($config, $accessToken);
         $this->eventDb = $eventDb;
+        $this->userApi = $userApi;
     }
 
     /**
@@ -180,7 +187,8 @@ class EventApi extends BaseApi
      *
      * @throws \Exception if a status code other than 201 is returned.
      *
-     * @see EventFormType::buildForm() for a list of supported fields in the $data array and their constraints.
+     * @see EventFormType::buildForm() for a list of supported fields in the $data array
+     * and their constraints.
      *
      * @return EventEntity|null
      */
@@ -198,10 +206,6 @@ class EventApi extends BaseApi
                 }
             }
         }
-        // Convert comma-separated tags list into array
-        $data['tags'] = array_map(function ($item) {
-            return trim($item);
-        }, explode(',', $data['tags']));
 
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
@@ -218,12 +222,54 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Returns a response array containing an 'events' and 'pagination' element.
+     * Submit an edited event to the API and return it.
      *
-     * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
-     * Event entities.
+     * If something happened NULL is returned
      *
+     * @param array $data
+     *
+<<<<<<< HEAD
      * @param string $url API Url to query for one or more events. Either a listing can be retrieved or a single event.
+=======
+     * @throws \Exception if a status code other than 201 is returned.
+     * @see EventFormType::buildForm() for a list of supported fields in the $data array
+     * @return EventEntity|null
+     */
+    public function edit(array $data)
+    {
+        // Convert datetime objects to strings
+        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        foreach ($dateFields as $dateField) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+                $data[$dateField] = $data[$dateField]->format('c');
+            }
+            if (isset($data[$dateField])) {
+                if (!strtotime($data[$dateField])) {
+                    unset($data[$dateField]);
+                }
+            }
+        }
+
+
+        list ($status, $result, $headers) = $this->apiPut($data['uri'], $data);
+        // if successful, return event entity represented by the URL in the Location header
+        if ($status == 204) {
+            $response = $this->getCollection($headers['location']);
+            return current($response['events']);
+        }
+
+        throw new \Exception('Your event submission was not accepted, the server reports: ' . $result);
+    }
+
+    /**
+     * Returns a response array containing an 'events' and 'pagination' element.
+
+     * Each event in this response is also stored in the cache so that a relation
+     * can be made between the API URLs and Event entities.
+     *
+     * @param string $url API Url to query for one or more events. Either a
+     *                    listing can be retrieved or a single event.
+>>>>>>> 0be7e19e16a15f48de15b139949f839d79773f6a
      * @param array  $queryParams
      *
      * @return array
@@ -273,8 +319,11 @@ class EventApi extends BaseApi
 
         $commentData = array();
 
-        foreach ($comments['comments'] as $comment) {
-            $commentData['comments'][] = new TalkCommentEntity($comment);
+        foreach ($comments['comments'] as $item) {
+            if (isset($item->user_uri)) {
+                $item->username = $this->userApi->getUsername($item->user_uri);
+            }
+            $commentData['comments'][] = new TalkCommentEntity($item);
         }
 
         $commentData['pagination'] = $meta;

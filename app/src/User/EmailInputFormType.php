@@ -7,9 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Form used to request resending of the verification email
+ * Form used to accept input of an email address only
  */
-class EmailVerificationFormType extends AbstractType
+class EmailInputFormType extends AbstractType
 {
     /**
      * Returns the name of this form type.
@@ -18,7 +18,7 @@ class EmailVerificationFormType extends AbstractType
      */
     public function getName()
     {
-        return 'email_verification';
+        return 'email_input';
     }
 
     /**

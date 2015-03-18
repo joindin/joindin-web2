@@ -1,4 +1,12 @@
 <?php
+
+// To help the built-in PHP dev server, check if the request was actually for
+// something which should probably be served as a static file
+
+if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
+	return false;
+}
+
 // include dependencies
 require '../vendor/autoload.php';
 
