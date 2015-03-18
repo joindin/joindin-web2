@@ -402,33 +402,6 @@ class EventController extends BaseController
         return $result;
     }
 
-    /**
-     * Submits the form data to the API and returns the edited event, false if there is an error or null
-     * if it is held for moderation.
-     *
-     * Should an error occur will this method append an error message to the form's error collection.
-     *
-     * @param Form $form
-     *
-     * @return EventEntity|null|false
-     */
-    private function editEventUsingForm(Form $form)
-    {
-        $eventApi = $this->getEventApi();
-        $values = $form->getData()->toArray();
-
-        $result = false;
-        try {
-            $result = $eventApi->edit($values);
-        } catch (\Exception $e) {
-            $form->addError(
-                new FormError('An error occurred while editing your event: ' . $e->getMessage())
-            );
-        }
-
-        return $result;
-    }
-
     protected function getEventApi()
     {
         $cache = $this->getCache();
