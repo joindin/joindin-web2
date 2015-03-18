@@ -65,7 +65,7 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($comment->getUserDisplayName());
         $this->assertNull($comment->getCommentDate());
-        $this->assertNull($comment->getRating());        
+        $this->assertNull($comment->getRating());
         $this->assertNull($comment->getComment());
         $this->assertNull($comment->getCommentSource());
         $this->assertNull($comment->getCommentHash());

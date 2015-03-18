@@ -22,8 +22,8 @@ class EventCommentEntity
         }
 
         return $this->data->rating;
-    }    
-
+    }
+    
     public function getUserDisplayName()
     {
         if (!isset($this->data->user_display_name)) {
