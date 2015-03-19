@@ -24,6 +24,7 @@ class UserController extends BaseController
         $app->get('/user/logout', array($this, 'logout'))->name('user-logout');
         $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
         $app->map('/user/register', array($this, 'register'))->via('GET', 'POST')->name('user-register');
+        $app->map('/user/password', array($this, 'password'))->via('GET', 'POST')->name('user-password');
         $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
         $app->map('/user/resend-verification', array($this, 'resendVerification'))
             ->via('GET', 'POST')->name('user-resend-verification');
@@ -154,6 +155,61 @@ class UserController extends BaseController
     }
 
     /**
+     * New password page.
+     *
+     * @return void.
+     */
+    public function password()
+    {
+        $config  = $this->application->config('oauth');
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */ 
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new PasswordFormType());
+
+        $error = false;
+        if ($request->isPost()) { 
+            $form->submit($request->post($form->getName()));
+    
+            if ($form->isValid()) {
+                $clientId     = $config['client_id'];
+                $clientSecret = $config['client_secret'];
+
+                $data    = $form->getData();
+                $userApi = $this->getUserApi();
+                $result  = $userApi->setPassword($clientId, $clientSecret, $data['password']);
+
+                if (false === $result) {
+                    $error = true;     
+                } else {
+                    session_regenerate_id(true);
+                    $_SESSION['access_token'] = $result->access_token;
+                    $this->accessToken = $_SESSION['access_token'];
+
+                    $this->render(
+                        'User/password.html.twig',
+                        array(
+                            'form'    => $form->createView(),
+                            'success' => true,
+                        )
+                    );
+
+                    return;
+                }
+            }
+        }
+
+        $this->render(
+            'User/password.html.twig',
+            array(
+                'form'  => $form->createView(),
+                'error' => $error,
+            )
+        );
+    }
+
+    /**
      * Log out
      *
      * @return void
@@ -171,7 +227,19 @@ class UserController extends BaseController
     }
 
     /**
-     * Accept a user's email verification
+     *
+     */
+    protected function getUserApi() {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        $cache = new CacheService($keyPrefix);
+        $userDb = new UserDb($cache);
+        $userApi = new UserApi($this->cfg, $this->accessToken, $userDb);
+
+        return $userApi;
+    }
+
+    /*
+     * * Accept a user's email verification
      *
      * @return void
      */
@@ -522,15 +590,6 @@ class UserController extends BaseController
     {
         $keyPrefix = $this->cfg['redisKeyPrefix'];
         return new CacheService($keyPrefix);
-    }
-
-    /**
-     * @return UserApi
-     */
-    private function getUserApi()
-    {
-        $cache = $this->getCache();
-        return new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
     }
 
     /**

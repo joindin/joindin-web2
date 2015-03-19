@@ -39,6 +39,42 @@ class UserApi extends BaseApi
     }
 
     /**
+     * Change the user's password
+     *
+     * @param  string $password The new password
+     *
+     * @return mixed the access token or false  
+     */
+    public function setPassword($clientId, $clientSecret, $password)
+    {
+        $url = $this->baseApiUrl . '/v2.1/password';
+        $params = array(
+            'grant_type'    => 'password',
+            'client_id'     => $clientId,
+            'client_secret' => $clientSecret,
+            'password'      => $password,
+        );
+
+        list($status, $result) = $this->apiPost($url, $params);
+        switch ($status) {
+            case 200:
+                if ($result) {
+                     $data = json_decode($result);
+                     if ($data) {
+                         if (isset($data->access_token)) {
+                             return $data;
+                         }
+                     }
+                }
+                break;
+            default:
+                break;
+        }
+
+        return false;
+    }
+
+    /*
      * Takes the fields from the registration form, and passes them though
      * to the API to register a new user
      *
@@ -209,3 +245,4 @@ class UserApi extends BaseApi
         throw new \Exception($message);
     }
 }
+
