@@ -16,12 +16,23 @@
                         Twitter: <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
                             @{{ thisUser.getTwitterUsername }}</a>
                         {% endif %}
+
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-edit', {'username': thisUser.getUsername}) }}">
+                                Edit</a>
+                        </p>
                     </section>
                 </div>
             </div>
         </div>
     </section>
 
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+    {% endif %}
+    {% if flash.getMessages.error %}
+        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+    {% endif %}
     {% set blockCount = 0 %}
     <section class="user-profile-panels">
         <div class="row">
