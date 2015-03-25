@@ -46,7 +46,21 @@ class UserEntity
         $name = str_replace('@', '', $this->data->twitter_username);
         return $name;
     }
-    
+
+    /**
+     * Getter for email
+     *
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        if (!isset($this->data->email)) {
+            return null;
+        }
+
+        return $this->data->email;
+    }
+
     /**
      * Getter for uri
      *
@@ -125,5 +139,33 @@ class UserEntity
     public function getGravatarHash()
     {
         return $this->data->gravatar_hash;
+    }
+
+    /**
+     * Getter for can_edit
+     *
+     * @return mixed
+     */
+    public function getCanEdit()
+    {
+        if (!isset($this->data->can_edit)) {
+            return false;
+        }
+
+        return $this->data->can_edit;
+    }
+
+    /**
+     * Getter for admin
+     *
+     * @return mixed
+     */
+    public function getAdmin()
+    {
+        if (!isset($this->data->admin)) {
+            return false;
+        }
+
+        return $this->data->admin;
     }
 }
