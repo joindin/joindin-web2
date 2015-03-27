@@ -89,11 +89,11 @@ class UserController extends BaseController
             }
         }
         $this->render(
-		'User/login.html.twig',
-		array(
-		    'redirect' => $request->get('redirect'),
-		)
-	    );
+	    'User/login.html.twig',
+	    array(
+	        'redirect' => $request->get('redirect'),
+	    )
+	);
     }
 
     /**
