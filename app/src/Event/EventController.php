@@ -56,7 +56,8 @@ class EventController extends BaseController
             'Event/index.html.twig',
             array(
                 'page' => $page,
-                'events' => $events
+                'events' => $events,
+		'redirect' => $this->getPath(),
             )
         );
     }
@@ -81,6 +82,7 @@ class EventController extends BaseController
             array(
                 'page' => $page,
                 'events' => $events,
+		'redirect' => $this->getPath(),
             )
         );
     }
@@ -103,6 +105,7 @@ class EventController extends BaseController
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
+		'redirect' => $this->getPath(),
             )
         );
     }
@@ -118,7 +121,8 @@ class EventController extends BaseController
 
         $this->render('Event/map.html.twig', array(
             'event' => $event,
-        ));
+	    'redirect' => $this->getPath(),
+       ));
     }
 
     public function talkComments($friendly_name)

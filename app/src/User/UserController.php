@@ -86,8 +86,12 @@ class UserController extends BaseController
                 }
             }
         }
-
-        $this->render('User/login.html.twig');
+        $this->render(
+		'User/login.html.twig',
+		array(
+		    'redirect' => $request->get('redirect'),
+		)
+	    );
     }
 
     /**
@@ -122,7 +126,8 @@ class UserController extends BaseController
         $this->render(
             'User/register.html.twig',
             array(
-                'form' => $form->createView(),
+                'form'	   => $form->createView(),
+		'redirect' => $this->getPath(),
             )
         );
     }
@@ -160,6 +165,8 @@ class UserController extends BaseController
      */
     public function logout()
     {
+	$redirect = "/?redirect=" . $this->application->request()->get('redirect');
+	
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
         }
@@ -167,7 +174,7 @@ class UserController extends BaseController
             unset($_SESSION['access_token']);
         }
         session_regenerate_id(true);
-        $this->application->redirect('/');
+        $this->application->redirect($redirect);
     }
 
     /**
@@ -235,6 +242,7 @@ class UserController extends BaseController
             'User/emailverification.html.twig',
             array(
                 'form' => $form->createView(),
+		'redirect' => $this->getPath(),
             )
         );
     }
@@ -323,6 +331,7 @@ class UserController extends BaseController
                 'events'           => $events,
                 'hostedEvents'     => $hostedEvents,
                 'talkComments'     => $talkComments,
+		'redirect'	   => $this->getPath(),
             )
         );
     }
@@ -365,6 +374,7 @@ class UserController extends BaseController
                 'thisUser'  => $user,
                 'talks'     => $talks,
                 'eventInfo' => $eventInfo,
+		'redirect'  => $this->getPath(),
             )
         );
     }
@@ -398,6 +408,7 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'events'   => $eventsCollection['events'],
                 'type'     => 'attended',
+		'redirect' => $this->getPath(),
             )
         );
     }
@@ -432,7 +443,8 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'events'   => $hostedEventsCollection['events'],
                 'type'     => 'hosted',
-            )
+ 		'redirect' => $this->getPath(),
+           )
         );
     }
 
@@ -489,7 +501,8 @@ class UserController extends BaseController
                 'talkComments' => $talkComments,
                 'eventInfo'    => $eventInfo,
                 'talkInfo'     => $talkInfo,
-            )
+     		'redirect'     => $this->getPath(),
+	    )
         );
     }
 
@@ -604,7 +617,8 @@ class UserController extends BaseController
         $this->render(
             'User/username-reminder.html.twig',
             array(
-                'form' => $form->createView(),
+                'form'	   => $form->createView(),
+		'redirect' => $this->getPath(),
             )
         );
     }
