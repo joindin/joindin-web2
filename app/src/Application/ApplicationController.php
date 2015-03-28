@@ -42,7 +42,13 @@ class ApplicationController extends BaseController
 
     public function apps()
     {
-        $this->render('Application/apps.html.twig');
+        $this->render(
+	    'Application/apps.html.twig',
+	    array(
+		'redirect' => $this->getPath(),
+	    )
+	);
+;
     }
 
     /**
