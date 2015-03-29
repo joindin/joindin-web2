@@ -37,12 +37,12 @@
                                 {%  include '_common/login.html.twig'  %}
                             </div>
                         {% endif %}
-                    {% else %}
-                        <p>Comments are closed</p>
-                    {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% else %}
+                <p>Comments are closed</p>
+            {% endif %}
 
             {% if comments %}
                 {% for comment in comments %}
