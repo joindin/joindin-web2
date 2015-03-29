@@ -102,6 +102,13 @@
         </section>
     {% endif %}
 
+    {% if event.getAverageRating %}
+    <section>
+        {% include '_common/rating.html.twig' with {'rating': event.averageRating, 'style': 'vertical'} %}
+    </section>
+    {% endif %}
+
+
 {% endblock %}
 
 {% block extra_meta %}
