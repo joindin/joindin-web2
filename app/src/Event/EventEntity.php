@@ -186,6 +186,11 @@ class EventEntity
         return $this->data->attendee_count;
     }
 
+    public function getAverageRating()
+    {
+        return $this->data->average_rating;
+    }
+
     public function getCommentsCount()
     {
         if (!isset($this->data->event_comments_count)) {

@@ -195,6 +195,7 @@ class EventController extends BaseController
     public function addComment($friendly_name)
     {
         $request = $this->application->request();
+        $rating = (int) $request->post('rating');
         $comment = $request->post('comment');
         $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
         $url .= '#add-comment';
@@ -203,7 +204,7 @@ class EventController extends BaseController
         $event = $eventApi->getByFriendlyUrl($friendly_name);
         if ($event) {
             try {
-                $eventApi->addComment($event, $comment);
+                $eventApi->addComment($event, $rating, $comment);
             } catch (Exception $e) {
                 if (stripos($e->getMessage(), 'duplicate comment') !== false) {
                     // duplicate comment
@@ -284,11 +285,6 @@ class EventController extends BaseController
                 if ($event instanceof EventEntity) {
                     $this->redirectToDetailPage($event->getUrlFriendlyName());
                 }
-
-                // held for moderation
-                if ($event === null) {
-                    $this->redirectToListPage();
-                }
             }
         }
 
@@ -343,6 +339,11 @@ class EventController extends BaseController
                 'timezones' => EventFormType::getNestedListOfTimezones(),
             )
         );
+
+
+    }
+
+    /**
 
 
     }

@@ -14,7 +14,16 @@ class EventCommentEntity
     {
         $this->data = $data;
     }
+    
+    public function getRating()
+    {
+        if (!isset($this->data->rating)) {
+            return null;
+        }
 
+        return $this->data->rating;
+    }
+    
     public function getUserDisplayName()
     {
         if (!isset($this->data->user_display_name)) {

@@ -141,11 +141,19 @@ class EventApi extends BaseApi
 
         return $commentData;
     }
-
-    public function addComment($event, $comment)
+    
+    /**
+     * Add a comment
+     *
+     * @param EventEntity $event
+     * @param int $rating
+     * @param string $comment
+     */
+    public function addComment($event, $rating, $comment)
     {
         $uri = $event->getCommentsUri();
         $params = array(
+            'rating' => $rating,
             'comment' => $comment,
         );
         list ($status, $result) = $this->apiPost($uri, $params);
@@ -259,8 +267,8 @@ class EventApi extends BaseApi
     /**
      * Returns a response array containing an 'events' and 'pagination' element.
 
-     * Each event in this response is also stored in the cache so that a relation
-     * can be made between the API URLs and Event entities.
+     * Each event in this response is also stored in the cache so that a relation can be made between the API URLs and
+     * Event entities.
      *
      * @param string $url API Url to query for one or more events. Either a
      *                    listing can be retrieved or a single event.

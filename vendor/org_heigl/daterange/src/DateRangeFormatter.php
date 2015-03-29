@@ -173,3 +173,4 @@ class DateRangeFormatter
         return $string;
     }
 }
+}
