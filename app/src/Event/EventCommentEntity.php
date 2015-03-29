@@ -69,4 +69,13 @@ class EventCommentEntity
         $hash = md5($this->data->comment_uri);
         return (substr($hash, 0, 6));
     }
+
+    public function getRating()
+    {
+        if (!isset($this->data->rating)) {
+            return null;
+        }
+
+        return $this->data->rating;
+    }
 }
