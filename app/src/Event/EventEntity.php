@@ -469,4 +469,13 @@ class EventEntity
     {
         return $this->data->can_edit;
     }
+
+    public function getHosts()
+    {
+        if (!isset($this->data->hosts)) {
+            return [];
+        }
+
+        return $this->data->hosts;
+    }
 }

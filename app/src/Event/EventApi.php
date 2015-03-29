@@ -107,6 +107,12 @@ class EventApi extends BaseApi
         if (isset($event_list['events']) && isset($event_list['events'][0])) {
             $event = new EventEntity($event_list['events'][0]);
             $this->eventDb->save($event);
+
+            foreach ($event->getHosts() as $hostsInfo) {
+                if (isset($hostsInfo->host_uri)) {
+                    $hostsInfo->username = $this->userApi->getUsername($hostsInfo->host_uri);
+                }
+            }
             return $event;
         }
         

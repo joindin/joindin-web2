@@ -19,6 +19,21 @@
                 </small>
             </h2>
 
+            <div class="event-details">Host{% if event.hosts|length != 1 %}s{% endif %}:
+                 {% for host in event.hosts %}
+                    {% set comma = "" %}
+                    {% if not loop.last %}
+                        {% set comma = "," %}
+                    {% endif %}
+
+                    {% if host.username %}
+                        <a href="{{ urlFor('user-profile', {'username': host.username}) }}">{{ host.host_name }}</a>{{comma}}
+                    {% else %}
+                        {{ host.host_name }}{{comma}}
+                    {% endif %}
+                 {% endfor %}
+            </div>
+
             {% if event.getTags %}
             <p>
                 {% for tag in event.getTags %}
