@@ -57,7 +57,7 @@ class EventController extends BaseController
             array(
                 'page' => $page,
                 'events' => $events,
-		'redirect' => $this->getPath(),
+                'redirect' => $this->getPath(),
             )
         );
     }
@@ -82,7 +82,7 @@ class EventController extends BaseController
             array(
                 'page' => $page,
                 'events' => $events,
-		'redirect' => $this->getPath(),
+                'redirect' => $this->getPath(),
             )
         );
     }
@@ -105,7 +105,7 @@ class EventController extends BaseController
                 'event' => $event,
                 'quicklink' => $quicklink,
                 'comments' => $comments,
-		'redirect' => $this->getPath(),
+                'redirect' => $this->getPath(),
             )
         );
     }
@@ -121,7 +121,7 @@ class EventController extends BaseController
 
         $this->render('Event/map.html.twig', array(
             'event' => $event,
-	    'redirect' => $this->getPath(),
+            'redirect' => $this->getPath(),
        ));
     }
 
@@ -156,6 +156,7 @@ class EventController extends BaseController
                     'page' => $page,
                     'talkComments' => $comments,
                     'talkSlugs' => $slugs,
+                    'redirect' => $this->getPath(),
                 )
             );
         } else {
@@ -182,6 +183,7 @@ class EventController extends BaseController
         $this->render('Event/schedule.html.twig', array(
             'event' => $event,
             'eventDays' => $schedule,
+            'redirect' => $this->getPath(),
         ));
     }
 
@@ -301,6 +303,7 @@ class EventController extends BaseController
             array(
                 'form'      => $form->createView(),
                 'timezones' => EventFormType::getNestedListOfTimezones(),
+                'redirect' => $this->getPath(),
             )
         );
     }
@@ -345,6 +348,7 @@ class EventController extends BaseController
                 'event'     => $event,
                 'form'      => $form->createView(),
                 'timezones' => EventFormType::getNestedListOfTimezones(),
+                'redirect' => $this->getPath(),
             )
         );
 
