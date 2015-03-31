@@ -119,10 +119,13 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        $this->render('Event/map.html.twig', array(
-            'event' => $event,
-            'redirect' => $this->getPath(),
-       ));
+        $this->render(
+            'Event/map.html.twig',
+            array(
+                'event' => $event,
+                'redirect' => $this->getPath(),
+            )
+        );
     }
 
     public function talkComments($friendly_name)
