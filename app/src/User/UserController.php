@@ -45,7 +45,6 @@ class UserController extends BaseController
     {
         $config = $this->application->config('oauth');
         $request = $this->application->request();
-
         $error = false;
         if ($request->isPost()) {
             // handle submission of login form

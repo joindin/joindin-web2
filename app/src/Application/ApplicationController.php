@@ -34,7 +34,7 @@ class ApplicationController extends BaseController
                 'events' => $hotEvents,
                 'cfp_events' => $cfpEvents,
                 'page' => $page,
-                'redirect' => $this->getPath(),
+                'redirect' => $this->application->request()->get('redirect'),
             )
         );
     }
