@@ -53,7 +53,7 @@ abstract class BaseController
      */
     public function getPath()
     {
-	return $this->application->request->getPath();
+        return $this->application->request->getPath();
     }
 
     abstract protected function defineRoutes(Slim $app);

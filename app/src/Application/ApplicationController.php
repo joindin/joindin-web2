@@ -34,7 +34,7 @@ class ApplicationController extends BaseController
                 'events' => $hotEvents,
                 'cfp_events' => $cfpEvents,
                 'page' => $page,
-		'redirect' => $this->application->request()->get('redirect'),
+                'redirect' => $this->getPath(),
             )
         );
     }
@@ -42,12 +42,11 @@ class ApplicationController extends BaseController
     public function apps()
     {
         $this->render(
-	    'Application/apps.html.twig',
-	    array(
-		'redirect' => $this->getPath(),
-	    )
-	);
-;
+            'Application/apps.html.twig',
+            array(
+                'redirect' => $this->getPath(),
+            )
+        );
     }
 
     /**
@@ -56,11 +55,11 @@ class ApplicationController extends BaseController
     public function about()
     {
         $this->render(
-	    'Application/about.html.twig',
-	    array(
-		'redirect' => $this->getPath(),
-	    )    
-	);
+            'Application/about.html.twig',
+            array(
+                'redirect' => $this->getPath(),
+            )
+        );
     }
 
     /**
