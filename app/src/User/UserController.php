@@ -29,6 +29,8 @@ class UserController extends BaseController
             ->via('GET', 'POST')->name('user-resend-verification');
         $app->map('/user/username-reminder', array($this, 'remindUsername'))
             ->via('GET', 'POST')->name('user-username-reminder');
+        $app->map('/user/password-reset', array($this, 'resetPassword'))
+            ->via('GET', 'POST')->name('user-password-reset');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
@@ -603,6 +605,50 @@ class UserController extends BaseController
 
         $this->render(
             'User/username-reminder.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
+    }
+
+    public function resetPassword()
+    {
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new UsernameInputFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getData();
+                $username = $values['username'];
+
+                $userApi = $this->getUserApi();
+
+                $result = false;
+                try {
+                    $result = $userApi->passwordReset($username);
+                    if ($result) {
+                        $this->application->flash(
+                            'message',
+                            'Check your email for instructions on resetting your password.'
+                        );
+                        $this->application->redirect('/user/login');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError(
+                        new FormError('An error occurred: ' . $e->getMessage())
+                    );
+                }
+
+            }
+        }
+
+        $this->render(
+            'User/password-reset.html.twig',
             array(
                 'form' => $form->createView(),
             )

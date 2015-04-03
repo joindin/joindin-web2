@@ -208,4 +208,35 @@ class UserApi extends BaseApi
         }
         throw new \Exception($message);
     }
+
+    /**
+     * Ask the API to email the user a token to reset their password
+     *
+     * @param username $username  The username address of the user to remind
+     *
+     * @throws \Exception   If an error occurs (not a 202 response)
+     *
+     * return bool  True if successful
+     */
+    public function passwordReset($username)
+    {
+        $data = array("username" => $username);
+
+        list ($status, $result, $headers) = $this->apiPost(
+            $this->baseApiUrl . '/v2.1/emails/reminders/password',
+            $data
+        );
+
+        if ($status == 202) {
+            return true;
+        }
+
+        $message = json_decode($result);
+        if (is_array($message)) {
+            $message = current($message);
+        } else {
+            $message = "Unknown error";
+        }
+        throw new \Exception($message);
+    }
 }
