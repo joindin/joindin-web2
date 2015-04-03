@@ -13,9 +13,10 @@ namespace Symfony\Component\Form\Tests\Extension\Core\Type;
 
 use Symfony\Component\Form\Extension\Core\View\ChoiceView;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Test\TypeTestCase as TestCase;
 use Symfony\Component\Intl\Util\IntlTestHelper;
 
-class DateTypeTest extends TypeTestCase
+class DateTypeTest extends TestCase
 {
     private $defaultTimezone;
 
@@ -59,6 +60,8 @@ class DateTypeTest extends TypeTestCase
     public function testSubmitFromSingleTextDateTimeWithDefaultFormat()
     {
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'single_text',
             'input' => 'datetime',
         ));
@@ -73,6 +76,8 @@ class DateTypeTest extends TypeTestCase
     {
         $form = $this->factory->create('date', null, array(
             'format' => \IntlDateFormatter::MEDIUM,
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'single_text',
             'input' => 'datetime',
         ));
@@ -87,6 +92,8 @@ class DateTypeTest extends TypeTestCase
     {
         $form = $this->factory->create('date', null, array(
             'format' => \IntlDateFormatter::MEDIUM,
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'single_text',
             'input' => 'string',
         ));
@@ -101,6 +108,8 @@ class DateTypeTest extends TypeTestCase
     {
         $form = $this->factory->create('date', null, array(
             'format' => \IntlDateFormatter::MEDIUM,
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'single_text',
             'input' => 'timestamp',
         ));
@@ -117,6 +126,8 @@ class DateTypeTest extends TypeTestCase
     {
         $form = $this->factory->create('date', null, array(
             'format' => \IntlDateFormatter::MEDIUM,
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'single_text',
             'input' => 'array',
         ));
@@ -136,6 +147,8 @@ class DateTypeTest extends TypeTestCase
     public function testSubmitFromText()
     {
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'text',
         ));
 
@@ -156,6 +169,8 @@ class DateTypeTest extends TypeTestCase
     public function testSubmitFromChoice()
     {
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'choice',
         ));
 
@@ -176,6 +191,8 @@ class DateTypeTest extends TypeTestCase
     public function testSubmitFromChoiceEmpty()
     {
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'choice',
             'required' => false,
         ));
@@ -195,6 +212,8 @@ class DateTypeTest extends TypeTestCase
     public function testSubmitFromInputDateTimeDifferentPattern()
     {
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'format' => 'MM*yyyy*dd',
             'widget' => 'single_text',
             'input' => 'datetime',
@@ -209,6 +228,8 @@ class DateTypeTest extends TypeTestCase
     public function testSubmitFromInputStringDifferentPattern()
     {
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'format' => 'MM*yyyy*dd',
             'widget' => 'single_text',
             'input' => 'string',
@@ -223,6 +244,8 @@ class DateTypeTest extends TypeTestCase
     public function testSubmitFromInputTimestampDifferentPattern()
     {
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'format' => 'MM*yyyy*dd',
             'widget' => 'single_text',
             'input' => 'timestamp',
@@ -239,6 +262,8 @@ class DateTypeTest extends TypeTestCase
     public function testSubmitFromInputRawDifferentPattern()
     {
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'format' => 'MM*yyyy*dd',
             'widget' => 'single_text',
             'input' => 'array',
@@ -355,9 +380,78 @@ class DateTypeTest extends TypeTestCase
         ));
     }
 
-    public function testSetDataWithDifferentTimezoneDateTime()
+    public function testSetDataWithDifferentNegativeUTCTimezoneDateTime()
+    {
+        $form = $this->factory->create('date', null, array(
+            'format' => \IntlDateFormatter::MEDIUM,
+            'model_timezone' => 'America/New_York',
+            'view_timezone' => 'Pacific/Tahiti',
+            'input' => 'string',
+            'widget' => 'single_text',
+        ));
+
+        $form->setData('2010-06-02');
+
+        $this->assertEquals('01.06.2010', $form->getViewData());
+    }
+
+    public function testSetDataWithDifferentTimezonesDateTime()
+    {
+        $form = $this->factory->create('date', null, array(
+            'format' => \IntlDateFormatter::MEDIUM,
+            'model_timezone' => 'America/New_York',
+            'view_timezone' => 'Pacific/Tahiti',
+            'input' => 'datetime',
+            'widget' => 'single_text',
+        ));
+
+        $dateTime = new \DateTime('2010-06-02 America/New_York');
+
+        $form->setData($dateTime);
+
+        $this->assertDateTimeEquals($dateTime, $form->getData());
+        $this->assertEquals('01.06.2010', $form->getViewData());
+    }
+
+    public function testSetDataWithDifferentPositiveUTCTimezoneDateTime()
     {
         date_default_timezone_set('Pacific/Tahiti');
+
+        $form = $this->factory->create('date', null, array(
+            'format' => \IntlDateFormatter::MEDIUM,
+            'input' => 'datetime',
+            'widget' => 'single_text',
+        ));
+
+        $dateTime = new \DateTime('2010-06-02 Australia/Melbourne');
+
+        $form->setData($dateTime);
+
+        $this->assertDateTimeEquals($dateTime, $form->getData());
+        $this->assertEquals('02.06.2010', $form->getViewData());
+    }
+
+    public function testSetDataWithSamePositiveUTCTimezoneDateTime()
+    {
+        date_default_timezone_set('Australia/Melbourne');
+
+        $form = $this->factory->create('date', null, array(
+            'format' => \IntlDateFormatter::MEDIUM,
+            'input' => 'datetime',
+            'widget' => 'single_text',
+        ));
+
+        $dateTime = new \DateTime('2010-06-02 Australia/Melbourne');
+
+        $form->setData($dateTime);
+
+        $this->assertDateTimeEquals($dateTime, $form->getData());
+        $this->assertEquals('02.06.2010', $form->getViewData());
+    }
+
+    public function testSetDataWithSameNegativeUTCTimezoneDateTime()
+    {
+        date_default_timezone_set('America/New_York');
 
         $form = $this->factory->create('date', null, array(
             'format' => \IntlDateFormatter::MEDIUM,
@@ -465,6 +559,8 @@ class DateTypeTest extends TypeTestCase
         $this->markTestIncomplete('Needs to be reimplemented using validators');
 
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'single_text',
         ));
 
@@ -478,6 +574,8 @@ class DateTypeTest extends TypeTestCase
         $this->markTestIncomplete('Needs to be reimplemented using validators');
 
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'choice',
         ));
 
@@ -495,6 +593,8 @@ class DateTypeTest extends TypeTestCase
         $this->markTestIncomplete('Needs to be reimplemented using validators');
 
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'choice',
         ));
 
@@ -512,6 +612,8 @@ class DateTypeTest extends TypeTestCase
         $this->markTestIncomplete('Needs to be reimplemented using validators');
 
         $form = $this->factory->create('date', null, array(
+            'model_timezone' => 'UTC',
+            'view_timezone' => 'UTC',
             'widget' => 'choice',
         ));
 

@@ -46,7 +46,7 @@ class IsbnValidator extends ConstraintValidator
         $value = (string) $value;
         $canonical = str_replace('-', '', $value);
 
-        if (null == $constraint->type) {
+        if (null === $constraint->type) {
             if ($constraint->isbn10 && !$constraint->isbn13) {
                 $constraint->type = 'isbn10';
             } elseif ($constraint->isbn13 && !$constraint->isbn10) {
@@ -132,7 +132,7 @@ class IsbnValidator extends ConstraintValidator
                 return Isbn::INVALID_CHARACTERS_ERROR;
             }
 
-            $checkSum += $digit * intval(10 - $i);
+            $checkSum += $digit * (10 - $i);
         }
 
         if (isset($isbn{$i})) {
