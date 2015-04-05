@@ -87,5 +87,13 @@ function initialize(Twig_Environment $env, Slim $app)
         })
     );
 
+    /**
+     * wrapped Slim request function get()
+     */
+    $env->addFunction(
+        new Twig_SimpleFunction('get', function ($name) use ($app) {
+            return $app->request->get($name);
+        })
+    );
 
 }
