@@ -85,7 +85,11 @@ class UserController extends BaseController
                 }
             }
         }
-        $this->render('User/login.html.twig');
+        $parameter = ($request->get('redirect')) ? array('redirect' => $request->get('redirect')) : array();
+        $this->render(
+            'User/login.html.twig',
+            $parameter
+        );
     }
 
     /**
@@ -158,7 +162,8 @@ class UserController extends BaseController
      */
     public function logout()
     {
-        $redirect = "/?redirect=" . $this->application->request()->get('redirect');
+        $request = $this->application->request();
+        $redirect = ($request->get('redirect')) ? "/?redirect=" . $request->get('redirect') : "/";
 
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
