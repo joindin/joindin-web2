@@ -87,7 +87,6 @@ class SearchController extends BaseController
                 'page'     => $page,
                 'keyword'  => $keyword,
                 'tag'      => $tag,
-                'redirect' => $this->getPath(),
             )
         );
     }
@@ -130,7 +129,6 @@ class SearchController extends BaseController
                 'page'       => $page,
                 'pagination' => $pagination,
                 'keyword'    => $keyword,
-                'redirect'   => $this->getPath(),
             )
         );
     }

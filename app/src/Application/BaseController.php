@@ -47,14 +47,6 @@ abstract class BaseController
             );
         }
     }
-    
-    /**
-     * wrapping Slim request function getPath()
-     */
-    public function getPath()
-    {
-        return $this->application->request->getPath();
-    }
 
     abstract protected function defineRoutes(Slim $app);
 }
