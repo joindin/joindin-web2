@@ -385,7 +385,7 @@ class ChoiceList implements ChoiceListInterface
      */
     protected function isPreferred($choice, array $preferredChoices)
     {
-        return false !== array_search($choice, $preferredChoices, true);
+        return in_array($choice, $preferredChoices, true);
     }
 
     /**
@@ -505,7 +505,7 @@ class ChoiceList implements ChoiceListInterface
      *
      * @return array The fixed choices.
      *
-     * @see fixChoice
+     * @see fixChoice()
      */
     protected function fixChoices(array $choices)
     {

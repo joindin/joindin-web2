@@ -840,9 +840,12 @@ abstract class AbstractValidatorTest extends \PHPUnit_Framework_TestCase
      * Cannot be UnsupportedMetadataException for BC with Symfony < 2.5.
      *
      * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     * @group legacy
      */
-    public function testValidatePropertyFailsIfPropertiesNotSupported()
+    public function testLegacyValidatePropertyFailsIfPropertiesNotSupported()
     {
+        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
+
         // $metadata does not implement PropertyMetadataContainerInterface
         $metadata = $this->getMock('Symfony\Component\Validator\MetadataInterface');
 
@@ -970,9 +973,12 @@ abstract class AbstractValidatorTest extends \PHPUnit_Framework_TestCase
      * Cannot be UnsupportedMetadataException for BC with Symfony < 2.5.
      *
      * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     * @group legacy
      */
-    public function testValidatePropertyValueFailsIfPropertiesNotSupported()
+    public function testLegacyValidatePropertyValueFailsIfPropertiesNotSupported()
     {
+        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
+
         // $metadata does not implement PropertyMetadataContainerInterface
         $metadata = $this->getMock('Symfony\Component\Validator\MetadataInterface');
 
