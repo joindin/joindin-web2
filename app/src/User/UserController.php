@@ -31,6 +31,8 @@ class UserController extends BaseController
             ->via('GET', 'POST')->name('user-username-reminder');
         $app->map('/user/password-reset', array($this, 'resetPassword'))
             ->via('GET', 'POST')->name('user-password-reset');
+        $app->map('/user/new-password', array($this, 'newPassword'))
+            ->via('GET', 'POST')->name('user-new-password');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
@@ -654,4 +656,36 @@ class UserController extends BaseController
             )
         );
     }
+
+    /**
+     * Link in password reset email lands here
+     *
+     * @return void
+     */
+    public function newPassword()
+    {
+        $request = $this->application->request();
+        $token = $request->get('token');
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new NewPasswordFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                // TODO the two passwords aren't getting checked for matching
+                // then make the API call
+            }
+        }
+
+        $this->render(
+            'User/new-password.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
+    }
+
 }
