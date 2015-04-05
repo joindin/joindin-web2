@@ -46,7 +46,6 @@ class TalkController extends BaseController
                 'event'    => $event,
                 'comments' => $comments,
                 'talkSlug' => $talkSlug,
-                'redirect' => $this->getPath(),
             )
         );
     }

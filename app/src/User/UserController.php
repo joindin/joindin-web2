@@ -85,12 +85,7 @@ class UserController extends BaseController
                 }
             }
         }
-        $this->render(
-            'User/login.html.twig',
-            array(
-                'redirect' => $request->get('redirect'),
-            )
-        );
+        $this->render('User/login.html.twig');
     }
 
     /**
@@ -126,8 +121,7 @@ class UserController extends BaseController
             'User/register.html.twig',
             array(
                 'form'     => $form->createView(),
-                'redirect' => $this->getPath(),
-            )
+           )
         );
     }
 
@@ -241,7 +235,6 @@ class UserController extends BaseController
             'User/emailverification.html.twig',
             array(
                 'form' => $form->createView(),
-                'redirect' => $this->getPath(),
             )
         );
     }
@@ -330,7 +323,6 @@ class UserController extends BaseController
                 'events'           => $events,
                 'hostedEvents'     => $hostedEvents,
                 'talkComments'     => $talkComments,
-                'redirect'         => $this->getPath(),
             )
         );
     }
@@ -373,7 +365,6 @@ class UserController extends BaseController
                 'thisUser'  => $user,
                 'talks'     => $talks,
                 'eventInfo' => $eventInfo,
-                'redirect'  => $this->getPath(),
             )
         );
     }
@@ -407,7 +398,6 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'events'   => $eventsCollection['events'],
                 'type'     => 'attended',
-                'redirect' => $this->getPath(),
             )
         );
     }
@@ -442,7 +432,6 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'events'   => $hostedEventsCollection['events'],
                 'type'     => 'hosted',
-                'redirect' => $this->getPath(),
            )
         );
     }
@@ -500,7 +489,6 @@ class UserController extends BaseController
                 'talkComments' => $talkComments,
                 'eventInfo'    => $eventInfo,
                 'talkInfo'     => $talkInfo,
-                'redirect'     => $this->getPath(),
             )
         );
     }
@@ -617,7 +605,6 @@ class UserController extends BaseController
             'User/username-reminder.html.twig',
             array(
                 'form'     => $form->createView(),
-                'redirect' => $this->getPath(),
             )
         );
     }
