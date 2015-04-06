@@ -83,10 +83,10 @@ class SearchController extends BaseController
         $this->render(
             'Event/search.html.twig',
             array(
-                'events'   => $events,
-                'page'     => $page,
-                'keyword'  => $keyword,
-                'tag'      => $tag,
+                'events'  => $events,
+                'page'    => $page,
+                'keyword' => $keyword,
+                'tag'     => $tag
             )
         );
     }
@@ -128,7 +128,7 @@ class SearchController extends BaseController
                 'talks'      => $talks,
                 'page'       => $page,
                 'pagination' => $pagination,
-                'keyword'    => $keyword,
+                'keyword'    => $keyword
             )
         );
     }
