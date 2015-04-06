@@ -42,8 +42,8 @@ class TalkController extends BaseController
         $this->render(
             'Talk/index.html.twig',
             array(
-                'talk'     => $talk,
-                'event'    => $event,
+                'talk' => $talk,
+                'event' => $event,
                 'comments' => $comments,
                 'talkSlug' => $talkSlug,
             )

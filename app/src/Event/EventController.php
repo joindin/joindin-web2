@@ -56,7 +56,7 @@ class EventController extends BaseController
             'Event/index.html.twig',
             array(
                 'page' => $page,
-                'events' => $events,
+                'events' => $events
             )
         );
     }
@@ -116,10 +116,9 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        $this->render(
-            'Event/map.html.twig',
-            array('event' => $event)
-        );
+        $this->render('Event/map.html.twig', array(
+            'event' => $event,
+        ));
     }
 
     public function talkComments($friendly_name)

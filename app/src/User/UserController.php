@@ -45,6 +45,7 @@ class UserController extends BaseController
     {
         $config = $this->application->config('oauth');
         $request = $this->application->request();
+
         $error = false;
         if ($request->isPost()) {
             // handle submission of login form
@@ -124,8 +125,8 @@ class UserController extends BaseController
         $this->render(
             'User/register.html.twig',
             array(
-                'form'     => $form->createView(),
-           )
+                'form' => $form->createView(),
+            )
         );
     }
 
@@ -437,7 +438,7 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'events'   => $hostedEventsCollection['events'],
                 'type'     => 'hosted',
-           )
+            )
         );
     }
 
@@ -609,7 +610,7 @@ class UserController extends BaseController
         $this->render(
             'User/username-reminder.html.twig',
             array(
-                'form'     => $form->createView(),
+                'form' => $form->createView(),
             )
         );
     }
