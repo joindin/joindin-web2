@@ -638,9 +638,11 @@ class UserController extends BaseController
             'password' => '',
         ];
 
+        $canChangePassword = (!$_SESSION['user']->getAdmin()) || $user->getUri() == $_SESSION['user']->getUri();
+
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new UserFormType(), $userData);
+        $form    = $factory->create(new UserFormType($canChangePassword), $userData);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -653,8 +655,11 @@ class UserController extends BaseController
             if ($form->isValid()) {
                 try {
                     $values = $form->getData();
+                    // the form will convert twitter_username to NULL if it's empty, so we need to put it back
+                    $values['twitter_username'] = (string)$values['twitter_username'];
 
                     $userApi = $this->getUserApi();
+                    // LDBG($values);exit;
                     $result = $userApi->edit($user->getUri(), $values);
                     if ($result instanceof UserEntity) {
                         if ($_SESSION['user']->getUri() == $result->getUri()) {
@@ -684,7 +689,8 @@ class UserController extends BaseController
             'User/profile-edit.html.twig',
             array(
                 'thisUser' => $user,
-                'form'     => $form->createView(),
+                'form' => $form->createView(),
+                'can_change_password' => $canChangePassword,
             )
         );
     }

@@ -11,6 +11,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class UserFormType extends AbstractType
 {
+    protected $canChangePassword;
+
+    public function __construct($canChangePassword)
+    {
+        $this->canChangePassword = $canChangePassword;
+    }
+
     /**
      * Returns the name of this form type.
      *
@@ -56,10 +63,14 @@ class UserFormType extends AbstractType
                 'text',
                 [
                     'required' => false,
+                    'empty_data' => '',
                     // 'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
-            ->add(
+        ;
+
+        if ($this->canChangePassword) {
+            $builder->add(
                 'old_password',
                 'password',
                 [
@@ -80,6 +91,7 @@ class UserFormType extends AbstractType
                     'constraints' => [new Assert\Length(['min' => 6])],
                 ]
             )
-        ;
+            ;
+        }
     }
 }

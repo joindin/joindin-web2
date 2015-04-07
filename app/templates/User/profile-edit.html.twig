@@ -32,11 +32,13 @@
                 <fieldset class="col-sm-6">
                     <h2>Edit profile</h2>
                 </fieldset>
+                {% if can_change_password %}
                 <fieldset class="col-sm-6">
                     <h2>Change password</h2>
                     <p>If you wish to change your password, please enter your current
                         password and then then the new one.</p>
                 </fieldset>
+                {% endif %}
             </div>
             <div class="row">
                 <fieldset class="col-sm-6">
@@ -44,14 +46,21 @@
                     {{ form_row(form.email) }}
                     {{ form_row(form.twitter_username) }}
                 </fieldset>
+                {% if can_change_password %}
                 <fieldset class="col-sm-6">
                     {{ form_row(form.old_password) }}
                     {{ form_row(form.password) }}
                 </fieldset>
+                {% endif %}
             </div>
 
             <div class="row">
-                <div class="col-sm-12">
+                {% set class = 'col-sm-6' %}
+                {% if can_change_password %}
+                    {% set class = 'col-sm-12' %}
+                {% endif %}
+
+                <div class="{{ class }}">
                     <input type="submit" name="submit" class="btn btn-primary pull-right button-spacer" value="Save" />
                     <input type="submit" name="submit" class="btn btn-primary pull-right button-spacer" value="Cancel" />
                 </div>
@@ -60,4 +69,5 @@
 
         {{ form_end(form) }}
     </section>
+
 {% endblock %}
