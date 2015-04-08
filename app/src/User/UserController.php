@@ -638,7 +638,8 @@ class UserController extends BaseController
             'password' => '',
         ];
 
-        $canChangePassword = (!$_SESSION['user']->getAdmin()) || $user->getUri() == $_SESSION['user']->getUri();
+        // can only change password if we're editing ourselves
+        $canChangePassword = ($user->getUri() == $_SESSION['user']->getUri());
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
