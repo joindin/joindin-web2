@@ -263,4 +263,30 @@ class UserApi extends BaseApi
 
         throw new \Exception('Your profile update was not accepted. The server reports: ' . $result);
     }
+
+    /**
+     * Set a new password for a user who has forgotten theirs
+     *
+     * @param  string $token    The reset token we sent by email
+     *
+     * @throws \Exception       if a status code other than 201 is returned
+     *
+     * @return bool             True if the password was changed
+     */
+    public function resetPassword($token, $password)
+    {
+        $data = array(
+            "token" => $token,
+            "password" => $password,
+        );
+
+        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new \Exception('The password could not be updated');
+    }
+
 }

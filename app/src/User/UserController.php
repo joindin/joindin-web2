@@ -760,8 +760,26 @@ class UserController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                // TODO the two passwords aren't getting checked for matching
-                // then make the API call
+                $values = $form->getData();
+                $userApi = $this->getUserApi();
+
+                $result = false;
+                try {
+                    $result = $userApi->resetPassword($token, $values['password']);
+                    if ($result) {
+                        $this->application->flash(
+                            'message',
+                            'Your password was saved; you may now log in.'
+                        );
+                        $this->application->redirect('/user/login');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError(
+                        new FormError('An error occurred: ' . $e->getMessage())
+                    );
+                }
+
+
             }
         }
 
