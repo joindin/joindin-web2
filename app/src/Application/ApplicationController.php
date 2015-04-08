@@ -13,6 +13,7 @@ class ApplicationController extends BaseController
         $app->get('/', array($this, 'index'));
         $app->get('/apps', array($this, 'apps'))->name('apps');
         $app->get('/about', array($this, 'about'))->name('about');
+        $app->get('/not-allowed', array($this, 'notAllowed'))->name('not-allowed');
     }
 
     public function index()
@@ -49,6 +50,15 @@ class ApplicationController extends BaseController
     public function about()
     {
         $this->render('Application/about.html.twig');
+    }
+
+
+    /**
+     * Render the notAllowed page
+     */
+    public function notAllowed()
+    {
+        $this->render('Application/not-allowed.html.twig');
     }
 
     /**

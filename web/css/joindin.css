@@ -351,6 +351,15 @@ form ul.errors {
     color: #d9534f;
 }
 
+form .button-spacer {
+    margin-right: 5px;
+    margin-left: 0;
+}
+form .button-spacer.pull-right {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
 .commented-on {
     font-style: italic;
 }

@@ -34,6 +34,8 @@ class UserController extends BaseController
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
         $app->get('/user/:username/hosted', array($this, 'profileHosted'))->name('user-profile-hosted');
         $app->get('/user/:username/comments', array($this, 'profileComments'))->name('user-profile-comments');
+        $app->map('/user/:username/edit', array($this, 'profileEdit'))
+            ->via('GET', 'POST')->name('user-profile-edit');
     }
 
     /**
@@ -605,6 +607,91 @@ class UserController extends BaseController
             'User/username-reminder.html.twig',
             array(
                 'form' => $form->createView(),
+            )
+        );
+    }
+
+    /**
+     * User profile edit page
+     *
+     * @param  string $username User's username
+     * @return void
+     */
+    public function profileEdit($username)
+    {
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+        if (!$user) {
+            Slim::getInstance()->notFound();
+        }
+
+        if (!$user->getCanEdit() || !isset($_SESSION['user'])) {
+            $this->application->redirect($this->application->urlFor('not-allowed'));
+        }
+
+        // create an array of the data to be edited for use by the form
+        $userData = [
+            'full_name' => $user->getFullName(),
+            'email' => $user->getEmail(),
+            'twitter_username' => $user->getTwitterUsername(),
+            'old_password' => '',
+            'password' => '',
+        ];
+
+        // can only change password if we're editing ourselves
+        $canChangePassword = ($user->getUri() == $_SESSION['user']->getUri());
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new UserFormType($canChangePassword), $userData);
+
+        $request = $this->application->request();
+        if ($request->isPost()) {
+            if ($request->post('submit') == 'Cancel') {
+                $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
+            }
+
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                try {
+                    $values = $form->getData();
+                    // the form will convert twitter_username to NULL if it's empty, so we need to put it back
+                    $values['twitter_username'] = (string)$values['twitter_username'];
+
+                    $userApi = $this->getUserApi();
+                    // LDBG($values);exit;
+                    $result = $userApi->edit($user->getUri(), $values);
+                    if ($result instanceof UserEntity) {
+                        if ($_SESSION['user']->getUri() == $result->getUri()) {
+                            // update the session
+                            $_SESSION['user'] = $result;
+                        }
+
+                        $this->application->flash('message', 'Profile has been updated');
+                        $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
+                    }
+                } catch (\Exception $e) {
+                    $message = $e->getMessage();
+                    if (strpos($message, 'The credentials could not be verified')) {
+                        $form->get('old_password')->addError(
+                            new FormError('Your current password is incorrect')
+                        );
+                    } else {
+                        $form->addError(
+                            new FormError('An error occurred: ' . $message)
+                        );
+                    }
+                }
+            }
+        }
+
+        $this->render(
+            'User/profile-edit.html.twig',
+            array(
+                'thisUser' => $user,
+                'form' => $form->createView(),
+                'can_change_password' => $canChangePassword,
             )
         );
     }
