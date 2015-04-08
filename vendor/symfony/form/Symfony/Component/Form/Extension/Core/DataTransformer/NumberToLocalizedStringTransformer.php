@@ -148,7 +148,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms a localized number into an integer or float
+     * Transforms a localized number into an integer or float.
      *
      * @param string $value The localized value
      *
@@ -221,7 +221,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     }
 
     /**
-     * Returns a preconfigured \NumberFormatter instance
+     * Returns a preconfigured \NumberFormatter instance.
      *
      * @return \NumberFormatter
      */
@@ -242,9 +242,9 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     /**
      * Rounds a number according to the configured precision and rounding mode.
      *
-     * @param int|float     $number A number.
+     * @param int|float $number A number.
      *
-     * @return int|float     The rounded number.
+     * @return int|float The rounded number.
      */
     private function round($number)
     {

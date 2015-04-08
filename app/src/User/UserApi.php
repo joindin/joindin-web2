@@ -239,4 +239,28 @@ class UserApi extends BaseApi
         }
         throw new \Exception($message);
     }
+
+    /**
+     * Update a user's details
+     *
+     * @see http://joindin.github.io/joindin-api/users.html for a list of supported
+     * fields in the $data array
+     *
+     * @param array $data
+     *
+     * @throws \Exception if unsuccessful
+     * @return UserEntity
+     */
+    public function edit($uri, array $data)
+    {
+        list ($status, $result, $headers) = $this->apiPut($uri, $data);
+
+        // if successful, return event entity represented by the URL in the Location header
+        if ($status == 204) {
+            // Retrieve a new copy of the user
+            return $this->getUser($uri);
+        }
+
+        throw new \Exception('Your profile update was not accepted. The server reports: ' . $result);
+    }
 }

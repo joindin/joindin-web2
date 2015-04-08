@@ -98,8 +98,8 @@ class NativeRequestHandler implements RequestHandlerInterface
             }
 
             $fixedFiles = array();
-            foreach ($_FILES as $name => $file) {
-                $fixedFiles[$name] = self::stripEmptyFiles(self::fixPhpFilesArray($file));
+            foreach ($_FILES as $fileKey => $file) {
+                $fixedFiles[$fileKey] = self::stripEmptyFiles(self::fixPhpFilesArray($file));
             }
 
             if ('' === $name) {
@@ -184,10 +184,10 @@ class NativeRequestHandler implements RequestHandlerInterface
             unset($files[$k]);
         }
 
-        foreach (array_keys($data['name']) as $key) {
+        foreach ($data['name'] as $key => $name) {
             $files[$key] = self::fixPhpFilesArray(array(
                 'error' => $data['error'][$key],
-                'name' => $data['name'][$key],
+                'name' => $name,
                 'type' => $data['type'][$key],
                 'tmp_name' => $data['tmp_name'][$key],
                 'size' => $data['size'][$key],
