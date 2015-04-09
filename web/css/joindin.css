@@ -474,3 +474,7 @@ a.starred, table.schedule a.starred {
 .event-details {
     color: #777;
 }
+
+.tags {
+    margin-bottom: 5px;
+}
