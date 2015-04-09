@@ -1,43 +1,78 @@
 {% extends '/layout.html.twig' %}
 
 {% block body %}
-            {% include 'Event/_common/event_header.html.twig' %}
-            <p>{{ event.getDescription|nl2br }}</p>
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    <div class="panel panel-default" style="border:none">
+          {# <div class="panel-body"> #}
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    {% if event.getTags %}
+                        {% for tag in event.getTags %}
+                            <a href="{{ urlFor('search-events') }}?tag={{ tag }}">
+                                <span class="label label-default">{{ tag }}</span>
+                            </a>
+                        {% endfor %}
+                        <br>
+                    {% endif %}
+
+                    {% if event.getAttendeeCount %}
+                        {{ event.getAttendeeCount|escape }}</span> people
+                        {% if event.isPastEvent() %}attended{% else %}attending{% endif %}
+                    {% endif %}
+
+                    <br>Host{% if event.hosts|length != 1 %}s{% endif %}:
+                    {% for host in event.hosts %}
+                        {% set comma = "" %}
+                        {% if not loop.last %}
+                            {% set comma = "," %}
+                        {% endif %}
+
+                        {% if host.username %}
+                            <a href="{{ urlFor('user-profile', {'username': host.username}) }}">{{ host.host_name }}</a>{{comma}}
+                        {% else %}
+                            {{ host.host_name }}{{comma}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
+                    <br>
+                    Short URL: <a href="{{ shortUrlForEvent(event.getStub) }}">{{ shortUrlForEvent(event.getStub) }}</a> <i class="fa fa-external-link-square"></i>
+                </div>
+            {# </div> #}
+        </div>
+    </div>
+
+    <p>{{ event.getDescription|nl2br }}</p>
+
+    <div id="streetmap" style="border: 1px solid black; height: 300px;"></div>
 {% endblock %}
 
-
 {% block extraAside %}
-    {% if event.getStub or event.getWebsiteAddress %}
-        <section class="short-url">
-    {% endif %}
-    {% if event.getStub  %}
-            <label class="control-label">Short URL:</label>
-            <br>
-            <i class="fa fa-external-link-square"></i>
-            <a href="{{ shortUrlForEvent(event.getStub) }}">
-                {{ shortUrlForEvent(event.getStub) }}
-            </a>
-    {% endif %}
-    {% if event.getWebsiteAddress %}
-        <div class="extraAside">
-            <p>
-                <label>Event Website:</label>
-                <br>
-                <i class="fa fa-external-link-square"></i>
-                <a href="{{ event.getWebsiteAddress }}" rel="nofollow">
-                    {{ event.getWebsiteAddress }}
-                </a>
-            </p>
-        </div>
-    {% endif %}
-    {% if event.getStub or event.getWebsiteAddress %}
-        </section>
-    {% endif %}
-
 {% endblock %}
 
 {% block extra_meta %}
     {{ parent() }}
-    <link rel="canonical" href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}" />
-    {% if event.getStub %}<link rel="shortlink" href="{{ shortUrlForEvent(event.getStub) }}" />{% endif %}
+{% endblock %}
+
+{% block extra_styles %}
+<link href="/leaflet/leaflet.css" rel="stylesheet">
+<!--[if lte IE 8]><link rel="stylesheet" href="/leaflet/leaflet.ie.css" /><![endif]-->
+{% endblock %}
+
+{% block extra_javascript %}
+    <!-- leaflet -->
+    <script type="text/javascript" src="/leaflet/leaflet.js"></script>
+    <script>
+        /** OpenStreetMap */
+        var map = L.map('streetmap').setView([{{ event.getLatitude }}, {{ event.getLongitude }}], 14);
+        L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([{{ event.getLatitude }}, {{ event.getLongitude }}]).addTo(map)
+                .bindPopup('<b>{{ location.finalName }}</b>');
+    </script>
 {% endblock %}
