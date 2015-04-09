@@ -3,7 +3,7 @@
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
-    <h2>Recent comments</h2>
+    <h2>Talk comments</h2>
     {% for comment in talkComments.comments %}
         {% set talkSlug = talkSlugs[comment.getTalkUri()] %}
         {% include '_common/comment.html.twig' with {
