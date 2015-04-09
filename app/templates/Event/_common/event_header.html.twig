@@ -11,7 +11,7 @@
 
                     {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
 
-                    at <a href="{{ urlFor('event-map', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getLocation }}</a>
+                    at <a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}#streetmap">{{ event.getLocation }}</a>
 
                     {% include 'Event/_common/attending.html.twig' %}
                 </small>
