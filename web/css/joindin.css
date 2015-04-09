@@ -42,6 +42,19 @@ nav.navbar a.navbar-brand img {
     padding-right: 10px;
 }
 
+.page-nav {
+    border-top: 1px solid #eee;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-top: 10px;
+    margin-bottom: 0px
+}
+
+.page-header {
+  margin: 10px 0 20px;
+  padding-bottom: 0;
+}
+
 form.navbar-form {
     margin-top: 10px;
 }
@@ -80,6 +93,12 @@ h6, .h6 {
 .box {
     border: 1px solid #d7dcdf;
     padding: 10px;
+}
+
+.title h1, .title h2 {
+    margin-top: 0;
+    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .sidebar section > h1, .sidebar section > h2, .sidebar section > h3, .sidebar section > h4, .sidebar section > h5, .sidebar section > h6 {
