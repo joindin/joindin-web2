@@ -86,11 +86,8 @@ class UserController extends BaseController
                 }
             }
         }
-        $parameter = ($request->get('redirect')) ? array('redirect' => $request->get('redirect')) : array();
-        $this->render(
-            'User/login.html.twig',
-            $parameter
-        );
+
+        $this->render('User/login.html.twig');
     }
 
     /**

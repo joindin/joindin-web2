@@ -50,7 +50,7 @@
                          <li><a href="{{ urlFor('user-profile', {'username': user.getUsername} ) }}">{{ user.getFullName }}</a></li>
                         <li><a href="{{ urlFor('user-logout') }}{%if currentPath() != "/" %}?redirect={{ currentPath() }}{% endif %}">Logout</a></li>
                     {% else %}
-                        <li><a href="{{ urlFor('user-login') }}{%if get('redirect') != '' %}?redirect={{ get('redirect') }}{% endif %}">Login</a></li>
+                        <li><a href="{{ urlFor('user-login') }}?redirect={{ redirect }}">Login</a></li>
                     {% endif %}
                 </ul>
                 <form class="navbar-form navbar-right" role="search" action="{{ urlFor('search') }}">
