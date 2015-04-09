@@ -8,12 +8,13 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
                     {% if event.getTags %}
+                        <div class="tags">
                         {% for tag in event.getTags %}
                             <a href="{{ urlFor('search-events') }}?tag={{ tag }}">
                                 <span class="label label-default">{{ tag }}</span>
                             </a>
                         {% endfor %}
-                        <br>
+                        </div>
                     {% endif %}
 
                     {% if event.getAttendeeCount %}
