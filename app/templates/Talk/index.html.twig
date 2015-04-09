@@ -14,36 +14,8 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'Event/_common/event_header.html.twig' %}
+    {% include 'Talk/_common/talk_header.html.twig' %}
     <section>
-        <h3>
-            {{ talk.getTitle }}
-            {% if talk.getType != 'Talk' %}
-                <span class="label talk-type-label {{ talk.getTypeClass }}">{{ talk.getType }}</span>
-            {% endif %}
-        </h3>
-        {% if talk.getSpeakers %}
-            <h4>
-                {% for speaker in talk.getSpeakers %}
-                    {% set comma = "" %}
-                    {% if not loop.last %}
-                        {% set comma = "," %}
-                    {% endif %}
-
-                    {% if speaker.username %}
-                        <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
-                    {% else %}
-                        {{ speaker.speaker_name }}{{comma}}
-                    {% endif %}
-                {% endfor %}
-                <small>{{ talk.getStartDateTime()|date('j F Y \\a\\t H:i', event.getFullTimezone) }} &mdash; {{ talk.language }}</small>
-            </h4>
-        {% endif %}
-
-        <ul class="list-inline">
-            {% if talk.slidesLink is not empty %}<li><a href="{{ talk.slidesLink }}">View Slides</a></li>{% endif %}
-        </ul>
-
         <p>{{ talk.getDescription | nl2br }}</p>
     </section>
 
@@ -115,11 +87,4 @@
 {% endblock %}
 
 {% block extraAside %}
-    <section>
-        {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
-    </section>
-    <section class="short-url">
-        <label class="control-label">Short URL:</label>
-        <p><a href="{{ shortUrlForTalk(talk.getStub) }}">{{ shortUrlForTalk(talk.getStub) }}</a></p>
-    </section>
 {% endblock %}
