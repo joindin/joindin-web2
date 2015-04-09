@@ -27,7 +27,6 @@ class EventController extends BaseController
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/comments', array($this, 'comments'))->name("event-comments");
-        $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
         $app->get('/event/:friendly_name/talk-comments', array($this, 'talkComments'))->name("event-talk-comments");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
@@ -126,20 +125,6 @@ class EventController extends BaseController
                 'comments' => $comments,
             )
         );
-    }
-
-    public function map($friendly_name)
-    {
-        $eventApi = $this->getEventApi();
-        $event    = $eventApi->getByFriendlyUrl($friendly_name);
-
-        if (! $event) {
-            $this->redirectToListPage();
-        }
-
-        $this->render('Event/map.html.twig', array(
-            'event' => $event,
-        ));
     }
 
     public function talkComments($friendly_name)
