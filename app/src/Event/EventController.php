@@ -26,6 +26,7 @@ class EventController extends BaseController
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
+        $app->get('/event/:friendly_name/comments', array($this, 'comments'))->name("event-comments");
         $app->get('/event/:friendly_name/map', array($this, 'map'))->name("event-map");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
         $app->get('/event/:friendly_name/talk-comments', array($this, 'talkComments'))->name("event-talk-comments");
@@ -96,9 +97,29 @@ class EventController extends BaseController
         $quicklink = $this->application->request()->headers("host")
             . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
 
-        $comments = $eventApi->getComments($event->getCommentsUri(), true);
         $this->render(
             'Event/details.html.twig',
+            array(
+                'event' => $event,
+                'quicklink' => $quicklink,
+            )
+        );
+    }
+
+    public function comments($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+        if (! $event) {
+            return Slim::getInstance()->notFound();
+        }
+
+        $quicklink = $this->application->request()->headers("host")
+            . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
+
+        $comments = $eventApi->getComments($event->getCommentsUri(), true);
+        $this->render(
+            'Event/comments.html.twig',
             array(
                 'event' => $event,
                 'quicklink' => $quicklink,
