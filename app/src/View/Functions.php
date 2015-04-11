@@ -83,7 +83,11 @@ function initialize(Twig_Environment $env, Slim $app)
      */
     $env->addFunction(
         new Twig_SimpleFunction('currentPath', function () use ($app) {
-            return $app->request->getPath();
+            $request = $app->request;
+            $params = $app->request->get();
+            $queryString = http_build_query($params);
+
+            return $request->getPath() . '?' . urlencode($queryString);
         })
     );
 }
