@@ -87,7 +87,11 @@ function initialize(Twig_Environment $env, Slim $app)
             $params = $app->request->get();
             $queryString = http_build_query($params);
 
-            return $request->getPath() . '?' . urlencode($queryString);
+            if ($queryString) {
+                return $request->getPath() . '?' . urlencode($queryString);
+            } else {
+                return $request->getPath();
+            }
         })
     );
 }
