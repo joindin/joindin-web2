@@ -196,6 +196,7 @@ class EventController extends BaseController
     {
         $request = $this->application->request();
         $comment = $request->post('comment');
+        $rating = (int) $request->post('rating');
         $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
         $url .= '#add-comment';
 
@@ -203,7 +204,7 @@ class EventController extends BaseController
         $event = $eventApi->getByFriendlyUrl($friendly_name);
         if ($event) {
             try {
-                $eventApi->addComment($event, $comment);
+                $eventApi->addComment($event, $comment, $rating);
             } catch (Exception $e) {
                 if (stripos($e->getMessage(), 'duplicate comment') !== false) {
                     // duplicate comment

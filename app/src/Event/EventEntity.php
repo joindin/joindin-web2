@@ -478,4 +478,9 @@ class EventEntity
 
         return $this->data->hosts;
     }
+
+    public function getAverageRating()
+    {
+        return $this->data->event_average_rating;
+    }
 }
