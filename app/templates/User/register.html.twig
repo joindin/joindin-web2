@@ -28,6 +28,11 @@
             </div>
         </div>
         {{ form_end(form) }}
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="{{ urlFor('user-resend-verification') }}">Already registered but didn't receive a welcome email?</a>
+            </div>
+        </div>
 {% endblock %}
 
 {% block extraAside %}
