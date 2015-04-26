@@ -288,5 +288,4 @@ class UserApi extends BaseApi
 
         throw new \Exception('The password could not be updated');
     }
-
 }

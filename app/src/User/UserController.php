@@ -671,7 +671,9 @@ class UserController extends BaseController
                         }
 
                         $this->application->flash('message', 'Profile has been updated');
-                        $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
+                        $this->application->redirect(
+                            $this->application->urlFor('user-profile', ['username' => $username])
+                        );
                     }
                 } catch (\Exception $e) {
                     $message = $e->getMessage();
@@ -790,5 +792,4 @@ class UserController extends BaseController
             )
         );
     }
-
 }
