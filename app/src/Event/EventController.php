@@ -203,7 +203,7 @@ class EventController extends BaseController
         $request = $this->application->request();
         $comment = $request->post('comment');
         $rating = (int) $request->post('rating');
-        $url = $this->application->urlFor("event-detail", array('friendly_name' => $friendly_name));
+        $url = $this->application->urlFor("event-comments", array('friendly_name' => $friendly_name));
         $url .= '#add-comment';
 
         $eventApi = $this->getEventApi();
