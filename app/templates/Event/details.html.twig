@@ -77,16 +77,3 @@
                 .bindPopup('<b>{{ location.finalName }}</b>');
     </script>
 {% endblock %}
-
-{% block extra_javascript %}
-    <script type="text/javascript">
-        $('#rating_widget').bind('over', function (event, value) {
-            if (value) {
-                $("#rating_value").html($("#rating option[value='"+value+"']").text());
-            } else {
-                $("#rating_value").html($("#rating option:selected").text())
-            }
-        });
-        $('#rating_widget').bind('rated', function (event, value) { $("#rating_value").html($("#rating option[value='"+value+"']").text()) });
-    </script>
-{% endblock %}
