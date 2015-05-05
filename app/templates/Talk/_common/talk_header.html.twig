@@ -9,7 +9,16 @@
                     {% if talk.getSpeakers %}
                         <h3>
                             {% for speaker in talk.getSpeakers %}
-                                {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
+                                {% set comma = "" %}
+                                {% if not loop.last %}
+                                    {% set comma = "," %}
+                                {% endif %}
+
+                                {% if speaker.username %}
+                                    <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+                                {% else %}
+                                    {{ speaker.speaker_name }}{{comma}}
+                                {% endif %}
                             {% endfor %}
                         </h3>
                     {% endif %}

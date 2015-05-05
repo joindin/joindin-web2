@@ -37,12 +37,21 @@ set eventUrl = urlFor(
 
                 {% if talk.getSpeakers %}
                     <br/>
+                    <span class="nowrap">
                     by
                     {% for speaker in talk.getSpeakers %}
-                        <span class="nowrap">
-                            {{ speaker.speaker_name }}{% if not loop.last %}, {% endif %}
-                        </span>
+                        {% set comma = "" %}
+                        {% if not loop.last %}
+                            {% set comma = "," %}
+                        {% endif %}
+
+                        {% if speaker.username %}
+                            <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+                        {% else %}
+                            {{ speaker.speaker_name }}{{comma}}
+                        {% endif %}
                     {% endfor %}
+                    </span>
                 {% endif %}
             </p>
         </section>
