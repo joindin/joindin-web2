@@ -77,4 +77,21 @@ function initialize(Twig_Environment $env, Slim $app)
             return $formatter->getDateRange($start, $end);
         })
     );
+
+    /**
+     * wrapped Slim request function getPath()
+     */
+    $env->addFunction(
+        new Twig_SimpleFunction('currentPath', function () use ($app) {
+            $request = $app->request;
+            $params = $app->request->get();
+            $queryString = http_build_query($params);
+
+            if ($queryString) {
+                return $request->getPath() . urlencode('?' . $queryString);
+            } else {
+                return $request->getPath();
+            }
+        })
+    );
 }

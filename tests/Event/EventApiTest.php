@@ -170,13 +170,16 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->method('apiPost')
             ->with(
                 'http://example.com/comments/123',
-                array('comment'=>'comment')
+                array(
+                    'comment' => 'comment',
+                    'rating' => 3,
+                )
             )
             ->will($this->returnValue(array('201', 'result')));
 
         // The test
         $this->assertTrue(
-            $mockEventApi->addComment($mockEventObj, 'comment')
+            $mockEventApi->addComment($mockEventObj, 'comment', 3)
         );
     }
 
@@ -213,7 +216,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->method('apiPost')
             ->with(
                 'http://example.com/comments/123',
-                array('comment'=>'comment')
+                array(
+                    'comment' => 'comment',
+                    'rating' => 0,
+                )
             )
             ->will($this->returnValue(array('500', 'no result')));
 

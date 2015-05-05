@@ -162,6 +162,9 @@ class UserController extends BaseController
      */
     public function logout()
     {
+        $request = $this->application->request();
+        $redirect = ($request->get('redirect')) ? $request->get('redirect') : "/";
+
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
         }
@@ -169,7 +172,7 @@ class UserController extends BaseController
             unset($_SESSION['access_token']);
         }
         session_regenerate_id(true);
-        $this->application->redirect('/');
+        $this->application->redirect($redirect);
     }
 
     /**
