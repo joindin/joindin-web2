@@ -48,7 +48,11 @@
 
     <p>{{ event.getDescription|nl2br }}</p>
 
-    <div id="streetmap" style="border: 1px solid black; height: 300px;"></div>
+
+    {% if event.getLatitude != '0' and event.getLongitude != '0' %}
+        <div id="streetmap" style="border: 1px solid black; height: 300px;"></div>
+    {% endif %}
+
 {% endblock %}
 
 {% block extraAside %}
