@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Form used to accept input of an email address only
+ * Form used to accept input of a username only
  */
 class UsernameInputFormType extends AbstractType
 {
