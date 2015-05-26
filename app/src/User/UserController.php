@@ -29,13 +29,15 @@ class UserController extends BaseController
             ->via('GET', 'POST')->name('user-resend-verification');
         $app->map('/user/username-reminder', array($this, 'remindUsername'))
             ->via('GET', 'POST')->name('user-username-reminder');
+        $app->map('/user/password-reset', array($this, 'resetPassword'))
+            ->via('GET', 'POST')->name('user-password-reset');
+        $app->map('/user/new-password', array($this, 'newPassword'))
+            ->via('GET', 'POST')->name('user-new-password');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
         $app->get('/user/:username/hosted', array($this, 'profileHosted'))->name('user-profile-hosted');
         $app->get('/user/:username/comments', array($this, 'profileComments'))->name('user-profile-comments');
-        $app->map('/user/:username/edit', array($this, 'profileEdit'))
-            ->via('GET', 'POST')->name('user-profile-edit');
     }
 
     /**
@@ -672,7 +674,9 @@ class UserController extends BaseController
                         }
 
                         $this->application->flash('message', 'Profile has been updated');
-                        $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
+                        $this->application->redirect(
+                            $this->application->urlFor('user-profile', ['username' => $username])
+                        );
                     }
                 } catch (\Exception $e) {
                     $message = $e->getMessage();
@@ -695,6 +699,99 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'form' => $form->createView(),
                 'can_change_password' => $canChangePassword,
+            )
+        );
+    }
+
+    public function resetPassword()
+    {
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new UsernameInputFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getData();
+                $username = $values['username'];
+
+                $userApi = $this->getUserApi();
+
+                $result = false;
+                try {
+                    $result = $userApi->passwordReset($username);
+                    if ($result) {
+                        $this->application->flash(
+                            'message',
+                            'Check your email for instructions on resetting your password.'
+                        );
+                        $this->application->redirect('/user/login');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError(
+                        new FormError('An error occurred: ' . $e->getMessage())
+                    );
+                }
+
+            }
+        }
+
+        $this->render(
+            'User/password-reset.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
+    }
+
+    /**
+     * Link in password reset email lands here
+     *
+     * @return void
+     */
+    public function newPassword()
+    {
+        $request = $this->application->request();
+        $token = $request->get('token');
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new NewPasswordFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getData();
+                $userApi = $this->getUserApi();
+
+                $result = false;
+                try {
+                    $result = $userApi->resetPassword($token, $values['password']);
+                    if ($result) {
+                        $this->application->flash(
+                            'message',
+                            'Your password was saved; you may now log in.'
+                        );
+                        $this->application->redirect('/user/login');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError(
+                        new FormError('An error occurred: ' . $e->getMessage())
+                    );
+                }
+
+
+            }
+        }
+
+        $this->render(
+            'User/new-password.html.twig',
+            array(
+                'form' => $form->createView(),
             )
         );
     }

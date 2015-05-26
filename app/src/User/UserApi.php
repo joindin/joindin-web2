@@ -210,6 +210,37 @@ class UserApi extends BaseApi
     }
 
     /**
+     * Ask the API to email the user a token to reset their password
+     *
+     * @param username $username  The username address of the user to remind
+     *
+     * @throws \Exception   If an error occurs (not a 202 response)
+     *
+     * return bool  True if successful
+     */
+    public function passwordReset($username)
+    {
+        $data = array("username" => $username);
+
+        list ($status, $result, $headers) = $this->apiPost(
+            $this->baseApiUrl . '/v2.1/emails/reminders/password',
+            $data
+        );
+
+        if ($status == 202) {
+            return true;
+        }
+
+        $message = json_decode($result);
+        if (is_array($message)) {
+            $message = current($message);
+        } else {
+            $message = "Unknown error";
+        }
+        throw new \Exception($message);
+    }
+
+    /**
      * Update a user's details
      *
      * @see http://joindin.github.io/joindin-api/users.html for a list of supported
@@ -231,5 +262,30 @@ class UserApi extends BaseApi
         }
 
         throw new \Exception('Your profile update was not accepted. The server reports: ' . $result);
+    }
+
+    /**
+     * Set a new password for a user who has forgotten theirs
+     *
+     * @param  string $token    The reset token we sent by email
+     *
+     * @throws \Exception       if a status code other than 201 is returned
+     *
+     * @return bool             True if the password was changed
+     */
+    public function resetPassword($token, $password)
+    {
+        $data = array(
+            "token" => $token,
+            "password" => $password,
+        );
+
+        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new \Exception('The password could not be updated');
     }
 }
