@@ -1,0 +1,11 @@
+{
+  "name": "joind.in",
+  "description": "joindin frontend",
+  "repository": "",
+  "author": "",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt": "0.4.2",
+    "grunt-jsvalidate": "0.2.*"
+  }
+}
