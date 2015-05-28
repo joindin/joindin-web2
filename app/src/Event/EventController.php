@@ -23,6 +23,7 @@ class EventController extends BaseController
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
+        $app->get('/event/pending', array($this, 'pending'))->name("events-pending");
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
@@ -54,6 +55,33 @@ class EventController extends BaseController
 
         $this->render(
             'Event/index.html.twig',
+            array(
+                'page' => $page,
+                'events' => $events
+            )
+        );
+    }
+
+    public function pending()
+    {
+        if (!isset($_SESSION['user']) || $_SESSION['user']->getAdmin() == false) {
+            $this->application->redirect($this->application->urlFor('not-allowed'));
+        }
+
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
+        $start = ($page -1) * $this->itemsPerPage;
+
+        $eventApi = $this->getEventApi();
+        $events = $eventApi->getEvents(
+            $this->itemsPerPage,
+            $start,
+            'pending'
+        );
+
+        $this->render(
+            'Event/pending.html.twig',
             array(
                 'page' => $page,
                 'events' => $events
