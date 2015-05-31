@@ -54,9 +54,10 @@ class AuthApi extends BaseApi
         list ($status, $result, $headers) = $this->apiPost($url, $params);
         if ($status == 201) {
             // we got one, data is actually in the body
-            $data = json_decode($result, true);
+            $data = json_decode($result);
             if ($data) {
-                return $data['token'];
+                $token = $data->twitter_request_tokens[0];
+                return $token->token;
             }
         }
         return false;
