@@ -38,6 +38,8 @@ class UserController extends BaseController
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
         $app->get('/user/:username/hosted', array($this, 'profileHosted'))->name('user-profile-hosted');
         $app->get('/user/:username/comments', array($this, 'profileComments'))->name('user-profile-comments');
+        $app->map('/user/:username/edit', array($this, 'profileEdit'))
+            ->via('GET', 'POST')->name('user-profile-edit');
     }
 
     /**
