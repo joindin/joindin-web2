@@ -778,7 +778,8 @@ class UserController extends BaseController
      * This gets a request token via the API, and forwards the user
      * to twitter to log in and grant us access
      */
-    public function loginWithTwitter() {
+    public function loginWithTwitter()
+    {
         // ask the API for a request token
         $config = $this->application->config('oauth');
         $clientId = $config['client_id'];
@@ -787,7 +788,7 @@ class UserController extends BaseController
         $authApi = new AuthApi($this->cfg, $this->accessToken);
         $request_token = $authApi->getTwitterRequestToken($clientId, $clientSecret);
 
-        if($request_token) {
+        if ($request_token) {
             // forward the user
             header("Location: https://api.twitter.com/oauth/authenticate?oauth_token=" . $request_token);
             exit;
@@ -803,7 +804,8 @@ class UserController extends BaseController
     /**
      * The callback URL should point to here
      */
-    public function accessTokenTwitter() {
+    public function accessTokenTwitter()
+    {
         $config = $this->application->config('oauth');
         $request = $this->application->request();
 
@@ -821,7 +823,8 @@ class UserController extends BaseController
         $this->handleLogin($result);
     }
 
-    protected function handleLogin($result, $redirect = false) {
+    protected function handleLogin($result, $redirect = false)
+    {
         if (false === $result) {
             $this->application->flash('error', "Failed to log in");
             if (empty($redirect)) {

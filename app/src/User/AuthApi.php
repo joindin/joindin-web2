@@ -44,7 +44,8 @@ class AuthApi extends BaseApi
      * @param  string $clientSecret OAuth client secret
      * @return string The token
      */
-    public function getTwitterRequestToken($clientId, $clientSecret) {
+    public function getTwitterRequestToken($clientId, $clientSecret)
+    {
         $url = $this->baseApiUrl . '/v2.1/twitter/request_token';
         $params = array(
             'client_id'     => $clientId,
@@ -69,7 +70,8 @@ class AuthApi extends BaseApi
      * @param  string $clientId OAuth client ID
      * @param  string $clientSecret OAuth client secret
      */
-    public function verifyTwitter($clientId, $clientSecret, $token, $verifier) {
+    public function verifyTwitter($clientId, $clientSecret, $token, $verifier)
+    {
         $url = $this->baseApiUrl . '/v2.1/twitter/token';
         $params = array(
             'client_id'     => $clientId,
