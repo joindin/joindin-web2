@@ -33,6 +33,8 @@ class UserController extends BaseController
             ->via('GET', 'POST')->name('user-password-reset');
         $app->map('/user/new-password', array($this, 'newPassword'))
             ->via('GET', 'POST')->name('user-new-password');
+        $app->get('/user/twitter-login', array($this, 'loginWithTwitter'))->name('twitter-login');
+        $app->get('/user/twitter-access', array($this, 'accessTokenFromTwitter'))->name('twitter-callback');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
@@ -66,31 +68,7 @@ class UserController extends BaseController
             $authApi = new AuthApi($this->cfg, $this->accessToken);
             $result = $authApi->login($username, $password, $clientId, $clientSecret);
 
-            if (false === $result) {
-                $this->application->flash('error', "Failed to log in");
-                if (empty($redirect)) {
-                    $redirect = '/user/login';
-                }
-                $this->application->redirect($redirect);
-            } else {
-                session_regenerate_id(true);
-                $_SESSION['access_token'] = $result->access_token;
-                $this->accessToken = $_SESSION['access_token'];
-
-                // now get users details
-                $userApi = $this->getUserApi();
-                $user = $userApi->getUser($result->user_uri);
-                if ($user) {
-                    $_SESSION['user'] = $user;
-                    if (empty($redirect) || strpos($redirect, '/user/login') === 0) {
-                        $this->application->redirect('/');
-                    } else {
-                        $this->application->redirect($redirect);
-                    }
-                } else {
-                    unset($_SESSION['access_token']);
-                }
-            }
+            $this->handleLogin($result, $redirect);
         }
 
         $this->render('User/login.html.twig');
@@ -796,5 +774,91 @@ class UserController extends BaseController
                 'form' => $form->createView(),
             )
         );
+    }
+
+    /**
+     * This gets a request token via the API, and forwards the user
+     * to Twitter to log in and grant us access
+     */
+    public function loginWithTwitter()
+    {
+        // ask the API for a request token
+        $config = $this->application->config('oauth');
+        $clientId = $config['client_id'];
+        $clientSecret = $config['client_secret'];
+
+        $authApi = new AuthApi($this->cfg, $this->accessToken);
+        $request_token = $authApi->getTwitterRequestToken($clientId, $clientSecret);
+
+        if ($request_token) {
+            // forward the user
+            header("Location: https://api.twitter.com/oauth/authenticate?oauth_token=" . $request_token);
+            exit;
+        }
+
+        $this->application->flash(
+            'error',
+            'We could not log you in with twitter'
+        );
+        $this->application->redirect('/user/login');
+    }
+
+    /**
+     * The callback URL should point to here
+     */
+    public function accessTokenFromTwitter()
+    {
+        $config = $this->application->config('oauth');
+        $request = $this->application->request();
+
+        // pass verification to the API so we can log in
+        $clientId = $config['client_id'];
+        $clientSecret = $config['client_secret'];
+
+        // handle incoming vars
+        $token = $request->get('oauth_token');
+        $verifier = $request->get('oauth_verifier');
+
+        $authApi = new AuthApi($this->cfg, $this->accessToken);
+        $result = $authApi->verifyTwitter($clientId, $clientSecret, $token, $verifier);
+
+        $this->handleLogin($result);
+    }
+
+    /**
+     * Process a user login result. If result is false, then we failed, otherwise
+     * update the session.
+     *
+     * @param  stdclass|false  $result
+     * @param  string|boolean  $redirect
+     * @return void
+     */
+    protected function handleLogin($result, $redirect = false)
+    {
+        if (false === $result) {
+            $this->application->flash('error', "Failed to log in");
+            if (empty($redirect)) {
+                $redirect = $this->application->urlFor('user-login');
+            }
+            $this->application->redirect($redirect);
+        }
+        
+        session_regenerate_id(true);
+        $_SESSION['access_token'] = $result->access_token;
+        $this->accessToken = $_SESSION['access_token'];
+
+        // now get users details
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUser($result->user_uri);
+        if ($user) {
+            $_SESSION['user'] = $user;
+            if (empty($redirect) || strpos($redirect, '/user/login') === 0) {
+                $this->application->redirect('/');
+            }
+            $this->application->redirect($redirect);
+        }
+        unset($_SESSION['access_token']);
+        $this->application->flash('error', "Failed to log in. User account problem.");
+        $this->application->redirect($this->application->urlFor('user-login'));
     }
 }

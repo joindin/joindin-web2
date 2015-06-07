@@ -479,3 +479,7 @@ a.starred, table.schedule a.starred {
 .tags {
     margin-bottom: 5px;
 }
+
+.already-registered {
+    padding-right: 10px;
+}
