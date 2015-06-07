@@ -823,6 +823,14 @@ class UserController extends BaseController
         $this->handleLogin($result);
     }
 
+    /**
+     * Process a user login result. If result is false, then we failed, otherwise
+     * update the session.
+     *
+     * @param  stdclass|false  $result
+     * @param  string|boolean  $redirect
+     * @return void
+     */
     protected function handleLogin($result, $redirect = false)
     {
         if (false === $result) {
