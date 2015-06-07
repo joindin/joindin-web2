@@ -34,7 +34,7 @@ class UserController extends BaseController
         $app->map('/user/new-password', array($this, 'newPassword'))
             ->via('GET', 'POST')->name('user-new-password');
         $app->get('/user/twitter-login', array($this, 'loginWithTwitter'))->name('twitter-login');
-        $app->get('/user/twitter-access', array($this, 'accessTokenTwitter'))->name('twitter-callback');
+        $app->get('/user/twitter-access', array($this, 'accessTokenFromTwitter'))->name('twitter-callback');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
@@ -804,7 +804,7 @@ class UserController extends BaseController
     /**
      * The callback URL should point to here
      */
-    public function accessTokenTwitter()
+    public function accessTokenFromTwitter()
     {
         $config = $this->application->config('oauth');
         $request = $this->application->request();
