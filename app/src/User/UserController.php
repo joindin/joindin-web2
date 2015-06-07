@@ -839,24 +839,24 @@ class UserController extends BaseController
                 $redirect = '/user/login';
             }
             $this->application->redirect($redirect);
-        } else {
-            session_regenerate_id(true);
-            $_SESSION['access_token'] = $result->access_token;
-            $this->accessToken = $_SESSION['access_token'];
-
-            // now get users details
-            $userApi = $this->getUserApi();
-            $user = $userApi->getUser($result->user_uri);
-            if ($user) {
-                $_SESSION['user'] = $user;
-                if (empty($redirect) || strpos($redirect, '/user/login') === 0) {
-                    $this->application->redirect('/');
-                } else {
-                    $this->application->redirect($redirect);
-                }
-            } else {
-                unset($_SESSION['access_token']);
-            }
         }
+        
+        session_regenerate_id(true);
+        $_SESSION['access_token'] = $result->access_token;
+        $this->accessToken = $_SESSION['access_token'];
+
+        // now get users details
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUser($result->user_uri);
+        if ($user) {
+            $_SESSION['user'] = $user;
+            if (empty($redirect) || strpos($redirect, '/user/login') === 0) {
+                $this->application->redirect('/');
+            }
+            $this->application->redirect($redirect);
+        }
+        unset($_SESSION['access_token']);
+        $this->application->flash('error', "Failed to log in. User account problem.");
+        $this->application->redirect($this->application->urlFor('user-login'));
     }
 }
