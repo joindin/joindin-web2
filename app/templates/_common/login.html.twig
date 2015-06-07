@@ -16,7 +16,9 @@
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Log in">
         <a class="btn btn-link" href="{{ urlFor('user-register') }}">or register now</a>
-        <a class="btn btn-link" href="{{ urlFor('twitter-login') }}">Log in with Twitter</a>
+    </div>
+    <div class="form-group">
+        <span class="already-registered">Already registered?</span> <a href="{{ urlFor('twitter-login') }}"><img src="/img/sign-in-with-twitter.png" alt="Sign in with Twitter"></a>
     </div>
     <div>
         Problems logging in? <a class="btn btn-link" href="{{ urlFor('user-resend-verification') }}">Resend welcome email</a>
