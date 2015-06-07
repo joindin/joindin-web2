@@ -836,7 +836,7 @@ class UserController extends BaseController
         if (false === $result) {
             $this->application->flash('error', "Failed to log in");
             if (empty($redirect)) {
-                $redirect = '/user/login';
+                $redirect = $this->application->urlFor('user-login');
             }
             $this->application->redirect($redirect);
         }
