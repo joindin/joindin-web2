@@ -776,7 +776,7 @@ class UserController extends BaseController
 
     /**
      * This gets a request token via the API, and forwards the user
-     * to twitter to log in and grant us access
+     * to Twitter to log in and grant us access
      */
     public function loginWithTwitter()
     {
