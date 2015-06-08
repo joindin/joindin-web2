@@ -35,6 +35,7 @@ class UserController extends BaseController
             ->via('GET', 'POST')->name('user-new-password');
         $app->get('/user/twitter-login', array($this, 'loginWithTwitter'))->name('twitter-login');
         $app->get('/user/twitter-access', array($this, 'accessTokenFromTwitter'))->name('twitter-callback');
+        $app->get('/user/facebook-access', array($this, 'accessTokenFromFacebook'))->name('facebook-callback');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
@@ -824,6 +825,27 @@ class UserController extends BaseController
 
         $authApi = new AuthApi($this->cfg, $this->accessToken);
         $result = $authApi->verifyTwitter($clientId, $clientSecret, $token, $verifier);
+
+        $this->handleLogin($result);
+    }
+
+    /**
+     * The Facebook callback URL returns here
+     */
+    public function accessTokenFromFacebook()
+    {
+        $config = $this->application->config('oauth');
+        $request = $this->application->request();
+
+        // pass verification to the API so we can log in
+        $clientId = $config['client_id'];
+        $clientSecret = $config['client_secret'];
+
+        // handle incoming vars
+        $code = $request->get('code');
+
+        $authApi = new AuthApi($this->cfg, $this->accessToken);
+        $result = $authApi->verifyFacebook($clientId, $clientSecret, $code);
 
         $this->handleLogin($result);
     }
