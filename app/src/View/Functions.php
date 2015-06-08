@@ -122,4 +122,33 @@ function initialize(Twig_Environment $env, Slim $app)
             }
         })
     );
+
+    /**
+     * Create link to log in with Facebook
+     */
+    $env->addFunction(
+        new Twig_SimpleFunction(
+            'facebookLoginUrl',
+            function () use ($app) {
+                if (!$app->config('facebook') || empty($app->config('facebook')['app_id'])) {
+                    // app_id isn't configured
+                    return '';
+                }
+
+                $req = $app->request();
+                $redirectUrl = $req->getUrl();
+                $redirectUrl .= $app->urlFor('facebook-callback');
+
+                $url = 'https://www.facebook.com/dialog/oauth?';
+                $url .= http_build_query([
+                    'scope' => 'email',
+                    'client_id' => $app->config('facebook')['app_id'],
+                    'redirect_uri' => $redirectUrl,
+                ]);
+
+                return $url;
+            },
+            ['is_safe' => ['html']]
+        )
+    );
 }
