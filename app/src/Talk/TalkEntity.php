@@ -44,7 +44,18 @@ class TalkEntity
 
     public function getStartDateTime()
     {
-        return new DateTime($this->data->start_date);
+        if (! $this->data->start_date) {
+            $this->data->start_date = '@' . time();
+        }
+        if (! $this->data->start_date instanceof \DateTimeInterface) {
+            $this->data->start_date = new DateTime($this->data->start_date);
+        }
+        return $this->data->start_date;
+    }
+
+    public function getStartDate()
+    {
+        return $this->getStartDateTime();
     }
 
     public function getEndDateTime()
@@ -150,4 +161,67 @@ class TalkEntity
     {
         return $this->data->starred_uri;
     }
+
+    public function setTitle($title)
+    {
+        $this->data->talk_title = $title;
+
+        return $this;
+    }
+
+    public function setDescription($description)
+    {
+        $this->data->talk_description = $description;
+
+        return $this;
+    }
+
+    public function setLanguage($language)
+    {
+        $this->data->language = $language;
+
+        return $this;
+    }
+
+    public function setSlidesLink($slidesLink)
+    {
+        $this->data->slides_link = $slidesLink;
+
+        return $this;
+    }
+
+    public function setStartDate($startDate)
+    {
+        $this->data->start_date = $startDate;
+
+        return $this;
+    }
+
+    public function setDuration($duration)
+    {
+        $this->data->duration = $duration;
+
+        return $this;
+    }
+
+    public function setType($type)
+    {
+        $this->data->type = $type;
+
+        return $this;
+    }
+
+    public function setSpeakers($speakers)
+    {
+        $this->data->speakers = $speakers;
+
+        return $this;
+    }
+
+    public function toArray()
+    {
+        return (array) $this->data;
+    }
+
+
 }
