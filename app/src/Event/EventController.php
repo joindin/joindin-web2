@@ -37,6 +37,7 @@ class EventController extends BaseController
         $app->get('/event/xhr-unattend/:friendly_name', array($this, 'xhrUnattend'));
         $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
         $app->get('/event/unattend/:friendly_name', array($this, 'unattend'))->name("event-unattend");
+        $app->post('/event/action-pending-event/:friendly_name', array($this, 'actionPendingEvent'))->name("event-action-pending");
     }
 
     public function index()
@@ -380,6 +381,45 @@ class EventController extends BaseController
         );
 
 
+    }
+
+    /**
+     * Approve or reject a pending event
+     *
+     * @param  string $friendly_name
+     * @return void
+     */
+    public function actionPendingEvent($friendly_name)
+    {
+        if (!isset($_SESSION['user']) || $_SESSION['user']->getAdmin() == false) {
+            $this->application->redirect($this->application->urlFor('not-allowed'));
+        }
+        
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+        if (! $event) {
+            $this->application->flash('error', 'Could not find event.');
+            $this->application->redirect($this->application->urlFor("events-pending"));
+        }
+
+        try {
+            $action = $this->application->request->post('action', '');
+            switch ($action) {
+                case 'approve':
+                    $eventApi->approveEvent($event->getApprovalUri());
+                    $this->application->flash('message', 'Event approved.');
+                    break;
+
+                case 'reject':
+                    $eventApi->rejectEvent($event->getApprovalUri());
+                    $this->application->flash('message', 'Event rejected.');
+                    break;
+            }
+        } catch (Exception $e) {
+            $this->application->flash('error', $e->getMessage());
+        }
+
+        $this->application->redirect($this->application->urlFor("events-pending"));
     }
 
     /**
