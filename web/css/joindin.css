@@ -332,6 +332,22 @@ table.schedule span.speaker a:hover {
     width: 100%;
 }
 
+.event.pending-event .controls {
+    float: left;
+    margin-top: 6px;
+    padding: 0 10px;
+    width: 150px;
+}
+
+.event.pending-event .description {
+    margin-left: 120px;
+}
+
+.event.pending-event form button {
+    width: 100%;
+    margin-bottom: 5px
+}
+
 @media (max-width: 768px) {
     .pull-right-xs {
         float: right;

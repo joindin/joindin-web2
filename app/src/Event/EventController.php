@@ -78,7 +78,8 @@ class EventController extends BaseController
         $events = $eventApi->getEvents(
             $this->itemsPerPage,
             $start,
-            'pending'
+            'pending',
+            true
         );
 
         $this->render(
