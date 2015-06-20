@@ -325,4 +325,36 @@ class EventApi extends BaseApi
 
         return $commentData;
     }
+
+    /**
+     * Approve a pending event by POSTing to approval_uri
+     *
+     * @param  string $approval_uri
+     * @return boolean
+     */
+    public function approveEvent($approval_uri)
+    {
+        list ($status, $result, $headers) = $this->apiPost($approval_uri);
+
+        if ($status == 204) {
+            return true;
+        }
+        throw new \Exception("Failed to approve event: " . $result);
+    }
+
+    /**
+     * Reject a pending event by DELETEing to approval_uri
+     *
+     * @param  string $approval_uri
+     * @return boolean
+     */
+    public function rejectEvent($approval_uri)
+    {
+        list ($status, $result, $headers) = $this->apiDelete($approval_uri);
+
+        if ($status == 204) {
+            return true;
+        }
+        throw new \Exception("Failed to reject event: " . $result);
+    }
 }
