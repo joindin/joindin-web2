@@ -379,6 +379,10 @@ form .button-spacer.pull-right {
     margin-left: 5px;
 }
 
+label.required:after {
+    content: ' *'
+}
+
 .commented-on {
     font-style: italic;
 }
@@ -486,4 +490,8 @@ a.starred, table.schedule a.starred {
 
 .already-registered {
     padding-right: 10px;
+}
+
+#contact_comment {
+    height: 15em;
 }

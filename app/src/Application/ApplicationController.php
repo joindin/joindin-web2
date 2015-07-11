@@ -13,6 +13,7 @@ class ApplicationController extends BaseController
         $app->get('/', array($this, 'index'));
         $app->get('/apps', array($this, 'apps'))->name('apps');
         $app->get('/about', array($this, 'about'))->name('about');
+        $app->map('/contact', array($this, 'contact'))->via('GET', 'POST')->name('contact');
         $app->get('/not-allowed', array($this, 'notAllowed'))->name('not-allowed');
     }
 
@@ -52,6 +53,46 @@ class ApplicationController extends BaseController
         $this->render('Application/about.html.twig');
     }
 
+    /**
+     * Render the contact page
+     */
+    public function contact()
+    {
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new ContactFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getData();
+                
+                $config = $this->application->config('oauth');
+                $clientId = $config['client_id'];
+                $clientSecret = $config['client_secret'];
+
+                try {
+                    $contactApi = $this->getContactApi();
+                    $contactApi->contact($values['name'], $values['email'], $values['comment'], $clientId, $clientSecret);
+                    $this->application->flash('message', "Thank you for contacting us.");
+                    $this->application->redirect($this->application->urlFor("contact"));
+                } catch (\Exception $e) {
+                    $this->application->flashNow('error', $e->getMessage());
+                }
+            }
+        }
+
+        $this->render(
+            'Application/contact.html.twig',
+            [
+                'form' => $form->createView()
+            ]
+        );
+    }
+
 
     /**
      * Render the notAllowed page
@@ -86,5 +127,13 @@ class ApplicationController extends BaseController
     {
         $userDb = new UserDb($this->getCache());
         return new UserApi($this->cfg, $this->accessToken, $userDb);
+    }
+
+    /**
+     * @return ContactApi
+     */
+    private function getContactApi()
+    {
+        return new ContactApi($this->cfg, $this->accessToken);
     }
 }
