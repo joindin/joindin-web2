@@ -391,6 +391,10 @@ form .button-spacer.pull-right {
   visibility: hidden;
 }
 
+.user-profile {
+    margin-bottom: 10px;
+}
+
 .user-profile-panels h4 {
     margin-top: 0;
     margin-bottom: 0;
