@@ -73,6 +73,14 @@ class ContactFormType extends AbstractType
                 ]
             )
             ->add(
+                'subject',
+                'text',
+                [
+                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
+                    'max_length' => '100',
+                ]
+            )
+            ->add(
                 'comment',
                 'textarea',
                 [

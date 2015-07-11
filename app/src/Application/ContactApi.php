@@ -10,7 +10,7 @@ class ContactApi extends BaseApi
         parent::__construct($config, $accessToken);
     }
 
-    public function contact($name, $email, $comment, $clientId, $clientSecret)
+    public function contact($name, $email, $subject, $comment, $clientId, $clientSecret)
     {
 
         $url = $this->baseApiUrl . '/v2.1/contact';
@@ -19,6 +19,7 @@ class ContactApi extends BaseApi
             'client_secret' => $clientSecret,
             'name'          => $name,
             'email'         => $email,
+            'subject'       => $subject,
             'comment'       => $comment,
         );
 

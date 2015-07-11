@@ -76,7 +76,7 @@ class ApplicationController extends BaseController
 
                 try {
                     $contactApi = $this->getContactApi();
-                    $contactApi->contact($values['name'], $values['email'], $values['comment'], $clientId, $clientSecret);
+                    $contactApi->contact($values['name'], $values['email'], $values['subject'], $values['comment'], $clientId, $clientSecret);
                     $this->application->flash('message', "Thank you for contacting us.");
                     $this->application->redirect($this->application->urlFor("contact"));
                 } catch (\Exception $e) {
