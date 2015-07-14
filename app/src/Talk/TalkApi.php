@@ -195,7 +195,7 @@ class TalkApi extends BaseApi
     public function getAgenda($talksUri)
     {
         $talks = $this->getCollection($talksUri . '?start=0&resultsperpage=1000&verbose=yes');
-        if (!$talks) {
+        if (!array_key_exists('talks', $talks)) {
             return [];
         }
         $talks = $talks['talks'];
