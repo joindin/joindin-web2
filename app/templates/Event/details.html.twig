@@ -78,7 +78,7 @@
                             <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.title }}</a>
 
                             {% if talk.speakers %}
-                                <br><span class="by">{{ talk.getType }} by</span>
+                                <br><span class="lowlight">{{ talk.getType }} by</span>
                                 {% for speaker in talk.speakers %}
                                     <span class="speaker">
                                         {% set comma = "" %}
@@ -94,7 +94,7 @@
                                     </span>
                                 {% endfor %}
                             {% endif %}
-                            <span class="duration">({{ prettyDuration(talk.duration) }})</span>
+                            <span class="lowlight">({{ prettyDuration(talk.duration) }})</span>
                         </td>
                         <td class="talk-info">
                             {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical', 'size': 'small'} %}

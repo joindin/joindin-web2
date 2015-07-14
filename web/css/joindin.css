@@ -220,7 +220,7 @@ footer {
     padding-left: 0;
 }
 
-.agenda .by, .agenda .duration {
+.agenda .lowlight {
     color: #777;
 }
 
