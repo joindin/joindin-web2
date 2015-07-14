@@ -226,7 +226,7 @@ footer {
 
 .agenda .talk-info {
     width: 157px;
-    text-align: right;
+    float: right;
 }
 
 .agenda .talk-info .rating {

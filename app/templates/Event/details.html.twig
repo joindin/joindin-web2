@@ -70,6 +70,22 @@
                             {% if loop.first %}{{ time|replace({' ': '&nbsp;'})|raw }}{# -{{ talk.EndDateTime|date('H:i') }} #}{% endif %}
                         </td>
                         <td class="agenda-cell">
+                            <div class="talk-info">
+                                {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical', 'size': 'small', 'include_rating_placeholder': true} %}
+
+                                <span class="slides">
+                                    {% if talk.slidesLink %}
+                                        <a target="new" title="Slides for this session" href="{{ talk.slidesLink }}">
+                                            <img src="/img/icon-slides.gif" alt="Slides for this session">
+                                    </a>
+                                    {% endif %}
+                                </span>
+                                
+                                <span class="comment-count">
+                                    <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.commentCount }}</a>
+                                </span>
+                            </div>
+                            
                             {% if user %}
                             <div id="{{ event.getUrlFriendlyName }}/{{ talk.getUrlFriendlyTalkTitle }}" class="star-wrapper">
                                 <a href="javascript:" class="star{% if talk.starred %} starred{% endif %}">{% if talk.starred %}&#10029;{% else %}&#10025;{% endif %}</a>
@@ -98,21 +114,6 @@
                                 <span class="track"><span class="lowlight">in</span> {{ talk.tracks.0.track_name }}</span>
                             {% endif %}
                             <span class="lowlight">({{ prettyDuration(talk.duration) }})</span>
-                        </td>
-                        <td class="talk-info">
-                            {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical', 'size': 'small', 'include_rating_placeholder': true} %}
-
-                            <span class="slides">
-                                {% if talk.slidesLink %}
-                                    <a target="new" title="Slides for this session" href="{{ talk.slidesLink }}">
-                                        <img src="/img/icon-slides.gif" alt="Slides for this session">
-                                </a>
-                                {% endif %}
-                            </span>
-                            
-                            <span class="comment-count">
-                                <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.commentCount }}</a>
-                            </span>
                         </td>
                     </tr>
                 {% endfor %}
