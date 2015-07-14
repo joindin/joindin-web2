@@ -87,6 +87,8 @@ function initialize(Twig_Environment $env, Slim $app)
      *     - 126 minutes converts to "2 hours, 6 minutes"
      */
     $env->addFunction(new Twig_SimpleFunction('prettyDuration', function ($duration) {
+        $duration = (int)$duration;
+
         if ($duration < 60) {
             return "$duration minutes";
         }

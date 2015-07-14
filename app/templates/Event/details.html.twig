@@ -113,7 +113,9 @@
                             {% if talk.tracks %}
                                 <span class="track"><span class="lowlight">in</span> {{ talk.tracks.0.track_name }}</span>
                             {% endif %}
-                            <span class="lowlight">({{ prettyDuration(talk.duration) }})</span>
+                            {% if talk.duration %}
+                                <span class="lowlight">({{ prettyDuration(talk.duration)|replace({' ': '&nbsp;'})|raw }})</span>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
