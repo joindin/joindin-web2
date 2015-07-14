@@ -94,6 +94,9 @@
                                     </span>
                                 {% endfor %}
                             {% endif %}
+                            {% if talk.tracks %}
+                                <span class="track"><span class="lowlight">in</span> {{ talk.tracks.0.track_name }}</span>
+                            {% endif %}
                             <span class="lowlight">({{ prettyDuration(talk.duration) }})</span>
                         </td>
                         <td class="talk-info">
