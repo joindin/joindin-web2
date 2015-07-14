@@ -96,11 +96,15 @@ class EventController extends BaseController
         $quicklink = $this->application->request()->headers("host")
             . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
 
+
+        $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
+
         $this->render(
             'Event/details.html.twig',
             array(
                 'event' => $event,
                 'quicklink' => $quicklink,
+                'agenda' => $agenda,
             )
         );
     }

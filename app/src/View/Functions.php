@@ -79,6 +79,32 @@ function initialize(Twig_Environment $env, Slim $app)
     );
 
     /**
+     * Convert a number of minutes into a prettier textual string.
+     *
+     * e.g.
+     *     - 60 minutes converts to "1 hour"
+     *     - 120 minutes converts to "2 hours"
+     *     - 126 minutes converts to "2 hours, 6 minutes"
+     */
+    $env->addFunction(new Twig_SimpleFunction('prettyDuration', function ($duration) {
+        if ($duration < 60) {
+            return "$duration minutes";
+        }
+        if ($duration == 60) {
+            return "1 hour";
+        }
+
+        $hours = (int)($duration/60);
+        $minutes = $duration - ($hours*60);
+
+        if (!$minutes) {
+            return "$hours hours";
+        }
+        
+        return "$hours hours, $minutes minutes";
+    }));
+
+    /**
      * wrapped Slim request function getPath()
      */
     $env->addFunction(
