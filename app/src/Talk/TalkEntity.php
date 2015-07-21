@@ -222,6 +222,4 @@ class TalkEntity
     {
         return (array) $this->data;
     }
-
-
 }

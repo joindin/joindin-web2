@@ -103,7 +103,7 @@ class TalkFormType extends AbstractType
                 'choice',
                 array(
                     'label' => 'Language',
-                    'choices' => array_merge(['Select a language'],$languages),
+                    'choices' => array_merge(['Select a language'], $languages),
                     'constraints' => [new Assert\NotBlank()],
                 )
             )
@@ -115,7 +115,7 @@ class TalkFormType extends AbstractType
                     'attr'        => array(
                         'placeholder' => 'Where can we find your slides?',
                     ),
-//                    'constraints' => [new Assert\UrlValidator()],
+                    'constraints' => [new Assert\UrlValidator()],
                 )
             )
             ->add(
@@ -123,7 +123,7 @@ class TalkFormType extends AbstractType
                     'start_date',
                     'text',
                     $this->getOptionsForDateWidget(sprintf('Start date & time in %s', $timezone))
-                )->addViewTransformer(new DateTimeToStringTransformer($timezone, $timezone, 'd. m. Y H:i' ))
+                )->addViewTransformer(new DateTimeToStringTransformer($timezone, $timezone, 'd. m. Y H:i'))
             )
             ->add(
                 'duration',
@@ -141,7 +141,7 @@ class TalkFormType extends AbstractType
                 'choice',
                 array(
                     'label'       => 'Type',
-                    'choices'     => array_merge(['Select a type'],$types),
+                    'choices'     => array_merge(['Select a type'], $types),
                     'constraints' => [new Assert\NotBlank()],
                 )
             )

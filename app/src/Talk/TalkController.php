@@ -303,7 +303,10 @@ class TalkController extends BaseController
             $result = $talkApi->edit($values, $talk->getApiUri());
         } catch (\Exception $e) {
             $form->addError(
-                new FormError('An error occurred while editing your talk: ' . $e->getMessage() . "\n" . $e->getTraceAsString())
+                new FormError(sprintf(
+                    'An error occurred while editing your talk: %s',
+                    $e->getMessage() . "\n" . $e->getTraceAsString()
+                ))
             );
         }
 
@@ -343,7 +346,10 @@ class TalkController extends BaseController
             $result = $talkApi->submit($values, $event->getTalksUri());
         } catch (\Exception $e) {
             $form->addError(
-                new FormError('An error occurred while editing your talk: ' . $e->getMessage() . "\n" . $e->getTraceAsString())
+                new FormError(sprintf(
+                    'An error occurred while editing your talk: %s',
+                    $e->getMessage() . "\n" . $e->getTraceAsString()
+                ))
             );
         }
 
