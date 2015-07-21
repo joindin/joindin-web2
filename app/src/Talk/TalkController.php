@@ -321,7 +321,7 @@ class TalkController extends BaseController
      */
     public function alterSpeakers($speakernames, TalkEntity $talk)
     {
-        $speakersApi = $this->get
+        //$speakersApi = $this->get
     }
 
     /**
