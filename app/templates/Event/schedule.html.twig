@@ -113,5 +113,15 @@
             </tbody>
         </table>
         {% endfor %}
+
+        {% if event.getCanEdit %}
+            <div class="container-fluid">
+                <div class="col-xs-12 col-md-12">
+                    <a href="{{ urlFor('talk-add', {"eventSlug": event.getUrlFriendlyName}) }}" style="margin-top: 1em; margin-bottom: 1em;" class="btn btn-primary col-xs-12 col-md-2">
+                        Add a new talk
+                    </a>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

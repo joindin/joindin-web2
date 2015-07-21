@@ -49,6 +49,7 @@
     <nav class="page-nav">
         <ul class="nav nav-pills">
             <li><a href="#">Claim talk</a></li>
+            <li><a href="{{  urlFor('talk-edit', {'eventSlug':event.getUrlFriendlyName, 'talkSlug' : talk.getUrlFriendlyTalkTitle}) }}">Edit talk</a></li>
         </ul>
     </nav>
     {% endif%}

@@ -185,4 +185,87 @@ class TalkApi extends BaseApi
     
         throw new \Exception("Failed to toggle star: $status, $result");
     }
+
+    public function getEmptyTalk()
+    {
+
+    }
+
+
+    /**
+     * Submit an edited talk to the API and return it.
+     *
+     * If the talk has been successfully stored TRUE is returned whereas if
+     * something happened an Exception is thrown,
+     *
+     * @param array $date
+     *
+     * @throws \Exception if a status code other than 201 is returned.
+     * @see TalkFormType::buildForm() for a list of supported fields in the $data array
+     * @return boolean
+     */
+    public function edit(array $data)
+    {
+        // Convert datetime objects to strings
+        $dateFields = array('start_date');
+        foreach ($dateFields as $dateField) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+                $data[$dateField] = $data[$dateField]->format('c');
+            }
+            if (isset($data[$dateField])) {
+                if (!strtotime($data[$dateField])) {
+                    unset($data[$dateField]);
+                }
+            }
+        }
+
+        list ($status, $result, $headers) = $this->apiPut($data['uri'], $data);
+        // if successful, return event entity represented by the URL in the Location header
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new \Exception('Your talk submission was not accepted, the server reports: ' . $result);
+    }
+
+    /**
+     * Submits a new talk to the API and returns it or null if it is pending acceptance.
+     *
+     * @param array $data
+     *
+     * @throws \Exception if a status code other than 201 is returned.
+     *
+     * @see TalkFormType::buildForm() for a list of supported fields in the $data array
+     * and their constraints.
+     *
+     * @return TalkEntity|null
+     */
+    public function submit(array $data, $talksUri)
+    {
+        // Convert datetime objects to strings
+        $dateFields = array('start_date');
+        foreach ($dateFields as $dateField) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+                $data[$dateField] = $data[$dateField]->format('Y-m-d H:i:s');
+            }
+            if (isset($data[$dateField])) {
+                if (!strtotime($data[$dateField])) {
+                    unset($data[$dateField]);
+                }
+            }
+        }
+
+        list ($status, $result, $headers) = $this->apiPost($talksUri, $data);
+        // if successful, return event entity represented by the URL in the Location header
+        if ($status == 201) {
+            $response = $this->getTalk($headers['location']);
+
+            return $response;
+        }
+        if ($status == 202) {
+            return null;
+        }
+
+        throw new \Exception('Your talk submission was not accepted, the server reports: ' . $result);
+    }
 }
