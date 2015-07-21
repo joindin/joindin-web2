@@ -71,7 +71,7 @@ class UserController extends BaseController
             $this->handleLogin($result, $redirect);
         }
 
-        $this->render('User/login.html.twig');
+        $this->application->redirect('/');
     }
 
     /**
