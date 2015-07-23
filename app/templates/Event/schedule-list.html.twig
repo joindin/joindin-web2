@@ -1,0 +1,88 @@
+{% extends '/layout.html.twig' %}
+
+{% block extra_javascript %}{% endblock %}
+
+{% block title %}{{ event.getName }} schedule - Joind.in{% endblock %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    <div class="row">
+        <div class="col-xs-6">
+            <h2>Schedule</h2>
+        </div>
+        <div class="col-xs-6 text-right">
+            <div class="btn-group" role="group" aria-label="Style">
+                <a class="btn btn-default active" href="{{ urlFor('event-schedule-list', {"friendly_name": event.getUrlFriendlyName}) }}">List</a>
+                <a class="btn btn-default" href="{{ urlFor('event-schedule-grid', {"friendly_name": event.getUrlFriendlyName}) }}">Grid</a>
+            </div>
+        </div>
+    </div>
+    {% if agenda|length %}
+    <div class="agenda">
+        {% for date,days in agenda %}
+            <h3>{{  date|date('l jS F Y') }}</h3>
+            <table class="table table-condensed">
+            {% for time,talks in days %}
+                {% for talk in talks %}
+                    <tr>
+                        <td class="time col-xs-1">
+                            {% if loop.first %}{{ time|replace({' ': '&nbsp;'})|raw }}{# -{{ talk.EndDateTime|date('H:i') }} #}{% endif %}
+                        </td>
+                        <td class="agenda-cell">
+                            <div class="talk-info">
+                                {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical', 'size': 'small', 'include_rating_placeholder': true} %}
+
+                                <span class="slides">
+                                    {% if talk.slidesLink %}
+                                        <a target="new" title="Slides for this session" href="{{ talk.slidesLink }}">
+                                            <img src="/img/icon-slides.gif" alt="Slides for this session">
+                                    </a>
+                                    {% endif %}
+                                </span>
+                                
+                                <span class="comment-count">
+                                    <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.commentCount }}</a>
+                                </span>
+                            </div>
+                            
+                            {% if user %}
+                            <div id="{{ event.getUrlFriendlyName }}/{{ talk.getUrlFriendlyTalkTitle }}" class="star-wrapper">
+                                <a href="javascript:" class="star{% if talk.starred %} starred{% endif %}">{% if talk.starred %}&#10029;{% else %}&#10025;{% endif %}</a>
+                            </div>
+                            {% endif %}
+                            <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.title }}</a>
+
+                            {% if talk.speakers %}
+                                <br><span class="lowlight">{{ talk.getType }} by</span>
+                                {% for speaker in talk.speakers %}
+                                    <span class="speaker">
+                                        {% set comma = "" %}
+                                        {% if not loop.last %}
+                                            {% set comma = "," %}
+                                        {% endif %}
+
+                                        {% if speaker.username %}
+                                            <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+                                        {% else %}
+                                            {{ speaker.speaker_name }}{{comma}}
+                                        {% endif %}
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                            {% if talk.tracks %}
+                                <span class="track"><span class="lowlight">in</span> {{ talk.tracks.0.track_name }}</span>
+                            {% endif %}
+                            {% if talk.duration %}
+                                <span class="lowlight">({{ prettyDuration(talk.duration)|replace({' ': '&nbsp;'})|raw }})</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+{% endblock %}

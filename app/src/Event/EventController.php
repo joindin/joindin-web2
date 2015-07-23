@@ -28,6 +28,8 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/comments', array($this, 'comments'))->name("event-comments");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
+        $app->get('/event/:friendly_name/schedule/list', array($this, 'scheduleList'))->name("event-schedule-list");
+        $app->get('/event/:friendly_name/schedule/grid', array($this, 'scheduleGrid'))->name("event-schedule-grid");
         $app->get('/event/:friendly_name/talk-comments', array($this, 'talkComments'))->name("event-talk-comments");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->map('/event/:friendly_name/edit', array($this, 'edit'))->via('GET', 'POST')->name('event-edit');
@@ -96,15 +98,11 @@ class EventController extends BaseController
         $quicklink = $this->application->request()->headers("host")
             . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
 
-
-        $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
-
         $this->render(
             'Event/details.html.twig',
             array(
                 'event' => $event,
                 'quicklink' => $quicklink,
-                'agenda' => $agenda,
             )
         );
     }
@@ -172,6 +170,31 @@ class EventController extends BaseController
 
     public function schedule($friendly_name)
     {
+        $events_url = $this->application->urlFor("event-schedule-list", ['friendly_name' => $friendly_name]);
+        $this->application->redirect($events_url);
+    }
+    
+    public function scheduleList($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if (! $event) {
+            $this->redirectToListPage();
+        }
+
+
+        $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
+
+
+        $this->render('Event/schedule-list.html.twig', array(
+            'event' => $event,
+            'agenda' => $agenda,
+        ));
+    }
+
+    public function scheduleGrid($friendly_name)
+    {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
@@ -185,7 +208,7 @@ class EventController extends BaseController
 
         $schedule = $scheduler->getScheduleData($event);
 
-        $this->render('Event/schedule.html.twig', array(
+        $this->render('Event/schedule-grid.html.twig', array(
             'event' => $event,
             'eventDays' => $schedule,
         ));

@@ -7,6 +7,18 @@
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
+    <div class="row">
+        <div class="col-xs-6">
+            <h2>Schedule</h2>
+        </div>
+        <div class="col-xs-6 text-right">
+            <div class="btn-group" role="group" aria-label="Style">
+                <a class="btn btn-default" href="{{ urlFor('event-schedule-list', {"friendly_name": event.getUrlFriendlyName}) }}">List</a>
+                <a class="btn btn-default active" href="{{ urlFor('event-schedule-grid', {"friendly_name": event.getUrlFriendlyName}) }}">Grid</a>
+            </div>
+        </div>
+    </div>
+
     <div>
         <label>Sessions Key</label>
 
