@@ -170,7 +170,12 @@ class EventController extends BaseController
 
     public function schedule($friendly_name)
     {
-        $events_url = $this->application->urlFor("event-schedule-list", ['friendly_name' => $friendly_name]);
+        $scheduleView = 'list';
+        if (isset($_COOKIE['schedule-view']) && $_COOKIE['schedule-view'] == 'grid') {
+            $scheduleView = 'grid';
+        }
+
+        $events_url = $this->application->urlFor("event-schedule-$scheduleView", ['friendly_name' => $friendly_name]);
         $this->application->redirect($events_url);
     }
     
@@ -183,9 +188,9 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
+        setcookie('schedule-view', 'list', strtotime('+2 years'), '/');
 
         $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
-
 
         $this->render('Event/schedule-list.html.twig', array(
             'event' => $event,
@@ -201,8 +206,9 @@ class EventController extends BaseController
         if (! $event) {
             $this->redirectToListPage();
         }
+        
+        setcookie('schedule-view', 'grid', strtotime('+2 years'), '/');
 
-        $cache = $this->getCache();
         $talkApi = $this->getTalkApi();
         $scheduler = new EventScheduler($talkApi);
 
