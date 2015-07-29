@@ -292,8 +292,10 @@ class EventController extends BaseController
                     $this->redirectToDetailPage($event->getUrlFriendlyName());
                 }
 
-                // held for moderation
+                // held for moderation - note that we test for null explicitly as false means
+                // that we failed to submit the event to the API
                 if ($event === null) {
+                    $this->application->flash('message', "Thank you for your submission.\nIf your event is approved, you will receive an email letting you know it's been accepted.");
                     $this->redirectToListPage();
                 }
             }
