@@ -391,6 +391,10 @@ form .button-spacer.pull-right {
   visibility: hidden;
 }
 
+#comment {
+    line-height: 1.2em;
+}
+
 .user-profile {
     margin-bottom: 10px;
 }
