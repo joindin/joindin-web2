@@ -450,6 +450,40 @@ class EventEntity
         return $this;
     }
 
+    /**
+     * Returns the status of the CFP
+     * Baed on start and end dates
+     *
+     * @return string
+     */
+    public function getCfpStatus()
+    {
+        if (!empty($this->getCfpStartDate()) && !empty($this->getCfpEndDate())) {
+            $startDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpStartDate());
+            $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpEndDate());
+            $now = new DateTime(null, $endDate->getTimezone());
+            $now->setTime(0, 0, 0);
+
+            switch ($now) {
+                case $now < $startDate :
+                    $return = var_dump($now) . var_dump($startDate) . 'Pending';
+                    break;
+
+                case $now >= $startDate && $now <= $endDate:
+                    $return = 'Open';
+                    break;
+
+                default:
+                    $return = 'Closed';
+                    break;
+            }
+        } else {
+            $return = '';
+        }
+
+        return $return;
+    }
+
     public function getId()
     {
         return $this->data->ID;
