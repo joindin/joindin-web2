@@ -466,7 +466,7 @@ class EventEntity
 
             switch ($now) {
                 case $now < $startDate :
-                    $return = var_dump($now) . var_dump($startDate) . 'Pending';
+                    $return = 'Pending';
                     break;
 
                 case $now >= $startDate && $now <= $endDate:
