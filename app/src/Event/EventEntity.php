@@ -465,7 +465,7 @@ class EventEntity
             $now->setTime(0, 0, 0);
 
             switch ($now) {
-                case $now < $startDate :
+                case $now < $startDate:
                     $return = 'Pending';
                     break;
 
