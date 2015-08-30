@@ -70,7 +70,7 @@
                             {% endfor %}
 
                             {% if event.getWebsiteAddress %}
-                                Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
+                                <br>Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
                             {% endif %}
 
                             {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
