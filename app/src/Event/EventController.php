@@ -23,6 +23,7 @@ class EventController extends BaseController
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
+        $app->get('/event/pending', array($this, 'pending'))->name("events-pending");
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
@@ -36,6 +37,7 @@ class EventController extends BaseController
         $app->get('/event/xhr-unattend/:friendly_name', array($this, 'xhrUnattend'));
         $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
         $app->get('/event/unattend/:friendly_name', array($this, 'unattend'))->name("event-unattend");
+        $app->post('/event/action-pending-event/:friendly_name', array($this, 'actionPendingEvent'))->name("event-action-pending");
     }
 
     public function index()
@@ -54,6 +56,34 @@ class EventController extends BaseController
 
         $this->render(
             'Event/index.html.twig',
+            array(
+                'page' => $page,
+                'events' => $events
+            )
+        );
+    }
+
+    public function pending()
+    {
+        if (!isset($_SESSION['user']) || $_SESSION['user']->getAdmin() == false) {
+            $this->application->redirect($this->application->urlFor('not-allowed'));
+        }
+
+        $page = ((int)$this->application->request()->get('page') === 0)
+            ? 1
+            : $this->application->request()->get('page');
+        $start = ($page -1) * $this->itemsPerPage;
+
+        $eventApi = $this->getEventApi();
+        $events = $eventApi->getEvents(
+            $this->itemsPerPage,
+            $start,
+            'pending',
+            true
+        );
+
+        $this->render(
+            'Event/pending.html.twig',
             array(
                 'page' => $page,
                 'events' => $events
@@ -352,6 +382,45 @@ class EventController extends BaseController
         );
 
 
+    }
+
+    /**
+     * Approve or reject a pending event
+     *
+     * @param  string $friendly_name
+     * @return void
+     */
+    public function actionPendingEvent($friendly_name)
+    {
+        if (!isset($_SESSION['user']) || $_SESSION['user']->getAdmin() == false) {
+            $this->application->redirect($this->application->urlFor('not-allowed'));
+        }
+        
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+        if (! $event) {
+            $this->application->flash('error', 'Could not find event.');
+            $this->application->redirect($this->application->urlFor("events-pending"));
+        }
+
+        try {
+            $action = $this->application->request->post('action', '');
+            switch ($action) {
+                case 'approve':
+                    $eventApi->approveEvent($event->getApprovalUri());
+                    $this->application->flash('message', 'Event approved.');
+                    break;
+
+                case 'reject':
+                    $eventApi->rejectEvent($event->getApprovalUri());
+                    $this->application->flash('message', 'Event rejected.');
+                    break;
+            }
+        } catch (Exception $e) {
+            $this->application->flash('error', $e->getMessage());
+        }
+
+        $this->application->redirect($this->application->urlFor("events-pending"));
     }
 
     /**

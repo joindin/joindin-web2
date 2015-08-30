@@ -1,0 +1,106 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Pending events - Joind.in{% endblock %}
+
+{% block body %}
+    {% if user.admin %}
+    <nav class="page-nav admin">
+        <ul class="nav nav-pills">
+            <li><a href="{{ urlFor('events-pending') }}">Pending events</a></li>
+        </ul>
+    </nav>
+    {% endif %}
+    <h1 class="title">Pending events</h1>
+    <div>
+
+        {% if flash.getMessages.message %}
+            <div class="alert alert-success">{{flash.getMessages.message}}</div>
+        {% endif %}
+        {% if flash.getMessages.error %}
+            <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+        {% endif %}
+
+        {% for event in events.events %}
+
+            {% set eventUrl = urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) %}
+
+            <article class="event row pending-event">
+                <div class="controls">
+                    <div class="logo text-center">
+                    <img src="{{ event.getIcon|img_path("event_icons") }}">
+                    </div>
+                    <form action="{{ urlFor('event-action-pending',  {"friendly_name": event.getUrlFriendlyName}) }}" method="POST">
+                        <button name="action" value="approve" class="btn btn-small btn-success">Approve</button>
+                        <button name="action" value="reject" class="btn btn-small btn-danger">Reject</button>
+                    </form>
+                </div>
+                <div class="title description">
+                    <section>
+                        <h3 class="header">
+                            {{ event.getName }}
+                        </h3>
+
+                        <p class="meta">
+
+                        </p>
+
+                        <p class="wideOnly">
+                            {{ event.getDescription | slice(0, 200)}}&hellip;
+                        </p>
+
+                        <p class="meta">
+                            {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
+
+                            {% if event.getLocation %}
+                                @ {{event.getLocation|escape}}
+                            {% endif %}
+
+                            <br>Host{% if event.hosts|length != 1 %}s{% endif %}:
+                            {% for host in event.hosts %}
+                                {% set comma = "" %}
+                                {% if not loop.last %}
+                                    {% set comma = "," %}
+                                {% endif %}
+
+                                {% if host.username %}
+                                    <a href="{{ urlFor('user-profile', {'username': host.username}) }}">{{ host.host_name }}</a>{{comma}}
+                                {% else %}
+                                    {{ host.host_name }}{{comma}}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if event.getWebsiteAddress %}
+                                Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
+                            {% endif %}
+
+                            {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
+                                <p class="cfp-dates">
+                                    {% if "now"|date('c') < event.getCallForPapersStartDate %}
+                                        {# not open yet #}
+                                        Call for papers starts {{ event.getCallForPapersStartDate |date('j M Y', event.getFullTimezone) }}
+                                    {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
+                                        {# still open #}
+                                        Call for papers ends {{ event.getCallForPapersEndDate |date('j M Y', event.getFullTimezone) }}
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+                        </p>
+                    </section>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+
+    {% include '_common/pagination.html.twig' with {'pagination': events.pagination} %}
+{% endblock %}
+
+{% block extraAside %}
+    <section>
+        <h3>Submit your event</h3>
+        <p>
+            Know of an event happening? Let us know! We love to get the word out about
+            events the community would be interested in and you can help us spread the word!
+        </p>
+        <a href="{{ urlFor('event-submit') }}" class="btn btn-primary col-xs-12">Submit</a>
+    </section>
+{% endblock %}

@@ -55,6 +55,18 @@ nav.navbar a.navbar-brand img {
   padding-bottom: 0;
 }
 
+.page-nav.admin {
+    margin-top: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-top: none;
+    background-color: #FFFEDC;
+}
+.page-nav.admin .nav > li > a:hover, .page-nav.admin .nav > li > a:focus {
+    background-color: #FFFEDC;
+    text-decoration: none;
+}
+
 form.navbar-form {
     margin-top: 10px;
 }
@@ -320,6 +332,22 @@ table.schedule span.speaker a:hover {
     width: 100%;
 }
 
+.event.pending-event .controls {
+    float: left;
+    margin-top: 6px;
+    padding: 0 10px;
+    width: 150px;
+}
+
+.event.pending-event .description {
+    margin-left: 120px;
+}
+
+.event.pending-event form button {
+    width: 100%;
+    margin-bottom: 5px
+}
+
 @media (max-width: 768px) {
     .pull-right-xs {
         float: right;
@@ -499,3 +527,4 @@ a.starred, table.schedule a.starred {
 #contact_comment {
     height: 15em;
 }
+
