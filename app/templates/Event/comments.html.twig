@@ -89,5 +89,10 @@
             }
         });
         $('#rating_widget').bind('rated', function (event, value) { $("#rating_value").html($("#rating option[value='"+value+"']").text()) });
+        $("#comment").keyup(function(e) {
+            while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))) {
+                $(this).height($(this).height()+1);
+            };
+        });
     </script>
 {% endblock %}
