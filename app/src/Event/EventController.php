@@ -18,6 +18,7 @@ use Slim\Slim;
 class EventController extends BaseController
 {
     private $itemsPerPage = 10;
+    private $pendingItemsPerPage = 30;
 
     protected function defineRoutes(\Slim\Slim $app)
     {
@@ -72,11 +73,11 @@ class EventController extends BaseController
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
-        $start = ($page -1) * $this->itemsPerPage;
+        $start = ($page -1) * $this->pendingItemsPerPage;
 
         $eventApi = $this->getEventApi();
         $events = $eventApi->getEvents(
-            $this->itemsPerPage,
+            $this->pendingItemsPerPage,
             $start,
             'pending',
             true
