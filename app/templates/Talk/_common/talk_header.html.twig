@@ -39,7 +39,9 @@
                 </div>
                 <div class="col-xs-4 text-right">
                     <div style="margin-top: 10px">
+                        {% if talk.getAverageRating %} Avg. Rating
                         {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
