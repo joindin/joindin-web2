@@ -3,6 +3,13 @@
 {% block title %}Events - Joind.in{% endblock %}
 
 {% block body %}
+    {% if user.admin %}
+    <nav class="page-nav admin">
+        <ul class="nav nav-pills">
+            <li><a href="{{ urlFor('events-pending') }}">Pending events</a></li>
+        </ul>
+    </nav>
+    {% endif %}
     <h1 class="title">Upcoming events</h1>
     <div>
         {% for event in events.events %}

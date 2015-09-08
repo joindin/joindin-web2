@@ -517,4 +517,9 @@ class EventEntity
     {
         return $this->data->event_average_rating;
     }
+
+    public function getApprovalUri()
+    {
+        return $this->data->approval_uri;
+    }
 }
