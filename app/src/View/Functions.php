@@ -79,16 +79,6 @@ function initialize(Twig_Environment $env, Slim $app)
     );
 
     /**
-     * Simple wrapper to format single dates
-     */
-    $env->addFunction(new Twig_SimpleFunction('dateFormat', function ($value, $format = 'd.m.Y H:i') {
-        if (! $value instanceof \DateTimeInterface) {
-            $value = new \DateTime($value);
-        }
-        return date_format($value, $format);
-    }));
-
-    /**
      * wrapped Slim request function getPath()
      */
     $env->addFunction(
