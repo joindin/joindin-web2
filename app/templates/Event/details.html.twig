@@ -43,6 +43,19 @@
                     Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
                     <br>
                     Short URL: <a href="{{ shortUrlForEvent(event.getStub) }}">{{ shortUrlForEvent(event.getStub) }}</a> <i class="fa fa-external-link-square"></i>
+                    {% if event.getCfpStatus %}
+                        <br>
+                        Call for Papers Status: {{ event.getCfpStatus }}
+                    {% endif %}
+                    {% if event.getCfpStatus == 'Open' %}
+                        <br>
+                        (ends {{ dateFormat(event.getCfPEndDate, 'd.m.Y') }})
+                        {% if event.getCfpUrl %}
+                            <br>
+                            More information: <a href="{{ event.getCfpUrl }}" rel="nofollow">{{ event.getCfpUrl }}</a> <i class="fa fa-external-link-square"></i>
+                        {% endif %}
+                    {% endif %}
+
                 </div>
             {# </div> #}
         </div>
