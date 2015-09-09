@@ -42,6 +42,7 @@ class BaseApi
 
         if ($this->proxy) {
             $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['request_fulluri'] = true;
         }
 
         $streamContext = stream_context_create($contextOpts);
@@ -77,6 +78,7 @@ class BaseApi
 
         if ($this->proxy) {
             $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['request_fulluri'] = true;
         }
 
         $streamContext = stream_context_create($contextOpts);
@@ -119,6 +121,7 @@ class BaseApi
         
         if ($this->proxy) {
             $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['request_fulluri'] = true;
         }
 
         $streamContext = stream_context_create($contextOpts);
@@ -160,6 +163,7 @@ class BaseApi
 
         if ($this->proxy) {
             $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['request_fulluri'] = true;
         }
 
         $streamContext = stream_context_create($contextOpts);
