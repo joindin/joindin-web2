@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Form\DataTransformer\DateTransformer;
 use Form\DataTransformer\EventTagsTransformer;
+use Form\Listener\GetResolvedUrlListener;
+use Form\Constraint\UrlResolverConstraint;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -125,7 +127,13 @@ class EventFormType extends AbstractType
                     $this->getOptionsForDateWidget('End date')
                 )->addViewTransformer($dateTransformer)
             )
-            ->add('href', 'url', $this->getOptionsForUrlWidget('Website URL'))
+            ->add(
+                $builder->create(
+                    'href', 
+                    'url', 
+                    $this->getOptionsForUrlWidget('Website URL', true)
+                    )->addEventSubscriber(new GetResolvedUrlListener())
+                )
             ->add(
                 $builder->create(
                     'cfp_start_date',
@@ -140,7 +148,13 @@ class EventFormType extends AbstractType
                     $this->getOptionsForDateWidget('Closing date', false)
                 )->addViewTransformer($dateTransformer)
             )
-            ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
+            ->add(
+                $builder->create(
+                    'cfp_url', 
+                    'url', 
+                    $this->getOptionsForUrlWidget('Call for papers URL', false)
+                    )->addEventSubscriber(new GetResolvedUrlListener())
+                )
             ->add(
                 'location',
                 'text',
@@ -185,7 +199,7 @@ class EventFormType extends AbstractType
      */
     private function getOptionsForUrlWidget($label, $required = true)
     {
-        $constraints = [new Assert\Url()];
+        $constraints = [new Assert\Url(), new UrlResolverConstraint()];
         if ($required) {
             $constraints[] = new Assert\NotBlank();
         }
