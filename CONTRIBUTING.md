@@ -5,6 +5,7 @@
 If you wish to contribute to joind.in, please be sure to
 read/subscribe to the following resources:
 
+ -  Contributor Code of Conduct: https://github.com/joindin/joindin-web2/CODE_OF_CONDUCT.md
  -  Contributor's Guide:
     https://github.com/joindin/joind.in/wiki/How-to-Contribute-Code
  -  Contributor's mailing list:
