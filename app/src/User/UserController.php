@@ -71,7 +71,7 @@ class UserController extends BaseController
             $this->handleLogin($result, $redirect);
         }
 
-        $this->render('User/login.html.twig');
+        $this->application->redirect('/');
     }
 
     /**
@@ -177,7 +177,7 @@ class UserController extends BaseController
             $this->application->flash('error', "Sorry, your verification link was invalid.");
         }
 
-        $this->application->redirect('/user/login');
+        $this->application->redirect('/');
 
     }
 
@@ -207,7 +207,7 @@ class UserController extends BaseController
                             'We have resent your welcome email. Please check ' .
                             'your email to verify your account before logging in.'
                         );
-                        $this->application->redirect('/user/login');
+                        $this->application->redirect('/');
                     }
                 } catch (\Exception $e) {
                     $form->addError(
@@ -577,7 +577,7 @@ class UserController extends BaseController
                             'message',
                             'Check your email to find a reminder of your username.'
                         );
-                        $this->application->redirect('/user/login');
+                        $this->application->redirect('/');
                     }
                 } catch (\Exception $e) {
                     $form->addError(
@@ -708,7 +708,7 @@ class UserController extends BaseController
                             'message',
                             'Check your email for instructions on resetting your password.'
                         );
-                        $this->application->redirect('/user/login');
+                        $this->application->redirect('/');
                     }
                 } catch (\Exception $e) {
                     $form->addError(
@@ -756,7 +756,7 @@ class UserController extends BaseController
                             'message',
                             'Your password was saved; you may now log in.'
                         );
-                        $this->application->redirect('/user/login');
+                        $this->application->redirect('/');
                     }
                 } catch (\Exception $e) {
                     $form->addError(
@@ -800,7 +800,7 @@ class UserController extends BaseController
             'error',
             'We could not log you in with twitter'
         );
-        $this->application->redirect('/user/login');
+        $this->application->redirect('/');
     }
 
     /**
@@ -830,15 +830,15 @@ class UserController extends BaseController
      * update the session.
      *
      * @param  stdclass|false  $result
-     * @param  string|boolean  $redirect
+     * @param  string          $redirect
      * @return void
      */
-    protected function handleLogin($result, $redirect = false)
+    protected function handleLogin($result, $redirect = '')
     {
         if (false === $result) {
             $this->application->flash('error', "Failed to log in");
             if (empty($redirect)) {
-                $redirect = $this->application->urlFor('user-login');
+                $redirect = '/';
             }
             $this->application->redirect($redirect);
         }
@@ -859,6 +859,6 @@ class UserController extends BaseController
         }
         unset($_SESSION['access_token']);
         $this->application->flash('error', "Failed to log in. User account problem.");
-        $this->application->redirect($this->application->urlFor('user-login'));
+        $this->application->redirect('/');
     }
 }

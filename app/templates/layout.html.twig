@@ -49,8 +49,6 @@
                     {% if user %}
                          <li><a href="{{ urlFor('user-profile', {'username': user.getUsername} ) }}">{{ user.getFullName }}</a></li>
                         <li><a href="{{ urlFor('user-logout') }}{%if currentPath() != "/" %}?redirect={{ currentPath() }}{% endif %}">Logout</a></li>
-                    {% else %}
-                        <li><a href="{{ urlFor('user-login') }}">Login</a></li>
                     {% endif %}
                 </ul>
                 <form class="navbar-form navbar-right" role="search" action="{{ urlFor('search') }}">
@@ -76,7 +74,17 @@
                 {% block body %}{% endblock %}
             </div>
             <aside class="col-xs-12 col-sm-{{ sidebar_col_width }} pull-right-sm sidebar">
+
                 {% block extraAside %}{% endblock %}
+                
+                {% if not user %}
+                <section>
+                        <h2>Log in</h2>
+                        {% include '_common/login.html.twig' %}
+                </section>
+                {% endif %}
+
+                {% block bottomAside %}{% endblock %}
 
                 <!-- Hidden on XS as it appears right above the footer, duplicating the info -->
                 <section class="text-center hidden-xs box sponsor">
