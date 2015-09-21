@@ -31,7 +31,7 @@
 
                         {% if talk.slidesLink is not empty %}
                         <br>
-                        View Slides: <a href="">{{ talk.slidesLink }}</a> <i class="fa fa-external-link-square"></i>
+                        View Slides: <a href="{{ talk.slidesLink }}">{{ talk.slidesLink }}</a> <i class="fa fa-external-link-square"></i>
                         {% endif %}
                         <br>
                         Short URL: <a href="{{ shortUrlForTalk(talk.getStub) }}">{{ shortUrlForTalk(talk.getStub) }}</a>
