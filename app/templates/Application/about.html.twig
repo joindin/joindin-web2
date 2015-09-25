@@ -3,23 +3,50 @@
 {% block title %}About - Joind.in{% endblock %}
 
 {% block body %}
-    <h1 class="title">What is Joind.In?</h1>
 
-    <p>Do you love being involved at tech conferences? Do you love contributing your feedback on the talks you're attending, seeing who else is there? Do you want to catch up on the talks you attended (or missed)?</p>
+    <h1 class="title">About Joind.in</h1>
 
-    <p>Joind.In does all this, helping you be a real part of the conference before, during and afterwards. It is the replacement for all those paper submission forms that get left on the floor at the end of an event. The site gives details of events past, present and future, the sessions, timetable and speakers at each, and allows all attendees to register and leave feedback - for the sessions and for the event itself.</p>
+    <p>Joind.in brings attendee feedback to speakers at events, quickly and transparently.  Getting feedback lets speakers improve, attendees be heard, and organisers find out what really works (and doesn't!) at their events.  All this means ... better events and speakers!</p>
 
-    <h2>Got Something To Say?</h2>
+    <p>Some highlights of using joind.in with your event:
+    <ul><li>Let us know your CfP dates and we'll help spread the word.  Other organisations use our data feed and we also run <a target="_blank" href="http://callingallpapers.com">http://callingallpapers.com</a></li>
+    <li>Schedule view: with your talks entered, people can use joind.in to view the schedule by track or in agenda layout</li>
+    <li>Mobile apps: we have iphone and android apps that your attendees can use to view the schedule and give feedback - much easier than a printed schedule during the day!  More info: <a target="_blank" href="http://m.joind.in/apps">http://m.joind.in/apps</a></li>
+    <li>Speakers get great feedback and improve every year - having this feature means a lot to them</li></ul>
+
+    <h2>Event Organisers</h2>
+
+    <p>If you want to use joind.in to get feedback to your speakers, then you're welcome to do so! Head over to <a href="{{ urlFor('events-index') }}">the events page</a> and submit your event details.  These are approved by a human (usually within a couple of days) and we'll email you when your event is ready for you to edit.</p>
+
+    <h2>Speakers</h2>
+
+    <p>Claim your talks!  When you're listed as giving a talk, this will be attached to your account when you "claim" it and the event organiser has approved your claim.  Once claimed, you can edit your talk record to add links to slides and reply to comments by attendees</p>
+
+    <h2>Open Source</h2>
+
+    <p>Joind.in is built and run by volunteers, and is an open source project.  If you want to get involved, we'd be delighted to have you, regardless of who you are or your level of experience - lots of people make their first contributions to open source on this project as it's fairly easy to get started with.</p>
+
+    <p>Some important information for working with Joind.in:
+    <ul><li>Joind.in has a Code of Conduct, included in all our projects, which all our participants and contributors are required to follow.  You can expect this project to be respectful and welcoming, regardless of ... really any other variables.</li>
+    <li>Look at the bug tracker to report bugs (bug reporting is a very important open source contribution!) and to see what kinds of things we're working on: <a target="_blank" href="https://joindin.jira.com">https://joindin.jira.com</a>.  Check out the "easypick" issues we have tagged there - these are specifically aimed at people new to the project and don't need too much understanding of how the wider system works.  You don't need permission to get started, just assign a task to yourself so we know you're working on it.</li>
+    <li>Get set up with the development platform, you will need virtualbox and vagrant installed, then follow the README here: <a target="_blank" href="https://github.com/joindin/joindin-vm">https://github.com/joindin/joindin-vm</a></li>
+    <li>Our various projects each have their own repositories so you can go straight to what you're interested in:<ul>
+        <li><a target="_blank" href="https://github.com/joindin/joindin-web2">https://github.com/joindin/joindin-web2</a> is the repo for the new website (currently at <a target="_blank" href="http://m.joind.in">http://m.joind.in</a>)</li>
+        <li>The new site and both mobile apps use a common API, which is at <a target="_blank" href="https://github.com/joindin/joindin-api">https://github.com/joindin/joindin-api</a></li>
+        <li>The iphone app: <a target="_blank" href="https://github.com/joindin/joind.in-iphone">https://github.com/joindin/joind.in-iphone</a></li>
+        <li>The android app: <a target="_blank" href="https://github.com/joindin/Joind.in-android-app">https://github.com/joindin/Joind.in-android-app</a></li>
+        <li>The old website (maintenance mode, we're unlikely to accept contributions other than security fixes for this one) <a target="_blank" href="https://github.com/joindin/joind.in">https://github.com/joindin/joind.in</a></li>
+        <li>Javascript widgets for speakers and events to use on their site: <a target="_blank" href="https://github.com/joindin/JoindIn.js">https://github.com/joindin/JoindIn.js</a></li>
+        <li><a target="_blank" href="https://github.com/joindin/joindin-vm">https://github.com/joindin/joindin-vm</a> is the dev platform VM setup</li>
+        <li>We are also responsible for <a target="_blank" href="http://callingallpapers.com">http://callingallpapers.com</a> - the code is at <a target="_blank" href="https://github.com/joindin/callingallpapers.com">https://github.com/joindin/callingallpapers.com</a></li>
+    </ul></li></ul>
+
+    <p>If you're not sure where in that huge list to get started, or you want to chat to us, then the best place to find us is on IRC.  We us #joind.in on irc.freenode.net, feel free to pop in and talk to us anytime!</p>
+
+
+    <h2>Get In Touch</h2>
 
     <p>If you have any comments, questions, feedback or anything else you'd like us to know, then do <a href="{{ urlFor('contact') }}">please get in touch</a>. We'd be delighted to hear from you!</p>
-
-    <h2>Want To Get Involved?</h2>
-
-    <p>We love having contributors to our projects, whether you'd like to work with the website copy, frontend, backend, apps, or you just have a bug to report ... we need all of those things, from people at all levels of expertise!</p>
-
-    <p>To <b>report a bug</b>, or find something that needs fixing, visit our bug tracker at <a href="http://joindin.jira.com">http://joindin.jira.com</a> - we have a tag "easypick" for issues that we think can be tackled without too much experience using the system - just assign it to yourself so we know you are working on it.</p>
-    <p>Get your own development copy of the projects by following the instructions here: <a href="https://github.com/joindin/joindin-vm">https://github.com/joindin/joindin-vm</a>.</p>
-    <p>If you want to chat to us about anything, or you need a hand setting up or using git, we use IRC and you can find us in #joind.in on <a href="http://irc.freenode.net">freenode</a> - just introduce yourself and start talking :)</p>
 
     <div class="clearfix"></div>
 
