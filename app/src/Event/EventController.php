@@ -30,6 +30,8 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/comments', array($this, 'comments'))->name("event-comments");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
+        $app->get('/event/:friendly_name/schedule/list', array($this, 'scheduleList'))->name("event-schedule-list");
+        $app->get('/event/:friendly_name/schedule/grid', array($this, 'scheduleGrid'))->name("event-schedule-grid");
         $app->get('/event/:friendly_name/talk-comments', array($this, 'talkComments'))->name("event-talk-comments");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->map('/event/:friendly_name/edit', array($this, 'edit'))->via('GET', 'POST')->name('event-edit');
@@ -199,6 +201,17 @@ class EventController extends BaseController
 
     public function schedule($friendly_name)
     {
+        $scheduleView = 'list';
+        if (isset($_COOKIE['schedule-view']) && $_COOKIE['schedule-view'] == 'grid') {
+            $scheduleView = 'grid';
+        }
+
+        $events_url = $this->application->urlFor("event-schedule-$scheduleView", ['friendly_name' => $friendly_name]);
+        $this->application->redirect($events_url);
+    }
+    
+    public function scheduleList($friendly_name)
+    {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
@@ -206,13 +219,33 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        $cache = $this->getCache();
+        setcookie('schedule-view', 'list', strtotime('+2 years'), '/');
+
+        $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
+
+        $this->render('Event/schedule-list.html.twig', array(
+            'event' => $event,
+            'agenda' => $agenda,
+        ));
+    }
+
+    public function scheduleGrid($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if (! $event) {
+            $this->redirectToListPage();
+        }
+        
+        setcookie('schedule-view', 'grid', strtotime('+2 years'), '/');
+
         $talkApi = $this->getTalkApi();
         $scheduler = new EventScheduler($talkApi);
 
         $schedule = $scheduler->getScheduleData($event);
 
-        $this->render('Event/schedule.html.twig', array(
+        $this->render('Event/schedule-grid.html.twig', array(
             'event' => $event,
             'eventDays' => $schedule,
         ));

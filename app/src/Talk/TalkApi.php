@@ -185,4 +185,31 @@ class TalkApi extends BaseApi
     
         throw new \Exception("Failed to toggle star: $status, $result");
     }
+
+    /**
+     * Retreive a list of talks organised by date and time
+     *
+     * @param  string $talksUri
+     * @return array
+     */
+    public function getAgenda($talksUri)
+    {
+        $talks = $this->getCollection($talksUri . '?start=0&resultsperpage=1000&verbose=yes');
+        if (!array_key_exists('talks', $talks)) {
+            return [];
+        }
+        $talks = $talks['talks'];
+
+        $agenda = [];
+
+        foreach ($talks as $talk) {
+            $date = $talk->getStartDateTime()->format("Y-m-d");
+            $startTime = $talk->getStartDateTime()->format("H:i");
+            $endTime = $talk->getEndDateTime()->format("H:i");
+            $time = "$startTime";// - $endTime";
+            $agenda[$date][$time][] = $talk;
+        }
+
+        return $agenda;
+    }
 }
