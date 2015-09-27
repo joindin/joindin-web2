@@ -215,6 +215,56 @@ footer {
     font-size: 8pt;
 }
 
+
+/* Agenda */
+.agenda h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.agenda .table > thead > tr > th, .agenda .table > tbody > tr > th, .agenda .table > tfoot > tr > th, .agenda .table > thead > tr > td, .agenda .table > tbody > tr > td, .agenda .table > tfoot > tr > td {
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    line-height: 1.42857;
+    vertical-align: top;
+}
+
+.agenda .time {
+    padding-left: 0;
+}
+
+.agenda .lowlight {
+    color: #777;
+}
+
+.agenda .talk-info {
+    width: 157px;
+    float: right;
+}
+
+.agenda .talk-info .rating {
+    display: inline-block;
+    margin-left: 0;
+}
+
+.agenda .talk-info .slides {
+    display: inline-block;
+    margin-left: 3px;
+    width: 16px;
+}
+
+.agenda .talk-info .comment-count {
+    display: inline-block;
+    margin-left: 3px;
+    background: rgba(0, 0, 0, 0) url("/img/icon-comment.gif") 0 0  no-repeat scroll;
+    width: 21px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 11px;
+    height: 21px;
+    line-height: 16px;
+}
+
+/* Schedule */
 table.schedule a {
     color: white;
 }
@@ -510,6 +560,15 @@ a.star:hover {
 
 a.starred, table.schedule a.starred {
     color: #fff;
+}
+
+.agenda table .star-wrapper {
+    float: none;
+    display: inline-block;
+}
+
+.agenda table a.starred {
+    color: #428bca;
 }
 
 .event-details {
