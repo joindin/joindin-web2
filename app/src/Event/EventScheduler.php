@@ -140,7 +140,9 @@ class EventScheduler
 
         //set unique track names gathered above as array values
         foreach ($tracksByDay as $date => $tracks) {
-            $tracksByDay[$date] = array_keys($tracks);
+            $trackNames = array_keys($tracks);
+            sort($trackNames, SORT_STRING);
+            $tracksByDay[$date] = $trackNames;
         }
 
         return $tracksByDay;
