@@ -205,8 +205,7 @@ class TalkApi extends BaseApi
         foreach ($talks as $talk) {
             $date = $talk->getStartDateTime()->format("Y-m-d");
             $startTime = $talk->getStartDateTime()->format("H:i");
-            $endTime = $talk->getEndDateTime()->format("H:i");
-            $time = "$startTime";// - $endTime";
+            $time = "$startTime";
             $agenda[$date][$time][] = $talk;
         }
 
