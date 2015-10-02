@@ -14,7 +14,7 @@ $config = array(
         ),
         'twig' => array(
             // set to the folder name to cache into, or false to disable
-            'cache' => '/tmp/joindin-twig-cache'
+            'cache' => false
         )
     ),
 );
