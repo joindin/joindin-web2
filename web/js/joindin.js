@@ -3,7 +3,7 @@ $(function(){
 
     // stars
     $('.star').click(function() {
-        var id = $(this).parents('div').attr('id');
+        var id = $(this).parents('div, span').attr('id');
         var element = $(this);
 
         var url = '/event/' + id + '/star';

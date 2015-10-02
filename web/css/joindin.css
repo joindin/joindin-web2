@@ -571,8 +571,14 @@ a.starred, table.schedule a.starred {
     display: inline-block;
 }
 
-.agenda table a.starred {
+.agenda table a.starred, a.starred.talk {
     color: #000;
+}
+
+a.talk.star {
+    font-size: 1.2em;
+    float: none;
+    margin: 0 5px 0;
 }
 
 .event-details {
