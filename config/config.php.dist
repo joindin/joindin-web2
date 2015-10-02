@@ -5,7 +5,7 @@ $config = array(
         'debug' => 1,
         'custom' => array(
             'redisKeyPrefix' => 'dev-',
-            'apiUrl' => 'https://api.joind.in',
+            'apiUrl' => 'http://api.dev.joind.in',
             'googleAnalyticsId' => '',
         ),
         'oauth' => array(
