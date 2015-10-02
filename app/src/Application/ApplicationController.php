@@ -42,7 +42,16 @@ class ApplicationController extends BaseController
 
     public function apps()
     {
-        $this->render('Application/apps.html.twig');
+        $perPage = 5;
+        $start = 1;
+
+        $eventApi = $this->getEventApi();
+        $hotEvents = $eventApi->getEvents($perPage, $start, 'hot');
+
+        $this->render('Application/apps.html.twig',
+            array(
+                'hot_events' => $hotEvents,
+            ));
     }
 
     /**
@@ -50,7 +59,17 @@ class ApplicationController extends BaseController
      */
     public function about()
     {
-        $this->render('Application/about.html.twig');
+
+        $perPage = 5;
+        $start = 1;
+
+        $eventApi = $this->getEventApi();
+        $hotEvents = $eventApi->getEvents($perPage, $start, 'hot');
+
+        $this->render('Application/about.html.twig',
+            array(
+                'hot_events' => $hotEvents,
+            ));
     }
 
     /**
