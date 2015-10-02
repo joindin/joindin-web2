@@ -1,6 +1,6 @@
 {% extends '/layout.html.twig' %}
 
-{% block title %}{{ event.getName }} - Joind.in{% endblock %}
+{% block title %}{{ event.getName|e('html') }} - Joind.in{% endblock %}
     
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <p>{{ event.getDescription|nl2br }}</p>
+    <p>{{ event.getDescription|e('html')|nl2br }}</p>
 
 
     {% if event.getLatitude != '0' and event.getLongitude != '0' %}
