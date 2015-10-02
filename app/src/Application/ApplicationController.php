@@ -23,7 +23,7 @@ class ApplicationController extends BaseController
             ? 1
             : $this->application->request()->get('page');
 
-        $perPage = 6;
+        $perPage = 10;
         $start = ($page -1) * $perPage;
 
         $eventApi = $this->getEventApi();
@@ -69,7 +69,7 @@ class ApplicationController extends BaseController
 
             if ($form->isValid()) {
                 $values = $form->getData();
-                
+
                 $config = $this->application->config('oauth');
                 $clientId = $config['client_id'];
                 $clientSecret = $config['client_secret'];
