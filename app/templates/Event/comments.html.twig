@@ -1,9 +1,11 @@
 {% extends '/layout.html.twig' %}
 
 {% block title %}{{ event.getName }} comments - Joind.in{% endblock %}
+{% block extraAside %}{% include 'Event/_common/event_details.html.twig' %}{% endblock %}
 
 {% block body %}
             {% include 'Event/_common/event_header.html.twig' %}
+
 
             <p>What did you like about this event, and what do you think could be
                 better for the next time? Leave your feedback to help the organizers
