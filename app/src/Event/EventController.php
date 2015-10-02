@@ -69,7 +69,9 @@ class EventController extends BaseController
     public function pending()
     {
         if (!isset($_SESSION['user']) || $_SESSION['user']->getAdmin() == false) {
-            $this->application->redirect($this->application->urlFor('not-allowed'));
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $this->application->urlFor('events-pending')
+            );
         }
 
         $page = ((int)$this->application->request()->get('page') === 0)

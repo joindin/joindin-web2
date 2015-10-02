@@ -27,5 +27,5 @@
         <a href="{{ urlFor('user-password-reset') }}">Forgotten&nbsp;password</a><br>
         <a href="{{ urlFor('user-username-reminder') }}">Forgotten&nbsp;username</a>
     </div>
-    <input type="hidden" name="redirect" value="{{ getCurrentUrl() }}">
+    <input type="hidden" name="redirect" value="{{ redirect ? redirect : getCurrentUrl() }}">
 </form>
