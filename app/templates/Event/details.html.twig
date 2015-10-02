@@ -1,7 +1,7 @@
 {% extends '/layout.html.twig' %}
 
 {% block title %}{{ event.getName }} - Joind.in{% endblock %}
-    
+
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
@@ -20,7 +20,7 @@
                     {% endif %}
 
                     {% if event.getAttendeeCount %}
-                        {{ event.getAttendeeCount|escape }}</span> people
+                        <span class="{{ event.getUrlFriendlyName|escape }}-attending-count">{{ event.getAttendeeCount|escape }}</span> people
                         {% if event.isPastEvent() %}attended{% else %}attending{% endif %}
                     {% endif %}
 
