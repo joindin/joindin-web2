@@ -39,6 +39,8 @@ class TalkController extends BaseController
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true, 0);
 
+        $localizedMessages = $this->getLocalizedMessages('Talk');
+
         $this->render(
             'Talk/index.html.twig',
             array(
@@ -46,6 +48,7 @@ class TalkController extends BaseController
                 'event' => $event,
                 'comments' => $comments,
                 'talkSlug' => $talkSlug,
+                'msg' => $localizedMessages,
             )
         );
     }
@@ -174,5 +177,26 @@ class TalkController extends BaseController
     {
         $userDb = new UserDb($this->getCache());
         return new UserApi($this->cfg, $this->accessToken, $userDb);
+    }
+
+    /**
+     * @param string $templateDirName
+     * @return array Localized messages
+     */
+    private function getLocalizedMessages($templateDirName)
+    {
+        $localizedBasePath = realpath('../app/templates/' . $templateDirName . '/lang');
+        $msgPath = $localizedBasePath . '/en_UK.php'; // default
+        $lang = $this->application->request->get('LANG');
+        $lang = preg_replace('/[^\w-]/', '', $lang); // for security
+        if (!empty($lang)) {
+            $_msgPath = $localizedBasePath . '/' . $lang . '.php';
+            if (file_exists($_msgPath)) {
+                $msgPath = $_msgPath;
+            }
+        }
+        /** @noinspection PhpIncludeInspection */
+        $localizedMessages = include $msgPath;
+        return $localizedMessages;
     }
 }

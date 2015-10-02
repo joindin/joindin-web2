@@ -22,7 +22,7 @@
     </section>
 
     <section id="comments">
-        <h2>Comments</h2>
+        <h2>{{msg.comments}}</h2>
         {% if talk.areCommentsEnabled %}
             {% if flash.getMessages.message %}
                 <div class="alert alert-success">{{flash.getMessages.message}}</div>
@@ -32,7 +32,7 @@
                     <div class="panel panel-default">
                     {% if user %}
                         <div class="panel-heading">
-                            <h2 class="panel-title">Write a comment</h2>
+                            <h2 class="panel-title">{{msg.write_a_comment}}</h2>
                         </div>
                         <div class="panel-body">
                             <form method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
@@ -41,14 +41,14 @@
                                 {% endif %}
                                 <div class="rating-vote-container">
                                     <div id="rating_container" class="form-group">
-                                        <label for="rating">Rate the talk:</label>
+                                        <label for="rating">{{msg.rate_the_talk}}:</label>
                                         <select id="rating" name="rating">
                                             <option value="0"></option>
-                                            <option value="1">Needed more work</option>
-                                            <option value="2">Had potential</option>
-                                            <option value="3">Worth hearing</option>
-                                            <option value="4">Great info &amp; insight</option>
-                                            <option value="5">Brilliant!</option>
+                                            <option value="1">{{msg.rating_1}}</option>
+                                            <option value="2">{{msg.rating_2}}</option>
+                                            <option value="3">{{msg.rating_3}}</option>
+                                            <option value="4">{{msg.rating_4}}</option>
+                                            <option value="5">{{msg.rating_5}}</option>
                                         </select>
                                         <br>
                                         <div class="rateit" id="rating_widget" data-rateit-backingfld="#rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
@@ -56,17 +56,17 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="comment">Your comment:</label>
+                                    <label for="comment">{{msg.your_comment}}:</label>
                                     <textarea id="comment" class="form-control" name="comment" rows="7"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Submit comment</button>
+                                    <button type="submit" class="btn btn-primary">{{msg.submit_comment}}</button>
                                 </div>
                             </form>
                         </div>
                     {% else %}
                         <div class="panel-heading">
-                            <h2 class="panel-title">Please log in to comment on this event.</h2>
+                            <h2 class="panel-title">{{msg.please_log_in}}</h2>
                         </div>
                         <div class="panel-body">
                             {%  include '_common/login.html.twig'  %}
@@ -76,7 +76,7 @@
                 </div>
             </div>
         {% else %}
-            <p>Comments are closed.</p>
+            <p>{{msg.comments_are_closed}}</p>
         {% endif %}
         
         {% if comments %}
