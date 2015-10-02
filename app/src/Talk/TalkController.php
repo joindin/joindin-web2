@@ -12,15 +12,16 @@ use Slim\Slim;
 
 class TalkController extends BaseController
 {
-
     protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
         $app->post('/event/:eventSlug/:talkSlug/star', array($this, 'star'))->name('talk-star');
         $app->get('/talk/:talkStub', array($this, 'quick'))->name('talk-quicklink');
         $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
+        $app->get('/:talkId', array($this, 'quickById'))
+            ->name('talk-quick-by-id')
+            ->conditions(array('talkId' => '\d+'));
     }
-
 
     public function index($eventSlug, $talkSlug)
     {
@@ -74,7 +75,7 @@ class TalkController extends BaseController
             $reason = $e->getMessage();
             $this->application->halt(500, '{ "message": "Failed to toggle star: ' . $reason .'" }');
         }
-        
+
         $this->application->status(200);
         echo json_encode($result);
     }
@@ -95,6 +96,30 @@ class TalkController extends BaseController
             $this->application->urlFor(
                 'talk',
                 array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk['slug'])
+            )
+        );
+    }
+
+    public function quickById($talkId)
+    {
+        $cache = $this->getCache();
+        $eventDb = new EventDb($cache);
+
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkByTalkId($talkId);
+        if (!$talk) {
+            return \Slim\Slim::getInstance()->notFound();
+        }
+
+        $event = $eventDb->load('uri', $talk->getEventUri());
+        if (!$event) {
+            return \Slim\Slim::getInstance()->notFound();
+        }
+
+        $this->application->redirect(
+            $this->application->urlFor(
+                'talk',
+                array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk->getUrlFriendlyTalkTitle())
             )
         );
     }
