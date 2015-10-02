@@ -568,7 +568,7 @@ a.starred, table.schedule a.starred {
 }
 
 .agenda table a.starred {
-    color: #428bca;
+    color: #000;
 }
 
 .event-details {
