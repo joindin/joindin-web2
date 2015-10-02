@@ -554,6 +554,10 @@ a.star, table.schedule a.star {
     line-height: 0.5em;
 }
 
+a.star {
+    font-size: 2.0em;
+}
+
 a.star:hover {
     text-decoration: none;
 }
