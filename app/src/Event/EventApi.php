@@ -277,6 +277,13 @@ class EventApi extends BaseApi
         $collectionData = array();
         foreach ($events['events'] as $item) {
             $event = new EventEntity($item);
+
+            foreach ($event->getHosts() as $hostsInfo) {
+                if (isset($hostsInfo->host_uri)) {
+                    $hostsInfo->username = $this->userApi->getUsername($hostsInfo->host_uri);
+                }
+            }
+            
             $collectionData['events'][] = $event;
 
             // save the URL so we can look up by it
