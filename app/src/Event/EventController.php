@@ -51,6 +51,7 @@ class EventController extends BaseController
         $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
+        $cfpEvents = $eventApi->getEvents(10, 0, 'cfp', true);
         $events = $eventApi->getEvents(
             $this->itemsPerPage,
             $start,
@@ -61,6 +62,7 @@ class EventController extends BaseController
             'Event/index.html.twig',
             array(
                 'page' => $page,
+                'cfp_events' => $cfpEvents,
                 'events' => $events
             )
         );
