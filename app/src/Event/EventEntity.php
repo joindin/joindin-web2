@@ -384,7 +384,7 @@ class EventEntity
      */
     public function setHref($href)
     {
-        $this->data->href;
+        $this->data->href = $href;
     }
 
     /**
