@@ -24,6 +24,8 @@
                         {% if event.isPastEvent() %}attended{% else %}attending{% endif %}
                     {% endif %}
 
+                    {% include 'Event/_common/attending.html.twig' %}
+
                     <br>Host{% if event.hosts|length != 1 %}s{% endif %}:
                     {% for host in event.hosts %}
                         {% set comma = "" %}
