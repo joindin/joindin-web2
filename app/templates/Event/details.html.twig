@@ -19,10 +19,7 @@
                         </div>
                     {% endif %}
 
-                    {% if event.getAttendeeCount %}
-                        {{ event.getAttendeeCount|escape }}</span> people
-                        {% if event.isPastEvent() %}attended{% else %}attending{% endif %}
-                    {% endif %}
+                    {% include 'Event/_common/attending_string.html.twig' %}
 
                     {% include 'Event/_common/attending.html.twig' %}
 
