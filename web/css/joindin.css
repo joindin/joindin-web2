@@ -591,3 +591,7 @@ a.starred, table.schedule a.starred {
     height: 15em;
 }
 
+.form-cancel {
+    margin-right: 10px;
+    margin-top: 9px;
+}
