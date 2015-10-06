@@ -40,28 +40,9 @@ class ApplicationController extends BaseController
         );
     }
 
-    /**
-     * Get latest current events
-     *
-     * @param $start
-     * @param $perPage
-     * @return array
-     */
-    public function getCurrentEvents($start, $perPage)
-    {
-        $eventApi = $this->getEventApi();
-        return $eventApi->getEvents($perPage, $start, 'hot');
-    }
-
-    /**
-     * Display the apps page
-     */
     public function apps()
     {
-        $this->render('Application/apps.html.twig',
-            array(
-                'hot_events' => $this->getCurrentEvents(0, 5),
-            ));
+        $this->render('Application/apps.html.twig');
     }
 
     /**
@@ -69,10 +50,7 @@ class ApplicationController extends BaseController
      */
     public function about()
     {
-        $this->render('Application/about.html.twig',
-            array(
-                'hot_events' => $this->getCurrentEvents(0, 5),
-            ));
+        $this->render('Application/about.html.twig');
     }
 
     /**
