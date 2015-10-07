@@ -3,6 +3,11 @@
         <div class="col-xs-12 col-sm-12 title">
             <h1>
                 {{ talk.getTitle }}
+                {% if user %}
+                    <span id="{{ event.getUrlFriendlyName }}/{{ talk.getUrlFriendlyTalkTitle }}" class="star-wrapper">
+                        <a href="javascript:" class="talk star{% if talk.getStarred %} starred{% endif %}">{% if talk.starred %}&#10029;{% else %}&#10025;{% endif %}</a>
+                    </span>
+                {% endif %}
             </h1>
             <div class="row">
                 <div class="col-xs-8">
