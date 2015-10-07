@@ -1,41 +1,48 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 class="panel-title">Event details</h2>
-    </div>
-    <div class="panel-body">
-        {% if event.getTags %}
-            <div class="tags">
-                {% for tag in event.getTags %}
-                    <a href="{{ urlFor('search-events') }}?tag={{ tag }}">
-                        <span class="label label-default">{{ tag }}</span>
-                    </a>
-                {% endfor %}
-            </div>
-        {% endif %}
+<h3>Event details</h3>
 
-        {% if event.getAttendeeCount %}
-            {{ event.getAttendeeCount|escape }}</span> people
-            {% if event.isPastEvent() %}attended{% else %}attending{% endif %}<br>
-        {% endif %}
-
-        Host{% if event.hosts|length != 1 %}s{% endif %}:
-        {% for host in event.hosts %}
-            {% set comma = "" %}
-            {% if not loop.last %}
-                {% set comma = "," %}
-            {% endif %}
-
-            {% if host.username %}
-                <a href="{{ urlFor('user-profile', {'username': host.username}) }}">{{ host.host_name }}</a>{{comma}}
-            {% else %}
-                {{ host.host_name }}{{comma}}
-            {% endif %}
+{% if event.getTags %}
+    <div class="tags">
+        {% for tag in event.getTags %}
+            <a href="{{ urlFor('search-events') }}?tag={{ tag }}">
+                <span class="label label-default">{{ tag }}</span>
+            </a>
         {% endfor %}
-        <br>
-        Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
-        <br>
-        Short URL: <a href="{{ shortUrlForEvent(event.getStub) }}">{{ shortUrlForEvent(event.getStub) }}</a> <i class="fa fa-external-link-square"></i>
-        <hr>
-        {{ event.getDescription | slice(0, 200)}}&hellip;
     </div>
-</div>
+{% endif %}
+
+{% if event.getAttendeeCount %}
+    {{ event.getAttendeeCount|escape }}</span> people
+    {% if event.isPastEvent() %}attended{% else %}attending{% endif %}<br>
+{% endif %}
+
+Host{% if event.hosts|length != 1 %}s{% endif %}:
+{% for host in event.hosts %}
+    {% set comma = "" %}
+    {% if not loop.last %}
+        {% set comma = "," %}
+    {% endif %}
+
+    {% if host.username %}
+        <a href="{{ urlFor('user-profile', {'username': host.username}) }}">{{ host.host_name }}</a>{{comma}}
+    {% else %}
+        {{ host.host_name }}{{comma}}
+    {% endif %}
+{% endfor %}
+<br>
+Event Website:<br><a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress | replace({'http://': '', 'https://': '',}) }}</a> <i class="fa fa-external-link-square"></i>
+
+{% if event.getCfpStatus %}
+    <br>
+    Call for Papers:
+    {% if event.getCfpStatus == 'Open' %}
+        {{ event.getCfpStatus }} until {{ event.getCfPEndDate|date("j M Y") }}.
+        {% if event.getCfpUrl %}
+            <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+        {% endif %}
+    {% else %}
+        {{ event.getCfpStatus }}.
+        {% if event.getCfpUrl and event.getCfpStatus == 'Pending' %}
+            <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+        {% endif %}
+    {% endif %}
+{% endif %}
