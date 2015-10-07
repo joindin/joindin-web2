@@ -40,7 +40,8 @@ class EventController extends BaseController
         $app->get('/event/xhr-unattend/:friendly_name', array($this, 'xhrUnattend'));
         $app->get('/event/attend/:friendly_name', array($this, 'attend'))->name("event-attend");
         $app->get('/event/unattend/:friendly_name', array($this, 'unattend'))->name("event-unattend");
-        $app->post('/event/action-pending-event/:friendly_name', array($this, 'actionPendingEvent'))->name("event-action-pending");
+        $app->post('/event/action-pending-event/:friendly_name', array($this, 'actionPendingEvent'))
+            ->name("event-action-pending");
     }
 
     public function index()

@@ -58,10 +58,12 @@ class ApplicationController extends BaseController
      */
     public function apps()
     {
-        $this->render('Application/apps.html.twig',
-            array(
+        $this->render(
+            'Application/apps.html.twig',
+            [
                 'hot_events' => $this->getCurrentEvents(0, 5),
-            ));
+            ]
+        );
     }
 
     /**
@@ -69,10 +71,12 @@ class ApplicationController extends BaseController
      */
     public function about()
     {
-        $this->render('Application/about.html.twig',
-            array(
+        $this->render(
+            'Application/about.html.twig',
+            [
                 'hot_events' => $this->getCurrentEvents(0, 5),
-            ));
+            ]
+        );
     }
 
     /**
@@ -98,7 +102,14 @@ class ApplicationController extends BaseController
 
                 try {
                     $contactApi = $this->getContactApi();
-                    $contactApi->contact($values['name'], $values['email'], $values['subject'], $values['comment'], $clientId, $clientSecret);
+                    $contactApi->contact(
+                        $values['name'],
+                        $values['email'],
+                        $values['subject'],
+                        $values['comment'],
+                        $clientId,
+                        $clientSecret
+                    );
                     $this->application->flash('message', "Thank you for contacting us.");
                     $this->application->redirect($this->application->urlFor("contact"));
                 } catch (\Exception $e) {
