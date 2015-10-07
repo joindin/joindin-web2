@@ -65,6 +65,22 @@ class TalkApi extends BaseApi
     }
 
     /**
+     * @param integer $talkId
+     * @return TalkEntity
+     */
+    public function getTalkByTalkId($talkId)
+    {
+        $talkId = (int)$talkId;
+        if (!$talkId) {
+            return;
+        }
+
+        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId;
+
+        return $this->getTalk($talkUrl, true);
+    }
+
+    /**
      * Gets a talk when we know the slug and event's uri.
      *
      * @param  string $talkSlug
@@ -125,7 +141,7 @@ class TalkApi extends BaseApi
         if (null !== $limitTo) {
             $params['resultsperpage'] = $limitTo   ;
         }
-        
+
         $comments = (array)json_decode($this->apiGet($comment_uri, $params));
 
         $commentData = array();
@@ -182,7 +198,7 @@ class TalkApi extends BaseApi
                 return ['starred' => true];
             }
         }
-    
+
         throw new \Exception("Failed to toggle star: $status, $result");
     }
 
