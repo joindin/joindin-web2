@@ -39,14 +39,25 @@
                         {% for talk in talks %}
                             <section>
                                 {% set event = attribute(eventInfo, talk.getApiUri) %}
-                                {% if talk.getAverageRating %}
-                                    <div class="pull-right rating rating-{{ talk.getAverageRating }}">
-                                        <img src="/img/avg-rating-{{ talk.getAverageRating }}.png"
-                                             title="Rated {{ talk.getAverageRating }}"
-                                            width="132" height="24" alt="Rated {{ talk.getAverageRating }}"/>
-                                            {# width/height: 156/28, 132/24, 117/21 #}
-                                    </div>
-                                {% endif %}
+                                <div class="pull-right talk-info">
+                                    {% if talk.getAverageRating %}
+                                        {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical', 'size': 'small', 'include_rating_placeholder': true} %}
+                                    {% endif %}
+
+                                    <span class="slides">
+                                        {% if talk.slidesLink %}
+                                            <a target="new" title="Slides for this session" href="{{ talk.slidesLink }}">
+                                                <img src="/img/icon-slides.gif" alt="Slides for this session">
+                                        </a>
+                                        {% endif %}
+                                    </span>
+
+                                    <span class="comment-count">
+                                        <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.commentCount }}</a>
+                                    </span>
+                                </div>
+
+
                                 <h3><a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.getUrlFriendlyTalkTitle }) }}">{{ talk.getTitle }}</a></h3>
                                 <small>
                                     at

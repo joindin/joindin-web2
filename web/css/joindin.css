@@ -245,18 +245,18 @@ footer {
     float: right;
 }
 
-.agenda .talk-info .rating {
+.talk-info .rating {
     display: inline-block;
     margin-left: 0;
 }
 
-.agenda .talk-info .slides {
+.talk-info .slides {
     display: inline-block;
     margin-left: 3px;
     width: 16px;
 }
 
-.agenda .talk-info .comment-count {
+.talk-info .comment-count {
     display: inline-block;
     margin-left: 3px;
     background: rgba(0, 0, 0, 0) url("/img/icon-comment.gif") 0 0  no-repeat scroll;
