@@ -45,14 +45,17 @@
                     Short URL: <a href="{{ shortUrlForEvent(event.getStub) }}">{{ shortUrlForEvent(event.getStub) }}</a> <i class="fa fa-external-link-square"></i>
                     {% if event.getCfpStatus %}
                         <br>
-                        Call for Papers Status: {{ event.getCfpStatus }}
-                    {% endif %}
-                    {% if event.getCfpStatus == 'Open' %}
-                        <br>
-                        (ends {{ event.getCfPEndDate|date("d.m.Y") }})
-                        {% if event.getCfpUrl %}
-                            <br>
-                            More information: <a href="{{ event.getCfpUrl }}" rel="nofollow">{{ event.getCfpUrl }}</a> <i class="fa fa-external-link-square"></i>
+                        Call for Papers:
+                        {% if event.getCfpStatus == 'Open' %}
+                            {{ event.getCfpStatus }} until {{ event.getCfPEndDate|date("d.m.Y") }}.
+                            {% if event.getCfpUrl %}
+                                <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+                            {% endif %}
+                        {% else %}
+                            {{ event.getCfpStatus }}.
+                            {% if event.getCfpUrl and event.getCfpStatus == 'Pending' %}
+                                <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
 
