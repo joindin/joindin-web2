@@ -13,7 +13,7 @@ set eventUrl = urlFor(
     <div class="title description">
         <section>
             <h3 class="header">
-                <a href="{{ eventUrl }}">{{ event.getName }}</a>
+                <a href="{{ eventUrl }}">{{ event.getName|e('html') }}</a>
             </h3>
 
             <p class="meta">
@@ -21,14 +21,14 @@ set eventUrl = urlFor(
             </p>
 
             <p class="wideOnly">
-                {{ event.getDescription | slice(0, 200)}}&hellip;
+                {{ event.getDescription | slice(0, 200) | e('html')}}&hellip;
             </p>
 
             <p class="meta">
                 {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
 
                 {% if event.getLocation %}
-                    @ {{event.getLocation|escape}}
+                    @ {{event.getLocation|escape('html')}}
                 {% endif %}
 
                 |

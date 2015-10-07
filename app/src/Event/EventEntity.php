@@ -23,7 +23,7 @@ class EventEntity
             return null;
         }
 
-        return $this->data->name;
+        return htmlspecialchars_decode($this->data->name, ENT_QUOTES);
     }
 
     public function setName($name)
@@ -93,8 +93,7 @@ class EventEntity
         if (!isset($this->data->location)) {
             return null;
         }
-
-        return $this->data->location;
+        return htmlspecialchars_decode($this->data->location, ENT_QUOTES);
     }
 
     public function setLocation($location)
@@ -107,8 +106,7 @@ class EventEntity
         if (!isset($this->data->description)) {
             return null;
         }
-
-        return $this->data->description;
+        return htmlspecialchars_decode($this->data->description, ENT_QUOTES);
     }
 
     public function setDescription($description)
