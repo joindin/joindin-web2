@@ -132,7 +132,8 @@ class ApplicationController extends BaseController
      */
     public function notAllowed()
     {
-        $this->render('Application/not-allowed.html.twig');
+
+        $this->render('Application/not-allowed.html.twig', [ 'redirect' => $this->application->request->get('redirect') ]);
     }
 
     /**
