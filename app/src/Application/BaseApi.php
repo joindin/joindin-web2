@@ -5,11 +5,16 @@ class BaseApi
 {
     protected $baseApiUrl;
     protected $accessToken;
+    protected $proxy;
 
     public function __construct($config, $accessToken)
     {
         if (isset($config['apiUrl'])) {
             $this->baseApiUrl = $config['apiUrl'];
+        }
+
+        if (isset($config['proxy']) && $config['proxy']) {
+            $this->proxy = $config['proxy'];
         }
 
         $this->accessToken = $accessToken;
@@ -33,6 +38,11 @@ class BaseApi
 
         if ($this->accessToken) {
             $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
+        }
+
+        if ($this->proxy) {
+            $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['request_fulluri'] = true;
         }
 
         $streamContext = stream_context_create($contextOpts);
@@ -64,6 +74,11 @@ class BaseApi
 
         if ($this->accessToken) {
             $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
+        }
+
+        if ($this->proxy) {
+            $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['request_fulluri'] = true;
         }
 
         $streamContext = stream_context_create($contextOpts);
@@ -104,6 +119,11 @@ class BaseApi
             $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
         }
         
+        if ($this->proxy) {
+            $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['request_fulluri'] = true;
+        }
+
         $streamContext = stream_context_create($contextOpts);
         $result = file_get_contents($url, 0, $streamContext);
         if (false === $result) {
@@ -139,6 +159,11 @@ class BaseApi
 
         if ($this->accessToken) {
             $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
+        }
+
+        if ($this->proxy) {
+            $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['request_fulluri'] = true;
         }
 
         $streamContext = stream_context_create($contextOpts);

@@ -7,6 +7,7 @@ $config = array(
             'redisKeyPrefix' => 'dev-',
             'apiUrl' => 'http://api.dev.joind.in',
             'googleAnalyticsId' => '',
+            'proxy' => '',
         ),
         'oauth' => array(
             'client_id' => 'web2',

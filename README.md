@@ -61,3 +61,14 @@ Octocat gives [a good starting point](https://gist.github.com/octocat/9257657) f
     nbproject/private/
 
 For more info on ignoring files, [github has an excellent help page](https://help.github.com/articles/ignoring-files/).
+
+## Using A Proxy
+
+Since web2 then calls the API, it can be tricky to see what is going on.  You can use a proxy tool such as Charles Proxy or mitmproxy to observe the requests that are being made by enabling the `proxy` setting in the config with a line that looks something like this:
+
+    'proxy' => 'tcp://10.0.2.2:8888',
+
+If the proxy tool is running on your host machine, you'll need to understand what IP address the guest thinks your host has, the easiest way to do that is to `vagrant ssh` into the VM and then type `last` to see where it thinks you logged in from.
+
+Alternatively, try [Lorna's blog post about Wiresharking a VM](http://www.lornajane.net/posts/2014/wireshark-capture-on-remote-server).
+     
