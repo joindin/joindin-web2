@@ -47,7 +47,7 @@
                         <br>
                         Call for Papers:
                         {% if event.getCfpStatus == 'Open' %}
-                            {{ event.getCfpStatus }} until {{ event.getCfPEndDate|date("d.m.Y") }}.
+                            {{ event.getCfpStatus }} until {{ event.getCfPEndDate|date("j M Y") }}.
                             {% if event.getCfpUrl %}
                                 <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
                             {% endif %}
