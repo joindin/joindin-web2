@@ -70,12 +70,12 @@ class TalkApi extends BaseApi
      */
     public function getTalkByTalkId($talkId)
     {
+        $talkId = (int)$talkId;
         if (!$talkId) {
             return;
         }
 
-        $talkUrl = $this->baseApiUrl . '/v2.1/talks';
-        $talkUrl = sprintf($talkUrl.'/%s', $talkId);
+        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId;
 
         return $this->getTalk($talkUrl, true);
     }
