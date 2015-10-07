@@ -1,7 +1,11 @@
 {% extends '/layout.html.twig' %}
 
 {% block title %}{{ event.getName }} talk comments - Joind.in{% endblock %}
-{% block extraAside %}{% include 'Event/_common/event_details.html.twig' %}{% endblock %}
+{% block extraAside %}
+<section>
+    {% include 'Event/_common/event_details.html.twig' %}
+</section>
+{% endblock %}
 
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
