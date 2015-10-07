@@ -75,7 +75,7 @@
                         {% endfor %}
 
                         {# skip keynote talks, as they will span all tracks (columns) #}
-                        {% if talk.type != "Keynote" %}
+                        {% if talk.type|lower != "keynote" and talk.type|lower != "social event" %}
                             {% for track in day.tracks %}
                                 {% if track in actualTracks %}
                                     {# if track is a number, Twig won't allow this value
@@ -96,7 +96,7 @@
                         {% endif %}
 
                         {# if a talk has no tracks, or is a Keynote, span all tracks (columns) in table #}
-                        {% if talk.tracks|length == 0 or talk.type == "Keynote" %}
+                        {% if talk.tracks|length == 0 or talk.type|lower == "keynote" or talk.type|lower == "social event" %}
                             <td class="{{ talk.getTypeClass }}" colspan={{ day.tracks|length }}>
                                 {% include '/Event/_common/schedule_cell.html.twig' %}
                             </td>
