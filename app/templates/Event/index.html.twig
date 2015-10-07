@@ -28,4 +28,17 @@
         </p>
         <a href="{{ urlFor('event-submit') }}" class="btn btn-primary col-xs-12">Submit</a>
     </section>
+    <section>
+        <h3>Open Calls for Papers</h3>
+        {% if cfp_events.events %}
+            {% for event in cfp_events.events %}
+                {% include 'Event/_common/summary_cfp.html.twig' %}
+            {% endfor %}
+            <div>
+                <a href="{{ urlFor( 'event-call-for-papers' ) }}">See more Calls for Papers <i class="fa fa-arrow-circle-o-right"></i></a>
+            </div>
+        {% else %}
+            <p>There are no events with an open call for papers.</p>
+        {% endif %}
+    </section>
 {% endblock %}
