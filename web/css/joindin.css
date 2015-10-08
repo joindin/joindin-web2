@@ -190,9 +190,19 @@ footer {
 }
 
 .key {
-    padding: 0.5em;
+    padding: 0.5em 5px;
     color: white;
     text-align: center;
+    position: relative;
+    min-height: 1px;
+    margin-bottom: 1px;
+    float: left;
+    width: auto;
+}
+@media (min-width: 435px) {
+.key {
+    padding: 0.5em 15px;
+}
 }
 
 .talk-type-talk {

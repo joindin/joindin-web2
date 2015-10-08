@@ -27,12 +27,14 @@
     <div>
         <label>Sessions Key</label>
 
-        <div class="container-fluid">
-            <div class="col-xs-12 col-md-2 col-md-offset-1 talk-type-keynote key">Keynote</div>
-            <div class="col-xs-12 col-md-2 talk-type-talk key">Talk</div>
-            <div class="col-xs-12 col-md-2 talk-type-workshop key">Workshop</div>
-            <div class="col-xs-12 col-md-2 talk-type-socialevent key">Social</div>
-            <div class="col-xs-12 col-md-2 talk-type-eventrelated key">Event Related</div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="talk-type-keynote key">Keynote</div>
+                <div class="talk-type-talk key">Talk</div>
+                <div class="talk-type-workshop key">Workshop</div>
+                <div class="talk-type-socialevent key">Social</div>
+                <div class="talk-type-eventrelated key">Event Related</div>
+            </div>
         </div>
 
         {% for day in eventDays %}
