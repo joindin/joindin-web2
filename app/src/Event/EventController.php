@@ -27,7 +27,8 @@ class EventController extends BaseController
         $app->get('/event/pending', array($this, 'pending'))->name("events-pending");
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
-        $app->get('/event/:friendly_name', array($this, 'details'))->name("event-detail");
+        $app->get('/event/:friendly_name', array($this, 'eventDefault'))->name("event-default");
+        $app->get('/event/:friendly_name/details', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/comments', array($this, 'comments'))->name("event-comments");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
         $app->get('/event/:friendly_name/schedule/list', array($this, 'scheduleList'))->name("event-schedule-list");
@@ -121,6 +122,34 @@ class EventController extends BaseController
                 'events' => $events,
             )
         );
+    }
+
+
+    /**
+     * Return default page for event
+     *
+     * If event in progress or within 2 days of finishing return schedule
+     * Otherwise, return details
+     *
+     * @@see https://joindin.jira.com/browse/JOINDIN-609 If last page remembered default to that instead
+     * @param string $friendly_name
+     */
+    public function eventDefault($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+        if (! $event) {
+            return Slim::getInstance()->notFound();
+        }
+
+        $now = new \DateTime();
+        $startDate = new \DateTime($event->getStartDate());
+        $endDate = new \DateTime($event->getEndDate());
+        if ($now >= $startDate && $now <= $endDate->add(new \DateInterval('P2D'))) {
+            return $this->schedule($friendly_name);
+        } else {
+            return $this->details($friendly_name);
+        }
     }
 
     public function details($friendly_name)
