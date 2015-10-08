@@ -606,3 +606,12 @@ a.talk.star {
     margin-right: 10px;
     margin-top: 9px;
 }
+
+.attending.label {
+    font-size: 12px;
+    font-weight: normal;
+    display: inline-block;
+    padding: 1px 5px;
+    line-height: 18px;
+    margin-bottom: 2px;
+}

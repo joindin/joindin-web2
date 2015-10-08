@@ -1,5 +1,5 @@
 {% if 0 != event.getAttendeeCount %}
-    | <span class="{{ event.getUrlFriendlyName|escape }}-attending-count">{{ event.getAttendeeCount|escape }}</span>
+    <span class="{{ event.getUrlFriendlyName|escape }}-attending-count">{{ event.getAttendeeCount|escape }}</span>
     <span class="{{ event.getUrlFriendlyName|escape }}-attending-string">
     {% if event.isPastEvent() %}
         attended
