@@ -39,6 +39,22 @@ class UserApi extends BaseApi
     }
 
     /**
+     * @param integer $userId
+     * @return UserEntity
+     */
+    public function getUserByUserId($userId)
+    {
+        $userId = (int)$userId;
+        if (!$userId) {
+            return;
+        }
+
+        $userUrl = $this->baseApiUrl . '/v2.1/users/' . $userId;
+
+        return $this->getUser($userUrl);
+    }
+
+    /**
      * Takes the fields from the registration form, and passes them though
      * to the API to register a new user
      *
