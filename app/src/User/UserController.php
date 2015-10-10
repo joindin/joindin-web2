@@ -42,6 +42,9 @@ class UserController extends BaseController
         $app->get('/user/:username/comments', array($this, 'profileComments'))->name('user-profile-comments');
         $app->map('/user/:username/edit', array($this, 'profileEdit'))
             ->via('GET', 'POST')->name('user-profile-edit');
+        $app->get('/user/view/:userId', array($this, 'redirectFromId'))
+            ->name('user-redirect-from-id')
+            ->conditions(array('userId' => '\d+'));
     }
 
     /**
@@ -860,5 +863,29 @@ class UserController extends BaseController
         unset($_SESSION['access_token']);
         $this->application->flash('error', "Failed to log in. User account problem.");
         $this->application->redirect('/');
+    }
+
+    public function redirectFromId($userId)
+    {
+        $cache = $this->getCache();
+        //$eventDb = new EventDb($cache);
+
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUserId($userId);
+        if (!$user) {
+            return \Slim\Slim::getInstance()->notFound();
+        }
+
+        /*$event = $eventDb->load('uri', $talk->getEventUri());
+        if (!$event) {
+            return \Slim\Slim::getInstance()->notFound();
+        }*/
+
+        $this->application->redirect(
+            $this->application->urlFor(
+                'user-profile',
+                array('username' => $user->getUsername())
+            )
+        );
     }
 }
