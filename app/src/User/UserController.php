@@ -867,19 +867,11 @@ class UserController extends BaseController
 
     public function redirectFromId($userId)
     {
-        $cache = $this->getCache();
-        //$eventDb = new EventDb($cache);
-
         $userApi = $this->getUserApi();
         $user = $userApi->getUserByUserId($userId);
         if (!$user) {
             return \Slim\Slim::getInstance()->notFound();
         }
-
-        /*$event = $eventDb->load('uri', $talk->getEventUri());
-        if (!$event) {
-            return \Slim\Slim::getInstance()->notFound();
-        }*/
 
         $this->application->redirect(
             $this->application->urlFor(
