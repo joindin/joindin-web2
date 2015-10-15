@@ -21,6 +21,9 @@ class TalkController extends BaseController
         $app->get('/:talkId', array($this, 'quickById'))
             ->name('talk-quick-by-id')
             ->conditions(array('talkId' => '\d+'));
+        $app->get('/talk/view/:talkId', array($this, 'quickById'))
+            ->name('talk-by-id-web1')
+            ->conditions(array('talkId' => '\d+'));
     }
 
     public function index($eventSlug, $talkSlug)
