@@ -216,8 +216,14 @@ class EventApi extends BaseApi
         if ($status == 202) {
             return null;
         }
+        if ($status == 400) {
+            $decoded = json_decode($result);
+            if (is_array($decoded)) {
+                $result = current($decoded);
+            }
+        }
 
-        throw new \Exception('Your event submission was not accepted, the server reports: ' . $result);
+        throw new \Exception($result);
     }
 
     /**
