@@ -132,9 +132,9 @@ class EventApi extends BaseApi
             return;
         }
 
-        $userUrl = $this->baseApiUrl . '/v2.1/events/' . $eventId;
+        $eventUrl = $this->baseApiUrl . '/v2.1/events/' . $eventId;
 
-        return $this->getEvent($userUrl);
+        return $this->getEvent($eventUrl);
     }
 
     /**
