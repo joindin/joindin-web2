@@ -43,6 +43,9 @@ class EventController extends BaseController
         $app->get('/event/unattend/:friendly_name', array($this, 'unattend'))->name("event-unattend");
         $app->post('/event/action-pending-event/:friendly_name', array($this, 'actionPendingEvent'))
             ->name("event-action-pending");
+        $app->get('/event/view/:eventId', array($this, 'redirectFromId'))
+            ->name('event-redirect-from-id')
+            ->conditions(array('eventId' => '\d+'));
     }
 
     public function index()
@@ -491,6 +494,28 @@ class EventController extends BaseController
         }
 
         $this->application->redirect($this->application->urlFor("events-pending"));
+    }
+
+    /**
+     * Handles redirecting web1 event urls to web2
+     * e.g. /event/view/3 -> /event/myevent
+     *
+     * @param int $eventId
+     */
+    public function redirectFromId($eventId)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getEventById($eventId);
+        if (!$event) {
+            return \Slim\Slim::getInstance()->notFound();
+        }
+
+        $this->application->redirect(
+            $this->application->urlFor(
+                'event-default',
+                array('friendly_name' => $event->getUrlFriendlyName())
+            )
+        );
     }
 
     /**

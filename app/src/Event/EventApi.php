@@ -115,8 +115,26 @@ class EventApi extends BaseApi
             }
             return $event;
         }
-        
+
         return false;
+    }
+
+    /**
+     * Get an event by id
+     *
+     * @param integer $eventId
+     * @return EventEntity
+     */
+    public function getEventById($eventId)
+    {
+        $eventId = (int)$eventId;
+        if (!$eventId) {
+            return;
+        }
+
+        $eventUrl = $this->baseApiUrl . '/v2.1/events/' . $eventId;
+
+        return $this->getEvent($eventUrl);
     }
 
     /**
