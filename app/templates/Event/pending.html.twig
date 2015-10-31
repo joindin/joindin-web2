@@ -41,14 +41,6 @@
                         </h3>
 
                         <p class="meta">
-
-                        </p>
-
-                        <p class="wideOnly">
-                            {{ event.getDescription | nl2br }}
-                        </p>
-
-                        <p class="meta">
                             {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
 
                             {% if event.getLocation %}
@@ -84,6 +76,9 @@
                                     {% endif %}
                                 </p>
                             {% endif %}
+                        </p>
+                        <p class="wideOnly">
+                            {{ event.getDescription | nl2br }}
                         </p>
                     </section>
                 </div>
