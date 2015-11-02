@@ -15,6 +15,7 @@ class ApplicationController extends BaseController
         $app->get('/about', array($this, 'about'))->name('about');
         $app->map('/contact', array($this, 'contact'))->via('GET', 'POST')->name('contact');
         $app->get('/not-allowed', array($this, 'notAllowed'))->name('not-allowed');
+        $app->get('/assets', array($this, 'assets'))->name('assets');
     }
 
     public function index()
@@ -122,6 +123,19 @@ class ApplicationController extends BaseController
             'Application/contact.html.twig',
             [
                 'form' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * Render the assets page
+     */
+    public function assets()
+    {
+        $this->render(
+            'Application/assets.html.twig',
+            [
+                'hot_events' => $this->getCurrentEvents(0, 5),
             ]
         );
     }

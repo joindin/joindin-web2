@@ -45,7 +45,9 @@
                     <li>
                         <a href="{{ urlFor('about') }}">About</a>
                     </li>
-
+                    <li>
+                        <a href="{{ urlFor('assets') }}">Assets</a>
+                    </li>
                     {% if user %}
                          <li><a href="{{ urlFor('user-profile', {'username': user.getUsername} ) }}">{{ user.getFullName }}</a></li>
                         <li><a href="{{ urlFor('user-logout') }}{%if currentPath() != "/" %}?redirect={{ currentPath() }}{% endif %}">Logout</a></li>
