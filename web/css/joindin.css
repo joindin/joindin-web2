@@ -596,6 +596,12 @@ a.talk.star {
 
 .already-registered {
     padding-right: 10px;
+    margin-bottom: 5px;
+}
+
+.alternative-login a {
+    display: block;
+    margin-bottom: 5px;
 }
 
 #contact_comment {
