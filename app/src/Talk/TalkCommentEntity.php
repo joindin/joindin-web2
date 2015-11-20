@@ -105,4 +105,13 @@ class TalkCommentEntity
         $hash = md5($this->data->uri);
         return (substr($hash, 0, 6));
     }
+
+    public function getReportedUri()
+    {
+        if (!isset($this->data->reported_uri)) {
+            return null;
+        }
+
+        return $this->data->reported_uri;
+    }
 }

@@ -17,6 +17,8 @@ class TalkController extends BaseController
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
         $app->post('/event/:eventSlug/:talkSlug/star', array($this, 'star'))->name('talk-star');
         $app->get('/talk/:talkStub', array($this, 'quick'))->name('talk-quicklink');
+        $app->get('/event/:eventSlug/:talkSlug/comments/:commentHash/report', array($this, 'reportComment'))
+            ->name('talk-report-comment');
         $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
         $app->get('/:talkId', array($this, 'quickById'))
             ->name('talk-quick-by-id')
@@ -165,6 +167,39 @@ class TalkController extends BaseController
 
         $this->application->flash('message', 'Thank you for your comment.');
         $url .= '#add-comment';
+        $this->application->redirect($url);
+    }
+
+    public function reportComment($eventSlug, $talkSlug, $commentHash)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+
+        $comments = $talkApi->getComments($talk->getCommentsUri());
+        foreach ($comments as $comment) {
+            if ($comment->getCommentHash() !== $commentHash) {
+                continue;
+            }
+            $reportedComment = $comment;
+            break;
+        }
+
+        if (!isset($reportedComment)) {
+            $this->application->flash('error', 'The reported comment was not found on this talk.');
+            $this->application->redirect($url);
+        }
+
+        try {
+            $talkApi->reportComment($reportedComment->getReportedUri());
+        } catch (Exception $e) {
+            $this->application->flash('error', $e->getMessage());
+            $this->application->redirect($url);
+        }
+
+        $this->application->flash('message', 'Thank you for your report.');
         $this->application->redirect($url);
     }
 
