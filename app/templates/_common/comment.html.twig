@@ -35,6 +35,8 @@
                                 at
                                 <a href="#comment-{{ comment.getCommentHash }}">{{ comment.getCommentDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }}</a>
                                 <span class="hidden-xs">{% if comment.getCommentSource is not null %} (via {{ comment.getCommentSource }}){% endif %}</span>
+                                <br><br>
+                                <a href="/event/{{ event.getUrlFriendlyName }}{% if talk is not null %}/{{ talk.getUrlFriendlyTalkTitle }}{% endif %}/comments/{{ comment.getCommentHash }}/report">Report comment</a>
                             </small>
                         </div>
                     </h3>

@@ -179,6 +179,16 @@ class TalkApi extends BaseApi
         throw new \Exception("Failed to add comment: " . $result);
     }
 
+    public function reportComment($uri)
+    {
+        list ($status, $result) = $this->apiPost($uri);
+
+        if ($status == 202) {
+            return true;
+        }
+        throw new \Exception("Failed to report comment: " . $result);
+    }
+
     /**
      * Star or unstar based on current setting of starred
      *

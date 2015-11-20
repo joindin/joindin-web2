@@ -78,4 +78,13 @@ class EventCommentEntity
 
         return $this->data->rating;
     }
+
+    public function getReportedUri()
+    {
+        if (!isset($this->data->reported_uri)) {
+            return null;
+        }
+
+        return $this->data->reported_uri;
+    }
 }

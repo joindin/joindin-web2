@@ -80,7 +80,7 @@
 
             {% if comments %}
                 {% for comment in comments %}
-                    {% include '_common/comment.html.twig' with {'comment': comment} %}
+                    {% include '_common/comment.html.twig' with {'comment': comment, 'event': event} %}
                 {% endfor %}
             {% endif %}
 {% endblock %}
