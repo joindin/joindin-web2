@@ -87,4 +87,13 @@ class EventCommentEntity
 
         return $this->data->reported_uri;
     }
+
+    public function getUserUri()
+    {
+        if (!isset($this->data->user_uri)) {
+            return null;
+        }
+
+        return $this->data->user_uri;
+    }
 }
