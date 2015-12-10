@@ -410,7 +410,7 @@ class UserController extends BaseController
         $eventApi = $this->getEventApi();
         $hostedEventsCollection = $eventApi->getCollection(
             $user->getHostedEventsUri(),
-            ['verbose' => 'yes', 'resultsperpage' => 5]
+            ['verbose' => 'yes', 'resultsperpage' => 0]
         );
         if (!isset($hostedEventsCollection['events'])) {
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
