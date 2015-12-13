@@ -474,10 +474,9 @@ class EventController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                $event = $this->editEventUsingForm($form, $event);
-
-                if ($event instanceof EventEntity) {
-                    $this->redirectToDetailPage($event->getUrlFriendlyName());
+                $result = $this->editEventUsingForm($form, $event);
+                if ($result instanceof EventEntity) {
+                    $this->redirectToDetailPage($result->getUrlFriendlyName());
                 }
             }
         }
@@ -629,7 +628,42 @@ class EventController extends BaseController
             );
         }
 
+        try {
+            $fileData = $this->getUploadedFileData($_FILES['event'], 'new_icon');
+            if ($fileData) {
+                $eventApi->uploadIcon($values['uri'], $fileData);
+            }
+        } catch (\Exception $e) {
+            $result = false;
+            $error = $e->getMessage();
+            $messages = json_decode($error);
+            if ($messages) {
+                $error = implode(', ', $messages);
+            }
+            $form->addError(
+                new FormError("An error occurred while uploading your event icon: $error")
+            );
+        }
+
         return $result;
+    }
+
+    /**
+     * Retrieve the uploaded file data for $key.
+     *
+     * @param  string $key
+     * @return array|false
+     */
+    private function getUploadedFileData($files, $key)
+    {
+        if (isset($files['error'][$key]) && $files['error'][$key] == UPLOAD_ERR_OK) {
+            $data = file_get_contents($files['tmp_name'][$key]);
+            $fileData['image'] = base64_encode($data);
+            $fileData['type'] = $files['type'][$key];
+
+            return $fileData;
+        }
+        return false;
     }
 
     protected function getEventApi()

@@ -293,6 +293,30 @@ class EventApi extends BaseApi
     }
 
     /**
+     * Upload event icon
+     *
+     * @param  string $event_uri event's URI
+     * @param  string $fileData  array of 'image' (base64 encoded string of image file contents)
+     *                           and 'type' (mimetype of image)
+     * @return boolean
+     */
+    public function uploadIcon($event_uri, $fileData)
+    {
+        $uri = $event_uri . '/icon';
+
+        $data['type'] = $fileData['type'];
+        $data['image'] = $fileData['image'];
+
+        list ($status, $result, $headers) = $this->apiPut($uri, $data);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new \Exception($result);
+    }
+
+    /**
      * Returns a response array containing an 'events' and 'pagination' element.
 
      * Each event in this response is also stored in the cache so that a relation
