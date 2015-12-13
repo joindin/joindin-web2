@@ -540,4 +540,12 @@ class EventEntity
             return false;
         }
     }
+
+    /**
+     * Used by the edit form
+     */
+    public function getNewIcon()
+    {
+        return null;
+    }
 }
