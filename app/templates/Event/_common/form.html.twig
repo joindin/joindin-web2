@@ -44,9 +44,13 @@
 
             {% if event.name %}
             <fieldset class="col-offset-sm-6 col-sm-6 event">
-                <p>An event's icon must be a square image.</p>
                 <legend>Icon</legend>
-                {{ form_row(form.new_icon) }}
+                <div class="logo text-center">
+                    <img src="{{ event.getIcon|img_path("event_icons") }}">
+                </div>
+                <div>
+                    {{ form_row(form.new_icon) }}
+                </div>
             </fieldset>
             {% endif %}
         </div>
