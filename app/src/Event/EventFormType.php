@@ -165,6 +165,19 @@ class EventFormType extends AbstractType
                     'attr' => ['readonly' => 'readonly'],
                 ]
             )
+            ->add(
+                'new_icon',
+                'file',
+                [
+                    'data_class' => null,
+                    'label' => 'Upload new icon',
+                    'required' => false,
+                    'attr'=> [
+                        'class'=>'file',
+                    ],
+                    'constraints' => [new Constraint\ValidEventIcon(['groupname' => 'event', 'keyname'=>'new_icon'])],
+                ]
+            )
         ;
     }
 

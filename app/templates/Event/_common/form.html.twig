@@ -41,6 +41,14 @@
                 </div>
                 {{ form_row(form.cfp_url) }}
             </fieldset>
+
+            {% if event.name %}
+            <fieldset class="col-offset-sm-6 col-sm-6 event">
+                <p>An event's icon must be a square image.</p>
+                <legend>Icon</legend>
+                {{ form_row(form.new_icon) }}
+            </fieldset>
+            {% endif %}
         </div>
         <div class="row">
             <fieldset class="col-sm-12" class="location">
