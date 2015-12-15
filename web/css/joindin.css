@@ -118,6 +118,11 @@ aside h3.header {
     margin-bottom: 0;
 }
 
+.site-banner {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .sidebar section > h1, .sidebar section > h2, .sidebar section > h3, .sidebar section > h4, .sidebar section > h5, .sidebar section > h6 {
     margin-top: 0;
     padding-bottom: 2px;
