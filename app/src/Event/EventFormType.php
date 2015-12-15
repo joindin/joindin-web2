@@ -146,7 +146,7 @@ class EventFormType extends AbstractType
                 'text',
                 [
                     'label' => 'Venue name',
-                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 3])],
+                    'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
