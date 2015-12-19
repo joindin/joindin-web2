@@ -118,7 +118,13 @@ class TalkController extends BaseController
 
         $event = $eventDb->load('uri', $talk->getEventUri());
         if (!$event) {
-            return \Slim\Slim::getInstance()->notFound();
+            // load from API as not in cache
+            $eventApi = $this->getEventApi();
+            $eventEntity = $eventApi->getEvent($talk->getEventUri());
+            if (!$eventEntity) {
+                return \Slim\Slim::getInstance()->notFound();
+            }
+            $event['url_friendly_name'] = $eventEntity->getUrlFriendlyName();
         }
 
         $this->application->redirect(
