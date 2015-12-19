@@ -37,7 +37,7 @@
  </target>
 
  <target name="launch">
-  <exec command="scripts/jenkinslaunch.sh" checkreturn="true" />
+  <exec command="scripts/jenkinslaunch.sh" checkreturn="true" passthru="true"/>
  </target>
 
 </project>
