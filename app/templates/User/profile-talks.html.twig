@@ -53,7 +53,7 @@
                                     </span>
 
                                     <span class="comment-count">
-                                        <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.commentCount }}</a>
+                                        <a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.getUrlFriendlyTalkTitle }) }}"> {{ talk.commentCount }}</a>
                                     </span>
                                 </div>
 
