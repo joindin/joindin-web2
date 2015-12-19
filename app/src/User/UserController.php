@@ -43,7 +43,7 @@ class UserController extends BaseController
         $app->get('/user/:username/comments', array($this, 'profileComments'))->name('user-profile-comments');
         $app->map('/user/:username/edit', array($this, 'profileEdit'))
             ->via('GET', 'POST')->name('user-profile-edit');
-        $app->get('/user/view/:userId', array($this, 'redirectFromId'))
+        $app->get('/user/view/:userId(/:others+)', array($this, 'redirectFromId'))
             ->name('user-redirect-from-id')
             ->conditions(array('userId' => '\d+'));
     }
