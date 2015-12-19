@@ -543,7 +543,7 @@ class EventController extends BaseController
             return \Slim\Slim::getInstance()->notFound();
         }
 
-        if($extra && is_array($extra) && ($extra[0] == "talk_comments")) {
+        if ($extra && is_array($extra) && ($extra[0] == "talk_comments")) {
             $this->application->redirect(
                 $this->application->urlFor(
                     'event-talk-comments',
