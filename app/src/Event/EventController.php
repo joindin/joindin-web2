@@ -550,6 +550,20 @@ class EventController extends BaseController
                     array('friendly_name' => $event->getUrlFriendlyName())
                 )
             );
+        } if ($extra && is_array($extra) && ($extra[0] == "comments")) {
+            $this->application->redirect(
+                $this->application->urlFor(
+                    'event-comments',
+                    array('friendly_name' => $event->getUrlFriendlyName())
+                )
+            );
+        } if ($extra && is_array($extra) && ($extra[0] == "talks")) {
+            $this->application->redirect(
+                $this->application->urlFor(
+                    'event-schedule',
+                    array('friendly_name' => $event->getUrlFriendlyName())
+                )
+            );
         } else {
             $this->application->redirect(
                 $this->application->urlFor(
