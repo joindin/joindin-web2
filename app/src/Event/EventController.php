@@ -45,7 +45,7 @@ class EventController extends BaseController
         $app->get('/event/unattend/:friendly_name', array($this, 'unattend'))->name("event-unattend");
         $app->post('/event/action-pending-event/:friendly_name', array($this, 'actionPendingEvent'))
             ->name("event-action-pending");
-        $app->get('/event/view/:eventId', array($this, 'redirectFromId'))
+        $app->get('/event/view/:eventId(/:extra+)', array($this, 'redirectFromId'))
             ->name('event-redirect-from-id')
             ->conditions(array('eventId' => '\d+'));
     }
@@ -535,7 +535,7 @@ class EventController extends BaseController
      *
      * @param int $eventId
      */
-    public function redirectFromId($eventId)
+    public function redirectFromId($eventId, $extra = false)
     {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getEventById($eventId);
@@ -543,12 +543,21 @@ class EventController extends BaseController
             return \Slim\Slim::getInstance()->notFound();
         }
 
-        $this->application->redirect(
-            $this->application->urlFor(
-                'event-default',
-                array('friendly_name' => $event->getUrlFriendlyName())
-            )
-        );
+        if($extra && is_array($extra) && ($extra[0] == "talk_comments")) {
+            $this->application->redirect(
+                $this->application->urlFor(
+                    'event-talk-comments',
+                    array('friendly_name' => $event->getUrlFriendlyName())
+                )
+            );
+        } else {
+            $this->application->redirect(
+                $this->application->urlFor(
+                    'event-default',
+                    array('friendly_name' => $event->getUrlFriendlyName())
+                )
+            );
+        }
     }
 
     /**
