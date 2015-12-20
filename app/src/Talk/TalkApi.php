@@ -112,6 +112,9 @@ class TalkApi extends BaseApi
 
         $collection = (array)json_decode($this->apiGet($talk_uri));
 
+        if (!isset($collection['talks'])) {
+            return false;
+        }
         $talk = new TalkEntity($collection['talks'][0]);
         $this->talkDb->save($talk);
 
