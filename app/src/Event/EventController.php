@@ -144,6 +144,11 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (! $event) {
+            // Maybe it's a stub
+            $event = $eventApi->getByStub($friendly_name);
+            if ($event) {
+                $this->redirectToDetailPage($event->getUrlFriendlyName(), 301);
+            }
             return Slim::getInstance()->notFound();
         }
 
