@@ -23,6 +23,7 @@
             </div>
         </div>
     </div>
+
     {% if agenda|length %}
     <div class="agenda">
         {% for date,days in agenda %}
@@ -88,6 +89,8 @@
             </table>
         {% endfor %}
     </div>
+    {% else %}
+    <p>This event does not have a schedule.</p>
     {% endif %}
 
 {% endblock %}

@@ -24,6 +24,7 @@
         </div>
     </div>
 
+    {% if eventDays %}
     <div>
         <label>Sessions Key</label>
 
@@ -133,4 +134,8 @@
         </table>
         {% endfor %}
     </div>
+    {% else %}
+    <p>This event does not have a schedule.</p>
+    {% endif %}
+
 {% endblock %}
