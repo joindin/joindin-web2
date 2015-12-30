@@ -53,18 +53,34 @@ class EventController extends BaseController
 
     public function index()
     {
-        $page = ((int)$this->application->request()->get('page') === 0)
-            ? 1
-            : $this->application->request()->get('page');
-        $start = ($page -1) * $this->itemsPerPage;
+        $page = $this->application->request()->get('page');
+        if ($page === null) {
+            // if page is not set, then do not set $start so that the API will return
+            // the first page of events where at least one event is in the future
+            $page = 1;
+            $start = null;
+        } else {
+            $page = ((int)$page === 0) ? 1 : $page;
+            $start = ($page -1) * $this->itemsPerPage;
+        }
 
         $eventApi = $this->getEventApi();
+        $events = $eventApi->getEvents($this->itemsPerPage, $start, 'all');
+        if ($start === null) {
+            // Find out the page number that has been sent back to us by the API - if
+            // we can't work it out, assume it is page 1
+            $start = 0;
+            $page = 1;
+            if (isset($events['pagination'])) {
+                parse_str(parse_url($events['pagination']->this_page, PHP_URL_QUERY), $parts);
+                if (isset($parts['start'])) {
+                    $start = $parts['start'];
+                    $page = (int)($start / $this->itemsPerPage) + 1;
+                }
+            }
+        }
+
         $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);
-        $events = $eventApi->getEvents(
-            $this->itemsPerPage,
-            $start,
-            'upcoming'
-        );
 
         $this->render(
             'Event/index.html.twig',
