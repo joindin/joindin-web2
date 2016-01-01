@@ -36,4 +36,3 @@ class TalkCommentReportEntity
         return $this->data->reporting_user_username;
     }
 }
-

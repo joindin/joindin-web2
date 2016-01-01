@@ -425,5 +425,4 @@ class EventApi extends BaseApi
 
         return $reports;
     }
-
 }
