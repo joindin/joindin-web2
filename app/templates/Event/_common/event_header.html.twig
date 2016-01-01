@@ -25,6 +25,7 @@
             <li><a href="{{ urlFor('event-talk-comments', {"friendly_name": event.getUrlFriendlyName}) }}">Talk comments</a></li>
             {% if event.getCanEdit %}
             <li><a href="{{ urlFor('event-edit', {"friendly_name": event.getUrlFriendlyName}) }}">Edit</a></li>
+            <li><a href="{{ urlFor('event-reported-comments', {"friendly_name": event.getUrlFriendlyName}) }}">Reported comments</a></li>
             {% endif %}
         </ul>
     </nav>

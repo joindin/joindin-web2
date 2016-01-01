@@ -1,0 +1,28 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}{{ event.getName }} reported comments - Joind.in{% endblock %}
+{% block extraAside %}
+<section>
+    {% include 'Event/_common/event_details.html.twig' %}
+</section>
+{% endblock %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    <h2>Event comments</h2>
+    {% for report in eventComments %}
+        <p>Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
+        by {{ report.getReportingUser }}</p>
+        {% include '_common/comment.html.twig' with {'comment': report.getComment, 'event': event} %}
+    {% endfor %}
+
+    <h2>Talk comments</h2>
+    {% for report in talkComments %}
+        <p>Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
+        by {{ report.getReportingUser }}</p>
+        {% include '_common/comment.html.twig' with {'comment': report.getComment, 'event': event} %}
+    {% endfor %}
+
+
+{% endblock %}
