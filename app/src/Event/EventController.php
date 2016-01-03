@@ -152,14 +152,12 @@ class EventController extends BaseController
             return Slim::getInstance()->notFound();
         }
 
-        $now = new \DateTime();
-        $startDate = new \DateTime($event->getStartDate());
-        $endDate = new \DateTime($event->getEndDate());
-        if ($now >= $startDate && $now <= $endDate->add(new \DateInterval('P2D'))) {
-            return $this->schedule($friendly_name);
-        } else {
-            return $this->details($friendly_name);
+        $action = 'scheduleList';
+        if (isset($_COOKIE['schedule-view']) && $_COOKIE['schedule-view'] == 'grid') {
+            $action = 'scheduleGrid';
         }
+
+        return $this->$action($friendly_name);
     }
 
     public function details($friendly_name)

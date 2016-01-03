@@ -12,6 +12,10 @@
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
+    {# Display the first paragraph of the description above the schedule #}
+    {% set paragraphs = event.getDescription | split("\n") %}
+    <p>{{ paragraphs[0] }}</p>
+
     <div class="row">
         <div class="col-xs-6">
             <h2>Schedule</h2>
@@ -23,6 +27,7 @@
             </div>
         </div>
     </div>
+
     {% if agenda|length %}
     <div class="agenda">
         {% for date,days in agenda %}
@@ -88,6 +93,8 @@
             </table>
         {% endfor %}
     </div>
+    {% else %}
+    <p>This event does not have a schedule.</p>
     {% endif %}
 
 {% endblock %}
