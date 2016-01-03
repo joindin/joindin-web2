@@ -20,8 +20,9 @@
     <nav class="page-nav">
         <ul class="nav nav-pills">
             {% set event_sub_menu = [
-                {"route":"event-detail", "name":"Details", "active_match": ['event-default', 'event-detail']},
-                {"route":"event-schedule", "name":"Schedule", "active_match": ['event-schedule-list', 'event-schedule-grid']},
+                {"route":"event-detail", "name":"Details", "active_match": ['event-detail']},
+                {"route":"event-schedule", "name":"Schedule",
+                    "active_match": ['event-default', 'event-schedule-list', 'event-schedule-grid']},
                 {"route":"event-comments", "name":"Event comments", "active_match": ['event-comments']},
                 {"route":"event-talk-comments", "name":"Talk comments", "active_match": ['event-talk-comments']}
             ] %}
