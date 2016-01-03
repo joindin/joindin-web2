@@ -1,0 +1,15 @@
+{% extends '/layout.html.twig' %}
+
+{% block extra_meta %}
+    {{ parent() }}
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Joind.in">
+    <meta property="og:title" content="{{ event.getName }} on Joind.in">
+    <meta property="og:url" content="{{ getCurrentUrl(true) }}">
+    <meta property="og:image" content="{{ event.getIcon|img_path("event_icons") }}">
+{% set paragraphs = event.getDescription | split("\n") %}
+    <meta property="og:description" content="{{ paragraphs[0] }}">
+    <meta name="twitter:image" content="{{ event.getIcon|img_path("event_icons") }}" data-page-subject="true">
+    <meta name="twitter:card" content="summary" data-page-subject="true">
+    <meta name="twitter:site" content="@joindin" />
+{% endblock %}

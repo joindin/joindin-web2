@@ -1,4 +1,4 @@
-{% extends '/layout.html.twig' %}
+{% extends 'Event/_common/layout_event_details.html.twig' %}
 
 {% block title %}{{ event.getName }} - Joind.in{% endblock %}
     
@@ -75,13 +75,6 @@
 {% endblock %}
 
 {% block extraAside %}
-{% endblock %}
-
-{% block extra_meta %}
-    {{ parent() }}
-    <meta property="og:image" content="{{ event.getIcon|img_path("event_icons") }}">
-    <meta name="twitter:image" content="{{ event.getIcon|img_path("event_icons") }}" data-page-subject="true">
-    <meta name="twitter:card" content="photo" data-page-subject="true">
 {% endblock %}
 
 {% block extra_styles %}
