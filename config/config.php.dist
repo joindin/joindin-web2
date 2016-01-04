@@ -8,6 +8,7 @@ $config = array(
             'apiUrl' => 'http://api.dev.joind.in',
             'googleAnalyticsId' => '',
             'proxy' => '',
+            'csrfSecret' => '',
         ),
         'oauth' => array(
             'client_id' => 'web2',
