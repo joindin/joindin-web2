@@ -89,11 +89,11 @@ $app->notFound(function () use ($app) {
 // register middlewares
 $app->add(new Middleware\ValidationMiddleware());
 
+$csrfSecret = null;
 if (!empty($config['slim']['custom']['csrfSecret'])) {
-    $app->add(new Middleware\FormMiddleware($config['slim']['custom']['csrfSecret']));
-} else {
-    $app->add(new Middleware\FormMiddleware());
+    $csrfSecret = $config['slim']['custom']['csrfSecret'];
 }
+$app->add(new Middleware\FormMiddleware($csrfSecret));
 
 // register routes
 new Application\ApplicationController($app);
