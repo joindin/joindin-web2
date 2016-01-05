@@ -193,3 +193,37 @@
         </div>
     </section>
 {% endblock %}
+
+{% block bottomAside %}
+    <section>
+        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#embed-modal">
+            Embed
+            <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+        </button>
+    </section>
+
+    <div class="modal fade" id="embed-modal" tabindex="-1" role="dialog" aria-labelledby="embed-modal-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="embed-modal-label">Embed your profile</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Do you want to embed your Joind.in profile into your website? Then, copy (<kbd>Ctrl</kbd> + <kbd>C</kbd>) and paste (<kbd>Ctrl</kbd> + <kbd>V</kbd>) the following code:
+                    </p>
+                    <pre class="js-embeddable-code" tabindex="0"><code>&lt;div class="joindin-embed" data-url="{{ thisUser.getUri }}" data-type="speaker"&gt;&lt;/div&gt;
+&lt;link rel="stylesheet" href="https://cdn.joind.in/joindin.min.css" /&gt;
+&lt;script src="https://cdn.joind.in/joindin.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;JoindIn.init();&lt;/script&gt;</code></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

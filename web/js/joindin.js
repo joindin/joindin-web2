@@ -21,7 +21,21 @@ $(function(){
             }
             element.blur();
         });
-     });
+    });
+
+    if (window.getSelection) {
+        var embeddableCode = $('.js-embeddable-code');
+
+        embeddableCode.on('click focus', function(event) {
+            var range = document.createRange();
+            range.selectNode(event.target);
+            window.getSelection().addRange(range);
+        });
+
+        $('#embed-modal').on('shown.bs.modal', function() {
+            embeddableCode.focus();
+        });
+    }
 
     function modifyAttendingCount(eventName, byAmount)
     {
