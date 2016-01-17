@@ -37,6 +37,10 @@ function initialize(Twig_Environment $env, Slim $app)
         return $url;
     }));
 
+    $env->addFunction(new Twig_SimpleFunction('getCurrentRoute', function () use ($app) {
+        return $app->router->getCurrentRoute()->getName();
+    }));
+
     $env->addFunction(new Twig_SimpleFunction('getCurrentUrl', function () {
         return $_SERVER['REQUEST_URI'];
     }));

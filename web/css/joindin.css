@@ -72,6 +72,16 @@ form.navbar-form {
     margin-top: 10px;
 }
 
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
+    font-weight: bold;
+    background-color: #fff;
+    color: #428bca;
+}
+.nav-pills > li.active > a:hover {
+    background-color: #eee;
+    color: #428bca;
+}
+
 h1 {
     border-bottom: 1px solid #d7dcdf;
     color: #000;
