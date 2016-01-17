@@ -41,8 +41,17 @@ function initialize(Twig_Environment $env, Slim $app)
         return $app->router->getCurrentRoute()->getName();
     }));
 
-    $env->addFunction(new Twig_SimpleFunction('getCurrentUrl', function () {
-        return $_SERVER['REQUEST_URI'];
+    $env->addFunction(new Twig_SimpleFunction('getCurrentUrl', function ($fullyQualified = false) use ($app) {
+        $url =  $_SERVER['REQUEST_URI'];
+
+        if ($fullyQualified) {
+            $scheme = $app->request()->getScheme();
+            $host = $app->request()->headers('host');
+
+            $url = "$scheme://$host$url";
+        }
+
+        return $url;
     }));
 
     $env->addFunction(
