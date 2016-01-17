@@ -48,6 +48,8 @@
                     {% if user %}
                          <li><a href="{{ urlFor('user-profile', {'username': user.getUsername} ) }}">{{ user.getFullName }}</a></li>
                         <li><a href="{{ urlFor('user-logout') }}{%if currentPath() != "/" %}?redirect={{ currentPath() }}{% endif %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="/#login">Login</a></li>
                     {% endif %}
                 </ul>
                 <form class="navbar-form navbar-right" role="search" action="{{ urlFor('search') }}">
@@ -80,6 +82,7 @@
                 {% block extraAside %}{% endblock %}
                 
                 {% if not user %}
+                <div id="loginheader"><a name="login">&nbsp;</a></div>
                 <section>
                         <h2>Log in</h2>
                         {% include '_common/login.html.twig' %}
