@@ -274,7 +274,7 @@ class EventApi extends BaseApi
                 $data[$dateField] = $data[$dateField]->format('c');
             }
             if (isset($data[$dateField])) {
-                if (!strtotime($data[$dateField])) {
+                if (!empty($data[$dateField]) && !strtotime($data[$dateField])) {
                     unset($data[$dateField]);
                 }
             }
