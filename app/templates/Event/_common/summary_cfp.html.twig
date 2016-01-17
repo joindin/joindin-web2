@@ -15,13 +15,13 @@ set eventUrl = urlFor(
             @ {{event.getLocation|escape}}
         {% endif %}
 
-        {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
-                {% if "now"|date('c') < event.getCallForPapersStartDate %}
+        {% if event.getCfpEndDate and event.getCfpEndDate > "now"|date('c') %}
+                {% if "now"|date('c') < event.getCfpStartDate %}
                     {# not open yet #}
-                    <br>Call for papers starts {{ event.getCallForPapersStartDate |date('j M Y', event.getFullTimezone) }}
-                {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
+                    <br>Call for papers starts {{ event.getCfpStartDate |date('j M Y', event.getFullTimezone) }}
+                {% elseif "now"|date('c') < event.getCfpEndDate %}
                     {# still open #}
-                    <br>Call for papers ends {{ event.getCallForPapersEndDate |date('j M Y', event.getFullTimezone) }}
+                    <br>Call for papers ends {{ event.getCfpEndDate |date('j M Y', event.getFullTimezone) }}
                 {% endif %}
         {% endif %}
     </p>
