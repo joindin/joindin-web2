@@ -98,7 +98,7 @@
 {% if user %}
     <section>
         <h2>Claim talk</h2>
-        <p>Are you the speaker of this talk?</p>
+        <p>Are you the speaker for this talk?</p>
         <p><button type="button" class="btn btn-default" data-toggle="modal" data-target="#claimModal">Claim talk</button></p>
     </section>
     {# Temporary popup form the claim talk button #}
@@ -112,7 +112,7 @@
           <div class="modal-body">
             {% set legacy_id = talk.getApiUri()|split('/')|last %}
             <p>This functionality isn't yet available on our new site.</p>
-            <p>If you'd like to help us provide it then <a href="http://github.com/joindin/joindin-vm">GitHub</a> is the place to start. Otherwise to claim this talk, go to the <a href="https://legacy.joind.in/talk/view/{{ legacy_id }}">legacy website</a></p>
+            <p>If you'd like to help us provide it (maybe after you've given your talk) then you can find the project on <a href="http://github.com/joindin/joindin-vm">GitHub</a>. Until then, you can use the <a href="https://legacy.joind.in/talk/view/{{ legacy_id }}">legacy website</a> to claim your talk.</p>
           </div>
         </div>
       </div>
