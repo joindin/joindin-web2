@@ -37,6 +37,9 @@
             <li class="{% if getCurrentRoute() == 'event-edit' %}active{% endif %}">
                 <a href="{{ urlFor('event-edit', {"friendly_name": event.getUrlFriendlyName}) }}">Edit</a>
             </li>
+            <li class="{% if getCurrentRoute() == 'event-reported-comments' %}active{% endif %}">
+                <a href="{{ urlFor('event-reported-comments', {"friendly_name": event.getUrlFriendlyName}) }}">Reported comments</a>
+            </li>
             {% endif %}
         </ul>
     </nav>

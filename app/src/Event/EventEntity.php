@@ -522,4 +522,22 @@ class EventEntity
     {
         return $this->data->approval_uri;
     }
+
+    public function getReportedEventCommentsUri()
+    {
+        if (isset($this->data->reported_comments_uri)) {
+            return $this->data->reported_comments_uri;
+        } else {
+            return false;
+        }
+    }
+
+    public function getReportedTalkCommentsUri()
+    {
+        if (isset($this->data->reported_talk_comments_uri)) {
+            return $this->data->reported_talk_comments_uri;
+        } else {
+            return false;
+        }
+    }
 }

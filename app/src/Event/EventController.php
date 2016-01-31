@@ -48,6 +48,7 @@ class EventController extends BaseController
         $app->get('/event/view/:eventId(/:extra+)', array($this, 'redirectFromId'))
             ->name('event-redirect-from-id')
             ->conditions(array('eventId' => '\d+'));
+        $app->get('/event/:friendly_name/reported-comments', array($this, 'reportedComments'))->name("event-reported-comments");
     }
 
     public function index()
@@ -694,6 +695,38 @@ class EventController extends BaseController
         }
 
         $this->application->response()->body(json_encode(array('success' => $result)));
+    }
+
+    public function reportedComments($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            if (! $event->getCanEdit()) {
+                $this->redirectToDetailPage($event->getUrlFriendlyName());
+            }
+
+            $eventComments = $eventApi->getReportedEventComments(
+                $event->getReportedEventCommentsUri()
+            );
+
+            $talkComments = $eventApi->getReportedTalkComments(
+                $event->getReportedTalkCommentsUri()
+            );
+
+            $this->render(
+                'Event/reported-comments.html.twig',
+                array(
+                    'event' => $event,
+                    'eventComments' => $eventComments,
+                    'talkComments'  => $talkComments,
+                )
+            );
+        } else {
+            $events_url = $this->application->urlFor("events-index");
+            $this->application->redirect($events_url);
+        }
     }
 
     /**

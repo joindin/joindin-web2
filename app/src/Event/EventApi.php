@@ -3,6 +3,7 @@ namespace Event;
 
 use Application\BaseApi;
 use Talk\TalkCommentEntity;
+use Talk\TalkCommentReportEntity;
 use User\UserApi;
 
 class EventApi extends BaseApi
@@ -397,5 +398,31 @@ class EventApi extends BaseApi
             return true;
         }
         throw new \Exception("Failed to reject event: " . $result);
+    }
+
+    public function getReportedEventComments($comment_uri)
+    {
+        $response = json_decode($this->apiGet($comment_uri));
+
+        $reports = [];
+
+        foreach ($response->reports as $item) {
+            $reports[] = new EventCommentReportEntity($item);
+        }
+
+        return $reports;
+    }
+
+    public function getReportedTalkComments($comment_uri)
+    {
+        $response = json_decode($this->apiGet($comment_uri));
+
+        $reports = [];
+
+        foreach ($response->reports as $item) {
+            $reports[] = new TalkCommentReportEntity($item);
+        }
+
+        return $reports;
     }
 }
