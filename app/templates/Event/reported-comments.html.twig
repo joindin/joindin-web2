@@ -14,14 +14,14 @@
     {% for report in eventComments %}
         <p>Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
         by {{ report.getReportingUser }}</p>
-        {% include '_common/comment.html.twig' with {'comment': report.getComment, 'event': event} %}
+        {% include '_common/comment.html.twig' with {'comment': report.getComment, 'event': event, display_comment_report: false} %}
     {% endfor %}
 
     <h2>Talk comments</h2>
     {% for report in talkComments %}
         <p>Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
         by {{ report.getReportingUser }}</p>
-        {% include '_common/comment.html.twig' with {'comment': report.getComment, 'event': event} %}
+        {% include '_common/comment.html.twig' with {'comment': report.getComment, 'event': event, display_comment_report: false} %}
     {% endfor %}
 
 
