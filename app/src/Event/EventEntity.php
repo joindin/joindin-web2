@@ -522,4 +522,12 @@ class EventEntity
     {
         return $this->data->approval_uri;
     }
+
+    /**
+     * Used by the edit form
+     */
+    public function getNewIcon()
+    {
+        return null;
+    }
 }

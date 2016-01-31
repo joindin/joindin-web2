@@ -11,6 +11,7 @@ use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
 use Symfony\Component\Validator\Validator;
+use Symfony\Component\Validator\Validation;
 
 /**
  * In this middleware we create the validation services as provided by Symfony and register it as service in the
@@ -77,11 +78,14 @@ class ValidationMiddleware extends Middleware
      */
     public function createValidator()
     {
-        return new Validator(
-            new ClassMetadataFactory(new StaticMethodLoader()),
-            new ConstraintValidatorFactory($this->app, array()),
-            $this->getTranslator()
-        );
+        $validator = Validation::createValidatorBuilder()
+            ->setMetadataFactory(new ClassMetadataFactory(new StaticMethodLoader()))
+            ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app, array()))
+            ->setTranslator($this->getTranslator())
+            ->setApiVersion(Validation::API_VERSION_2_5)
+            ->getValidator();
+
+        return $validator;
     }
 
     /**

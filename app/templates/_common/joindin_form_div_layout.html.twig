@@ -27,14 +27,18 @@ render the errors after the widget. #}
 
 {# Elements need a form-control class #}
 {% block widget_attributes %}
-{% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) %}
+{% if attr.class is not defined %}
+    {% set attr = attr|merge({'class': 'form-control'}) %}
+{% endif %}
 {{ parent() }}
 {% endblock widget_attributes %}
 
 {# Labels need a control-label class #}
 {% block form_label %}
 {% if label is not sameas(false) %}
-    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' control-label')|trim}) %}
+    {% if label_attr.class is not defined %}
+        {% set label_attr = label_attr|merge({'class': 'control-label'}) %}
+    {% endif %}
 {% endif %}
 {{ parent() }}
 {% endblock form_label %}
