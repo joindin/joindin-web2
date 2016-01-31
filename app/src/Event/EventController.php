@@ -717,7 +717,6 @@ class EventController extends BaseController
                 $event->getReportedTalkCommentsUri()
             );
 
-            var_dump($eventComments);
             $this->render(
                 'Event/reported-comments.html.twig',
                 array(
