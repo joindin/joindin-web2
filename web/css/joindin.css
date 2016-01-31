@@ -118,6 +118,10 @@ aside h3.header {
     margin-bottom: 0;
 }
 
+h3.reported_by {
+    margin-top: 20px;
+}
+
 .site-banner {
     margin-top: 10px;
     margin-bottom: 10px;

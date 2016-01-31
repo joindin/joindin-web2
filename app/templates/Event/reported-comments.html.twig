@@ -10,17 +10,17 @@
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
-    <h2>Event comments</h2>
+    <h2>Reported event comments</h2>
     {% for report in eventComments %}
-        <p>Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
-        by {{ report.getReportingUser }}</p>
+        <h3 class="reported_by">Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
+        by <a href="{{ urlFor('user-profile', {'username': report.reportingUser}) }}">{{ report.getReportingUser }}</a>:</h3>
         {% include '_common/comment.html.twig' with {'comment': report.getComment, 'event': event, display_comment_report: false} %}
     {% endfor %}
 
-    <h2>Talk comments</h2>
+    <h2>Reported talk comments</h2>
     {% for report in talkComments %}
-        <p>Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
-        by {{ report.getReportingUser }}</p>
+        <h3 class="reported_by">Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
+            by <a href="{{ urlFor('user-profile', {'username': report.reportingUser}) }}">{{ report.getReportingUser }}</a> on <em>{{ report.comment.talkTitle }}</em>:</h3>
         {% include '_common/comment.html.twig' with {'comment': report.getComment, 'event': event, display_comment_report: false} %}
     {% endfor %}
 
