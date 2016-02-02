@@ -49,6 +49,7 @@ class EventController extends BaseController
             ->name('event-redirect-from-id')
             ->conditions(array('eventId' => '\d+'));
         $app->get('/event/:friendly_name/reported-comments', array($this, 'reportedComments'))->name("event-reported-comments");
+        $app->post('/event/:friendly_name/moderate-comment', array($this, 'moderateComment'))->name("event-moderate-comment");
     }
 
     public function index()
@@ -727,6 +728,45 @@ class EventController extends BaseController
             $events_url = $this->application->urlFor("events-index");
             $this->application->redirect($events_url);
         }
+    }
+
+    /**
+     * Moderate a comment by POSTing to this action with a decision and a
+     * reported_uri. You must be logged in and an event admin to moderate
+     * a comment. Redirects back to the list of reported comments.
+     *
+     * @param string $friendly_name
+     * @return void
+     */
+    public function moderateComment($friendly_name)
+    {
+        if (!isset($_SESSION['user']) || $_SESSION['user']->getAdmin() == false) {
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $this->application->urlFor('events-pending')
+            );
+        }
+
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            if (! $event->getCanEdit()) {
+                $this->redirectToDetailPage($event->getUrlFriendlyName());
+            }
+            $reported_uri = $this->application->request->post('reported_uri');
+            $decision = $this->application->request->post('decision');
+
+            $eventApi->moderateComment($reported_uri, $decision);
+            if ($decision == 'approved') {
+                $this->application->flash('message', 'Report accepted.');
+            } else {
+                $this->application->flash('message', 'Report rejected. Comment has been republished.');
+            }
+
+        }
+
+        $url = $this->application->urlFor("event-reported-comments", ['friendly_name' => $friendly_name]);
+        $this->application->redirect($url);
     }
 
     /**

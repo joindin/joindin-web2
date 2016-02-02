@@ -425,4 +425,27 @@ class EventApi extends BaseApi
 
         return $reports;
     }
+
+    /**
+     * Moderate a comment by PUT'ing a decision to the reported_uri.
+     *
+     * @param string $reported_uri
+     * @param string $decision
+     * @throws Exception on error
+     *
+     * @return boolean
+     */
+    public function moderateComment($reported_uri, $decision)
+    {
+        $data['decision'] = $decision;
+
+        list ($status, $result, $headers) = $this->apiPut($reported_uri, $data);
+
+        // if successful, return event entity represented by the URL in the Location header
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new \Exception('Your comment moderation was not accepted, the server reports: ' . $result);
+    }
 }
