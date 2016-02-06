@@ -19,7 +19,7 @@
             {% include 'Event/_common/summary.html.twig' %}
         {% endfor %}
     </div>
-    {% include '_common/pagination.html.twig' with {'pagination': events.pagination} %}
+    {% include 'Event/_common/event_pagination.html.twig' with {'pagination': events.pagination} %}
 {% endblock %}
 
 {% block extraAside %}
