@@ -66,7 +66,6 @@ nav.navbar a.navbar-brand img {
     margin-top: 4px;
     padding-top: 1px;
     padding-bottom: 1px;
-    border-top: none;
     background-color: #FFFEDC;
 }
 .page-nav.admin .nav > li > a:hover, .page-nav.admin .nav > li > a:focus {
