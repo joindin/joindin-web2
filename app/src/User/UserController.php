@@ -865,7 +865,7 @@ class UserController extends BaseController
             if (empty($redirect)) {
                 $redirect = '/';
             }
-            $this->application->redirect($redirect);
+            $this->application->redirect($redirect . '#login');
         }
         
         session_regenerate_id(true);
