@@ -530,4 +530,14 @@ class EventEntity
     {
         return null;
     }
+
+    public function getSmallImage()
+    {
+        if (!isset($this->data->images->small)) {
+            // use our default image
+            return "/img/event_icons/none.png";
+        }
+
+        return $this->data->images->small->url;
+    }
 }
