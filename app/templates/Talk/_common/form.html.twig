@@ -1,0 +1,31 @@
+{% block form %}
+{{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+{{ form_errors(form) }}
+    <div class="row">
+        <fieldset class="col-sm-12">
+            {{ form_row(form.talk_title) }}
+            {{ form_row(form.talk_description) }}
+            {{ form_row(form.slides_link) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+            {% if event.urlFriendlyName is defined %}
+            <a href="{{ urlFor('event-detail', {friendly_name:event.urlFriendlyName}) }}" class="form-cancel pull-right">Cancel</a>
+            {% endif %}
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block form_extra_styles %}
+    <style>
+        label.required:after {
+            content: ' *'
+        }
+    </style>
+{% endblock %}
+
+{% block form_extra_javascript %}
+{% endblock %}

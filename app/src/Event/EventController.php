@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator;
 use Talk\TalkDb;
 use Talk\TalkApi;
+use Talk\TalkFormType;
 use User\UserDb;
 use User\UserApi;
 use Exception;
@@ -50,6 +51,7 @@ class EventController extends BaseController
             ->conditions(array('eventId' => '\d+'));
         $app->get('/event/:friendly_name/reported-comments', array($this, 'reportedComments'))->name("event-reported-comments");
         $app->post('/event/:friendly_name/moderate-comment', array($this, 'moderateComment'))->name("event-moderate-comment");
+        $app->map('/event/:friendly_name/add-talk', array($this, 'addTalk'))->via('GET', 'POST')->name("event-add-talk");
     }
 
     public function index()
@@ -606,15 +608,15 @@ class EventController extends BaseController
      */
     private function addEventUsingForm(Form $form)
     {
-        $eventApi = $this->getEventApi();
-        $values = $form->getData();
+        $eventapi = $this->geteventapi();
+        $values = $form->getdata();
 
         $result = false;
         try {
-            $result = $eventApi->submit($values);
-        } catch (\Exception $e) {
-            $form->addError(
-                new FormError('An error occurred while submitting your event: ' . $e->getMessage())
+            $result = $eventapi->submit($values);
+        } catch (\exception $e) {
+            $form->adderror(
+                new formerror('an error occurred while submitting your event: ' . $e->getmessage())
             );
         }
 
@@ -802,6 +804,54 @@ class EventController extends BaseController
 
         $url = $this->application->urlFor("event-reported-comments", ['friendly_name' => $friendly_name]);
         $this->application->redirect($url);
+    }
+
+    /**
+     * Add a talk to the event
+     *
+     * @param string $friendly_name
+     */
+    public function addTalk($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        if (!$event) {
+            return Slim::getInstance()->notFound();
+        }
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new TalkFormType($event));
+
+        $request = $this->application->request();
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getdata();
+                var_dump($values);exit;
+
+                try {
+                    $talkApi = $this->getTalkApi();
+                    $result = $talkApi->addTalk($values);
+
+                    $this->application->flash('message', "Talk added");
+                    $this->redirectToDetailPage($event->getUrlFriendlyName());
+                } catch (\Exception $e) {
+                    $form->adderror(
+                        new formError('an error occurred while submitting your event: ' . $e->getmessage())
+                    );
+                }
+            }
+        }
+
+        $this->render(
+            'Event/add-talk.html.twig',
+            array(
+                'event' => $event,
+                'form' => $form->createView(),
+            )
+        );
     }
 
     /**

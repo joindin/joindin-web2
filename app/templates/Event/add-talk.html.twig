@@ -1,0 +1,13 @@
+{% extends '/layout.html.twig' %}
+
+{% use '/Talk/_common/form.html.twig' %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+    <h2>Add a talk to this event</h2>
+    {{ block('form') }}
+{% endblock %}
+
+{% block extra_styles %}
+    {{ block('form_extra_styles') }}
+{% endblock %}
