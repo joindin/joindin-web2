@@ -3,22 +3,12 @@ namespace View\Filters;
 
 use Twig_Environment;
 use Twig_Filter_Function;
-use Slim\Slim;
 
-function initialize(Twig_Environment $env, Slim $app)
+function initialize(Twig_Environment $env)
 {
     $env->addFilter(
         'img_path',
-        new Twig_Filter_Function(
-            function ($env, $suffix, $infix) use ($app) {
-                $base_url = $app->config('image_base_url');
-                if (!$base_url) {
-                    $base_url = 'https://joind.in/inc';
-                }
-                return \View\Filters\img_path($env, $suffix, $infix, $base_url);
-            },
-            ['needs_environment' => true]
-        )
+        new Twig_Filter_Function('\View\Filters\img_path', ['needs_environment' => true])
     );
     $env->addFilter(
         'link',
@@ -30,7 +20,7 @@ function initialize(Twig_Environment $env, Slim $app)
     $env->addFilter('format_date', new Twig_Filter_Function('\View\Filters\format_date'));
 }
 
-function img_path($env, $suffix, $infix, $base_url)
+function img_path($env, $suffix, $infix)
 {
     if (!$suffix && $infix = 'event_icons') {
         $suffix = 'none.png';
@@ -44,7 +34,7 @@ function img_path($env, $suffix, $infix, $base_url)
         return $uri . $path;
     }
 
-    return $base_url .$path;
+    return 'https://joind.in/inc' .$path;
 }
 
 function format_date($date)
