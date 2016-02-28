@@ -59,7 +59,7 @@ class EventController extends BaseController
         $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
-        $cfpEvents = $eventApi->getEvents(10, 0, 'cfp', true);
+        $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);
         $events = $eventApi->getEvents(
             $this->itemsPerPage,
             $start,
