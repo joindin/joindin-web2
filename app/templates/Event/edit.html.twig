@@ -5,23 +5,34 @@
 {% block title %}Edit {{ event.getName }} - Joind.in{% endblock %}
 
 {% block body %}
-    {% if user %}
-        <style>
-            label.required:after {
-                content: ' *'
-            }
-        </style>
-        <h1 class="title">Edit {{ event.name }}</h1>
-        <p>
-            Edit your event here. The site is aimed at events with sessions, where organisers are looking to
-            use this as a tool to gather feedback.
-        </p>
-        <p>
-            Please supply a description of your event in English, we will consider which events fit our intended
-            criteria (community event, clear description, intent to gather feedback) before approving; you may
-            <a href="{{ urlFor('about') }}">contact us</a> if you have any questions.
-        </p>
-    {% endif %}
+    <h1 class="title">Edit {{ event.name }}</h1>
+    <div class="page-header">
+        <div class="row event">
+            <div class="col-sm-12">
+                {% include 'Event/_common/event_nav.html.twig' with {'top_border': false} %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <p>
+                Edit your event here. The site is aimed at events with sessions, where organisers are looking to
+                use this as a tool to gather feedback.
+            </p>
+            <p>
+                Please supply a description of your event in English, we will consider which events fit our intended
+                criteria (community event, clear description, intent to gather feedback) before approving; you may
+                <a href="{{ urlFor('about') }}">contact us</a> if you have any questions.
+            </p>
+        </div>
+    </div>
+    
+    <style>
+        label.required:after {
+            content: ' *'
+        }
+    </style>
     {{ block('form') }}
 {% endblock %}
 
