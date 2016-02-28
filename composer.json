@@ -23,6 +23,7 @@
         "symfony/validator":     "~2.5",
         "symfony/security-csrf": "~2.5",
         "symfony/twig-bridge":   "~2.5",
-        "org_heigl/daterange": "~1.1"
+        "org_heigl/daterange": "~1.1",
+        "guzzlehttp/guzzle": "^6.1"
     }
 }
