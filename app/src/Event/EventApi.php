@@ -293,27 +293,58 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Upload event icon
+     * Upload event image - this one's a bit special as it's a form post
+     *
+     * Uses Guzzle
      *
      * @param  string $event_uri event's URI
-     * @param  string $fileData  array of 'image' (base64 encoded string of image file contents)
-     *                           and 'type' (mimetype of image)
+     * @param  string $fileName  the (temp) file to send
      * @return boolean
      */
-    public function uploadIcon($event_uri, $fileData)
+    public function uploadIcon($event_uri, $fileName)
     {
-        $uri = $event_uri . '/icon';
+        $uri = $event_uri . '/images';
 
-        $data['type'] = $fileData['type'];
-        $data['image'] = $fileData['image'];
+        try {
+            $client = new \GuzzleHttp\Client([
+                "timeout" => 10,
+            ]);
 
-        list ($status, $result, $headers) = $this->apiPut($uri, $data);
+            $headers = [];
+            $headers["Accept"] = "application/json";
+            $headers["Authorization"] = "OAuth {$this->accessToken}";
 
-        if ($status == 204) {
+            // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+            $headers["Forwarded"] = "for=$ip;user-agent=\"$agent\"";
+
+            $options = [];
+            $options['headers'] = $headers;
+
+            if ($this->proxy) {
+                $options['proxy'] = $this->proxy;
+            }
+
+            // now add the file itself
+            $options['multipart'] = [['name' => 'image',
+                'contents' => fopen($fileName, 'r')]];
+
+            $request = new \GuzzleHttp\Psr7\Request('POST', $uri);
+            $response = $client->send($request, $options);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $body = $e->getResponse()->getBody();
+            error_log($e->getMessage());
+            error_log(json_decode($body)[0]);
+            throw new \Exception(json_decode($body)[0]);
+        }
+
+        if ($response->getStatusCode() == 201) {
             return true;
         }
 
-        throw new \Exception($result);
+        throw new \Exception($response);
     }
 
     /**

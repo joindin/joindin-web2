@@ -629,9 +629,8 @@ class EventController extends BaseController
         }
 
         try {
-            $fileData = $this->getUploadedFileData($_FILES['event'], 'new_icon');
-            if ($fileData) {
-                $eventApi->uploadIcon($values['uri'], $fileData);
+            if (isset($_FILES['event']['error']['new_icon']) && $_FILES['event']['error']['new_icon'] == UPLOAD_ERR_OK) {
+                $eventApi->uploadIcon($values['uri'], $_FILES['event']['tmp_name']['new_icon']);
             }
         } catch (\Exception $e) {
             $result = false;
