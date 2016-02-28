@@ -629,7 +629,7 @@ class EventController extends BaseController
         }
 
         try {
-            if (isset($_FILES['event']['error']['new_icon']) 
+            if (isset($_FILES['event']['error']['new_icon'])
                 && $_FILES['event']['error']['new_icon'] == UPLOAD_ERR_OK) {
                 $eventApi->uploadIcon(
                     $values['uri'],
