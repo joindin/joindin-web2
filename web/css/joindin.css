@@ -52,6 +52,11 @@ nav.navbar a.navbar-brand img {
     margin-bottom: 0px
 }
 
+.page-nav.no-top-border {
+    border-top: none;
+    margin-top: 0;
+}
+
 .page-header {
   margin: 10px 0 20px;
   padding-bottom: 0;
