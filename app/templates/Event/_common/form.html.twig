@@ -46,7 +46,7 @@
             <fieldset class="col-offset-sm-6 col-sm-6 event">
                 <legend>Icon</legend>
                 <div class="logo text-center">
-                    <img src="{{ event.getIcon|img_path("event_icons") }}">
+                    <img src="{{ event.getSmallImage }}">
                 </div>
                 <div>
                     {{ form_row(form.new_icon) }}
