@@ -83,6 +83,16 @@ form.navbar-form {
     color: #428bca;
 }
 
+.page-nav.admin .nav-pills > li.active > a, .page-nav.admin .nav-pills > li.active > a:focus {
+    font-weight: bold;
+    background-color: #FFFEDC;
+    color: #428bca;
+}
+.page-nav.admin .nav-pills > li.active > a:hover {
+    background-color: #FFFEDC;
+    color: #428bca;
+}
+
 h1 {
     border-bottom: 1px solid #d7dcdf;
     color: #000;
