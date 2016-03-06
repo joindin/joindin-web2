@@ -651,24 +651,6 @@ class EventController extends BaseController
         return $result;
     }
 
-    /**
-     * Retrieve the uploaded file data for $key.
-     *
-     * @param  string $key
-     * @return array|false
-     */
-    private function getUploadedFileData($files, $key)
-    {
-        if (isset($files['error'][$key]) && $files['error'][$key] == UPLOAD_ERR_OK) {
-            $data = file_get_contents($files['tmp_name'][$key]);
-            $fileData['image'] = base64_encode($data);
-            $fileData['type'] = $files['type'][$key];
-
-            return $fileData;
-        }
-        return false;
-    }
-
     protected function getEventApi()
     {
         $cache = $this->getCache();
