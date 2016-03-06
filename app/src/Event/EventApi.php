@@ -297,14 +297,12 @@ class EventApi extends BaseApi
      *
      * Uses Guzzle
      *
-     * @param  string $event_uri event's URI
+     * @param  string $imagesUri event's images_uri
      * @param  string $fileName  the (temp) file to send
      * @return boolean
      */
-    public function uploadIcon($event_uri, $fileName)
+    public function uploadIcon($imagesUri, $fileName)
     {
-        $uri = $event_uri . '/images';
-
         try {
             $client = new \GuzzleHttp\Client([
                 "timeout" => 10,
@@ -330,7 +328,7 @@ class EventApi extends BaseApi
             $options['multipart'] = [['name' => 'image',
                 'contents' => fopen($fileName, 'r')]];
 
-            $request = new \GuzzleHttp\Psr7\Request('POST', $uri);
+            $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
             $response = $client->send($request, $options);
 
         } catch (\GuzzleHttp\Exception\RequestException $e) {

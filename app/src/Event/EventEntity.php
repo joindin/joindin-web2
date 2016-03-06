@@ -541,6 +541,11 @@ class EventEntity
         }
     }
 
+    public function getImagesUri()
+    {
+        return $this->data->images_uri;
+    }
+
     /**
      * Used by the edit form
      */
