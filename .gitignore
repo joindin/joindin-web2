@@ -4,3 +4,4 @@ web/js/site.js
 vendor/.git
 node_modules/
 .DS_Store
+web/inc
