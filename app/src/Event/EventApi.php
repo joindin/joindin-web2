@@ -342,7 +342,7 @@ class EventApi extends BaseApi
             return true;
         }
 
-        throw new \Exception($response);
+        throw new \Exception((string)$response->getBody());
     }
 
     /**
