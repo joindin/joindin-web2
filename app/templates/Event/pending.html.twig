@@ -27,7 +27,7 @@
             <article class="event row pending-event">
                 <div class="controls">
                     <div class="logo text-center">
-                    <img src="{{ event.getIcon|img_path("event_icons") }}">
+                    <img src="{{ event.getSmallImage }}">
                     </div>
                     <form action="{{ urlFor('event-action-pending',  {"friendly_name": event.getUrlFriendlyName}) }}" method="POST">
                         <button name="action" value="approve" class="btn btn-small btn-success">Approve</button>

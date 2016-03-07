@@ -293,6 +293,59 @@ class EventApi extends BaseApi
     }
 
     /**
+     * Upload event image - this one's a bit special as it's a form post
+     *
+     * Uses Guzzle
+     *
+     * @param  string $imagesUri event's images_uri
+     * @param  string $fileName  the (temp) file to send
+     * @return boolean
+     */
+    public function uploadIcon($imagesUri, $fileName)
+    {
+        try {
+            $client = new \GuzzleHttp\Client([
+                "timeout" => 10,
+            ]);
+
+            $headers = [];
+            $headers["Accept"] = "application/json";
+            $headers["Authorization"] = "OAuth {$this->accessToken}";
+
+            // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+            $headers["Forwarded"] = "for=$ip;user-agent=\"$agent\"";
+
+            $options = [];
+            $options['headers'] = $headers;
+
+            if ($this->proxy) {
+                $options['proxy'] = $this->proxy;
+            }
+
+            // now add the file itself
+            $options['multipart'] = [['name' => 'image',
+                'contents' => fopen($fileName, 'r')]];
+
+            $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
+            $response = $client->send($request, $options);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $body = $e->getResponse()->getBody();
+            error_log($e->getMessage());
+            error_log(json_decode($body)[0]);
+            throw new \Exception(json_decode($body)[0]);
+        }
+
+        if ($response->getStatusCode() == 201) {
+            return true;
+        }
+
+        throw new \Exception((string)$response->getBody());
+    }
+
+    /**
      * Returns a response array containing an 'events' and 'pagination' element.
 
      * Each event in this response is also stored in the cache so that a relation

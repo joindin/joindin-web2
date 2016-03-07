@@ -540,4 +540,27 @@ class EventEntity
             return false;
         }
     }
+
+    public function getImagesUri()
+    {
+        return $this->data->images_uri;
+    }
+
+    /**
+     * Used by the edit form
+     */
+    public function getNewIcon()
+    {
+        return null;
+    }
+
+    public function getSmallImage()
+    {
+        if (!isset($this->data->images->small)) {
+            // use our default image
+            return "/img/event_icons/none.png";
+        }
+
+        return $this->data->images->small->url;
+    }
 }

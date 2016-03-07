@@ -474,10 +474,9 @@ class EventController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                $event = $this->editEventUsingForm($form, $event);
-
-                if ($event instanceof EventEntity) {
-                    $this->redirectToDetailPage($event->getUrlFriendlyName());
+                $result = $this->editEventUsingForm($form, $event);
+                if ($result instanceof EventEntity) {
+                    $this->redirectToDetailPage($result->getUrlFriendlyName());
                 }
             }
         }
@@ -626,6 +625,26 @@ class EventController extends BaseController
         } catch (\Exception $e) {
             $form->addError(
                 new FormError('An error occurred while editing your event: ' . $e->getMessage())
+            );
+        }
+
+        try {
+            if (isset($_FILES['event']['error']['new_icon'])
+                && $_FILES['event']['error']['new_icon'] == UPLOAD_ERR_OK) {
+                $eventApi->uploadIcon(
+                    $result->getImagesUri(),
+                    $_FILES['event']['tmp_name']['new_icon']
+                );
+            }
+        } catch (\Exception $e) {
+            $result = false;
+            $error = $e->getMessage();
+            $messages = json_decode($error);
+            if ($messages) {
+                $error = implode(', ', $messages);
+            }
+            $form->addError(
+                new FormError("An error occurred while uploading your event icon: $error")
             );
         }
 
