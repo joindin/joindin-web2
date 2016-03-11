@@ -51,6 +51,11 @@ nav.navbar a.navbar-brand img {
     margin-bottom: 0px
 }
 
+.page-nav.no-top-border {
+    border-top: none;
+    margin-top: 0;
+}
+
 .page-header {
   margin: 10px 0 20px;
   padding-bottom: 0;
@@ -60,7 +65,6 @@ nav.navbar a.navbar-brand img {
     margin-top: 4px;
     padding-top: 1px;
     padding-bottom: 1px;
-    border-top: none;
     background-color: #FFFEDC;
 }
 .page-nav.admin .nav > li > a:hover, .page-nav.admin .nav > li > a:focus {
@@ -79,6 +83,16 @@ form.navbar-form {
 }
 .nav-pills > li.active > a:hover {
     background-color: #eee;
+    color: #428bca;
+}
+
+.page-nav.admin .nav-pills > li.active > a, .page-nav.admin .nav-pills > li.active > a:focus {
+    font-weight: bold;
+    background-color: #FFFEDC;
+    color: #428bca;
+}
+.page-nav.admin .nav-pills > li.active > a:hover {
+    background-color: #FFFEDC;
     color: #428bca;
 }
 
