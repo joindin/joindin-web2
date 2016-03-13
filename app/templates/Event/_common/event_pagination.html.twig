@@ -4,7 +4,7 @@
             <ul class="pagination">
                 {% if pagination.prev_page %}
                     <li>
-                        <a href="?start={{ prevStart }}{% if keyword %}&amp;keyword={{ keyword }}{% endif %}{% if tag %}&amp;tag={{ tag }}{% endif %}">
+                        <a href="{{ urlFor("events-index") }}{% if (page - 1) != 0 %}?page={{ page - 1 }}{% endif %}">
                             <i class="fa fa-arrow-circle-o-left"></i> Previous
                         </a>
                     </li>
@@ -13,10 +13,10 @@
                         <a href="javascript:"><i class="fa fa-arrow-circle-o-left"></i> Prev<span class="hidden-xs">ious</span></a>
                     </li>
                 {% endif %}
-                <!-- <li class="current hidden&#45;xs"><a href="#">Page {{ page }}</a></li> -->
-                {% if pagination.next_page and pagination.count >= 10 %}
+
+                {% if pagination.next_page and (pagination.count >= 10 or page < 0)  %}
                     <li>
-                        <a href="?start={{ nextStart }}{% if keyword %}&amp;keyword={{ keyword }}{% endif %}{% if tag %}&amp;tag={{ tag }}{% endif %}">
+                        <a href="{{ urlFor("events-index") }}{% if (page + 1) != 0 %}?page={{ page + 1 }}{% endif %}">
                             Next <i class="fa fa-arrow-circle-o-right"></i>
                         </a>
                     </li>
