@@ -843,6 +843,10 @@ class EventController extends BaseController
         if (!$event) {
             return Slim::getInstance()->notFound();
         }
+        if (!$event->getCanEdit()) {
+            $this->application->flash('error', "You do not have permission to do this.");
+            $this->redirectToDetailPage($event->getUrlFriendlyName());
+        }
 
         $languageApi = $this->getLanguageApi();
         $languages = $languageApi->getLanguagesChoiceList();
