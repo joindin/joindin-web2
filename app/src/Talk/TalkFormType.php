@@ -76,7 +76,6 @@ class TalkFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('addr', 'hidden', ['mapped' => false])
             ->add(
                 'talk_title',
                 'text',
