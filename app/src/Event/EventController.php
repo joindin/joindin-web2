@@ -11,10 +11,12 @@ use Symfony\Component\Validator\Validator;
 use Talk\TalkDb;
 use Talk\TalkApi;
 use Talk\TalkFormType;
+use Talk\TalkTypeApi;
 use User\UserDb;
 use User\UserApi;
 use Exception;
 use Slim\Slim;
+use Language\LanguageApi;
 
 class EventController extends BaseController
 {
@@ -681,6 +683,20 @@ class EventController extends BaseController
         return $eventApi;
     }
 
+    protected function getLanguageApi()
+    {
+        $languageApi = new LanguageApi($this->cfg, $this->accessToken);
+
+        return $languageApi;
+    }
+
+    protected function getTalkTypeApi()
+    {
+        $talkTypeApi = new TalkTypeApi($this->cfg, $this->accessToken);
+
+        return $talkTypeApi;
+    }
+
     /**
      * Redirects the current request to the event listing page.
      *
@@ -821,9 +837,15 @@ class EventController extends BaseController
             return Slim::getInstance()->notFound();
         }
 
+        $languageApi = $this->getLanguageApi();
+        $languages = $languageApi->getLanguagesChoiceList();
+
+        $talkTypeApi = $this->getTalkTypeApi();
+        $talkTypes = $talkTypeApi->getTalkTypesChoiceList();
+
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new TalkFormType($event));
+        $form = $factory->create(new TalkFormType($event, $languages, $talkTypes));
 
         $request = $this->application->request();
         if ($request->isPost()) {

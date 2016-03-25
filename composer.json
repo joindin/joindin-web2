@@ -5,6 +5,7 @@
         "psr-0":{
             "Application": ["app/src/", "tests/"],
             "Form":        ["app/src/", "tests/"],
+            "Language":    ["app/src/", "tests/"],
             "Middleware":  ["app/src/", "tests/"],
             "Event":       ["app/src/", "tests/"],
             "Search":      ["app/src/", "tests/"],

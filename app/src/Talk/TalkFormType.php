@@ -27,12 +27,25 @@ class TalkFormType extends AbstractType
      */
     protected $endDate;
 
-    public function __construct(EventEntity $event)
+    /**
+     * @var [string]
+     */
+    protected $languages;
+
+    /**
+     * @var [string]
+     */
+    protected $talkTypes;
+
+    public function __construct(EventEntity $event, array $languages, array $talkTypes)
     {
         $this->timezone = $event->getFullTimezone();
         $tz = new \DateTimeZone($this->timezone);
         $this->startDate = new \DateTimeImmutable($event->getStartDate(), $tz);
         $this->endDate = new \DateTimeImmutable($event->getEndDate(), $tz);
+
+        $this->languages = $languages;
+        $this->talkTypes = $talkTypes;
     }
 
 
@@ -130,6 +143,20 @@ class TalkFormType extends AbstractType
                             'message' => 'Value must be a positive number.'
                         ]),
                     ],
+                ]
+            )
+            ->add(
+                'language',
+                'choice',
+                [
+                    'choices' => ['' => '']  + $this->languages
+                ]
+            )
+            ->add(
+                'type',
+                'choice',
+                [
+                    'choices' => ['' => '']  + $this->talkTypes
                 ]
             )
         ;
