@@ -268,6 +268,8 @@ class EventController extends BaseController
             $scheduleView = 'grid';
         }
 
+        $this->application->flashKeep();
+
         $events_url = $this->application->urlFor("event-schedule-$scheduleView", ['friendly_name' => $friendly_name]);
         $this->application->redirect($events_url);
     }
@@ -829,17 +831,18 @@ class EventController extends BaseController
 
             if ($form->isValid()) {
                 $values = $form->getdata();
-                var_dump($values);exit;
 
                 try {
                     $talkApi = $this->getTalkApi();
-                    $result = $talkApi->addTalk($values);
+                    $result = $talkApi->addTalk($event->getTalksUri(), $values);
 
                     $this->application->flash('message', "Talk added");
-                    $this->redirectToDetailPage($event->getUrlFriendlyName());
+                    $this->application->redirect(
+                        $this->application->urlFor('event-schedule', array('friendly_name' => $event->getUrlFriendlyName()))
+                    );
                 } catch (\Exception $e) {
                     $form->adderror(
-                        new formError('an error occurred while submitting your event: ' . $e->getmessage())
+                        new formError('An error occurred while adding this talk: ' . $e->getmessage())
                     );
                 }
             }

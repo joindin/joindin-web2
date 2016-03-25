@@ -240,4 +240,36 @@ class TalkApi extends BaseApi
 
         return $agenda;
     }
+
+    /**
+     * Add a talk to an event
+     *
+     * @param string $talksUri
+     * @param array $data
+     */
+    public function addTalk($talksUri, $data)
+    {
+        array_walk($data, function (&$value) {
+            if ($value instanceof \DateTimeInterface) {
+                $value = $value->format('Y-m-d H:i');
+            }
+        });
+        list ($status, $result, $headers) = $this->apiPost($talksUri, $data);
+        // if successful, return talk entity represented by the URL in the Location header
+        if ($status == 201) {
+            $response = $this->getCollection($headers['location']);
+            return current($response['talks']);
+        }
+        if ($status == 202) {
+            return null;
+        }
+        if ($status == 400) {
+            $decoded = json_decode($result);
+            if (is_array($decoded)) {
+                $result = current($decoded);
+            }
+        }
+
+        throw new \Exception($result);
+    }
 }
