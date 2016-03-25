@@ -5,33 +5,37 @@ namespace Talk;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Form\DataTransformer\DateTransformer;
-use Form\DataTransformer\EventTagsTransformer;
+use Event\EventEntity;
 
 /**
  * Form used to render and validate the submission or editing of a talk.
- *
- * Usage (extraneous use of variables is made to illustrate which parts are used):
- *
- * ```
- * $formType = new TalkFormType();
- * $factory  = $this->application->formFactory;
- * $form     = $factory->create($formType);
- * $formName = $form->getName();
- *
- * if ($this->application->request()->isPost()) {
- *     $data = $request->post($formName);
- *
- *     $form->submit($data);
- *
- *     if ($form->isValid()) {
- *         // ... perform success actions
- *     }
- * }
- * ```
  */
 class TalkFormType extends AbstractType
 {
+    /**
+     * @var string
+     */
+    protected $timezone;
+
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $startDate;
+
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $endDate;
+
+    public function __construct(EventEntity $event)
+    {
+        $this->timezone = $event->getFullTimezone();
+        $tz = new \DateTimeZone($this->timezone);
+        $this->startDate = new \DateTimeImmutable($event->getStartDate(), $tz);
+        $this->endDate = new \DateTimeImmutable($event->getEndDate(), $tz);
+    }
+
+
     /**
      * Returns the name of this form type.
      *
@@ -45,9 +49,6 @@ class TalkFormType extends AbstractType
     /**
      * Adds fields with their types and validation constraints to this definition.
      *
-     * This method is automatically called by the Form Factory builder and does not need
-     * to be called manually, see the class description for usage information.
-     *
      * @param FormBuilderInterface $builder
      * @param array                $options
      *
@@ -55,12 +56,6 @@ class TalkFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $timezone = null;
-        if (isset($options['data'])) {
-            $timezone = $options['data']->getFullTimezone();
-        }
-
-        $dateTransformer = new DateTransformer($timezone);
         $builder
             ->add('addr', 'hidden', ['mapped' => false])
             ->add(
@@ -84,6 +79,57 @@ class TalkFormType extends AbstractType
                 [
                     'constraints' => [new Assert\Url()],
                     'required' => false,
+                ]
+            )
+            ->add(
+                'start_date',
+                'datetime',
+                [
+                    'label' => 'Date and time of talk',
+                    'date_widget' => 'single_text',
+                    'time_widget' => 'single_text',
+                    'date_format' => 'd MMMM y',
+                    'model_timezone' => $this->timezone,
+                    'view_timezone' => $this->timezone,
+                    'constraints' => [
+                        new Assert\NotBlank(),
+                        new Assert\Date()
+                    ],
+                    'attr' => [
+                        'date_widget' => [
+                            'class' => 'date-picker form-control',
+                            'data-provide' => 'datepicker',
+                            'data-date-format' => 'd MM yyyy',
+                            'data-date-week-start' => '1',
+                            'data-date-autoclose' => '1',
+                            'data-date-today-highlight' => true,
+                            'data-date-start-date '=> $this->startDate->format('j F Y'),
+                            'data-date-end-date' => $this->endDate->format('j F Y'),
+                        ],
+                        'time_widget' => [
+                            'class' => 'time-picker form-control',
+                            'data-provide' => 'timepicker',
+                            'data-show-meridian' => 'false',
+                            'data-default-time' => '09:00',
+                            'placeholder' => 'HH:MM',
+                        ],
+                     ]
+                ]
+            )
+            ->add(
+                'duration',
+                'integer',
+                [
+                    'label' => 'Duration (mins)',
+                    'precision' => 0,
+                    'constraints' => [
+                        new Assert\NotBlank(),
+                        new Assert\Type('integer'),
+                        new Assert\Regex([
+                            'pattern' => '/^[0-9]\d*$/',
+                            'message' => 'Value must be a positive number.'
+                        ]),
+                    ],
                 ]
             )
         ;

@@ -1,3 +1,19 @@
+
+{# Custom widget for talk start date & time #}
+{%- block _talk_start_date_widget -%}
+    <div class="row">
+        <fieldset class="col-sm-8">
+            {{- form_widget(form.date, { 'attr': attr.date_widget }) -}}
+            {{- form_errors(form.date) -}}
+        </fieldset>
+        <fieldset class="col-sm-4">
+            {{- form_widget(form.time, { 'attr': attr.time_widget }) -}}
+            {{- form_errors(form.time) -}}
+        </fieldset>
+    </div>
+{%- endblock _talk_start_date_widget -%}
+
+
 {% block form %}
 {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
 {{ form_errors(form) }}
@@ -5,6 +21,18 @@
         <fieldset class="col-sm-12">
             {{ form_row(form.talk_title) }}
             {{ form_row(form.talk_description) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="col-sm-5">
+            {{ form_row(form.start_date) }}
+        </fieldset>
+        <fieldset class="col-sm-2">
+            {{ form_row(form.duration) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="col-sm-12">
             {{ form_row(form.slides_link) }}
         </fieldset>
     </div>

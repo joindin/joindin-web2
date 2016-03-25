@@ -1,5 +1,9 @@
 {% extends '/layout.html.twig' %}
 
+{% block title %}Add talk to {{ event.getName }} - Joind.in{% endblock %}
+
+{% form_theme form _self %}
+    
 {% use '/Talk/_common/form.html.twig' %}
 
 {% block body %}
