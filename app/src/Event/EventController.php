@@ -53,18 +53,34 @@ class EventController extends BaseController
 
     public function index()
     {
-        $page = ((int)$this->application->request()->get('page') === 0)
-            ? 1
-            : $this->application->request()->get('page');
-        $start = ($page -1) * $this->itemsPerPage;
+        $start = null;
+        $page = (int)$this->application->request()->get('page');
+
+        if (array_key_exists('events_list_middle_start', $_SESSION) && $page !== 0) {
+            // use the middle start point that we've remembered, unless it's page zero,
+            // in which case, we reset in case new events have been added
+            $start = $_SESSION['events_list_middle_start'] + ($page * $this->itemsPerPage);
+
+            if ($start < 0) {
+                $this->itemsPerPage = $start + $this->itemsPerPage;
+                $start = 0;
+            }
+        }
 
         $eventApi = $this->getEventApi();
+        $events = $eventApi->getEvents($this->itemsPerPage, $start, 'all');
+        if ($start === null) {
+            // Find out the start number that has been sent back to us by the API
+            if (isset($events['pagination'])) {
+                parse_str(parse_url($events['pagination']->this_page, PHP_URL_QUERY), $parts);
+                if (isset($parts['start'])) {
+                    $start = $parts['start'];
+                }
+                $_SESSION['events_list_middle_start'] = $start;
+            }
+        }
+
         $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);
-        $events = $eventApi->getEvents(
-            $this->itemsPerPage,
-            $start,
-            'upcoming'
-        );
 
         $this->render(
             'Event/index.html.twig',
