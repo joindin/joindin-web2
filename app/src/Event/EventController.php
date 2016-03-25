@@ -697,6 +697,13 @@ class EventController extends BaseController
         return $talkTypeApi;
     }
 
+    protected function getTrackApi()
+    {
+        $trackApi = new TrackApi($this->cfg, $this->accessToken);
+
+        return $trackApi;
+    }
+
     /**
      * Redirects the current request to the event listing page.
      *
@@ -843,9 +850,12 @@ class EventController extends BaseController
         $talkTypeApi = $this->getTalkTypeApi();
         $talkTypes = $talkTypeApi->getTalkTypesChoiceList();
 
+        $trackApi = $this->getTrackApi();
+        $tracks = $trackApi->getTracksChoiceList($event->getTracksUri());
+
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new TalkFormType($event, $languages, $talkTypes));
+        $form = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks));
 
         $request = $this->application->request();
         if ($request->isPost()) {

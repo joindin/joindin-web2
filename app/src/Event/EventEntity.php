@@ -546,6 +546,11 @@ class EventEntity
         return $this->data->images_uri;
     }
 
+    public function getTracksUri()
+    {
+        return $this->data->tracks_uri;
+    }
+
     /**
      * Used by the edit form
      */

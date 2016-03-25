@@ -37,7 +37,12 @@ class TalkFormType extends AbstractType
      */
     protected $talkTypes;
 
-    public function __construct(EventEntity $event, array $languages, array $talkTypes)
+    /**
+     * @var [string]
+     */
+    protected $track;
+
+    public function __construct(EventEntity $event, array $languages, array $talkTypes, array $tracks)
     {
         $this->timezone = $event->getFullTimezone();
         $tz = new \DateTimeZone($this->timezone);
@@ -46,6 +51,7 @@ class TalkFormType extends AbstractType
 
         $this->languages = $languages;
         $this->talkTypes = $talkTypes;
+        $this->tracks = $tracks;
     }
 
 
@@ -157,6 +163,14 @@ class TalkFormType extends AbstractType
                 'choice',
                 [
                     'choices' => ['' => '']  + $this->talkTypes
+                ]
+            )
+            ->add(
+                'track',
+                'choice',
+                [
+                    'required' => (bool) !empty($this->tracks),
+                    'choices' => ['' => '']  + $this->tracks
                 ]
             )
         ;
