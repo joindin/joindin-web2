@@ -853,9 +853,15 @@ class EventController extends BaseController
         $trackApi = $this->getTrackApi();
         $tracks = $trackApi->getTracksChoiceList($event->getTracksUri());
 
+        // default values
+        $sessionKeys = ['duration', 'language', 'type', 'track'];
+        foreach ($sessionKeys as $key) {
+            $data[$key] = $this->getSessionVariable('add_talk_' . $key);
+        }
+
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks));
+        $form = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks), $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -863,6 +869,11 @@ class EventController extends BaseController
 
             if ($form->isValid()) {
                 $values = $form->getdata();
+
+                // store some values to session for next form
+                foreach ($sessionKeys as $key) {
+                    $_SESSION['add_talk_' . $key] = $values[$key];
+                }
 
                 try {
                     $talkApi = $this->getTalkApi();

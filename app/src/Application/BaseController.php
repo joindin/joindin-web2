@@ -48,5 +48,14 @@ abstract class BaseController
         }
     }
 
+    protected function getSessionVariable($name, $default = null)
+    {
+        $value = $default;
+        if (array_key_exists($name, $_SESSION)) {
+            $value = $_SESSION[$name];
+        }
+        return $value;
+    }
+
     abstract protected function defineRoutes(Slim $app);
 }
