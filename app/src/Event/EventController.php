@@ -740,7 +740,7 @@ class EventController extends BaseController
      */
     public function moderateComment($friendly_name)
     {
-        if (!isset($_SESSION['user']) || $_SESSION['user']->getAdmin() == false) {
+        if (!isset($_SESSION['user'])) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $this->application->urlFor('events-pending')
             );
