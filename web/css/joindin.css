@@ -679,3 +679,7 @@ a.talk.star {
 .top-spacer {
     margin-top: 10px;
 }
+
+form ul.speakers {
+    list-style-type: none;
+}

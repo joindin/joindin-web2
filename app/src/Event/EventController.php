@@ -858,6 +858,7 @@ class EventController extends BaseController
         foreach ($sessionKeys as $key) {
             $data[$key] = $this->getSessionVariable('add_talk_' . $key);
         }
+        $data['speakers'][] = [];
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;

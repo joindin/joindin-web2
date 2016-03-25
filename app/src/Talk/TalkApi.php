@@ -254,6 +254,19 @@ class TalkApi extends BaseApi
                 $value = $value->format('Y-m-d H:i');
             }
         });
+
+        // ensure that speakers is a list of names with no empty ones
+        if (isset($data['speakers'])) {
+            array_walk($data['speakers'], function (&$value) {
+                if (is_array($value)) {
+                    $value = current($value);
+                }
+                $value = trim($value);
+            });
+            $data['speakers'] = array_filter($data['speakers']);
+        }
+
+
         list ($status, $result, $headers) = $this->apiPost($talksUri, $data);
         // if successful, return talk entity represented by the URL in the Location header
         if ($status == 201) {

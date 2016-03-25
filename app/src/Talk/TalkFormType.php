@@ -172,6 +172,15 @@ class TalkFormType extends AbstractType
                     'choices' => ['' => '']  + $this->tracks
                 ]
             )
+            ->add(
+                'speakers',
+                'collection',
+                [
+                    'label' => 'Speakers!',
+                    'type' => new SpeakerFormType(),
+                    'allow_add' => true,
+                ]
+            )
         ;
     }
 }
