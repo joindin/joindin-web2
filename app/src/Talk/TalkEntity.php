@@ -150,4 +150,9 @@ class TalkEntity
     {
         return $this->data->starred_uri;
     }
+
+    public function getTracksUri()
+    {
+        return $this->data->tracks_uri;
+    }
 }

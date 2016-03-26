@@ -882,7 +882,11 @@ class EventController extends BaseController
 
                 try {
                     $talkApi = $this->getTalkApi();
-                    $result = $talkApi->addTalk($event->getTalksUri(), $values);
+                    $talk = $talkApi->addTalk($event->getTalksUri(), $values);
+
+                    if (!empty($values['track']) && isset($tracks[$values['track']])) {
+                        $talkApi->addTalkToTrack($talk->getTracksUri(), $values['track']);
+                    }
 
                     $this->application->flash('message', "Talk added");
                     $this->application->redirect(

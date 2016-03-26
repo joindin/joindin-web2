@@ -285,4 +285,29 @@ class TalkApi extends BaseApi
 
         throw new \Exception($result);
     }
+
+    /**
+     * Add a talk to a track
+     *
+     * @param  $talkTracksUri
+     * @param  $trackUri
+     *
+     * @return  bool
+     */
+    public function addTalkToTrack($talkTracksUri, $trackUri)
+    {
+        $params = [
+            'track_uri' => $trackUri,
+        ];
+
+        list($status, $result, $headers) = $this->apiPost($talkTracksUri, $params);
+        if ($status == 201) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+        
+        throw new \Exception("Failed: " . $message);
+    }
 }

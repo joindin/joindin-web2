@@ -38,7 +38,7 @@ class TrackApi extends BaseApi
 
         $list = $this->getTracks($url);
         foreach ($list['tracks'] as $track) {
-            $tracks[$track['track_name']] = $track['track_name'];
+            $tracks[$track['uri']] = $track['track_name'];
         }
 
         return $tracks;
