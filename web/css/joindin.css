@@ -683,3 +683,11 @@ a.talk.star {
 form ul.speakers {
     list-style-type: none;
 }
+
+form ol.tracks li {
+    margin-top: 20px;
+}
+form ol.tracks li:last-child {
+    list-style-type: none;
+    border-bottom: none;
+}

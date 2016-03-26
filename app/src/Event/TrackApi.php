@@ -43,4 +43,52 @@ class TrackApi extends BaseApi
 
         return $tracks;
     }
+
+    /**
+     * Update a track
+     *
+     * @param  string $trackUri
+     * @param  array $data
+     */
+    public function updateTrack($trackUri, $data)
+    {
+        $params = [
+            'track_name' => $data['track_name'],
+            'track_description' => $data['track_description'],
+        ];
+
+        list($status, $result, $headers) = $this->apiPut($trackUri, $params);
+        if ($status == 204) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+        
+        throw new \Exception("Failed: " . $message);
+    }
+
+    /**
+     * Add a track to an event's tracks collection
+     *
+     * @param  string $eventTracksUri
+     * @param  array $data
+     */
+    public function addTrack($eventTracksUri, $data)
+    {
+        $params = [
+            'track_name' => $data['track_name'],
+            'track_description' => $data['track_description'],
+        ];
+
+        list($status, $result, $headers) = $this->apiPost($eventTracksUri, $params);
+        if ($status == 201) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+        
+        throw new \Exception("Failed: " . $message);
+    }
 }
