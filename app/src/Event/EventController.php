@@ -929,8 +929,10 @@ class EventController extends BaseController
 
         $trackApi = $this->getTrackApi();
         $tracks = $trackApi->getTracks($event->getTracksUri());
+        $numberOfTracks = 0;
         if ($tracks && $tracks['meta']['count']) {
             $data['tracks'] = $tracks['tracks'];
+            $numberOfTracks = count($data['tracks']);
         } else {
             $data['tracks'][] = [];
         }
@@ -947,11 +949,22 @@ class EventController extends BaseController
 
                 try {
                     $eventTracksUri = $event->getTracksUri();
+                    $updatedTrackUris = [];
                     foreach ($values['tracks'] as $item) {
                         if ($item['uri']) {
+                            $updatedTrackUris[$item['uri']] = $item['uri'];
                             $trackApi->updateTrack($item['uri'], $item);
                         } else {
                             $trackApi->addTrack($eventTracksUri, $item);
+                        }
+                    }
+
+                    // have any tracks been removed from the form and so need to be deleted?
+                    if ($numberOfTracks > 0 && $numberOfTracks != count($updatedTrackUris)) {
+                        foreach ($data['tracks'] as $item) {
+                            if (!isset($updatedTrackUris[$item['uri']])) {
+                                $trackApi->deleteTrack($item['uri']);
+                            }
                         }
                     }
 

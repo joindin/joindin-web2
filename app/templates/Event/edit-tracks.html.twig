@@ -67,6 +67,11 @@ jQuery(document).ready(function() {
     // Get the list that holds the collection of tags
     collectionHolder = $('ol.tracks');
 
+    // add a delete link to all of the existing tag form li elements
+    collectionHolder.find('li').each(function() {
+        addTrackFormDeleteLink($(this));
+    });
+
     // add the "add a tag" anchor and li to the tags ul
     collectionHolder.append(newLinkLi);
 
@@ -100,6 +105,19 @@ function addTrackForm($collectionHolder, $newLinkLi) {
     // Display the form in the page in an li, before the "Add a track" link li
     var $newFormLi = $('<li></li>').append(newForm);
     $newLinkLi.before($newFormLi);
+}
+
+function addTrackFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<a style="float: right" class="btn btn-default btn-xs" href="#">delete this track</a>');
+    $tagFormLi.prepend($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $tagFormLi.remove();
+    });
 }
 </script>
 {% endblock %}

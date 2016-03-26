@@ -38,6 +38,7 @@ class TrackCollectionFormType extends AbstractType
                 [
                     'type' => new TrackFormType(),
                     'allow_add' => true,
+                    'allow_delete' => true,
                 ]
             )
         ;

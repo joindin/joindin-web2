@@ -91,4 +91,23 @@ class TrackApi extends BaseApi
         
         throw new \Exception("Failed: " . $message);
     }
+
+    /**
+     * Delete a track
+     *
+     * @param  string $trackUri
+     * @param  array $data
+     */
+    public function deleteTrack($trackUri)
+    {
+        list($status, $result, $headers) = $this->apiDelete($trackUri);
+        if ($status == 204) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+        
+        throw new \Exception("Failed to delete track: " . $message);
+    }
 }
