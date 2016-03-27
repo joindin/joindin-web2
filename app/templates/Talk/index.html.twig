@@ -118,6 +118,12 @@
       </div>
     </div>
 {% endif %}
+{% if user %}
+    <section>
+        <h2>Edit talk</h2>
+        <p><a href="{{ urlFor('talk-edit', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" class="btn btn-default" >Edit talk</a></p>
+    </section>
+{% endif %}
 {% endblock %}
 
 {% block extraAside %}
