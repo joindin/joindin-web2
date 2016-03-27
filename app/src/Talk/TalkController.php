@@ -57,6 +57,7 @@ class TalkController extends BaseController
                 'event' => $event,
                 'comments' => $comments,
                 'talkSlug' => $talkSlug,
+                'canEditTalk' => ($talk->isSpeaker($_SESSION['user']->getUri()) || $event->getCanEdit()),
             )
         );
     }
