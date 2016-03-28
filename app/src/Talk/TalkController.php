@@ -399,5 +399,4 @@ class TalkController extends BaseController
 
         return $trackApi;
     }
-
 }

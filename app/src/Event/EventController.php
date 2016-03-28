@@ -51,9 +51,12 @@ class EventController extends BaseController
         $app->get('/event/view/:eventId(/:extra+)', array($this, 'redirectFromId'))
             ->name('event-redirect-from-id')
             ->conditions(array('eventId' => '\d+'));
-        $app->get('/event/:friendly_name/reported-comments', array($this, 'reportedComments'))->name("event-reported-comments");
-        $app->post('/event/:friendly_name/moderate-comment', array($this, 'moderateComment'))->name("event-moderate-comment");
-        $app->map('/event/:friendly_name/add-talk', array($this, 'addTalk'))->via('GET', 'POST')->name("event-add-talk");
+        $app->get('/event/:friendly_name/reported-comments', array($this, 'reportedComments'))
+            ->name("event-reported-comments");
+        $app->post('/event/:friendly_name/moderate-comment', array($this, 'moderateComment'))
+            ->name("event-moderate-comment");
+        $app->map('/event/:friendly_name/add-talk', array($this, 'addTalk'))
+            ->via('GET', 'POST')->name("event-add-talk");
     }
 
     public function index()
@@ -456,7 +459,8 @@ class EventController extends BaseController
                 // held for moderation - note that we test for null explicitly as false means
                 // that we failed to submit the event to the API
                 if ($event === null) {
-                    $this->application->flash('message', "Thank you for your submission.\nIf your event is approved, you will receive an email letting you know it's been accepted.");
+                    $this->application->flash('message', "Thank you for your submission.\n"
+                        . "If your event is approved, you will receive an email letting you know it's been accepted.");
                     $this->redirectToListPage();
                 }
             }
@@ -890,7 +894,7 @@ class EventController extends BaseController
 
                     $this->application->flash('message', "Talk added");
                     $this->application->redirect(
-                        $this->application->urlFor('event-schedule', array('friendly_name' => $event->getUrlFriendlyName()))
+                        $this->application->urlFor('event-schedule', ['friendly_name' => $event->getUrlFriendlyName()])
                     );
                 } catch (\Exception $e) {
                     $form->adderror(
