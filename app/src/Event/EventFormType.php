@@ -239,7 +239,7 @@ class EventFormType extends AbstractType
             // 'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
             'constraints' => $constraints,
             'attr'        => [
-                                'class'                     => 'date-picker',
+                                'class'                     => 'date-picker form-control',
                                 'data-provide'              => 'datepicker',
                                 'data-date-format'          => 'd MM yyyy',
                                 'data-date-week-start'      => '1',
