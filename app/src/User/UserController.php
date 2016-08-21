@@ -43,6 +43,7 @@ class UserController extends BaseController
         $app->get('/user/:username/comments', array($this, 'profileComments'))->name('user-profile-comments');
         $app->map('/user/:username/edit', array($this, 'profileEdit'))
             ->via('GET', 'POST')->name('user-profile-edit');
+        $app->get('/user/:username/delete', array($this, 'userDelete'))->name('user-profile-delete');
         $app->get('/user/view/:userId(/:extra+)', array($this, 'redirectFromId'))
             ->name('user-redirect-from-id')
             ->conditions(array('userId' => '\d+'));
@@ -685,6 +686,31 @@ class UserController extends BaseController
                 'can_change_password' => $canChangePassword,
             )
         );
+    }
+
+    public function userDelete($username)
+    {
+        
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+
+        try {
+            // LDBG($values);exit;
+            $result = $userApi->delete($user->getUri());
+
+            $this->application->flash('message', 'User has been deleted');
+        }catch(\Exception $e){
+
+            $this->application->flash('error', 'There was a problem deleting the user: ' . $e->getMessage());
+            $this->application->redirect(
+                $this->application->urlFor('user-profile-edit', ['username' => $username])
+            );
+        }
+
+        $this->application->redirect('/');
+
+
+
     }
 
     public function resetPassword()
