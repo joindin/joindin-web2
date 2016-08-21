@@ -144,14 +144,6 @@ class TalkController extends BaseController
 
         if ($comment == '' || $rating == 0) {
             $this->application->flash('error', 'Please provide a comment and rating');
-
-            if ($comment != ''){
-                //If the user provided a comment but no rating, send the comment back
-                $this->application->flash('comment',$comment);
-            }else{
-                //Otherwise, they provided a rating but no comment
-                $this->application->flash('rating',$rating);
-            }
             $url .= '#add-comment';
             $this->application->redirect($url);
         }
@@ -168,25 +160,11 @@ class TalkController extends BaseController
                 if (stripos($e->getMessage(), 'duplicate comment') !== false) {
                     // duplicate comment
                     $this->application->flash('error', 'Duplicate comment.');
-
-                    //Pass the comment and rating back to re-populate the form
-                    $this->application->flash('comment',$comment);
-                    $this->application->flash('rating',$rating);
-
-                    $url .= '#add-comment';
-
                     $this->application->redirect($url);
                 }
                 if (stripos($e->getMessage(), 'comment failed spam check') !== false) {
                     // spam comment
                     $this->application->flash('error', 'Comment failed the spam check.');
-
-                    //Pass the comment and rating back to re-populate the form
-                    $this->application->flash('comment',$comment);
-                    $this->application->flash('rating',$rating);
-
-                    $url .= '#add-comment';
-
                     $this->application->redirect($url);
                 }
                 throw $e;
