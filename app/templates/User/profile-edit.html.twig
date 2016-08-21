@@ -22,6 +22,12 @@
         </div>
     </section>
 
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+    {% endif %}
+    {% if flash.getMessages.error %}
+        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+    {% endif %}
 
     {# <h1>Edit your profile</h1> #}
     <section>
@@ -61,8 +67,12 @@
                 {% endif %}
 
                 <div class="{{ class }}">
+                    {% if user.admin %}
+                        <a onclick="return confirm('Are you sure you want to delete this user?');" href="{{ urlFor('user-profile-delete', {'username': thisUser.getUsername}) }}" name="delete" class="btn btn-danger pull-right button-spacer">Delete User</a>
+                    {% endif %}
                     <input type="submit" name="submit" class="btn btn-primary pull-right button-spacer" value="Save" />
                     <input type="submit" name="submit" class="btn btn-primary pull-right button-spacer" value="Cancel" />
+
                 </div>
             </div>
 
