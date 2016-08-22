@@ -612,15 +612,15 @@ class EventController extends BaseController
      */
     private function addEventUsingForm(Form $form)
     {
-        $eventapi = $this->geteventapi();
-        $values = $form->getdata();
+        $eventApi = $this->getEventApi();
+        $values = $form->getData();
 
         $result = false;
         try {
-            $result = $eventapi->submit($values);
-        } catch (\exception $e) {
-            $form->adderror(
-                new formerror('an error occurred while submitting your event: ' . $e->getmessage())
+            $result = $eventApi->submit($values);
+        } catch (\Exception $e) {
+            $form->addError(
+                new FormError('an error occurred while submitting your event: ' . $e->getMessage())
             );
         }
 
