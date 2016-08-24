@@ -213,6 +213,7 @@ class EventApi extends BaseApi
     /**
      * Get attendees for given event
      * @param $attendees_uri
+     * @param $limit
      * @param bool $verbose
      * @return UserEntity[]
      */
