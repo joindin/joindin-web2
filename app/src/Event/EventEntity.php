@@ -541,6 +541,11 @@ class EventEntity
         }
     }
 
+    public function getAttendeesUri(){
+        return $this->data->attendees_uri;
+
+    }
+
     public function getImagesUri()
     {
         return $this->data->images_uri;
