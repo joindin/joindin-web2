@@ -75,6 +75,9 @@
 {% endblock %}
 
 {% block extraAside %}
+    <section class="event-attendees">
+        {% include 'Event/_common/event_attendees.html.twig' %}
+    </section>
 {% endblock %}
 
 {% block extra_meta %}
@@ -101,5 +104,17 @@
 
         L.marker([{{ event.getLatitude }}, {{ event.getLongitude }}]).addTo(map)
                 .bindPopup('<b>{{ location.finalName }}</b>');
+    </script>
+    <script>
+
+        jQuery(function($){
+            $("#allAttendees").click(function(ev){
+                ev.preventDefault();
+
+                var url = "{{ urlFor('event-attendees', {'friendly_name': event.getEventSlug}) }}";
+                $(".event-attendees").load(url);
+
+            })
+        })
     </script>
 {% endblock %}
