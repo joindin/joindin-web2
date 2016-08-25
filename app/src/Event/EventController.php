@@ -192,7 +192,7 @@ class EventController extends BaseController
             . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
 
 
-        $attendees  = $eventApi->getAttendees($event->getAttendeesUri(),6);
+        $attendees  = $eventApi->getAttendees($event->getAttendeesUri(), 6);
 
         $this->render(
             'Event/details.html.twig',
