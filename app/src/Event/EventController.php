@@ -204,7 +204,8 @@ class EventController extends BaseController
         );
     }
 
-    public function attendees($friendly_name){
+    public function attendees($friendly_name)
+    {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
