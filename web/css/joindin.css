@@ -635,6 +635,7 @@ a.talk.star {
 .event-attendees .row .col .attendeeName {
     height:40px;
     overflow:hidden;
+    margin-top:5px;
 }
 
 .tags {
