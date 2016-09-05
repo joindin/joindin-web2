@@ -24,6 +24,9 @@
             <li class="{% if getCurrentRoute() == 'event-edit' %}active{% endif %}">
                 <a href="{{ urlFor('event-edit', {"friendly_name": event.getUrlFriendlyName}) }}">Edit</a>
             </li>
+            <li class="{% if getCurrentRoute() == 'event-edit-tracks' %}active{% endif %}">
+                <a href="{{ urlFor('event-edit-tracks', {"friendly_name": event.getUrlFriendlyName}) }}">Tracks</a>
+            </li>
             <li class="{% if getCurrentRoute() == 'event-add-talk' %}active{% endif %}">
                 <a href="{{ urlFor('event-add-talk', {"friendly_name": event.getUrlFriendlyName}) }}">Add talk</a>
             </li>

@@ -54,6 +54,7 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name/reported-comments', array($this, 'reportedComments'))->name("event-reported-comments");
         $app->post('/event/:friendly_name/moderate-comment', array($this, 'moderateComment'))->name("event-moderate-comment");
         $app->map('/event/:friendly_name/add-talk', array($this, 'addTalk'))->via('GET', 'POST')->name("event-add-talk");
+        $app->map('/event/:friendly_name/edit-tracks', array($this, 'editTracks'))->via('GET', 'POST')->name("event-edit-tracks");
     }
 
     public function index()
@@ -907,6 +908,86 @@ class EventController extends BaseController
                 'form' => $form->createView(),
             )
         );
+    }
+
+    /**
+     * Edit tracks for this event
+     *
+     * @param string $friendly_name
+     */
+    public function editTracks($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        if (!$event) {
+            return Slim::getInstance()->notFound();
+        }
+        if (!$event->getCanEdit()) {
+            $this->application->flash('error', "You do not have permission to do this.");
+            $this->redirectToDetailPage($event->getUrlFriendlyName());
+        }
+
+        $trackApi = $this->getTrackApi();
+        $tracks = $trackApi->getTracks($event->getTracksUri());
+        $numberOfTracks = 0;
+        if ($tracks && $tracks['meta']['count']) {
+            $data['tracks'] = $tracks['tracks'];
+            $numberOfTracks = count($data['tracks']);
+        } else {
+            $data['tracks'][] = [];
+        }
+
+        $factory = $this->application->formFactory;
+        $form = $factory->create(new TrackCollectionFormType(), $data);
+
+        $request = $this->application->request();
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getdata();
+
+                try {
+                    $eventTracksUri = $event->getTracksUri();
+                    $updatedTrackUris = [];
+                    foreach ($values['tracks'] as $item) {
+                        if ($item['uri']) {
+                            $updatedTrackUris[$item['uri']] = $item['uri'];
+                            $trackApi->updateTrack($item['uri'], $item);
+                        } else {
+                            $trackApi->addTrack($eventTracksUri, $item);
+                        }
+                    }
+
+                    // have any tracks been removed from the form and so need to be deleted?
+                    if ($numberOfTracks > 0 && $numberOfTracks != count($updatedTrackUris)) {
+                        foreach ($data['tracks'] as $item) {
+                            if (!isset($updatedTrackUris[$item['uri']])) {
+                                $trackApi->deleteTrack($item['uri']);
+                            }
+                        }
+                    }
+
+                    $this->application->flash('message', "Tracks updated");
+                    $this->application->redirect(
+                        $this->application->urlFor('event-edit-tracks', array('friendly_name' => $event->getUrlFriendlyName()))
+                    );
+                } catch (\Exception $e) {
+                    $form->adderror(
+                        new formError('An error occurred while adding this talk: ' . $e->getmessage())
+                    );
+                }
+            }
+        }
+
+        $this->render(
+            'Event/edit-tracks.html.twig',
+            array(
+                'event' => $event,
+                'form' => $form->createView(),
+            )
+        );
+
     }
 
     /**
