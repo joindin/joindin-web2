@@ -4,13 +4,17 @@
 
 {% block body %}
     {% if user.admin %}
-    <nav class="page-nav admin">
-        <ul class="nav nav-pills">
-            <li><a href="{{ urlFor('events-pending') }}">Pending events</a></li>
-        </ul>
-    </nav>
+    <div class="page-header">
+        <h1 class="title">Upcoming events</h1>
+        <nav class="page-nav admin no-top-border">
+            <ul class="nav nav-pills">
+                <li><a href="{{ urlFor('events-pending') }}">Pending events</a></li>
+            </ul>
+        </nav>
+    </div>
+    {% else %}
+        <h1 class="title">Events</h1>
     {% endif %}
-    <h1 class="title">Events</h1>
     {% if flash.getMessages.message %}
         <div class="alert alert-success">{{ flash.getMessages.message|nl2br }}</div>
     {% endif %}

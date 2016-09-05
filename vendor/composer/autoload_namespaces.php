@@ -24,6 +24,7 @@ return array(
     'Search' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Predis' => array($vendorDir . '/predis/predis/lib'),
     'Middleware' => array($baseDir . '/app/src', $baseDir . '/tests'),
+    'Language' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Form' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Event' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Application' => array($baseDir . '/app/src', $baseDir . '/tests'),

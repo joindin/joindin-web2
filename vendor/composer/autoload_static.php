@@ -150,6 +150,14 @@ class ComposerStaticInitea939503be411f5478ca4976fabdaa0c
                 1 => __DIR__ . '/../..' . '/tests',
             ),
         ),
+        'L' => 
+        array (
+            'Language' => 
+            array (
+                0 => __DIR__ . '/../..' . '/app/src',
+                1 => __DIR__ . '/../..' . '/tests',
+            ),
+        ),
         'F' => 
         array (
             'Form' => 

@@ -52,6 +52,11 @@ nav.navbar a.navbar-brand img {
     margin-bottom: 0px
 }
 
+.page-nav.no-top-border {
+    border-top: none;
+    margin-top: 0;
+}
+
 .page-header {
   margin: 10px 0 20px;
   padding-bottom: 0;
@@ -61,7 +66,6 @@ nav.navbar a.navbar-brand img {
     margin-top: 4px;
     padding-top: 1px;
     padding-bottom: 1px;
-    border-top: none;
     background-color: #FFFEDC;
 }
 .page-nav.admin .nav > li > a:hover, .page-nav.admin .nav > li > a:focus {
@@ -83,6 +87,16 @@ form.navbar-form {
     color: #428bca;
 }
 
+.page-nav.admin .nav-pills > li.active > a, .page-nav.admin .nav-pills > li.active > a:focus {
+    font-weight: bold;
+    background-color: #FFFEDC;
+    color: #428bca;
+}
+.page-nav.admin .nav-pills > li.active > a:hover {
+    background-color: #FFFEDC;
+    color: #428bca;
+}
+
 h1 {
     border-bottom: 1px solid #d7dcdf;
     color: #000;
@@ -93,6 +107,7 @@ h1 {
 h1, .h1, h2, .h2, h3, .h3 {
     margin-bottom: 5px;
     margin-top: 10px;
+    font-weight: normal;
 }
 
 h1, .h1 {
@@ -658,4 +673,13 @@ a.talk.star {
 
 #loginheader {
     margin-bottom: 20px;
+}
+
+
+.top-spacer {
+    margin-top: 10px;
+}
+
+form ul.speakers {
+    list-style-type: none;
 }

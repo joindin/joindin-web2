@@ -240,4 +240,74 @@ class TalkApi extends BaseApi
 
         return $agenda;
     }
+
+    /**
+     * Add a talk to an event
+     *
+     * @param string $talksUri
+     * @param array $data
+     */
+    public function addTalk($talksUri, $data)
+    {
+        array_walk($data, function (&$value) {
+            if ($value instanceof \DateTimeInterface) {
+                $value = $value->format('Y-m-d H:i');
+            }
+        });
+
+        // ensure that speakers is a list of names with no empty ones
+        if (isset($data['speakers'])) {
+            array_walk($data['speakers'], function (&$value) {
+                if (is_array($value)) {
+                    $value = current($value);
+                }
+                $value = trim($value);
+            });
+            $data['speakers'] = array_filter($data['speakers']);
+        }
+
+
+        list ($status, $result, $headers) = $this->apiPost($talksUri, $data);
+        // if successful, return talk entity represented by the URL in the Location header
+        if ($status == 201) {
+            $response = $this->getCollection($headers['location']);
+            return current($response['talks']);
+        }
+        if ($status == 202) {
+            return null;
+        }
+        if ($status == 400) {
+            $decoded = json_decode($result);
+            if (is_array($decoded)) {
+                $result = current($decoded);
+            }
+        }
+
+        throw new \Exception($result);
+    }
+
+    /**
+     * Add a talk to a track
+     *
+     * @param  $talkTracksUri
+     * @param  $trackUri
+     *
+     * @return  bool
+     */
+    public function addTalkToTrack($talkTracksUri, $trackUri)
+    {
+        $params = [
+            'track_uri' => $trackUri,
+        ];
+
+        list($status, $result, $headers) = $this->apiPost($talkTracksUri, $params);
+        if ($status == 201) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+        
+        throw new \Exception("Failed: " . $message);
+    }
 }

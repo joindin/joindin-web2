@@ -17,30 +17,12 @@
             </h1>
         </div>
     </div>
-    <nav class="page-nav">
-        <ul class="nav nav-pills">
-            {% set event_sub_menu = [
-                {"route":"event-detail", "name":"Details", "active_match": ['event-detail']},
-                {"route":"event-schedule", "name":"Schedule",
-                    "active_match": ['event-default', 'event-schedule-list', 'event-schedule-grid']},
-                {"route":"event-comments", "name":"Event comments", "active_match": ['event-comments']},
-                {"route":"event-talk-comments", "name":"Talk comments", "active_match": ['event-talk-comments']}
-            ] %}
+    {% include 'Event/_common/event_nav.html.twig' %}
 
-            {% for item in event_sub_menu %}
-            <li class="{% if getCurrentRoute() in item.active_match %}active{% endif %}">
-                <a href="{{ urlFor(item.route, {"friendly_name": event.getUrlFriendlyName}) }}">{{ item.name }}</a>
-            </li>
-            {% endfor %}
-
-            {% if event.getCanEdit %}
-            <li class="{% if getCurrentRoute() == 'event-edit' %}active{% endif %}">
-                <a href="{{ urlFor('event-edit', {"friendly_name": event.getUrlFriendlyName}) }}">Edit</a>
-            </li>
-            <li class="{% if getCurrentRoute() == 'event-reported-comments' %}active{% endif %}">
-                <a href="{{ urlFor('event-reported-comments', {"friendly_name": event.getUrlFriendlyName}) }}">Reported comments</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
+    {% if flash.getMessages.message %}
+        <div class="top-spacer alert alert-success">{{flash.getMessages.message}}</div>
+    {% endif %}
+    {% if flash.getMessages.error %}
+        <div class="top-spacer alert alert-danger">{{flash.getMessages.error}}</div>
+    {% endif %}
 </div>

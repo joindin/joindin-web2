@@ -1,0 +1,21 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Add talk to {{ event.getName }} - Joind.in{% endblock %}
+
+{% form_theme form _self %}
+    
+{% use '/Talk/_common/form.html.twig' %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+    <h2>Add a talk to this event</h2>
+    {{ block('form') }}
+{% endblock %}
+
+{% block extra_styles %}
+    {{ block('form_extra_styles') }}
+{% endblock %}
+
+{% block extra_javascript %}
+    {{ block('form_extra_javascript') }}
+{% endblock %}
