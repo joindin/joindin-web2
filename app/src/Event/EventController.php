@@ -51,10 +51,15 @@ class EventController extends BaseController
         $app->get('/event/view/:eventId(/:extra+)', array($this, 'redirectFromId'))
             ->name('event-redirect-from-id')
             ->conditions(array('eventId' => '\d+'));
-        $app->get('/event/:friendly_name/reported-comments', array($this, 'reportedComments'))->name("event-reported-comments");
-        $app->post('/event/:friendly_name/moderate-comment', array($this, 'moderateComment'))->name("event-moderate-comment");
-        $app->map('/event/:friendly_name/add-talk', array($this, 'addTalk'))->via('GET', 'POST')->name("event-add-talk");
-        $app->map('/event/:friendly_name/edit-tracks', array($this, 'editTracks'))->via('GET', 'POST')->name("event-edit-tracks");
+        $app->get('/event/:friendly_name/reported-comments', array($this, 'reportedComments'))
+            ->name("event-reported-comments");
+        $app->post('/event/:friendly_name/moderate-comment', array($this, 'moderateComment'))
+            ->name("event-moderate-comment");
+        $app->map('/event/:friendly_name/add-talk', array($this, 'addTalk'))->via('GET', 'POST')
+            ->name("event-add-talk");
+        $app->map('/event/:friendly_name/edit-tracks', array($this, 'editTracks'))->via('GET', 'POST')
+            ->name("event-edit-tracks");
+
     }
 
     public function index()
@@ -276,7 +281,7 @@ class EventController extends BaseController
         $events_url = $this->application->urlFor("event-schedule-$scheduleView", ['friendly_name' => $friendly_name]);
         $this->application->redirect($events_url);
     }
-    
+
     public function scheduleList($friendly_name)
     {
         $eventApi = $this->getEventApi();
@@ -304,7 +309,7 @@ class EventController extends BaseController
         if (! $event) {
             $this->redirectToListPage();
         }
-        
+
         setcookie('schedule-view', 'grid', strtotime('+2 years'), '/');
 
         $talkApi = $this->getTalkApi();
@@ -457,7 +462,8 @@ class EventController extends BaseController
                 // held for moderation - note that we test for null explicitly as false means
                 // that we failed to submit the event to the API
                 if ($event === null) {
-                    $this->application->flash('message', "Thank you for your submission.\nIf your event is approved, you will receive an email letting you know it's been accepted.");
+                    $this->application->flash('message', "Thank you for your submission.\n"
+                        . "If your event is approved, you will receive an email letting you know it's been accepted.");
                     $this->redirectToListPage();
                 }
             }
@@ -528,7 +534,7 @@ class EventController extends BaseController
         if (!isset($_SESSION['user']) || $_SESSION['user']->getAdmin() == false) {
             $this->application->redirect($this->application->urlFor('not-allowed'));
         }
-        
+
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (! $event) {
@@ -891,7 +897,7 @@ class EventController extends BaseController
 
                     $this->application->flash('message', "Talk added");
                     $this->application->redirect(
-                        $this->application->urlFor('event-schedule', array('friendly_name' => $event->getUrlFriendlyName()))
+                        $this->application->urlFor('event-schedule', ['friendly_name' => $event->getUrlFriendlyName()])
                     );
                 } catch (\Exception $e) {
                     $form->adderror(

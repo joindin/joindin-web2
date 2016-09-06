@@ -24,6 +24,10 @@
     {% include 'Talk/_common/talk_header.html.twig' %}
     <section>
         <p>{{ talk.getDescription | nl2br }}</p>
+        {% if canEditTalk|default(false) %}
+        <p><a href="{{ urlFor('talk-edit', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" class="btn btn-default btn-xs" >Edit talk</a></p>
+        {% endif %}
+
     </section>
 
     <section id="comments">
