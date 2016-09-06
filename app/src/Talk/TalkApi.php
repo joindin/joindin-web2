@@ -287,6 +287,47 @@ class TalkApi extends BaseApi
     }
 
     /**
+     * Edit a talk
+     *
+     * @param string $talkUri
+     * @param array $data
+     */
+    public function editTalk($talkUri, $data)
+    {
+        array_walk($data, function (&$value) {
+            if ($value instanceof \DateTimeInterface) {
+                $value = $value->format('Y-m-d H:i');
+            }
+        });
+
+        // ensure that speakers is a list of names with no empty ones
+        if (isset($data['speakers'])) {
+            array_walk($data['speakers'], function (&$value) {
+                if (is_array($value)) {
+                    $value = current($value);
+                }
+                $value = trim($value);
+            });
+            $data['speakers'] = array_filter($data['speakers']);
+        }
+
+        list ($status, $result, $headers) = $this->apiPut($talkUri, $data);
+
+        // if successful, return talk entity represented by the URL in the Location header
+        if ($status == 204) {
+            $response = $this->getCollection($headers['location']);
+            return current($response['talks']);
+        }
+
+        $decoded = json_decode($result);
+        if (is_array($decoded)) {
+            $result = current($decoded);
+        }
+
+        throw new \RuntimeException($result);
+    }
+
+    /**
      * Add a talk to a track
      *
      * @param  $talkTracksUri
@@ -309,5 +350,25 @@ class TalkApi extends BaseApi
         $message = $result[0];
         
         throw new \Exception("Failed: " . $message);
+    }
+
+    /**
+     * Remove a talk from a track
+     *
+     * @param  $removeTrackUri
+     *
+     * @return  bool
+     */
+    public function removeTalkFromTrack($removeTrackUri)
+    {
+        list($status, $result, $headers) = $this->apiDelete($removeTrackUri);
+        if ($status == 204) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+        
+        throw new \Exception("Failed to remove talk from track: " . $message);
     }
 }

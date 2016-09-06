@@ -179,6 +179,7 @@ class TalkFormType extends AbstractType
                     'label' => 'Speakers!',
                     'type' => new SpeakerFormType(),
                     'allow_add' => true,
+                    'allow_delete' => true,
                 ]
             )
         ;

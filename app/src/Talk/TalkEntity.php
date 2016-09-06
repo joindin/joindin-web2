@@ -18,6 +18,23 @@ class TalkEntity
         $this->data = $data;
     }
 
+    /**
+     * Is user a speaker on this talk?
+     *
+     * @param  string  $userUri
+     * @return boolean
+     */
+    public function isSpeaker($userUri)
+    {
+        $speakers = $this->getSpeakers();
+        foreach ($speakers as $speaker) {
+            if (isset($speaker->speaker_uri) && $speaker->speaker_uri == $userUri) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getTitle()
     {
         return $this->data->talk_title;
