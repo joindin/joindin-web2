@@ -50,6 +50,11 @@ class TalkController extends BaseController
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true, 0);
 
+        $canEditTalk = false;
+        if (isset($_SESSION['user'])) {
+            $canEditTalk = ($talk->isSpeaker($_SESSION['user']->getUri()) || $event->getCanEdit());
+        }
+
         $this->render(
             'Talk/index.html.twig',
             array(
@@ -57,7 +62,7 @@ class TalkController extends BaseController
                 'event' => $event,
                 'comments' => $comments,
                 'talkSlug' => $talkSlug,
-                'canEditTalk' => ($talk->isSpeaker($_SESSION['user']->getUri()) || $event->getCanEdit()),
+                'canEditTalk' => $canEditTalk,
             )
         );
     }
