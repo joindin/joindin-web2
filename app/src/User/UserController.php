@@ -690,7 +690,6 @@ class UserController extends BaseController
 
     public function userDelete($username)
     {
-
         $userApi = $this->getUserApi();
         $user = $userApi->getUserByUsername($username);
 
@@ -699,7 +698,7 @@ class UserController extends BaseController
             $result = $userApi->delete($user->getUri());
 
             $this->application->flash('message', 'User has been deleted');
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
 
             $this->application->flash('error', 'There was a problem deleting the user: ' . $e->getMessage());
             $this->application->redirect(
@@ -708,9 +707,6 @@ class UserController extends BaseController
         }
 
         $this->application->redirect('/');
-
-
-
     }
 
     public function resetPassword()
