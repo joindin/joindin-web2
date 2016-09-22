@@ -281,15 +281,13 @@ class UserApi extends BaseApi
     }
 
 
-    public function delete($uri){
-
-
+    public function delete($uri)
+    {
         list ($status, $result) = $this->apiDelete($uri, []);
 
         if ($status == 204) {
             return true;
         }
-
 
         throw new \Exception("Unable to delete user: $status, $result");
     }
