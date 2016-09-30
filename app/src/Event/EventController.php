@@ -224,7 +224,7 @@ class EventController extends BaseController
         }
 
 
-        $attendees  = $eventApi->getAttendees($event->getAttendeesUri());
+        $attendees  = $eventApi->getAttendees($event->getAttendeesUri(), 0, true);
 
         $this->render(
             'Event/_common/event_attendees.html.twig',
