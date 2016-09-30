@@ -32,6 +32,7 @@ class EventController extends BaseController
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'eventDefault'))->name("event-default");
         $app->get('/event/:friendly_name/details', array($this, 'details'))->name("event-detail");
+        $app->get('/event/:friendly_name/attendees', array($this, 'attendees'))->name("event-attendees");
         $app->get('/event/:friendly_name/comments', array($this, 'comments'))->name("event-comments");
         $app->get('/event/:friendly_name/comments/:comment_hash/report', array($this, 'reportComment'))
             ->name("event-comments-reported");
@@ -192,6 +193,7 @@ class EventController extends BaseController
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
+
         if (! $event) {
             return Slim::getInstance()->notFound();
         }
@@ -199,11 +201,37 @@ class EventController extends BaseController
         $quicklink = $this->application->request()->headers("host")
             . $this->application->urlFor('event-quicklink', array('stub' => $event->getStub()));
 
+
+        $attendees  = $eventApi->getAttendees($event->getAttendeesUri(), 6);
+
         $this->render(
             'Event/details.html.twig',
             array(
                 'event' => $event,
                 'quicklink' => $quicklink,
+                'attendees' => $attendees
+            )
+        );
+    }
+
+    public function attendees($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if (! $event) {
+            return Slim::getInstance()->notFound();
+        }
+
+
+        $attendees  = $eventApi->getAttendees($event->getAttendeesUri());
+
+        $this->render(
+            'Event/_common/event_attendees.html.twig',
+            array(
+                'event'     => $event,
+                'fullList'  => true,
+                'attendees' => $attendees
             )
         );
     }

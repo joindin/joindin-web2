@@ -5,6 +5,7 @@ use Application\BaseApi;
 use Talk\TalkCommentEntity;
 use Talk\TalkCommentReportEntity;
 use User\UserApi;
+use User\UserEntity;
 
 class EventApi extends BaseApi
 {
@@ -206,6 +207,34 @@ class EventApi extends BaseApi
         }
 
         throw new \Exception("Failed to unmark you as attending: " . $result);
+    }
+
+
+    /**
+     * Get attendees for given event
+     * @param $attendees_uri
+     * @param $limit
+     * @param bool $verbose
+     * @return UserEntity[]
+     */
+    public function getAttendees($attendees_uri, $limit = 0, $verbose = false)
+    {
+
+        $attendees_uri .= "?resultsperpage={$limit}";
+        if ($verbose) {
+            $attendees_uri = $attendees_uri . '&verbose=yes';
+        }
+
+
+        $attendees = (array)json_decode($this->apiGet($attendees_uri));
+
+        $attendeeData = array();
+
+        foreach ($attendees['users'] as $attendee) {
+            $attendeeData[] = new UserEntity($attendee);
+        }
+
+        return $attendeeData;
     }
 
     /**
