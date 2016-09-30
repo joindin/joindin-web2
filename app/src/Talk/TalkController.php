@@ -50,6 +50,13 @@ class TalkController extends BaseController
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true, 0);
 
+        $canRateTalk = true;
+        if (isset($_SESSION['user'])) {
+            foreach ($comments as $comment) {
+                $canRateTalk = $comment->canRateTalk($_SESSION['user']->getUri());
+            }
+        }
+
         $canEditTalk = false;
         if (isset($_SESSION['user'])) {
             $canEditTalk = ($talk->isSpeaker($_SESSION['user']->getUri()) || $event->getCanEdit());
@@ -63,6 +70,7 @@ class TalkController extends BaseController
                 'comments' => $comments,
                 'talkSlug' => $talkSlug,
                 'canEditTalk' => $canEditTalk,
+                'canRateTalk' => $canRateTalk,
             )
         );
     }
