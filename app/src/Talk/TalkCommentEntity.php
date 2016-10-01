@@ -123,4 +123,13 @@ class TalkCommentEntity
 
         return $this->data->user_uri;
     }
+
+    public function canRateTalk($user_uri)
+    {
+        if ($this->data->user_uri == $user_uri) {
+            return false;
+        }
+
+        return true;
+    }
 }

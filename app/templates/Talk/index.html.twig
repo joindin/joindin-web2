@@ -48,22 +48,26 @@
                                 {% if flash.getMessages.error %}
                                     <div class="alert alert-danger">{{flash.getMessages.error}}</div>
                                 {% endif %}
-                                <div class="rating-vote-container">
-                                    <div id="rating_container" class="form-group">
-                                        <label for="rating">Rate the talk:</label>
-                                        <select id="rating" name="rating">
-                                            <option value="0"></option>
-                                            <option value="1"{% if (flash.getMessages.rating and flash.getMessages.rating == 1) %} selected="selected"{% endif %}>Needed more work</option>
-                                            <option value="2"{% if (flash.getMessages.rating and flash.getMessages.rating == 2) %} selected="selected"{% endif %}>Had potential</option>
-                                            <option value="3"{% if (flash.getMessages.rating and flash.getMessages.rating == 3) %} selected="selected"{% endif %}>Worth hearing</option>
-                                            <option value="4"{% if (flash.getMessages.rating and flash.getMessages.rating == 4) %} selected="selected"{% endif %}>Great info &amp; insight</option>
-                                            <option value="5"{% if (flash.getMessages.rating and flash.getMessages.rating == 5) %} selected="selected"{% endif %}>Brilliant!</option>
-                                        </select>
-                                        <br>
-                                        <div class="rateit" id="rating_widget" data-rateit-backingfld="#rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
-                                        <div id="rating_value"></div>
+                                {% if canRateTalk %}
+                                    <div class="rating-vote-container">
+                                        <div id="rating_container" class="form-group">
+                                            <label for="rating">Rate the talk:</label>
+                                            <select id="rating" name="rating">
+                                                <option value="0"></option>
+                                                <option value="1"{% if (flash.getMessages.rating and flash.getMessages.rating == 1) %} selected="selected"{% endif %}>Needed more work</option>
+                                                <option value="2"{% if (flash.getMessages.rating and flash.getMessages.rating == 2) %} selected="selected"{% endif %}>Had potential</option>
+                                                <option value="3"{% if (flash.getMessages.rating and flash.getMessages.rating == 3) %} selected="selected"{% endif %}>Worth hearing</option>
+                                                <option value="4"{% if (flash.getMessages.rating and flash.getMessages.rating == 4) %} selected="selected"{% endif %}>Great info &amp; insight</option>
+                                                <option value="5"{% if (flash.getMessages.rating and flash.getMessages.rating == 5) %} selected="selected"{% endif %}>Brilliant!</option>
+                                            </select>
+                                            <br>
+                                            <div class="rateit" id="rating_widget" data-rateit-backingfld="#rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
+                                            <div id="rating_value"></div>
+                                        </div>
                                     </div>
-                                </div>
+                                {% else %}
+                                    <input type="hidden" id="rating" name="rating" value="1">
+                                {% endif %}
                                 <div class="form-group">
                                     <label for="comment">Your comment:</label>
                                     <textarea id="comment" class="form-control" name="comment" rows="7">{% if flash.getMessages.comment %}{{ flash.getMessages.comment }}{% endif %}</textarea>
@@ -87,7 +91,7 @@
         {% else %}
             <p>Comments are closed.</p>
         {% endif %}
-        
+
         {% if comments %}
             {% for comment in comments %}
                 {% include '_common/comment.html.twig' with {'comment': comment, 'talk': talk }%}

@@ -50,6 +50,16 @@ class TalkController extends BaseController
 
         $comments = $talkApi->getComments($talk->getCommentUri(), true, 0);
 
+        $canRateTalk = true;
+        if (isset($_SESSION['user'])) {
+            foreach ($comments as $comment) {
+                $canRateTalk = $comment->canRateTalk($_SESSION['user']->getUri());
+            }
+            if ($talk->isSpeaker($_SESSION['user']->getUri())) {
+                $canRateTalk = false;
+            }
+        }
+
         $canEditTalk = false;
         if (isset($_SESSION['user'])) {
             $canEditTalk = ($talk->isSpeaker($_SESSION['user']->getUri()) || $event->getCanEdit());
@@ -63,6 +73,7 @@ class TalkController extends BaseController
                 'comments' => $comments,
                 'talkSlug' => $talkSlug,
                 'canEditTalk' => $canEditTalk,
+                'canRateTalk' => $canRateTalk,
             )
         );
     }
@@ -95,7 +106,7 @@ class TalkController extends BaseController
         $isSpeaker = $talk->isSpeaker($_SESSION['user']->getUri());
         if (!($isAdmin || $isSpeaker)) {
             $this->application->flash('error', "You do not have permission to do this.");
-            
+
             $talkUrl = $this->application->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
             $this->application->redirect($talkUrl);
         }
@@ -120,7 +131,7 @@ class TalkController extends BaseController
         $data['type'] = $talk->getType();
         if ($talk->getTracks()) {
             $data['track'] = $talk->getTracks()[0]->track_uri;
-            
+
         }
         if ($talk->getSpeakers()) {
             foreach ($talk->getSpeakers() as $speaker) {
