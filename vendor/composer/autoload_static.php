@@ -16,12 +16,17 @@ class ComposerStaticInitea939503be411f5478ca4976fabdaa0c
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
         ),
         'O' => 
         array (
             'Org_Heigl\\DateRange\\' => 20,
             'Org_Heigl\\DateRangeTest\\' => 24,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
         ),
         'G' => 
         array (
@@ -32,6 +37,10 @@ class ComposerStaticInitea939503be411f5478ca4976fabdaa0c
     );
 
     public static $prefixDirsPsr4 = array (
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
@@ -43,6 +52,10 @@ class ComposerStaticInitea939503be411f5478ca4976fabdaa0c
         'Org_Heigl\\DateRangeTest\\' => 
         array (
             0 => __DIR__ . '/..' . '/org_heigl/daterange/tests',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
