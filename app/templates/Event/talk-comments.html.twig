@@ -15,7 +15,8 @@
         {% set talkSlug = talkSlugs[comment.getTalkUri()] %}
         {% include '_common/comment.html.twig' with {
             'showTalkTitle': true,
-            'talkLink': urlForTalk(event.getUrlFriendlyName(), talkSlug)
+            'talkLink': urlForTalk(event.getUrlFriendlyName(), talkSlug),
+            'talkSlug': talkSlug
         } %}
     {% endfor %}
 
