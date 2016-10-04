@@ -31,6 +31,7 @@ class TalkController extends BaseController
         $app->get('/talk/view/:talkId', array($this, 'quickById'))
             ->name('talk-by-id-web1')
             ->conditions(array('talkId' => '\d+'));
+        $app->get('/event/:eventSlug/:talkSlug/claim', array($this, 'claimTalk'))->name('talk-claim');
     }
 
     public function index($eventSlug, $talkSlug)
@@ -195,6 +196,34 @@ class TalkController extends BaseController
             ]
         );
 
+    }
+
+    /**
+     * TODO: Write this as a proper talk!
+     */
+    public function claimTalk($eventSlug, $talkSlug)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+
+        if (!$event) {
+            $this->application->notFound();
+            return;
+        }
+
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        if (!$talk) {
+            $this->application->notFound();
+            return;
+        }
+
+        $talkApi->claimTalk(
+            $talk->getSpeakersUri(), array(
+            'display_name'  => 'Ryan Wood',
+            'username'      => "rwood"
+            )
+        );
     }
 
     public function star($eventSlug, $talkSlug)

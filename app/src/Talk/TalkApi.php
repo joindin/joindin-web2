@@ -327,6 +327,12 @@ class TalkApi extends BaseApi
         throw new \RuntimeException($result);
     }
 
+    public function claimTalk($talkSpeakersUri, $data)
+    {
+        print_r($this->apiPost($talkSpeakersUri, $data));
+        //list ($status, $result, $headers) = $this->apiPut($talkSpeakersUri, $data);
+    }
+    
     /**
      * Add a talk to a track
      *
