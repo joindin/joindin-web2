@@ -25,6 +25,7 @@
         "symfony/security-csrf": "~2.5",
         "symfony/twig-bridge":   "~2.5",
         "org_heigl/daterange": "~1.1",
-        "guzzlehttp/guzzle": "^6.2.1"
+        "guzzlehttp/guzzle": "^6.2.1",
+        "monolog/monolog": "^1.21"
     }
 }
