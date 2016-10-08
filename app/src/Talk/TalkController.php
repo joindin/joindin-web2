@@ -224,6 +224,8 @@ class TalkController extends BaseController
             'username'      => "rwood"
             )
         );
+
+        echo "OK?";
     }
 
     public function star($eventSlug, $talkSlug)
