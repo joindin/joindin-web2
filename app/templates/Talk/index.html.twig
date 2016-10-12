@@ -103,11 +103,15 @@
 
 
 {% block topAside %}
-{% if user %}
+{% if user and unclaimed|length > 0 %}
     <section>
         <h2>Claim talk</h2>
-        <p>Are you the speaker for this talk?</p>
-        <p><button type="button" class="btn btn-default" data-toggle="modal" data-target="#claimModal">Claim talk</button></p>
+        <p>Are you a speaker for this talk?</p>
+        {% if ( unclaimed|length == 1 ) %}
+            <p><a href="{{ urlFor('talk-claim', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" class="btn btn-default">Claim talk</a></p>
+        {% else %}
+            <p><button type="button" class="btn btn-default" data-toggle="modal" data-target="#claimModal">Claim talk</button></p>
+        {% endif %}
     </section>
     {# Temporary popup form the claim talk button #}
     <div class="modal fade" id="claimModal" tabindex="-1" role="dialog">
