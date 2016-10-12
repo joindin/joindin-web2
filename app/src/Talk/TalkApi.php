@@ -329,8 +329,16 @@ class TalkApi extends BaseApi
 
     public function claimTalk($talkSpeakersUri, $data)
     {
-        print_r($this->apiPost($talkSpeakersUri, $data));
-        //list ($status, $result, $headers) = $this->apiPut($talkSpeakersUri, $data);
+        list ($status, $result, $headers) = $this->apiPost($talkSpeakersUri, $data);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+
+        throw new \Exception("Failed: " . $message);
     }
     
     /**
