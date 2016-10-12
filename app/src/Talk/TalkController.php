@@ -61,6 +61,14 @@ class TalkController extends BaseController
             }
         }
 
+        $unclaimed = [];
+
+        foreach ($talk->getSpeakers() as $speaker) {
+            if (! isset($speaker->speaker_uri)) {
+                $unclaimed[] = $speaker->speaker_name;
+            }
+        }
+
         $canEditTalk = false;
         if (isset($_SESSION['user'])) {
             $canEditTalk = ($talk->isSpeaker($_SESSION['user']->getUri()) || $event->getCanEdit());
@@ -75,6 +83,7 @@ class TalkController extends BaseController
                 'talkSlug' => $talkSlug,
                 'canEditTalk' => $canEditTalk,
                 'canRateTalk' => $canRateTalk,
+                'unclaimed'   => $unclaimed,
             )
         );
     }
@@ -198,9 +207,7 @@ class TalkController extends BaseController
 
     }
 
-    /**
-     * TODO: Write this as a proper talk!
-     */
+
     public function claimTalk($eventSlug, $talkSlug)
     {
         $eventApi = $this->getEventApi();
@@ -220,8 +227,8 @@ class TalkController extends BaseController
 
         $talkApi->claimTalk(
             $talk->getSpeakersUri(), array(
-            'display_name'  => 'Ryan Wood',
-            'username'      => "rwood"
+            'display_name'  => 'Roy Stone',
+            'username'      => "rstone"
             )
         );
 
