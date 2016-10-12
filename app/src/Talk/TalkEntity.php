@@ -124,7 +124,8 @@ class TalkEntity
         return $this->data->url_friendly_talk_title;
     }
 
-    public function getSpeakersUri(){
+    public function getSpeakersUri()
+    {
         return $this->data->speakers_uri;
     }
 

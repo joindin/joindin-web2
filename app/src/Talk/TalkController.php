@@ -245,14 +245,16 @@ class TalkController extends BaseController
         if ($valid) {
             try {
                 $talkApi->claimTalk(
-                    $talk->getSpeakersUri(), array(
+                    $talk->getSpeakersUri(),
+                    array(
                         'display_name'  => $display_name,
                         'username'      => $_SESSION['user']->getUsername()
                     )
                 );
 
                 $this->application->flash(
-                    'claimmessage', 'Your claim has been received. You will receive an' .
+                    'claimmessage',
+                    'Your claim has been received. You will receive an' .
                     ' email once the host has accepted your claim'
                 );
             } catch (Exception $e) {
