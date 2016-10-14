@@ -13,7 +13,9 @@
             "User":        ["app/src/", "tests/"]
         }
     },
-    "preferred-install": "dist",
+    "config": {
+        "preferred-install": "dist"
+    },
     "minimum-stability": "stable",
     "require": {
         "predis/predis":         "~0.8",
