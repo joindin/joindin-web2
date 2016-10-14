@@ -49,3 +49,7 @@ An example would be:
 ```
 JOINDIN-445 #close Fixed.
 ```
+
+## PHP Version
+
+The current PHP version for joind.in is PHP 5.6.
