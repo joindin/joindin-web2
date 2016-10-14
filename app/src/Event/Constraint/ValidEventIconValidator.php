@@ -29,7 +29,7 @@ class ValidEventIconValidator extends ConstraintValidator
             $contents = file_get_contents($files['tmp_name'][$keyName]);
             $image = @imagecreatefromstring($contents);
             if ($image === false) {
-                 $this->context->buildViolation("'%filename%' is not a recognised image file")
+                $this->context->buildViolation("'%filename%' is not a recognised image file")
                     ->setParameter('%filename%', $filename)
                     ->addViolation();
                 return;
@@ -39,7 +39,7 @@ class ValidEventIconValidator extends ConstraintValidator
             $height = imagesy($image);
             if ($width !== $height) {
                 imagedestroy($image);
-                 $this->context->buildViolation("'%filename%' is not a square image")
+                $this->context->buildViolation("'%filename%' is not a square image")
                     ->setParameter('%filename%', $filename)
                     ->addViolation();
                 return;

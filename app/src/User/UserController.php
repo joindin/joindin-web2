@@ -62,7 +62,7 @@ class UserController extends BaseController
         $error = false;
         if ($request->isPost()) {
             // handle submission of login form
-        
+
             // make a call to the api with granttype=password
             $username = $request->post('username');
             $password = $request->post('password');
@@ -888,7 +888,7 @@ class UserController extends BaseController
             }
             $this->application->redirect($redirect . '#login');
         }
-        
+
         session_regenerate_id(true);
         $_SESSION['access_token'] = $result->access_token;
         $this->accessToken = $_SESSION['access_token'];

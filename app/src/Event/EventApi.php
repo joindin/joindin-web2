@@ -400,7 +400,7 @@ class EventApi extends BaseApi
                     $hostsInfo->username = $this->userApi->getUsername($hostsInfo->host_uri);
                 }
             }
-            
+
             $collectionData['events'][] = $event;
 
             // save the URL so we can look up by it
