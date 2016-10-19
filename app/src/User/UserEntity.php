@@ -25,7 +25,7 @@ class UserEntity
     {
         return $this->data->username;
     }
-    
+
     /**
      * Getter for full_name
      *
@@ -35,7 +35,7 @@ class UserEntity
     {
         return $this->data->full_name;
     }
-    
+
     /**
      * Getter for twitter_username
      *
@@ -70,7 +70,7 @@ class UserEntity
     {
         return $this->data->uri;
     }
-    
+
     /**
      * Getter for verbose_uri
      *
@@ -80,7 +80,7 @@ class UserEntity
     {
         return $this->data->verbose_uri;
     }
-    
+
     /**
      * Getter for website_uri
      *
@@ -90,7 +90,7 @@ class UserEntity
     {
         return $this->data->website_uri;
     }
-    
+
     /**
      * Getter for talks_uri
      *
@@ -100,7 +100,7 @@ class UserEntity
     {
         return $this->data->talks_uri;
     }
-    
+
     /**
      * Getter for attended_events_uri
      *

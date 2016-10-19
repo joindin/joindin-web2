@@ -119,7 +119,7 @@ class SearchController extends BaseController
         if (!empty($talks['talks'])) {
             $eventInfo = $this->getEventInfoForTalks($talks['talks']);
         }
-        
+
         $this->render(
             'Application/search.html.twig',
             array(

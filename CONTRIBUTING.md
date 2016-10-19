@@ -53,3 +53,7 @@ JOINDIN-445 #close Fixed.
 ## PHP Version
 
 The current PHP version for joind.in is PHP 5.6.
+
+## Code Style
+
+All PHP code follows [psr-2](http://www.php-fig.org/psr/psr-2/). One way to help ensure that your submitted code is PSR-2 is to run [PHP Code Sniffer]() against PSR-2 and the [.editorconfig](http://editorconfig.org/) plugin for your editor before submitting.
