@@ -2,10 +2,15 @@
 namespace Event;
 
 use Application\BaseDb;
+use Application\CacheService;
 
 class EventDb extends BaseDb
 {
-    protected $keyName = 'events';
+    public function __construct(CacheService $cache)
+    {
+        parent::__construct($cache);
+        $this->keyName = 'events';
+    }
 
     public function save(EventEntity $event)
     {
