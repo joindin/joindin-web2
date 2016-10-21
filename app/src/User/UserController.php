@@ -616,7 +616,9 @@ class UserController extends BaseController
         }
 
         if (!$user->getCanEdit() || !isset($_SESSION['user'])) {
-            $this->application->redirect($this->application->urlFor('not-allowed'));
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $this->application->urlFor('user-profile-edit', ['username' => $username])
+            );
         }
 
         // create an array of the data to be edited for use by the form
