@@ -495,6 +495,19 @@ class EventApi extends BaseApi
         return $reports;
     }
 
+    public function getPendingClaims($claims_uri)
+    {
+        $response = json_decode($this->apiGet($claims_uri));
+
+        $reports = [];
+
+        foreach ($response->reports as $item) {
+            $reports[] = $item; //new EventCommentReportEntity($item);
+        }
+
+        return $reports;
+    }
+
     public function getReportedTalkComments($comment_uri)
     {
         $response = json_decode($this->apiGet($comment_uri));

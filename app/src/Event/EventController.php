@@ -60,6 +60,8 @@ class EventController extends BaseController
             ->name("event-add-talk");
         $app->map('/event/:friendly_name/edit-tracks', array($this, 'editTracks'))->via('GET', 'POST')
             ->name("event-edit-tracks");
+        $app->map('/event/:friendly_name/claims', array($this, 'talkClaims'))->via('GET')
+            ->name("event-talk-claims");
     }
 
     public function index()
@@ -860,6 +862,30 @@ class EventController extends BaseController
 
         $url = $this->application->urlFor("event-reported-comments", ['friendly_name' => $friendly_name]);
         $this->application->redirect($url);
+    }
+    
+    public function talkClaims($friendly_name)
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $this->application->urlFor('event-talk-claims', ['friendly_name' => $friendly_name])
+            );
+        }
+
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            if (!$event->getCanEdit()) {
+                $this->redirectToDetailPage($event->getUrlFriendlyName());
+            }
+            
+            $claims_uri = $event->getPendingClaimsUri();
+            $claims = $eventApi->getPendingClaims($claims_uri);
+            var_dump($claims);
+
+        }
+
     }
 
     /**
