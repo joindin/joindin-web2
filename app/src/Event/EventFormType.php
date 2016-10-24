@@ -62,7 +62,7 @@ class EventFormType extends AbstractType
         if (isset($options['data'])) {
             $timezone = $options['data']->getFullTimezone();
         }
-        
+
         $dateTransformer = new DateTransformer($timezone);
         $builder
             ->add('addr', 'hidden', ['mapped' => false])
@@ -79,8 +79,8 @@ class EventFormType extends AbstractType
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
                     'attr'        => [
-                                        'rows' => '10',
-                                     ]
+                        'rows' => '10',
+                    ]
                 ]
             )
             ->add(
@@ -239,13 +239,13 @@ class EventFormType extends AbstractType
             // 'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
             'constraints' => $constraints,
             'attr'        => [
-                                'class'                     => 'date-picker form-control',
-                                'data-provide'              => 'datepicker',
-                                'data-date-format'          => 'd MM yyyy',
-                                'data-date-week-start'      => '1',
-                                'data-date-autoclose'       => '1',
-                                'data-date-today-highlight' => true,
-                             ]
+                'class'                     => 'date-picker form-control',
+                'data-provide'              => 'datepicker',
+                'data-date-format'          => 'd MM yyyy',
+                'data-date-week-start'      => '1',
+                'data-date-autoclose'       => '1',
+                'data-date-today-highlight' => true,
+            ]
         ];
     }
 

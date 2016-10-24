@@ -21,7 +21,7 @@ function initialize(Twig_Environment $env, Slim $app)
         $url = $app->urlFor($routeName, $params);
         return $url;
     }));
-    
+
     $env->addFunction(new Twig_SimpleFunction('hash', function ($value) {
         return md5($value);
     }));
@@ -115,7 +115,7 @@ function initialize(Twig_Environment $env, Slim $app)
         if (!$minutes) {
             return "$hours hours";
         }
-        
+
         return "$hours hours, $minutes minutes";
     }));
 

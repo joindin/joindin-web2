@@ -23,14 +23,13 @@ class BaseApi
     protected function apiGet($url, $params = array())
     {
         $paramsString = count($params) ? '?' . http_build_query($params, '', '&') : '';
-        
+
         $contextOpts = array('http' => array(
-            'header'  => "Accept: application/json",
+            'header' => "Accept: application/json",
             'timeout' => 10,
             'ignore_errors' => true,
-            )
-        );
-        
+        ));
+
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip = $_SERVER['REMOTE_ADDR'];
         $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
@@ -46,7 +45,7 @@ class BaseApi
         }
 
         $streamContext = stream_context_create($contextOpts);
-        $result = file_get_contents($url.$paramsString, 0, $streamContext);
+        $result = file_get_contents($url . $paramsString, 0, $streamContext);
 
         if (false === $result) {
             throw new \Exception('Unable to connect to API');
@@ -60,12 +59,11 @@ class BaseApi
         $paramsString = count($params) ? '?' . http_build_query($params, '', '&') : '';
 
         $contextOpts = array('http' => array(
-            'method'  => 'DELETE',
-            'header'  => "Accept: application/json",
+            'method' => 'DELETE',
+            'header' => "Accept: application/json",
             'timeout' => 10,
             'ignore_errors' => true,
-            )
-        );
+        ));
 
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -82,7 +80,7 @@ class BaseApi
         }
 
         $streamContext = stream_context_create($contextOpts);
-        $result = file_get_contents($url.$paramsString, 0, $streamContext);
+        $result = file_get_contents($url . $paramsString, 0, $streamContext);
 
         if (false === $result) {
             throw new \Exception('Unable to connect to API');
@@ -101,14 +99,13 @@ class BaseApi
     protected function apiPost($url, $params = array())
     {
         $contextOpts = array('http' => array(
-            'method'  => 'POST',
-            'header'  => "Content-type: application/json\r\n"
-                       . "Accept: application/json",
+            'method' => 'POST',
+            'header' => "Content-type: application/json\r\n"
+                      . "Accept: application/json",
             'content' => json_encode($params),
             'timeout' => 10,
             'ignore_errors' => true,
-            )
-        );
+        ));
 
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -118,7 +115,7 @@ class BaseApi
         if ($this->accessToken) {
             $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
         }
-        
+
         if ($this->proxy) {
             $contextOpts['http']['proxy'] = $this->proxy;
             $contextOpts['http']['request_fulluri'] = true;
@@ -143,14 +140,13 @@ class BaseApi
     protected function apiPut($url, $params = array())
     {
         $contextOpts = array('http' => array(
-            'method'  => 'PUT',
-            'header'  => "Content-type: application/json\r\n"
+            'method' => 'PUT',
+            'header' => "Content-type: application/json\r\n"
                 . "Accept: application/json",
             'content' => json_encode($params),
             'timeout' => 10,
             'ignore_errors' => true,
-        )
-        );
+        ));
 
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip = $_SERVER['REMOTE_ADDR'];

@@ -64,7 +64,7 @@ class TrackApi extends BaseApi
 
         $result = json_decode($result);
         $message = $result[0];
-        
+
         throw new \Exception("Failed: " . $message);
     }
 
@@ -88,7 +88,7 @@ class TrackApi extends BaseApi
 
         $result = json_decode($result);
         $message = $result[0];
-        
+
         throw new \Exception("Failed: " . $message);
     }
 
@@ -107,7 +107,7 @@ class TrackApi extends BaseApi
 
         $result = json_decode($result);
         $message = $result[0];
-        
+
         throw new \Exception("Failed to delete track: " . $message);
     }
 }

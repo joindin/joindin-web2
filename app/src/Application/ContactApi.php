@@ -31,7 +31,6 @@ class ContactApi extends BaseApi
 
         $result = json_decode($result);
         $message = $result[0];
-        
 
         throw new \Exception("Failed: " . $message);
     }

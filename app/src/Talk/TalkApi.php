@@ -348,7 +348,7 @@ class TalkApi extends BaseApi
 
         $result = json_decode($result);
         $message = $result[0];
-        
+
         throw new \Exception("Failed: " . $message);
     }
 
@@ -368,7 +368,7 @@ class TalkApi extends BaseApi
 
         $result = json_decode($result);
         $message = $result[0];
-        
+
         throw new \Exception("Failed to remove talk from track: " . $message);
     }
 }

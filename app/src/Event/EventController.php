@@ -60,7 +60,6 @@ class EventController extends BaseController
             ->name("event-add-talk");
         $app->map('/event/:friendly_name/edit-tracks', array($this, 'editTracks'))->via('GET', 'POST')
             ->name("event-edit-tracks");
-
     }
 
     public function index()
@@ -547,8 +546,6 @@ class EventController extends BaseController
                 'timezones' => EventFormType::getNestedListOfTimezones(),
             )
         );
-
-
     }
 
     /**
@@ -859,7 +856,6 @@ class EventController extends BaseController
             } else {
                 $this->application->flash('message', 'Report rejected. Comment has been republished.');
             }
-
         }
 
         $url = $this->application->urlFor("event-reported-comments", ['friendly_name' => $friendly_name]);
@@ -1004,7 +1000,10 @@ class EventController extends BaseController
 
                     $this->application->flash('message', "Tracks updated");
                     $this->application->redirect(
-                        $this->application->urlFor('event-edit-tracks', array('friendly_name' => $event->getUrlFriendlyName()))
+                        $this->application->urlFor(
+                            'event-edit-tracks',
+                            array('friendly_name' => $event->getUrlFriendlyName())
+                        )
                     );
                 } catch (\Exception $e) {
                     $form->adderror(
@@ -1021,7 +1020,6 @@ class EventController extends BaseController
                 'form' => $form->createView(),
             )
         );
-
     }
 
     /**

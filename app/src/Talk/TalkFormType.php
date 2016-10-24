@@ -131,7 +131,7 @@ class TalkFormType extends AbstractType
                             'data-default-time' => '09:00',
                             'placeholder' => 'HH:MM',
                         ],
-                     ]
+                    ]
                 ]
             )
             ->add(
