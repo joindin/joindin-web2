@@ -204,7 +204,6 @@ class TalkApi extends BaseApi
             if ($status == 200) {
                 return ['starred' => false];
             }
-
         } else {
             list ($status, $result) = $this->apiPost($talk->getStarredUri(), []);
             if ($status == 201) {

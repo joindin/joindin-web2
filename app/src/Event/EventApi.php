@@ -359,7 +359,6 @@ class EventApi extends BaseApi
 
             $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
             $response = $client->send($request, $options);
-
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $body = $e->getResponse()->getBody();
             error_log($e->getMessage());

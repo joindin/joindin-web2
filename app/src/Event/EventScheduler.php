@@ -97,7 +97,6 @@ class EventScheduler
 
             if (!isset($talksByDay[$date]) || !array_key_exists($date, $talksByDay)) {
                 $talksByDay[$date] = array();
-
             }
             if (!isset($talksByDay[$date][$time]) || !array_key_exists($time, $talksByDay[$date])) {
                 $talksByDay[$date][$time] = array();
