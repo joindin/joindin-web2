@@ -1,7 +1,7 @@
 <?php
 namespace Application;
 
-use Slim;
+use Slim\Slim;
 use Twig_Error_Runtime;
 
 abstract class BaseController
@@ -12,11 +12,11 @@ abstract class BaseController
     protected $accessToken;
     protected $cfg;
 
-    function __construct(Slim $app)
+    public function __construct(Slim $app)
     {
         $this->application = $app;
         $this->defineRoutes($app);
-		$this->cfg = $this->getConfig();
+        $this->cfg = $this->getConfig();
 
         $this->accessToken = isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null;
     }
@@ -31,7 +31,7 @@ abstract class BaseController
     protected function render($template, $data = array(), $status = null)
     {
         try {
-            echo $this->application->render($template, $data, $status);
+            $this->application->render($template, $data, $status);
         } catch (Twig_Error_Runtime $e) {
             $this->application->render(
                 'Error/app_load_error.html.twig',
@@ -46,6 +46,15 @@ abstract class BaseController
                 )
             );
         }
+    }
+
+    protected function getSessionVariable($name, $default = null)
+    {
+        $value = $default;
+        if (array_key_exists($name, $_SESSION)) {
+            $value = $_SESSION[$name];
+        }
+        return $value;
     }
 
     abstract protected function defineRoutes(Slim $app);

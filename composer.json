@@ -1,0 +1,36 @@
+{
+    "name": "joindin/website",
+    "license": "MIT",
+    "autoload": {
+        "psr-0":{
+            "Application": ["app/src/", "tests/"],
+            "Form":        ["app/src/", "tests/"],
+            "Language":    ["app/src/", "tests/"],
+            "Middleware":  ["app/src/", "tests/"],
+            "Event":       ["app/src/", "tests/"],
+            "Search":      ["app/src/", "tests/"],
+            "Talk":        ["app/src/", "tests/"],
+            "User":        ["app/src/", "tests/"]
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "5.6.26"
+        },
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "predis/predis":         "~0.8",
+        "slim/slim":             "~2.4",
+        "slim/views":            "~0.1",
+        "twig/twig":             "~1.15",
+        "symfony/form":          "~2.5",
+        "symfony/validator":     "~2.5",
+        "symfony/security-csrf": "~2.5",
+        "symfony/twig-bridge":   "~2.5",
+        "org_heigl/daterange":   "~1.1",
+        "guzzlehttp/guzzle":     "^6.2.1",
+        "monolog/monolog":       "^1.21"
+    }
+}

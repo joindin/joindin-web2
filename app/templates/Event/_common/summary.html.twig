@@ -1,0 +1,65 @@
+{%
+set eventUrl = urlFor(
+    'event-default', {"friendly_name": event.getUrlFriendlyName}
+)
+%}
+
+<article class="event row">
+    <div class="logo text-center">
+        <a href="{{ eventUrl }}">
+            <img src="{{ event.getSmallImage }}">
+        </a>
+    </div>
+    <div class="title description">
+        <section>
+            <h3 class="header">
+                <a href="{{ eventUrl }}">{{ event.getName }}</a>
+            </h3>
+
+            <p class="meta">
+
+            </p>
+
+            <p class="wideOnly">
+                {{ event.getDescription | slice(0, 200)}}&hellip;
+            </p>
+
+            <p class="meta">
+                {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
+
+                {% if event.getLocation %}
+                    @ {{event.getLocation|escape}}
+                {% endif %}
+
+                |
+
+                <a href="{{ eventUrl }}/comments">
+                    {{ event.getCommentsCount}}
+                    {% if event.getCommentsCount == 1 %}
+                        comment
+                    {% else %}
+                        comments
+                    {% endif %}
+                </a>
+
+                |
+
+                {% include 'Event/_common/attending_string.html.twig' %}
+
+                {% include 'Event/_common/attending.html.twig' %}
+
+                {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
+                    <p class="cfp-dates">
+                        {% if "now"|date('c') < event.getCallForPapersStartDate %}
+                            {# not open yet #}
+                            Call for papers starts {{ event.getCallForPapersStartDate |date('j M Y', event.getFullTimezone) }}
+                        {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
+                            {# still open #}
+                            Call for papers ends {{ event.getCallForPapersEndDate |date('j M Y', event.getFullTimezone) }}
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </p>
+        </section>
+    </div>
+</article>

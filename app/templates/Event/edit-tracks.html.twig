@@ -1,0 +1,123 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}{{ event.getName }} Tracks - Joind.in{% endblock %}
+
+{% form_theme form _self %}
+    
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+    <h2>Tracks</h2>
+
+    {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+    {{ form_errors(form) }}
+{#
+        <div class="row">
+            <fieldset class="col-sm-12">
+                {{ form_row(form.track_name) }}
+            </fieldset>
+        </div>
+        <div class="row">
+            <fieldset class="col-sm-12">
+                {{ form_row(form.track_description) }}
+            </fieldset>
+        </div>
+ #}
+
+        <div class="row">
+            <fieldset class="col-sm-12">
+                <ol class="tracks" data-prototype="{{ form_widget(form.tracks.vars.prototype)|e }}">
+                    {% for track in form.tracks %}
+                        <li>
+                            {{ form_row(track.uri) }}
+                            {{ form_row(track.track_name) }}
+                            {{ form_row(track.track_description) }}
+                        </li>
+                    {% endfor %}
+                </ol>
+            </fieldset>
+        </div>
+ 
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary pull-right" value="Update" />
+                <a href="{{ urlFor('event-detail', {friendly_name:event.urlFriendlyName}) }}" class="form-cancel pull-right">Cancel</a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        label.required:after {
+            content: ' *'
+        }
+    </style>
+{% endblock %}
+
+{% block extra_javascript %}
+<script type="text/javascript">
+var collectionHolder;
+
+// setup an "add a track" link
+var addTrackLink = $('<a href="#" class="add_track_link btn btn-sm btn-default">Add a track</a>');
+var newLinkLi = $('<li></li>').append(addTrackLink);
+
+jQuery(document).ready(function() {
+    // Get the list that holds the collection of tags
+    collectionHolder = $('ol.tracks');
+
+    // add a delete link to all of the existing tag form li elements
+    collectionHolder.find('li').each(function() {
+        addTrackFormDeleteLink($(this));
+    });
+
+    // add the "add a tag" anchor and li to the tags ul
+    collectionHolder.append(newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolder.data('index', collectionHolder.find(':input').length);
+
+    addTrackLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addTrackForm(collectionHolder, newLinkLi);
+    });
+});
+
+function addTrackForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+
+    // get the new index
+    var index = $collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a track" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+}
+
+function addTrackFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<a style="float: right" class="btn btn-default btn-xs" href="#">delete this track</a>');
+    $tagFormLi.prepend($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $tagFormLi.remove();
+    });
+}
+</script>
+{% endblock %}

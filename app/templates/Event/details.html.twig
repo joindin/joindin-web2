@@ -1,57 +1,120 @@
-{% extends '/layout.html.twig' %}
+{% extends 'Event/_common/layout_event_details.html.twig' %}
 
+{% block title %}{{ event.getName }} - Joind.in{% endblock %}
+    
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
-    <p>{{ event.getDescription|format_string|raw }}</p>
+    <div class="panel panel-default" style="border:none">
+          {# <div class="panel-body"> #}
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    {% if event.getTags %}
+                        <div class="tags">
+                        {% for tag in event.getTags %}
+                            <a href="{{ urlFor('search-events') }}?tag={{ tag }}">
+                                <span class="label label-default">{{ tag }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
 
-    <div id="comments">
-        {% if comments %}
-            <h2>Comments</h2>
-            <ul>
-            {% for comment in comments %}
-                {% include '_common/comment.html.twig' with {'comment': comment} %}
-            {% endfor %}
-            </ul>
-        {% endif %}
+                    {% include 'Event/_common/attending_string.html.twig' %}
 
-        {% if user %}
-            <h2>Write a comment</h2>
-            <form id="add-comment" method="POST" action="{{ urlFor('event-add-comment', {'friendly_name': event.getUrlFriendlyName}) }}">
-            <div>
-                <label for="comment">Your comment:</label>
-                <textarea id="comment" name="comment"></textarea>
-            </div>
-            <div>
-                <input type="submit" value="Submit comment">
-            </div>
-            </form>
-        {% else %}
-            <a href="{{ urlFor('user-login') }}">Login</a> to write a comment
-        {% endif %}
+                    {% include 'Event/_common/attending.html.twig' %}
+
+                    <br>Host{% if event.hosts|length != 1 %}s{% endif %}:
+                    {% for host in event.hosts %}
+                        {% set comma = "" %}
+                        {% if not loop.last %}
+                            {% set comma = "," %}
+                        {% endif %}
+
+                        {% if host.username %}
+                            <a href="{{ urlFor('user-profile', {'username': host.username}) }}">{{ host.host_name }}</a>{{comma}}
+                        {% else %}
+                            {{ host.host_name }}{{comma}}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
+                    <br>
+                    {% if event.stub %}
+                        Short URL: <a href="{{ shortUrlForEvent(event.getStub) }}">{{ shortUrlForEvent(event.getStub) }}</a> <i class="fa fa-external-link-square"></i>
+                    {% endif %}
+                    {% if event.getCfpStatus %}
+                        <br>
+                        Call for Papers:
+                        {% if event.getCfpStatus == 'Open' %}
+                            {{ event.getCfpStatus }} until {{ event.getCfPEndDate|date("j M Y") }}.
+                            {% if event.getCfpUrl %}
+                                <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+                            {% endif %}
+                        {% else %}
+                            {{ event.getCfpStatus }}.
+                            {% if event.getCfpUrl and event.getCfpStatus == 'Pending' %}
+                                <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+            {# </div> #}
+        </div>
     </div>
-{% endblock %}
 
+    <p>{{ event.getDescription|nl2br }}</p>
+
+
+    {% if event.getLatitude != '0' and event.getLongitude != '0' %}
+        <div id="streetmap" style="border: 1px solid black; height: 300px;"></div>
+    {% endif %}
+
+{% endblock %}
 
 {% block extraAside %}
-    {% if event.getStub %}
-        <div class="extraAside">
-            <p>
-                Short URL to this event:
-                <a href="{{ urlFor('event-quicklink', {"stub": event.getStub}) }}">
-                    {{ quicklink }}
-                </a>
-            </p>
-        </div>
-    {% endif %}
-    {% if event.getWebsiteAddress %}
-        <div class="extraAside">
-            <p>
-                <a href="{{ event.getWebsiteAddress }}">
-                    Visit event website
-                </a>
-            </p>
-        </div>
-    {% endif %}
+    <section class="event-attendees">
+        {% include 'Event/_common/event_attendees.html.twig' %}
+    </section>
 {% endblock %}
 
+{% block extra_meta %}
+    {{ parent() }}
+    <meta property="og:image" content="{{ event.getSmallImage }}">
+    <meta name="twitter:image" content="{{ event.getsmallImage }}" data-page-subject="true">
+    <meta name="twitter:card" content="photo" data-page-subject="true">
+{% endblock %}
+
+{% block extra_styles %}
+<link href="/leaflet/leaflet.css" rel="stylesheet">
+<!--[if lte IE 8]><link rel="stylesheet" href="/leaflet/leaflet.ie.css" /><![endif]-->
+{% endblock %}
+
+{% block extra_javascript %}
+    <!-- leaflet -->
+    <script type="text/javascript" src="/leaflet/leaflet.js"></script>
+    <script>
+        /** OpenStreetMap */
+        var map = L.map('streetmap').setView([{{ event.getLatitude }}, {{ event.getLongitude }}], 14);
+        L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([{{ event.getLatitude }}, {{ event.getLongitude }}]).addTo(map)
+                .bindPopup('<b>{{ location.finalName }}</b>');
+    </script>
+    <script>
+
+        jQuery(function($){
+            $("#allAttendees").click(function(ev){
+                ev.preventDefault();
+
+                var url = "{{ urlFor('event-attendees', {'friendly_name': event.getEventSlug}) }}";
+                $(".event-attendees").load(url);
+
+            })
+        })
+    </script>
+{% endblock %}

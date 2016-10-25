@@ -1,0 +1,46 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Search - Joind.in{% endblock %}
+
+{% block body %}
+<section class="search-results">
+    <h2 class="title">Search results for keyword "{{ keyword }}"</h2>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>Events</h3>
+            {% if events.events is empty %}
+                {% if page > 1 %}
+                    <p>No more events found</p>
+                {% else %}
+                    <p>Sorry, no events found</p>
+                {% endif %}
+            {% else %}
+                <div>
+                    {% for event in events.events %}
+                        {% include 'Event/_common/summary.html.twig' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-sm-6">
+            <h3>Talks</h3>
+            {% if talks.talks is empty %}
+                {% if page > 1 %}
+                    <p>No more talks found</p>
+                {% else %}
+                    <p>Sorry, no talks found</p>
+                {% endif %}
+            {% else %}
+                <div>
+                    {% for talk in talks.talks %}
+                        {% include 'Talk/_common/summary.html.twig'
+                        with {'event': attribute(eventInfo, talk.getEventUri) } %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include '_common/pagination.html.twig' with {'pagination': pagination} %}
+{% endblock %}

@@ -1,0 +1,55 @@
+<div class="page-header">
+    <div class="row event">
+        <div class="col-xs-12 col-sm-12 title">
+            <h1>
+                {{ talk.getTitle }}
+                {% if user %}
+                    <span id="{{ event.getUrlFriendlyName }}/{{ talk.getUrlFriendlyTalkTitle }}" class="star-wrapper">
+                        <a href="javascript:" class="talk star{% if talk.getStarred %} starred{% endif %}">{% if talk.starred %}&#10029;{% else %}&#10025;{% endif %}</a>
+                    </span>
+                {% endif %}
+            </h1>
+            <div class="row">
+                <div class="col-xs-8">
+                    {% if talk.getSpeakers %}
+                        <h3>
+                            {% for speaker in talk.getSpeakers %}
+                                {% set comma = "" %}
+                                {% if not loop.last %}
+                                    {% set comma = "," %}
+                                {% endif %}
+
+                                {% if speaker.username %}
+                                    <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+                                {% else %}
+                                    {{ speaker.speaker_name }}{{comma}}
+                                {% endif %}
+                            {% endfor %}
+                        </h3>
+                    {% endif %}
+                    <h4>
+                        {{ talk.getStartDateTime()|date('l j F Y \\a\\t H:i', event.getFullTimezone) }}
+                    </h4>
+
+                    <p>
+                        {{ talk.getType }} in {{ talk.language }} at <a href="{{ urlFor('event-schedule', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getName }}</a>
+
+                        {% if talk.slidesLink is not empty %}
+                        <br>
+                        View Slides: <a href="{{ talk.slidesLink }}">{{ talk.slidesLink }}</a> <i class="fa fa-external-link-square"></i>
+                        {% endif %}
+                        <br>
+                        Short URL: <a href="{{ shortUrlForTalk(talk.getStub) }}">{{ shortUrlForTalk(talk.getStub) }}</a>
+                    </p>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <div style="margin-top: 10px">
+                        {% if talk.getAverageRating %} Avg. Rating
+                        {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical'} %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

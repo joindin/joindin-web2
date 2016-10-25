@@ -33,6 +33,24 @@ class TalkCommentEntity
         return $this->data->user_display_name;
     }
 
+    public function getUsername()
+    {
+        if (!isset($this->data->username)) {
+            return null;
+        }
+
+        return $this->data->username;
+    }
+
+    public function getGravatarHash()
+    {
+        if (!isset($this->data->gravatar_hash)) {
+            return null;
+        }
+
+        return $this->data->gravatar_hash;
+    }
+
     public function getCommentDate()
     {
         if (!isset($this->data->created_date)) {
@@ -58,5 +76,60 @@ class TalkCommentEntity
         }
 
         return $this->data->source;
+    }
+
+    public function getTalkTitle()
+    {
+        if (!isset($this->data->talk_title)) {
+            return null;
+        }
+
+        return $this->data->talk_title;
+    }
+
+    public function getTalkUri()
+    {
+        if (!isset($this->data->talk_uri)) {
+            return null;
+        }
+
+        return $this->data->talk_uri;
+    }
+
+    public function getCommentHash()
+    {
+        if (!isset($this->data->uri)) {
+            return null;
+        }
+
+        $hash = md5($this->data->uri);
+        return (substr($hash, 0, 6));
+    }
+
+    public function getReportedUri()
+    {
+        if (!isset($this->data->reported_uri)) {
+            return null;
+        }
+
+        return $this->data->reported_uri;
+    }
+
+    public function getUserUri()
+    {
+        if (!isset($this->data->user_uri)) {
+            return null;
+        }
+
+        return $this->data->user_uri;
+    }
+
+    public function canRateTalk($user_uri)
+    {
+        if ($this->data->user_uri == $user_uri) {
+            return false;
+        }
+
+        return true;
     }
 }

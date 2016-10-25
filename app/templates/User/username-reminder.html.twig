@@ -1,0 +1,38 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Username reminder - Joind.in{% endblock %}
+
+{% block body %}
+        <style>
+            label.required:after {
+                content: ' *'
+            }
+        </style>
+
+        <h1 class="title">Username reminder</h1>
+        <p>If you have forgotten your username, please enter the email address
+        you used to register on the site and we'll send you a quick reminder.</p>
+
+        {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <fieldset class="col-sm-12">
+                {{ form_row(form.email) }}
+            </fieldset>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary pull-right" value="Remind me" />
+            </div>
+        </div>
+        {{ form_end(form) }}
+{% endblock %}
+
+{% block extraAside %}
+{% endblock %}
+
+{% block extra_styles %}
+{% endblock %}
+
+{% block extra_javascript %}
+{% endblock %}

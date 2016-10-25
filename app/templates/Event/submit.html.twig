@@ -1,0 +1,58 @@
+{% extends '/layout.html.twig' %}
+
+{% use '/Event/_common/form.html.twig' %}
+
+
+{% block body %}
+    {% if user %}
+        <style>
+            label.required:after {
+                content: ' *'
+            }
+        </style>
+        <h1 class="title">Submit a new event</h1>
+        <p>
+            Submit your event here to be included on joind.in. All events must be approved by our team of volunteers
+            before they appear on the site, so please be patient - you will be notified if your event is approved. 
+            The site is aimed at events whose organisers will use joind.in as a tool to gather feedback for themselves
+            and for the presenters at their events.
+        </p>
+        <p>
+            Please supply a description of your event in English, we will consider which events fit our intended
+            criteria (community event, clear description, intent to gather feedback) before approving; you may
+            <a href="{{ urlFor('about') }}">contact us</a> if you have any questions.
+        </p>
+
+    {% endif %}
+    {{ block('form') }}
+{% endblock %}
+
+{% block extraAside %}
+    {% if user %}
+    <section>
+        <h3>Submission tips</h3>
+        <p>
+            Here's a few tips for submitting events:
+        </p>
+        <dl>
+            <dt>English</dt>
+            <dd>
+                Please ensure that the description is in English with a translation below if appropriate.
+                Events without a meaningful description won't be approved.
+            </dd>
+        </dl>
+        <dl>
+            <dt>Map</dt>
+            <dd>
+                Add the venue location to get a map on the website and apps so people can find you on the day.
+            </dd>
+        </dl>
+        <dl>
+            <dt>Call for Papers</dt>
+            <dd>
+                If your event has a call for papers, add a link to it and the dates when it will be open.
+            </dd>
+        </dl>
+    </section>
+    {% endif %}
+{% endblock %}

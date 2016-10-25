@@ -3,14 +3,19 @@ namespace Application;
 
 use Event\EventDb;
 use Event\EventApi;
+use User\UserDb;
+use User\UserApi;
 
 class ApplicationController extends BaseController
 {
-    protected function defineRoutes(\Slim $app)
+    protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/', array($this, 'index'));
         $app->get('/apps', array($this, 'apps'))->name('apps');
         $app->get('/about', array($this, 'about'))->name('about');
+        $app->map('/contact', array($this, 'contact'))->via('GET', 'POST')->name('contact');
+        $app->get('/not-allowed', array($this, 'notAllowed'))->name('not-allowed');
+        $app->get('/assets', array($this, 'assets'))->name('assets');
     }
 
     public function index()
@@ -19,27 +24,47 @@ class ApplicationController extends BaseController
             ? 1
             : $this->application->request()->get('page');
 
-        $perPage = 6;
+        $perPage = 10;
         $start = ($page -1) * $perPage;
 
-        $keyPrefix = $this->cfg['redis']['keyPrefix'];
+        $eventApi = $this->getEventApi();
+        $hotEvents = $eventApi->getEvents($perPage, $start, 'hot');
+        $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);
 
-        $cache = new CacheService($keyPrefix);
-        $event_collection = new EventApi($this->cfg, $this->accessToken, new EventDb($cache));
-        $hot_events = $event_collection->getCollection($perPage, $start, 'hot');
-
-        echo $this->render(
+        $this->render(
             'Application/index.html.twig',
             array(
-                'events' => $hot_events,
+                'events' => $hotEvents,
+                'cfp_events' => $cfpEvents,
                 'page' => $page,
             )
         );
     }
 
+    /**
+     * Get latest current events
+     *
+     * @param $start
+     * @param $perPage
+     * @return array
+     */
+    public function getCurrentEvents($start, $perPage)
+    {
+        $eventApi = $this->getEventApi();
+        return $eventApi->getEvents($perPage, $start, 'hot');
+    }
+
+    /**
+     * Display the apps page
+     */
     public function apps()
     {
-        echo $this->render('Application/apps.html.twig');
+        $this->render(
+            'Application/apps.html.twig',
+            [
+                'hot_events' => $this->getCurrentEvents(0, 5),
+            ]
+        );
     }
 
     /**
@@ -47,8 +72,118 @@ class ApplicationController extends BaseController
      */
     public function about()
     {
-        echo $this->render(
-            'Application/about.html.twig'
+        $this->render(
+            'Application/about.html.twig',
+            [
+                'hot_events' => $this->getCurrentEvents(0, 5),
+            ]
         );
+    }
+
+    /**
+     * Render the contact page
+     */
+    public function contact()
+    {
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new ContactFormType());
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getData();
+
+                $config = $this->application->config('oauth');
+                $clientId = $config['client_id'];
+                $clientSecret = $config['client_secret'];
+
+                try {
+                    $contactApi = $this->getContactApi();
+                    $contactApi->contact(
+                        $values['name'],
+                        $values['email'],
+                        $values['subject'],
+                        $values['comment'],
+                        $clientId,
+                        $clientSecret
+                    );
+                    $this->application->flash('message', "Thank you for contacting us.");
+                    $this->application->redirect($this->application->urlFor("contact"));
+                } catch (\Exception $e) {
+                    $this->application->flashNow('error', $e->getMessage());
+                }
+            }
+        }
+
+        $this->render(
+            'Application/contact.html.twig',
+            [
+                'form' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * Render the assets page
+     */
+    public function assets()
+    {
+        $this->render(
+            'Application/assets.html.twig',
+            [
+                'hot_events' => $this->getCurrentEvents(0, 5),
+            ]
+        );
+    }
+
+
+    /**
+     * Render the notAllowed page
+     */
+    public function notAllowed()
+    {
+
+        $this->render('Application/not-allowed.html.twig', [
+            'redirect' => $this->application->request->get('redirect')
+        ]);
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCache()
+    {
+        $keyPrefix = $this->cfg['redisKeyPrefix'];
+        return new CacheService($keyPrefix);
+    }
+
+    /**
+     * @return EventApi
+     */
+    private function getEventApi()
+    {
+        $eventDb = new EventDb($this->getCache());
+        return new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
+    }
+
+    /**
+     * @return UserApi
+     */
+    private function getUserApi()
+    {
+        $userDb = new UserDb($this->getCache());
+        return new UserApi($this->cfg, $this->accessToken, $userDb);
+    }
+
+    /**
+     * @return ContactApi
+     */
+    private function getContactApi()
+    {
+        return new ContactApi($this->cfg, $this->accessToken);
     }
 }

@@ -1,0 +1,35 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}{{ event.getName }} reported comments - Joind.in{% endblock %}
+{% block extraAside %}
+<section>
+    {% include 'Event/_common/event_details.html.twig' %}
+</section>
+{% endblock %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+    {% endif %}
+    {% if flash.getMessages.error %}
+        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+    {% endif %}
+
+    <h2>Reported event comments</h2>
+    {% for report in eventComments %}
+        <h3 class="reported_by">Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
+        by <a href="{{ urlFor('user-profile', {'username': report.reportingUser}) }}">{{ report.getReportingUser }}</a>:</h3>
+        {% include 'Event/_common/reported_comment.html.twig' with {'comment': report.getComment, 'event': event} %}
+    {% endfor %}
+
+    <h2>Reported talk comments</h2>
+    {% for report in talkComments %}
+        <h3 class="reported_by">Reported at {{ report.getReportingDate|date('H:i \\o\\n j M Y', event.getFullTimezone) }} 
+            by <a href="{{ urlFor('user-profile', {'username': report.reportingUser}) }}">{{ report.getReportingUser }}</a> on <em>{{ report.comment.talkTitle }}</em>:</h3>
+        {% include 'Event/_common/reported_comment.html.twig' with {'comment': report.getComment, 'event': event} %}
+    {% endfor %}
+
+
+{% endblock %}

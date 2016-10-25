@@ -1,0 +1,47 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Contact - Joind.in{% endblock %}
+
+{% block body %}
+    <h1 class="title">Contact</h1>
+
+    <p>Use this form to get in touch with the team behind Joind.in.  If you have questions or comments about anything on this site, or any other feedback for us, we're pleased to hear from you - just use the form below!</p>
+
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+    {% endif %}
+    {% if flash.getMessages.error %}
+        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+    {% endif %}
+
+
+
+    {{ form_start(form, {'attr' : {'id' : 'contact'} }) }}
+    {{ form_errors(form) }}
+    <div class="row">
+        <fieldset class="col-xs-12 col-sm-6">
+            {{ form_row(form.name) }}
+        </fieldset>
+        <fieldset class="col-xs-12 col-sm-6">
+            {{ form_row(form.email) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="col-sm-12">
+            {{ form_row(form.subject) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="col-sm-12">
+            {{ form_row(form.comment) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+
+{% endblock %}

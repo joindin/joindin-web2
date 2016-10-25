@@ -1,0 +1,38 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Resend welcome email - Joind.in{% endblock %}
+
+{% block body %}
+        <style>
+            label.required:after {
+                content: ' *'
+            }
+        </style>
+
+        <h1 class="title">Resend welcome email</h1>
+        <p>If you registered and didn't receive a welcome email, please enter your
+            email address in order to resend.</p>
+
+        {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <fieldset class="col-sm-12">
+                {{ form_row(form.email) }}
+            </fieldset>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary pull-right" value="Resend" />
+            </div>
+        </div>
+        {{ form_end(form) }}
+{% endblock %}
+
+{% block extraAside %}
+{% endblock %}
+
+{% block extra_styles %}
+{% endblock %}
+
+{% block extra_javascript %}
+{% endblock %}

@@ -1,0 +1,144 @@
+
+{# Custom widget for talk start date & time #}
+{%- block _talk_start_date_widget -%}
+    <div class="row">
+        <fieldset class="col-sm-8">
+            {{- form_widget(form.date, { 'attr': attr.date_widget }) -}}
+            {{- form_errors(form.date) -}}
+        </fieldset>
+        <fieldset class="col-sm-4">
+            {{- form_widget(form.time, { 'attr': attr.time_widget }) -}}
+            {{- form_errors(form.time) -}}
+        </fieldset>
+    </div>
+{%- endblock _talk_start_date_widget -%}
+
+{% block form %}
+{{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+{{ form_errors(form) }}
+    <div class="row">
+        <fieldset class="col-sm-12">
+            {{ form_row(form.talk_title) }}
+            {{ form_row(form.talk_description) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="col-sm-5">
+            {{ form_row(form.start_date) }}
+        </fieldset>
+        <fieldset class="col-sm-2">
+            {{ form_row(form.duration) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="col-sm-3">
+            {{ form_row(form.language) }}
+        </fieldset>
+        <fieldset class="col-sm-3">
+            {{ form_row(form.type) }}
+        </fieldset>
+        <fieldset class="col-sm-4">
+            {{ form_row(form.track) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="col-sm-12">
+            {{ form_row(form.slides_link) }}
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset class="col-sm-6">
+            <label>Speakers</label>
+            <ul class="speakers" data-prototype="{{ form_widget(form.speakers.vars.prototype)|e }}">
+                {% for speaker in form.speakers %}
+                    <li>{{ form_row(speaker.name) }}</li>
+                {% endfor %}
+            </ul>
+        </fieldset>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+            {% if event.urlFriendlyName is defined %}
+            <a href="{{ urlFor('event-detail', {friendly_name:event.urlFriendlyName}) }}" class="form-cancel pull-right">Cancel</a>
+            {% endif %}
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block form_extra_styles %}
+    <style>
+        label.required:after {
+            content: ' *'
+        }
+    </style>
+{% endblock %}
+
+{% block form_extra_javascript %}
+<script type="text/javascript">
+var collectionHolder;
+
+// setup an "add a speaker" link
+var addSpeakerLink = $('<a href="#" class="add_speaker_link btn btn-sm btn-default">Add a speaker</a>');
+var newLinkLi = $('<li></li>').append(addSpeakerLink);
+
+jQuery(document).ready(function() {
+    // Get the ul that holds the collection of tags
+    collectionHolder = $('ul.speakers');
+
+    // add a delete link to all of the existing tag form li elements
+    collectionHolder.find('li').each(function() {
+        addSpeakerFormDeleteLink($(this));
+    });
+
+    // add the "add a tag" anchor and li to the tags ul
+    collectionHolder.append(newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolder.data('index', collectionHolder.find(':input').length);
+
+    addSpeakerLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addSpeakerForm(collectionHolder, newLinkLi);
+    });
+});
+
+function addSpeakerForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+
+    // get the new index
+    var index = $collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a speaker" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+}
+
+function addSpeakerFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<a style="float: right" class="btn btn-default btn-xs" href="#">delete this speaker</a>');
+    $tagFormLi.prepend($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $tagFormLi.remove();
+    });
+}
+</script>
+{% endblock %}

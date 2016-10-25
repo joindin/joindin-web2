@@ -1,0 +1,707 @@
+body {
+    padding-top: 50px;
+    font-size: 13px;
+}
+@media (min-width: 1200px) {
+  .container-fluid {
+    width: 1170px;
+  }
+}
+
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.container-fluid {
+    max-width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.row {
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-bottom: 15px;
+}
+
+.navbar-default {
+    background-image: none;
+    background-color: white;
+    border-radius: 0px;
+    border-bottom: 2px solid #007b97;
+    font-size: 14px;
+}
+
+nav.navbar a.navbar-brand {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+nav.navbar a.navbar-brand img {
+    height: 40px;
+}
+
+.navbar-nav>li>a {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.page-nav {
+    border-top: 1px solid #eee;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-top: 10px;
+    margin-bottom: 0px
+}
+
+.page-nav.no-top-border {
+    border-top: none;
+    margin-top: 0;
+}
+
+.page-header {
+  margin: 10px 0 20px;
+  padding-bottom: 0;
+}
+
+.page-nav.admin {
+    margin-top: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    background-color: #FFFEDC;
+}
+.page-nav.admin .nav > li > a:hover, .page-nav.admin .nav > li > a:focus {
+    background-color: #FFFEDC;
+    text-decoration: none;
+}
+
+form.navbar-form {
+    margin-top: 10px;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
+    font-weight: bold;
+    background-color: #fff;
+    color: #428bca;
+}
+.nav-pills > li.active > a:hover {
+    background-color: #eee;
+    color: #428bca;
+}
+
+.page-nav.admin .nav-pills > li.active > a, .page-nav.admin .nav-pills > li.active > a:focus {
+    font-weight: bold;
+    background-color: #FFFEDC;
+    color: #428bca;
+}
+.page-nav.admin .nav-pills > li.active > a:hover {
+    background-color: #FFFEDC;
+    color: #428bca;
+}
+
+h1 {
+    border-bottom: 1px solid #d7dcdf;
+    color: #000;
+    font-weight: normal;
+    margin-bottom: 16px;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-bottom: 5px;
+    margin-top: 10px;
+    font-weight: normal;
+}
+
+h1, .h1 {
+    font-size: 30px;
+}
+h2, .h2 {
+    font-size: 24px;
+}
+h3, .h3 {
+    font-size: 18px;
+}
+h4, .h4 {
+    font-size: 14px;
+}
+h5, .h5 {
+    font-size: 12px;
+}
+h6, .h6 {
+    font-size: 10px;
+}
+
+aside h3.header {
+    font-size: 16px;
+}
+
+.box {
+    border: 1px solid #d7dcdf;
+    padding: 10px;
+}
+
+.title h1, .title h2 {
+    margin-top: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+h3.reported_by {
+    margin-top: 20px;
+}
+
+.site-banner {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.sidebar section > h1, .sidebar section > h2, .sidebar section > h3, .sidebar section > h4, .sidebar section > h5, .sidebar section > h6 {
+    margin-top: 0;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #d7dcdf;
+}
+
+aside > section {
+    margin-top: 15px;
+    display: inline-block;
+    width: 100%;
+}
+aside > section > article {
+    margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+    /* additional 10px of separation when asides are rendered as a sidebar */
+    .sidebar {
+        padding-left: 20px;
+    }
+}
+aside .sponsor img {
+    width: 100%;
+    max-width: 200px;
+
+}
+
+ul.pagination li.current a, ul.pagination li.current a:hover, ul.pagination li.current a:active {
+    background-color: transparent;
+    color: inherit;
+    cursor: default;
+}
+
+footer {
+    border-top: 1px solid #d7dcdf;
+    margin: 5px 0;
+    padding-top: 5px;
+}
+
+.ratings {
+    margin-bottom: 1em;
+}
+
+.assets {
+    margin-top: 2em;
+}
+
+.comment h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: 1.5em;
+}
+
+.comment h3 .meta {
+    margin-top: 0.3em;
+}
+
+.comment h3 .meta small {
+    display: block;
+    font-size: 60%;
+}
+
+.comment h3 .rating {
+    margin-top: 0.5em;
+}
+
+.comment .avatar img {
+    -webkit-border-radius: 50%; /* Can also be 55px */
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 4px solid white;
+    margin-top: 0.2em;
+    margin-left: 0.5em;
+}
+
+.key {
+    padding: 0.5em 5px;
+    color: white;
+    text-align: center;
+    position: relative;
+    min-height: 1px;
+    margin-bottom: 1px;
+    float: left;
+    width: auto;
+}
+@media (min-width: 435px) {
+.key {
+    padding: 0.5em 15px;
+}
+}
+
+.talk-type-talk {
+    background-color: #5A8EC3;
+}
+
+.talk-type-keynote {
+    background-color: #C799CE;
+}
+
+.talk-type-workshop {
+    background-color: #F69159;
+}
+
+.talk-type-socialevent {
+    background-color: #CAAD90;
+}
+
+.talk-type-eventrelated {
+    background-color: #5BB068;
+}
+/* A special case that lets us put the talk type as a label */
+.talk-type-label {
+    padding: 4px;
+    font-size: 8pt;
+}
+
+
+/* Agenda */
+.agenda h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.agenda .table > thead > tr > th, .agenda .table > tbody > tr > th, .agenda .table > tfoot > tr > th, .agenda .table > thead > tr > td, .agenda .table > tbody > tr > td, .agenda .table > tfoot > tr > td {
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    line-height: 1.42857;
+    vertical-align: top;
+}
+
+.agenda .time {
+    padding-left: 0;
+}
+
+.agenda .lowlight {
+    color: #777;
+}
+
+.agenda .talk-info {
+    width: 157px;
+    float: right;
+}
+
+.talk-info .rating {
+    display: inline-block;
+    margin-left: 0;
+}
+
+.talk-info .slides {
+    display: inline-block;
+    margin-left: 3px;
+    width: 16px;
+}
+
+.talk-info .comment-count {
+    display: inline-block;
+    margin-left: 3px;
+    background: rgba(0, 0, 0, 0) url("/img/icon-comment.gif") 0 0  no-repeat scroll;
+    width: 21px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 11px;
+    height: 21px;
+    line-height: 16px;
+}
+
+/* Schedule */
+table.schedule a {
+    color: white;
+}
+
+table.schedule span.speaker a {
+    color: black;
+    font-style: italic;
+}
+
+table.schedule span.speaker a:hover {
+    color: white;
+}
+
+.rateit {
+    display: -moz-inline-box;
+    display: inline-block;
+    position: relative;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.rateit .rateit-range
+{
+    position: relative;
+    display: -moz-inline-box;
+    display: inline-block;
+    background: url(../img/rating.png);
+    height: 21px;
+    outline: none;
+}
+
+.rateit .rateit-range * {
+    display:block;
+}
+
+/* for IE 6 */
+* html .rateit, * html .rateit .rateit-range
+{
+    display: inline;
+}
+
+/* for IE 7 */
+* + html .rateit, * + html .rateit .rateit-range
+{
+    display: inline;
+}
+
+.rateit .rateit-hover, .rateit .rateit-selected
+{
+    position: absolute;
+    left: 0px;
+}
+
+.rateit .rateit-hover
+{
+    background: url(../img/rating.png) left -42px;
+}
+
+.rateit .rateit-selected
+{
+    background: url(../img/rating.png) left -21px;
+}
+
+.rateit .rateit-preset
+{
+    background: url(../img/rating.png) left -63px;
+}
+
+.rateit button.rateit-reset:hover, .rateit button.rateit-reset:focus
+{
+    background-position: 0 -21px;
+}
+
+#comments form div {
+    clear: left;
+}
+
+#comments form input {
+    margin-top: 1em;
+}
+
+#comments div#rating_value {
+    clear: none;
+    font-size: 80%;
+    font-weight: bold;
+    height: 2em;
+}
+
+.apps img {
+    border: 1px solid #ccc;
+}
+
+.apps {
+    margin-bottom: 10px;
+}
+
+.event .logo {
+    float: left;
+    margin-top: 6px;
+    padding: 0 10px;
+    width: 90px;
+}
+
+.event .description {
+    postion:relative;
+    margin-left: 90px;
+}
+
+.event .logo img {
+    width: 100%;
+}
+
+.event.pending-event .controls {
+    float: left;
+    margin-top: 6px;
+    padding: 0 10px;
+    width: 150px;
+}
+
+.event.pending-event .description {
+    margin-left: 150px;
+}
+
+.event.pending-event form button {
+    width: 100%;
+    margin-bottom: 5px
+}
+
+@media (max-width: 768px) {
+    .pull-right-xs {
+        float: right;
+    }
+
+    .pull-left-xs {
+        float: left;
+    }
+}
+
+@media (min-width: 768px) {
+    .pull-right-sm {
+        float: right;
+    }
+
+    .pull-left-sm {
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .pull-right-md {
+        float: right;
+    }
+
+    .pull-left-md {
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .pull-right-lg {
+        float: right;
+    }
+
+    .pull-left-lg {
+        float: left;
+    }
+}
+
+form {
+    margin: 0 0 10px;
+}
+
+form ul.errors {
+    padding-left: 0;
+    list-style-type: none;
+    color: #d9534f;
+}
+
+form .button-spacer {
+    margin-right: 5px;
+    margin-left: 0;
+}
+form .button-spacer.pull-right {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+label.required:after {
+    content: ' *'
+}
+
+.commented-on {
+    font-style: italic;
+}
+
+.comment:before {
+  display: block;
+  content: " ";
+  margin-top: -60px;
+  height: 60px;
+  visibility: hidden;
+}
+
+#comment {
+    line-height: 1.2em;
+}
+
+.user-profile {
+    margin-bottom: 10px;
+}
+
+.user-profile-panels h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.user-profile-panels section {
+    margin-bottom: 10px;
+}
+.user-profile-panels section .rating {
+    margin-top: 2px;
+    margin-left: 5px;
+}
+
+.user-profile-panels .panel-body {
+    padding-bottom: 5px;
+    min-height: 345px;
+}
+.user-profile-panels .more, .user-details .more {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.user-profile img {
+    margin-right: 20px;
+}
+
+.user-profile img {
+    height: 100px;
+    width: 100px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.user-details {
+    color: #777;
+    font-weight: 400;
+    font-size: 1.2em;
+    line-height: 1;
+    margin-top: 10px;
+}
+
+.search-results .talk .rating {
+    float: right;
+}
+
+.user-profile-panels .logo {
+    position: relative;
+    float: left;
+    width: 70px;
+}
+
+.user-profile-panels .logo img {
+    width: 100%;
+    max-width: 50px;
+}
+
+.user-profile-panels .title h3, .user-profile-panels .title h4 {
+    margin-top: 0;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+a.star, table.schedule a.star {
+    font-size: 3em;
+    float: right;
+    text-decoration: none;
+    color: #000;
+    line-height: 0.5em;
+}
+
+a.star {
+    font-size: 2.0em;
+}
+
+a.star:hover {
+    text-decoration: none;
+}
+
+a.starred, table.schedule a.starred {
+    color: #fff;
+}
+
+.agenda table .star-wrapper {
+    float: none;
+    display: inline-block;
+}
+
+.agenda table a.starred, a.starred.talk {
+    color: #000;
+}
+
+a.talk.star {
+    font-size: 1.5em;
+    float: none;
+    margin: 0 5px 0;
+}
+
+.event-details {
+    color: #777;
+}
+
+.event-attendees img {
+    max-width:100%
+}
+
+.event-attendees .row .col {
+    text-align:center;
+}
+
+.event-attendees .row .col .attendeeName {
+    height:40px;
+    overflow:hidden;
+    margin-top:5px;
+}
+
+.tags {
+    margin-bottom: 5px;
+}
+
+.already-registered {
+    padding-right: 10px;
+    margin-bottom: 5px;
+}
+
+.alternative-login a {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#contact_comment {
+    height: 15em;
+}
+
+.form-cancel {
+    margin-right: 10px;
+    margin-top: 9px;
+}
+
+.attending.label {
+    font-size: 12px;
+    font-weight: normal;
+    display: inline-block;
+    padding: 1px 5px;
+    line-height: 18px;
+    margin-bottom: 2px;
+}
+
+#loginheader {
+    margin-bottom: 20px;
+}
+
+
+.top-spacer {
+    margin-top: 10px;
+}
+
+form ul.speakers {
+    list-style-type: none;
+}
+
+form ol.tracks li {
+    margin-top: 20px;
+}
+form ol.tracks li:last-child {
+    list-style-type: none;
+    border-bottom: none;
+}

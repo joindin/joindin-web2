@@ -1,0 +1,27 @@
+{% extends 'Event/_common/layout_event_details.html.twig' %}
+
+{% block title %}{{ event.getName }} talk comments - Joind.in{% endblock %}
+{% block extraAside %}
+<section>
+    {% include 'Event/_common/event_details.html.twig' %}
+</section>
+{% endblock %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    <h2>Talk comments</h2>
+    {% for comment in talkComments.comments %}
+        {% set talkSlug = talkSlugs[comment.getTalkUri()] %}
+        {% include '_common/comment.html.twig' with {
+            'showTalkTitle': true,
+            'talkLink': urlForTalk(event.getUrlFriendlyName(), talkSlug)
+        } %}
+    {% endfor %}
+
+    {% if talkComments.comments is defined and talkComments.comments is not empty %}
+        {% include '_common/pagination.html.twig' with {'pagination': talkComments.pagination} %}
+    {% else %}
+        <p>No comments yet.</p>
+    {% endif %}
+{% endblock %}

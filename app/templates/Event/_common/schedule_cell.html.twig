@@ -1,12 +1,21 @@
+{% if user %}
+<div id="{{ event.getUrlFriendlyName }}/{{ talk.getUrlFriendlyTalkTitle }}">
+    <a href="javascript:" class="star{% if talk.starred %} starred{% endif %}">{% if talk.starred %}&#10029;{% else %}&#10025;{% endif %}</a>
+</div>
+{% endif %}
 <p><a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.title }}</a></p>
 <p>{% for speaker in talk.speakers %}
-    <a href="{{ speaker.speaker_uri }}">
-        <span class="speaker">
-        {% if loop.last %}
-            {{ speaker.speaker_name }}</a>
-        {% else %}
-            {{ speaker.speaker_name }}</a>,
+    <span class="speaker">
+        {% set comma = "" %}
+        {% if not loop.last %}
+            {% set comma = "," %}
         {% endif %}
-        </span>
+
+        {% if speaker.username %}
+            <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+        {% else %}
+            {{ speaker.speaker_name }}{{comma}}
+        {% endif %}
+    </span>
     {% endfor %}
 </p>

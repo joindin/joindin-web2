@@ -61,7 +61,7 @@ class EventScheduler
      */
     public function getEventDays($talks)
     {
-        if(empty($talks)) {
+        if (empty($talks) || empty($talks['talks'])) {
             return array();
         }
 
@@ -121,7 +121,6 @@ class EventScheduler
         $tracksByDay = array();
 
         foreach ($talks as $talk) {
-
             $dateTime = $talk->getStartDateTime();
             $date = $dateTime->format('d-m-Y');
 

@@ -1,0 +1,78 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Talks by {{ thisUser.getFullname }} - Joind.in{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div class="row user-profile">
+            <div class="col-xs-12">
+                <div class="pull-left">
+                    <img src="{{ gravatar(thisUser.getGravatarHash, 100) }}">
+                </div>
+                <div>
+                    <h2>{{ thisUser.getFullname }}</h2>
+                    <section class="user-details">
+                        {% if thisUser.getTwitterUsername %}
+                        Twitter: <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
+                            @{{ thisUser.getTwitterUsername }}</a>
+                        {% endif %}
+
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile', {'username': thisUser.getUsername}) }}">
+                                View profile</a>
+                        </p>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="user-profile-panels">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Talks</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% for talk in talks %}
+                            <section>
+                                {% set event = attribute(eventInfo, talk.getApiUri) %}
+                                <div class="pull-right talk-info">
+                                    {% if talk.getAverageRating %}
+                                        {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical', 'size': 'small', 'include_rating_placeholder': true} %}
+                                    {% endif %}
+
+                                    <span class="slides">
+                                        {% if talk.slidesLink %}
+                                            <a target="new" title="Slides for this session" href="{{ talk.slidesLink }}">
+                                                <img src="/img/icon-slides.gif" alt="Slides for this session">
+                                        </a>
+                                        {% endif %}
+                                    </span>
+
+                                    <span class="comment-count">
+                                        <a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.getUrlFriendlyTalkTitle }) }}"> {{ talk.commentCount }}</a>
+                                    </span>
+                                </div>
+
+
+                                <h3><a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.getUrlFriendlyTalkTitle }) }}">{{ talk.getTitle }}</a></h3>
+                                <small>
+                                    at
+                                    <a href="{{ urlFor('event-detail', {'friendly_name': event.url_friendly_name}) }}">{{ event.name }}</a>
+                                    on {{ talk.getStartDateTime|date('j M Y') }}
+                                </small>
+                            </section>
+                        {% endfor %}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile', {'username': thisUser.getUsername}) }}">
+                                View profile</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

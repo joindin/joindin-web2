@@ -1,0 +1,231 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}{{ thisUser.getFullname }} - Joind.in{% endblock %}
+
+{% block body %}
+    <section class="page-header">
+        <div class="row user-profile">
+            <div class="col-xs-12">
+                <div class="pull-left">
+                    <img src="{{ gravatar(thisUser.getGravatarHash, 100) }}">
+                </div>
+                <div>
+                    <h2>{{ thisUser.getFullname }}</h2>
+                    <section class="user-details">
+                        {% if thisUser.getTwitterUsername %}
+                        Twitter: <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
+                            @{{ thisUser.getTwitterUsername }}</a>
+                        {% endif %}
+
+                        {% if thisUser.canEdit %}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-edit', {'username': thisUser.getUsername}) }}">
+                                Edit</a>
+                        </p>
+                        {% endif %}
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+    {% endif %}
+    {% if flash.getMessages.error %}
+        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+    {% endif %}
+    {% set blockCount = 0 %}
+    <section class="user-profile-panels">
+        <div class="row">
+            {% if talks %}
+            {% set blockCount = blockCount + 1 %}
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Talks</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% for talk in talks %}
+                            <section>
+                                {% set event = attribute(eventInfo, talk.getApiUri) %}
+                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.getUrlFriendlyTalkTitle }) }}">{{ talk.getTitle }}</a></h4>
+                                {% if talk.getAverageRating %}
+                                    <div class="pull-right rating rating-{{ talk.getAverageRating }}">
+                                        <img src="/img/avg-rating-{{ talk.getAverageRating }}.png"
+                                             title="Rated {{ talk.getAverageRating }}"
+                                            width="132" height="24" alt="Rated {{ talk.getAverageRating }}"/>
+                                            {# width/height: 156/28, 132/24, 117/21 #}
+                                    </div>
+                                {% endif %}
+                                <small>
+                                    at
+                                    <a href="{{ urlFor('event-detail', {'friendly_name': event.url_friendly_name}) }}">{{ event.name }}</a>
+                                    <br>
+                                    on {{ talk.getStartDateTime|date('j M Y') }}
+                                </small>
+                            </section>
+                        {% endfor %}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-talks', {'username': thisUser.getUsername}) }}">
+                                View all talks by {{ thisUser.getFullname }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if events %}
+            {% set blockCount = blockCount + 1 %}
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Attended events</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% for event in events %}
+                            <section>
+                                <h4><a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.name }}</a></h4>
+                                <small>
+                                    {% if event.getLocation %}
+                                    at
+                                    {{ event.getLocation }}</a>
+                                    <br>
+                                    {% endif %}
+                                    on {{ event.getStartDate|date('j M Y') }}
+                                    {%  if event.getStartDate|date('j M Y', event.getFullTimezone)
+                                            is not sameas(event.getEndDate|date('j M Y', event.getFullTimezone)) %}
+                                        &ndash; {{ event.getEndDate|date('j M Y', event.getFullTimezone) }}
+
+                                    {% endif %}
+                                </small>
+                            </section>
+                        {% endfor %}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-events', {'username': thisUser.getUsername}) }}">
+                                View all events attended by {{ thisUser.getFullname }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if talkComments %}
+            {% set blockCount = blockCount + 1 %}
+            {% if blockCount is not even %}
+        </div>
+        <div class="row">
+            {% endif %}
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Comments</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% for comment in talkComments %}
+                            <section>
+                                {% set event = attribute(eventInfo, comment.getTalkUri) %}
+                                {% set talk = attribute(talkInfo, comment.getTalkUri) %}
+                                <h4><a href="{{ urlFor('talk', {'eventSlug': event.url_friendly_name, 'talkSlug': talk.url_friendly_talk_title }) }}#comment-{{ comment.getCommentHash }}">{{ comment.getTalkTitle }}</a></h4>
+                                {% if comment.getRating %}
+                                    <div class="pull-right rating rating-{{ comment.getRating }}">
+                                        <img src="/img/avg-rating-{{ comment.getRating }}.png"
+                                             title="Rated {{ comment.getRating }}"
+                                            width="132" height="24" alt="Rated {{ comment.getRating }}"/>
+                                            {# width/height: 156/28, 132/24, 117/21 #}
+                                    </div>
+                                {% endif %}
+                                <small>
+                                    at
+                                    <a href="{{ urlFor('event-detail', {'friendly_name': event.url_friendly_name}) }}">{{ event.name }}</a>
+                                    <br>
+                                    on {{ comment.getCommentDate|date('j M Y') }}
+                                </small>
+                            </section>
+                        {% endfor %}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-comments', {'username': thisUser.getUsername}) }}">
+                                View all comments by {{ thisUser.getFullname }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if hostedEvents %}
+            {% set blockCount = blockCount + 1 %}
+            {% if blockCount is not even %}
+        </div>
+        <div class="row">
+            {% endif %}
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Hosted events</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% for event in hostedEvents %}
+                            <section>
+                                <h4><a href="{{ urlFor('event-detail', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.name }}</a></h4>
+                                <small>
+                                    {% if event.getLocation %}
+                                    at
+                                    {{ event.getLocation }}</a>
+                                    <br>
+                                    {% endif %}
+                                    on {{ event.getStartDate|date('j M Y') }}
+                                    {%  if event.getStartDate|date('j M Y', event.getFullTimezone)
+                                            is not sameas(event.getEndDate|date('j M Y', event.getFullTimezone)) %}
+                                        &ndash; {{ event.getEndDate|date('j M Y', event.getFullTimezone) }}
+
+                                    {% endif %}
+                                </small>
+                            </section>
+                        {% endfor %}
+                        <p class="more">
+                            <a href="{{ urlFor('user-profile-hosted', {'username': thisUser.getUsername}) }}">
+                                View all events hosted by {{ thisUser.getFullname }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block bottomAside %}
+    {#
+    <section>
+        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#embed-modal">
+            Embed profile
+            <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+        </button>
+    </section>
+
+    <div class="modal fade" id="embed-modal" tabindex="-1" role="dialog" aria-labelledby="embed-modal-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="embed-modal-label">Embed your profile</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Do you want to embed your Joind.in profile into your website? Then, copy (<kbd>Ctrl</kbd> + <kbd>C</kbd>) and paste (<kbd>Ctrl</kbd> + <kbd>V</kbd>) the following code:
+                    </p>
+                    <pre class="js-embeddable-code" tabindex="0"><code>&lt;div class="joindin-embed" data-url="{{ thisUser.getUri }}" data-type="speaker"&gt;&lt;/div&gt;
+&lt;link rel="stylesheet" href="https://cdn.joind.in/joindin.min.css" /&gt;
+&lt;script src="https://cdn.joind.in/joindin.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;JoindIn.init();&lt;/script&gt;</code></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    #}
+{% endblock %}

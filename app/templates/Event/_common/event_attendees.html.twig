@@ -1,0 +1,17 @@
+{% if (event.getAttendeeCount  > 0) %}
+<h3>Who's attending?</h3>
+    <div class="row">
+        {% for attendee in attendees %}
+            <div class="col col-sm-4 col-xs-3">
+                <img src="{{ gravatar(attendee.getGravatarHash, 100) }}">
+                <div class="attendeeName"><a href="{{ urlFor('user-profile', {'username': attendee.username}) }}">{{ attendee.getFullName }}</a></div>
+            </div>
+        {% endfor %}
+
+        {% if ((event.getAttendeeCount  > 6) and (not fullList)) %}
+            <p  class="text-center col-xs-12" >
+                <a href="#" id="allAttendees">See all {{ event.getAttendeeCount }} attendees</a>
+            </p>
+        {% endif %}
+    </div>
+{% endif %}

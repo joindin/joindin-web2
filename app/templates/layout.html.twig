@@ -1,92 +1,145 @@
+{# default to sidebar_col_width of 3 if not set #}
+{% if not sidebar_col_width %} {% set sidebar_col_width = 3 %} {% endif %}
+{% set main_col_width = 12 - sidebar_col_width %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>{% block title %}Joind.in{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="/css/main.css" rel="stylesheet">
-
-    {#<link rel="shortcut icon" href="/images/favicon.ico">#}
-    {#<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">#}
-    {#<link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">#}
-    {#<link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">#}
+    {% block extra_meta %}{% endblock %}
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/css/font-awesome-custom.css" rel="stylesheet">
+    <link href="/css/datepicker3.css" rel="stylesheet">
+    <link href="/css/bootstrap-timepicker.css" rel="stylesheet">
+    <link href="/css/joindin.css" rel="stylesheet">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/img/apple-touch-icon-167x167.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon-180x180.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon-192x192.png">
+    <link rel="icon" sizes="128x128" href="/img/favicon-128x128.png">
+    {% block extra_styles %}{% endblock %}
 </head>
 
 <body>
-    <header id="head">
-        <div class="userdetails">
-            <form action="/search/events" method="get" style="float: left">
-                <input type="text" name="keyword" value="{{ keyword }}" placeholder="Search events or talks">
-                <button type="submit">Search</button>
-            </form>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <img src="/img/logo.png" alt="Joind.in"/>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/event">Events</a>
+                    </li>
+                    <li>
+                        <a href="{{ urlFor('apps') }}">Apps</a>
+                    </li>
+                    <li>
+                        <a href="{{ urlFor('about') }}">About</a>
+                    </li>
+                    {% if user %}
+                         <li><a href="{{ urlFor('user-profile', {'username': user.getUsername} ) }}">{{ user.getFullName }}</a></li>
+                        <li><a href="{{ urlFor('user-logout') }}{%if currentPath() != "/" %}?redirect={{ currentPath() }}{% endif %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="/#login">Login</a></li>
+                    {% endif %}
+                </ul>
+                <form class="navbar-form navbar-right" role="search" action="{{ urlFor('search') }}">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control input-sm" value="{{ keyword }}" placeholder="Search events or talks">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default input-sm" type="submit"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container-fluid">
+        <div class="alert alert-info site-banner" role="alert">
+            You're seeing the next-generation joind.in website. If you're not ready for the future yet, you can return to the <a href="https://legacy.joind.in">old version</a> of the site.  (PS  We'd love your <a href="{{ urlFor('contact') }}">feedback</a> on our new look!)
         </div>
-        <nav>
-            <ul>
-                <li>
-                    <h1>
-                        <a href="/">
-                            <img src="/img/logo.png"
-                                 alt="Joind.in"
-                                 class="respImage"
-                                 width="120"
-                                 height="30"/>
-                        </a>
-                    </h1>
-                </li>
-
-                <li>
-                    <a href="/event">Events</a>
-                </li>
-                <li>
-                    <a href="{{ urlFor('apps') }}">Apps</a>
-                </li>
-                <li>
-                    <a href="{{ urlFor('about') }}">About</a>
-                </li>
-
-                {% if user %}
-                    <li><a href="#">{{ user.getFullName }}</a></li> <!-- This should link to the user profile page in the future -->
-                    <li><a href="{{ urlFor('user-logout') }}">Logout</a></li>
-                {% else %}
-                    <li><a href="{{ urlFor('user-login') }}">Login</a></li>
-                {% endif %}
-
-            </ul>
-        </nav>
-    </header>
-
-    <div id="wrapper">
-        <div id="content">
-            {% block body %}{% endblock %}
-        </div>
-        <aside id="aside">
-            <section class="wideOnly">
-                <img src="/img/logo-combell.png" alt=" " />
-                <p>
-                    <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
-                    <a href="http://www.combell.com/en">hosting</a> by Combell
-                </p>
+        <div class="row">
+            <aside class="col-xs-12 col-sm-{{ sidebar_col_width }} pull-right-sm sidebar">
+                {% block topAside %}{% endblock %}
+            </aside>
+            <div class="col-xs-12 col-sm-{{ main_col_width }}" >
+                {% block body %}{% endblock %}
+            </div>
+            <aside class="col-xs-12 col-sm-{{ sidebar_col_width }} pull-right-sm sidebar">
 
                 {% block extraAside %}{% endblock %}
-            </section>
-        </aside>
+                
+                {% if not user %}
+                <div id="loginheader"><a name="login">&nbsp;</a></div>
+                <section>
+                        <h2>Log in</h2>
+                        {% include '_common/login.html.twig' %}
+                </section>
+                {% endif %}
+
+                {% block bottomAside %}{% endblock %}
+
+                <!-- Hidden on XS as it appears right above the footer, duplicating the info -->
+                <section class="text-center hidden-xs box sponsor">
+                    <img src="/img/logo-combell.png" alt="Combell" />
+                    <p>
+                        <a href="http://www.combell.com/en/servers/cloud-server">Cloud server</a>
+                        <a href="http://www.combell.com/en">hosting</a> by Combell
+                    </p>
+                </section>
+            </aside>
+        </div>
     </div>
 
-    <div id="foot">
-        <a href="http://www.combell.com/en/servers/cloud-server">
-            Cloud server
-        </a>
-        <a href="http://www.combell.com/en">hosting</a>
-        by Combell
-        <a href="http://www.combell.com/en">
-            <img src="/img/logo-combell-small.gif"
-                 alt="Combell"
-                 height="22"
-                 width="80"/ >
-        </a>
-    </div>
-</body>
+    <footer class="container-fluid" role="footer">
+        <div class="row">
+            <div class="col-xs-5">
+                <a href="http://github.com/joindin"><i class="fa fa-github-alt"></i> Contribute on Github</a>
+            </div>
+            <div class="col-xs-7 text-right">
+                <a href="http://www.combell.com/en/servers/cloud-server">
+                    Cloud server
+                </a>
+                <a href="http://www.combell.com/en">hosting</a>
+                by Combell
+                <a href="http://www.combell.com/en">
+                    <img src="/img/logo-combell-small.png" alt="Combell">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+        var baseUrl = "{{ baseUrl() }}";
+    </script>
+    <script type="text/javascript" src="/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.rateit.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-timepicker.js"></script>
+    <script type="text/javascript" src="/js/joindin.js"></script>
+
 {% block extra_javascript %}{% endblock %}
 
 {# Begin Google Analytics code #}
@@ -107,4 +160,5 @@
     </script>
 {% endif %}
 {# End Google Analytics code #}
+</body>
 </html>

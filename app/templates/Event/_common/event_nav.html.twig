@@ -1,0 +1,38 @@
+{# By default, top_border is on #}
+{% if top_border is not defined %} {% set top_border = true %} {% endif %}
+
+    <nav class="page-nav {% if top_border == false %}no-top-border{% endif %}">
+        <ul class="nav nav-pills">
+            {% set event_sub_menu = [
+                {"route":"event-detail", "name":"Details", "active_match": ['event-detail']},
+                {"route":"event-schedule", "name":"Schedule",
+                    "active_match": ['event-default', 'event-schedule-list', 'event-schedule-grid']},
+                {"route":"event-comments", "name":"Event comments", "active_match": ['event-comments']},
+                {"route":"event-talk-comments", "name":"Talk comments", "active_match": ['event-talk-comments']}
+            ] %}
+
+            {% for item in event_sub_menu %}
+            <li class="{% if getCurrentRoute() in item.active_match %}active{% endif %}">
+                <a href="{{ urlFor(item.route, {"friendly_name": event.getUrlFriendlyName}) }}">{{ item.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    {% if event.getCanEdit %}
+    <nav class="page-nav admin">
+        <ul class="nav nav-pills">
+            <li class="{% if getCurrentRoute() == 'event-edit' %}active{% endif %}">
+                <a href="{{ urlFor('event-edit', {"friendly_name": event.getUrlFriendlyName}) }}">Edit</a>
+            </li>
+            <li class="{% if getCurrentRoute() == 'event-edit-tracks' %}active{% endif %}">
+                <a href="{{ urlFor('event-edit-tracks', {"friendly_name": event.getUrlFriendlyName}) }}">Tracks</a>
+            </li>
+            <li class="{% if getCurrentRoute() == 'event-add-talk' %}active{% endif %}">
+                <a href="{{ urlFor('event-add-talk', {"friendly_name": event.getUrlFriendlyName}) }}">Add talk</a>
+            </li>
+            <li class="{% if getCurrentRoute() == 'event-reported-comments' %}active{% endif %}">
+                <a href="{{ urlFor('event-reported-comments', {"friendly_name": event.getUrlFriendlyName}) }}">Reported comments</a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}

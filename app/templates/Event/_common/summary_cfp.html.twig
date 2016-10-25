@@ -1,0 +1,28 @@
+{%
+set eventUrl = urlFor(
+    'event-detail', {"friendly_name": event.getUrlFriendlyName}
+)
+%}
+
+<article class="cfp-event title-only">
+    <h3 class="header">
+        <a href="{{ eventUrl }}">{{ event.getName }}</a>
+    </h3>
+    <p class="meta">
+        {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
+
+        {% if event.getLocation %}
+            @ {{event.getLocation|escape}}
+        {% endif %}
+
+        {% if event.getCfpEndDate and event.getCfpEndDate > "now"|date('c') %}
+                {% if "now"|date('c') < event.getCfpStartDate %}
+                    {# not open yet #}
+                    <br>Call for papers starts {{ event.getCfpStartDate |date('j M Y', event.getFullTimezone) }}
+                {% elseif "now"|date('c') < event.getCfpEndDate %}
+                    {# still open #}
+                    <br>Call for papers ends {{ event.getCfpEndDate |date('j M Y', event.getFullTimezone) }}
+                {% endif %}
+        {% endif %}
+    </p>
+</article>

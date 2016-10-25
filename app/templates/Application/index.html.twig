@@ -1,12 +1,40 @@
-{% extends '/layout.html.twig' %}
+{% set sidebar_col_width = 4 %}
+{% extends 'layout.html.twig' %}
+
+{% block title %}Joind.in{% endblock %}
 
 {% block body %}
-    <h1 class="title">Hot Events</h1>
-    <div>
-        {% for event in events.events %}
-            {% include '_common/eventsummary.html.twig' %}
-        {% endfor %}
+    <h1>Hot Events</h1>
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+    {% endif %}
+    {% for event in events.events %}
+        {% include 'Event/_common/summary.html.twig' %}
+    {% endfor %}
+    <div class="col-xs-12">
+        <a href="/event" class="btn btn-block btn-lg">See more events <i class="fa fa-arrow-circle-o-right"></i></a>
     </div>
+{% endblock %}
 
-    {% include '_common/pagination.html.twig' %}
+{% block topAside %}
+    <section>
+        <h2>Welcome</h2>
+        <p>Welcome to joind.in! This is the site where event attendees can leave feedback on an event and its sessions. Do you have an opinion? Then <a href="{{ urlFor('user-register') }}">register an account</a> and share it!</p>
+    </section>
+{% endblock %}
+
+{% block extraAside %}
+    <section>
+        <h2>Open Calls for Papers</h2>
+        {% if cfp_events.events %}
+        {% for event in cfp_events.events %}
+            {% include 'Event/_common/summary_cfp.html.twig' %}
+        {% endfor %}
+        <div>
+            <a href="{{ urlFor( 'event-call-for-papers' ) }}">See more Calls for Papers <i class="fa fa-arrow-circle-o-right"></i></a>
+        </div>
+        {% else %}
+        <p>There are no events with an open call for papers.</p>
+        {% endif %}
+    </section>
 {% endblock %}

@@ -1,12 +1,51 @@
 {% extends '/layout.html.twig' %}
 
+{% block title %}Events - Joind.in{% endblock %}
+
 {% block body %}
-    <h1 class="title">Latest events</h1>
+    {% if user.admin %}
+    <div class="page-header">
+        <h1 class="title">Upcoming events</h1>
+        <nav class="page-nav admin no-top-border">
+            <ul class="nav nav-pills">
+                <li><a href="{{ urlFor('events-pending') }}">Pending events</a></li>
+            </ul>
+        </nav>
+    </div>
+    {% else %}
+        <h1 class="title">Events</h1>
+    {% endif %}
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{ flash.getMessages.message|nl2br }}</div>
+    {% endif %}
     <div>
         {% for event in events.events %}
-            {% include '_common/eventsummary.html.twig' %}
+            {% include 'Event/_common/summary.html.twig' %}
         {% endfor %}
     </div>
+    {% include 'Event/_common/event_pagination.html.twig' with {'pagination': events.pagination} %}
+{% endblock %}
 
-    {% include '_common/pagination.html.twig' %}
+{% block extraAside %}
+    <section>
+        <h3>Submit your event</h3>
+        <p>
+            Know of an event happening? Let us know! We love to get the word out about
+            events the community would be interested in and you can help us spread the word!
+        </p>
+        <a href="{{ urlFor('event-submit') }}" class="btn btn-primary col-xs-12">Submit</a>
+    </section>
+    <section>
+        <h3>Open Calls for Papers</h3>
+        {% if cfp_events.events %}
+            {% for event in cfp_events.events %}
+                {% include 'Event/_common/summary_cfp.html.twig' %}
+            {% endfor %}
+            <div>
+                <a href="{{ urlFor( 'event-call-for-papers' ) }}">See more Calls for Papers <i class="fa fa-arrow-circle-o-right"></i></a>
+            </div>
+        {% else %}
+            <p>There are no events with an open call for papers.</p>
+        {% endif %}
+    </section>
 {% endblock %}

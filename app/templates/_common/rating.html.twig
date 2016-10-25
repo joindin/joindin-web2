@@ -1,5 +1,15 @@
-<div class="rating rating-{{ rating }}">
-    <img src="/img/rating-{{ rating }}.gif"
-         title="Rated {{ rating }}"
-         class="float"
-         width="117" height="21" alt="Rated {{ rating }}"/>
+{%  if (rating or include_rating_placeholder) %}
+
+{% set width = '156' %}
+{% set height = '28' %}
+{% if size == 'small' %}
+    {% set width = '94' %}
+    {% set height = '17' %}
+{% endif %}
+
+    <div class="rating rating-{{ rating }}">
+        <img src="/img/avg-rating-{{ rating }}.png"
+             title="Rated {{ rating }}"
+            width="{{ width }}" height="{{ height }}" alt="Rated {{ rating }}"/>
+    </div>
+{% endif %}

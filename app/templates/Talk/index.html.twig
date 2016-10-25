@@ -1,54 +1,131 @@
 {% extends '/layout.html.twig' %}
 
+{% block title %}{{ talk.getTitle }} - {{ event.getName }} - Joind.in{% endblock %}
+
+{% block extra_javascript %}
+    <script type="text/javascript">
+        $('#rating_widget').bind('over', function (event, value) {
+            if (value) {
+                $("#rating_value").html($("#rating option[value='"+value+"']").text());
+            } else {
+                $("#rating_value").html($("#rating option:selected").text())
+            }
+        });
+        $('#rating_widget').bind('rated', function (event, value) { $("#rating_value").html($("#rating option[value='"+value+"']").text()) });
+        $("#comment").keyup(function(e) {
+            var offset = this.offsetHeight - this.clientHeight;
+            $(this).css('height', 'auto').css('height', this.scrollHeight + offset);
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
-    {% include 'Event/_common/event_header.html.twig' %}
+    {% include 'Talk/_common/talk_header.html.twig' %}
     <section>
-        <h2>
-            {% if talk.getType != 'Talk' %}
-                <span class="talk-type-label {{ talk.getTypeClass }}">{{ talk.getType }}</span>
-            {% endif %}
-
-            {{ talk.getTitle }}
-
-            {% if talk.getSpeakers %}
-                &mdash;
-                {% for speaker in talk.getSpeakers %}
-                    {{ speaker.speaker_name }}{% if speaker.last and not speaker.first %}, {% endif %}
-                {% endfor %}
-            {% endif %}
-        </h2>
-        <p>
-        </p>
-
         <p>{{ talk.getDescription | nl2br }}</p>
-
-
+        {% if canEditTalk|default(false) %}
+        <p><a href="{{ urlFor('talk-edit', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" class="btn btn-default btn-xs" >Edit talk</a></p>
+        {% endif %}
 
     </section>
 
     <section id="comments">
         <h2>Comments</h2>
+        {% if talk.areCommentsEnabled %}
+            {% if flash.getMessages.message %}
+                <div class="alert alert-success">{{flash.getMessages.message}}</div>
+            {% endif %}
+            <div class="row" id="add-comment">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                    {% if user %}
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Write a comment</h2>
+                        </div>
+                        <div class="panel-body">
+                            <form method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
+                                {% if flash.getMessages.error %}
+                                    <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+                                {% endif %}
+                                {% if canRateTalk %}
+                                    <div class="rating-vote-container">
+                                        <div id="rating_container" class="form-group">
+                                            <label for="rating">Rate the talk:</label>
+                                            <select id="rating" name="rating">
+                                                <option value="0"></option>
+                                                <option value="1"{% if (flash.getMessages.rating and flash.getMessages.rating == 1) %} selected="selected"{% endif %}>Needed more work</option>
+                                                <option value="2"{% if (flash.getMessages.rating and flash.getMessages.rating == 2) %} selected="selected"{% endif %}>Had potential</option>
+                                                <option value="3"{% if (flash.getMessages.rating and flash.getMessages.rating == 3) %} selected="selected"{% endif %}>Worth hearing</option>
+                                                <option value="4"{% if (flash.getMessages.rating and flash.getMessages.rating == 4) %} selected="selected"{% endif %}>Great info &amp; insight</option>
+                                                <option value="5"{% if (flash.getMessages.rating and flash.getMessages.rating == 5) %} selected="selected"{% endif %}>Brilliant!</option>
+                                            </select>
+                                            <br>
+                                            <div class="rateit" id="rating_widget" data-rateit-backingfld="#rating" data-rateit-starwidth="23" data-rateit-starheight="21" data-rateit-resetable="false"></div>
+                                            <div id="rating_value"></div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <input type="hidden" id="rating" name="rating" value="1">
+                                {% endif %}
+                                <div class="form-group">
+                                    <label for="comment">Your comment:</label>
+                                    <textarea id="comment" class="form-control" name="comment" rows="7">{% if flash.getMessages.comment %}{{ flash.getMessages.comment }}{% endif %}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Submit comment</button>
+                                </div>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="panel-heading">
+                            <h2 class="panel-title">Please log in to comment on this event.</h2>
+                        </div>
+                        <div class="panel-body">
+                            {%  include '_common/login.html.twig'  %}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Comments are closed.</p>
+        {% endif %}
 
         {% if comments %}
-        <ul>
             {% for comment in comments %}
-                {% include '_common/comment.html.twig' with {'comment': comment }%}
+                {% include '_common/comment.html.twig' with {'comment': comment, 'talk': talk }%}
             {% endfor %}
-        </ul>
         {% endif %}
     </section>
 
 {% endblock %}
 
+
+{% block topAside %}
+{% if user %}
+    <section>
+        <h2>Claim talk</h2>
+        <p>Are you the speaker for this talk?</p>
+        <p><button type="button" class="btn btn-default" data-toggle="modal" data-target="#claimModal">Claim talk</button></p>
+    </section>
+    {# Temporary popup form the claim talk button #}
+    <div class="modal fade" id="claimModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h2 class="modal-title" id="claimModalLabel">Sorry</h2>
+          </div>
+          <div class="modal-body">
+            {% set legacy_id = talk.getApiUri()|split('/')|last %}
+            <p>This functionality isn't yet available on our new site.</p>
+            <p>If you'd like to help us provide it (maybe after you've given your talk) then you can find the project on <a href="http://github.com/joindin/joindin-vm">GitHub</a>. Until then, you can use the <a href="https://legacy.joind.in/talk/view/{{ legacy_id }}">legacy website</a> to claim your talk.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endif %}
+{% endblock %}
+
 {% block extraAside %}
-    <p class="extraAside">
-        Short URL to this talk:
-        <a href="/talk/{{ talk.getStub }}">
-            http://joind.in/talk/{{ talk.getStub }}
-        </a>
-    </p>
-    <p class="extraAside">
-        Average talk rating:
-        {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating} %}
-    </p>
 {% endblock %}

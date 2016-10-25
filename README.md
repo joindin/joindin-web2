@@ -8,54 +8,19 @@ This version is the next generation version, providing a responsive cross-device
 
 You can either install joind.in on an existing PHP platform, or use our vagrant setup.
 
+### Welcome
+
+Joind.in welcomes all contributors regardless of your ability or experience. We especially welcome
+you if you are new to Open Source development and will provide a helping hand. To ensure that
+everyone understands what we expect from our community, our projects have a [Contributor Code of
+Conduct](CODE_OF_CONDUCT.md) and by participating in the development of joind.in you agree to abide
+by its terms.
+
 ## Quick start with Vagrant
 
-The virtual machine has been moved to a different repo. To use it [fork the joindin-vm](https://github.com/joindin/joindin-vm) repository and follow the instructions in there. 
+To get you going without much hassle we created a vagrant-setup. To use it [fork the joindin-vm](https://github.com/joindin/joindin-vm) repository and follow the instructions in there.
 
 This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-web2). 
-
-## Quick Start for existing platforms
-
-1. Clone repository to any location
-
-        git clone https://github.com/joindin/responsive
-        cd responsive
-        
-1. Create a vhost entry for the site. The docroot should be `/web`.
-
-        <VirtualHost *:80>
-            ServerName joindin.local
-    
-            DocumentRoot "/home/exampleuser/www/responsive/web"
-    
-            <Directory "/home/exampleuser/www/responsive">
-                Options FollowSymLinks
-                AllowOverride All
-            </Directory>
-        </VirtualHost>
-
-1. Add hostname to /etc/hosts.
-
-        echo "127.0.0.1 joindin.local" | sudo tee -a /etc/hosts
-
-1. Enjoy the site!
-
-1. Set up Redis: instructions can be found at http://redis.io/topics/quickstart but to be honest, your favourite package manager should do a good enough job
-
-1. Enjoy the site!
-
-## Configuration
-
-1. Copy the file config/config.php.dist to config/config.php
-
-        cp config/config.php.dist config/config.php
-
-1. Change the value of `apiUrl` to the URL of your development API if you don't want to use the production API.
-
-       Note that if you are connecting to the production API, you will find that you won't be able to log in as you don't have the correct oauth client_id.
-
-       **Create a local copy of the API from the [GitHub project](https://github.com/joindin/joindin-api) and then you can log in to it from your web2 installation**
- 
 
 ## Other Resources
 
@@ -63,3 +28,47 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 * Issues list: http://joindin.jira.com/ (good bug reports ALWAYS welcome!)
 * CI Environment: lots of output and information about tests, deploys etc: http://jenkins.joind.in
 * Community: We hang out on IRC, pop in with questions or comments! #joind.in on Freenode
+
+## Global .gitignore
+
+git has the capability to define a global gitignore file , which means you can 
+set up rules on your machine to ignore everything you don't want to include in 
+your commits. This works not only for this project, but for all your other
+projects too.
+
+You can define the gitignore file with a command that looks like this, where the 
+last argument is the file that holds the patterns to ignore: 
+
+    $ git config --global core.excludesfile ~/.gitignore_global
+
+Octocat gives [a good starting point](https://gist.github.com/octocat/9257657) for what to include, but you can also ignore the files used by your editor:
+
+    # Eclipse
+    .classpath
+    .project
+    .settings/
+    
+    # Intellij
+    .idea/
+    *.iml
+    *.iws
+        
+    # Maven
+    log/
+    target/
+
+    # Netbeans
+    nbproject/private/
+
+For more info on ignoring files, [github has an excellent help page](https://help.github.com/articles/ignoring-files/).
+
+## Using A Proxy
+
+Since web2 then calls the API, it can be tricky to see what is going on.  You can use a proxy tool such as Charles Proxy or mitmproxy to observe the requests that are being made by enabling the `proxy` setting in the config with a line that looks something like this:
+
+    'proxy' => 'tcp://10.0.2.2:8888',
+
+If the proxy tool is running on your host machine, you'll need to understand what IP address the guest thinks your host has, the easiest way to do that is to `vagrant ssh` into the VM and then type `last` to see where it thinks you logged in from.
+
+Alternatively, try [Lorna's blog post about Wiresharking a VM](http://www.lornajane.net/posts/2014/wireshark-capture-on-remote-server).
+     

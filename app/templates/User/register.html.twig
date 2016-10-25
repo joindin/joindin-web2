@@ -1,0 +1,47 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Registration - Joind.in{% endblock %}
+
+{% block body %}
+        <style>
+            label.required:after {
+                content: ' *'
+            }
+        </style>
+
+        <h1 class="title">Register a new account</h1>
+        <p></p>
+
+        {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <fieldset class="col-sm-12">
+                <legend>Your information</legend>
+                {{ form_row(form.username) }}
+                {{ form_row(form.password) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.full_name) }}
+                {{ form_row(form.twitter_username) }}
+            </fieldset>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary pull-right" value="Register" />
+            </div>
+        </div>
+        {{ form_end(form) }}
+        <div class="row">
+            <div class="col-sm-12">
+                Already registered but didn't receive a welcome email? <a class="btn btn-link" href="{{ urlFor('user-resend-verification') }}">Resend welcome email</a>
+            </div>
+        </div>
+{% endblock %}
+
+{% block extraAside %}
+{% endblock %}
+
+{% block extra_styles %}
+{% endblock %}
+
+{% block extra_javascript %}
+{% endblock %}

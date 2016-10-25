@@ -2,15 +2,24 @@
 $config = array(
     'slim' => array(
         'mode' => 'development',
+        'debug' => 1,
         'custom' => array(
-            'redis' => array(
-                'keyPrefix' => 'dev-',
-            ),
-            'apiUrl' => 'https://api.joind.in',
+            'redisKeyPrefix' => 'dev-',
+            'apiUrl' => 'http://api.dev.joind.in',
             'googleAnalyticsId' => '',
+            'proxy' => '',
+            'csrfSecret' => '',
         ),
         'oauth' => array(
             'client_id' => 'web2',
+            'client_secret' => 'web2secret',
         ),
+        'facebook' => array(
+            'app_id' => '',
+        ),
+        'twig' => array(
+            // set to the folder name to cache into, or false to disable
+            'cache' => false
+        )
     ),
 );

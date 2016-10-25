@@ -1,15 +1,17 @@
 <?php
-require_once '../app/src/Application/Autoloader.php';
 
-spl_autoload_register('Application\Autoloader::autoload');
+// To help the built-in PHP dev server, check if the request was actually for
+// something which should probably be served as a static file
+
+if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
+	return false;
+}
+
+// include dependencies
+require '../vendor/autoload.php';
 
 session_cache_limiter(false);
 session_start();
-
-// include dependencies
-require '../vendor/Slim/Slim.php';
-require '../vendor/TwigView.php';
-require '../vendor/predis-0.8/autoload.php';
 
 // include view controller
 require '../app/src/View/Filters.php';
@@ -23,17 +25,20 @@ if (is_readable($configFile)) {
     include realpath(__DIR__ . '/../config/config.php.dist');
 }
 
+// Wrap the Config Data with the Application Config object
+$config['slim']['custom'] = new \Application\Config($config['slim']['custom']);
+
 // initialize Slim
-$app = new Slim(
+$app = new \Slim\Slim(
     array_merge(
         $config['slim'],
         array(
-            'view' => new \TwigView(),
+            'view' => new \Slim\Views\Twig(),
         )
     )
 );
 
-$app->configureMode('development', function() use ($app) {
+$app->configureMode('development', function () use ($app) {
     error_reporting(-1);
     ini_set('display_errors', 1);
     ini_set('html_errors', 1);
@@ -55,16 +60,40 @@ $app->view()->appendData(
 );
 
 // set Twig base folder, view folder and initialize Joindin filters
-\TwigView::$twigDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
+$app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
 View\Filters\initialize($app->view()->getEnvironment(), $app);
 View\Functions\initialize($app->view()->getEnvironment(), $app);
-$app->configureMode('development', function() use ($app) {
+
+if (isset($config['slim']['twig']['cache'])) {
+    $app->view()->getEnvironment()->setCache($config['slim']['twig']['cache']);
+} else {
+    $app->view()->getEnvironment()->setCache(false);
+}
+
+$app->configureMode('development', function () use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
     $env->addExtension(new \Twig_Extension_Debug());
 });
 
+// register error handlers
+$app->error(function (\Exception $e) use ($app) {
+    $app->render('Error/error.html.twig', ['exception' => $e]);
+});
+
+$app->notFound(function () use ($app) {
+    $app->render('Error/404.html.twig');
+});
+
+// register middlewares
+$app->add(new Middleware\ValidationMiddleware());
+
+$csrfSecret = null;
+if (!empty($config['slim']['custom']['csrfSecret'])) {
+    $csrfSecret = $config['slim']['custom']['csrfSecret'];
+}
+$app->add(new Middleware\FormMiddleware($csrfSecret));
 
 // register routes
 new Application\ApplicationController($app);

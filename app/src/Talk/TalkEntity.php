@@ -18,6 +18,23 @@ class TalkEntity
         $this->data = $data;
     }
 
+    /**
+     * Is user a speaker on this talk?
+     *
+     * @param  string  $userUri
+     * @return boolean
+     */
+    public function isSpeaker($userUri)
+    {
+        $speakers = $this->getSpeakers();
+        foreach ($speakers as $speaker) {
+            if (isset($speaker->speaker_uri) && $speaker->speaker_uri == $userUri) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getTitle()
     {
         return $this->data->talk_title;
@@ -49,7 +66,7 @@ class TalkEntity
 
     public function getEndDateTime()
     {
-        if(!$this->data->duration) {
+        if (!$this->data->duration) {
             return null;
         }
 
@@ -81,7 +98,7 @@ class TalkEntity
 
     public function getApiUri($verbose = false)
     {
-        if($verbose) {
+        if ($verbose) {
             return $this->data->verbose_uri;
         }
         return $this->data->uri;
@@ -110,5 +127,49 @@ class TalkEntity
     public function getStub()
     {
         return $this->data->stub;
+    }
+
+    public function areCommentsEnabled()
+    {
+        return $this->data->comments_enabled;
+    }
+
+    public function getCommentsUri()
+    {
+        if (!isset($this->data->comments_uri)) {
+            return null;
+        }
+
+        return $this->data->comments_uri;
+    }
+
+    public function getSlidesLink()
+    {
+        return $this->data->slides_link;
+    }
+
+    public function getLanguage()
+    {
+        return $this->data->language;
+    }
+
+    public function getCommentCount()
+    {
+        return $this->data->comment_count;
+    }
+
+    public function getStarred()
+    {
+        return $this->data->starred;
+    }
+
+    public function getStarredUri()
+    {
+        return $this->data->starred_uri;
+    }
+
+    public function getTracksUri()
+    {
+        return $this->data->tracks_uri;
     }
 }
