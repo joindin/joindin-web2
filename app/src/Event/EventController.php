@@ -20,8 +20,15 @@ use Language\LanguageApi;
 
 class EventController extends BaseController
 {
-    private $itemsPerPage = 10;
-    private $pendingItemsPerPage = 30;
+    private $itemsPerPage;
+    private $pendingItemsPerPage;
+
+    public function __construct(Slim $app)
+    {
+        parent::__construct($app);
+        $this->itemsPerPage = 10;
+        $this->pendingItemsPerPage = 30;
+    }
 
     protected function defineRoutes(\Slim\Slim $app)
     {
