@@ -30,7 +30,7 @@ class EventController extends BaseController
         $this->pendingItemsPerPage = 30;
     }
 
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $app)
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
@@ -605,7 +605,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event = $eventApi->getEventById($eventId);
         if (!$event) {
-            return \Slim\Slim::getInstance()->notFound();
+            return Slim::getInstance()->notFound();
         }
 
         if ($extra && is_array($extra) && ($extra[0] == "talk_comments")) {

@@ -5,6 +5,7 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventApi;
 use Event\EventDb;
+use Slim\Slim;
 use Talk\TalkApi;
 use Talk\TalkDb;
 use User\UserDb;
@@ -34,9 +35,9 @@ class SearchController extends BaseController
     }
 
     /**
-     * @param \Slim $app
+     * @param Slim $app
      */
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $app)
     {
         $app->get('/search/events', array($this, 'searchEvents'))->name("search-events");
         $app->get('/search', array($this, 'search'))->name("search");
