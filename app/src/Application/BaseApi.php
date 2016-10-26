@@ -1,7 +1,7 @@
 <?php
 namespace Application;
 
-class BaseApi
+abstract class BaseApi
 {
     protected $baseApiUrl;
     protected $accessToken;
