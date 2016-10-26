@@ -1,23 +1,12 @@
 <?php
 namespace Talk;
 
+use Application\BaseEntity;
 use DateTime;
 use DateInterval;
 
-class TalkEntity
+class TalkEntity extends BaseEntity
 {
-    private $data;
-
-    /**
-     * Create new TalkEntity
-     *
-     * @param Object $data Model data retrieved from API
-     */
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
     /**
      * Is user a speaker on this talk?
      *

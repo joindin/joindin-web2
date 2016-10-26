@@ -1,22 +1,11 @@
 <?php
 namespace Event;
 
+use Application\BaseEntity;
 use DateTime;
 
-class EventEntity
+class EventEntity extends BaseEntity
 {
-    private $data;
-
-    /**
-     * Create new EventEntity
-     *
-     * @param Object $data Model data retrieved from API
-     */
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
     public function getName()
     {
         if (!isset($this->data->name)) {
