@@ -2,15 +2,16 @@
 namespace Event;
 
 use Application\BaseCommentReportingEntity;
+use stdClass;
 
 class EventCommentReportEntity extends BaseCommentReportingEntity
 {
     /**
      * Create new EventCommentReportEntity
      *
-     * @param \stdClass $data Model data retrieved from API
+     * @param stdClass $data Model data retrieved from API
      */
-    public function __construct(\stdClass $data)
+    public function __construct(stdClass $data)
     {
         parent::__construct($data);
 

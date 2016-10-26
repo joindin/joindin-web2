@@ -2,15 +2,16 @@
 namespace Talk;
 
 use Application\BaseCommentReportingEntity;
+use stdClass;
 
 class TalkCommentReportEntity extends BaseCommentReportingEntity
 {
     /**
      * Create new TalkCommentReportEntity
      *
-     * @param \stdClass $data Model data retrieved from API
+     * @param stdClass $data Model data retrieved from API
      */
-    public function __construct(\stdClass $data)
+    public function __construct(stdClass $data)
     {
         parent::__construct($data);
 

@@ -2,10 +2,11 @@
 namespace Talk;
 
 use Application\BaseCommentEntity;
+use stdClass;
 
 class TalkCommentEntity extends BaseCommentEntity
 {
-    public function __construct(\stdClass $data)
+    public function __construct(stdClass $data)
     {
         parent::__construct($data);
         $this->commentUri = isset($this->data->uri) ? $this->data->uri : null;
