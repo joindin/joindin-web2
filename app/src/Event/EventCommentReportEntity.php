@@ -1,24 +1,24 @@
 <?php
 namespace Event;
 
-class EventCommentReportEntity
-{
-    private $data;
-    private $comment;
+use Application\BaseCommentReportingEntity;
 
+class EventCommentReportEntity extends BaseCommentReportingEntity
+{
     /**
      * Create new EventCommentReportEntity
      *
-     * @param Object $data Model data retrieved from API
+     * @param \stdClass $data Model data retrieved from API
      */
-    public function __construct($data)
+    public function __construct(\stdClass $data)
     {
+        parent::__construct($data);
+
         // should contain a comment
         if ($data->comment) {
             $this->comment = new EventCommentEntity($data->comment);
             unset($data->comment);
         }
-        $this->data = $data;
     }
 
     public function getComment()
