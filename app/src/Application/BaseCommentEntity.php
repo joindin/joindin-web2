@@ -1,9 +1,17 @@
 <?php
 namespace Application;
 
+use stdClass;
+
 abstract class BaseCommentEntity extends BaseEntity
 {
     protected $commentUri;
+
+    public function __construct(stdClass $data)
+    {
+        parent::__construct($data);
+        $this->commentUri = null;
+    }
 
     public function getUserDisplayName()
     {

@@ -9,7 +9,9 @@ class TalkCommentEntity extends BaseCommentEntity
     public function __construct(stdClass $data)
     {
         parent::__construct($data);
-        $this->commentUri = isset($this->data->uri) ? $this->data->uri : null;
+        if (isset($this->data->uri)) {
+            $this->commentUri = $this->data->uri;
+        }
     }
 
     public function getUsername()

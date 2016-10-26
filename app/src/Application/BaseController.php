@@ -18,7 +18,10 @@ abstract class BaseController
         $this->defineRoutes($app);
         $this->cfg = $this->getConfig();
 
-        $this->accessToken = isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null;
+        $this->accessToken = null;
+        if (isset($_SESSION['access_token'])) {
+            $this->accessToken = $_SESSION['access_token'];
+        }
     }
 
     private function getConfig()
