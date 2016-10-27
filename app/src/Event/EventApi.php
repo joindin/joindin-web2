@@ -499,9 +499,10 @@ class EventApi extends BaseApi
     {
         $response = json_decode($this->apiGet($claims_uri));
 
+        var_dump($response);
         $reports = [];
 
-        foreach ($response->reports as $item) {
+        foreach ($response->claims as $item) {
             $reports[] = $item; //new EventCommentReportEntity($item);
         }
 
