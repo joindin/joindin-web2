@@ -872,6 +872,7 @@ class EventController extends BaseController
             );
         }
 
+
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
 
@@ -1138,4 +1139,5 @@ class EventController extends BaseController
         $userDb = new UserDb($this->getCache());
         return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
+
 }
