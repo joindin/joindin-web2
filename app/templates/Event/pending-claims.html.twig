@@ -1,0 +1,55 @@
+{% extends 'Event/_common/layout_event_details.html.twig' %}
+
+{% block extra_javascript %}{% endblock %}
+
+{% block title %}{{ event.getName }} pending talk claims - Joind.in{% endblock %}
+{% block extraAside %}
+<section>
+    {% include 'Event/_common/event_details.html.twig' %}
+</section>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-xs-6">
+            <h2>Pending Talk Claims</h2>
+        </div>
+    </div>
+
+    {% if claims|length %}
+
+    <div class="agenda">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>Talk</th>
+                    <th>Display Name</th>
+                    <th>Claimed By</th>
+                    <td></td>
+                </tr>
+            </thead>
+            <tr>
+                {% for claim in claims %}
+                    <td class="col-sm-4">
+                        {{ claim.talk.getTitle() }}
+                    </td>
+                    <td class="col-sm-2">
+                        {{ claim.display_name }}
+                    </td>
+                    <td class="col-sm-2">
+                        {{ claim.user.getFullName() }}
+                    </td>
+                    <td class="agenda-cell">
+
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+
+    {% else %}
+    <p>There are no pending talk claims currently.</p>
+    {% endif %}
+
+{% endblock %}
