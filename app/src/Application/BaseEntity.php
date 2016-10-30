@@ -5,6 +5,7 @@ use stdClass;
 
 abstract class BaseEntity
 {
+    /** @var stdClass */
     protected $data;
 
     /**
