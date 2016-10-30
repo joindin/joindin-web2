@@ -2,15 +2,15 @@
 namespace Event;
 
 use Application\BaseCommentEntity;
-use stdClass;
 
 class EventCommentEntity extends BaseCommentEntity
 {
-    public function __construct(stdClass $data)
+    public function getCommentUri()
     {
-        parent::__construct($data);
-        if (isset($this->data->comment_uri)) {
-            $this->commentUri = $this->data->comment_uri;
+        if (!isset($this->data->comment_uri)) {
+            return null;
         }
+
+        return $this->data->comment_uri;
     }
 }

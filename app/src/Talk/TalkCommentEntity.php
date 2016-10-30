@@ -6,14 +6,6 @@ use stdClass;
 
 class TalkCommentEntity extends BaseCommentEntity
 {
-    public function __construct(stdClass $data)
-    {
-        parent::__construct($data);
-        if (isset($this->data->uri)) {
-            $this->commentUri = $this->data->uri;
-        }
-    }
-
     public function getUsername()
     {
         if (!isset($this->data->username)) {
@@ -39,6 +31,15 @@ class TalkCommentEntity extends BaseCommentEntity
         }
 
         return $this->data->talk_uri;
+    }
+
+    public function getCommentUri()
+    {
+        if (!isset($this->data->uri)) {
+            return null;
+        }
+
+        return $this->data->uri;
     }
 
     public function canRateTalk($user_uri)

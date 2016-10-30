@@ -1,18 +1,8 @@
 <?php
 namespace Application;
 
-use stdClass;
-
 abstract class BaseCommentEntity extends BaseEntity
 {
-    protected $commentUri;
-
-    public function __construct(stdClass $data)
-    {
-        parent::__construct($data);
-        $this->commentUri = null;
-    }
-
     public function getUserDisplayName()
     {
         if (!isset($this->data->user_display_name)) {
@@ -85,13 +75,15 @@ abstract class BaseCommentEntity extends BaseEntity
         return $this->data->source;
     }
 
+    abstract public function getCommentUri();
+
     public function getCommentHash()
     {
-        if (!isset($this->commentUri)) {
+        if (empty($this->getCommentUri())) {
             return null;
         }
 
-        $hash = md5($this->commentUri);
+        $hash = md5($this->getCommentUri());
         return (substr($hash, 0, 6));
     }
 }
