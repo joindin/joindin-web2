@@ -705,3 +705,7 @@ form ol.tracks li:last-child {
     list-style-type: none;
     border-bottom: none;
 }
+
+#talk-commentbox-body {
+    display: none;
+}

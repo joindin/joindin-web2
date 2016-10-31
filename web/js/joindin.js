@@ -23,6 +23,12 @@ $(function(){
         });
     });
 
+    $('#talk-commentbox-header').click(function() {
+        $('#talk-commentbox-body').slideDown();
+        $('#talk-commentbox-showmore').hide();
+        return false;
+    });
+
     if (window.getSelection) {
         var embeddableCode = $('.js-embeddable-code');
 
