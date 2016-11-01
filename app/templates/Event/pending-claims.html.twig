@@ -11,6 +11,8 @@
 
 {% block body %}
 
+    {% include 'Event/_common/event_header.html.twig' %}
+
     <div class="row">
         <div class="col-xs-6">
             <h2>Pending Talk Claims</h2>
@@ -41,6 +43,15 @@
                         {{ claim.user.getFullName() }}
                     </td>
                     <td class="agenda-cell">
+                        {% if claim.approved %}
+                            <strong>Claim Approved</strong>
+                        {% else %}
+                        <form action="" method="post">
+                            <input type="hidden" name="display_name" value="{{  claim.display_name }}" />
+                            <input type="hidden" name="username" value="{{ claim.user.getUsername() }}" />
+                            <button type="button submit" name="action" value="approve">Approve</button>
+                        </form>
+                        {% endif %}
 
                     </td>
                 {% endfor %}
