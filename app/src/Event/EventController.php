@@ -60,7 +60,7 @@ class EventController extends BaseController
             ->name("event-add-talk");
         $app->map('/event/:friendly_name/edit-tracks', array($this, 'editTracks'))->via('GET', 'POST')
             ->name("event-edit-tracks");
-        $app->map('/event/:friendly_name/claims', array($this, 'talkClaims'))->via('GET')
+        $app->map('/event/:friendly_name/claims', array($this, 'talkClaims'))->via('GET' ,'POST')
             ->name("event-talk-claims");
     }
 
@@ -883,7 +883,6 @@ class EventController extends BaseController
             
             $claims_uri = $event->getPendingClaimsUri();
 
-            echo $claims_uri;
             $claims = $eventApi->getPendingClaims($claims_uri, true);
 
             $userApi = $this->getUserApi();
@@ -892,9 +891,22 @@ class EventController extends BaseController
             foreach ($claims as &$claim){
                 $claim->user = $userApi->getUser($claim->speaker_uri);
                 $claim->talk = $talkApi->getTalk($claim->talk_uri);
-            }
 
-            var_dump($claims);
+
+                if (
+                    $this->application->request->post('display_name')
+                    && $this->application->request->post('display_name') == $claim->display_name
+                    && $this->application->request->post('username') == $claim->user->getUsername()
+                ) {
+                    $data = [
+                        'display_name'  => $this->application->request->post('display_name'),
+                        'username'      => $this->application->request->post('username')
+                    ];
+                    $talkApi->claimTalk($claim->approve_claim_uri, $data);
+
+                    $claim->approved = 1;
+                }
+            }
 
             $this->render(
                 'Event/pending-claims.html.twig',
