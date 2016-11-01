@@ -882,8 +882,27 @@ class EventController extends BaseController
             }
             
             $claims_uri = $event->getPendingClaimsUri();
-            $claims = $eventApi->getPendingClaims($claims_uri);
+
+            echo $claims_uri;
+            $claims = $eventApi->getPendingClaims($claims_uri, true);
+
+            $userApi = $this->getUserApi();
+            $talkApi = $this->getTalkApi();
+
+            foreach ($claims as &$claim){
+                $claim->user = $userApi->getUser($claim->speaker_uri);
+                $claim->talk = $talkApi->getTalk($claim->talk_uri);
+            }
+
             var_dump($claims);
+
+            $this->render(
+                'Event/pending-claims.html.twig',
+                array(
+                    'event' => $event,
+                    'claims' => $claims,
+                )
+            );
 
         }
 
