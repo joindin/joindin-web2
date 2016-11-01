@@ -60,7 +60,7 @@ class EventController extends BaseController
             ->name("event-add-talk");
         $app->map('/event/:friendly_name/edit-tracks', array($this, 'editTracks'))->via('GET', 'POST')
             ->name("event-edit-tracks");
-        $app->map('/event/:friendly_name/claims', array($this, 'talkClaims'))->via('GET' ,'POST')
+        $app->map('/event/:friendly_name/claims', array($this, 'talkClaims'))->via('GET', 'POST')
             ->name("event-talk-claims");
     }
 
@@ -888,16 +888,14 @@ class EventController extends BaseController
             $userApi = $this->getUserApi();
             $talkApi = $this->getTalkApi();
 
-            foreach ($claims as &$claim){
+            foreach ($claims as &$claim) {
                 $claim->user = $userApi->getUser($claim->speaker_uri);
                 $claim->talk = $talkApi->getTalk($claim->talk_uri);
 
 
-                if (
-                    $this->application->request->post('display_name')
+                if ($this->application->request->post('display_name')
                     && $this->application->request->post('display_name') == $claim->display_name
-                    && $this->application->request->post('username') == $claim->user->getUsername()
-                ) {
+                    && $this->application->request->post('username') == $claim->user->getUsername()) {
                     $data = [
                         'display_name'  => $this->application->request->post('display_name'),
                         'username'      => $this->application->request->post('username')
@@ -1170,5 +1168,4 @@ class EventController extends BaseController
         $userDb = new UserDb($this->getCache());
         return new UserApi($this->cfg, $this->accessToken, $userDb);
     }
-
 }
