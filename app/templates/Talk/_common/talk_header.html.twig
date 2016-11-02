@@ -22,7 +22,7 @@
                                 {% if speaker.username %}
                                     <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>
                                     {% if canEditTalk %}
-                                        <a href="#" class="unlink-speaker" data-username="{{ speaker.username }}"><small>(unlink)</small></a>
+                                        <a onclick="return confirm('Are you sure you want to unlink this speaker from this talk?')" href="#"><small>(unlink)</small></a>
                                     {% endif %}
                                     {{ comma }}
                                 {% else %}
