@@ -130,7 +130,7 @@ class EventScheduler
 
             $tracks = $talk->getTracks();
 
-            if (is_array($tracks) && count($tracks > 0)) {
+            if (is_array($tracks) && !empty($tracks)) {
                 foreach ($tracks as $track) {
                     //obtain array of unique track names as array key
                     $tracksByDay[$date][$track->track_name] = true;
