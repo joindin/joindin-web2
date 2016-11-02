@@ -31,6 +31,7 @@ class TalkController extends BaseController
         $app->get('/talk/view/:talkId', array($this, 'quickById'))
             ->name('talk-by-id-web1')
             ->conditions(array('talkId' => '\d+'));
+        $app->post('/event/:eventSlug/:talkSlug/claim', array($this, 'claimTalk'))->name('talk-claim');
     }
 
     public function index($eventSlug, $talkSlug)
@@ -60,6 +61,14 @@ class TalkController extends BaseController
             }
         }
 
+        $unclaimed = [];
+
+        foreach ($talk->getSpeakers() as $speaker) {
+            if (! isset($speaker->speaker_uri)) {
+                $unclaimed[] = $speaker->speaker_name;
+            }
+        }
+
         $canEditTalk = false;
         if (isset($_SESSION['user'])) {
             $canEditTalk = ($talk->isSpeaker($_SESSION['user']->getUri()) || $event->getCanEdit());
@@ -74,6 +83,7 @@ class TalkController extends BaseController
                 'talkSlug' => $talkSlug,
                 'canEditTalk' => $canEditTalk,
                 'canRateTalk' => $canRateTalk,
+                'unclaimed'   => $unclaimed,
             )
         );
     }
@@ -195,6 +205,68 @@ class TalkController extends BaseController
             ]
         );
 
+    }
+
+
+    public function claimTalk($eventSlug, $talkSlug)
+    {
+        if (!isset($_SESSION['user'])) {
+            $thisUrl = $this->application->urlFor('talk-edit', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        $request = $this->application->request();
+        $display_name = $request->post('display_name');
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+
+        if (!$event) {
+            $this->application->notFound();
+            return;
+        }
+
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        if (!$talk) {
+            $this->application->notFound();
+            return;
+        }
+        
+        $speakers = $talk->getSpeakers();
+        $valid = false;
+        foreach ($speakers as $speaker) {
+            if (! isset($speaker->speaker_uri) && $speaker->speaker_name == $display_name) {
+                $valid = true;
+            }
+        }
+
+        if ($valid) {
+            try {
+                $talkApi->claimTalk(
+                    $talk->getSpeakersUri(),
+                    array(
+                        'display_name'  => $display_name,
+                        'username'      => $_SESSION['user']->getUsername()
+                    )
+                );
+
+                $this->application->flash(
+                    'claimmessage',
+                    'Your claim has been received. You will receive an' .
+                    ' email once the host has accepted your claim'
+                );
+            } catch (Exception $e) {
+                $this->application->flash('claimerror', $e->getMessage());
+            }
+
+        } else {
+            $this->application->flash('claimerror', "No speaker {$display_name} found for this talk.");
+        }
+
+        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+        $this->application->redirect($url);
     }
 
     public function star($eventSlug, $talkSlug)
