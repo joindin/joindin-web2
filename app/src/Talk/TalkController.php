@@ -141,7 +141,6 @@ class TalkController extends BaseController
         $data['type'] = $talk->getType();
         if ($talk->getTracks()) {
             $data['track'] = $talk->getTracks()[0]->track_uri;
-
         }
         if ($talk->getSpeakers()) {
             foreach ($talk->getSpeakers() as $speaker) {
@@ -204,7 +203,6 @@ class TalkController extends BaseController
                 'form' => $form->createView(),
             ]
         );
-
     }
 
 

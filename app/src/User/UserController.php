@@ -183,7 +183,6 @@ class UserController extends BaseController
         }
 
         $this->application->redirect('/');
-
     }
 
     public function resendVerification()
@@ -219,7 +218,6 @@ class UserController extends BaseController
                         new FormError('An error occurred: ' . $e->getMessage())
                     );
                 }
-
             }
         }
 
@@ -589,7 +587,6 @@ class UserController extends BaseController
                         new FormError('An error occurred: ' . $e->getMessage())
                     );
                 }
-
             }
         }
 
@@ -742,7 +739,6 @@ class UserController extends BaseController
                         new FormError('An error occurred: ' . $e->getMessage())
                     );
                 }
-
             }
         }
 
@@ -790,8 +786,6 @@ class UserController extends BaseController
                         new FormError('An error occurred: ' . $e->getMessage())
                     );
                 }
-
-
             }
         }
 

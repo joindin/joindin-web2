@@ -32,7 +32,6 @@ class UserApi extends BaseApi
 
                     return $user;
                 }
-
             }
         }
         return false;
