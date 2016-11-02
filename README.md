@@ -71,4 +71,18 @@ Since web2 then calls the API, it can be tricky to see what is going on.  You ca
 If the proxy tool is running on your host machine, you'll need to understand what IP address the guest thinks your host has, the easiest way to do that is to `vagrant ssh` into the VM and then type `last` to see where it thinks you logged in from.
 
 Alternatively, try [Lorna's blog post about Wiresharking a VM](http://www.lornajane.net/posts/2014/wireshark-capture-on-remote-server).
+
+### CODE STYLE
+
+Please do your best to ensure that any code you contributed adheres to the PSR2 coding style. You can run php codesniffer using phing on an individual file like so:
+
+phing phpcs -Dfilename.php
+
+This will run codesniffer on any file within the regular source for joindin-web2. Wildcards work as does specifying part of the path in case the filename alone results in sniffing more files than you wanted.
+
+To see a summary of the codesniff errors and warnings across the entire project, run
+
+phing phpcs
+
+This will show the files that still need some attention.
      
