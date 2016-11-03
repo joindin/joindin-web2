@@ -177,12 +177,4 @@ class TalkEntity
     {
         return $this->data->tracks_uri;
     }
-
-    public function getId()
-    {
-        $uri = $this->data->uri;
-        $parts = explode('/', $uri);
-
-        return $parts[5];
-    }
 }
