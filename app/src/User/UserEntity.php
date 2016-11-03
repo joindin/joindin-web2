@@ -168,4 +168,12 @@ class UserEntity
 
         return $this->data->admin;
     }
+
+    public function getId()
+    {
+        $uri = $this->data->uri;
+        $parts = explode('/', $uri);
+
+        return $parts[5];
+    }
 }
