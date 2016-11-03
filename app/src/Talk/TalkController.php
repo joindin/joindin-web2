@@ -32,6 +32,8 @@ class TalkController extends BaseController
             ->name('talk-by-id-web1')
             ->conditions(array('talkId' => '\d+'));
         $app->post('/event/:eventSlug/:talkSlug/claim', array($this, 'claimTalk'))->name('talk-claim');
+        $app->get('/event/:eventSlug/:talkSlug/unlink/:username', array($this, 'unlinkSpeaker'))
+            ->name('unlink-speaker');
     }
 
     public function index($eventSlug, $talkSlug)
