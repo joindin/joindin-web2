@@ -448,8 +448,9 @@ class TalkController extends BaseController
 
     public function unlinkSpeaker($eventSlug, $talkSlug, $username)
     {
+        $thisUrl = $this->application->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
+        
         if (!isset($_SESSION['user'])) {
-            $thisUrl = $this->application->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
             );
