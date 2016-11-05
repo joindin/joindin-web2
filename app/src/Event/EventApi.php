@@ -505,7 +505,7 @@ class EventApi extends BaseApi
         $reports = [];
 
         foreach ($response->claims as $item) {
-            $reports[] = $item; //new EventCommentReportEntity($item);
+            $reports[] = $item;
         }
 
         return $reports;
