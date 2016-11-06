@@ -541,6 +541,15 @@ class EventEntity
         }
     }
 
+    public function getPendingClaimsUri()
+    {
+        if (isset($this->data->pending_claims_uri)) {
+            return $this->data->pending_claims_uri;
+        } else {
+            return false;
+        }
+    }
+
     public function getAttendeesUri()
     {
         return $this->data->attendees_uri;
