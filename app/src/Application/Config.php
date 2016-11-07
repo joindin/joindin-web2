@@ -4,9 +4,9 @@ namespace Application;
 
 class Config implements \ArrayAccess
 {
-    protected $settings = array();
+    protected $settings;
 
-    public function __construct($settings)
+    public function __construct(array $settings = [])
     {
         $this->settings = $settings;
     }

@@ -2,10 +2,15 @@
 namespace User;
 
 use Application\BaseDb;
+use Application\CacheService;
 
 class UserDb extends BaseDb
 {
-    protected $keyName = 'users';
+    public function __construct(CacheService $cache)
+    {
+        parent::__construct($cache);
+        $this->keyName = 'users';
+    }
 
     public function save(UserEntity $user)
     {

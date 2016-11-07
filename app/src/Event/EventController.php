@@ -20,10 +20,17 @@ use Language\LanguageApi;
 
 class EventController extends BaseController
 {
-    private $itemsPerPage = 10;
-    private $pendingItemsPerPage = 30;
+    private $itemsPerPage;
+    private $pendingItemsPerPage;
 
-    protected function defineRoutes(\Slim\Slim $app)
+    public function __construct(Slim $app)
+    {
+        parent::__construct($app);
+        $this->itemsPerPage = 10;
+        $this->pendingItemsPerPage = 30;
+    }
+
+    protected function defineRoutes(Slim $app)
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
@@ -600,7 +607,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event = $eventApi->getEventById($eventId);
         if (!$event) {
-            return \Slim\Slim::getInstance()->notFound();
+            return Slim::getInstance()->notFound();
         }
 
         if ($extra && is_array($extra) && ($extra[0] == "talk_comments")) {
