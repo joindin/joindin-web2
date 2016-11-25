@@ -686,9 +686,24 @@ a.talk.star {
 }
 
 #loginheader {
+    padding: 8px;
     margin-bottom: 20px;
 }
 
+#loginheader:target {
+    background-color: #d9edf7;
+    animation: pulse 1s 1;
+    animation-delay: 2s;
+    animation-fill-mode: both;
+}
+@keyframes pulse {
+    0% {
+        background-color: #d9edf7;
+    }
+    100% {
+        background-color: #fff;
+    }
+}
 
 .top-spacer {
     margin-top: 10px;
