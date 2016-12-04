@@ -173,9 +173,8 @@ class UserController extends BaseController
         $token = $request->get('token');
         $userApi = $this->getUserApi();
 
-        $result = false;
         try {
-            $result = $userApi->verify($token);
+            $userApi->verify($token);
             $this->application->flash('message', "Thank you for verifying your email address. You can now log in.");
         } catch (\Exception $e) {
             $this->application->flash('error', "Sorry, your verification link was invalid.");
@@ -202,7 +201,6 @@ class UserController extends BaseController
 
                 $userApi = $this->getUserApi();
 
-                $result = false;
                 try {
                     $result = $userApi->reverify($email);
                     if ($result) {
@@ -573,7 +571,6 @@ class UserController extends BaseController
 
                 $userApi = $this->getUserApi();
 
-                $result = false;
                 try {
                     $result = $userApi->usernameReminder($email);
                     if ($result) {
@@ -704,7 +701,6 @@ class UserController extends BaseController
 
                 $userApi = $this->getUserApi();
 
-                $result = false;
                 try {
                     $result = $userApi->passwordReset($username);
                     if ($result) {
@@ -752,7 +748,6 @@ class UserController extends BaseController
                 $values = $form->getData();
                 $userApi = $this->getUserApi();
 
-                $result = false;
                 try {
                     $result = $userApi->resetPassword($token, $values['password']);
                     if ($result) {
