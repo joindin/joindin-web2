@@ -10,7 +10,8 @@
             "Event":       ["app/src/", "tests/"],
             "Search":      ["app/src/", "tests/"],
             "Talk":        ["app/src/", "tests/"],
-            "User":        ["app/src/", "tests/"]
+            "User":        ["app/src/", "tests/"],
+            "Client":      ["app/src/", "tests/"]
         }
     },
     "config": {

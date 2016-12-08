@@ -1,0 +1,21 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}3rd party-App {{ client.getName |default('Unnamed') }}- Joind.in{% endblock %}
+
+{% block body %}
+
+    <section id="apps">
+        <h2>Details for App {{ client.getName | default('Unnamed') }}</h2>
+        {% include 'Client/_common/client.html.twig' with {'client': client }%}
+        <a href="{{ urlFor('client-edit', {'clientName' : client.getId}) }}" class="btn btn-default disabled">Edit</a>
+        <a href="{{ urlFor('client-delete', {'clientName' : client.getId}) }}" class="btn btn-danger disabled">Delete</a>
+    </section>
+
+{% endblock %}
+
+
+{% block topAside %}
+{% endblock %}
+
+{% block extraAside %}
+{% endblock %}
