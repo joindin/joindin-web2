@@ -20,10 +20,17 @@ use Language\LanguageApi;
 
 class EventController extends BaseController
 {
-    private $itemsPerPage = 10;
-    private $pendingItemsPerPage = 30;
+    private $itemsPerPage;
+    private $pendingItemsPerPage;
 
-    protected function defineRoutes(\Slim\Slim $app)
+    public function __construct(Slim $app)
+    {
+        parent::__construct($app);
+        $this->itemsPerPage = 10;
+        $this->pendingItemsPerPage = 30;
+    }
+
+    protected function defineRoutes(Slim $app)
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
         $app->get('/event', array($this, 'index'))->name("events-index");
@@ -60,6 +67,8 @@ class EventController extends BaseController
             ->name("event-add-talk");
         $app->map('/event/:friendly_name/edit-tracks', array($this, 'editTracks'))->via('GET', 'POST')
             ->name("event-edit-tracks");
+        $app->map('/event/:friendly_name/claims', array($this, 'talkClaims'))->via('GET', 'POST')
+            ->name("event-talk-claims");
     }
 
     public function index()
@@ -598,7 +607,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event = $eventApi->getEventById($eventId);
         if (!$event) {
-            return \Slim\Slim::getInstance()->notFound();
+            return Slim::getInstance()->notFound();
         }
 
         if ($extra && is_array($extra) && ($extra[0] == "talk_comments")) {
@@ -860,6 +869,60 @@ class EventController extends BaseController
 
         $url = $this->application->urlFor("event-reported-comments", ['friendly_name' => $friendly_name]);
         $this->application->redirect($url);
+    }
+    
+    public function talkClaims($friendly_name)
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $this->application->urlFor('event-talk-claims', ['friendly_name' => $friendly_name])
+            );
+        }
+
+
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if ($event) {
+            if (!$event->getCanEdit()) {
+                $this->redirectToDetailPage($event->getUrlFriendlyName());
+            }
+            
+            $claims_uri = $event->getPendingClaimsUri();
+
+            $claims = $eventApi->getPendingClaims($claims_uri, true);
+
+            $userApi = $this->getUserApi();
+            $talkApi = $this->getTalkApi();
+
+            foreach ($claims as &$claim) {
+                $claim->user = $userApi->getUser($claim->speaker_uri);
+                $claim->talk = $talkApi->getTalk($claim->talk_uri);
+
+
+                if ($this->application->request->post('display_name')
+                    && $this->application->request->post('display_name') == $claim->display_name
+                    && $this->application->request->post('username') == $claim->user->getUsername()) {
+                    $data = [
+                        'display_name'  => $this->application->request->post('display_name'),
+                        'username'      => $this->application->request->post('username')
+                    ];
+                    $talkApi->claimTalk($claim->approve_claim_uri, $data);
+
+                    $claim->approved = 1;
+                }
+            }
+
+            $this->render(
+                'Event/pending-claims.html.twig',
+                array(
+                    'event' => $event,
+                    'claims' => $claims,
+                )
+            );
+
+        }
+
     }
 
     /**

@@ -1,23 +1,12 @@
 <?php
 namespace Talk;
 
+use Application\BaseEntity;
 use DateTime;
 use DateInterval;
 
-class TalkEntity
+class TalkEntity extends BaseEntity
 {
-    private $data;
-
-    /**
-     * Create new TalkEntity
-     *
-     * @param Object $data Model data retrieved from API
-     */
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
     /**
      * Is user a speaker on this talk?
      *
@@ -122,6 +111,11 @@ class TalkEntity
     public function getUrlFriendlyTalkTitle()
     {
         return $this->data->url_friendly_talk_title;
+    }
+
+    public function getSpeakersUri()
+    {
+        return $this->data->speakers_uri;
     }
 
     public function getStub()

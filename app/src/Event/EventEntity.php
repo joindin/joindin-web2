@@ -1,22 +1,11 @@
 <?php
 namespace Event;
 
+use Application\BaseEntity;
 use DateTime;
 
-class EventEntity
+class EventEntity extends BaseEntity
 {
-    private $data;
-
-    /**
-     * Create new EventEntity
-     *
-     * @param Object $data Model data retrieved from API
-     */
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
     public function getName()
     {
         if (!isset($this->data->name)) {
@@ -536,6 +525,15 @@ class EventEntity
     {
         if (isset($this->data->reported_talk_comments_uri)) {
             return $this->data->reported_talk_comments_uri;
+        } else {
+            return false;
+        }
+    }
+
+    public function getPendingClaimsUri()
+    {
+        if (isset($this->data->pending_claims_uri)) {
+            return $this->data->pending_claims_uri;
         } else {
             return false;
         }

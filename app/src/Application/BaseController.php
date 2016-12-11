@@ -7,7 +7,7 @@ use Twig_Error_Runtime;
 abstract class BaseController
 {
     /** @var Slim */
-    protected $application = null;
+    protected $application;
 
     protected $accessToken;
     protected $cfg;
@@ -18,7 +18,10 @@ abstract class BaseController
         $this->defineRoutes($app);
         $this->cfg = $this->getConfig();
 
-        $this->accessToken = isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null;
+        $this->accessToken = null;
+        if (isset($_SESSION['access_token'])) {
+            $this->accessToken = $_SESSION['access_token'];
+        }
     }
 
     private function getConfig()

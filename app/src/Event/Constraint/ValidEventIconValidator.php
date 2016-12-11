@@ -47,7 +47,6 @@ class ValidEventIconValidator extends ConstraintValidator
 
             // we got here - image is fine.
             imagedestroy($image);
-
         }
     }
 }

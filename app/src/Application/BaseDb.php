@@ -1,9 +1,13 @@
 <?php
 namespace Application;
 
-class BaseDb
+abstract class BaseDb
 {
+    /** @var CacheService */
     protected $cache;
+
+    /** @var string */
+    protected $keyName;
 
     public function __construct(CacheService $cache)
     {

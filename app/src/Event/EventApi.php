@@ -359,7 +359,6 @@ class EventApi extends BaseApi
 
             $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
             $response = $client->send($request, $options);
-
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $body = $e->getResponse()->getBody();
             error_log($e->getMessage());
@@ -490,6 +489,22 @@ class EventApi extends BaseApi
 
         foreach ($response->reports as $item) {
             $reports[] = new EventCommentReportEntity($item);
+        }
+
+        return $reports;
+    }
+
+    public function getPendingClaims($claims_uri, $verbose = false)
+    {
+        if ($verbose) {
+            $claims_uri = $claims_uri . "?verbose=yes";
+        }
+        $response = json_decode($this->apiGet($claims_uri));
+        
+        $reports = [];
+
+        foreach ($response->claims as $item) {
+            $reports[] = $item;
         }
 
         return $reports;

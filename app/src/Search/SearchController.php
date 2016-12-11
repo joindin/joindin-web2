@@ -5,6 +5,7 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventApi;
 use Event\EventDb;
+use Slim\Slim;
 use Talk\TalkApi;
 use Talk\TalkDb;
 use User\UserDb;
@@ -13,11 +14,10 @@ use User\UserApi;
 /**
  * Class SearchController
  * SearchController that will be combining API calls to search for events and talks
- * or to search for both seperately
+ * or to search for both separately
  */
 class SearchController extends BaseController
 {
-
     /**
      * @var integer The number of events / talks to fetch from the API
      */
@@ -26,12 +26,18 @@ class SearchController extends BaseController
     /**
      * @var integer The number of search results to show per page
      */
-    protected $itemsPerPage = 10;
+    protected $itemsPerPage;
+
+    public function __construct(Slim $app)
+    {
+        parent::__construct($app);
+        $this->itemsPerPage = 10;
+    }
 
     /**
-     * @param \Slim $app
+     * @param Slim $app
      */
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $app)
     {
         $app->get('/search/events', array($this, 'searchEvents'))->name("search-events");
         $app->get('/search', array($this, 'search'))->name("search");

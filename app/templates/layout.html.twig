@@ -91,9 +91,8 @@
                 {% block extraAside %}{% endblock %}
                 
                 {% if not user %}
-                <div id="loginheader"><a name="login">&nbsp;</a></div>
-                <section>
-                        <h2>Log in</h2>
+                <section id="loginheader">
+                    <h2>Log in</h2>
                         {% include '_common/login.html.twig' %}
                 </section>
                 {% endif %}

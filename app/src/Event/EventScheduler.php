@@ -97,7 +97,6 @@ class EventScheduler
 
             if (!isset($talksByDay[$date]) || !array_key_exists($date, $talksByDay)) {
                 $talksByDay[$date] = array();
-
             }
             if (!isset($talksByDay[$date][$time]) || !array_key_exists($time, $talksByDay[$date])) {
                 $talksByDay[$date][$time] = array();
@@ -130,7 +129,7 @@ class EventScheduler
 
             $tracks = $talk->getTracks();
 
-            if (is_array($tracks) && count($tracks > 0)) {
+            if (is_array($tracks) && !empty($tracks)) {
                 foreach ($tracks as $track) {
                     //obtain array of unique track names as array key
                     $tracksByDay[$date][$track->track_name] = true;

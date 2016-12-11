@@ -5,11 +5,6 @@ use Application\BaseApi;
 
 class ContactApi extends BaseApi
 {
-    public function __construct($config, $accessToken)
-    {
-        parent::__construct($config, $accessToken);
-    }
-
     public function contact($name, $email, $subject, $comment, $clientId, $clientSecret)
     {
 

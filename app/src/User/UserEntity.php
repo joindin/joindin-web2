@@ -2,20 +2,10 @@
 
 namespace User;
 
-class UserEntity
+use Application\BaseEntity;
+
+class UserEntity extends BaseEntity
 {
-    private $data;
-
-    /**
-     * Create new UserEntity
-     *
-     * @param stdclass $data Model data retrieved from API
-     */
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
     /**
      * Getter for username
      *

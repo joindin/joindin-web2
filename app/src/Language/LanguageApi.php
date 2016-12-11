@@ -5,11 +5,6 @@ use Application\BaseApi;
 
 class LanguageApi extends BaseApi
 {
-    public function __construct($config, $accessToken)
-    {
-        parent::__construct($config, $accessToken);
-    }
-
     /**
      * Retrieve list of languages from the API
      *
