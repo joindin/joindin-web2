@@ -1,0 +1,24 @@
+{% block form %}
+    {% if user %}
+        {{ form_start(form, {'attr' : {'id' : 'client'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <fieldset class="col-sm-12">
+                <legend>Client information</legend>
+                {{ form_row(form.application) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.callback_url) }}
+            </fieldset>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+                <a href="{{ backUri }}" class="btn btn-default pull-right">Cancel</a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    {% else %}
+        <h1>Login required</h1>
+        <p>In order to submit a client, please log in.</p>
+    {% endif %}
+{% endblock %}

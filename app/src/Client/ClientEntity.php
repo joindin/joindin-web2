@@ -50,4 +50,10 @@ class ClientEntity extends BaseEntity
 
         return $this->data->consumer_secret;
     }
+
+    public function getApiUri()
+    {
+        return $this->data->client_uri;
+    }
+
 }
