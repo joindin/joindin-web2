@@ -55,5 +55,4 @@ class ClientEntity extends BaseEntity
     {
         return $this->data->client_uri;
     }
-
 }

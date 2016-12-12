@@ -31,7 +31,7 @@ class ClientController extends BaseController
         $clientApi = $this->getClientApi();
         $clients = $clientApi->getCollection([]);
 
-        $this->render('Client/index.html.twig',['clients' => $clients['clients']]);
+        $this->render('Client/index.html.twig', ['clients' => $clients['clients']]);
     }
 
     public function showClient($clientName)
@@ -206,7 +206,6 @@ class ClientController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-
                 try {
                     $clientApi->deleteClient($client->getApiUri());
 
