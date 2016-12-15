@@ -1,0 +1,33 @@
+{# This template should work for both event and talk comments #}
+{% if display_comment_report is not defined %}
+    {% set display_comment_report = true %}
+{% endif %}
+
+<div class="client">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h3>
+                <a href="{{ urlFor('client-show', {'clientName' : client.getId}) }}">{{ client.getName|default('Unnamed') }}</a>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-xs-12 col-sm-6">
+                <dl>
+                    <dt>Consumer-Key</dt>
+                    <dd>{{ client.getConsumerKey }}</dd>
+                    {% if client.hasConsumerSecret %}
+                    <dt>Consumer-Secret</dt>
+                    <dd>{{ client.getConsumerSecret }}</dd>
+                    {% endif %}
+                    <dt>Date created</dt>
+                    <dd>{{ client.getCreationDateTime | date('d.m.Y H:i:s') }}</dd>
+                    <dt>Callback-URL</dt>
+                    <dd>{{ client.getCallbackUrl }}</dd>
+                </dl>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <p>{{ client.getDescription | nl2br }}</p>
+            </div>
+        </div>
+    </div>
+</div>

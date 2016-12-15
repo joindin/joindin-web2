@@ -101,6 +101,7 @@ new Event\EventController($app);
 new Search\SearchController($app);
 new User\UserController($app);
 new Talk\TalkController($app);
+new Client\ClientController($app);
 
 // execute application
 $app->run();

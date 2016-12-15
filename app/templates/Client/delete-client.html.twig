@@ -1,0 +1,25 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Delete client "{{ client.getName }}" - Joind.in{% endblock %}
+
+{% form_theme form _self %}
+{% use '/Client/_common/deleteform.html.twig' %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="/client">Clients</a></li>
+        <li class="active">Delete client {{ client.getName }}</li>
+    </ol>
+
+    <div class="page-header">
+        <div class="row event">
+            <div class="col-xs-12 col-sm-12 title">
+                <h1>
+                    Delete client "{{ client.getName }}"
+                </h1>
+            </div>
+        </div>
+    </div>
+    {{ block('form') }}
+{% endblock %}

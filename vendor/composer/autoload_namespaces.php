@@ -27,5 +27,6 @@ return array(
     'Language' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Form' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Event' => array($baseDir . '/app/src', $baseDir . '/tests'),
+    'Client' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Application' => array($baseDir . '/app/src', $baseDir . '/tests'),
 );

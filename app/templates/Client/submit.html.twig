@@ -1,0 +1,24 @@
+{% extends '/layout.html.twig' %}
+
+{% use '/Client/_common/form.html.twig' %}
+
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="/client">Clients</a></li>
+        <li class="active">Create new client</li>
+    </ol>
+
+    <div class="page-header">
+        <div class="row event">
+            <div class="col-xs-12 col-sm-12 title">
+                <h1>
+                    Create a new client
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    {{ block('form') }}
+{% endblock %}
