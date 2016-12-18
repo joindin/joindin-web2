@@ -903,7 +903,6 @@ class EventController extends BaseController
                 if ($this->application->request->post('display_name')
                     && $this->application->request->post('display_name') == $claim->display_name
                     && $this->application->request->post('username') == $claim->user->getUsername()) {
-
                     $data = [
                         'display_name'  => $this->application->request->post('display_name'),
                         'username'      => $this->application->request->post('username'),
