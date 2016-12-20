@@ -1,0 +1,46 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}ApiKeys - Joind.in{% endblock %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li class="active">API-keys</li>
+    </ol>
+
+    <section id="apps">
+        <h2>My API-keys</h2>
+        <table class="table">
+            <thead>
+                <th>Application</th>
+                <th>last used</th>
+                <th>&nbsp;</th>
+            </thead>
+        {% if keys %}
+            <tbody>
+            {% for key in keys %}
+                <tr>
+                    <td>
+                        {{ key.getApplicationName }}
+                    </td><td>
+                        {{ key.getLastUsedDateTime | date('d.m.Y H:i:s') }}
+                    </td><td>
+                        <a class="btn btn-danger btn-xs" href="{{ urlFor('apikey-delete', {'apikey': key.getId}) }}">
+                            Delete Api-Key
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        {% endif %}
+        </table>
+    </section>
+
+{% endblock %}
+
+
+{% block topAside %}
+{% endblock %}
+
+{% block extraAside %}
+{% endblock %}

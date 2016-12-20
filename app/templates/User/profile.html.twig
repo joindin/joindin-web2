@@ -20,7 +20,12 @@
                         {% if thisUser.canEdit %}
                         <p class="more">
                             <a href="{{ urlFor('user-profile-edit', {'username': thisUser.getUsername}) }}">
-                                Edit</a>
+                                Edit
+                            </a>
+                            &mdash;
+                            <a href="{{ urlFor('apikey-show', {'username': thisUser.getUsername}) }}">
+                                API-Keys
+                            </a>
                         </p>
                         {% endif %}
                     </section>
