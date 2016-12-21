@@ -20,7 +20,7 @@ class ClientApi extends BaseApi
         );
         $meta  = array_pop($talks);
 
-        $collectionData = array();
+        $collectionData = ['clients' => []];
         foreach ($talks['clients'] as $item) {
             $talk = new ClientEntity($item);
 
