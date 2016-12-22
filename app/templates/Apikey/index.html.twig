@@ -5,6 +5,7 @@
 {% block body %}
 
     <ol class="breadcrumb">
+        <li><a href="{{ urlFor('user-profile', {'username': user.getUsername}) }}">{{ user.getFullName }}</a></li>
         <li class="active">API-keys</li>
     </ol>
 
@@ -25,7 +26,7 @@
                     </td><td>
                         {{ key.getLastUsedDateTime | date('d.m.Y H:i:s') }}
                     </td><td>
-                        <a class="btn btn-danger btn-xs" href="{{ urlFor('apikey-delete', {'apikey': key.getId}) }}">
+                        <a class="btn btn-danger btn-xs" href="{{ urlFor('apikey-delete', {'apikey': key.getId, 'username' : user.getUsername }) }}">
                             Delete Api-Key
                         </a>
                     </td>

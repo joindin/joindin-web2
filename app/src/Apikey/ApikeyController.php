@@ -12,14 +12,21 @@ class ApikeyController extends BaseController
 {
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/apikey', array($this, 'index'))->name('apikey-show');
-        $app->get('/apikey/:apikey/delete', array($this, 'deleteApiKey'))->via('GET', 'POST')->name('apikey-delete');
+        $app->get('/user/:username/apikey', array($this, 'index'))->name('apikey-show');
+        $app->get('/user/:username/apikey/:apikey/delete', array($this, 'deleteApiKey'))->via('GET', 'POST')->name('apikey-delete');
     }
 
-    public function index()
+    public function index($username)
     {
+        $thisUrl = $this->application->urlFor('apikey-show', ['username' => $username]);
+
         if (! isset($_SESSION['user'])) {
-            $thisUrl = $this->application->urlFor('apikey-show');
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
             );
@@ -28,13 +35,20 @@ class ApikeyController extends BaseController
         $tokenApi = $this->getApikeyApi();
         $tokens   = $tokenApi->getCollection([]);
 
-        $this->render('Apikey/index.html.twig', ['keys' => $tokens['tokens']]);
+        $this->render('Apikey/index.html.twig', ['keys' => $tokens['tokens'], 'user' => $_SESSION['user']]);
     }
 
-    public function deleteApiKey($apikey)
+    public function deleteApiKey($username, $apikey)
     {
+        $thisUrl = $this->application->urlFor('apikey-delete', ['apikey' => $apikey, 'username' => $username]);
+
         if (!isset($_SESSION['user'])) {
-            $thisUrl = $this->application->urlFor('apikey-delete', ['apikey' => $apikey]);
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
             );
@@ -69,7 +83,7 @@ class ApikeyController extends BaseController
                         $apikey->getId()
                     ));
                     $this->application->redirect(
-                        $this->application->urlFor('apikey-show')
+                        $this->application->urlFor('apikey-show', ['username' => $username])
                     );
                     return;
                 } catch (\RuntimeException $e) {
@@ -85,7 +99,8 @@ class ApikeyController extends BaseController
             [
                 'apikey' => $apikey,
                 'form' => $form->createView(),
-                'backUri' => $this->application->urlFor('apikey-show'),
+                'backUri' => $this->application->urlFor('apikey-show', ['username' => $username]),
+                'user' => $_SESSION['user'],
             ]
         );
     }

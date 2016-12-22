@@ -8,7 +8,8 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="/apikey">API-keys</a></li>
+        <li><a href="{{ urlFor('user-profile', {'username': user.getUsername}) }}">{{ user.getFullName }}</a></li>
+        <li><a href="{{ urlFor('apikey-show', {'username': user.getUsername}) }}">API-keys</a></li>
         <li class="active">Delete API-key</li>
     </ol>
 
