@@ -5,15 +5,16 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="/client">Clients</a></li>
+        <li><a href="{{ urlFor('user-profile', {'username': user.getUsername}) }}">{{ user.getFullName }}</a></li>
+        <li><a href="{{ urlFor('clients', {'username': user.getUsername}) }}">Clients</a></li>
         <li class="active">Client {{ client.getName }}</li>
     </ol>
 
     <section id="apps">
         <h2>Details for App {{ client.getName | default('Unnamed') }}</h2>
         {% include 'Client/_common/client.html.twig' with {'client': client }%}
-        <a href="{{ urlFor('client-edit', {'clientName' : client.getId}) }}" class="btn btn-default pull-right">Edit</a>
-        <a href="{{ urlFor('client-delete', {'clientName' : client.getId}) }}" class="btn btn-danger pull-right">Delete</a>
+        <a href="{{ urlFor('client-edit', {'clientName' : client.getId, 'username' : user.getUsername }) }}" class="btn btn-default pull-right">Edit</a>
+        <a href="{{ urlFor('client-delete', {'clientName' : client.getId, 'username' : user.getUsername }) }}" class="btn btn-danger pull-right">Delete</a>
     </section>
 
 {% endblock %}

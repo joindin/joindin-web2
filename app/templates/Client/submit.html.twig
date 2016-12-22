@@ -6,7 +6,8 @@
 {% block body %}
 
     <ol class="breadcrumb">
-        <li><a href="/client">Clients</a></li>
+        <li><a href="{{ urlFor('user-profile', {'username': user.getUsername}) }}">{{ user.getFullName }}</a></li>
+        <li><a href="{{ urlFor('clients', {'username': user.getUsername}) }}">Clients</a></li>
         <li class="active">Create new client</li>
     </ol>
 

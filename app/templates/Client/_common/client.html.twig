@@ -7,7 +7,7 @@
     <div class="panel panel-default">
         <div class="panel-heading clearfix">
             <h3>
-                <a href="{{ urlFor('client-show', {'clientName' : client.getId}) }}">{{ client.getName|default('Unnamed') }}</a>
+                <a href="{{ urlFor('client-show', {'clientName' : client.getId , 'username' : user.getUsername }) }}">{{ client.getName|default('Unnamed') }}</a>
             </h3>
         </div>
         <div class="panel-body">
