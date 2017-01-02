@@ -1,0 +1,29 @@
+{% block form %}
+    {% if user %}
+        {{ form_start(form, {'attr' : {'id' : 'apikey'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="col-sm-12 bg_warning">
+                <p>
+                    You are about to permanently remove the API-key for
+                    <strong>{{ apikey.getApplicationName }}</strong>.
+                </p><p>
+                    You will need to log in with {{ apikey.getApplicationName }} to use the application again!
+                </p><p>
+                    Are you sure you want to do delete this key?
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                {{ form_row(form.apikey_id) }}
+                <input type="submit" class="btn btn-danger pull-right" value="Permanently delete the key" />
+                <a href="{{ backUri }}" class="btn btn-default pull-right">Cancel</a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    {% else %}
+        <h1>Login required</h1>
+        <p>In order to delete a key, please log in.</p>
+    {% endif %}
+{% endblock %}

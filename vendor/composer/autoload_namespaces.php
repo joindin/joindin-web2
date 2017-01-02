@@ -29,4 +29,5 @@ return array(
     'Event' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Client' => array($baseDir . '/app/src', $baseDir . '/tests'),
     'Application' => array($baseDir . '/app/src', $baseDir . '/tests'),
+    'Apikey' => array($baseDir . '/app/src', $baseDir . '/tests'),
 );

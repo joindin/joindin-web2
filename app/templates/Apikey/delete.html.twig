@@ -1,23 +1,23 @@
 {% extends '/layout.html.twig' %}
 
-{% block title %}Delete client "{{ client.getName }}" - Joind.in{% endblock %}
+{% block title %}Delete API-key - Joind.in{% endblock %}
 
 {% form_theme form _self %}
-{% use '/Client/_common/deleteform.html.twig' %}
+{% use '/Apikey/_common/deleteform.html.twig' %}
 
 {% block body %}
 
     <ol class="breadcrumb">
         <li><a href="{{ urlFor('user-profile', {'username': user.getUsername}) }}">{{ user.getFullName }}</a></li>
-        <li><a href="{{ urlFor('clients', {'username': user.getUsername}) }}">Clients</a></li>
-        <li class="active">Delete client {{ client.getName }}</li>
+        <li><a href="{{ urlFor('apikey-show', {'username': user.getUsername}) }}">API-keys</a></li>
+        <li class="active">Delete API-key</li>
     </ol>
 
     <div class="page-header">
         <div class="row event">
             <div class="col-xs-12 col-sm-12 title">
                 <h1>
-                    Delete client "{{ client.getName }}"
+                    Delete API-key for "{{ apikey.getApplicationName }}"
                 </h1>
             </div>
         </div>

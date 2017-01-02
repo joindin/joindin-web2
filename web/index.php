@@ -102,6 +102,7 @@ new Search\SearchController($app);
 new User\UserController($app);
 new Talk\TalkController($app);
 new Client\ClientController($app);
+new Apikey\ApikeyController($app);
 
 // execute application
 $app->run();
