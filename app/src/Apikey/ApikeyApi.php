@@ -21,7 +21,7 @@ class ApikeyApi extends BaseApi
 
         $collectionData = array();
         foreach ($tokens['tokens'] as $item) {
-            $talk = new ApiKeyEntity($item);
+            $talk = new ApikeyEntity($item);
 
             $collectionData['tokens'][] = $talk;
         }
