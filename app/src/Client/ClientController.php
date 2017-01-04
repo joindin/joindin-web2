@@ -12,17 +12,24 @@ class ClientController extends BaseController
 {
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/client', array($this, 'index'))->name('clients');
-        $app->map('/client/create', array($this, 'createClient'))->via('GET', 'POST')->name('client-create');
-        $app->get('/client/:clientName', array($this, 'showClient'))->name('client-show');
-        $app->map('/client/:clientName/edit', array($this, 'editClient'))->via('GET', 'POST')->name('client-edit');
-        $app->get('/client/:clientName/delete', array($this, 'deleteClient'))->via('GET', 'POST')->name('client-delete');
+        $app->get('/user/:username/clients', array($this, 'index'))->name('clients');
+        $app->map('/user/:username/client/create', array($this, 'createClient'))->via('GET', 'POST')->name('client-create');
+        $app->get('/user/:username/client/:clientName', array($this, 'showClient'))->name('client-show');
+        $app->map('/user/:username/client/:clientName/edit', array($this, 'editClient'))->via('GET', 'POST')->name('client-edit');
+        $app->get('/user/:username/client/:clientName/delete', array($this, 'deleteClient'))->via('GET', 'POST')->name('client-delete');
     }
 
-    public function index()
+    public function index($username)
     {
+        $thisUrl = $this->application->urlFor('clients', ['username' => $username]);
+
         if (!isset($_SESSION['user'])) {
-            $thisUrl = $this->application->urlFor('clients');
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
             );
@@ -31,13 +38,23 @@ class ClientController extends BaseController
         $clientApi = $this->getClientApi();
         $clients = $clientApi->getCollection([]);
 
-        $this->render('Client/index.html.twig', ['clients' => $clients['clients']]);
+        $this->render('Client/index.html.twig', ['clients' => $clients['clients'], 'user' => $_SESSION['user']]);
     }
 
-    public function showClient($clientName)
+    public function showClient($username, $clientName)
     {
+        $thisUrl = $this->application->urlFor(
+            'client-show',
+            ['clientName' => $clientName, 'username' => $username]
+        );
+
         if (!isset($_SESSION['user'])) {
-            $thisUrl = $this->application->urlFor('client-show', ['clientName' => $clientName]);
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
             );
@@ -51,13 +68,20 @@ class ClientController extends BaseController
             return;
         }
 
-        $this->render('Client/details.html.twig', ['client' => $client]);
+        $this->render('Client/details.html.twig', ['client' => $client, 'user' => $_SESSION['user']]);
     }
 
-    public function createClient()
+    public function createClient($username)
     {
+        $thisUrl = $this->application->urlFor('clients-create', ['username' => $username]);
+
         if (! isset($_SESSION['user'])) {
-            $thisUrl = $this->application->urlFor('clients-create');
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
             );
@@ -73,7 +97,7 @@ class ClientController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid() && $this->addClientUsingForm($form)) {
-                $this->application->redirect($this->application->urlFor('clients'));
+                $this->application->redirect($this->application->urlFor('clients', ['username' => $username]));
                 return ;
             }
         }
@@ -83,14 +107,25 @@ class ClientController extends BaseController
             [
                 'form' => $form->createView(),
                 'backUri' => $this->application->urlFor('clients'),
+                'user'=> $_SESSION['user']
             ]
         );
     }
 
-    public function editClient($clientName)
+    public function editClient($username, $clientName)
     {
+        $thisUrl = $this->application->urlFor(
+            'client-edit',
+            ['clientName' => $clientName, 'username' => $username]
+        );
+
         if (!isset($_SESSION['user'])) {
-            $thisUrl = $this->application->urlFor('client-edit', ['clientName' => $clientName]);
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
             );
@@ -125,7 +160,7 @@ class ClientController extends BaseController
                     $clientApi->editClient($client->getApiUri(), $values);
 
                     $this->application->redirect(
-                        $this->application->urlFor('client-show', ['clientName' => $clientName])
+                        $this->application->urlFor('client-show', ['clientName' => $clientName, 'username' => $username])
                     );
                     return;
                 } catch (\RuntimeException $e) {
@@ -141,7 +176,8 @@ class ClientController extends BaseController
             [
                 'client' => $client,
                 'form' => $form->createView(),
-                'backUri' => $this->application->urlFor('client-show', ['clientName' => $client->getId()]),
+                'backUri' => $this->application->urlFor('client-show', ['clientName' => $client->getId(), 'username' => $username]),
+                'user'=> $_SESSION['user']
             ]
         );
     }
@@ -176,10 +212,20 @@ class ClientController extends BaseController
 
 
 
-    public function deleteClient($clientName)
+    public function deleteClient($username, $clientName)
     {
+        $thisUrl = $this->application->urlFor(
+            'client-delete',
+            ['clientName' => $clientName, 'username' => $username]
+        );
+
         if (!isset($_SESSION['user'])) {
-            $thisUrl = $this->application->urlFor('client-delete', ['clientName' => $clientName]);
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
             );
@@ -214,7 +260,7 @@ class ClientController extends BaseController
                         $client->getName()
                     ));
                     $this->application->redirect(
-                        $this->application->urlFor('clients')
+                        $this->application->urlFor('clients', ['username' => $username])
                     );
                     return;
                 } catch (\RuntimeException $e) {
@@ -230,7 +276,8 @@ class ClientController extends BaseController
             [
                 'client' => $client,
                 'form' => $form->createView(),
-                'backUri' => $this->application->urlFor('client-show', ['clientName' => $client->getId()]),
+                'backUri' => $this->application->urlFor('client-show', ['clientName' => $client->getId(), 'username' => $username]),
+                'user'=> $_SESSION['user']
             ]
         );
     }

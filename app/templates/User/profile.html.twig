@@ -23,6 +23,10 @@
                                 Edit
                             </a>
                             &mdash;
+                            <a href="{{ urlFor('clients', {'username': thisUser.getUsername}) }}">
+                                Clients
+                            </a>
+                            &mdash;
                             <a href="{{ urlFor('apikey-show', {'username': thisUser.getUsername}) }}">
                                 API-Keys
                             </a>
