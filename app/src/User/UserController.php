@@ -877,7 +877,7 @@ class UserController extends BaseController
                 $this->application->flash('error', "Failed to log in");
             }
             if ($result[0] == 'Not verified') {
-                $this->application->flash('error', "User account not verified.  Please use 'Resend welcome email' link to verify.");
+                $this->application->flash('error', "User account not verified. <a href='/user/resend-verification'>Click here</a> to resend welcome email.");
             }
 
             if (empty($redirect)) {
