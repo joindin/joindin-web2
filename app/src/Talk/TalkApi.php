@@ -399,4 +399,18 @@ class TalkApi extends BaseApi
 
         throw new Exception("Failed to remove talk from track: " . $message);
     }
+
+    public function unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri)
+    {
+        list($status, $result, $headers) = $this->apiDelete($unlinkSpeakerUri, []);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+
+        throw new \Exception("Failed to unlink speaker from talk: " . $message);
+    }
 }

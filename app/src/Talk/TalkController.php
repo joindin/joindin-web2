@@ -32,6 +32,8 @@ class TalkController extends BaseController
             ->name('talk-by-id-web1')
             ->conditions(array('talkId' => '\d+'));
         $app->post('/event/:eventSlug/:talkSlug/claim', array($this, 'claimTalk'))->name('talk-claim');
+        $app->get('/event/:eventSlug/:talkSlug/unlink/:username', array($this, 'unlinkSpeaker'))
+            ->name('unlink-speaker');
     }
 
     public function index($eventSlug, $talkSlug)
@@ -439,6 +441,41 @@ class TalkController extends BaseController
         }
 
         $this->application->flash('message', 'Thank you for your report.');
+        $this->application->redirect($url);
+    }
+
+    public function unlinkSpeaker($eventSlug, $talkSlug, $username)
+    {
+        $url = $this->application->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
+        
+        if (!isset($_SESSION['user'])) {
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $url
+            );
+        }
+
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $eventUri = $event->getUri();
+
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $eventUri);
+        $talkUri = $talk->getApiUri();
+
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+        $userId = $user->getId();
+
+        $unlinkSpeakerUri = $talkUri . "/speakers/" . $userId;
+
+        try {
+            $talkApi->unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri);
+        } catch (Exception $e) {
+            $this->application->flash('error', $e->getMessage());
+            $this->application->redirect($url);
+        }
+
+        $this->application->flash('message', 'Speaker has been removed from this talk.');
         $this->application->redirect($url);
     }
 

@@ -20,7 +20,11 @@
                                 {% endif %}
 
                                 {% if speaker.username %}
-                                    <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+                                    <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>
+                                    {% if canEditTalk %}
+                                        <a onclick="return confirm('Are you sure you want to unlink this speaker from this talk?')" href="{{ urlFor('unlink-speaker', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle, 'username': speaker.username }) }}"><small>(unlink)</small></a>
+                                    {% endif %}
+                                    {{ comma }}
                                 {% else %}
                                     {{ speaker.speaker_name }}{{comma}}
                                 {% endif %}
