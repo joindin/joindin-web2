@@ -898,19 +898,24 @@ class EventController extends BaseController
             foreach ($claims as &$claim) {
                 $claim->user = $userApi->getUser($claim->speaker_uri);
                 $claim->talk = $talkApi->getTalk($claim->talk_uri);
-
+                $action = $this->application->request->post('action');
 
                 if ($this->application->request->post('display_name')
                     && $this->application->request->post('display_name') == $claim->display_name
                     && $this->application->request->post('username') == $claim->user->getUsername()) {
                     $data = [
                         'display_name'  => $this->application->request->post('display_name'),
-                        'username'      => $this->application->request->post('username')
+                        'username'      => $this->application->request->post('username'),
                     ];
-                    $talkApi->claimTalk($claim->approve_claim_uri, $data);
 
-                    $claim->approved = 1;
+                    if ($action == "approve") {
+                        $this->appoveClaimPendingTalk($talkApi, $claim, $data);
+                    } elseif ($action == "reject") {
+                        $this->rejectClaimPendingTalk($talkApi, $claim, $data);
+                    }
+
                 }
+
             }
 
             $this->render(
@@ -923,6 +928,24 @@ class EventController extends BaseController
 
         }
 
+    }
+    private function appoveClaimPendingTalk($talkApi, $claim, $data)
+    {
+        $talkApi->claimTalk($claim->approve_claim_uri, $data);
+
+        $claim->approved = 1;
+    }
+
+    /**
+     * Add a talk to the event
+     *
+     * @param string $friendly_name
+     */
+    private function rejectClaimPendingTalk($talkApi, $claim, $data)
+    {
+        $talkApi->rejectTalkClaim($claim->approve_claim_uri, $data);
+
+        $claim->approved = 0;
     }
 
     /**

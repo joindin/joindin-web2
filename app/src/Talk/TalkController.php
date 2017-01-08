@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormError;
 
 class TalkController extends BaseController
 {
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $app)
     {
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
         $app->map('/event/:eventSlug/:talkSlug/edit', array($this, 'editTalk'))->via('GET', 'POST')->name('talk-edit');

@@ -2,6 +2,7 @@
 namespace Talk;
 
 use Application\BaseApi;
+use Exception;
 use User\UserApi;
 
 class TalkApi extends BaseApi
@@ -179,7 +180,7 @@ class TalkApi extends BaseApi
         if ($status == 201) {
             return true;
         }
-        throw new \Exception("Failed to add comment: " . $result);
+        throw new Exception("Failed to add comment: " . $result);
     }
 
     public function reportComment($uri)
@@ -189,7 +190,7 @@ class TalkApi extends BaseApi
         if ($status == 202) {
             return true;
         }
-        throw new \Exception("Failed to report comment: " . $result);
+        throw new Exception("Failed to report comment: " . $result);
     }
 
     /**
@@ -211,7 +212,7 @@ class TalkApi extends BaseApi
             }
         }
 
-        throw new \Exception("Failed to toggle star: $status, $result");
+        throw new Exception("Failed to toggle star: $status, $result");
     }
 
     /**
@@ -282,7 +283,7 @@ class TalkApi extends BaseApi
             }
         }
 
-        throw new \Exception($result);
+        throw new Exception($result);
     }
 
     /**
@@ -337,7 +338,21 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed: " . $message);
+        throw new Exception("Failed: " . $message);
+    }
+
+    public function rejectTalkClaim($talkSpeakersUri, $data)
+    {
+        list ($status, $result, $headers) = $this->apiDelete($talkSpeakersUri, $data);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+
+        throw new Exception("Failed: " . $message);
     }
     
     /**
@@ -362,7 +377,7 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed: " . $message);
+        throw new Exception("Failed: " . $message);
     }
 
     /**
@@ -382,6 +397,6 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed to remove talk from track: " . $message);
+        throw new Exception("Failed to remove talk from track: " . $message);
     }
 }
