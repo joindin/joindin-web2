@@ -937,9 +937,7 @@ class EventController extends BaseController
     }
 
     /**
-     * Add a talk to the event
-     *
-     * @param string $friendly_name
+     * Reject a talk claim
      */
     private function rejectClaimPendingTalk($talkApi, $claim, $data)
     {
