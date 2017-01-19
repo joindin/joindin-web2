@@ -89,4 +89,8 @@ phing phpcs
 ```
 
 This will show the files that still need some attention.
+
+## License
+
+The joindin-API is developed under a BSD-3 License. You can find the exact wording [in the LICENSE-file](LICENSE)
      
