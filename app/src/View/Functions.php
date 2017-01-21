@@ -169,7 +169,7 @@ function initialize(Twig_Environment $env, Slim $app)
      * Create a link to download a QR-Code for the given URL
      */
     $env->addFunction(
-        new Twig_SimpleFunction('qrcode', function ($url) use ($app){
+        new Twig_SimpleFunction('qrcode', function ($url) use ($app) {
             return sprintf(
                 'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=%s&choe=UTF-8&chld=H',
                 urlencode($url)
