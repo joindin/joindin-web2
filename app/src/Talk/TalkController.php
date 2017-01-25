@@ -537,8 +537,10 @@ class TalkController extends BaseController
                     ));
 
                     $this->application->redirect(
-                        $this->application->urlFor('event-default',
-                            ['friendly_name' => $eventSlug])
+                        $this->application->urlFor(
+                            'event-default',
+                            ['friendly_name' => $eventSlug]
+                        )
                     );
 
                     return;
