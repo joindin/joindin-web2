@@ -24,7 +24,10 @@
     <section>
         <p>{{ talk.getDescription | nl2br }}</p>
         {% if canEditTalk|default(false) %}
-        <p><a href="{{ urlFor('talk-edit', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" class="btn btn-default btn-xs" >Edit talk</a></p>
+        <p>
+            <a href="{{ urlFor('talk-edit', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" class="btn btn-default btn-xs" >Edit talk</a>
+            <a href="{{ urlFor('talk-delete', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" class="btn btn-danger btn-xs" >Delete talk</a>
+        </p>
         {% endif %}
 
     </section>

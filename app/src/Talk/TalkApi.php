@@ -413,4 +413,30 @@ class TalkApi extends BaseApi
 
         throw new \Exception("Failed to unlink speaker from talk: " . $message);
     }
+
+    /**
+     * Delete a talk.
+     *
+     * Deleting all associated entries should be handled by the API.
+     *
+     * @param $clientUri
+     *
+     * @throws \Exception
+     * @return bool
+     */
+    public function deleteTalk($clientUri)
+    {
+        list ($status, $result, $headers) = $this->apiDelete($clientUri);
+
+        if ($status != 204) {
+            $decoded = json_decode($result);
+            if (is_array($decoded)) {
+                $result = current($decoded);
+            }
+            throw new \Exception($result);
+        }
+
+        return true;
+
+    }
 }

@@ -34,6 +34,7 @@ class TalkController extends BaseController
         $app->post('/event/:eventSlug/:talkSlug/claim', array($this, 'claimTalk'))->name('talk-claim');
         $app->get('/event/:eventSlug/:talkSlug/unlink/:username', array($this, 'unlinkSpeaker'))
             ->name('unlink-speaker');
+        $app->map('/event/:eventSlug/:talkSlug/delete', array($this, 'deleteTalk'))->via('GET', 'POST')->name('talk-delete');
     }
 
     public function index($eventSlug, $talkSlug)
@@ -477,6 +478,90 @@ class TalkController extends BaseController
 
         $this->application->flash('message', 'Speaker has been removed from this talk.');
         $this->application->redirect($url);
+    }
+
+    public function deleteTalk($eventSlug, $talkSlug)
+    {
+        $thisUrl = $this->application->urlFor(
+            'talk-delete',
+            ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]
+        );
+
+        if (! isset($_SESSION['user'])) {
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+
+        if (! $event->getCanEdit()) {
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+            );
+        }
+
+        $talkApi = $this->getTalkApi();
+        try {
+            $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        } catch (Exception $e) {
+            $this->application->notFound();
+            return;
+        }
+
+        if (false === $talk) {
+            $this->application->notFound();
+            return;
+        }
+
+        // default values
+        $data              = [];
+        $data['talk_uri'] = $talk->getApiUri();
+
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new TalkDeleteFormType(), $data);
+
+        $request = $this->application->request();
+
+        if ($request->isPost()) {
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                try {
+                    $talkApi->deleteTalk($talk->getApiUri());
+
+                    $this->application->flash('message', sprintf(
+                        'The talk "%s" has been permanently removed',
+                        $talk->getTitle()
+                    ));
+
+                    $this->application->redirect(
+                        $this->application->urlFor('event-default',
+                            ['friendly_name' => $eventSlug])
+                    );
+
+                    return;
+                } catch (\RuntimeException $e) {
+                    $form->adderror(
+                        new FormError('An error occurred while removing this talk: ' . $e->getmessage())
+                    );
+                }
+            }
+        }
+
+        $this->render(
+            'Talk/delete-talk.html.twig',
+            [
+                'talk'  => $talk,
+                'form'    => $form->createView(),
+                'backUri' => $this->application->urlFor('talk', [
+                    'eventSlug' => $eventSlug,
+                    'talkSlug'  => $talkSlug,
+                ]),
+                'user'    => $_SESSION['user']
+            ]
+        );
     }
 
     /**

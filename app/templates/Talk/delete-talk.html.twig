@@ -1,0 +1,19 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Delete talk "{{ talk.getTitle }}" - Joind.in{% endblock %}
+
+{% form_theme form _self %}
+{% use '/Talk/_common/deleteform.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <div class="row event">
+            <div class="col-xs-12 col-sm-12 title">
+                <h1>
+                    Delete talk "{{ talk.getTitle }}"
+                </h1>
+            </div>
+        </div>
+    </div>
+    {{ block('form') }}
+{% endblock %}
