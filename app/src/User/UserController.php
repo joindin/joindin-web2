@@ -880,7 +880,8 @@ class UserController extends BaseController
                 $this->application->flash(
                     'error',
                     "User account not verified. <a href='/user/resend-verification'> 
-                        Click here</a> to resend welcome email.");
+                        Click here</a> to resend welcome email."
+                );
             }
 
             if (empty($redirect)) {
