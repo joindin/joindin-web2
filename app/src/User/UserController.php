@@ -872,8 +872,17 @@ class UserController extends BaseController
      */
     protected function handleLogin($result, $redirect = '')
     {
-        if (false === $result) {
-            $this->application->flash('error', "Failed to log in");
+        if (!is_object($result)) {
+            if (false === $result || $result[0] == 'Signin failed') {
+                $this->application->flash('error', "Failed to log in");
+            }
+            if ($result[0] == 'Not verified') {
+                $this->application->flash(
+                    'error',
+                    "User account not verified. <a href='/user/resend-verification'> 
+                        Click here</a> to resend welcome email.");
+            }
+
             if (empty($redirect)) {
                 $redirect = '/';
             }
