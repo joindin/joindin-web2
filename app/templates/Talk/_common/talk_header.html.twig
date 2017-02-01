@@ -44,6 +44,7 @@
                         {% endif %}
                         <br>
                         Short URL: <a href="{{ shortUrlForTalk(talk.getStub) }}">{{ shortUrlForTalk(talk.getStub) }}</a>
+                        (<a class="qr-code" href="{{ qrcode(shortUrlForTalk(talk.getStub)) }}">QR-Code</a>)
                     </p>
                 </div>
                 <div class="col-xs-4 text-right">
