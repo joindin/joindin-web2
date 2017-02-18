@@ -431,8 +431,8 @@ class TalkApi extends BaseApi
 
     protected function handleTalkLinksUpdate($talkId, $original, $new)
     {
-        foreach($new as $key => $media) {
-            foreach($original as $old) {
+        foreach ($new as $key => $media) {
+            foreach ($original as $old) {
                 if ($key === $old->id) {
                     if ((
                         $media['type'] != $old->display_name ||
@@ -446,8 +446,8 @@ class TalkApi extends BaseApi
             $this->addTalkMedia($talkId, $media);
         }
 
-        foreach($original as $old) {
-            foreach($new as $key => $media) {
+        foreach ($original as $old) {
+            foreach ($new as $key => $media) {
                 if ($key === $old->id) {
                     continue 2;
                 }
