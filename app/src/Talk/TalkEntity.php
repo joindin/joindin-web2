@@ -2,9 +2,9 @@
 namespace Talk;
 
 use Application\BaseEntity;
-use DateTime;
-use DateInterval;
 use ArrayAccess;
+use DateInterval;
+use DateTime;
 
 class TalkEntity extends BaseEntity implements ArrayAccess
 {
