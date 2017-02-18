@@ -38,10 +38,26 @@
                     <p>
                         {{ talk.getType }} in {{ talk.language }} at <a href="{{ urlFor('event-schedule', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getName }}</a>
 
-                        {% if talk.slidesLink is not empty %}
-                        <br>
-                        View Slides: <a href="{{ talk.slidesLink }}">{{ talk.slidesLink }}</a> <i class="fa fa-external-link-square"></i>
-                        {% endif %}
+                        {% for media in talk.talk_media %}
+                            <br>
+                            {% if media.slides_link is defined %}
+                            View Slides: <a href="{{ media.slides_link }}">{{ media.slides_link }}</a> <i class="fa fa-external-link-square"></i>
+                            {% endif %}
+                            {% if media.video_link is defined %}
+                            View Video: <a href="{{ media.video_link }}">{{ media.video_link }}</a> <i class="fa fa-video-camera" aria-hidden="true"></i>
+                            {% endif %}
+                            {% if media.audio_link is defined %}
+                            Download Audio: <a href="{{ media.audio_link }}">{{ media.audio_link }}</a> <i class="fa fa-headphones" aria-hidden="true"></i>
+                            {% endif %}
+                            {% if media.code_link is defined %}
+                            Checkout the code: <a href="{{ media.code_link }}">{{ media.code_link }}</a> <i class="fa fa-code" aria-hidden="true"></i>
+                            {% endif %}
+                            {% if media.joindin_link is defined %}
+                            View previous talk: <a href="{{ media.joindin_link }}">{{ media.joindin_link }}</a> <i class="fa fa-code" aria-hidden="true"></i>
+                            {% endif %}
+                        {% endfor %}
+
+
                         <br>
                         Short URL: <a href="{{ shortUrlForTalk(talk.getStub) }}">{{ shortUrlForTalk(talk.getStub) }}</a>
                     </p>

@@ -4,8 +4,9 @@ namespace Talk;
 use Application\BaseEntity;
 use DateTime;
 use DateInterval;
+use ArrayAccess;
 
-class TalkEntity extends BaseEntity
+class TalkEntity extends BaseEntity implements ArrayAccess
 {
     /**
      * Is user a speaker on this talk?
@@ -165,5 +166,25 @@ class TalkEntity extends BaseEntity
     public function getTracksUri()
     {
         return $this->data->tracks_uri;
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->data->$offset);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->data->$offset;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->data->$offset = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->data->$offset);
     }
 }
