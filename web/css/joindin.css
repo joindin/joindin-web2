@@ -720,3 +720,6 @@ form ol.tracks li:last-child {
     list-style-type: none;
     border-bottom: none;
 }
+.talk_media .form-group {
+    display:inline-block;
+}

@@ -92,14 +92,6 @@ class TalkFormType extends AbstractType
                 ]
             )
             ->add(
-                'slides_link',
-                'url',
-                [
-                    'constraints' => [new Assert\Url()],
-                    'required' => false,
-                ]
-            )
-            ->add(
                 'start_date',
                 'datetime',
                 [
@@ -178,6 +170,16 @@ class TalkFormType extends AbstractType
                 [
                     'label' => 'Speakers!',
                     'type' => new SpeakerFormType(),
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                ]
+            )
+            ->add(
+                'talk_media',
+                'collection',
+                [
+                    'label' => 'Talk Media',
+                    'type' => new TalkMediaFormType(),
                     'allow_add' => true,
                     'allow_delete' => true,
                 ]
