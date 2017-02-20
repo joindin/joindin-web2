@@ -29,9 +29,7 @@ class AuthApi extends BaseApi
         if ($result) {
             $data = json_decode($result);
             if ($data) {
-                if (isset($data->access_token)) {
-                    return $data;
-                }
+                return $data;
             }
         }
         return false;

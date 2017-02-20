@@ -114,6 +114,8 @@ class TalkController extends BaseController
             $this->application->notFound();
             return;
         }
+        $talkId = basename($talk['uri']);
+        $talkMedia = $talkApi->getTalkLinksById($talkId);
 
         $isAdmin = $event->getCanEdit();
         $isSpeaker = $talk->isSpeaker($_SESSION['user']->getUri());
@@ -137,7 +139,6 @@ class TalkController extends BaseController
         $data = [];
         $data['talk_title'] = $talk->getTitle();
         $data['talk_description'] = $talk->getDescription();
-        $data['slides_link'] = $talk->getSlidesLink();
         $data['start_date'] = $talk->getStartDateTime();
         $data['duration'] = $talk->getDuration();
         $data['language'] = $talk->getLanguage();
@@ -149,6 +150,13 @@ class TalkController extends BaseController
             foreach ($talk->getSpeakers() as $speaker) {
                 $data['speakers'][] = ['name' => $speaker->speaker_name];
             }
+        }
+
+        foreach ($talkMedia as $media) {
+            $data['talk_media'][$media->id] = [
+                'type' => $media->display_name,
+                'url' => $media->url
+            ];
         }
 
         /** @var FormFactoryInterface $factory */
