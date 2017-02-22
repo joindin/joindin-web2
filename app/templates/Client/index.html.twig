@@ -1,0 +1,28 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}3rd party-Apps - Joind.in{% endblock %}
+
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li><a href="{{ urlFor('user-profile', {'username': user.getUsername}) }}">{{ user.getFullName }}</a></li>
+        <li class="active">Clients</li>
+    </ol>
+
+    <section id="apps">
+        <h2>My Apps</h2>
+        {% if clients %}
+            {% for client in clients %}
+                {% include 'Client/_common/client.html.twig' with {'client': client }%}
+            {% endfor %}
+        {% endif %}
+    </section>
+
+{% endblock %}
+
+
+{% block topAside %}
+{% endblock %}
+
+{% block extraAside %}
+{% endblock %}

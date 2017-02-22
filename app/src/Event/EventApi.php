@@ -2,6 +2,7 @@
 namespace Event;
 
 use Application\BaseApi;
+use Exception;
 use Talk\TalkCommentEntity;
 use Talk\TalkCommentReportEntity;
 use User\UserApi;
@@ -174,7 +175,7 @@ class EventApi extends BaseApi
         if ($status == 201) {
             return true;
         }
-        throw new \Exception("Failed to add comment: " . $result);
+        throw new Exception("Failed to add comment: " . $result);
     }
 
     public function reportComment($uri)
@@ -184,7 +185,7 @@ class EventApi extends BaseApi
         if ($status == 202) {
             return true;
         }
-        throw new \Exception("Failed to report comment: " . $result);
+        throw new Exception("Failed to report comment: " . $result);
     }
 
     public function attend(EventEntity $event)
@@ -195,7 +196,7 @@ class EventApi extends BaseApi
             return true;
         }
 
-        throw new \Exception("Failed to mark you as attending: " . $result);
+        throw new Exception("Failed to mark you as attending: " . $result);
     }
 
     public function unattend(EventEntity $event)
@@ -206,7 +207,7 @@ class EventApi extends BaseApi
             return true;
         }
 
-        throw new \Exception("Failed to unmark you as attending: " . $result);
+        throw new Exception("Failed to unmark you as attending: " . $result);
     }
 
 
@@ -242,7 +243,7 @@ class EventApi extends BaseApi
      *
      * @param array $data
      *
-     * @throws \Exception if a status code other than 201 is returned.
+     * @throws Exception if a status code other than 201 is returned.
      *
      * @see EventFormType::buildForm() for a list of supported fields in the $data array
      * and their constraints.
@@ -281,7 +282,7 @@ class EventApi extends BaseApi
             }
         }
 
-        throw new \Exception($result);
+        throw new Exception($result);
     }
 
     /**
@@ -291,7 +292,7 @@ class EventApi extends BaseApi
      *
      * @param array $data
      *
-     * @throws \Exception if a status code other than 201 is returned.
+     * @throws Exception if a status code other than 201 is returned.
      * @see EventFormType::buildForm() for a list of supported fields in the $data array
      * @return EventEntity|null
      */
@@ -318,7 +319,7 @@ class EventApi extends BaseApi
             return current($response['events']);
         }
 
-        throw new \Exception('Your event submission was not accepted, the server reports: ' . $result);
+        throw new Exception('Your event submission was not accepted, the server reports: ' . $result);
     }
 
     /**
@@ -363,14 +364,14 @@ class EventApi extends BaseApi
             $body = $e->getResponse()->getBody();
             error_log($e->getMessage());
             error_log(json_decode($body)[0]);
-            throw new \Exception(json_decode($body)[0]);
+            throw new Exception(json_decode($body)[0]);
         }
 
         if ($response->getStatusCode() == 201) {
             return true;
         }
 
-        throw new \Exception((string)$response->getBody());
+        throw new Exception((string)$response->getBody());
     }
 
     /**
@@ -462,7 +463,7 @@ class EventApi extends BaseApi
         if ($status == 204) {
             return true;
         }
-        throw new \Exception("Failed to approve event: " . $result);
+        throw new Exception("Failed to approve event: " . $result);
     }
 
     /**
@@ -478,7 +479,7 @@ class EventApi extends BaseApi
         if ($status == 204) {
             return true;
         }
-        throw new \Exception("Failed to reject event: " . $result);
+        throw new Exception("Failed to reject event: " . $result);
     }
 
     public function getReportedEventComments($comment_uri)
@@ -543,6 +544,6 @@ class EventApi extends BaseApi
             return true;
         }
 
-        throw new \Exception('Your comment moderation was not accepted, the server reports: ' . $result);
+        throw new Exception('Your comment moderation was not accepted, the server reports: ' . $result);
     }
 }

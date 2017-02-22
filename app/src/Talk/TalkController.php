@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormError;
 
 class TalkController extends BaseController
 {
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $app)
     {
         $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
         $app->map('/event/:eventSlug/:talkSlug/edit', array($this, 'editTalk'))->via('GET', 'POST')->name('talk-edit');
@@ -32,6 +32,8 @@ class TalkController extends BaseController
             ->name('talk-by-id-web1')
             ->conditions(array('talkId' => '\d+'));
         $app->post('/event/:eventSlug/:talkSlug/claim', array($this, 'claimTalk'))->name('talk-claim');
+        $app->get('/event/:eventSlug/:talkSlug/unlink/:username', array($this, 'unlinkSpeaker'))
+            ->name('unlink-speaker');
     }
 
     public function index($eventSlug, $talkSlug)
@@ -111,6 +113,8 @@ class TalkController extends BaseController
             $this->application->notFound();
             return;
         }
+        $talkId = basename($talk['uri']);
+        $talkMedia = $talkApi->getTalkLinksById($talkId);
 
         $isAdmin = $event->getCanEdit();
         $isSpeaker = $talk->isSpeaker($_SESSION['user']->getUri());
@@ -134,7 +138,6 @@ class TalkController extends BaseController
         $data = [];
         $data['talk_title'] = $talk->getTitle();
         $data['talk_description'] = $talk->getDescription();
-        $data['slides_link'] = $talk->getSlidesLink();
         $data['start_date'] = $talk->getStartDateTime();
         $data['duration'] = $talk->getDuration();
         $data['language'] = $talk->getLanguage();
@@ -146,6 +149,13 @@ class TalkController extends BaseController
             foreach ($talk->getSpeakers() as $speaker) {
                 $data['speakers'][] = ['name' => $speaker->speaker_name];
             }
+        }
+
+        foreach ($talkMedia as $media) {
+            $data['talk_media'][$media->id] = [
+                'type' => $media->display_name,
+                'url' => $media->url
+            ];
         }
 
         /** @var FormFactoryInterface $factory */
@@ -439,6 +449,41 @@ class TalkController extends BaseController
         }
 
         $this->application->flash('message', 'Thank you for your report.');
+        $this->application->redirect($url);
+    }
+
+    public function unlinkSpeaker($eventSlug, $talkSlug, $username)
+    {
+        $url = $this->application->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
+        
+        if (!isset($_SESSION['user'])) {
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect=' . $url
+            );
+        }
+
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $eventUri = $event->getUri();
+
+        $talkApi = $this->getTalkApi();
+        $talk = $talkApi->getTalkBySlug($talkSlug, $eventUri);
+        $talkUri = $talk->getApiUri();
+
+        $userApi = $this->getUserApi();
+        $user = $userApi->getUserByUsername($username);
+        $userId = $user->getId();
+
+        $unlinkSpeakerUri = $talkUri . "/speakers/" . $userId;
+
+        try {
+            $talkApi->unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri);
+        } catch (Exception $e) {
+            $this->application->flash('error', $e->getMessage());
+            $this->application->redirect($url);
+        }
+
+        $this->application->flash('message', 'Speaker has been removed from this talk.');
         $this->application->redirect($url);
     }
 

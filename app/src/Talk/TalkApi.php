@@ -2,6 +2,7 @@
 namespace Talk;
 
 use Application\BaseApi;
+use Exception;
 use User\UserApi;
 
 class TalkApi extends BaseApi
@@ -179,7 +180,7 @@ class TalkApi extends BaseApi
         if ($status == 201) {
             return true;
         }
-        throw new \Exception("Failed to add comment: " . $result);
+        throw new Exception("Failed to add comment: " . $result);
     }
 
     public function reportComment($uri)
@@ -189,7 +190,7 @@ class TalkApi extends BaseApi
         if ($status == 202) {
             return true;
         }
-        throw new \Exception("Failed to report comment: " . $result);
+        throw new Exception("Failed to report comment: " . $result);
     }
 
     /**
@@ -211,7 +212,7 @@ class TalkApi extends BaseApi
             }
         }
 
-        throw new \Exception("Failed to toggle star: $status, $result");
+        throw new Exception("Failed to toggle star: $status, $result");
     }
 
     /**
@@ -282,7 +283,7 @@ class TalkApi extends BaseApi
             }
         }
 
-        throw new \Exception($result);
+        throw new Exception($result);
     }
 
     /**
@@ -309,6 +310,9 @@ class TalkApi extends BaseApi
             });
             $data['speakers'] = array_filter($data['speakers']);
         }
+        $talkId = basename($talkUri);
+        $media = $this->getTalkLinksById($talkId);
+        $this->handleTalkLinksUpdate($talkId, $media, $data['talk_media']);
 
         list ($status, $result, $headers) = $this->apiPut($talkUri, $data);
 
@@ -337,7 +341,21 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed: " . $message);
+        throw new Exception("Failed: " . $message);
+    }
+
+    public function rejectTalkClaim($talkSpeakersUri, $data)
+    {
+        list ($status, $result, $headers) = $this->apiDelete($talkSpeakersUri, $data);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+
+        throw new Exception("Failed: " . $message);
     }
     
     /**
@@ -362,7 +380,7 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed: " . $message);
+        throw new Exception("Failed: " . $message);
     }
 
     /**
@@ -382,6 +400,102 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed to remove talk from track: " . $message);
+        throw new Exception("Failed to remove talk from track: " . $message);
+    }
+
+    public function unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri)
+    {
+        list($status, $result, $headers) = $this->apiDelete($unlinkSpeakerUri, []);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        $result = json_decode($result);
+        $message = $result[0];
+
+        throw new \Exception("Failed to unlink speaker from talk: " . $message);
+    }
+
+    public function getTalkLinksById($talkId)
+    {
+        $talkId = (int)$talkId;
+        if (!$talkId) {
+            return;
+        }
+
+        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links';
+
+        return json_decode($this->apiGet($talkUrl))->talk_links;
+    }
+
+    protected function handleTalkLinksUpdate($talkId, $original, $new)
+    {
+        foreach ($new as $key => $media) {
+            foreach ($original as $old) {
+                if ($key === $old->id) {
+                    if ((
+                        $media['type'] != $old->display_name ||
+                        $media['url'] != $old->url
+                    )) {
+                        $this->updateTalkMedia($talkId, $key, $media);
+                    }
+                    continue 2;
+                }
+            }
+            $this->addTalkMedia($talkId, $media);
+        }
+
+        foreach ($original as $old) {
+            foreach ($new as $key => $media) {
+                if ($key === $old->id) {
+                    continue 2;
+                }
+            }
+            $this->deleteTalkMedia($talkId, $old->id);
+        }
+    }
+
+    protected function addTalkMedia($talkId, $media)
+    {
+        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links';
+        $params = [
+            'display_name' => $media['type'],
+            'url' => $media['url'],
+        ];
+        list($status, $result, $headers) = $this->apiPost($talkUrl, $params);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new Exception("Failed: Adding Talk media");
+    }
+
+    protected function updateTalkMedia($talkId, $mediaId, $media)
+    {
+        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
+        $params = [
+            'display_name' => $media['type'],
+            'url' => $media['url'],
+        ];
+        list($status, $result, $headers) = $this->apiPut($talkUrl, $params);
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new Exception("Failed: Updating Talk media");
+    }
+
+    protected function deleteTalkMedia($talkId, $mediaId)
+    {
+        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
+        list($status, $result, $headers) = $this->apiDelete($talkUrl);
+
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new Exception("Failed: Deleting Talk media");
     }
 }

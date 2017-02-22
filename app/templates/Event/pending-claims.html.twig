@@ -31,31 +31,32 @@
                     <td></td>
                 </tr>
             </thead>
+            {% for claim in claims %}
             <tr>
-                {% for claim in claims %}
-                    <td class="col-sm-4">
-                        {{ claim.talk.getTitle() }}
-                    </td>
-                    <td class="col-sm-2">
-                        {{ claim.display_name }}
-                    </td>
-                    <td class="col-sm-2">
-                        {{ claim.user.getFullName() }}
-                    </td>
-                    <td class="agenda-cell">
-                        {% if claim.approved %}
-                            <strong>Claim Approved</strong>
-                        {% else %}
-                        <form action="" method="post">
-                            <input type="hidden" name="display_name" value="{{  claim.display_name }}" />
-                            <input type="hidden" name="username" value="{{ claim.user.getUsername() }}" />
-                            <button type="button submit" name="action" value="approve">Approve</button>
-                        </form>
-                        {% endif %}
+                <td class="col-sm-4">
+                    {{ claim.talk.getTitle() }}
+                </td>
+                <td class="col-sm-2">
+                    {{ claim.display_name }}
+                </td>
+                <td class="col-sm-2">
+                    {{ claim.user.getFullName() }}
+                </td>
+                <td class="agenda-cell">
+                    {% if claim.approved is defined %}
+                        <strong>Claim {{ claim.approved ? 'Approved' : 'Rejected' }}</strong>
+                    {% else %}
+                    <form action="" method="post">
+                        <input type="hidden" name="display_name" value="{{  claim.display_name }}" />
+                        <input type="hidden" name="username" value="{{ claim.user.getUsername() }}" />
+                        <button type="submit" class="btn btn-sm btn-success" name="action" value="approve">Approve</button>
+                        <button type="submit" class="btn btn-sm btn-warning" name="action" value="reject">Reject</button>
+                    </form>
+                    {% endif %}
 
-                    </td>
-                {% endfor %}
+                </td>
             </tr>
+            {% endfor %}
         </table>
     </div>
 
