@@ -1,0 +1,31 @@
+{% block form %}
+    {% if user %}
+        {{ form_start(form, {'attr' : {'id' : 'talk'} }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="col-sm-12 bg_warning">
+                <h3>
+                    Are you sure that you want to permanently remove the talk
+                    "<strong>{{ talk.getTitle }}</strong>"?
+                </h3>
+                <p>
+                    The talk and all associated comments will be removed from
+                    the system. There will be no way of retrieving that
+                    information after you delete the talk!
+                    This can not be undone!
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                {{ form_row(form.talk_uri) }}
+                <input type="submit" class="btn btn-danger pull-right" value="Permanently delete the talk" />
+                <a href="{{ backUri }}" class="btn btn-default pull-right">Go back without deleting</a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    {% else %}
+        <h1>Login required</h1>
+        <p>In order to remove a talk, please log in.</p>
+    {% endif %}
+{% endblock %}
