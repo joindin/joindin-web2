@@ -1,6 +1,6 @@
 {% extends '/layout.html.twig' %}
 
-{% block title %}{{ talk.getTitle }} - {{ event.getName }} - Joind.in{% endblock %}
+{% block title %}{{ talk.getTitle | raw }} - {{ event.getName }} - Joind.in{% endblock %}
 
 {% block extra_javascript %}
     <script type="text/javascript">
@@ -80,7 +80,7 @@
                             </form>
                         </div>
                     {% else %}
-                        <p class="panel-body">Please <a href="#loginheader">login</a> to leave a comment</p>                        
+                        <p class="panel-body">Please <a href="#loginheader">login</a> to leave a comment</p>
                     {% endif %}
                     </div>
                 </div>
@@ -128,7 +128,7 @@
             <h2 class="modal-title" id="claimModalLabel">Claim Talk</h2>
           </div>
           <div class="modal-body">
-            <form action="{{ urlFor('talk-claim', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" method="post">            
+            <form action="{{ urlFor('talk-claim', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}" method="post">
                 <p>Which speaker are you?</p>
                 <select name="display_name">
                     {% for speaker in unclaimed %}
@@ -136,7 +136,7 @@
                     {% endfor %}
                 </select>
                 <p><button type="submit" class="btn btn-default">Claim talk</button></p>
-            </form>            
+            </form>
           </div>
         </div>
       </div>
