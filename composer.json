@@ -33,6 +33,7 @@
         "symfony/twig-bridge":   "~2.5",
         "org_heigl/daterange":   "~1.1",
         "guzzlehttp/guzzle":     "^6.2.1",
-        "monolog/monolog":       "^1.21"
+        "monolog/monolog":       "^1.21",
+        "twbs/bootstrap-sass": "^3.3"
     }
 }
