@@ -1,0 +1,68 @@
+.comment h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: 1.5em;
+}
+
+.comment h3 .meta {
+    margin-top: 0.3em;
+}
+
+.comment h3 .meta small {
+    display: block;
+    font-size: 60%;
+}
+
+.comment h3 .rating {
+    margin-top: 0.5em;
+}
+
+.comment .avatar img {
+    -webkit-border-radius: 50%; /* Can also be 55px */
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 4px solid white;
+    margin-top: 0.2em;
+    margin-left: 0.5em;
+}
+
+.key {
+    padding: 0.5em 5px;
+    color: white;
+    text-align: center;
+    position: relative;
+    min-height: 1px;
+    margin-bottom: 1px;
+    float: left;
+    width: auto;
+}
+@media (min-width: 435px) {
+.key {
+    padding: 0.5em 15px;
+}
+}
+
+.talk-type-talk {
+    background-color: #5A8EC3;
+}
+
+.talk-type-keynote {
+    background-color: #C799CE;
+}
+
+.talk-type-workshop {
+    background-color: #F69159;
+}
+
+.talk-type-socialevent {
+    background-color: #CAAD90;
+}
+
+.talk-type-eventrelated {
+    background-color: #5BB068;
+}
+/* A special case that lets us put the talk type as a label */
+.talk-type-label {
+    padding: 4px;
+    font-size: 8pt;
+}

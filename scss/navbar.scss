@@ -1,0 +1,73 @@
+.navbar-default {
+    background-image: none;
+    background-color: white;
+    border-radius: 0px;
+    border-bottom: 2px solid #007b97;
+    font-size: 14px;
+}
+
+nav.navbar a.navbar-brand {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+nav.navbar a.navbar-brand img {
+    height: 40px;
+}
+
+.navbar-nav>li>a {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.page-nav {
+    border-top: 1px solid #eee;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-top: 10px;
+    margin-bottom: 0px
+}
+
+.page-nav.no-top-border {
+    border-top: none;
+    margin-top: 0;
+}
+
+.page-header {
+  margin: 10px 0 20px;
+  padding-bottom: 0;
+}
+
+.page-nav.admin {
+    margin-top: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    background-color: #FFFEDC;
+}
+.page-nav.admin .nav > li > a:hover, .page-nav.admin .nav > li > a:focus {
+    background-color: #FFFEDC;
+    text-decoration: none;
+}
+
+form.navbar-form {
+    margin-top: 10px;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
+    font-weight: bold;
+    background-color: #fff;
+    color: #428bca;
+}
+.nav-pills > li.active > a:hover {
+    background-color: #eee;
+    color: #428bca;
+}
+
+.page-nav.admin .nav-pills > li.active > a, .page-nav.admin .nav-pills > li.active > a:focus {
+    font-weight: bold;
+    background-color: #FFFEDC;
+    color: #428bca;
+}
+.page-nav.admin .nav-pills > li.active > a:hover {
+    background-color: #FFFEDC;
+    color: #428bca;
+}

@@ -1,0 +1,271 @@
+@media (max-width: 768px) {
+    .pull-right-xs {
+        float: right;
+    }
+
+    .pull-left-xs {
+        float: left;
+    }
+}
+
+@media (min-width: 768px) {
+    .pull-right-sm {
+        float: right;
+    }
+
+    .pull-left-sm {
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .pull-right-md {
+        float: right;
+    }
+
+    .pull-left-md {
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .pull-right-lg {
+        float: right;
+    }
+
+    .pull-left-lg {
+        float: left;
+    }
+}
+
+form {
+    margin: 0 0 10px;
+}
+
+form ul.errors {
+    padding-left: 0;
+    list-style-type: none;
+    color: #d9534f;
+}
+
+form .button-spacer {
+    margin-right: 5px;
+    margin-left: 0;
+}
+form .button-spacer.pull-right {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+label.required:after {
+    content: ' *'
+}
+
+.commented-on {
+    font-style: italic;
+}
+
+.comment:before {
+  display: block;
+  content: " ";
+  margin-top: -60px;
+  height: 60px;
+  visibility: hidden;
+}
+
+#comment {
+    line-height: 1.2em;
+}
+
+.user-profile {
+    margin-bottom: 10px;
+}
+
+.user-profile-panels h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.user-profile-panels section {
+    margin-bottom: 10px;
+}
+.user-profile-panels section .rating {
+    margin-top: 2px;
+    margin-left: 5px;
+}
+
+.user-profile-panels .panel-body {
+    padding-bottom: 5px;
+    min-height: 345px;
+}
+.user-profile-panels .more, .user-details .more {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.user-profile img {
+    margin-right: 20px;
+}
+
+.user-profile img {
+    height: 100px;
+    width: 100px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.user-details {
+    color: #777;
+    font-weight: 400;
+    font-size: 1.2em;
+    line-height: 1;
+    margin-top: 10px;
+}
+
+.search-results .talk .rating {
+    float: right;
+}
+
+.user-profile-panels .logo {
+    position: relative;
+    float: left;
+    width: 70px;
+}
+
+.user-profile-panels .logo img {
+    width: 100%;
+    max-width: 50px;
+}
+
+.user-profile-panels .title h3, .user-profile-panels .title h4 {
+    margin-top: 0;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+a.star, table.schedule a.star {
+    font-size: 3em;
+    float: right;
+    text-decoration: none;
+    color: #000;
+    line-height: 0.5em;
+}
+
+a.star {
+    font-size: 2.0em;
+}
+
+a.star:hover {
+    text-decoration: none;
+}
+
+a.starred, table.schedule a.starred {
+    color: #fff;
+}
+
+.agenda table .star-wrapper {
+    float: none;
+    display: inline-block;
+}
+
+.agenda table a.starred, a.starred.talk {
+    color: #000;
+}
+
+a.talk.star {
+    font-size: 1.5em;
+    float: none;
+    margin: 0 5px 0;
+}
+
+.event-details {
+    color: #777;
+}
+
+.event-attendees img {
+    max-width:100%
+}
+
+.event-attendees .row .col {
+    text-align:center;
+}
+
+.event-attendees .row .col .attendeeName {
+    height:40px;
+    overflow:hidden;
+    margin-top:5px;
+}
+
+.tags {
+    margin-bottom: 5px;
+}
+
+.already-registered {
+    padding-right: 10px;
+    margin-bottom: 5px;
+}
+
+.alternative-login a {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#contact_comment {
+    height: 15em;
+}
+
+.form-cancel {
+    margin-right: 10px;
+    margin-top: 9px;
+}
+
+.attending.label {
+    font-size: 12px;
+    font-weight: normal;
+    display: inline-block;
+    padding: 1px 5px;
+    line-height: 18px;
+    margin-bottom: 2px;
+}
+
+#loginheader {
+    padding: 8px;
+    margin-bottom: 20px;
+}
+
+#loginheader:target {
+    background-color: #d9edf7;
+    animation: pulse 1s 1;
+    animation-delay: 2s;
+    animation-fill-mode: both;
+}
+@keyframes pulse {
+    0% {
+        background-color: #d9edf7;
+    }
+    100% {
+        background-color: #fff;
+    }
+}
+
+.top-spacer {
+    margin-top: 10px;
+}
+
+form ul.speakers {
+    list-style-type: none;
+}
+
+form ol.tracks li {
+    margin-top: 20px;
+}
+form ol.tracks li:last-child {
+    list-style-type: none;
+    border-bottom: none;
+}
+.talk_media .form-group {
+    display:inline-block;
+}
