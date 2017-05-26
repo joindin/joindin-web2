@@ -153,30 +153,11 @@ class ApplicationController extends BaseController
     }
 
     /**
-     * @return CacheService
-     */
-    private function getCache()
-    {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        return new CacheService($keyPrefix);
-    }
-
-    /**
      * @return EventApi
      */
     private function getEventApi()
     {
-        $eventDb = new EventDb($this->getCache());
-        return new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
-    }
-
-    /**
-     * @return UserApi
-     */
-    private function getUserApi()
-    {
-        $userDb = new UserDb($this->getCache());
-        return new UserApi($this->cfg, $this->accessToken, $userDb);
+        return $this->application->container->get(EventApi::class);
     }
 
     /**
@@ -184,6 +165,6 @@ class ApplicationController extends BaseController
      */
     private function getContactApi()
     {
-        return new ContactApi($this->cfg, $this->accessToken);
+        return $this->application->container->get(ContactApi::class);
     }
 }

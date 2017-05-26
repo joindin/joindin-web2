@@ -11,10 +11,10 @@ class CacheService
     protected $client;
     protected $keyPrefix;
 
-    public function __construct($keyPrefix = '')
+    public function __construct(\Predis\Client $client, $keyPrefix = '')
     {
         $this->keyPrefix = $keyPrefix;
-        $this->client = new \Predis\Client();
+        $this->client = $client;
     }
 
     public function save($collection, $data, $keyField, $keyValue)
