@@ -88,14 +88,13 @@
             </div>
             <aside class="col-xs-12 col-sm-{{ sidebar_col_width }} pull-right-sm sidebar">
 
+                    {% if not user %}
+                        <section id="loginheader">
+                            <h2>Log in</h2>
+                            {% include '_common/login.html.twig' %}
+                        </section>
+                    {% endif %}
                 {% block extraAside %}{% endblock %}
-                
-                {% if not user %}
-                <section id="loginheader">
-                    <h2>Log in</h2>
-                        {% include '_common/login.html.twig' %}
-                </section>
-                {% endif %}
 
                 {% block bottomAside %}{% endblock %}
 
