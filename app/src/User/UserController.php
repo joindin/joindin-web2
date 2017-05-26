@@ -70,7 +70,7 @@ class UserController extends BaseController
             $clientId = $config['client_id'];
             $clientSecret = $config['client_secret'];
 
-            $authApi = new AuthApi($this->cfg, $this->accessToken);
+            $authApi = $this->application->container->get(AuthApi::class);
             $result = $authApi->login($username, $password, $clientId, $clientSecret);
 
             $this->handleLogin($result, $redirect);
@@ -470,7 +470,7 @@ class UserController extends BaseController
             }
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile-comments.html.twig',
             array(
                 'thisUser'     => $user,
@@ -502,23 +502,12 @@ class UserController extends BaseController
         return $eventInfo;
     }
 
-
-    /**
-     * @return CacheService
-     */
-    private function getCache()
-    {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        return new CacheService($keyPrefix);
-    }
-
     /**
      * @return UserApi
      */
     private function getUserApi()
     {
-        $cache = $this->getCache();
-        return new UserApi($this->cfg, $this->accessToken, new UserDb($cache));
+        return $this->application->container->get(UserApi::class);
     }
 
     /**
@@ -526,7 +515,7 @@ class UserController extends BaseController
      */
     private function getTalkDb()
     {
-        return new TalkDb($this->getCache());
+        return $this->application->container->get(TalkDb::class);
     }
 
     /**
@@ -534,7 +523,7 @@ class UserController extends BaseController
      */
     private function getTalkApi()
     {
-        return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb(), $this->getUserApi());
+        return $this->application->container->get(TalkApi::class);
     }
 
     /**
@@ -542,7 +531,7 @@ class UserController extends BaseController
      */
     private function getEventDb()
     {
-        return new EventDb($this->getCache());
+        return $this->application->container->get(EventDb::class);
     }
 
     /**
@@ -550,7 +539,7 @@ class UserController extends BaseController
      */
     private function getEventApi()
     {
-        return new EventApi($this->cfg, $this->accessToken, $this->getEventDb(), $this->getUserApi());
+        return $this->application->container->get(EventApi::class);
     }
 
     public function remindUsername()
@@ -803,7 +792,7 @@ class UserController extends BaseController
         $clientId = $config['client_id'];
         $clientSecret = $config['client_secret'];
 
-        $authApi = new AuthApi($this->cfg, $this->accessToken);
+        $authApi = $this->application->container->get(AuthApi::class);
         $request_token = $authApi->getTwitterRequestToken($clientId, $clientSecret);
 
         if ($request_token) {
@@ -835,7 +824,7 @@ class UserController extends BaseController
         $token = $request->get('oauth_token');
         $verifier = $request->get('oauth_verifier');
 
-        $authApi = new AuthApi($this->cfg, $this->accessToken);
+        $authApi = $this->application->container->get(AuthApi::class);
         $result = $authApi->verifyTwitter($clientId, $clientSecret, $token, $verifier);
 
         $this->handleLogin($result);
@@ -856,7 +845,7 @@ class UserController extends BaseController
         // handle incoming vars
         $code = $request->get('code');
 
-        $authApi = new AuthApi($this->cfg, $this->accessToken);
+        $authApi = $this->application->container->get(AuthApi::class);
         $result = $authApi->verifyFacebook($clientId, $clientSecret, $code);
 
         $this->handleLogin($result);
@@ -910,7 +899,7 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user = $userApi->getUserByUserId($userId);
         if (!$user) {
-            return \Slim\Slim::getInstance()->notFound();
+            return $this->application->notFound();
         }
 
         $this->application->redirect(

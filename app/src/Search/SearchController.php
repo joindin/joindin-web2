@@ -190,25 +190,11 @@ class SearchController extends BaseController
     }
 
     /**
-     * @return CacheService
-     */
-    private function getCache()
-    {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        return new CacheService($keyPrefix);
-    }
-
-    /**
      * @return EventApi
      */
     protected function getEventApi()
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $eventDb = new EventDb($cache);
-        $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
-
-        return $eventApi;
+        return $this->application->container->get(EventApi::class);
     }
 
     /**
@@ -216,12 +202,7 @@ class SearchController extends BaseController
      */
     protected function getTalkApi()
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        $cache = new CacheService($keyPrefix);
-        $talkDb = new TalkDb($cache);
-        $talkApi = new TalkApi($this->cfg, $this->accessToken, $talkDb, $this->getUserApi());
-
-        return $talkApi;
+        return $this->application->container->get(TalkApi::class);
     }
 
     /**
@@ -229,8 +210,7 @@ class SearchController extends BaseController
      */
     private function getUserApi()
     {
-        $userDb = new UserDb($this->getCache());
-        return new UserApi($this->cfg, $this->accessToken, $userDb);
+        return $this->application->container->get(UserApi::class);
     }
 
     /**

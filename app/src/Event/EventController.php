@@ -870,7 +870,7 @@ class EventController extends BaseController
         $url = $this->application->urlFor("event-reported-comments", ['friendly_name' => $friendly_name]);
         $this->application->redirect($url);
     }
-    
+
     public function talkClaims($friendly_name)
     {
         if (!isset($_SESSION['user'])) {
@@ -887,7 +887,7 @@ class EventController extends BaseController
             if (!$event->getCanEdit()) {
                 $this->redirectToDetailPage($event->getUrlFriendlyName());
             }
-            
+
             $claims_uri = $event->getPendingClaimsUri();
 
             $claims = $eventApi->getPendingClaims($claims_uri, true);
@@ -1170,8 +1170,7 @@ class EventController extends BaseController
      */
     private function getCache()
     {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        return new CacheService($keyPrefix);
+        return $this->application->container->get(CacheService::class);
     }
 
     /**
@@ -1179,7 +1178,7 @@ class EventController extends BaseController
      */
     private function getTalkDb()
     {
-        return new TalkDb($this->getCache());
+        return $this->application->container->get(TalkDb::class);
     }
 
     /**
@@ -1187,7 +1186,7 @@ class EventController extends BaseController
      */
     private function getTalkApi()
     {
-        return new TalkApi($this->cfg, $this->accessToken, $this->getTalkDb(), $this->getUserApi());
+        return $this->application->container->get(TalkApi::class);
     }
 
     /**
@@ -1195,7 +1194,6 @@ class EventController extends BaseController
      */
     private function getUserApi()
     {
-        $userDb = new UserDb($this->getCache());
-        return new UserApi($this->cfg, $this->accessToken, $userDb);
+        return $this->application->container->get(UserApi::class);
     }
 }

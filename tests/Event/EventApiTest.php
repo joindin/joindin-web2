@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Event;
 
+use Predis\Client;
+
 class EventApiTest extends \PHPUnit_Framework_TestCase
 {
     private $mockConfig;
@@ -8,12 +10,20 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     private $mockDbEvent;
     private $mockUserDb;
     private $mockUserApi;
+    private $mockPredisClient;
 
     public function setUp()
     {
         $this->mockConfig = array('apiUrl' => 'http://example.com');
+
+        $this->mockPredisClient = $this->getMock(
+            Client::class
+        );
+
         $this->mockCache = $this->getMock(
-            'Application\CacheService'
+            'Application\CacheService',
+            null,
+            array($this->mockPredisClient)
         );
 
         $this->mockDbEvent = $this->getMock(

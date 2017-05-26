@@ -242,7 +242,7 @@ class TalkController extends BaseController
             $this->application->notFound();
             return;
         }
-        
+
         $speakers = $talk->getSpeakers();
         $valid = false;
         foreach ($speakers as $speaker) {
@@ -309,11 +309,10 @@ class TalkController extends BaseController
 
     public function quick($talkStub)
     {
-        $cache = $this->getCache();
-        $talkDb = new TalkDb($cache);
+        $talkDb = $this->application->container->get(TalkDb::class);
         $talk = $talkDb->load('stub', $talkStub);
 
-        $eventDb = new EventDb($cache);
+        $eventDb = $this->application->container->get(EventDb::class);
         $event = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
             return \Slim\Slim::getInstance()->notFound();
@@ -329,8 +328,7 @@ class TalkController extends BaseController
 
     public function quickById($talkId)
     {
-        $cache = $this->getCache();
-        $eventDb = new EventDb($cache);
+        $eventDb = $this->application->container->get(EventDb::class);
 
         $talkApi = $this->getTalkApi();
         $talk = $talkApi->getTalkByTalkId($talkId);
@@ -456,7 +454,7 @@ class TalkController extends BaseController
     public function unlinkSpeaker($eventSlug, $talkSlug, $username)
     {
         $url = $this->application->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
-        
+
         if (!isset($_SESSION['user'])) {
             $this->application->redirect(
                 $this->application->urlFor('not-allowed') . '?redirect=' . $url
@@ -575,21 +573,11 @@ class TalkController extends BaseController
     }
 
     /**
-     * @return CacheService
-     */
-    private function getCache()
-    {
-        $keyPrefix = $this->cfg['redisKeyPrefix'];
-        return new CacheService($keyPrefix);
-    }
-
-    /**
      * @return EventApi
      */
     private function getEventApi()
     {
-        $eventDb = new EventDb($this->getCache());
-        return new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
+        return $this->application->container->get(EventApi::class);
     }
 
     /**
@@ -597,8 +585,7 @@ class TalkController extends BaseController
      */
     private function getTalkApi()
     {
-        $talkDb = new TalkDb($this->getCache());
-        return new TalkApi($this->cfg, $this->accessToken, $talkDb, $this->getUserApi());
+        return $this->application->container->get(TalkApi::class);
     }
 
     /**
@@ -606,8 +593,7 @@ class TalkController extends BaseController
      */
     private function getUserApi()
     {
-        $userDb = new UserDb($this->getCache());
-        return new UserApi($this->cfg, $this->accessToken, $userDb);
+        return $this->application->container->get(UserApi::class);
     }
 
     /**
@@ -615,9 +601,7 @@ class TalkController extends BaseController
      */
     protected function getLanguageApi()
     {
-        $languageApi = new LanguageApi($this->cfg, $this->accessToken);
-
-        return $languageApi;
+        return $this->application->container->get(LanguageApi::class);
     }
 
     /**
@@ -625,9 +609,7 @@ class TalkController extends BaseController
      */
     protected function getTalkTypeApi()
     {
-        $talkTypeApi = new TalkTypeApi($this->cfg, $this->accessToken);
-
-        return $talkTypeApi;
+        return $this->application->container->get(TalkTypeApi::class);
     }
 
     /**
@@ -635,8 +617,6 @@ class TalkController extends BaseController
      */
     protected function getTrackApi()
     {
-        $trackApi = new TrackApi($this->cfg, $this->accessToken);
-
-        return $trackApi;
+        return $this->application->container->get(TrackApi::class);
     }
 }
