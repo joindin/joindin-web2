@@ -95,6 +95,64 @@ if (!empty($config['slim']['custom']['csrfSecret'])) {
 }
 $app->add(new Middleware\FormMiddleware($csrfSecret));
 
+// register services
+$app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
+
+$app->container->singleton(\Application\CacheService::class, function ($container) {
+    $client = new Predis\Client();
+    $keyPrefix = $container->settings['custom']['redisKeyPrefix'];
+    return new \Application\CacheService($client, $keyPrefix);
+});
+$app->container->singleton(\Application\ContactApi::class, function ($container) {
+    return new \Application\ContactApi($container['settings']['custom'], $container['access_token']);
+});
+$app->container->singleton(\User\UserDb::class, function ($container) {
+    return new \User\UserDb($container[\Application\CacheService::class]);
+});
+$app->container->singleton(\User\UserApi::class, function ($container) {
+    return new \User\UserApi(
+        $container['settings']['custom'],
+        $container['access_token'],
+        $container[\User\UserDb::class]
+    );
+});
+$app->container->singleton(\Event\EventDb::class, function ($container) {
+    return new \Event\EventDb($container[\Application\CacheService::class]);
+});
+$app->container->singleton(\Event\EventApi::class, function ($container) {
+    return new \Event\EventApi(
+        $container['settings']['custom'],
+        $container['access_token'],
+        $container[\Event\EventDb::class],
+        $container[\User\UserApi::class]
+    );
+});
+$app->container->singleton(\Talk\TalkDb::class, function ($container) {
+    return new \Talk\TalkDb($container[\Application\CacheService::class]);
+});
+$app->container->singleton(\Talk\TalkApi::class, function ($container) {
+    return new \Talk\TalkApi(
+        $container['settings']['custom'],
+        $container['access_token'],
+        new \Talk\TalkDb($container[\Application\CacheService::class]),
+        $container[\User\UserApi::class]);
+});
+$app->container->singleton(\User\AuthApi::class, function ($container) {
+    return new \User\AuthApi($container['settings']['custom'], $container['access_token']);
+});
+$app->container->singleton(\Language\LanguageApi::class, function ($container) {
+    return new \Language\LanguageApi($container['settings']['custom'], $container['access_token']);
+});
+$app->container->singleton(\Talk\TalkTypeApi::class, function ($container) {
+    return new \Talk\TalkTypeApi($container['settings']['custom'], $container['access_token']);
+});
+$app->container->singleton(\Event\TrackApi::class, function ($container) {
+    return new \Event\TrackApi($container['settings']['custom'], $container['access_token']);
+});
+$app->container->singleton(\Client\ClientApi::class, function ($container) {
+    return new \Client\ClientApi($container['settings']['custom'], $container['access_token']);
+});
+
 // register routes
 new Application\ApplicationController($app);
 new Event\EventController($app);

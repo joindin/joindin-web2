@@ -309,6 +309,6 @@ class ClientController extends BaseController
      */
     private function getClientApi()
     {
-        return new ClientApi($this->cfg, $this->accessToken);
+        return $this->application->container->get(ClientApi::class);
     }
 }
