@@ -47,6 +47,7 @@
                         <strong>Claim {{ claim.approved ? 'Approved' : 'Rejected' }}</strong>
                     {% else %}
                     <form action="" method="post">
+                        <input type="hidden" name="talk" value="{{ claim.talk.getStub() }}" />
                         <input type="hidden" name="display_name" value="{{  claim.display_name }}" />
                         <input type="hidden" name="username" value="{{ claim.user.getUsername() }}" />
                         <button type="submit" class="btn btn-sm btn-success" name="action" value="approve">Approve</button>
