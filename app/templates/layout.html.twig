@@ -89,8 +89,9 @@
             <aside class="col-xs-12 col-sm-{{ sidebar_col_width }} pull-right-sm sidebar">
 
                     {% if not user %}
+                        <a name="login" id="login"></a>
                         <section id="loginheader">
-                            <h2>Log in</h2>
+                            <h2>Log In</h2>
                             {% include '_common/login.html.twig' %}
                         </section>
                     {% endif %}
