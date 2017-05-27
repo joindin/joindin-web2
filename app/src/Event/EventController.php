@@ -908,6 +908,7 @@ class EventController extends BaseController
                     $data = [
                         'display_name'  => $this->application->request->post('display_name'),
                         'username'      => $this->application->request->post('username'),
+                        'action'        => $action,
                     ];
 
                     if ($action == "approve") {
