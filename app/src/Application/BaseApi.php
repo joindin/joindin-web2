@@ -203,4 +203,12 @@ abstract class BaseApi
 
         return $headers;
     }
+
+    /**
+     * @param $access_token
+     */
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+    }
 }
