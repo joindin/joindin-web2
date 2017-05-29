@@ -881,6 +881,9 @@ class UserController extends BaseController
 
         // now get users details
         $userApi = $this->getUserApi();
+
+        $userApi->setAccessToken($this->accessToken);
+
         $user = $userApi->getUser($result->user_uri);
         if ($user) {
             $_SESSION['user'] = $user;
