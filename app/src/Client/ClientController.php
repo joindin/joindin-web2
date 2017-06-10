@@ -80,7 +80,7 @@ class ClientController extends BaseController
 
     public function createClient($username)
     {
-        $thisUrl = $this->application->urlFor('clients-create', [
+        $thisUrl = $this->application->urlFor('client-create', [
             'username' => $username,
         ]);
 

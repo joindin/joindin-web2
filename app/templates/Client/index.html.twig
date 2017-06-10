@@ -16,6 +16,8 @@
                 {% include 'Client/_common/client.html.twig' with {'client': client }%}
             {% endfor %}
         {% endif %}
+
+        <a class="btn btn-default" href="{{ urlFor('client-create', {'username': user.getUsername}) }}">Add new Client</a>
     </section>
 
 {% endblock %}
