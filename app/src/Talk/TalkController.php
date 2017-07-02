@@ -170,6 +170,11 @@ class TalkController extends BaseController
             if ($form->isValid()) {
                 $values = $form->getdata();
 
+                // not allowing speakers to remove themselves after a talk has started (JOINDIN-749)
+                if (!$isAdmin && $data['start_date']->format('U') < time()) {
+                    $values['speakers'] = $data['speakers'];
+                }
+
                 try {
                     $talkApi = $this->getTalkApi();
                     $talk = $talkApi->editTalk($talk->getApiUri(), $values);
@@ -475,15 +480,21 @@ class TalkController extends BaseController
 
         $unlinkSpeakerUri = $talkUri . "/speakers/" . $userId;
 
-        try {
-            $talkApi->unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri);
-        } catch (Exception $e) {
-            $this->application->flash('error', $e->getMessage());
+        $isAdmin = $event->getCanEdit();
+        if (!$isAdmin && $talk->getStartDateTime()->format('U') > time()) {
+            try {
+                $talkApi->unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri);
+            } catch (Exception $e) {
+                $this->application->flash('error', $e->getMessage());
+                $this->application->redirect($url);
+            }
+
+            $this->application->flash('message', 'Speaker has been removed from this talk.');
+            $this->application->redirect($url);
+        } else {
+            $this->application->flash('message', 'Speaker can not be removed after start of talk.');
             $this->application->redirect($url);
         }
-
-        $this->application->flash('message', 'Speaker has been removed from this talk.');
-        $this->application->redirect($url);
     }
 
     public function deleteTalk($eventSlug, $talkSlug)
