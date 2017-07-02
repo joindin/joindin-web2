@@ -171,7 +171,7 @@ class TalkController extends BaseController
                 $values = $form->getdata();
 
                 // not allowing speakers to remove themselves after a talk has started (JOINDIN-749)
-                if (!$isAdmin && $data['start_date']->format('U') < time()) {
+                if (!$isAdmin && $data['start_date'] < new \DateTimeImmutable()) {
                     $values['speakers'] = $data['speakers'];
                 }
 
@@ -481,12 +481,13 @@ class TalkController extends BaseController
         $unlinkSpeakerUri = $talkUri . "/speakers/" . $userId;
 
         $isAdmin = $event->getCanEdit();
-        if (!$isAdmin && $talk->getStartDateTime()->format('U') > time()) {
+        if (!$isAdmin && $talk->getStartDateTime() > new \DateTimeImmutable()) {
             try {
                 $talkApi->unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri);
             } catch (Exception $e) {
                 $this->application->flash('error', $e->getMessage());
                 $this->application->redirect($url);
+                return;
             }
 
             $this->application->flash('message', 'Speaker has been removed from this talk.');
