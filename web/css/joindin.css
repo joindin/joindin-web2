@@ -723,3 +723,20 @@ form ol.tracks li:last-child {
 .talk_media .form-group {
     display:inline-block;
 }
+.login-button {
+    border: 1px solid;
+    border-radius:3px;
+}
+.login-button i {
+    margin-right: 5px;
+}
+.login-button a {
+    padding: 5px;
+}
+.login-button.github {
+    background-color: grey;
+}
+.login-button.github a {
+    color: white;
+}
+

@@ -115,6 +115,36 @@ class AuthApi extends BaseApi
                 }
             }
         }
+
+        return false;
+    }
+
+    /**
+     * Send Github verification code to the API to log us in
+     *
+     * @param  string $clientId OAuth client ID
+     * @param  string $clientSecret OAuth client secret
+     * @param  string $code Code parameter from Github
+     */
+    public function verifyGithub($clientId, $clientSecret, $code)
+    {
+        $url = $this->baseApiUrl . '/v2.1/github/token';
+        $params = [
+            'client_id'     => $clientId,
+            'client_secret' => $clientSecret,
+            'code'          => $code,
+        ];
+
+        list ($status, $result, $headers) = $this->apiPost($url, $params);
+        if ($result) {
+            $data = json_decode($result);
+            if ($data) {
+                if (isset($data->access_token)) {
+                    return $data;
+                }
+            }
+        }
+
         return false;
     }
 }

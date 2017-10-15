@@ -36,6 +36,7 @@ class UserController extends BaseController
         $app->get('/user/twitter-login', array($this, 'loginWithTwitter'))->name('twitter-login');
         $app->get('/user/twitter-access', array($this, 'accessTokenFromTwitter'))->name('twitter-callback');
         $app->get('/user/facebook-access', array($this, 'accessTokenFromFacebook'))->name('facebook-callback');
+        $app->get('/user/github-access', array($this, 'accessTokenFromGithub'))->name('github-callback');
         $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
         $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
         $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
@@ -847,6 +848,24 @@ class UserController extends BaseController
 
         $authApi = $this->application->container->get(AuthApi::class);
         $result = $authApi->verifyFacebook($clientId, $clientSecret, $code);
+
+        $this->handleLogin($result);
+    }
+
+    public function accessTokenFromGithub()
+    {
+        $config = $this->application->config('oauth');
+        $request = $this->application->request();
+
+        // pass verification to the API so we can log in
+        $clientId = $config['client_id'];
+        $clientSecret = $config['client_secret'];
+
+        // handle incoming vars
+        $code = $request->get('code');
+
+        $authApi = $this->application->container->get(AuthApi::class);
+        $result = $authApi->verifyGithub($clientId, $clientSecret, $code);
 
         $this->handleLogin($result);
     }

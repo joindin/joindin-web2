@@ -166,6 +166,35 @@ function initialize(Twig_Environment $env, Slim $app)
     );
 
     /**
+     * Create link to log in with Github
+     */
+    $env->addFunction(
+        new Twig_SimpleFunction(
+            'githubLoginUrl',
+            function () use ($app) {
+                if (!$app->config('github') || empty($app->config('github')['app_id'])) {
+                    // app_id isn't configured
+                    return '';
+                }
+
+                $req = $app->request();
+                $redirectUrl = $req->getUrl();
+                $redirectUrl .= $app->urlFor('github-callback');
+
+                $url = 'https://github.com/login/oauth/authorize?';
+                $url .= http_build_query([
+                    'scope' => 'user:email',
+                    'client_id' => $app->config('github')['app_id'],
+                    'redirect_uri' => $redirectUrl,
+                ]);
+
+                return $url;
+            },
+            ['is_safe' => ['html']]
+        )
+    );
+
+    /**
      * Create a link to download a QR-Code for the given URL
      */
     $env->addFunction(

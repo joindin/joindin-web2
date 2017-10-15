@@ -17,6 +17,9 @@ $config = array(
         'facebook' => array(
             'app_id' => '',
         ),
+        'github' => array(
+            'app_id' => '',
+        ),
         'twig' => array(
             // set to the folder name to cache into, or false to disable
             'cache' => false
