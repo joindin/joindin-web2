@@ -101,8 +101,8 @@
                                         </td>
                                     {% endset %}
                                     {% set trackCellHTMLMap = trackCellHTMLMap|merge({ (trackName) : cell }) %}
-                                    {% set titleTrackMap = titleTrackMap|merge({  (title)  : trackName }) %}
-                                    {% set titleTypeMap = titleTypeMap|merge({ (title) : talk.type }) %}
+                                    {% set titleTrackMap = titleTrackMap|merge({  (talk.url_friendly_talk_title)  : trackName }) %}
+                                    {% set titleTypeMap = titleTypeMap|merge({ (talk.url_friendly_talk_title) : talk.type }) %}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
