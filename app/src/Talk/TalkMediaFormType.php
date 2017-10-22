@@ -5,6 +5,7 @@ namespace Talk;
 use Event\EventEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Url;
 
 /**
  * Form used to render and validate the speakers collection on a Talk form
@@ -32,7 +33,8 @@ class TalkMediaFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', 'text', [
+            ->add('url', 'url', [
+                'constraints' => [new Url()],
                 'label' => false,
                 'required' => false,
             ])
