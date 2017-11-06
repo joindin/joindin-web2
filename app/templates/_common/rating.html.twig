@@ -9,18 +9,18 @@
 
     <div class="rating rating-{{ rating }}" title="Rated {{ rating }}" style="position:relative;">
         {% for i in 0..4 %}
-            {% set color = 'lightgray' %}
+            {% set color = 'rating-off' %}
             {%  if rating == 0 %}
-                {%  set color = 'white' %}
+                {%  set color = 'rating-unrated' %}
             {%  elseif rating > i %}
-                {% set color = 'rgb(140, 220, 96)' %}
+                {% set color = 'rating-on' %}
             {% endif %}
-            {% set shadow = '0 0 1px black' %}
+            {% set shadow = 'rating-shadow-default' %}
             {% if userrating and i + 1 == userrating %}
-                {% set shadow = '0 0 8px red' %}
+                {% set shadow = 'rating-shadow-own' %}
             {% endif %}
-        <span class="fa-stack" style="font-size:0.6em;">
-            <i class="fa fa-comment fa-stack-2x" style="color:{{ color }}; text-shadow: {{ shadow }};"></i>
+        <span class="fa-stack" style="font-size:0.7em;">
+            <i class="fa fa-joindin-comment fa-stack-2x {{ color }} {{ shadow }}"></i>
            {% if (rating > i) %}
             <i class="fa fa-thumbs-o-up fa-stack-1x"></i>
             {%  endif %}
