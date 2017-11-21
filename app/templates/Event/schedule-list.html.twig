@@ -42,7 +42,7 @@
                 {% if not starred_only or talk.starred %}
                     <tr>
                         <td class="time col-xs-1">
-                            {% if loop.first %}{{ time|replace({' ': '&nbsp;'})|raw }}{# -{{ talk.EndDateTime|date('H:i') }} #}{% endif %}
+                            {% if loop.first or talk.starred %}{{ time|replace({' ': '&nbsp;'})|raw }}{# -{{ talk.EndDateTime|date('H:i') }} #}{% endif %}
                         </td>
                         <td class="agenda-cell">
                             <div class="talk-info">
