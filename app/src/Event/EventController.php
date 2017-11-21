@@ -335,9 +335,10 @@ class EventController extends BaseController
         $starredOnly = ($starred === 'starred');
         $currentUrlWithoutStarred = str_replace('/starred', '', $request->getResourceUri());
 
+
         // Does it end in /schedule/list or are we on the default event page
         $expectedUrlSuffix = '/schedule/list';
-        if (substr($currentUrlWithoutStarred, count($expectedUrlSuffix)*-1) !== $expectedUrlSuffix) {
+        if (substr($currentUrlWithoutStarred, strlen($expectedUrlSuffix)*-1) !== $expectedUrlSuffix) {
             $currentUrlWithoutStarred .= $expectedUrlSuffix;
         }
 
@@ -372,7 +373,7 @@ class EventController extends BaseController
 
         // Does it end in /schedule/grid or are we on the default event page
         $expectedUrlSuffix = '/schedule/grid';
-        if (substr($currentUrlWithoutStarred, count($expectedUrlSuffix)*-1) !== $expectedUrlSuffix) {
+        if (substr($currentUrlWithoutStarred, strlen($expectedUrlSuffix)*-1) !== $expectedUrlSuffix) {
             $currentUrlWithoutStarred .= $expectedUrlSuffix;
         }
 
