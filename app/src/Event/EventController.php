@@ -44,8 +44,8 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name/comments/:comment_hash/report', array($this, 'reportComment'))
             ->name("event-comments-reported");
         $app->get('/event/:friendly_name/schedule', array($this, 'schedule'))->name("event-schedule");
-        $app->get('/event/:friendly_name/schedule/list', array($this, 'scheduleList'))->name("event-schedule-list");
-        $app->get('/event/:friendly_name/schedule/grid', array($this, 'scheduleGrid'))->name("event-schedule-grid");
+        $app->get('/event/:friendly_name/schedule/list(/:starred)', array($this, 'scheduleList'))->name("event-schedule-list");
+        $app->get('/event/:friendly_name/schedule/grid(/:starred)', array($this, 'scheduleGrid'))->name("event-schedule-grid");
         $app->get('/event/:friendly_name/talk-comments', array($this, 'talkComments'))->name("event-talk-comments");
         $app->post('/event/:friendly_name/add-comment', array($this, 'addComment'))->name('event-add-comment');
         $app->map('/event/:friendly_name/edit', array($this, 'edit'))->via('GET', 'POST')->name('event-edit');
@@ -318,7 +318,7 @@ class EventController extends BaseController
         $this->application->redirect($events_url);
     }
 
-    public function scheduleList($friendly_name)
+    public function scheduleList($friendly_name, $starred = false)
     {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
@@ -331,13 +331,26 @@ class EventController extends BaseController
 
         $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
 
+        $request = $this->application->request();
+        $starredOnly = ($starred === 'starred');
+        $currentUrlWithoutStarred = str_replace('/starred', '', $request->getResourceUri());
+
+        // Does it end in /schedule/list or are we on the default event page
+        $expectedUrlSuffix = '/schedule/list';
+        if (substr($currentUrlWithoutStarred, count($expectedUrlSuffix)*-1) !== $expectedUrlSuffix) {
+            $currentUrlWithoutStarred .= $expectedUrlSuffix;
+        }
+
         $this->render('Event/schedule-list.html.twig', array(
             'event' => $event,
             'agenda' => $agenda,
+            'starred' => $starred,
+            'starred_only' => $starredOnly,
+            'current_url' => $currentUrlWithoutStarred
         ));
     }
 
-    public function scheduleGrid($friendly_name)
+    public function scheduleGrid($friendly_name, $starred = false)
     {
         $eventApi = $this->getEventApi();
         $event = $eventApi->getByFriendlyUrl($friendly_name);
@@ -353,9 +366,22 @@ class EventController extends BaseController
 
         $schedule = $scheduler->getScheduleData($event);
 
+        $request = $this->application->request();
+        $starredOnly = ($starred === 'starred');
+        $currentUrlWithoutStarred = str_replace('/starred', '', $request->getResourceUri());
+
+        // Does it end in /schedule/grid or are we on the default event page
+        $expectedUrlSuffix = '/schedule/grid';
+        if (substr($currentUrlWithoutStarred, count($expectedUrlSuffix)*-1) !== $expectedUrlSuffix) {
+            $currentUrlWithoutStarred .= $expectedUrlSuffix;
+        }
+
         $this->render('Event/schedule-grid.html.twig', array(
             'event' => $event,
             'eventDays' => $schedule,
+            'starred' => $starred,
+            'starred_only' => $starredOnly,
+            'current_url' => $currentUrlWithoutStarred
         ));
     }
 
