@@ -40,7 +40,7 @@
                                 <span class="hidden-xs">{% if comment.getCommentSource is not null %} (via {{ comment.getCommentSource }}){% endif %}</span>
                                 <br><br>
                                 {% if display_comment_report and user and user.uri != comment.getUserUri %}
-                                    <a href="/event/{{ event.getUrlFriendlyName }}{% if talk is not null %}/{{ talk.getUrlFriendlyTalkTitle }}{% elseif talkSlug is not null %}/{{ talkSlug }}{% endif %}/comments/{{ comment.getCommentHash }}/report">Report comment</a>
+                                    <a href="/event/{{ event.getUrlFriendlyName }}{% if talk is not null %}/{{ talk.getUrlFriendlyTalkTitle }}{% elseif talkSlug is not null %}/{{ talkSlug }}{% endif %}/comments/{{ comment.getCommentHash }}/report" onclick="return confirm('Are you sure you want to report this comment? This cannot be undone.');" >Report comment</a>
                                 {% endif %}
                             </small>
                         </div>
