@@ -487,6 +487,10 @@ class TalkApi extends BaseApi
 
     protected function addTalkMedia($talkId, $media)
     {
+        if (trim($media['url']) == '') {
+            return false;
+        }
+
         $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links';
         $params = [
             'display_name' => $media['type'],
