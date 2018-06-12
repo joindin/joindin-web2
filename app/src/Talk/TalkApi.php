@@ -457,6 +457,10 @@ class TalkApi extends BaseApi
     protected function handleTalkLinksUpdate($talkId, $original, $new)
     {
         foreach ($new as $key => $media) {
+            if (empty($media['url'])) {
+                continue;
+            }
+
             foreach ($original as $old) {
                 if ($key === $old->id) {
                     if ((
