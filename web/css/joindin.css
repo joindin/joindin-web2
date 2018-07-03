@@ -532,7 +532,7 @@ label.required:after {
 }
 
 .user-profile {
-    margin-bottom: 10px;
+    padding-bottom: 5px;
 }
 
 .user-profile-panels h4 {
@@ -551,13 +551,18 @@ label.required:after {
     padding-bottom: 5px;
     min-height: 345px;
 }
-.user-profile-panels .more, .user-details .more {
+.user-profile-panels .more {
     margin-top: 15px;
     margin-bottom: 0;
 }
 
+.user-details .more {
+  margin-top: 15px;
+}
+
 .user-profile img {
     margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .user-profile img {
@@ -573,7 +578,7 @@ label.required:after {
     color: #777;
     font-weight: 400;
     font-size: 1.2em;
-    line-height: 1;
+    line-height: 1.2;
     margin-top: 10px;
 }
 

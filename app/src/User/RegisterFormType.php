@@ -77,6 +77,17 @@ class RegisterFormType extends AbstractType
                     'required' => false
                 ]
             )
-        ;
+            ->add(
+                'biography',
+                'textarea',
+                [
+                    'required' => false,
+                    'empty_data' => '',
+                    'attr' => [
+                        'rows' => 4,
+                        'maxlength' => '400'
+                    ]
+                ]
+            );
     }
 }
