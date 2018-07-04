@@ -105,6 +105,7 @@ class SearchController extends BaseController
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $events = array();
         $talks = array();
+        $users = array();
         $eventInfo = array();
         $pagination = array();
 
@@ -115,10 +116,11 @@ class SearchController extends BaseController
         if (!empty($keyword)) {
             $events = $this->searchEventsByTitleAndTag($page, $keyword);
             $talks = $this->searchTalksByTitle($page, $keyword);
+            $users = $this->searchUsersByKeyword($page, $keyword);
 
             // combine pagination data for events and talks
             $pagination = $this->combinePaginationData(
-                [$events['pagination'], $talks['pagination']]
+                [$events['pagination'], $talks['pagination'], $users['pagination']]
             );
         }
 
@@ -132,6 +134,7 @@ class SearchController extends BaseController
                 'events'     => $events,
                 'eventInfo'  => $eventInfo,
                 'talks'      => $talks,
+                'users'      => $users,
                 'page'       => $page,
                 'pagination' => $pagination,
                 'keyword'    => $keyword
@@ -187,6 +190,24 @@ class SearchController extends BaseController
             null, // pass empty $talks_uri so the base talks uri will be used
             $apiQueryParams
         );
+    }
+
+    /**
+     * @param int    $page
+     * @param string $keyword
+     *
+     * @return array
+     */
+    private function searchUsersByKeyword($page, $keyword)
+    {
+        $apiQueryParams = [
+            'keyword' => $keyword,
+            'resultsperpage' => $this->itemsPerPage,
+            'start' => ($page - 1) * $this->itemsPerPage,
+            'verbose' => 'yes'
+        ];
+
+        return $this->getUserApi()->getCollection($apiQueryParams);
     }
 
     /**

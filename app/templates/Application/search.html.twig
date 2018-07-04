@@ -7,7 +7,7 @@
     <h2 class="title">Search results for keyword "{{ keyword }}"</h2>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-4">
             <h3>Events</h3>
             {% if events.events is empty %}
                 {% if page > 1 %}
@@ -23,7 +23,7 @@
                 </div>
             {% endif %}
         </div>
-        <div class="col-sm-6">
+        <div class="col-md-4">
             <h3>Talks</h3>
             {% if talks.talks is empty %}
                 {% if page > 1 %}
@@ -40,7 +40,24 @@
                 </div>
             {% endif %}
         </div>
+        <div class="col-md-4">
+            <h3>Users</h3>
+            {% if users.users is empty %}
+                {% if page > 1 %}
+                    <p>No more users found</p>
+                {% else %}
+                    <p>Sorry, no users found</p>
+                {% endif %}
+            {% else %}
+                <div>
+                    {% for user in users.users %}
+                        {% include 'User/summary.html.twig' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
     </div>
 
     {% include '_common/pagination.html.twig' with {'pagination': pagination} %}
+</section>
 {% endblock %}

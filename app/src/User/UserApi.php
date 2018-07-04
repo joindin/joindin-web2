@@ -317,4 +317,34 @@ class UserApi extends BaseApi
 
         throw new \Exception('The password could not be updated');
     }
+
+    /**
+     * Get all users for the specified query params
+     *
+     * @param array         $queryParams
+     *
+     * @throws \Exception   if unable to connect to API
+     *
+     * @return array
+     */
+    public function getCollection(array $queryParams = [])
+    {
+        $usersUri = $this->baseApiUrl . '/v2.1/users';
+        $users = (array)json_decode(
+            $this->apiGet($usersUri, $queryParams)
+        );
+        $meta = array_pop($users);
+
+        $collectionData = array();
+        foreach ($users['users'] as $item) {
+            $user = new UserEntity($item);
+
+            $collectionData['users'][] = $user;
+            $this->userDb->save($user);
+        }
+
+        $collectionData['pagination'] = $meta;
+
+        return $collectionData;
+    }
 }

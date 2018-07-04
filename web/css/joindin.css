@@ -420,19 +420,21 @@ table.schedule span.speaker a:hover {
     margin-bottom: 10px;
 }
 
-.event .logo {
+.event .logo,
+.user .gravatar {
     float: left;
     margin-top: 6px;
     padding: 0 10px;
     width: 90px;
 }
 
-.event .description {
-    postion:relative;
+.event .description,
+.user .description {
     margin-left: 90px;
 }
 
-.event .logo img {
+.event .logo img,
+.user .gravatar img {
     width: 100%;
 }
 
