@@ -420,7 +420,11 @@ table.schedule span.speaker a:hover {
     margin-bottom: 10px;
 }
 
-.event .logo,
+.event .logo {
+    float: left;
+    margin: 10px 10px 10px 0;
+    width: 70px;
+}
 .user .gravatar {
     float: left;
     margin-top: 6px;
@@ -436,6 +440,10 @@ table.schedule span.speaker a:hover {
 .event .logo img,
 .user .gravatar img {
     width: 100%;
+}
+
+.event .header {
+    margin-top: 25px;
 }
 
 .event.pending-event .controls {
