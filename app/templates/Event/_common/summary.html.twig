@@ -5,61 +5,60 @@ set eventUrl = urlFor(
 %}
 
 <article class="event row">
-    <div class="logo text-center">
-        <a href="{{ eventUrl }}">
-            <img src="{{ event.getSmallImage }}">
-        </a>
-    </div>
-    <div class="title description">
-        <section>
-            <h3 class="header">
-                <a href="{{ eventUrl }}">{{ event.getName }}</a>
-            </h3>
+    <div class="col-xs-12">
+        <div class="logo text-center">
+            <a href="{{ eventUrl }}">
+                <img src="{{ event.getSmallImage }}">
+            </a>
+        </div>
+        <div class="title">
+            <section>
+                <h3 class="header">
+                    <a href="{{ eventUrl }}">{{ event.getName }}</a>
+                </h3>
 
-            <p class="meta">
+                <p class="meta">
+                    {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
 
-            </p>
-
-            <p class="wideOnly">
-                {{ event.getDescription | slice(0, 200)}}&hellip;
-            </p>
-
-            <p class="meta">
-                {{ dateRange(event.getStartDate, event.getEndDate, 'j M Y') }}
-
-                {% if event.getLocation %}
-                    @ {{event.getLocation|escape}}
-                {% endif %}
-
-                |
-
-                <a href="{{ eventUrl }}/comments">
-                    {{ event.getCommentsCount}}
-                    {% if event.getCommentsCount == 1 %}
-                        comment
-                    {% else %}
-                        comments
+                    {% if event.getLocation %}
+                        @ {{event.getLocation|escape}}
                     {% endif %}
-                </a>
+                </p>
 
-                |
+                <p class="wideOnly" style="clear:both">
+                    {{ event.getDescription | slice(0, 200)}}&hellip;
+                </p>
 
-                {% include 'Event/_common/attending_string.html.twig' %}
+                <p class="meta">
 
-                {% include 'Event/_common/attending.html.twig' %}
-
-                {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
-                    <p class="cfp-dates">
-                        {% if "now"|date('c') < event.getCallForPapersStartDate %}
-                            {# not open yet #}
-                            Call for papers starts {{ event.getCallForPapersStartDate |date('j M Y', event.getFullTimezone) }}
-                        {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
-                            {# still open #}
-                            Call for papers ends {{ event.getCallForPapersEndDate |date('j M Y', event.getFullTimezone) }}
+                    <a href="{{ eventUrl }}/comments">
+                        {{ event.getCommentsCount}}
+                        {% if event.getCommentsCount == 1 %}
+                            comment
+                        {% else %}
+                            comments
                         {% endif %}
-                    </p>
-                {% endif %}
-            </p>
-        </section>
+                    </a>
+
+                    |
+
+                    {% include 'Event/_common/attending_string.html.twig' %}
+
+                    {% include 'Event/_common/attending.html.twig' %}
+
+                    {% if event.getCallForPapersEndDate and event.getCallForPapersEndDate > "now"|date('c') %}
+                        <p class="cfp-dates">
+                            {% if "now"|date('c') < event.getCallForPapersStartDate %}
+                                {# not open yet #}
+                                Call for papers starts {{ event.getCallForPapersStartDate |date('j M Y', event.getFullTimezone) }}
+                            {% elseif "now"|date('c') < event.getCallForPapersEndDate %}
+                                {# still open #}
+                                Call for papers ends {{ event.getCallForPapersEndDate |date('j M Y', event.getFullTimezone) }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </p>
+            </section>
+        </div>
     </div>
 </article>
