@@ -13,8 +13,16 @@
                     <h2>{{ thisUser.getFullname }}</h2>
                     <section class="user-details">
                         {% if thisUser.getTwitterUsername %}
-                        Twitter: <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
-                            @{{ thisUser.getTwitterUsername }}</a>
+                            <p>
+                                Twitter:
+                                <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
+                                    @{{ thisUser.getTwitterUsername }}
+                                </a>
+                            </p>
+                        {% endif %}
+
+                        {% if thisUser.getBiography %}
+                            <p>Bio: {{ thisUser.getBiography }}</p>
                         {% endif %}
 
                         {% if thisUser.canEdit %}

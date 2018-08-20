@@ -609,6 +609,7 @@ class UserController extends BaseController
             'full_name' => $user->getFullName(),
             'email' => $user->getEmail(),
             'twitter_username' => $user->getTwitterUsername(),
+            'biography' => $user->getBiography(),
             'old_password' => '',
             'password' => '',
         ];
