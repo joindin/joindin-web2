@@ -1,0 +1,76 @@
+{% extends 'Event/_common/layout_event_details.html.twig' %}
+
+{% block extra_javascript %}{% endblock %}
+
+{% block title %}{{ event.getName }} slides - Joind.in{% endblock %}
+{% block extraAside %}
+<section>
+    {% include 'Event/_common/event_details.html.twig' %}
+</section>
+{% endblock %}
+
+{% block body %}
+    {% include 'Event/_common/event_header.html.twig' %}
+
+    {# Display the first paragraph of the description above the schedule #}
+    {% set paragraphs = event.getDescription | split("\n") %}
+    <p>{{ paragraphs[0] }}</p>
+
+    <div class="row">
+        <div class="col-xs-4">
+            <h2>Slides</h2>
+        </div>
+    </div>
+
+    {% if agenda|length %}
+    <div class="agenda">
+        <table class="table table-condensed">
+        {% for date,days in agenda %}
+            {% for time,talks in days %}
+                {% for talk in talks %}
+                {% if talk.slidesLink %}
+                    <tr>
+                        <td class="agenda-cell">
+                            <div class="talk-info">
+                                <span class="slides">
+                                        <a target="new" title="Slides for this session" href="{{ talk.slidesLink }}">
+                                            <img src="/img/icon-slides.gif" alt="Slides for this session">
+                                    </a>
+                                </span>
+                            </div>
+                            
+                            {% if user %}
+                            <div id="{{ event.getUrlFriendlyName }}/{{ talk.getUrlFriendlyTalkTitle }}" class="star-wrapper">
+                            </div>
+                            {% endif %}
+                            <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.title }}</a>
+
+                            {% if talk.speakers %}
+                                <br><span class="lowlight">{{ talk.getType }} by</span>
+                                {% for speaker in talk.speakers %}
+                                    <span class="speaker">
+                                        {% set comma = "" %}
+                                        {% if not loop.last %}
+                                            {% set comma = "," %}
+                                        {% endif %}
+
+                                        {% if speaker.username %}
+                                            <a href="{{ urlFor('user-profile', {'username': speaker.username}) }}">{{ speaker.speaker_name }}</a>{{comma}}
+                                        {% else %}
+                                            {{ speaker.speaker_name }}{{comma}}
+                                        {% endif %}
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        </table>
+    </div>
+    {% else %}
+    <p>This event does not have a schedule.</p>
+    {% endif %}
+{% endblock %}
