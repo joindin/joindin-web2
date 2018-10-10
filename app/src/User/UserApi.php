@@ -25,7 +25,7 @@ class UserApi extends BaseApi
         $result = $this->apiGet($url, array('verbose'=>'yes'));
 
         if ($result) {
-            $data = json_decode($result);
+            $data = json_decode($result, false, 512, JSON_BIGINT_AS_STRING);
             if ($data) {
                 if (isset($data->users) && isset($data->users[0])) {
                     $user = new UserEntity($data->users[0]);
