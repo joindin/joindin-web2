@@ -1,48 +1,74 @@
+/*
+   ==========================================================================
+         ___  _______  ___   __    _  ______         ___   __    _ 
+        |   ||       ||   | |  |  | ||      |       |   | |  |  | |
+        |   ||   _   ||   | |   |_| ||  _    |      |   | |   |_| |
+        |   ||  | |  ||   | |       || | |   |      |   | |       |
+     ___|   ||  |_|  ||   | |  _    || |_|   | ___  |   | |  _    |
+    |       ||       ||   | | | |   ||       ||   | |   | | | |   |
+    |_______||_______||___| |_|  |__||______| |___| |___| |_|  |__|
+   ==========================================================================
+
+    NOTES ----------
+    
+    ------------------- 
+
+*/
+
 body {
     padding-top: 50px;
     font-size: 13px;
 }
-@media (min-width: 1200px) {
-  .container-fluid {
-    width: 1170px;
-  }
-}
 
-.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-.container-fluid {
-    max-width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-.row {
-    margin-left: -10px;
-    margin-right: -10px;
-    padding-bottom: 15px;
-}
+/*  ==========================================================================
+    GRID
+    ========================================================================== */
 
-.navbar-default {
-    background-image: none;
-    background-color: white;
-    border-radius: 0px;
-    border-bottom: 2px solid #007b97;
-    font-size: 14px;
-}
+    @media (min-width: 1200px) {
+      .container-fluid {
+        width: 1170px;
+      }
+    }
 
-nav.navbar a.navbar-brand {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-nav.navbar a.navbar-brand img {
-    height: 40px;
-}
+    .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .container-fluid {
+        max-width: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .row {
+        margin-left: -10px;
+        margin-right: -10px;
+        padding-bottom: 15px;
+    }
 
-.navbar-nav>li>a {
-    padding-left: 10px;
-    padding-right: 10px;
-}
+/*  ==========================================================================
+    NAVIGATION
+    ========================================================================== */
+
+    .navbar-default {
+        background-image: none;
+        background-color: white;
+        border-radius: 0px;
+        border-bottom: 2px solid #007b97;
+        font-size: 14px;
+    }
+
+    nav.navbar a.navbar-brand {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    nav.navbar a.navbar-brand img {
+        height: 40px;
+    }
+
+    .navbar-nav>li>a {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 
 .page-nav {
     border-top: 1px solid #eee;
@@ -97,37 +123,41 @@ form.navbar-form {
     color: #428bca;
 }
 
-h1 {
-    border-bottom: 1px solid #d7dcdf;
-    color: #000;
-    font-weight: normal;
-    margin-bottom: 16px;
-}
+/*  ==========================================================================
+    HEADINGS
+    ========================================================================== */
 
-h1, .h1, h2, .h2, h3, .h3 {
-    margin-bottom: 5px;
-    margin-top: 10px;
-    font-weight: normal;
-}
+    h1 {
+        border-bottom: 1px solid #d7dcdf;
+        color: #000;
+        font-weight: normal;
+        margin-bottom: 16px;
+    }
 
-h1, .h1 {
-    font-size: 30px;
-}
-h2, .h2 {
-    font-size: 24px;
-}
-h3, .h3 {
-    font-size: 18px;
-}
-h4, .h4 {
-    font-size: 14px;
-}
-h5, .h5 {
-    font-size: 12px;
-}
-h6, .h6 {
-    font-size: 10px;
-}
+    h1, .h1, h2, .h2, h3, .h3 {
+        margin-bottom: 5px;
+        margin-top: 10px;
+        font-weight: normal;
+    }
+
+    h1, .h1 {
+        font-size: 30px;
+    }
+    h2, .h2 {
+        font-size: 24px;
+    }
+    h3, .h3 {
+        font-size: 18px;
+    }
+    h4, .h4 {
+        font-size: 14px;
+    }
+    h5, .h5 {
+        font-size: 12px;
+    }
+    h6, .h6 {
+        font-size: 10px;
+    }
 
 aside h3.header {
     font-size: 16px;
@@ -200,33 +230,37 @@ footer {
     margin-top: 2em;
 }
 
-.comment h3 {
-    margin-top: 0;
-    margin-bottom: 0;
-    min-height: 1.5em;
-}
+/*  ==========================================================================
+    COMMENTS
+    ========================================================================== */
 
-.comment h3 .meta {
-    margin-top: 0.3em;
-}
+    .comment h3 {
+        margin-top: 0;
+        margin-bottom: 0;
+        min-height: 1.5em;
+    }
 
-.comment h3 .meta small {
-    display: block;
-    font-size: 60%;
-}
+    .comment h3 .meta {
+        margin-top: 0.3em;
+    }
 
-.comment h3 .rating {
-    margin-top: 0.5em;
-}
+    .comment h3 .meta small {
+        display: block;
+        font-size: 60%;
+    }
 
-.comment .avatar img {
-    -webkit-border-radius: 50%; /* Can also be 55px */
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    border: 4px solid white;
-    margin-top: 0.2em;
-    margin-left: 0.5em;
-}
+    .comment h3 .rating {
+        margin-top: 0.5em;
+    }
+
+    .comment .avatar img {
+        -webkit-border-radius: 50%; /* Can also be 55px */
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        border: 4px solid white;
+        margin-top: 0.2em;
+        margin-left: 0.5em;
+    }
 
 .key {
     padding: 0.5em 5px;
@@ -269,31 +303,33 @@ footer {
     font-size: 8pt;
 }
 
+/*  ==========================================================================
+    AGENDA
+    ========================================================================== */
 
-/* Agenda */
-.agenda h2 {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-.agenda .table > thead > tr > th, .agenda .table > tbody > tr > th, .agenda .table > tfoot > tr > th, .agenda .table > thead > tr > td, .agenda .table > tbody > tr > td, .agenda .table > tfoot > tr > td {
-    border-top: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
-    line-height: 1.42857;
-    vertical-align: top;
-}
+    .agenda h2 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .agenda .table > thead > tr > th, .agenda .table > tbody > tr > th, .agenda .table > tfoot > tr > th, .agenda .table > thead > tr > td, .agenda .table > tbody > tr > td, .agenda .table > tfoot > tr > td {
+        border-top: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
+        line-height: 1.42857;
+        vertical-align: top;
+    }
 
-.agenda .time {
-    padding-left: 0;
-}
+    .agenda .time {
+        padding-left: 0;
+    }
 
-.agenda .lowlight {
-    color: #777;
-}
+    .agenda .lowlight {
+        color: #777;
+    }
 
-.agenda .talk-info {
-    width: 157px;
-    float: right;
-}
+    .agenda .talk-info {
+        width: 157px;
+        float: right;
+    }
 
 .talk-info .rating {
     display: inline-block;
@@ -318,19 +354,22 @@ footer {
     line-height: 16px;
 }
 
-/* Schedule */
-table.schedule a {
-    color: white;
-}
+/*  ==========================================================================
+    SCHEDULE
+    ========================================================================== */
 
-table.schedule span.speaker a {
-    color: black;
-    font-style: italic;
-}
+    table.schedule a {
+        color: white;
+    }
 
-table.schedule span.speaker a:hover {
-    color: white;
-}
+    table.schedule span.speaker a {
+        color: black;
+        font-style: italic;
+    }
+
+    table.schedule span.speaker a:hover {
+        color: white;
+    }
 
 .rateit {
     display: -moz-inline-box;
@@ -462,45 +501,49 @@ table.schedule span.speaker a:hover {
     margin-bottom: 5px
 }
 
-@media (max-width: 768px) {
-    .pull-right-xs {
-        float: right;
+/*  ==========================================================================
+    FLOATS
+    ========================================================================== */
+
+    @media (max-width: 768px) {
+        .pull-right-xs {
+            float: right;
+        }
+
+        .pull-left-xs {
+            float: left;
+        }
     }
 
-    .pull-left-xs {
-        float: left;
-    }
-}
+    @media (min-width: 768px) {
+        .pull-right-sm {
+            float: right;
+        }
 
-@media (min-width: 768px) {
-    .pull-right-sm {
-        float: right;
-    }
-
-    .pull-left-sm {
-        float: left;
-    }
-}
-
-@media (min-width: 992px) {
-    .pull-right-md {
-        float: right;
+        .pull-left-sm {
+            float: left;
+        }
     }
 
-    .pull-left-md {
-        float: left;
-    }
-}
+    @media (min-width: 992px) {
+        .pull-right-md {
+            float: right;
+        }
 
-@media (min-width: 1200px) {
-    .pull-right-lg {
-        float: right;
+        .pull-left-md {
+            float: left;
+        }
     }
 
-    .pull-left-lg {
-        float: left;
+    @media (min-width: 1200px) {
+        .pull-right-lg {
+            float: right;
+        }
+
+        .pull-left-lg {
+            float: left;
+        }
     }
-}
 
 form {
     margin: 0 0 10px;
