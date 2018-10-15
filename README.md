@@ -25,7 +25,7 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 ## Other Resources
 
 * The main website https://joind.in
-* Issues list: https://joindin.jira.com/ (good bug reports ALWAYS welcome!)
+* Issues list: https://github.com/joindin/joindin-web2/issues/ (good bug reports ALWAYS welcome!)
 * CI Environment: lots of output and information about tests, deploys etc: https://jenkins.joind.in
 * Community: We hang out on IRC, pop in with questions or comments! #joind.in on Freenode
 
