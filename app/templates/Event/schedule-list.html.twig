@@ -29,6 +29,10 @@
                 <a class="btn btn-default {% if not starred_only %}active{% endif %}" href="{{current_url}}">All sessions</a>
                 <a class="btn btn-default {% if starred_only %}active{% endif %}" href="{{current_url}}/starred">Starred only</a>
             </div>
+            <div class="btn-group" role="group" aria-label="Style">
+                <a class="btn btn-default btn-talk-list-title active" href="#">Title</a>
+                <a class="btn btn-default btn-talk-list-title-description" href="#">Title &amp; Description</a>
+            </div>
         </div>
     </div>
 
@@ -55,12 +59,12 @@
                                     </a>
                                     {% endif %}
                                 </span>
-                                
+
                                 <span class="comment-count">
                                     <a href="{{ urlForTalk(event.getUrlFriendlyName, talk.getUrlFriendlyTalkTitle) }}">{{ talk.commentCount }}</a>
                                 </span>
                             </div>
-                            
+
                             {% if user %}
                             <div id="{{ event.getUrlFriendlyName }}/{{ talk.getUrlFriendlyTalkTitle }}" class="star-wrapper">
                                 <a href="javascript:" class="star{% if talk.starred %} starred{% endif %}">{% if talk.starred %}&#10029;{% else %}&#10025;{% endif %}</a>
@@ -91,6 +95,7 @@
                             {% if talk.duration %}
                                 <span class="lowlight">({{ prettyDuration(talk.duration)|replace({' ': '&nbsp;'})|raw }})</span>
                             {% endif %}
+                            <p class="toggle-talk-description">{{ talk.description }}</p>
                         </td>
                     </tr>
                 {% endif %}
