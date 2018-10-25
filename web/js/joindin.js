@@ -173,4 +173,18 @@ $(function(){
             .addClass('panel-info')
             .addClass('comment-highlight');
     }
+
+    $("body").on("click", ".btn-talk-list-title", function (e) {
+        e.preventDefault();
+        $(".btn-talk-list-title-description").removeClass("active");
+        $(".btn-talk-list-title").addClass("active");
+        $(".toggle-talk-description").fadeOut("slow");
+    });
+
+    $("body").on("click", ".btn-talk-list-title-description", function (e) {
+        e.preventDefault();
+        $(".btn-talk-list-title-description").addClass("active");
+        $(".btn-talk-list-title").removeClass("active");
+        $(".toggle-talk-description").fadeIn("slow");
+    });
 });

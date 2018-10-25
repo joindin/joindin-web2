@@ -738,3 +738,7 @@ form ol.tracks li:last-child {
 .talk_media .form-group {
     display:inline-block;
 }
+.toggle-talk-description {
+    margin-top: 10px;
+    display: none;
+}
