@@ -6,15 +6,6 @@ use stdClass;
 
 class TalkCommentEntity extends BaseCommentEntity
 {
-    public function getUsername()
-    {
-        if (!isset($this->data->username)) {
-            return null;
-        }
-
-        return $this->data->username;
-    }
-
     public function getTalkTitle()
     {
         if (!isset($this->data->talk_title)) {
