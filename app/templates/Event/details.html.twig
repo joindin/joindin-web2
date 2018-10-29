@@ -43,7 +43,7 @@
                     <br>
                     {% if event.stub %}
                         Short URL: <a href="{{ shortUrlForEvent(event.getStub) }}">{{ shortUrlForEvent(event.getStub) }}</a> <i class="fa fa-external-link-square"></i>
-                        <a class="qr-code" href="{{ qrcode(shortUrlForEvent(event.getStub)) }}">QR-Code</a>
+                        <a class="qr-code" href="{{ qrcode(shortUrlForEvent(event.getStub)) }}" target="_blank">QR-Code (opens in new window)</a>
                     {% endif %}
                     {% if event.getCfpStatus %}
                         <br>
