@@ -439,9 +439,6 @@ class EventApi extends BaseApi
         $commentData = array();
 
         foreach ($comments['comments'] as $item) {
-            if (isset($item->user_uri)) {
-                $item->username = $this->userApi->getUsername($item->user_uri);
-            }
             $commentData['comments'][] = new TalkCommentEntity($item);
         }
 
