@@ -37,5 +37,4 @@ maintainers.
 
 This Code of Conduct is adapted from the
 [Contributor Covenant](http://contributor-covenant.org), version 1.2.0,
-available at [http://contributor- covenant.org/version/1/2/0/](http
-://contributor-covenant.org/version/1/2/0/)
+available at [http://contributor-covenant.org/version/1/2/0/](http://contributor-covenant.org/version/1/2/0/)
