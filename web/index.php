@@ -10,7 +10,9 @@ if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
 // include dependencies
 require '../vendor/autoload.php';
 
-session_set_cookie_params(60*60*24*7); // One week cookie
+$sessionLife = 60*60*24*7; // One week
+session_set_cookie_params($sessionLife);
+ini_set('session.gc_maxlifetime', $sessionLife);
 session_cache_limiter(false);
 session_start();
 
