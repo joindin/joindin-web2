@@ -19,8 +19,8 @@ You should work on what you want to. Our bug tracker is
 here: https://github.com/joindin/joindin-web2/issues
 
 Any issues that have the "hackathon" or "easypick" label are ones that we think
-are a good starting point. This [filter](https://github.com/joindin/joindin-web2/issues?q=is%3Aopen+is%3Aissue+label%3Aeasypick) will give you the list of all
-current "easypick" issues.
+are a good starting point. This [filter](https://github.com/joindin/joindin-web2/issues?q=is%3Aopen+is%3Aissue+label%3Aeasy-pick) will give you the list of all
+current "easy-pick" issues.
 
 If you have any problems, ask on the IRC channel or send an email to
 the mailing list.
