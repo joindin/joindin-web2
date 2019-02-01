@@ -1,9 +1,9 @@
 <form method="POST" action="{{ urlFor('user-login') }}">
     {% if flash.getMessages.message %}
-        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+        <div class="alert alert-success">{{flash.getMessages.message | raw}}</div>
     {% endif %}
     {% if flash.getMessages.error %}
-        <div class="alert alert-danger">{{flash.getMessages.error|raw}}</div>
+        <div class="alert alert-danger">{{flash.getMessages.error | raw}}</div>
     {% endif %}
     <div class="form-group">
         <label for="username">Username:</label>
