@@ -16,42 +16,33 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockConfig = array('apiUrl' => 'http://example.com');
 
-        $this->mockPredisClient = $this->getMock(
-            Client::class
-        );
+        $this->mockPredisClient = $this->getMockBuilder(Client::class)
+            ->getMock();
 
-        $this->mockCache = $this->getMock(
-            'Application\CacheService',
-            null,
-            array($this->mockPredisClient)
-        );
+        $this->mockCache = $this->getMockBuilder('Application\CacheService')
+            ->setConstructorArgs(array($this->mockPredisClient))
+            ->getMock();
 
-        $this->mockDbEvent = $this->getMock(
-            'Event\EventDb',
-            null,
-            array($this->mockCache)
-        );
+        $this->mockDbEvent = $this->getMockBuilder('Event\EventDb')
+            ->setConstructorArgs(array($this->mockCache))
+            ->getMock();
 
-        $this->mockUserDb = $this->getMock(
-            'User\UserDb',
-            null,
-            array($this->mockCache)
-        );
+        $this->mockUserDb = $this->getMockBuilder('User\UserDb')
+            ->setConstructorArgs(array($this->mockCache))
+            ->getMock();
 
-        $this->mockUserApi = $this->getMock(
-            'User\UserApi',
-            null,
-            array($this->mockConfig, null, $this->mockUserDb)
-        );
+        $this->mockUserApi = $this->getMockBuilder('User\UserApi')
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockUserDb))
+            ->getMock();
     }
 
     public function testDefaultgetEventsParametersAreSet()
     {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock()
+        ;
 
         $expectedParams = ['resultsperpage' => 10, 'start' => 1];
         $mockEvent->expects($this->once())
@@ -64,11 +55,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
     public function testgetEventsWithLimitSetsParamsCorrectly()
     {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $expectedParams = ['resultsperpage' => 75, 'start' => 1];
         $mockEvent->expects($this->once())
@@ -81,11 +71,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
     public function testgetEventsWithPageValueSetsParamsCorrectly()
     {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $expectedParams = ['resultsperpage' => 32, 'start' => 6];
         $mockEvent->expects($this->once())
@@ -98,11 +87,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
     public function testgetEventsWithFilterSetsAllParamsCorrectly()
     {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'filter' => 'samoflange'];
         $mockEvent->expects($this->once())
@@ -115,11 +103,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
     public function testgetEventsWithVerboseSetsAllParamsCorrectly()
     {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'verbose' => 'yes'];
         $mockEvent->expects($this->once())
@@ -132,11 +119,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
 
     public function testgetEventsWithQueryParamsPassesThemThroughCorrectly()
     {
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $expectedParams = ['resultsperpage' => 16, 'start' => 3, 'title' => 'test', 'tags' => 'php'];
         $mockEvent->expects($this->once())
@@ -154,13 +140,12 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     {
         // The object containing the event details (in this case, we only
         // need to mock the comments_uri and its getter
-        $mockEventObj = $this->getMock(
-            'Event\EventEntity',
-            array('getCommentsUri'),
-            array(
+        $mockEventObj = $this->getMockBuilder('Event\EventEntity')
+            ->setMethods(array('getCommentsUri'))
+            ->setConstructorArgs(array(
                 (object) array('comments_uri'=>'http://example.com/comments/123')
-            )
-        );
+            ))
+            ->getMock();
 
         $mockEventObj->expects($this->once())
             ->method('getCommentsUri')
@@ -170,11 +155,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         // We need to create the Event API class, and mock the call to the
         // joind.in API to return a known result and check we're making the
         // correct call
-        $mockEventApi = $this->getMock(
-            'Event\EventApi',
-            array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEventApi = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiPost'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $mockEventApi->expects($this->once())
             ->method('apiPost')
@@ -200,13 +184,12 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     {
         // The object containing the event details (in this case, we only
         // need to mock the comments_uri and its getter
-        $mockEventObj = $this->getMock(
-            'Event\EventEntity',
-            array('getCommentsUri'),
-            array(
+        $mockEventObj = $this->getMockBuilder('Event\EventEntity')
+            ->setMethods(array('getCommentsUri'))
+            ->setConstructorArgs(array(
                 (object) array('comments_uri'=>'http://example.com/comments/123')
-            )
-        );
+            ))
+            ->getMock();
 
         $mockEventObj->expects($this->once())
             ->method('getCommentsUri')
@@ -216,11 +199,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         // We need to create the Event API class, and mock the call to the
         // joind.in API to return a known (failed) result and check we're making the
         // correct call
-        $mockEventApi = $this->getMock(
-            'Event\EventApi',
-            array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEventApi = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiPost'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $mockEventApi->expects($this->once())
             ->method('apiPost')
@@ -234,30 +216,28 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array('500', 'no result')));
 
         // The test
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $mockEventApi->addComment($mockEventObj, 'comment');
     }
 
     public function testAttendThrowsExceptionIfAPIReturnsBadStatus()
     {
-        $mockEventObj = $this->getMock(
-            'Event\EventEntity',
-            array('getApiUriToMarkAsAttending'),
-            array(
+        $mockEventObj = $this->getMockBuilder('Event\EventEntity')
+            ->setMethods(array('getApiUriToMarkAsAttending'))
+            ->setConstructorArgs(array(
                 (object) array('attending_uri'=>'http://example.com/events/1/attending')
-            )
-        );
+            ))
+            ->getMock();
 
         $mockEventObj->expects($this->once())
             ->method('getApiUriToMarkAsAttending')
             ->will($this->returnValue('http://example.com/events/1/attending'));
 
 
-        $mockEventApi = $this->getMock(
-            'Event\EventApi',
-            array('apiPost'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEventApi = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiPost'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $mockEventApi->expects($this->once())
             ->method('apiPost')
@@ -266,18 +246,17 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue(array('500', 'no result')));
 
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $mockEventApi->attend($mockEventObj);
     }
 
     public function testDefaultGetTalkCommentsParametersAreSet()
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $mockEvent->expects($this->once())
             ->method('apiGet')
@@ -290,11 +269,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     public function testGetTalkCommentsWithLimitSetsParamsCorrectly()
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $mockEvent->expects($this->once())
             ->method('apiGet')
@@ -307,11 +285,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     public function testGetTalkCommentsWithStartValueSetsParamsCorrectly()
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $mockEvent->expects($this->once())
             ->method('apiGet')
@@ -324,11 +301,10 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     public function testGetTalkCommentsWithVerboseSetsAllParamsCorrectly()
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
-        $mockEvent = $this->getMock(
-            'Event\EventApi',
-            array('apiGet'),
-            array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi)
-        );
+        $mockEvent = $this->getMockBuilder('Event\EventApi')
+            ->setMethods(array('apiGet'))
+            ->setConstructorArgs(array($this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi))
+            ->getMock();
 
         $mockEvent->expects($this->once())
             ->method('apiGet')
