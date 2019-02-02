@@ -960,9 +960,7 @@ class EventController extends BaseController
                     } elseif ($action == "reject") {
                         $this->rejectClaimPendingTalk($talkApi, $claim, $data);
                     }
-
                 }
-
             }
 
             $this->render(
@@ -972,9 +970,7 @@ class EventController extends BaseController
                     'claims' => $claims,
                 )
             );
-
         }
-
     }
     private function appoveClaimPendingTalk($talkApi, $claim, $data)
     {
