@@ -1,0 +1,17 @@
+language: php
+dist: trusty
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+    - $HOME/.cache/composer/files
+matrix:
+  include:
+    - php: 5.6
+  fast_finish: true
+before_script:
+  - composer global require squizlabs/php_codesniffer 
+  - composer global require phpunit/phpunit
+  - composer global require jakub-onderka/php-parallel-lint
+  - composer install
+script:
+- PATH=$HOME/.composer/vendor/bin:$PATH ./build.sh
