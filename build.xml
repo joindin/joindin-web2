@@ -32,7 +32,7 @@
  </target>
 
  <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
-  <exec command="phpunit -c tests/phpunit.xml" logoutput="/dev/stdout" checkreturn="true" />
+  <exec command="vendor/bin/phpunit -c tests/phpunit.xml" logoutput="/dev/stdout" checkreturn="true" />
  </target>
 
  <target name="jsvalidate" description="Use jsvalidate to lint check the JS">
