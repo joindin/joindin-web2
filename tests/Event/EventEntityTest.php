@@ -12,7 +12,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
     {
         // Not used at the moment, but it's here for future use when we
         // want to provide data to the class
-        $this->eventData = new stdClass($data);
+        $this->eventData = new stdClass();
         $this->eventData->name                 = "Test event name";
         $this->eventData->icon                 = "Test event icon";
         $this->eventData->start_date           = "Test event start date";
