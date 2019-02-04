@@ -19,10 +19,10 @@ return [
     'duration7' => 140,
 ]
 --EXPECT--
-1 minutes
+1 minute
 30 minutes
 1 hour
-1 hours, 1 minutes
-1 hours, 10 minutes
-2 hours, 1 minutes
+1 hour, 1 minute
+1 hour, 10 minutes
+2 hours, 1 minute
 2 hours, 20 minutes

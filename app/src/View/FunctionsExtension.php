@@ -105,6 +105,7 @@ final class FunctionsExtension extends Twig_Extension
              *
              * e.g.
              *     - 60 minutes converts to "1 hour"
+             *     - 61 minutes converts to "1 hour, 1 minute
              *     - 120 minutes converts to "2 hours"
              *     - 126 minutes converts to "2 hours, 6 minutes"
              */
@@ -112,7 +113,7 @@ final class FunctionsExtension extends Twig_Extension
                 $duration = (int)$duration;
 
                 if ($duration < 60) {
-                    return "$duration minutes";
+                    return sprintf("%d %s", $duration, ($duration == 1 ? 'minute' : 'minutes'));
                 }
                 if ($duration == 60) {
                     return "1 hour";
@@ -122,10 +123,10 @@ final class FunctionsExtension extends Twig_Extension
                 $minutes = $duration - ($hours * 60);
 
                 if ( ! $minutes) {
-                    return "$hours hours";
+                    return sprintf("%d %s", $hours,'hour');
                 }
 
-                return "$hours hours, $minutes minutes";
+                return sprintf("%d %s, %d %s", $hours, ($hours == 1 ? 'hour' : 'hours'), $minutes, ($minutes == 1 ? 'minute' : 'minutes'));
             }),
 
             /**
