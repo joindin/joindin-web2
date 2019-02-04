@@ -37,6 +37,34 @@ $(function(){
         });
     }
 
+    $('#event_start_date').change(function() {
+        $('#event_end_date').datepicker(
+            'setStartDate',
+            $(this).datepicker('getDate')
+        );
+    });
+
+    $('#event_end_date').change(function() {
+        $('#event_start_date').datepicker(
+            'setEndDate',
+            $(this).datepicker('getDate')
+        );
+    });
+
+    $('#event_cfp_start_date').change(function() {
+        $('#event_cfp_end_date').datepicker(
+            'setStartDate',
+            $(this).datepicker('getDate')
+        );
+    });
+
+    $('#event_cfp_end_date').change(function() {
+        $('#event_cfp_start_date').datepicker(
+            'setEndDate',
+            $(this).datepicker('getDate')
+        );
+    });
+
     function modifyAttendingCount(eventName, byAmount)
     {
         var eventAttendingCountSpan = $('.' + eventName + '-attending-count');

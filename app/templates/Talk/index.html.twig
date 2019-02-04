@@ -36,7 +36,7 @@
         <h2>Comments</h2>
         {% if talk.areCommentsEnabled %}
             {% if flash.getMessages.message %}
-                <div class="alert alert-success">{{flash.getMessages.message}}</div>
+                <div class="alert alert-success">{{flash.getMessages.message | raw}}</div>
             {% endif %}
             <div class="row" id="add-comment">
                 <div class="col-sm-12">
@@ -48,7 +48,7 @@
                         <div class="panel-body">
                             <form method="POST" action="{{ urlFor('talk-add-comment', {'eventSlug': event.getUrlFriendlyName, 'talkSlug': talk.getUrlFriendlyTalkTitle}) }}">
                                 {% if flash.getMessages.error %}
-                                    <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+                                    <div class="alert alert-danger">{{flash.getMessages.error | raw}}</div>
                                 {% endif %}
                                 {% if canRateTalk %}
                                     <div class="rating-vote-container">

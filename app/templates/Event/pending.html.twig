@@ -14,10 +14,10 @@
     <div>
 
         {% if flash.getMessages.message %}
-            <div class="alert alert-success">{{flash.getMessages.message}}</div>
+            <div class="alert alert-success">{{flash.getMessages.message | raw}}</div>
         {% endif %}
         {% if flash.getMessages.error %}
-            <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+            <div class="alert alert-danger">{{flash.getMessages.error  | raw}}</div>
         {% endif %}
 
         {% for event in events.events %}
