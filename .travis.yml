@@ -14,4 +14,4 @@ matrix:
 before_script:
   - composer install
 script:
-  - PATH=$HOME/.composer/vendor/bin:$PATH ./build.sh
+  - ./build.sh
