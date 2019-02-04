@@ -11,10 +11,10 @@
     {% include 'Event/_common/event_header.html.twig' %}
 
     {% if flash.getMessages.message %}
-        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+        <div class="alert alert-success">{{flash.getMessages.message | raw}}</div>
     {% endif %}
     {% if flash.getMessages.error %}
-        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+        <div class="alert alert-danger">{{flash.getMessages.error | raw}}</div>
     {% endif %}
 
     <h2>Reported event comments</h2>

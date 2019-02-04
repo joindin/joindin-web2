@@ -18,7 +18,7 @@
             <h2>Comments</h2>
             {% if event.areCommentsEnabled %}
                 {% if flash.getMessages.message %}
-                    <div class="alert alert-success">{{flash.getMessages.message}}</div>
+                    <div class="alert alert-success">{{flash.getMessages.message | raw}}</div>
                 {% endif %}
                 <div class="row" id="add-comment">
                     <div class="col-sm-12">
@@ -29,7 +29,7 @@
                             </div>
                             <div class="panel-body">
                                 {% if flash.getMessages.error %}
-                                    <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+                                    <div class="alert alert-danger">{{flash.getMessages.error | raw}}</div>
                                 {% endif %}
                                 <form id="add-comment" role="form" method="POST" action="{{ urlFor('event-add-comment', {'friendly_name': event.getUrlFriendlyName}) }}">
                                     <div class="row">

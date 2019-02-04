@@ -6,6 +6,9 @@
 if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
 	return false;
 }
+if(!ini_get('date.timezone')) {
+    date_default_timezone_set('UTC');
+}
 
 // include dependencies
 require '../vendor/autoload.php';
@@ -100,7 +103,12 @@ $app->add(new Middleware\FormMiddleware($csrfSecret));
 $app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
 
 $app->container->singleton(\Application\CacheService::class, function ($container) {
-    $client = new Predis\Client();
+    $redisServer = null;
+    if ($host = getenv('REDIS_HOST')) {
+        $redisServer = "tcp://$host:6379";
+    }
+
+    $client = new Predis\Client($redisServer);
     $keyPrefix = $container->settings['custom']['redisKeyPrefix'];
     return new \Application\CacheService($client, $keyPrefix);
 });
