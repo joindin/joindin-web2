@@ -274,7 +274,6 @@ class TalkController extends BaseController
             } catch (Exception $e) {
                 $this->application->flash('claimerror', $e->getMessage());
             }
-
         } else {
             $this->application->flash('claimerror', "No speaker {$display_name} found for this talk.");
         }
