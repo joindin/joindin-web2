@@ -3,7 +3,11 @@
 <project name="joindin-responsive" default="build" basedir=".">
  <property name="basedir" value="."/>
 
- <target name="build" depends="phplint,jsvalidate,phpunit,phpcs" />
+ <target name="build" depends="composer,phplint,jsvalidate,phpunit,phpcs" />
+
+  <target name="composer" description="Run composer">
+     <exec command="composer install" logoutput="/dev/stdout" checkreturn="true" />
+  </target>
 
  <target name="phplint" description="Run php -l over the fileset">
    <phplint haltonfailure="true">
