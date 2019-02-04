@@ -34,9 +34,9 @@ mkdir -p $TARGET \
 && git archive $LAUNCHREF | tar xC $TARGET \
 && (echo $TARGET ; echo $LAUNCHREF) > $TARGET/web/release.txt \
 && ln -s $TARGETBASE/config.php $TARGET/config/config.php \
+&& composer install -o --prefer-dist --no-dev --no-progress --working-dir=$TARGET \
 && ln -s $TARGET $TARGETBASE/www.new \
 && mv -Tf $TARGETBASE/www.new $TARGETBASE/www \
 && rm -rf /tmp/joindin-twig-cache/live \
 && rm -rf /tmp/joindin-twig-cache/test
 "
-

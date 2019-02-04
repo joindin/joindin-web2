@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-parallel-lint --exclude vendor .
+vendor/bin/parallel-lint --exclude vendor .
 
-phpcs \
+vendor/bin/phpcs \
     --standard=psr2 \
     --ignore=vendor \
     --extensions=php \
@@ -11,5 +11,6 @@ phpcs \
     -p \
     .
 
-cd tests
-phpunit
+php vendor/bin/security-checker security:check composer.lock
+
+vendor/bin/phpunit -c tests/phpunit.xml
