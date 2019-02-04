@@ -27,6 +27,7 @@ final class FunctionsExtension extends Twig_Extension
     public function getFunctions()
     {
         $app = $this->app;
+
         return [
             new Twig_SimpleFunction('urlFor', function ($routeName, $params = array()) use ($app) {
                 $url = $app->urlFor($routeName, $params);
@@ -84,15 +85,16 @@ final class FunctionsExtension extends Twig_Extension
                 return "$scheme://$host" . $app->urlFor('event-quicklink', array('stub' => $eventStub));
             }),
 
-            new Twig_SimpleFunction('dateRange',
+            new Twig_SimpleFunction(
+                'dateRange',
                 function ($start, $end, $format = 'd.m.Y', $separator = ' - ') use ($app) {
                     $formatter = new \Org_Heigl\DateRange\DateRangeFormatter();
                     $formatter->setFormat($format);
                     $formatter->setSeparator($separator);
-                    if ( ! $start instanceof \DateTimeInterface) {
+                    if (!$start instanceof \DateTimeInterface) {
                         $start = new \DateTime($start);
                     }
-                    if ( ! $end instanceof \DateTimeInterface) {
+                    if (!$end instanceof \DateTimeInterface) {
                         $end = new \DateTime($end);
                     }
 
@@ -122,11 +124,17 @@ final class FunctionsExtension extends Twig_Extension
                 $hours   = (int)($duration / 60);
                 $minutes = $duration - ($hours * 60);
 
-                if ( ! $minutes) {
-                    return sprintf("%d %s", $hours,'hour');
+                if (!$minutes) {
+                    return sprintf("%d %s", $hours, 'hour');
                 }
 
-                return sprintf("%d %s, %d %s", $hours, ($hours == 1 ? 'hour' : 'hours'), $minutes, ($minutes == 1 ? 'minute' : 'minutes'));
+                return sprintf(
+                    "%d %s, %d %s",
+                    $hours,
+                    ($hours == 1 ? 'hour' : 'hours'),
+                    $minutes,
+                    ($minutes == 1 ? 'minute' : 'minutes')
+                );
             }),
 
             /**
@@ -150,7 +158,7 @@ final class FunctionsExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'facebookLoginUrl',
                 function () use ($app) {
-                    if ( ! $app->config('facebook') || empty($app->config('facebook')['app_id'])) {
+                    if (!$app->config('facebook') || empty($app->config('facebook')['app_id'])) {
                         // app_id isn't configured
                         return '';
                     }

@@ -37,7 +37,7 @@ final class FiltersExtension extends \Twig_Extension
      */
     public function imgPath(Twig_Environment $env, $suffix, $infix)
     {
-        if ( ! $suffix && $infix = 'event_icons') {
+        if (!$suffix && $infix = 'event_icons') {
             $suffix = 'none.png';
         }
 

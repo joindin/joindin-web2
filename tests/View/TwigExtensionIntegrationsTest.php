@@ -10,7 +10,7 @@ class TwigExtensionIntegrationTest extends \Twig_Test_IntegrationTestCase
 {
     private $slim;
 
-    function setUp()
+    public function setUp()
     {
         $this->slim = $this->getMockBuilder(Slim::class)
                            ->disableOriginalConstructor()
