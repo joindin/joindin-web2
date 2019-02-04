@@ -5,9 +5,9 @@
 
  <target name="build" depends="composer,phplint,jsvalidate,phpunit,phpcs" />
 
-  <target name="composer" description="Run composer">
-     <exec command="composer install" logoutput="/dev/stdout" checkreturn="true" />
-  </target>
+ <target name="composer" description="Run composer">
+   <exec command="composer install" logoutput="/dev/stdout" checkreturn="true" />
+ </target>
 
  <target name="phplint" description="Run php -l over the fileset">
    <phplint haltonfailure="true">
