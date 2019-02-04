@@ -2,22 +2,30 @@
 namespace View\Filters;
 
 use Twig_Environment;
-use Twig_Filter_Function;
+use Twig_SimpleFilter;
 
 function initialize(Twig_Environment $env)
 {
     $env->addFilter(
-        'img_path',
-        new Twig_Filter_Function('\View\Filters\img_path', ['needs_environment' => true])
-    );
-    $env->addFilter(
-        'link',
-        new Twig_Filter_Function(
-            '\View\Filters\link',
-            array('is_safe' => array('html'))
+        new Twig_SimpleFilter(
+            'img_path',
+            '\View\Filters\img_path',
+            ['needs_environment' => true]
         )
     );
-    $env->addFilter('format_date', new Twig_Filter_Function('\View\Filters\format_date'));
+    $env->addFilter(
+        new Twig_SimpleFilter(
+            'link',
+            '\View\Filters\link',
+            ['is_safe' => ['html']]
+        )
+    );
+    $env->addFilter(
+        new Twig_SimpleFilter(
+            'format_date',
+            '\View\Filters\format_date'
+        )
+    );
 }
 
 function img_path($env, $suffix, $infix)
