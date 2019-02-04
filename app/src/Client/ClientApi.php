@@ -132,6 +132,5 @@ class ClientApi extends BaseApi
         }
 
         return true;
-
     }
 }

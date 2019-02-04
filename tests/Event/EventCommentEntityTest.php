@@ -20,7 +20,6 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
         $this->commentData->event_comments_uri  = "Test comments uri";
         $this->commentData->user_uri            = "Test user uri";
         $this->commentData->source              = "Test comment source";
-
     }
 
     public function testBasicCommentsData()

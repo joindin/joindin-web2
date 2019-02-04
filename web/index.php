@@ -4,9 +4,9 @@
 // something which should probably be served as a static file
 
 if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
-	return false;
+    return false;
 }
-if(!ini_get('date.timezone')) {
+if (!ini_get('date.timezone')) {
     date_default_timezone_set('UTC');
 }
 
@@ -144,7 +144,8 @@ $app->container->singleton(\Talk\TalkApi::class, function ($container) {
         $container['settings']['custom'],
         $container['access_token'],
         new \Talk\TalkDb($container[\Application\CacheService::class]),
-        $container[\User\UserApi::class]);
+        $container[\User\UserApi::class]
+    );
 });
 $app->container->singleton(\User\AuthApi::class, function ($container) {
     return new \User\AuthApi($container['settings']['custom'], $container['access_token']);
