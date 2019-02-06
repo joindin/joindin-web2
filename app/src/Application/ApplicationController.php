@@ -11,7 +11,6 @@ class ApplicationController extends BaseController
     protected function defineRoutes(\Slim\Slim $app)
     {
         $app->get('/', array($this, 'index'));
-        $app->get('/apps', array($this, 'apps'))->name('apps');
         $app->get('/about', array($this, 'about'))->name('about');
         $app->map('/contact', array($this, 'contact'))->via('GET', 'POST')->name('contact');
         $app->get('/not-allowed', array($this, 'notAllowed'))->name('not-allowed');
@@ -52,19 +51,6 @@ class ApplicationController extends BaseController
     {
         $eventApi = $this->getEventApi();
         return $eventApi->getEvents($perPage, $start, 'hot');
-    }
-
-    /**
-     * Display the apps page
-     */
-    public function apps()
-    {
-        $this->render(
-            'Application/apps.html.twig',
-            [
-                'hot_events' => $this->getCurrentEvents(0, 5),
-            ]
-        );
     }
 
     /**
