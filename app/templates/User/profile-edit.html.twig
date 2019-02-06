@@ -68,7 +68,9 @@
                 {% endif %}
 
                 <div class="{{ class }}">
-                    {% if user.admin %}
+                    {% if is_editing_self %}
+                        <a onclick="return confirm('Are you sure you want to delete your account?');" href="{{ urlFor('user-profile-delete', {'username': thisUser.getUsername}) }}" name="delete" class="btn btn-danger pull-right button-spacer">Delete My Account</a>
+                    {% elseif user.admin %}
                         <a onclick="return confirm('Are you sure you want to delete this user?');" href="{{ urlFor('user-profile-delete', {'username': thisUser.getUsername}) }}" name="delete" class="btn btn-danger pull-right button-spacer">Delete User</a>
                     {% endif %}
                     <input type="submit" name="submit" class="btn btn-primary pull-right button-spacer" value="Save" />

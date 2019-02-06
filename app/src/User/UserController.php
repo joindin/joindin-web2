@@ -615,7 +615,8 @@ class UserController extends BaseController
         ];
 
         // can only change password if we're editing ourselves
-        $canChangePassword = ($user->getUri() == $_SESSION['user']->getUri());
+        $isEditingSelf = ($user->getUri() == $_SESSION['user']->getUri());
+        $canChangePassword = $isEditingSelf;
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
@@ -670,6 +671,7 @@ class UserController extends BaseController
                 'thisUser' => $user,
                 'form' => $form->createView(),
                 'can_change_password' => $canChangePassword,
+                'is_editing_self' => $isEditingSelf
             )
         );
     }
