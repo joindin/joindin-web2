@@ -681,11 +681,20 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user = $userApi->getUserByUsername($username);
 
-        try {
-            // LDBG($values);exit;
-            $result = $userApi->delete($user->getUri());
+        $isDeletingSelf = ($user->getUri() == $_SESSION['user']->getUri());
 
-            $this->application->flash('message', 'User has been deleted');
+        try {
+            $userApi->delete($user->getUri());
+
+            if ($isDeletingSelf) { // If we're deleting ourselves, log out and show an appropriate flash message
+                unset($_SESSION['user']);
+                unset($_SESSION['access_token']);
+                session_regenerate_id(true);
+
+                $this->application->flash('message', 'Your account has been deleted');
+            } else {
+                $this->application->flash('message', 'User has been deleted');
+            }
         } catch (\Exception $e) {
             $this->application->flash('error', 'There was a problem deleting the user: ' . $e->getMessage());
             $this->application->redirect(
