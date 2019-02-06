@@ -87,7 +87,7 @@ final class FunctionsExtension extends Twig_Extension
 
             new Twig_SimpleFunction(
                 'dateRange',
-                function ($start, $end, $format = 'd.m.Y', $separator = ' - ') use ($app) {
+                function ($start, $end, $format = 'd.m.Y', $separator = ' - ') {
                     $formatter = new \Org_Heigl\DateRange\DateRangeFormatter();
                     $formatter->setFormat($format);
                     $formatter->setSeparator($separator);
@@ -182,7 +182,7 @@ final class FunctionsExtension extends Twig_Extension
             /**
              * Create a link to download a QR-Code for the given URL
              */
-            new Twig_SimpleFunction('qrcode', function ($url) use ($app) {
+            new Twig_SimpleFunction('qrcode', function ($url) {
                 return sprintf(
                     'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=%s&choe=UTF-8&chld=H',
                     urlencode($url)
