@@ -1,6 +1,6 @@
 <?php
 
-namespace View;
+namespace JoindIn\Web\View;
 
 use Twig_Extension;
 use Twig_SimpleFunction;

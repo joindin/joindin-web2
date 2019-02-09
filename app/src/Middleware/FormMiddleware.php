@@ -1,6 +1,6 @@
 <?php
 
-namespace Middleware;
+namespace JoindIn\Web\Middleware;
 
 use Slim\Middleware;
 use Symfony\Bridge\Twig\Extension\FormExtension;

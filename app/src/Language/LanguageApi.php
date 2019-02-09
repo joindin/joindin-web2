@@ -1,7 +1,7 @@
 <?php
-namespace Language;
+namespace JoindIn\Web\Language;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 
 class LanguageApi extends BaseApi
 {

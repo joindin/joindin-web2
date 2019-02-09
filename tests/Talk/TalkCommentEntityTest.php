@@ -1,7 +1,7 @@
 <?php
-namespace Tests\Talk;
+namespace JoindIn\Web\Tests\Talk;
 
-use Talk\TalkCommentEntity;
+use JoindIn\Web\Talk\TalkCommentEntity;
 use stdClass;
 
 class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase

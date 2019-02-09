@@ -1,8 +1,8 @@
 <?php
 
-namespace User;
+namespace JoindIn\Web\User;
 
-use Application\BaseEntity;
+use JoindIn\Web\Application\BaseEntity;
 
 class UserEntity extends BaseEntity
 {

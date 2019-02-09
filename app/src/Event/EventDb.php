@@ -1,8 +1,8 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Application\BaseDb;
-use Application\CacheService;
+use JoindIn\Web\Application\BaseDb;
+use JoindIn\Web\Application\CacheService;
 
 class EventDb extends BaseDb
 {

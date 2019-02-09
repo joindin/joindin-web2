@@ -1,7 +1,7 @@
 <?php
-namespace Client;
+namespace JoindIn\Web\Client;
 
-use Application\BaseEntity;
+use JoindIn\Web\Application\BaseEntity;
 use DateTime;
 use DateInterval;
 

@@ -2,19 +2,12 @@
     "name": "joindin/website",
     "license": "BSD-3-Clause",
     "autoload": {
-        "psr-0":{
-            "Application": ["app/src/", "tests/"],
-            "Form":        ["app/src/", "tests/"],
-            "Language":    ["app/src/", "tests/"],
-            "Middleware":  ["app/src/", "tests/"],
-            "Event":       ["app/src/", "tests/"],
-            "Search":      ["app/src/", "tests/"],
-            "Talk":        ["app/src/", "tests/"],
-            "User":        ["app/src/", "tests/"],
-            "Client":      ["app/src/", "tests/"],
-            "Apikey":      ["app/src/", "tests/"],
-            "View":        ["app/src/", "tests/"]
+        "psr-4":{
+            "JoindIn\\Web\\": "app/src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": { "JoindIn\\Web\\": "tests/" }
     },
     "config": {
         "platform": {

@@ -1,7 +1,7 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseEntity;
+use JoindIn\Web\Application\BaseEntity;
 use ArrayAccess;
 use DateInterval;
 use DateTime;

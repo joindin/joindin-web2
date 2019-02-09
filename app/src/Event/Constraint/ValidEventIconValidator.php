@@ -1,5 +1,5 @@
 <?php
-namespace Event\Constraint;
+namespace JoindIn\Web\Event\Constraint;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

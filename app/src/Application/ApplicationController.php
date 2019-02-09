@@ -1,10 +1,11 @@
 <?php
-namespace Application;
+namespace JoindIn\Web\Application;
 
-use Event\EventDb;
-use Event\EventApi;
-use User\UserDb;
-use User\UserApi;
+use Symfony\Component\Form\FormFactoryInterface;
+use JoindIn\Web\Event\EventDb;
+use JoindIn\Web\Event\EventApi;
+use JoindIn\Web\User\UserDb;
+use JoindIn\Web\User\UserApi;
 
 class ApplicationController extends BaseController
 {

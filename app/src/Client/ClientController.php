@@ -1,7 +1,7 @@
 <?php
-namespace Client;
+namespace JoindIn\Web\Client;
 
-use Application\BaseController;
+use JoindIn\Web\Application\BaseController;
 use Exception;
 use Slim\Slim;
 use Symfony\Component\Form\Form;

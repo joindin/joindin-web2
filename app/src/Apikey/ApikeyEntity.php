@@ -1,7 +1,7 @@
 <?php
-namespace Apikey;
+namespace JoindIn\Web\Apikey;
 
-use Application\BaseEntity;
+use JoindIn\Web\Application\BaseEntity;
 use DateTime;
 use DateInterval;
 

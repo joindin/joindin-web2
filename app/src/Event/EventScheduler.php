@@ -1,7 +1,7 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Talk\TalkApi;
+use JoindIn\Web\Talk\TalkApi;
 
 /**
  * Class EventScheduler

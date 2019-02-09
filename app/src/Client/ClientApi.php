@@ -1,8 +1,8 @@
 <?php
-namespace Client;
+namespace JoindIn\Web\Client;
 
-use Application\BaseApi;
-use User\UserApi;
+use JoindIn\Web\Application\BaseApi;
+use JoindIn\Web\User\UserApi;
 
 class ClientApi extends BaseApi
 {

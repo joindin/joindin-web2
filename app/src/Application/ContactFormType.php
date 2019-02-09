@@ -1,12 +1,12 @@
 <?php
 
-namespace Application;
+namespace JoindIn\Web\Application;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Form\DataTransformer\DateTransformer;
-use Form\DataTransformer\EventTagsTransformer;
+use JoindIn\Web\Form\DataTransformer\DateTransformer;
+use JoindIn\Web\Form\DataTransformer\EventTagsTransformer;
 
 /**
  * Form used to render and validate a contact form.

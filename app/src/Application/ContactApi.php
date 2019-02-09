@@ -1,7 +1,7 @@
 <?php
-namespace Application;
+namespace JoindIn\Web\Application;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 
 class ContactApi extends BaseApi
 {

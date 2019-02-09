@@ -1,27 +1,28 @@
 <?php
-namespace User;
+namespace JoindIn\Web\User;
 
-use Application\BaseController;
-use Application\CacheService;
+use JoindIn\Web\Application\BaseController;
+use JoindIn\Web\Application\CacheService;
 use Symfony\Component\Form\FormError;
 use Slim\Slim;
+use JoindIn\Web\Talk\TalkDb;
+use JoindIn\Web\Talk\TalkApi;
+use JoindIn\Web\Event\EventDb;
+use JoindIn\Web\Event\EventApi;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
-use Talk\TalkDb;
-use Talk\TalkApi;
-use Event\EventDb;
-use Event\EventApi;
+use stdclass;
 
 class UserController extends BaseController
 {
     /**
      * Routes implemented by this class
      *
-     * @param \Slim $app Slim application instance
+     * @param Slim $app Slim application instance
      *
      * @return void
      */
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $app)
     {
         $app->get('/user/logout', array($this, 'logout'))->name('user-logout');
         $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');

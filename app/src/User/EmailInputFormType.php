@@ -1,6 +1,6 @@
 <?php
 
-namespace User;
+namespace JoindIn\Web\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

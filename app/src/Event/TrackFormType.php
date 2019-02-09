@@ -1,6 +1,6 @@
 <?php
 
-namespace Event;
+namespace JoindIn\Web\Event;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

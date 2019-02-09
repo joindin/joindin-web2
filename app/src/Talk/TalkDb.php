@@ -1,8 +1,8 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseDb;
-use Application\CacheService;
+use JoindIn\Web\Application\BaseDb;
+use JoindIn\Web\Application\CacheService;
 
 class TalkDb extends BaseDb
 {

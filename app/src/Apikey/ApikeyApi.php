@@ -1,7 +1,7 @@
 <?php
-namespace Apikey;
+namespace JoindIn\Web\Apikey;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 
 class ApikeyApi extends BaseApi
 {

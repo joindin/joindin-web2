@@ -1,22 +1,22 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Application\BaseController;
-use Application\CacheService;
+use JoindIn\Web\Application\BaseController;
+use JoindIn\Web\Application\CacheService;
 use Slim\Exception\Stop;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Validator;
-use Talk\TalkDb;
-use Talk\TalkApi;
-use Talk\TalkFormType;
-use Talk\TalkTypeApi;
-use User\UserDb;
-use User\UserApi;
+use JoindIn\Web\Talk\TalkDb;
+use JoindIn\Web\Talk\TalkApi;
+use JoindIn\Web\Talk\TalkFormType;
+use JoindIn\Web\Talk\TalkTypeApi;
+use JoindIn\Web\User\UserDb;
+use JoindIn\Web\User\UserApi;
 use Exception;
 use Slim\Slim;
-use Language\LanguageApi;
+use JoindIn\Web\Language\LanguageApi;
 
 class EventController extends BaseController
 {
@@ -1176,7 +1176,7 @@ class EventController extends BaseController
         $talkDb  = $this->getTalkDb();
         $slugs   = array();
 
-        /** @var \Talk\TalkCommentEntity $comment */
+        /** @var \JoindIn\Web\Talk\TalkCommentEntity $comment */
         foreach ($comments as $comment) {
             $slugs[$comment->getTalkUri()] = $talkDb->getSlugFor($comment->getTalkUri());
         }
@@ -1198,7 +1198,7 @@ class EventController extends BaseController
             array('resultsperpage' => 100) // Make sure we get all talks with a single request
         );
 
-        /** @var \Talk\TalkEntity $talk */
+        /** @var \JoindIn\Web\Talk\TalkEntity $talk */
         foreach ($talks['talks'] as $talk) {
             $slugs[$talk->getApiUri()] = $talk->getUrlFriendlyTalkTitle();
         }

@@ -1,15 +1,15 @@
 <?php
-namespace Search;
+namespace JoindIn\Web\Search;
 
-use Application\BaseController;
-use Application\CacheService;
-use Event\EventApi;
-use Event\EventDb;
+use JoindIn\Web\Application\BaseController;
+use JoindIn\Web\Application\CacheService;
+use JoindIn\Web\Event\EventApi;
+use JoindIn\Web\Event\EventDb;
 use Slim\Slim;
-use Talk\TalkApi;
-use Talk\TalkDb;
-use User\UserDb;
-use User\UserApi;
+use JoindIn\Web\Talk\TalkApi;
+use JoindIn\Web\Talk\TalkDb;
+use JoindIn\Web\User\UserDb;
+use JoindIn\Web\User\UserApi;
 
 /**
  * Class SearchController
