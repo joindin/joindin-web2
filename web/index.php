@@ -17,10 +17,6 @@ session_set_cookie_params(60*60*24*7); // One week cookie
 session_cache_limiter(false);
 session_start();
 
-// include view controller
-require '../app/src/View/Filters.php';
-require '../app/src/View/Functions.php';
-
 $config = array();
 $configFile = realpath(__DIR__ . '/../config/config.php');
 if (is_readable($configFile)) {
@@ -66,8 +62,10 @@ $app->view()->appendData(
 // set Twig base folder, view folder and initialize Joindin filters
 $app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
-View\Filters\initialize($app->view()->getEnvironment(), $app);
-View\Functions\initialize($app->view()->getEnvironment(), $app);
+
+$app->view()->getEnvironment()->addExtension(new \View\FiltersExtension());
+$app->view()->getEnvironment()->addExtension(new \Slim\Views\TwigExtension());
+$app->view()->getEnvironment()->addExtension(new \View\FunctionsExtension($app));
 
 if (isset($config['slim']['twig']['cache'])) {
     $app->view()->getEnvironment()->setCache($config['slim']['twig']['cache']);

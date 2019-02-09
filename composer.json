@@ -12,7 +12,8 @@
             "Talk":        ["app/src/", "tests/"],
             "User":        ["app/src/", "tests/"],
             "Client":      ["app/src/", "tests/"],
-            "Apikey":      ["app/src/", "tests/"]
+            "Apikey":      ["app/src/", "tests/"],
+            "View":        ["app/src/", "tests/"]
         }
     },
     "config": {
