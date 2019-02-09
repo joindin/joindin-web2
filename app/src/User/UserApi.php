@@ -1,7 +1,8 @@
 <?php
-namespace User;
+namespace JoindIn\Web\User;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
+use Symfony\Component\Form\Form;
 
 class UserApi extends BaseApi
 {

@@ -1,8 +1,8 @@
 <?php
-namespace User;
+namespace JoindIn\Web\User;
 
-use Application\BaseDb;
-use Application\CacheService;
+use JoindIn\Web\Application\BaseDb;
+use JoindIn\Web\Application\CacheService;
 
 class UserDb extends BaseDb
 {

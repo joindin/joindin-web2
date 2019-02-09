@@ -1,17 +1,17 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseController;
-use Application\CacheService;
-use Event\EventDb;
-use Event\EventApi;
-use User\UserDb;
-use User\UserApi;
+use JoindIn\Web\Application\BaseController;
+use JoindIn\Web\Application\CacheService;
+use JoindIn\Web\Event\EventDb;
+use JoindIn\Web\Event\EventApi;
+use Symfony\Component\Form\FormFactoryInterface;
+use JoindIn\Web\User\UserDb;
+use JoindIn\Web\User\UserApi;
 use Exception;
 use Slim\Slim;
-use Talk\TalkTypeApi;
-use Language\LanguageApi;
-use Event\TrackApi;
+use JoindIn\Web\Language\LanguageApi;
+use JoindIn\Web\Event\TrackApi;
 use Symfony\Component\Form\FormError;
 
 class TalkController extends BaseController

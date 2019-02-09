@@ -1,7 +1,7 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 
 class TrackApi extends BaseApi
 {

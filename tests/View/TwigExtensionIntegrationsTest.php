@@ -1,10 +1,10 @@
 <?php
 
-namespace Test\View;
+namespace JoindIn\Web\Test\View;
 
 use Slim\Slim;
-use View\FiltersExtension;
-use View\FunctionsExtension;
+use JoindIn\Web\View\FiltersExtension;
+use JoindIn\Web\View\FunctionsExtension;
 
 class TwigExtensionIntegrationTest extends \Twig_Test_IntegrationTestCase
 {

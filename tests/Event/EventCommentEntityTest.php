@@ -1,7 +1,7 @@
 <?php
-namespace Tests\Event;
+namespace JoindIn\Web\Tests\Event;
 
-use Event\EventCommentEntity;
+use JoindIn\Web\Event\EventCommentEntity;
 use stdClass;
 
 class EventCommentEntityTest extends \PHPUnit_Framework_TestCase

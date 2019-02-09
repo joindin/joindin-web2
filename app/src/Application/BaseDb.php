@@ -1,5 +1,7 @@
 <?php
-namespace Application;
+namespace JoindIn\Web\Application;
+
+use JoindIn\Web\Application\CacheService;
 
 abstract class BaseDb
 {

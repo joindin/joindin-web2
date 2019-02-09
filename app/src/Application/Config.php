@@ -1,6 +1,6 @@
 <?php
 
-namespace Application;
+namespace JoindIn\Web\Application;
 
 class Config implements \ArrayAccess
 {

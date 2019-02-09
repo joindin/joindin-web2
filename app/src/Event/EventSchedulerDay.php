@@ -1,5 +1,5 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
 use DateTime;
 

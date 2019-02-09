@@ -1,9 +1,10 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 use Exception;
-use User\UserApi;
+use Talk\Comment;
+use JoindIn\Web\User\UserApi;
 
 class TalkApi extends BaseApi
 {

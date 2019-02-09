@@ -1,13 +1,13 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 use DateTime;
 use Exception;
-use Talk\TalkCommentEntity;
-use Talk\TalkCommentReportEntity;
-use User\UserApi;
-use User\UserEntity;
+use JoindIn\Web\Talk\TalkCommentEntity;
+use JoindIn\Web\Talk\TalkCommentReportEntity;
+use JoindIn\Web\User\UserApi;
+use JoindIn\Web\User\UserEntity;
 
 class EventApi extends BaseApi
 {

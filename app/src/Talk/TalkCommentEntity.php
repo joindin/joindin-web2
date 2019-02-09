@@ -1,7 +1,7 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseCommentEntity;
+use JoindIn\Web\Application\BaseCommentEntity;
 use stdClass;
 
 class TalkCommentEntity extends BaseCommentEntity

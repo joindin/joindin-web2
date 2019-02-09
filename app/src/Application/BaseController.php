@@ -1,5 +1,5 @@
 <?php
-namespace Application;
+namespace JoindIn\Web\Application;
 
 use Slim\Slim;
 use Twig_Error_Runtime;

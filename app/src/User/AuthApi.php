@@ -1,7 +1,7 @@
 <?php
-namespace User;
+namespace JoindIn\Web\User;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 
 class AuthApi extends BaseApi
 {

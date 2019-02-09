@@ -1,12 +1,13 @@
 <?php
 
-namespace Event;
+namespace JoindIn\Web\Event;
 
+use Event\Constraint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Form\DataTransformer\DateTransformer;
-use Form\DataTransformer\EventTagsTransformer;
+use JoindIn\Web\Form\DataTransformer\DateTransformer;
+use JoindIn\Web\Form\DataTransformer\EventTagsTransformer;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -175,7 +176,7 @@ class EventFormType extends AbstractType
                     'attr'=> [
                         'class'=>'file',
                     ],
-                    'constraints' => [new Constraint\ValidEventIcon(['groupname' => 'event', 'keyname'=>'new_icon'])],
+                    'constraints' => [new \JoindIn\Web\Event\Constraint\ValidEventIcon(['groupname' => 'event', 'keyname' =>'new_icon'])],
                 ]
             )
         ;

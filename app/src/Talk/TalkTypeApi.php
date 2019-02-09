@@ -1,7 +1,7 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 
 class TalkTypeApi extends BaseApi
 {

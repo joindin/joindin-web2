@@ -1,8 +1,7 @@
 <?php
 
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Event\EventEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 

@@ -1,7 +1,8 @@
 <?php
-namespace Apikey;
+namespace JoindIn\Web\Apikey;
 
-use Application\BaseController;
+use Apikey\ClientApi;
+use JoindIn\Web\Application\BaseController;
 use Exception;
 use Slim\Slim;
 use Symfony\Component\Form\Form;
