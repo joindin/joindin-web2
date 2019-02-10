@@ -133,7 +133,7 @@ class TalkApi extends BaseApi
      *
      * @param $comment_uri
      * @param bool $verbose
-     * @return Comment[]
+     * @return TalkCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false, $limitTo = null)
     {

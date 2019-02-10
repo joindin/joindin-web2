@@ -106,7 +106,7 @@ class ApikeyController extends BaseController
     }
 
     /**
-     * @return ClientApi
+     * @return ApikeyApi
      */
     private function getApikeyApi()
     {

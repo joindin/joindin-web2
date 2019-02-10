@@ -585,7 +585,7 @@ class EventController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                $result = $this->editEventUsingForm($form, $event);
+                $result = $this->editEventUsingForm($form);
                 if ($result instanceof EventEntity) {
                     $this->redirectToDetailPage($result->getUrlFriendlyName());
                 }

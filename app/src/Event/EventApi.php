@@ -98,7 +98,7 @@ class EventApi extends BaseApi
      *
      * @param string $event_uri  API talk uri
      * @param bool $verbose  Return verbose data?
-     * @return TalkEntity
+     * @return EventEntity|bool
      */
     public function getEvent($event_uri, $verbose = true)
     {
@@ -145,7 +145,7 @@ class EventApi extends BaseApi
      * Get comments for given event
      * @param $comment_uri
      * @param bool $verbose
-     * @return Comment[]
+     * @return EventCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false)
     {
