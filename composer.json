@@ -1,6 +1,6 @@
 {
     "name": "joindin/website",
-    "license": "MIT",
+    "license": "BSD-3-Clause",
     "autoload": {
         "psr-0":{
             "Application": ["app/src/", "tests/"],
