@@ -9,9 +9,11 @@ use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
 use Symfony\Component\Validator\Validator;
 use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\ValidatorInterface;
 
 /**
  * In this middleware we create the validation services as provided by Symfony and register it as service in the
@@ -74,15 +76,14 @@ class ValidationMiddleware extends Middleware
      *
      * @see self::call() where this method is used to construct a shared instance in Slim.
      *
-     * @return Validator
+     * @return ValidatorInterface
      */
     public function createValidator()
     {
         $validator = Validation::createValidatorBuilder()
-            ->setMetadataFactory(new ClassMetadataFactory(new StaticMethodLoader()))
-            ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app, array()))
+            ->setMetadataFactory(new LazyLoadingMetadataFactory(new StaticMethodLoader()))
+            ->setConstraintValidatorFactory(new ConstraintValidatorFactory())
             ->setTranslator($this->getTranslator())
-            ->setApiVersion(Validation::API_VERSION_2_5)
             ->getValidator();
 
         return $validator;
