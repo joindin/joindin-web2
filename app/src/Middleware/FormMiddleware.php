@@ -14,6 +14,9 @@ use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\ResolvedFormTypeFactory;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
+use Symfony\Component\Security\Csrf\TokenStorage\NativeSessionTokenStorage;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\MessageSelector;
@@ -106,8 +109,15 @@ class FormMiddleware extends Middleware
      */
     public function createFormFactory($csrfSecret)
     {
+
         $builder = Forms::createFormFactoryBuilder()
-            ->addExtension(new CsrfExtension(new DefaultCsrfProvider($csrfSecret)))
+            ->addExtension(
+                new CsrfExtension(
+                    new CsrfTokenManager(
+                        new UriSafeTokenGenerator(), new NativeSessionTokenStorage()
+                    )
+                )
+            )
             ->setResolvedTypeFactory(new ResolvedFormTypeFactory());
 
         if ($this->app->validator) {
