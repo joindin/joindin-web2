@@ -2,16 +2,15 @@
 namespace JoindIn\Web\User;
 
 use JoindIn\Web\Application\BaseController;
-use JoindIn\Web\Application\CacheService;
 use Symfony\Component\Form\FormError;
 use Slim\Slim;
 use JoindIn\Web\Talk\TalkDb;
 use JoindIn\Web\Talk\TalkApi;
 use JoindIn\Web\Event\EventDb;
 use JoindIn\Web\Event\EventApi;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
-use stdclass;
+use stdClass;
+use Symfony\Component\Form\FormInterface;
 
 class UserController extends BaseController
 {
@@ -859,8 +858,8 @@ class UserController extends BaseController
      * Process a user login result. If result is false, then we failed, otherwise
      * update the session.
      *
-     * @param  \stdClass|false  $result
-     * @param  string           $redirect
+     * @param  stdClass|false  $result
+     * @param  string          $redirect
      * @return void
      */
     protected function handleLogin($result, $redirect = '')
