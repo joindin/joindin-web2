@@ -1,0 +1,10 @@
+--TEST--
+"urlFor" function
+--TEMPLATE--
+{{ urlFor(test1) }}
+--DATA--
+return [
+    'test1' => 'test'
+]
+--EXPECT--
+https://www.joind.in

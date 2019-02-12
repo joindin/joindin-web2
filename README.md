@@ -24,9 +24,9 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 
 ## Other Resources
 
-* The main website http://joind.in
-* Issues list: http://joindin.jira.com/ (good bug reports ALWAYS welcome!)
-* CI Environment: lots of output and information about tests, deploys etc: http://jenkins.joind.in
+* The main website https://joind.in
+* Issues list: https://github.com/joindin/joindin-web2/issues/ (good bug reports ALWAYS welcome!)
+* CI Environment: lots of output and information about tests, deploys etc: https://jenkins.joind.in
 * Community: We hang out on IRC, pop in with questions or comments! #joind.in on Freenode
 
 ## Global .gitignore
@@ -70,7 +70,7 @@ Since web2 then calls the API, it can be tricky to see what is going on.  You ca
 
 If the proxy tool is running on your host machine, you'll need to understand what IP address the guest thinks your host has, the easiest way to do that is to `vagrant ssh` into the VM and then type `last` to see where it thinks you logged in from.
 
-Alternatively, try [Lorna's blog post about Wiresharking a VM](http://www.lornajane.net/posts/2014/wireshark-capture-on-remote-server).
+Alternatively, try [Lorna's blog post about Wiresharking a VM](https://www.lornajane.net/posts/2014/wireshark-capture-on-remote-server).
 
 ### CODE STYLE
 

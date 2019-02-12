@@ -133,7 +133,7 @@ class TalkApi extends BaseApi
      *
      * @param $comment_uri
      * @param bool $verbose
-     * @return Comment[]
+     * @return TalkCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false, $limitTo = null)
     {
@@ -457,6 +457,10 @@ class TalkApi extends BaseApi
     protected function handleTalkLinksUpdate($talkId, $original, $new)
     {
         foreach ($new as $key => $media) {
+            if (empty($media['url'])) {
+                continue;
+            }
+
             foreach ($original as $old) {
                 if ($key === $old->id) {
                     if ((
@@ -483,6 +487,10 @@ class TalkApi extends BaseApi
 
     protected function addTalkMedia($talkId, $media)
     {
+        if (trim($media['url']) == '') {
+            return false;
+        }
+
         $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links';
         $params = [
             'display_name' => $media['type'],

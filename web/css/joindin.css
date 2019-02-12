@@ -422,18 +422,28 @@ table.schedule span.speaker a:hover {
 
 .event .logo {
     float: left;
+    margin: 10px 10px 10px 0;
+    width: 70px;
+}
+.user .gravatar {
+    float: left;
     margin-top: 6px;
     padding: 0 10px;
     width: 90px;
 }
 
-.event .description {
-    postion:relative;
+.event .description,
+.user .description {
     margin-left: 90px;
 }
 
-.event .logo img {
+.event .logo img,
+.user .gravatar img {
     width: 100%;
+}
+
+.event .header {
+    margin-top: 25px;
 }
 
 .event.pending-event .controls {
@@ -532,7 +542,7 @@ label.required:after {
 }
 
 .user-profile {
-    margin-bottom: 10px;
+    padding-bottom: 5px;
 }
 
 .user-profile-panels h4 {
@@ -551,13 +561,18 @@ label.required:after {
     padding-bottom: 5px;
     min-height: 345px;
 }
-.user-profile-panels .more, .user-details .more {
+.user-profile-panels .more {
     margin-top: 15px;
     margin-bottom: 0;
 }
 
+.user-details .more {
+  margin-top: 15px;
+}
+
 .user-profile img {
     margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .user-profile img {
@@ -573,7 +588,7 @@ label.required:after {
     color: #777;
     font-weight: 400;
     font-size: 1.2em;
-    line-height: 1;
+    line-height: 1.2;
     margin-top: 10px;
 }
 
@@ -722,4 +737,8 @@ form ol.tracks li:last-child {
 }
 .talk_media .form-group {
     display:inline-block;
+}
+.toggle-talk-description {
+    margin-top: 10px;
+    display: none;
 }

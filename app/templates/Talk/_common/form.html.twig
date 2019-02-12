@@ -170,6 +170,7 @@ function addTalkMediaForm($collectionHolder, $newLinkLi) {
 
     // Display the form in the page in an li, before the "Add Talk Media" link li
     var $newFormLi = $('<li></li>').append(newForm);
+    addTalkMediaFormDeleteLink($newFormLi);
     $newLinkLi.before($newFormLi);
 }
 

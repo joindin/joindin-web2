@@ -5,6 +5,8 @@ use Application\BaseController;
 use Application\CacheService;
 use Symfony\Component\Form\FormError;
 use Slim\Slim;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Talk\TalkDb;
 use Talk\TalkApi;
 use Event\EventDb;
@@ -121,7 +123,7 @@ class UserController extends BaseController
      *
      * Should an error occur will this method append an error message to the form's error collection.
      *
-     * @param Form $form
+     * @param FormInterface $form
      *
      * @return mixed
      */
@@ -609,6 +611,7 @@ class UserController extends BaseController
             'full_name' => $user->getFullName(),
             'email' => $user->getEmail(),
             'twitter_username' => $user->getTwitterUsername(),
+            'biography' => $user->getBiography(),
             'old_password' => '',
             'password' => '',
         ];
@@ -855,8 +858,8 @@ class UserController extends BaseController
      * Process a user login result. If result is false, then we failed, otherwise
      * update the session.
      *
-     * @param  stdclass|false  $result
-     * @param  string          $redirect
+     * @param  \stdClass|false  $result
+     * @param  string           $redirect
      * @return void
      */
     protected function handleLogin($result, $redirect = '')

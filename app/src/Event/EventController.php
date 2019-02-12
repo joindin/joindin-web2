@@ -40,6 +40,7 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name', array($this, 'eventDefault'))->name("event-default");
         $app->get('/event/:friendly_name/details', array($this, 'details'))->name("event-detail");
         $app->get('/event/:friendly_name/attendees', array($this, 'attendees'))->name("event-attendees");
+        $app->get('/event/:friendly_name/slides', array($this, 'slides'))->name("event-slides");
         $app->get('/event/:friendly_name/comments', array($this, 'comments'))->name("event-comments");
         $app->get('/event/:friendly_name/comments/:comment_hash/report', array($this, 'reportComment'))
             ->name("event-comments-reported");
@@ -318,6 +319,23 @@ class EventController extends BaseController
         $this->application->redirect($events_url);
     }
 
+    public function slides($friendly_name)
+    {
+        $eventApi = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
+
+        if (! $event) {
+            $this->redirectToListPage();
+        }
+
+        $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
+
+        $this->render('Event/slides.html.twig', array(
+            'event' => $event,
+            'agenda' => $agenda,
+        ));
+    }
+
     public function scheduleList($friendly_name, $starred = false)
     {
         $eventApi = $this->getEventApi();
@@ -567,7 +585,7 @@ class EventController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                $result = $this->editEventUsingForm($form, $event);
+                $result = $this->editEventUsingForm($form);
                 if ($result instanceof EventEntity) {
                     $this->redirectToDetailPage($result->getUrlFriendlyName());
                 }
@@ -942,9 +960,7 @@ class EventController extends BaseController
                     } elseif ($action == "reject") {
                         $this->rejectClaimPendingTalk($talkApi, $claim, $data);
                     }
-
                 }
-
             }
 
             $this->render(
@@ -954,9 +970,7 @@ class EventController extends BaseController
                     'claims' => $claims,
                 )
             );
-
         }
-
     }
     private function appoveClaimPendingTalk($talkApi, $claim, $data)
     {
