@@ -113,7 +113,8 @@ class FormMiddleware extends Middleware
             ->addExtension(
                 new CsrfExtension(
                     new CsrfTokenManager(
-                        new UriSafeTokenGenerator(), new NativeSessionTokenStorage()
+                        new UriSafeTokenGenerator(),
+                        new NativeSessionTokenStorage()
                     )
                 )
             )
