@@ -59,7 +59,7 @@ class UserApi extends BaseApi
      * Takes the fields from the registration form, and passes them though
      * to the API to register a new user
      *
-     * @param  Form $data   The fields from the registration form
+     * @param array $data   The fields from the registration form
      *
      * @see RegisterFormType::buildForm() for a list of supported fields in the $data array and their constraints.
      *
@@ -112,7 +112,7 @@ class UserApi extends BaseApi
     /**
      * Get the backend to send a new verification token to this email
      *
-     * @param email $email  The email address of the user who needs a new token
+     * @param string $email  The email address of the user who needs a new token
      *
      * @throws \Exception   If an error occurs (not a 202 response)
      *
@@ -192,7 +192,7 @@ class UserApi extends BaseApi
     /**
      * Ask the API to email the user to remind them of their username
      *
-     * @param email $email  The email address of the user to remind
+     * @param string $email  The email address of the user to remind
      *
      * @throws \Exception   If an error occurs (not a 202 response)
      *
@@ -223,11 +223,11 @@ class UserApi extends BaseApi
     /**
      * Ask the API to email the user a token to reset their password
      *
-     * @param username $username  The username address of the user to remind
+     * @param string $username  The username address of the user to remind
      *
      * @throws \Exception   If an error occurs (not a 202 response)
      *
-     * return bool  True if successful
+     * @return bool  True if successful
      */
     public function passwordReset($username)
     {

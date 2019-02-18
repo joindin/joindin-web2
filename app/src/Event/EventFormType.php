@@ -236,7 +236,6 @@ class EventFormType extends AbstractType
         return [
             'label'       => $label,
             'required'    => $required,
-            // 'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
             'constraints' => $constraints,
             'attr'        => [
                 'class'                     => 'date-picker form-control',

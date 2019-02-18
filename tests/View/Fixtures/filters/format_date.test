@@ -1,0 +1,17 @@
+--TEST--
+"format_date" filter
+--TEMPLATE--
+{{ date1|format_date }}
+{{ date2|format_date }}
+{{ date3|format_date }}
+--DATA--
+date_default_timezone_set('Europe/Paris');
+return [
+    'date1' => '2019/02/04',
+    'date2' => '2019-02-04',
+    'date3' => 'January 10 2019',
+]
+--EXPECT--
+Mon Feb 04th 2019
+Mon Feb 04th 2019
+Thu Jan 10th 2019

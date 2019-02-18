@@ -71,6 +71,5 @@ class ApikeyApi extends BaseApi
         }
 
         return true;
-
     }
 }

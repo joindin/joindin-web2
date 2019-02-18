@@ -18,12 +18,12 @@ class TalkFormType extends AbstractType
     protected $timezone;
 
     /**
-     * @var DateTimeImmutable
+     * @var \DateTimeImmutable
      */
     protected $startDate;
 
     /**
-     * @var DateTimeImmutable
+     * @var \DateTimeImmutable
      */
     protected $endDate;
 
@@ -40,7 +40,7 @@ class TalkFormType extends AbstractType
     /**
      * @var [string]
      */
-    protected $track;
+    protected $tracks;
 
     public function __construct(EventEntity $event, array $languages, array $talkTypes, array $tracks)
     {

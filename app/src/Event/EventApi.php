@@ -2,6 +2,7 @@
 namespace Event;
 
 use Application\BaseApi;
+use DateTime;
 use Exception;
 use Talk\TalkCommentEntity;
 use Talk\TalkCommentReportEntity;
@@ -97,7 +98,7 @@ class EventApi extends BaseApi
      *
      * @param string $event_uri  API talk uri
      * @param bool $verbose  Return verbose data?
-     * @return TalkEntity
+     * @return EventEntity|bool
      */
     public function getEvent($event_uri, $verbose = true)
     {
@@ -144,7 +145,7 @@ class EventApi extends BaseApi
      * Get comments for given event
      * @param $comment_uri
      * @param bool $verbose
-     * @return Comment[]
+     * @return EventCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false)
     {
@@ -255,7 +256,7 @@ class EventApi extends BaseApi
         // Convert datetime objects to strings
         $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
         foreach ($dateFields as $dateField) {
-            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('Y-m-d');
             }
             if (isset($data[$dateField])) {
@@ -301,7 +302,7 @@ class EventApi extends BaseApi
         // Convert datetime objects to strings
         $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
         foreach ($dateFields as $dateField) {
-            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('c');
             }
             if (isset($data[$dateField])) {

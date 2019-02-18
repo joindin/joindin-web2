@@ -585,7 +585,7 @@ class EventController extends BaseController
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                $result = $this->editEventUsingForm($form, $event);
+                $result = $this->editEventUsingForm($form);
                 if ($result instanceof EventEntity) {
                     $this->redirectToDetailPage($result->getUrlFriendlyName());
                 }
@@ -960,9 +960,7 @@ class EventController extends BaseController
                     } elseif ($action == "reject") {
                         $this->rejectClaimPendingTalk($talkApi, $claim, $data);
                     }
-
                 }
-
             }
 
             $this->render(
@@ -972,9 +970,7 @@ class EventController extends BaseController
                     'claims' => $claims,
                 )
             );
-
         }
-
     }
     private function appoveClaimPendingTalk($talkApi, $claim, $data)
     {
