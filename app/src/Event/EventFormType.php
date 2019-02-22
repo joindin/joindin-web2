@@ -3,6 +3,7 @@
 namespace JoindIn\Web\Event;
 
 use Event\Constraint;
+use JoindIn\Web\Event\Constraint\ValidEventIcon;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -176,7 +177,7 @@ class EventFormType extends AbstractType
                     'attr'=> [
                         'class'=>'file',
                     ],
-                    'constraints' => [new \JoindIn\Web\Event\Constraint\ValidEventIcon(['groupname' => 'event', 'keyname' =>'new_icon'])],
+                    'constraints' => [new ValidEventIcon(['groupname' => 'event', 'keyname' =>'new_icon'])],
                 ]
             )
         ;
