@@ -185,7 +185,7 @@ final class FunctionsExtension extends Twig_Extension
             new Twig_SimpleFunction('qrcode', function ($url) {
                 return sprintf(
                     'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=%s&choe=UTF-8&chld=H',
-                    urlencode($url)
+                    urlencode($url . '?qr')
                 );
             })
         ];
