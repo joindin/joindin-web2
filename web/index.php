@@ -104,7 +104,6 @@ $app->container->singleton(\Application\CacheService::class, function ($containe
 
     $redis = $container->settings['custom']['redis'];
     $keyPrefix = $redis['keyPrefix'];
-    unset($redis['keyPrefix']);
 
     if ($host = getenv('REDIS_HOST')) {
         $redis = "tcp://$host:6379";
