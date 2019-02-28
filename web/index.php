@@ -101,13 +101,19 @@ $app->add(new Middleware\FormMiddleware($csrfSecret));
 $app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
 
 $app->container->singleton(\Application\CacheService::class, function ($container) {
-    $redisServer = null;
+
+    $redis = $container->settings['custom']['redis'];
+
     if ($host = getenv('REDIS_HOST')) {
-        $redisServer = "tcp://$host:6379";
+        $redis['scheme'] = 'tcp';
+        $redis['host'] = $host;
+        $redis['port'] = 6379;
     }
 
-    $client = new Predis\Client($redisServer);
-    $keyPrefix = $container->settings['custom']['redisKeyPrefix'];
+    $keyPrefix = $redis['keyPrefix'];
+    unset($redis['keyPrefix']);
+    $client = new Predis\Client($redis);
+
     return new \Application\CacheService($client, $keyPrefix);
 });
 $app->container->singleton(\Application\ContactApi::class, function ($container) {
