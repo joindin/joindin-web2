@@ -103,14 +103,14 @@ $app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSIO
 $app->container->singleton(\Application\CacheService::class, function ($container) {
 
     $redis = $container->settings['custom']['redis'];
-    $keyPrefix = $redis['keyPrefix'];
+    $prefix = $redis['options']['prefix'];
 
     if ($host = getenv('REDIS_HOST')) {
-        $redis = "tcp://$host:6379";
+        $redis['connection'] = "tcp://$host:6379";
     }
 
-    $client = new Predis\Client($redis);
-    return new \Application\CacheService($client, $keyPrefix);
+    $client = new Predis\Client($redis['connection']);
+    return new \Application\CacheService($client, $prefix);
 });
 $app->container->singleton(\Application\ContactApi::class, function ($container) {
     return new \Application\ContactApi($container['settings']['custom'], $container['access_token']);

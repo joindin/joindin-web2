@@ -5,10 +5,14 @@ $config = [
         'debug'    => 1,
         'custom'   => [
             'redis'             => [
-                'scheme'    => 'tcp',
-                'host'      => '127.0.0.1',
-                'port'      => 6379,
-                'keyPrefix' => 'dev-',
+                'connection' => [
+                    'scheme'    => 'tcp',
+                    'host'      => '127.0.0.1',
+                    'port'      => 6379,
+                ],
+                'options' => [
+                    'prefix' => 'dev-',
+                ]
             ],
             'apiUrl'            => 'http://api.dev.joind.in',
             'googleAnalyticsId' => '',
