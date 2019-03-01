@@ -1,25 +1,34 @@
 <?php
-$config = array(
-    'slim' => array(
-        'mode' => 'development',
-        'debug' => 1,
-        'custom' => array(
-            'redisKeyPrefix' => 'dev-',
-            'apiUrl' => 'http://api.dev.joind.in',
+$config = [
+    'slim' => [
+        'mode'     => 'development',
+        'debug'    => 1,
+        'custom'   => [
+            'redis'             => [
+                'connection' => [
+                    'scheme'    => 'tcp',
+                    'host'      => '127.0.0.1',
+                    'port'      => 6379,
+                ],
+                'options' => [
+                    'prefix' => 'dev-',
+                ]
+            ],
+            'apiUrl'            => 'http://api.dev.joind.in',
             'googleAnalyticsId' => '',
-            'proxy' => '',
-            'csrfSecret' => '',
-        ),
-        'oauth' => array(
-            'client_id' => 'web2',
+            'proxy'             => '',
+            'csrfSecret'        => '',
+        ],
+        'oauth'    => [
+            'client_id'     => 'web2',
             'client_secret' => 'web2secret',
-        ),
-        'facebook' => array(
+        ],
+        'facebook' => [
             'app_id' => '',
-        ),
-        'twig' => array(
+        ],
+        'twig'     => [
             // set to the folder name to cache into, or false to disable
-            'cache' => false
-        )
-    ),
-);
+            'cache' => false,
+        ],
+    ],
+];
