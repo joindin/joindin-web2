@@ -87,7 +87,7 @@ class FormMiddleware extends Middleware
         $this->app->container->singleton(
             self::SERVICE_FORM_FACTORY,
             function () use ($formMiddleWare, $csrfSecret) {
-                return $formMiddleWare->createFormFactory($csrfSecret);
+                return $formMiddleWare->createFormFactory();
             }
         );
 
@@ -100,13 +100,11 @@ class FormMiddleware extends Middleware
      * Generally this method does not need to be called directly; it is used in a callback that created a shared
      * instance in the container of Slim.
      *
-     * @param string $csrfSecret
-     *
      * @see self::call() where this method is used to construct a shared instance in Slim.
      *
      * @return FormFactoryInterface
      */
-    public function createFormFactory($csrfSecret)
+    public function createFormFactory()
     {
 
         $builder = Forms::createFormFactoryBuilder()
