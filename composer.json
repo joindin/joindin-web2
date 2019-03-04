@@ -35,5 +35,23 @@
         "jakub-onderka/php-parallel-lint": "^1.0",
         "roave/security-advisories": "dev-master",
         "sensiolabs/security-checker": "^5.0"
+    },
+    "scripts": {
+        "test": "phpunit -c . tests/",
+        "lint": "parallel-lint --exclude vendor .",
+        "sniff": "phpcs --standard=PSR2 --ignore=**/config.php,vendor,tools,tests/bootstrap.php --extensions=php --report-checkstyle=build/logs/checkstyle.xml --runtime-set ignore_warnings_on_exit true -p .",
+        "security": "security-checker security:check composer.lock",
+        "coverage": [
+            "git diff origin/master... -- > diff.txt",
+            "diffFilter --phpunit diff.txt build/logs/clover.xml 80"
+        ],
+        "check": [
+            "mkdir -p build/logs",
+            "@lint",
+            "@sniff",
+            "@security",
+            "@test",
+            "@coverage"
+        ]
     }
 }
