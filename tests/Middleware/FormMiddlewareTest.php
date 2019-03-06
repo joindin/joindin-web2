@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Slim\Slim;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class FormMiddlewareTest extends TestCase
@@ -26,10 +25,6 @@ class FormMiddlewareTest extends TestCase
         $translator = $this->getMockBuilder(Translator::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-//        $translator
-//            ->expects($this->once())
-//            ->method('addResource');
 
         $app->translator = $translator;
 
