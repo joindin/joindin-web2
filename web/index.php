@@ -101,14 +101,15 @@ $app->add(new \JoindIn\Web\Middleware\FormMiddleware($csrfSecret));
 $app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
 
 $app->container->singleton(\JoindIn\Web\Application\CacheService::class, function ($container) {
-    $redisServer = null;
+    $redis = $container->settings['custom']['redis'];
+    $prefix = $redis['options']['prefix'];
+
     if ($host = getenv('REDIS_HOST')) {
-        $redisServer = "tcp://$host:6379";
+        $redis['connection'] = "tcp://$host:6379";
     }
 
-    $client = new Predis\Client($redisServer);
-    $keyPrefix = $container->settings['custom']['redisKeyPrefix'];
-    return new \JoindIn\Web\Application\CacheService($client, $keyPrefix);
+    $client = new Predis\Client($redis['connection']);
+    return new \JoindIn\Web\Application\CacheService($client, $prefix);
 });
 $app->container->singleton(\JoindIn\Web\Application\ContactApi::class, function ($container) {
     return new \JoindIn\Web\Application\ContactApi($container['settings']['custom'], $container['access_token']);
