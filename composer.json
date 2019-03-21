@@ -18,7 +18,7 @@
     },
     "config": {
         "platform": {
-            "php": "5.6.26"
+            "php": "7.3.2"
         },
         "preferred-install": "dist"
     },
