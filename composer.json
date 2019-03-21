@@ -18,29 +18,31 @@
     },
     "config": {
         "platform": {
-            "php": "5.6.26"
+            "php": "7.3.2"
         },
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "sort-packages" : true,
+        "optimize-autoloader" : true
     },
     "minimum-stability": "stable",
     "require": {
+        "guzzlehttp/guzzle":     "^6.2.1",
+        "monolog/monolog":       "^1.21",
+        "org_heigl/daterange":   "~1.1",
         "predis/predis":         "~0.8",
         "slim/slim":             "~2.4",
         "slim/views":            "~0.1",
-        "twig/twig":             "~1.15",
         "symfony/form":          "~2.8",
         "symfony/validator":     "~2.8",
         "symfony/security-csrf": "~2.8",
         "symfony/twig-bridge":   "~2.8",
-        "org_heigl/daterange":   "~1.1",
-        "guzzlehttp/guzzle":     "^6.2.1",
-        "monolog/monolog":       "^1.21"
+        "twig/twig":             "~1.15"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7",
-        "squizlabs/php_codesniffer": "^3.4",
         "jakub-onderka/php-parallel-lint": "^1.0",
+        "phpunit/phpunit": "^5.7",
         "roave/security-advisories": "dev-master",
-        "sensiolabs/security-checker": "^5.0"
+        "sensiolabs/security-checker": "^5.0",
+        "squizlabs/php_codesniffer": "^3.4"
     }
 }
