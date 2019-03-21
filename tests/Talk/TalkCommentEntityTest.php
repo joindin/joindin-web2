@@ -9,7 +9,7 @@ class TalkCommentEntityTest extends TestCase
 {
     private $commentData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->commentData = new stdClass();
         $this->commentData->rating              = 5;
@@ -25,7 +25,7 @@ class TalkCommentEntityTest extends TestCase
         $this->commentData->source              = "Test comment source";
     }
 
-    public function testBasicCommentsData()
+    public function testBasicCommentsData(): void
     {
         $comment = new TalkCommentEntity($this->commentData);
 
@@ -70,7 +70,7 @@ class TalkCommentEntityTest extends TestCase
         );
     }
 
-    public function testNonExistentTestDataDoesntBreak()
+    public function testNonExistentTestDataDoesntBreak(): void
     {
         $comment = new TalkCommentEntity(new stdClass());
 

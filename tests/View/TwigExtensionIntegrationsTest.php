@@ -11,7 +11,7 @@ class TwigExtensionIntegrationTest extends IntegrationTestCase
 {
     private $slim;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->slim = $this->getMockBuilder(Slim::class)
                            ->disableOriginalConstructor()
@@ -24,7 +24,7 @@ class TwigExtensionIntegrationTest extends IntegrationTestCase
         parent::setUp();
     }
 
-    protected function getExtensions()
+    protected function getExtensions(): array 
     {
         return [
             new FiltersExtension(),
@@ -32,7 +32,7 @@ class TwigExtensionIntegrationTest extends IntegrationTestCase
         ];
     }
 
-    protected function getFixturesDir()
+    protected function getFixturesDir(): string
     {
         return dirname(__FILE__).'/Fixtures/';
     }
