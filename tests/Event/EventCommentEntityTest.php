@@ -2,9 +2,10 @@
 namespace Tests\Event;
 
 use Event\EventCommentEntity;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
+class EventCommentEntityTest extends TestCase
 {
     private $commentData;
 

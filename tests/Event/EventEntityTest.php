@@ -2,9 +2,10 @@
 namespace Tests\Event;
 
 use Event\EventEntity;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class EventEntityTest extends \PHPUnit_Framework_TestCase
+class EventEntityTest extends TestCase
 {
     private $eventData;
 

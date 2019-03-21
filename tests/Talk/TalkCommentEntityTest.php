@@ -1,10 +1,11 @@
 <?php
 namespace Tests\Talk;
 
+use PHPUnit\Framework\TestCase;
 use Talk\TalkCommentEntity;
 use stdClass;
 
-class TalkCommentEntityTest extends \PHPUnit_Framework_TestCase
+class TalkCommentEntityTest extends TestCase
 {
     private $commentData;
 

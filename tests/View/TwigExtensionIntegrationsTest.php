@@ -3,10 +3,11 @@
 namespace Test\View;
 
 use Slim\Slim;
+use Twig\Test\IntegrationTestCase;
 use View\FiltersExtension;
 use View\FunctionsExtension;
 
-class TwigExtensionIntegrationTest extends \Twig_Test_IntegrationTestCase
+class TwigExtensionIntegrationTest extends IntegrationTestCase
 {
     private $slim;
 

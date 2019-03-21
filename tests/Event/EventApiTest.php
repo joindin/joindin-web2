@@ -1,9 +1,10 @@
 <?php
 namespace Tests\Event;
 
+use PHPUnit\Framework\TestCase;
 use Predis\Client;
 
-class EventApiTest extends \PHPUnit_Framework_TestCase
+class EventApiTest extends TestCase
 {
     private $mockConfig;
     private $mockCache;
