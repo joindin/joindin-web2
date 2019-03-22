@@ -24,7 +24,7 @@ class TwigExtensionIntegrationTest extends IntegrationTestCase
         parent::setUp();
     }
 
-    protected function getExtensions(): array 
+    protected function getExtensions(): array
     {
         return [
             new FiltersExtension(),
