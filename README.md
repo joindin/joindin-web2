@@ -76,7 +76,7 @@ Alternatively, try [Lorna's blog post about Wiresharking a VM](https://www.lorna
 
 ### CODE STYLE
 
-Please do your best to ensure that any code you contributed adheres to the PSR2 coding style. You can run php codesniffer an individual file like so:
+Please do your best to ensure that any code you contributed adheres to the PSR2 coding style. You can run php codesniffer on an individual file like so:
 
 ```bash
 vendor/bin/phpcs path/of/filename.php
