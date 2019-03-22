@@ -39,7 +39,9 @@ projects too.
 You can define the gitignore file with a command that looks like this, where the 
 last argument is the file that holds the patterns to ignore: 
 
-    $ git config --global core.excludesfile ~/.gitignore_global
+```bash
+git config --global core.excludesfile ~/.gitignore_global
+```
 
 Octocat gives [a good starting point](https://gist.github.com/octocat/9257657) for what to include, but you can also ignore the files used by your editor:
 
@@ -76,7 +78,7 @@ Alternatively, try [Lorna's blog post about Wiresharking a VM](https://www.lorna
 
 Please do your best to ensure that any code you contributed adheres to the PSR2 coding style. You can run php codesniffer an individual file like so:
 
-```
+```bash
 vendor/bin/phpcs path/of/filename.php
 ```
 
