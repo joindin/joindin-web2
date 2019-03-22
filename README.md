@@ -74,10 +74,10 @@ Alternatively, try [Lorna's blog post about Wiresharking a VM](https://www.lorna
 
 ### CODE STYLE
 
-Please do your best to ensure that any code you contributed adheres to the PSR2 coding style. You can run php codesniffer using phing on an individual file like so:
+Please do your best to ensure that any code you contributed adheres to the PSR2 coding style. You can run php codesniffer an individual file like so:
 
 ```
-phing phpcs -Dfilename.php
+vendor/bin/phpcs path/of/filename.php
 ```
 
 This will run codesniffer on any file within the regular source for joindin-web2. Wildcards work as does specifying part of the path in case the filename alone results in sniffing more files than you wanted.
@@ -85,7 +85,7 @@ This will run codesniffer on any file within the regular source for joindin-web2
 To see a summary of the codesniff errors and warnings across the entire project, run
 
 ```
-phing phpcs
+composer sniff
 ```
 
 This will show the files that still need some attention.
