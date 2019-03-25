@@ -3,14 +3,15 @@
 namespace Test\View;
 
 use Slim\Slim;
+use Twig\Test\IntegrationTestCase;
 use View\FiltersExtension;
 use View\FunctionsExtension;
 
-class TwigExtensionIntegrationTest extends \Twig_Test_IntegrationTestCase
+class TwigExtensionIntegrationTest extends IntegrationTestCase
 {
     private $slim;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->slim = $this->getMockBuilder(Slim::class)
                            ->disableOriginalConstructor()
@@ -23,7 +24,7 @@ class TwigExtensionIntegrationTest extends \Twig_Test_IntegrationTestCase
         parent::setUp();
     }
 
-    protected function getExtensions()
+    protected function getExtensions(): array
     {
         return [
             new FiltersExtension(),
@@ -31,7 +32,7 @@ class TwigExtensionIntegrationTest extends \Twig_Test_IntegrationTestCase
         ];
     }
 
-    protected function getFixturesDir()
+    protected function getFixturesDir(): string
     {
         return dirname(__FILE__).'/Fixtures/';
     }

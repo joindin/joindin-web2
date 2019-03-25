@@ -2,13 +2,14 @@
 namespace Tests\Event;
 
 use Event\EventEntity;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class EventEntityTest extends \PHPUnit_Framework_TestCase
+class EventEntityTest extends TestCase
 {
     private $eventData;
 
-    public function setUp()
+    public function setUp(): void
     {
         // Not used at the moment, but it's here for future use when we
         // want to provide data to the class
@@ -37,7 +38,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         $this->eventData->all_talk_comments_uri = "Test event all talk comments uri";
     }
 
-    public function testBasicEventData()
+    public function testBasicEventData(): void
     {
         $event = new EventEntity($this->eventData);
 
@@ -152,7 +153,7 @@ class EventEntityTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testNonExistentTestDataDoesntBreak()
+    public function testNonExistentTestDataDoesntBreak(): void
     {
         $event = new EventEntity(new stdClass());
 

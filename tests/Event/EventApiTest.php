@@ -1,9 +1,10 @@
 <?php
 namespace Tests\Event;
 
+use PHPUnit\Framework\TestCase;
 use Predis\Client;
 
-class EventApiTest extends \PHPUnit_Framework_TestCase
+class EventApiTest extends TestCase
 {
     private $mockConfig;
     private $mockCache;
@@ -12,7 +13,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     private $mockUserApi;
     private $mockPredisClient;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockConfig = array('apiUrl' => 'http://example.com');
 
@@ -36,7 +37,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    public function testDefaultgetEventsParametersAreSet()
+    public function testDefaultgetEventsParametersAreSet(): void
     {
         $mockEvent = $this->getMockBuilder('Event\EventApi')
             ->setMethods(array('apiGet'))
@@ -53,7 +54,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getEvents();
     }
 
-    public function testgetEventsWithLimitSetsParamsCorrectly()
+    public function testgetEventsWithLimitSetsParamsCorrectly(): void
     {
         $mockEvent = $this->getMockBuilder('Event\EventApi')
             ->setMethods(array('apiGet'))
@@ -69,7 +70,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getEvents(75);
     }
 
-    public function testgetEventsWithPageValueSetsParamsCorrectly()
+    public function testgetEventsWithPageValueSetsParamsCorrectly(): void
     {
         $mockEvent = $this->getMockBuilder('Event\EventApi')
             ->setMethods(array('apiGet'))
@@ -85,7 +86,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getEvents(32, 6);
     }
 
-    public function testgetEventsWithFilterSetsAllParamsCorrectly()
+    public function testgetEventsWithFilterSetsAllParamsCorrectly(): void
     {
         $mockEvent = $this->getMockBuilder('Event\EventApi')
             ->setMethods(array('apiGet'))
@@ -101,7 +102,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getEvents(16, 3, 'samoflange');
     }
 
-    public function testgetEventsWithVerboseSetsAllParamsCorrectly()
+    public function testgetEventsWithVerboseSetsAllParamsCorrectly(): void
     {
         $mockEvent = $this->getMockBuilder('Event\EventApi')
             ->setMethods(array('apiGet'))
@@ -117,7 +118,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getEvents(16, 3, null, true);
     }
 
-    public function testgetEventsWithQueryParamsPassesThemThroughCorrectly()
+    public function testgetEventsWithQueryParamsPassesThemThroughCorrectly(): void
     {
         $mockEvent = $this->getMockBuilder('Event\EventApi')
             ->setMethods(array('apiGet'))
@@ -136,7 +137,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that addComment() posts the correct data to the API
      */
-    public function testAddCommentPostsAComment()
+    public function testAddCommentPostsAComment(): void
     {
         // The object containing the event details (in this case, we only
         // need to mock the comments_uri and its getter
@@ -180,7 +181,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
     /**
      * If the API is down, then post comment should throw an exception
      */
-    public function testPostCommentThrowsExceptionIfAPIReturnsBadStatus()
+    public function testPostCommentThrowsExceptionIfAPIReturnsBadStatus(): void
     {
         // The object containing the event details (in this case, we only
         // need to mock the comments_uri and its getter
@@ -220,7 +221,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEventApi->addComment($mockEventObj, 'comment');
     }
 
-    public function testAttendThrowsExceptionIfAPIReturnsBadStatus()
+    public function testAttendThrowsExceptionIfAPIReturnsBadStatus(): void
     {
         $mockEventObj = $this->getMockBuilder('Event\EventEntity')
             ->setMethods(array('getApiUriToMarkAsAttending'))
@@ -250,7 +251,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEventApi->attend($mockEventObj);
     }
 
-    public function testDefaultGetTalkCommentsParametersAreSet()
+    public function testDefaultGetTalkCommentsParametersAreSet(): void
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
         $mockEvent = $this->getMockBuilder('Event\EventApi')
@@ -266,7 +267,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getTalkComments($comment_uri);
     }
 
-    public function testGetTalkCommentsWithLimitSetsParamsCorrectly()
+    public function testGetTalkCommentsWithLimitSetsParamsCorrectly(): void
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
         $mockEvent = $this->getMockBuilder('Event\EventApi')
@@ -282,7 +283,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getTalkComments($comment_uri, 75);
     }
 
-    public function testGetTalkCommentsWithStartValueSetsParamsCorrectly()
+    public function testGetTalkCommentsWithStartValueSetsParamsCorrectly(): void
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
         $mockEvent = $this->getMockBuilder('Event\EventApi')
@@ -298,7 +299,7 @@ class EventApiTest extends \PHPUnit_Framework_TestCase
         $mockEvent->getTalkComments($comment_uri, 32, 6);
     }
 
-    public function testGetTalkCommentsWithVerboseSetsAllParamsCorrectly()
+    public function testGetTalkCommentsWithVerboseSetsAllParamsCorrectly(): void
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
         $mockEvent = $this->getMockBuilder('Event\EventApi')
