@@ -88,6 +88,13 @@ class ContactFormType extends AbstractType
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
+            ->add(
+                'phone',
+                'text',
+                [
+                    'constraints' => [new Assert\Blank()],
+                ]
+            )
         ;
     }
 }
