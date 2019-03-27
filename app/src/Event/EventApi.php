@@ -61,7 +61,7 @@ class EventApi extends BaseApi
      * and return us an event
      *
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
-     * @return EventEntity The event we found, or false if something went wrong
+     * @return EventEntity|bool The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl)
     {
@@ -80,7 +80,7 @@ class EventApi extends BaseApi
      * and return us an event
      *
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
-     * @return EventEntity The event we found, or false if something went wrong
+     * @return EventEntity|bool The event we found, or false if something went wrong
      */
     public function getByStub($stub)
     {
@@ -127,7 +127,7 @@ class EventApi extends BaseApi
      * Get an event by id
      *
      * @param integer $eventId
-     * @return EventEntity
+     * @return EventEntity|null
      */
     public function getEventById($eventId)
     {
@@ -145,7 +145,7 @@ class EventApi extends BaseApi
      * Get comments for given event
      * @param $comment_uri
      * @param bool $verbose
-     * @return EventCommentEntity[]
+     * @return array|EventCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false)
     {
