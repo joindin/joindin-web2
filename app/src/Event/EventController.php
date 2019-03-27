@@ -7,6 +7,7 @@ use Slim\Exception\Stop;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Validator;
 use JoindIn\Web\Talk\TalkDb;
 use JoindIn\Web\Talk\TalkApi;
@@ -692,11 +693,11 @@ class EventController extends BaseController
      *
      * Should an error occur will this method append an error message to the form's error collection.
      *
-     * @param Form $form
+     * @param FormInterface $form
      *
      * @return EventEntity|null|false
      */
-    private function addEventUsingForm(Form $form)
+    private function addEventUsingForm(FormInterface $form)
     {
         $eventApi = $this->getEventApi();
         $values = $form->getData();
@@ -719,11 +720,11 @@ class EventController extends BaseController
      *
      * Should an error occur will this method append an error message to the form's error collection.
      *
-     * @param Form $form
+     * @param FormInterface $form
      *
      * @return EventEntity|null|false
      */
-    private function editEventUsingForm(Form $form)
+    private function editEventUsingForm(FormInterface $form)
     {
         $eventApi = $this->getEventApi();
         $values = $form->getData()->toArray();
