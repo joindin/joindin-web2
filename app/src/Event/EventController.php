@@ -1187,8 +1187,9 @@ class EventController extends BaseController
     }
 
     /**
-     * @param array       $slugs
      * @param EventEntity $event
+     *
+     * @return array
      */
     private function getTalkSlugsFromApi(EventEntity $event)
     {
@@ -1200,6 +1201,7 @@ class EventController extends BaseController
             array('resultsperpage' => 100) // Make sure we get all talks with a single request
         );
 
+        $slugs = [];
         /** @var \JoindIn\Web\Talk\TalkEntity $talk */
         foreach ($talks['talks'] as $talk) {
             $slugs[$talk->getApiUri()] = $talk->getUrlFriendlyTalkTitle();
