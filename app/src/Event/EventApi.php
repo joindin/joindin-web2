@@ -164,7 +164,7 @@ class EventApi extends BaseApi
         return $commentData;
     }
 
-    public function addComment($event, $comment, $rating = 0)
+    public function addComment(EventEntity $event, $comment, $rating = 0)
     {
         $uri = $event->getCommentsUri();
         $params = array(
