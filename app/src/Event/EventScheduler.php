@@ -2,6 +2,7 @@
 namespace JoindIn\Web\Event;
 
 use JoindIn\Web\Talk\TalkApi;
+use JoindIn\Web\Talk\TalkEntity;
 
 /**
  * Class EventScheduler
@@ -43,7 +44,7 @@ class EventScheduler
     /**
      * Retrieves talk collection from API
      *
-     * @param $talks_uri
+     * @param string $talks_uri
      * @return array
      */
     public function getTalks($talks_uri)
@@ -56,7 +57,7 @@ class EventScheduler
     /**
      * Get an array of populated EventSchedulerDay objects
      *
-     * @param $talks
+     * @param TalkEntity[] $talks
      * @return array Array of EventSchedulerDay objects
      */
     public function getEventDays($talks)
@@ -83,7 +84,7 @@ class EventScheduler
      * associative array by day, then by time for each
      * day
      *
-     * @param $talks
+     * @param TalkEntity[] $talks
      * @return array
      */
     protected function organiseTalksByDayAndTime($talks)
@@ -112,7 +113,7 @@ class EventScheduler
      * Get a multi-dimensional indexed array of unique
      * track names by date
      *
-     * @param $talks
+     * @param TalkEntity[] $talks
      * @return array
      */
     protected function getTracksByDay($talks)
