@@ -2,7 +2,6 @@
 
 namespace JoindIn\Web\Event;
 
-use Event\Constraint;
 use JoindIn\Web\Event\Constraint\ValidEventIcon;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
