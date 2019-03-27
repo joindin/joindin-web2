@@ -13,4 +13,4 @@ vendor/bin/phpcs \
 
 php vendor/bin/security-checker security:check composer.lock
 
-vendor/bin/phpunit 
+vendor/bin/phpunit -c ./phpunit.xml.dist

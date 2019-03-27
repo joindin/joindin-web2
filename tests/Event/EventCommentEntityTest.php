@@ -2,13 +2,14 @@
 namespace JoindIn\Web\Tests\Event;
 
 use JoindIn\Web\Event\EventCommentEntity;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
+class EventCommentEntityTest extends TestCase
 {
     private $commentData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->commentData = new stdClass();
         $this->commentData->comment             = "Test event comment text";
@@ -22,7 +23,7 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
         $this->commentData->source              = "Test comment source";
     }
 
-    public function testBasicCommentsData()
+    public function testBasicCommentsData(): void
     {
         $comment = new EventCommentEntity($this->commentData);
 
@@ -52,7 +53,7 @@ class EventCommentEntityTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testNonExistentTestDataDoesntBreak()
+    public function testNonExistentTestDataDoesntBreak(): void
     {
         $comment = new EventCommentEntity(new stdClass());
 

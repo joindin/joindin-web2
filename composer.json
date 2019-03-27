@@ -33,7 +33,7 @@
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^1.0",
-        "phpunit/phpunit": "^5.7",
+        "phpunit/phpunit": "^8.0",
         "roave/security-advisories": "dev-master",
         "sensiolabs/security-checker": "^5.0",
         "squizlabs/php_codesniffer": "^3.4"
@@ -41,7 +41,7 @@
     "scripts": {
         "test": "phpunit -c . tests/",
         "lint": "parallel-lint --exclude vendor .",
-        "sniff": "phpcs --standard=PSR2 --ignore=**/config.php,vendor,tools,tests/bootstrap.php --extensions=php --report-checkstyle=build/logs/checkstyle.xml --runtime-set ignore_warnings_on_exit true -p .",
+        "sniff": "phpcs --standard='PSR2' --ignore=**/config.php,**/database.php,vendor,tests/bootstrap.php --extensions=php --runtime-set ignore_warnings_on_exit true -p .",
         "security": "security-checker security:check composer.lock",
         "coverage": [
             "git diff origin/master... -- > diff.txt",
