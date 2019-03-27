@@ -972,7 +972,7 @@ class EventController extends BaseController
             );
         }
     }
-    private function appoveClaimPendingTalk($talkApi, $claim, $data)
+    private function appoveClaimPendingTalk(TalkApi $talkApi, $claim, $data)
     {
         $talkApi->claimTalk($claim->approve_claim_uri, $data);
 
@@ -982,7 +982,7 @@ class EventController extends BaseController
     /**
      * Reject a talk claim
      */
-    private function rejectClaimPendingTalk($talkApi, $claim, $data)
+    private function rejectClaimPendingTalk(TalkApi $talkApi, $claim, $data)
     {
         $talkApi->rejectTalkClaim($claim->approve_claim_uri, $data);
 
@@ -1094,6 +1094,7 @@ class EventController extends BaseController
             $data['tracks'][] = [];
         }
 
+        /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
         $form = $factory->create(new TrackCollectionFormType(), $data);
 
