@@ -30,7 +30,7 @@ final class FunctionsExtension extends Twig_Extension
 
         return [
             new Twig_SimpleFunction('urlFor', function ($routeName, $params = array()) use ($app) {
-                $url = trim($app->urlFor($routeName, $params), '/');
+                $url = rtrim($app->urlFor($routeName, $params), '/');
 
                 return $url;
             }),
