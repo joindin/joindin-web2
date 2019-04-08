@@ -92,6 +92,7 @@ class ContactFormType extends AbstractType
                 'phone',
                 'text',
                 [
+                    'required' => false,
                     'constraints' => [new Assert\Blank()],
                 ]
             )
