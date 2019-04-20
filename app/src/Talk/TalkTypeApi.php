@@ -1,4 +1,5 @@
 <?php
+
 namespace Talk;
 
 use Application\BaseApi;
@@ -6,13 +7,13 @@ use Application\BaseApi;
 class TalkTypeApi extends BaseApi
 {
     /**
-     * Retrieve list of talk types from the API
+     * Retrieve list of talk types from the API.
      *
      * @return array
      */
     public function getTalkTypes()
     {
-        $url = $this->baseApiUrl . '/v2.1/talk_types';
+        $url = $this->baseApiUrl.'/v2.1/talk_types';
         $queryParams['resultsperpage'] = 0;
 
         $result = $this->apiGet($url, $queryParams);
@@ -24,7 +25,7 @@ class TalkTypeApi extends BaseApi
     }
 
     /**
-     * Return the list of talk types in a format suitable for a choice list
+     * Return the list of talk types in a format suitable for a choice list.
      *
      * @return array
      */

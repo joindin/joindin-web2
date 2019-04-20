@@ -1,4 +1,5 @@
 <?php
+
 namespace Application;
 
 use stdClass;
@@ -10,6 +11,7 @@ abstract class BaseEntity
 
     /**
      * BaseEntity constructor.
+     *
      * @param stdClass $data Model data retrieved from API
      */
     public function __construct(stdClass $data)

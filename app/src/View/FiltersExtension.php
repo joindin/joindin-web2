@@ -23,7 +23,7 @@ final class FiltersExtension extends \Twig_Extension
             new Twig_SimpleFilter(
                 'format_date',
                 [$this, 'formatDate']
-            )
+            ),
         ];
     }
 
@@ -32,8 +32,9 @@ final class FiltersExtension extends \Twig_Extension
      * @param string           $suffix
      * @param string           $infix
      *
-     * @return string
      * @throws \Twig_Error_Runtime
+     *
+     * @return string
      */
     public function imgPath(Twig_Environment $env, $suffix, $infix)
     {
@@ -41,16 +42,16 @@ final class FiltersExtension extends \Twig_Extension
             $suffix = 'none.png';
         }
 
-        $path = '/img/' . $infix . '/' . $suffix;
+        $path = '/img/'.$infix.'/'.$suffix;
 
         // Allow for migration to local images
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
+        if (file_exists($_SERVER['DOCUMENT_ROOT'].$path)) {
             $uri = $env->getExtension('slim')->base();
 
-            return $uri . $path;
+            return $uri.$path;
         }
 
-        return 'https://joind.in/inc' . $path;
+        return 'https://joind.in/inc'.$path;
     }
 
     /**
@@ -72,7 +73,7 @@ final class FiltersExtension extends \Twig_Extension
      */
     public function link($url, $label = '', $class = '')
     {
-        return '<a href="' . $url . '" class="' . $class . '">' . ($label ? $label : $url) . '</a>';
+        return '<a href="'.$url.'" class="'.$class.'">'.($label ? $label : $url).'</a>';
     }
 
     /**

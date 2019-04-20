@@ -1,33 +1,33 @@
 <?php
+
 namespace Event;
 
 use DateTime;
 
 /**
- * Class EventSchedulerDay
+ * Class EventSchedulerDay.
  *
  * A helper class to support the scheduler service
- *
  */
 class EventSchedulerDay
 {
     /**
-     * @var DateTime $date
+     * @var DateTime
      */
     private $date;
 
     /**
-     * @var Array $talks
+     * @var array
      */
     private $talks;
 
     /**
-     * @var Array $tracks
+     * @var array
      */
     private $tracks;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param $date String
      * @param $talks Array Multi-dimensional associative array of talk objects
@@ -41,7 +41,7 @@ class EventSchedulerDay
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return string
      */
@@ -53,9 +53,9 @@ class EventSchedulerDay
     }
 
     /**
-     * Get talks
+     * Get talks.
      *
-     * @return Array
+     * @return array
      */
     public function getTalks()
     {
@@ -63,9 +63,9 @@ class EventSchedulerDay
     }
 
     /**
-     * Get tracks
+     * Get tracks.
      *
-     * @return Array
+     * @return array
      */
     public function getTracks()
     {

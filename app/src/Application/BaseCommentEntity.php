@@ -1,4 +1,5 @@
 <?php
+
 namespace Application;
 
 abstract class BaseCommentEntity extends BaseEntity
@@ -6,7 +7,7 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getUserDisplayName()
     {
         if (!isset($this->data->user_display_name)) {
-            return null;
+            return;
         }
 
         return $this->data->user_display_name;
@@ -15,7 +16,7 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getGravatarHash()
     {
         if (!isset($this->data->gravatar_hash)) {
-            return null;
+            return;
         }
 
         return $this->data->gravatar_hash;
@@ -24,7 +25,7 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getRating()
     {
         if (!isset($this->data->rating)) {
-            return null;
+            return;
         }
 
         return $this->data->rating;
@@ -33,7 +34,7 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getUserUri()
     {
         if (!isset($this->data->user_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->user_uri;
@@ -42,7 +43,7 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getReportedUri()
     {
         if (!isset($this->data->reported_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->reported_uri;
@@ -51,7 +52,7 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getCommentDate()
     {
         if (!isset($this->data->created_date)) {
-            return null;
+            return;
         }
 
         return $this->data->created_date;
@@ -60,7 +61,7 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getComment()
     {
         if (!isset($this->data->comment)) {
-            return null;
+            return;
         }
 
         return $this->data->comment;
@@ -69,7 +70,7 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getCommentSource()
     {
         if (!isset($this->data->source)) {
-            return null;
+            return;
         }
 
         return $this->data->source;
@@ -80,10 +81,11 @@ abstract class BaseCommentEntity extends BaseEntity
     public function getCommentHash()
     {
         if (empty($this->getCommentUri())) {
-            return null;
+            return;
         }
 
         $hash = md5($this->getCommentUri());
-        return (substr($hash, 0, 6));
+
+        return substr($hash, 0, 6);
     }
 }

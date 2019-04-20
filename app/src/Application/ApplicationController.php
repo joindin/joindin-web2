@@ -1,30 +1,28 @@
 <?php
+
 namespace Application;
 
-use Event\EventDb;
 use Event\EventApi;
-use User\UserDb;
-use User\UserApi;
 
 class ApplicationController extends BaseController
 {
     protected function defineRoutes(\Slim\Slim $app)
     {
-        $app->get('/', array($this, 'index'));
-        $app->get('/about', array($this, 'about'))->name('about');
-        $app->map('/contact', array($this, 'contact'))->via('GET', 'POST')->name('contact');
-        $app->get('/not-allowed', array($this, 'notAllowed'))->name('not-allowed');
-        $app->get('/assets', array($this, 'assets'))->name('assets');
+        $app->get('/', [$this, 'index']);
+        $app->get('/about', [$this, 'about'])->name('about');
+        $app->map('/contact', [$this, 'contact'])->via('GET', 'POST')->name('contact');
+        $app->get('/not-allowed', [$this, 'notAllowed'])->name('not-allowed');
+        $app->get('/assets', [$this, 'assets'])->name('assets');
     }
 
     public function index()
     {
-        $page = ((int)$this->application->request()->get('page') === 0)
+        $page = ((int) $this->application->request()->get('page') === 0)
             ? 1
             : $this->application->request()->get('page');
 
         $perPage = 10;
-        $start = ($page -1) * $perPage;
+        $start = ($page - 1) * $perPage;
 
         $eventApi = $this->getEventApi();
         $hotEvents = $eventApi->getEvents($perPage, $start, 'hot');
@@ -32,29 +30,31 @@ class ApplicationController extends BaseController
 
         $this->render(
             'Application/index.html.twig',
-            array(
-                'events' => $hotEvents,
+            [
+                'events'     => $hotEvents,
                 'cfp_events' => $cfpEvents,
-                'page' => $page,
-            )
+                'page'       => $page,
+            ]
         );
     }
 
     /**
-     * Get latest current events
+     * Get latest current events.
      *
      * @param $start
      * @param $perPage
+     *
      * @return array
      */
     public function getCurrentEvents($start, $perPage)
     {
         $eventApi = $this->getEventApi();
+
         return $eventApi->getEvents($perPage, $start, 'hot');
     }
 
     /**
-     * Render the about page
+     * Render the about page.
      */
     public function about()
     {
@@ -67,7 +67,7 @@ class ApplicationController extends BaseController
     }
 
     /**
-     * Render the contact page
+     * Render the contact page.
      */
     public function contact()
     {
@@ -75,7 +75,7 @@ class ApplicationController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new ContactFormType());
+        $form = $factory->create(new ContactFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -97,8 +97,8 @@ class ApplicationController extends BaseController
                         $clientId,
                         $clientSecret
                     );
-                    $this->application->flash('message', "Thank you for contacting us.");
-                    $this->application->redirect($this->application->urlFor("contact"));
+                    $this->application->flash('message', 'Thank you for contacting us.');
+                    $this->application->redirect($this->application->urlFor('contact'));
                 } catch (\Exception $e) {
                     $this->application->flashNow('error', $e->getMessage());
                 }
@@ -108,13 +108,13 @@ class ApplicationController extends BaseController
         $this->render(
             'Application/contact.html.twig',
             [
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]
         );
     }
 
     /**
-     * Render the assets page
+     * Render the assets page.
      */
     public function assets()
     {
@@ -126,15 +126,13 @@ class ApplicationController extends BaseController
         );
     }
 
-
     /**
-     * Render the notAllowed page
+     * Render the notAllowed page.
      */
     public function notAllowed()
     {
-
         $this->render('Application/not-allowed.html.twig', [
-            'redirect' => $this->application->request->get('redirect')
+            'redirect' => $this->application->request->get('redirect'),
         ]);
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Event;
 
 use Application\BaseApi;
@@ -6,7 +7,7 @@ use Application\BaseApi;
 class TrackApi extends BaseApi
 {
     /**
-     * Retrieve list of tracks from the API
+     * Retrieve list of tracks from the API.
      *
      * @return array
      */
@@ -23,7 +24,7 @@ class TrackApi extends BaseApi
     }
 
     /**
-     * Return the list of tracks in a format suitable for a choice list
+     * Return the list of tracks in a format suitable for a choice list.
      *
      * @return array
      */
@@ -40,15 +41,15 @@ class TrackApi extends BaseApi
     }
 
     /**
-     * Update a track
+     * Update a track.
      *
-     * @param  string $trackUri
-     * @param  array $data
+     * @param string $trackUri
+     * @param array  $data
      */
     public function updateTrack($trackUri, $data)
     {
         $params = [
-            'track_name' => $data['track_name'],
+            'track_name'        => $data['track_name'],
             'track_description' => $data['track_description'],
         ];
 
@@ -60,19 +61,19 @@ class TrackApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed: " . $message);
+        throw new \Exception('Failed: '.$message);
     }
 
     /**
-     * Add a track to an event's tracks collection
+     * Add a track to an event's tracks collection.
      *
-     * @param  string $eventTracksUri
-     * @param  array $data
+     * @param string $eventTracksUri
+     * @param array  $data
      */
     public function addTrack($eventTracksUri, $data)
     {
         $params = [
-            'track_name' => $data['track_name'],
+            'track_name'        => $data['track_name'],
             'track_description' => $data['track_description'],
         ];
 
@@ -84,14 +85,14 @@ class TrackApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed: " . $message);
+        throw new \Exception('Failed: '.$message);
     }
 
     /**
-     * Delete a track
+     * Delete a track.
      *
-     * @param  string $trackUri
-     * @param  array $data
+     * @param string $trackUri
+     * @param array  $data
      */
     public function deleteTrack($trackUri)
     {
@@ -103,6 +104,6 @@ class TrackApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed to delete track: " . $message);
+        throw new \Exception('Failed to delete track: '.$message);
     }
 }

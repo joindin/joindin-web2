@@ -2,12 +2,11 @@
 
 namespace Talk;
 
-use Event\EventEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Form used to render and validate the speakers collection on a Talk form
+ * Form used to render and validate the speakers collection on a Talk form.
  */
 class TalkMediaFormType extends AbstractType
 {
@@ -33,7 +32,7 @@ class TalkMediaFormType extends AbstractType
     {
         $builder
             ->add('url', 'text', [
-                'label' => false,
+                'label'    => false,
                 'required' => false,
             ])
             ->add(
@@ -49,7 +48,6 @@ class TalkMediaFormType extends AbstractType
                     ],
                     'label' => false,
                 ]
-            )
-        ;
+            );
     }
 }

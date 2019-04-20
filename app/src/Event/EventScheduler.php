@@ -1,14 +1,14 @@
 <?php
+
 namespace Event;
 
 use Talk\TalkApi;
 
 /**
- * Class EventScheduler
+ * Class EventScheduler.
  *
  * Takes an event and constructs a data
  * structure to facilitate schedule layout view
- *
  */
 class EventScheduler
 {
@@ -16,7 +16,7 @@ class EventScheduler
     protected $distinctDates;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param TalkApi $talkApi
      */
@@ -27,9 +27,10 @@ class EventScheduler
 
     /**
      * Builds schedule data into an array structure
-     * for schedule view
+     * for schedule view.
      *
      * @param EventEntity $event
+     *
      * @return array
      */
     public function getScheduleData(EventEntity $event)
@@ -41,9 +42,10 @@ class EventScheduler
     }
 
     /**
-     * Retrieves talk collection from API
+     * Retrieves talk collection from API.
      *
      * @param $talks_uri
+     *
      * @return array
      */
     public function getTalks($talks_uri)
@@ -54,15 +56,16 @@ class EventScheduler
     }
 
     /**
-     * Get an array of populated EventSchedulerDay objects
+     * Get an array of populated EventSchedulerDay objects.
      *
      * @param $talks
+     *
      * @return array Array of EventSchedulerDay objects
      */
     public function getEventDays($talks)
     {
         if (empty($talks) || empty($talks['talks'])) {
-            return array();
+            return [];
         }
 
         $talks = $talks['talks'];
@@ -70,7 +73,7 @@ class EventScheduler
 
         $tracksByDay = $this->getTracksByDay($talks);
 
-        $eventDays = array();
+        $eventDays = [];
         foreach ($talksByDay as $date => $talks) {
             $eventDays[] = new EventSchedulerDay($date, $talks, $tracksByDay[$date]);
         }
@@ -81,14 +84,15 @@ class EventScheduler
     /**
      * Organise event talks into an multi-dimensional
      * associative array by day, then by time for each
-     * day
+     * day.
      *
      * @param $talks
+     *
      * @return array
      */
     protected function organiseTalksByDayAndTime($talks)
     {
-        $talksByDay = array();
+        $talksByDay = [];
 
         foreach ($talks as $talk) {
             $dateTime = $talk->getStartDateTime();
@@ -96,10 +100,10 @@ class EventScheduler
             $time = $dateTime->format('H:i');
 
             if (!isset($talksByDay[$date]) || !array_key_exists($date, $talksByDay)) {
-                $talksByDay[$date] = array();
+                $talksByDay[$date] = [];
             }
             if (!isset($talksByDay[$date][$time]) || !array_key_exists($time, $talksByDay[$date])) {
-                $talksByDay[$date][$time] = array();
+                $talksByDay[$date][$time] = [];
             }
 
             $talksByDay[$date][$time][] = $talk;
@@ -110,21 +114,22 @@ class EventScheduler
 
     /**
      * Get a multi-dimensional indexed array of unique
-     * track names by date
+     * track names by date.
      *
      * @param $talks
+     *
      * @return array
      */
     protected function getTracksByDay($talks)
     {
-        $tracksByDay = array();
+        $tracksByDay = [];
 
         foreach ($talks as $talk) {
             $dateTime = $talk->getStartDateTime();
             $date = $dateTime->format('d-m-Y');
 
             if (!isset($tracksByDay[$date]) || !array_key_exists($date, $tracksByDay)) {
-                $tracksByDay[$date] = array();
+                $tracksByDay[$date] = [];
             }
 
             $tracks = $talk->getTracks();

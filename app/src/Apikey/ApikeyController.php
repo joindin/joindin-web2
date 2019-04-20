@@ -1,4 +1,5 @@
 <?php
+
 namespace Apikey;
 
 use Application\BaseController;
@@ -6,34 +7,33 @@ use Exception;
 use Slim\Slim;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormFactoryInterface;
 
 class ApikeyController extends BaseController
 {
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/user/:username/apikey', array($this, 'index'))->name('apikey-show');
-        $app->get('/user/:username/apikey/:apikey/delete', array($this, 'deleteApiKey'))->via('GET', 'POST')->name('apikey-delete');
+        $app->get('/user/:username/apikey', [$this, 'index'])->name('apikey-show');
+        $app->get('/user/:username/apikey/:apikey/delete', [$this, 'deleteApiKey'])->via('GET', 'POST')->name('apikey-delete');
     }
 
     public function index($username)
     {
         $thisUrl = $this->application->urlFor('apikey-show', ['username' => $username]);
 
-        if (! isset($_SESSION['user'])) {
+        if (!isset($_SESSION['user'])) {
             $this->application->redirect(
-                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+                $this->application->urlFor('not-allowed').'?redirect='.$thisUrl
             );
         }
 
         if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
-                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+                $this->application->urlFor('not-allowed').'?redirect='.$thisUrl
             );
         }
 
         $tokenApi = $this->getApikeyApi();
-        $tokens   = $tokenApi->getCollection([]);
+        $tokens = $tokenApi->getCollection([]);
 
         $this->render('Apikey/index.html.twig', ['keys' => $tokens['tokens'], 'user' => $_SESSION['user']]);
     }
@@ -44,27 +44,29 @@ class ApikeyController extends BaseController
 
         if (!isset($_SESSION['user'])) {
             $this->application->redirect(
-                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+                $this->application->urlFor('not-allowed').'?redirect='.$thisUrl
             );
         }
 
         if ($_SESSION['user']->getUsername() !== $username) {
             $this->application->redirect(
-                $this->application->urlFor('not-allowed') . '?redirect=' . $thisUrl
+                $this->application->urlFor('not-allowed').'?redirect='.$thisUrl
             );
         }
 
         $apikeyApi = $this->getApikeyApi();
+
         try {
             $apikey = $apikeyApi->getById($apikey);
         } catch (Exception $e) {
             $this->application->notFound();
+
             return;
         }
 
         // default values
         $data = [];
-        $data['apikey_id']  = $apikey->getId();
+        $data['apikey_id'] = $apikey->getId();
 
         $factory = $this->application->formFactory;
         $form = $factory->create(new ApikeyDeleteFormType(), $data);
@@ -85,10 +87,11 @@ class ApikeyController extends BaseController
                     $this->application->redirect(
                         $this->application->urlFor('apikey-show', ['username' => $username])
                     );
+
                     return;
                 } catch (\RuntimeException $e) {
                     $form->adderror(
-                        new FormError('An error occurred while removing this API-Key: ' . $e->getmessage())
+                        new FormError('An error occurred while removing this API-Key: '.$e->getmessage())
                     );
                 }
             }
@@ -97,10 +100,10 @@ class ApikeyController extends BaseController
         $this->render(
             'Apikey/delete.html.twig',
             [
-                'apikey' => $apikey,
-                'form' => $form->createView(),
+                'apikey'  => $apikey,
+                'form'    => $form->createView(),
                 'backUri' => $this->application->urlFor('apikey-show', ['username' => $username]),
-                'user' => $_SESSION['user'],
+                'user'    => $_SESSION['user'],
             ]
         );
     }

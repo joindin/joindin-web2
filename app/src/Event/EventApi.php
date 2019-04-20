@@ -1,4 +1,5 @@
 <?php
+
 namespace Event;
 
 use Application\BaseApi;
@@ -29,19 +30,19 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Get a paginated list of events, optionally applying a filter
+     * Get a paginated list of events, optionally applying a filter.
      *
-     * @param integer $limit       Number of events to get per page
-     * @param integer $start       Start value for pagination
-     * @param string  $filter      Filter to apply
-     * @param bool    $verbose     get verbose result
-     * @param array   $queryParams Additional query params as key => value pairs
+     * @param int    $limit       Number of events to get per page
+     * @param int    $start       Start value for pagination
+     * @param string $filter      Filter to apply
+     * @param bool   $verbose     get verbose result
+     * @param array  $queryParams Additional query params as key => value pairs
      *
      * @return array
      */
     public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
-        $url = $this->baseApiUrl . '/v2.1/events';
+        $url = $this->baseApiUrl.'/v2.1/events';
         $queryParams['resultsperpage'] = $limit;
         $queryParams['start'] = $start;
 
@@ -58,9 +59,10 @@ class EventApi extends BaseApi
 
     /**
      * Look up this friendlyUrl in the DB, get an API endpoint, fetch data
-     * and return us an event
+     * and return us an event.
      *
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
+     *
      * @return EventEntity The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl)
@@ -77,9 +79,10 @@ class EventApi extends BaseApi
 
     /**
      * Look up this stub in the DB, get an API endpoint, fetch data
-     * and return us an event
+     * and return us an event.
      *
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
+     *
      * @return EventEntity The event we found, or false if something went wrong
      */
     public function getByStub($stub)
@@ -94,20 +97,21 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Gets event data from api on single talk
+     * Gets event data from api on single talk.
      *
-     * @param string $event_uri  API talk uri
-     * @param bool $verbose  Return verbose data?
+     * @param string $event_uri API talk uri
+     * @param bool   $verbose   Return verbose data?
+     *
      * @return EventEntity|bool
      */
     public function getEvent($event_uri, $verbose = true)
     {
-        $params = array();
+        $params = [];
         if ($verbose) {
             $params['verbose'] = 'yes';
         }
 
-        $event_list = (array)json_decode($this->apiGet($event_uri, $params));
+        $event_list = (array) json_decode($this->apiGet($event_uri, $params));
         if (isset($event_list['events']) && isset($event_list['events'][0])) {
             $event = new EventEntity($event_list['events'][0]);
             $this->eventDb->save($event);
@@ -117,6 +121,7 @@ class EventApi extends BaseApi
                     $hostsInfo->username = $this->userApi->getUsername($hostsInfo->host_uri);
                 }
             }
+
             return $event;
         }
 
@@ -124,38 +129,41 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Get an event by id
+     * Get an event by id.
      *
-     * @param integer $eventId
+     * @param int $eventId
+     *
      * @return EventEntity
      */
     public function getEventById($eventId)
     {
-        $eventId = (int)$eventId;
+        $eventId = (int) $eventId;
         if (!$eventId) {
             return;
         }
 
-        $eventUrl = $this->baseApiUrl . '/v2.1/events/' . $eventId;
+        $eventUrl = $this->baseApiUrl.'/v2.1/events/'.$eventId;
 
         return $this->getEvent($eventUrl);
     }
 
     /**
-     * Get comments for given event
+     * Get comments for given event.
+     *
      * @param $comment_uri
      * @param bool $verbose
+     *
      * @return EventCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false)
     {
         if ($verbose) {
-            $comment_uri = $comment_uri . '?verbose=yes&resultsperpage=0';
+            $comment_uri = $comment_uri.'?verbose=yes&resultsperpage=0';
         }
 
-        $comments = (array)json_decode($this->apiGet($comment_uri));
+        $comments = (array) json_decode($this->apiGet($comment_uri));
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $comment) {
             $commentData[] = new EventCommentEntity($comment);
@@ -167,70 +175,71 @@ class EventApi extends BaseApi
     public function addComment($event, $comment, $rating = 0)
     {
         $uri = $event->getCommentsUri();
-        $params = array(
+        $params = [
             'comment' => $comment,
-            'rating' => $rating,
-        );
-        list ($status, $result) = $this->apiPost($uri, $params);
+            'rating'  => $rating,
+        ];
+        list($status, $result) = $this->apiPost($uri, $params);
 
         if ($status == 201) {
             return true;
         }
-        throw new Exception("Failed to add comment: " . $result);
+
+        throw new Exception('Failed to add comment: '.$result);
     }
 
     public function reportComment($uri)
     {
-        list ($status, $result) = $this->apiPost($uri);
+        list($status, $result) = $this->apiPost($uri);
 
         if ($status == 202) {
             return true;
         }
-        throw new Exception("Failed to report comment: " . $result);
+
+        throw new Exception('Failed to report comment: '.$result);
     }
 
     public function attend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
+        list($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
 
         if ($status == 201) {
             return true;
         }
 
-        throw new Exception("Failed to mark you as attending: " . $result);
+        throw new Exception('Failed to mark you as attending: '.$result);
     }
 
     public function unattend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
+        list($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
 
         if ($status == 200) {
             return true;
         }
 
-        throw new Exception("Failed to unmark you as attending: " . $result);
+        throw new Exception('Failed to unmark you as attending: '.$result);
     }
 
-
     /**
-     * Get attendees for given event
+     * Get attendees for given event.
+     *
      * @param $attendees_uri
      * @param $limit
      * @param bool $verbose
+     *
      * @return UserEntity[]
      */
     public function getAttendees($attendees_uri, $limit = 0, $verbose = false)
     {
-
         $attendees_uri .= "?resultsperpage={$limit}";
         if ($verbose) {
-            $attendees_uri = $attendees_uri . '&verbose=yes';
+            $attendees_uri = $attendees_uri.'&verbose=yes';
         }
 
+        $attendees = (array) json_decode($this->apiGet($attendees_uri));
 
-        $attendees = (array)json_decode($this->apiGet($attendees_uri));
-
-        $attendeeData = array();
+        $attendeeData = [];
 
         foreach ($attendees['users'] as $attendee) {
             $attendeeData[] = new UserEntity($attendee);
@@ -254,7 +263,7 @@ class EventApi extends BaseApi
     public function submit(array $data)
     {
         // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        $dateFields = ['start_date', 'end_date', 'cfp_start_date', 'cfp_end_date'];
         foreach ($dateFields as $dateField) {
             if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('Y-m-d');
@@ -266,15 +275,16 @@ class EventApi extends BaseApi
             }
         }
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
+        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl.'/v2.1/events', $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 201) {
             $response = $this->getCollection($headers['location']);
+
             return current($response['events']);
         }
         if ($status == 202) {
-            return null;
+            return;
         }
         if ($status == 400) {
             $decoded = json_decode($result);
@@ -294,13 +304,15 @@ class EventApi extends BaseApi
      * @param array $data
      *
      * @throws Exception if a status code other than 201 is returned.
+     *
      * @see EventFormType::buildForm() for a list of supported fields in the $data array
+     *
      * @return EventEntity|null
      */
     public function edit(array $data)
     {
         // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        $dateFields = ['start_date', 'end_date', 'cfp_start_date', 'cfp_end_date'];
         foreach ($dateFields as $dateField) {
             if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('c');
@@ -312,41 +324,42 @@ class EventApi extends BaseApi
             }
         }
 
-
-        list ($status, $result, $headers) = $this->apiPut($data['uri'], $data);
+        list($status, $result, $headers) = $this->apiPut($data['uri'], $data);
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
             $response = $this->getCollection($headers['location']);
+
             return current($response['events']);
         }
 
-        throw new Exception('Your event submission was not accepted, the server reports: ' . $result);
+        throw new Exception('Your event submission was not accepted, the server reports: '.$result);
     }
 
     /**
-     * Upload event image - this one's a bit special as it's a form post
+     * Upload event image - this one's a bit special as it's a form post.
      *
      * Uses Guzzle
      *
-     * @param  string $imagesUri event's images_uri
-     * @param  string $fileName  the (temp) file to send
-     * @return boolean
+     * @param string $imagesUri event's images_uri
+     * @param string $fileName  the (temp) file to send
+     *
+     * @return bool
      */
     public function uploadIcon($imagesUri, $fileName)
     {
         try {
             $client = new \GuzzleHttp\Client([
-                "timeout" => 10,
+                'timeout' => 10,
             ]);
 
             $headers = [];
-            $headers["Accept"] = "application/json";
-            $headers["Authorization"] = "OAuth {$this->accessToken}";
+            $headers['Accept'] = 'application/json';
+            $headers['Authorization'] = "OAuth {$this->accessToken}";
 
             // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
             $ip = $_SERVER['REMOTE_ADDR'];
             $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
-            $headers["Forwarded"] = "for=$ip;user-agent=\"$agent\"";
+            $headers['Forwarded'] = "for=$ip;user-agent=\"$agent\"";
 
             $options = [];
             $options['headers'] = $headers;
@@ -357,7 +370,7 @@ class EventApi extends BaseApi
 
             // now add the file itself
             $options['multipart'] = [['name' => 'image',
-                'contents' => fopen($fileName, 'r')]];
+                'contents'                   => fopen($fileName, 'r'), ]];
 
             $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
             $response = $client->send($request, $options);
@@ -365,6 +378,7 @@ class EventApi extends BaseApi
             $body = $e->getResponse()->getBody();
             error_log($e->getMessage());
             error_log(json_decode($body)[0]);
+
             throw new Exception(json_decode($body)[0]);
         }
 
@@ -372,27 +386,27 @@ class EventApi extends BaseApi
             return true;
         }
 
-        throw new Exception((string)$response->getBody());
+        throw new Exception((string) $response->getBody());
     }
 
     /**
      * Returns a response array containing an 'events' and 'pagination' element.
-
+     *
      * Each event in this response is also stored in the cache so that a relation
      * can be made between the API URLs and Event entities.
      *
-     * @param string $url API Url to query for one or more events. Either a
-     *                    listing can be retrieved or a single event.
+     * @param string $url         API Url to query for one or more events. Either a
+     *                            listing can be retrieved or a single event.
      * @param array  $queryParams
      *
      * @return array
      */
-    public function getCollection($uri, array $queryParams = array())
+    public function getCollection($uri, array $queryParams = [])
     {
-        $events = (array)json_decode($this->apiGet($uri, $queryParams));
-        $meta   = array_pop($events);
+        $events = (array) json_decode($this->apiGet($uri, $queryParams));
+        $meta = array_pop($events);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($events['events'] as $item) {
             $event = new EventEntity($item);
 
@@ -413,31 +427,31 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Get comments for all the talks of a given event
+     * Get comments for all the talks of a given event.
      *
      * @param string $comment_uri
-     * @param int   $limit
-     * @param int   $start
-     * @param bool  $verbose
+     * @param int    $limit
+     * @param int    $start
+     * @param bool   $verbose
      *
      * @return array An array with two keys:
-     *              'comments' holds the actual talk comment entities
-     *              'pagination' holds pagination related meta data
+     *               'comments' holds the actual talk comment entities
+     *               'pagination' holds pagination related meta data
      */
     public function getTalkComments($comment_uri, $limit = 10, $start = 1, $verbose = false)
     {
-        $comment_uri .= '?resultsperpage=' . $limit
-                      . '&start=' . $start;
+        $comment_uri .= '?resultsperpage='.$limit
+                      .'&start='.$start;
 
         if ($verbose) {
-            $comment_uri = $comment_uri . '&verbose=yes';
+            $comment_uri = $comment_uri.'&verbose=yes';
         }
 
-        $comments = (array)json_decode($this->apiGet($comment_uri));
+        $comments = (array) json_decode($this->apiGet($comment_uri));
 
         $meta = array_pop($comments);
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $item) {
             if (isset($item->user_uri)) {
@@ -452,35 +466,39 @@ class EventApi extends BaseApi
     }
 
     /**
-     * Approve a pending event by POSTing to approval_uri
+     * Approve a pending event by POSTing to approval_uri.
      *
-     * @param  string $approval_uri
-     * @return boolean
+     * @param string $approval_uri
+     *
+     * @return bool
      */
     public function approveEvent($approval_uri)
     {
-        list ($status, $result, $headers) = $this->apiPost($approval_uri);
+        list($status, $result, $headers) = $this->apiPost($approval_uri);
 
         if ($status == 204) {
             return true;
         }
-        throw new Exception("Failed to approve event: " . $result);
+
+        throw new Exception('Failed to approve event: '.$result);
     }
 
     /**
-     * Reject a pending event by DELETEing to approval_uri
+     * Reject a pending event by DELETEing to approval_uri.
      *
-     * @param  string $approval_uri
-     * @return boolean
+     * @param string $approval_uri
+     *
+     * @return bool
      */
     public function rejectEvent($approval_uri)
     {
-        list ($status, $result, $headers) = $this->apiDelete($approval_uri);
+        list($status, $result, $headers) = $this->apiDelete($approval_uri);
 
         if ($status == 204) {
             return true;
         }
-        throw new Exception("Failed to reject event: " . $result);
+
+        throw new Exception('Failed to reject event: '.$result);
     }
 
     public function getReportedEventComments($comment_uri)
@@ -499,10 +517,10 @@ class EventApi extends BaseApi
     public function getPendingClaims($claims_uri, $verbose = false)
     {
         if ($verbose) {
-            $claims_uri = $claims_uri . "?verbose=yes";
+            $claims_uri = $claims_uri.'?verbose=yes';
         }
         $response = json_decode($this->apiGet($claims_uri));
-        
+
         $reports = [];
 
         foreach ($response->claims as $item) {
@@ -530,21 +548,22 @@ class EventApi extends BaseApi
      *
      * @param string $reported_uri
      * @param string $decision
+     *
      * @throws Exception on error
      *
-     * @return boolean
+     * @return bool
      */
     public function moderateComment($reported_uri, $decision)
     {
         $data['decision'] = $decision;
 
-        list ($status, $result, $headers) = $this->apiPut($reported_uri, $data);
+        list($status, $result, $headers) = $this->apiPut($reported_uri, $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
             return true;
         }
 
-        throw new Exception('Your comment moderation was not accepted, the server reports: ' . $result);
+        throw new Exception('Your comment moderation was not accepted, the server reports: '.$result);
     }
 }

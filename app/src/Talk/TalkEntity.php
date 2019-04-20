@@ -1,4 +1,5 @@
 <?php
+
 namespace Talk;
 
 use Application\BaseEntity;
@@ -11,8 +12,9 @@ class TalkEntity extends BaseEntity implements ArrayAccess
     /**
      * Is user a speaker on this talk?
      *
-     * @param  string  $userUri
-     * @return boolean
+     * @param string $userUri
+     *
+     * @return bool
      */
     public function isSpeaker($userUri)
     {
@@ -22,6 +24,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
                 return true;
             }
         }
+
         return false;
     }
 
@@ -37,7 +40,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
 
     /**
      * Return the event type class name
-     * The type class is all lower case with no spaces
+     * The type class is all lower case with no spaces.
      */
     public function getTypeClass()
     {
@@ -57,7 +60,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
     public function getEndDateTime()
     {
         if (!$this->data->duration) {
-            return null;
+            return;
         }
 
         $start_time = $this->getStartDateTime();
@@ -91,6 +94,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         if ($verbose) {
             return $this->data->verbose_uri;
         }
+
         return $this->data->uri;
     }
 
@@ -132,7 +136,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
     public function getCommentsUri()
     {
         if (!isset($this->data->comments_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->comments_uri;

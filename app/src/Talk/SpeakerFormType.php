@@ -4,11 +4,9 @@ namespace Talk;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Event\EventEntity;
 
 /**
- * Form used to render and validate the speakers collection on a Talk form
+ * Form used to render and validate the speakers collection on a Talk form.
  */
 class SpeakerFormType extends AbstractType
 {
@@ -34,9 +32,8 @@ class SpeakerFormType extends AbstractType
     {
         $builder
             ->add('name', 'text', [
-                'label' => false,
+                'label'    => false,
                 'required' => false,
-            ])
-        ;
+            ]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Event;
 
 use Application\BaseCommentReportingEntity;
@@ -7,7 +8,7 @@ use stdClass;
 class EventCommentReportEntity extends BaseCommentReportingEntity
 {
     /**
-     * Create new EventCommentReportEntity
+     * Create new EventCommentReportEntity.
      *
      * @param stdClass $data Model data retrieved from API
      */

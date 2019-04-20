@@ -1,4 +1,5 @@
 <?php
+
 namespace Application;
 
 abstract class BaseDb

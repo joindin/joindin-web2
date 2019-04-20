@@ -1,9 +1,8 @@
 <?php
+
 namespace Apikey;
 
 use Application\BaseEntity;
-use DateTime;
-use DateInterval;
 
 class ApikeyEntity extends BaseEntity
 {
@@ -26,7 +25,6 @@ class ApikeyEntity extends BaseEntity
     {
         return new \DateTimeImmutable($this->data->created_date);
     }
-
 
     public function getApiUri()
     {

@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Form used to accept input of an email address only
+ * Form used to accept input of an email address only.
  */
 class EmailInputFormType extends AbstractType
 {
@@ -39,10 +39,9 @@ class EmailInputFormType extends AbstractType
                 'email',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
-            )
-        ;
+            );
     }
 }

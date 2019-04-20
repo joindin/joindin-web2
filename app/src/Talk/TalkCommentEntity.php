@@ -1,15 +1,15 @@
 <?php
+
 namespace Talk;
 
 use Application\BaseCommentEntity;
-use stdClass;
 
 class TalkCommentEntity extends BaseCommentEntity
 {
     public function getUsername()
     {
         if (!isset($this->data->username)) {
-            return null;
+            return;
         }
 
         return $this->data->username;
@@ -18,7 +18,7 @@ class TalkCommentEntity extends BaseCommentEntity
     public function getTalkTitle()
     {
         if (!isset($this->data->talk_title)) {
-            return null;
+            return;
         }
 
         return $this->data->talk_title;
@@ -27,7 +27,7 @@ class TalkCommentEntity extends BaseCommentEntity
     public function getTalkUri()
     {
         if (!isset($this->data->talk_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->talk_uri;
@@ -36,7 +36,7 @@ class TalkCommentEntity extends BaseCommentEntity
     public function getCommentUri()
     {
         if (!isset($this->data->uri)) {
-            return null;
+            return;
         }
 
         return $this->data->uri;
@@ -44,7 +44,6 @@ class TalkCommentEntity extends BaseCommentEntity
 
     public function canRateTalk($user_uri)
     {
-
         if (isset($this->data->user_uri) && $this->data->user_uri == $user_uri) {
             return false;
         }

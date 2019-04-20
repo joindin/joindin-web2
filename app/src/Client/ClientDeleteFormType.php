@@ -4,15 +4,12 @@ namespace Client;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Event\EventEntity;
 
 /**
  * Form used to render and validate the submission or editing of a 3rd party application.
  */
 class ClientDeleteFormType extends AbstractType
 {
-
     /**
      * Returns the name of this form type.
      *
@@ -38,7 +35,6 @@ class ClientDeleteFormType extends AbstractType
                 'client_id',
                 'hidden',
                 []
-            )
-        ;
+            );
     }
 }

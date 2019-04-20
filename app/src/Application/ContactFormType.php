@@ -5,8 +5,6 @@ namespace Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Form\DataTransformer\DateTransformer;
-use Form\DataTransformer\EventTagsTransformer;
 
 /**
  * Form used to render and validate a contact form.
@@ -61,14 +59,14 @@ class ContactFormType extends AbstractType
                 'text',
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'max_length' => '100',
+                    'max_length'  => '100',
                 ]
             )
             ->add(
                 'email',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
@@ -77,14 +75,14 @@ class ContactFormType extends AbstractType
                 'text',
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'max_length' => '100',
+                    'max_length'  => '100',
                 ]
             )
             ->add(
                 'comment',
                 'textarea',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -94,7 +92,6 @@ class ContactFormType extends AbstractType
                 [
                     'constraints' => [new Assert\Blank()],
                 ]
-            )
-        ;
+            );
     }
 }

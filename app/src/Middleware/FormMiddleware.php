@@ -35,7 +35,7 @@ class FormMiddleware extends Middleware
 
     const SERVICE_FORM_FACTORY = 'formFactory';
 
-    /** @var string  */
+    /** @var string */
     private $csrfSecret;
 
     /** @var string */
@@ -45,13 +45,13 @@ class FormMiddleware extends Middleware
      * Initializes the form middleware with a custom secret and the language used to translate messages.
      *
      * @param string|null $csrfSecret A string used to generate CSRF tokens with; defaults to an md5 hash of
-     *     the current folder.
+     *                                the current folder.
      * @param string      $locale     The locale in country_DIALECT notation, for example: en_UK
      */
     public function __construct($csrfSecret = null, $locale = 'en_UK')
     {
         $this->csrfSecret = $csrfSecret ?: md5(__DIR__);
-        $this->locale     = $locale;
+        $this->locale = $locale;
     }
 
     /**
@@ -71,7 +71,7 @@ class FormMiddleware extends Middleware
      */
     public function call()
     {
-        if (! $this->app->translator instanceof Translator) {
+        if (!$this->app->translator instanceof Translator) {
             $this->initializeTranslator();
         }
 
@@ -81,7 +81,7 @@ class FormMiddleware extends Middleware
         $env->addExtension($this->createFormTwigExtension(self::DEFAULT_LAYOUT));
 
         $formMiddleWare = $this;
-        $csrfSecret     = $formMiddleWare->csrfSecret;
+        $csrfSecret = $formMiddleWare->csrfSecret;
         $this->app->container->singleton(
             self::SERVICE_FORM_FACTORY,
             function () use ($formMiddleWare, $csrfSecret) {
@@ -132,7 +132,7 @@ class FormMiddleware extends Middleware
     {
         $loader = $env->getLoader();
         if (!$loader instanceof \Twig_Loader_Chain) {
-            $loader = new \Twig_Loader_Chain(array($loader));
+            $loader = new \Twig_Loader_Chain([$loader]);
             $env->setLoader($loader);
         }
 
@@ -149,7 +149,7 @@ class FormMiddleware extends Middleware
     private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
     {
         $reflected = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
-        $path = dirname($reflected->getFileName()) . '/../Resources/views/Form';
+        $path = dirname($reflected->getFileName()).'/../Resources/views/Form';
         $loader->addLoader(new \Twig_Loader_Filesystem($path));
     }
 
@@ -162,7 +162,7 @@ class FormMiddleware extends Middleware
      */
     private function createFormTwigExtension($formLayoutTemplate)
     {
-        return new FormExtension(new TwigRenderer(new TwigRendererEngine(array($formLayoutTemplate))));
+        return new FormExtension(new TwigRenderer(new TwigRendererEngine([$formLayoutTemplate])));
     }
 
     /**
@@ -202,7 +202,7 @@ class FormMiddleware extends Middleware
             $r = new \ReflectionClass('Symfony\Component\Form\Form');
             $this->app->translator->addResource(
                 'xliff',
-                dirname($r->getFilename()) . '/Resources/translations/validators.' . $this->locale . '.xlf',
+                dirname($r->getFilename()).'/Resources/translations/validators.'.$this->locale.'.xlf',
                 $this->locale,
                 'validators'
             );

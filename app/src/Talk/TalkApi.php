@@ -1,4 +1,5 @@
 <?php
+
 namespace Talk;
 
 use Application\BaseApi;
@@ -28,7 +29,7 @@ class TalkApi extends BaseApi
     }
 
     /**
-     * Get all talks associated with an event
+     * Get all talks associated with an event.
      *
      * @param string $talks_uri   API talk uri
      * @param array  $queryParams
@@ -38,15 +39,15 @@ class TalkApi extends BaseApi
     public function getCollection($talks_uri, array $queryParams = [])
     {
         if (empty($talks_uri)) {
-            $talks_uri = $this->baseApiUrl . '/v2.1/talks';
+            $talks_uri = $this->baseApiUrl.'/v2.1/talks';
         }
 
-        $talks = (array)json_decode(
+        $talks = (array) json_decode(
             $this->apiGet($talks_uri, $queryParams)
         );
         $meta = array_pop($talks);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($talks['talks'] as $item) {
             $talk = new TalkEntity($item);
 
@@ -66,17 +67,18 @@ class TalkApi extends BaseApi
     }
 
     /**
-     * @param integer $talkId
+     * @param int $talkId
+     *
      * @return TalkEntity
      */
     public function getTalkByTalkId($talkId)
     {
-        $talkId = (int)$talkId;
+        $talkId = (int) $talkId;
         if (!$talkId) {
             return;
         }
 
-        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId;
+        $talkUrl = $this->baseApiUrl.'/v2.1/talks/'.$talkId;
 
         return $this->getTalk($talkUrl, true);
     }
@@ -84,8 +86,9 @@ class TalkApi extends BaseApi
     /**
      * Gets a talk when we know the slug and event's uri.
      *
-     * @param  string $talkSlug
-     * @param  string $eventUri
+     * @param string $talkSlug
+     * @param string $eventUri
+     *
      * @return TalkEntity
      */
     public function getTalkBySlug($talkSlug, $eventUri)
@@ -99,19 +102,20 @@ class TalkApi extends BaseApi
     }
 
     /**
-     * Gets talk data from api on single talk
+     * Gets talk data from api on single talk.
      *
-     * @param string $talk_uri  API talk uri
-     * @param bool $verbose  Return verbose data?
+     * @param string $talk_uri API talk uri
+     * @param bool   $verbose  Return verbose data?
+     *
      * @return TalkEntity
      */
     public function getTalk($talk_uri, $verbose = false)
     {
         if ($verbose) {
-            $talk_uri = $talk_uri . '?verbose=yes';
+            $talk_uri = $talk_uri.'?verbose=yes';
         }
 
-        $collection = (array)json_decode($this->apiGet($talk_uri));
+        $collection = (array) json_decode($this->apiGet($talk_uri));
 
         if (!isset($collection['talks'])) {
             return false;
@@ -129,10 +133,11 @@ class TalkApi extends BaseApi
     }
 
     /**
-     * Get Comments for given talk
+     * Get Comments for given talk.
      *
      * @param $comment_uri
      * @param bool $verbose
+     *
      * @return TalkCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false, $limitTo = null)
@@ -143,12 +148,12 @@ class TalkApi extends BaseApi
         }
 
         if (null !== $limitTo) {
-            $params['resultsperpage'] = $limitTo   ;
+            $params['resultsperpage'] = $limitTo;
         }
 
-        $comments = (array)json_decode($this->apiGet($comment_uri, $params));
+        $comments = (array) json_decode($this->apiGet($comment_uri, $params));
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $item) {
             if (isset($item->user_uri)) {
@@ -162,51 +167,53 @@ class TalkApi extends BaseApi
     }
 
     /**
-     * Add a comment
+     * Add a comment.
      *
      * @param TalkEntity $talk
-     * @param int $rating
-     * @param string $comment
+     * @param int        $rating
+     * @param string     $comment
      */
     public function addComment($talk, $rating, $comment)
     {
         $uri = $talk->getCommentsUri();
-        $params = array(
-            'rating' => $rating,
+        $params = [
+            'rating'  => $rating,
             'comment' => $comment,
-        );
-        list ($status, $result) = $this->apiPost($uri, $params);
+        ];
+        list($status, $result) = $this->apiPost($uri, $params);
 
         if ($status == 201) {
             return true;
         }
-        throw new Exception("Failed to add comment: " . $result);
+
+        throw new Exception('Failed to add comment: '.$result);
     }
 
     public function reportComment($uri)
     {
-        list ($status, $result) = $this->apiPost($uri);
+        list($status, $result) = $this->apiPost($uri);
 
         if ($status == 202) {
             return true;
         }
-        throw new Exception("Failed to report comment: " . $result);
+
+        throw new Exception('Failed to report comment: '.$result);
     }
 
     /**
-     * Star or unstar based on current setting of starred
+     * Star or unstar based on current setting of starred.
      *
-     * @param  TalkEntity $talk
+     * @param TalkEntity $talk
      */
     public function toggleStar($talk)
     {
         if ($talk->getStarred()) {
-            list ($status, $result) = $this->apiDelete($talk->getStarredUri(), []);
+            list($status, $result) = $this->apiDelete($talk->getStarredUri(), []);
             if ($status == 200) {
                 return ['starred' => false];
             }
         } else {
-            list ($status, $result) = $this->apiPost($talk->getStarredUri(), []);
+            list($status, $result) = $this->apiPost($talk->getStarredUri(), []);
             if ($status == 201) {
                 return ['starred' => true];
             }
@@ -216,14 +223,15 @@ class TalkApi extends BaseApi
     }
 
     /**
-     * Retreive a list of talks organised by date and time
+     * Retreive a list of talks organised by date and time.
      *
-     * @param  string $talksUri
+     * @param string $talksUri
+     *
      * @return array
      */
     public function getAgenda($talksUri)
     {
-        $talks = $this->getCollection($talksUri . '?start=0&resultsperpage=1000&verbose=yes');
+        $talks = $this->getCollection($talksUri.'?start=0&resultsperpage=1000&verbose=yes');
         if (!array_key_exists('talks', $talks)) {
             return [];
         }
@@ -232,8 +240,8 @@ class TalkApi extends BaseApi
         $agenda = [];
 
         foreach ($talks as $talk) {
-            $date = $talk->getStartDateTime()->format("Y-m-d");
-            $startTime = $talk->getStartDateTime()->format("H:i");
+            $date = $talk->getStartDateTime()->format('Y-m-d');
+            $startTime = $talk->getStartDateTime()->format('H:i');
             $time = "$startTime";
             $agenda[$date][$time][] = $talk;
         }
@@ -242,10 +250,10 @@ class TalkApi extends BaseApi
     }
 
     /**
-     * Add a talk to an event
+     * Add a talk to an event.
      *
      * @param string $talksUri
-     * @param array $data
+     * @param array  $data
      */
     public function addTalk($talksUri, $data)
     {
@@ -266,15 +274,15 @@ class TalkApi extends BaseApi
             $data['speakers'] = array_filter($data['speakers']);
         }
 
-
-        list ($status, $result, $headers) = $this->apiPost($talksUri, $data);
+        list($status, $result, $headers) = $this->apiPost($talksUri, $data);
         // if successful, return talk entity represented by the URL in the Location header
         if ($status == 201) {
             $response = $this->getCollection($headers['location']);
+
             return current($response['talks']);
         }
         if ($status == 202) {
-            return null;
+            return;
         }
         if ($status == 400) {
             $decoded = json_decode($result);
@@ -287,10 +295,10 @@ class TalkApi extends BaseApi
     }
 
     /**
-     * Edit a talk
+     * Edit a talk.
      *
      * @param string $talkUri
-     * @param array $data
+     * @param array  $data
      */
     public function editTalk($talkUri, $data)
     {
@@ -314,11 +322,12 @@ class TalkApi extends BaseApi
         $media = $this->getTalkLinksById($talkId);
         $this->handleTalkLinksUpdate($talkId, $media, $data['talk_media']);
 
-        list ($status, $result, $headers) = $this->apiPut($talkUri, $data);
+        list($status, $result, $headers) = $this->apiPut($talkUri, $data);
 
         // if successful, return talk entity represented by the URL in the Location header
         if ($status == 204) {
             $response = $this->getCollection($headers['location']);
+
             return current($response['talks']);
         }
 
@@ -332,7 +341,7 @@ class TalkApi extends BaseApi
 
     public function claimTalk($talkSpeakersUri, $data)
     {
-        list ($status, $result, $headers) = $this->apiPost($talkSpeakersUri, $data);
+        list($status, $result, $headers) = $this->apiPost($talkSpeakersUri, $data);
 
         if ($status == 204) {
             return true;
@@ -341,12 +350,12 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new Exception("Failed: " . $message);
+        throw new Exception('Failed: '.$message);
     }
 
     public function rejectTalkClaim($talkSpeakersUri, $data)
     {
-        list ($status, $result, $headers) = $this->apiDelete($talkSpeakersUri, $data);
+        list($status, $result, $headers) = $this->apiDelete($talkSpeakersUri, $data);
 
         if ($status == 204) {
             return true;
@@ -355,16 +364,16 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new Exception("Failed: " . $message);
+        throw new Exception('Failed: '.$message);
     }
-    
+
     /**
-     * Add a talk to a track
+     * Add a talk to a track.
      *
      * @param  $talkTracksUri
      * @param  $trackUri
      *
-     * @return  bool
+     * @return bool
      */
     public function addTalkToTrack($talkTracksUri, $trackUri)
     {
@@ -380,15 +389,15 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new Exception("Failed: " . $message);
+        throw new Exception('Failed: '.$message);
     }
 
     /**
-     * Remove a talk from a track
+     * Remove a talk from a track.
      *
      * @param  $removeTrackUri
      *
-     * @return  bool
+     * @return bool
      */
     public function removeTalkFromTrack($removeTrackUri)
     {
@@ -400,7 +409,7 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new Exception("Failed to remove talk from track: " . $message);
+        throw new Exception('Failed to remove talk from track: '.$message);
     }
 
     public function unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri)
@@ -414,7 +423,7 @@ class TalkApi extends BaseApi
         $result = json_decode($result);
         $message = $result[0];
 
-        throw new \Exception("Failed to unlink speaker from talk: " . $message);
+        throw new \Exception('Failed to unlink speaker from talk: '.$message);
     }
 
     /**
@@ -425,17 +434,19 @@ class TalkApi extends BaseApi
      * @param $clientUri
      *
      * @throws \Exception
+     *
      * @return bool
      */
     public function deleteTalk($clientUri)
     {
-        list ($status, $result, $headers) = $this->apiDelete($clientUri);
+        list($status, $result, $headers) = $this->apiDelete($clientUri);
 
         if ($status != 204) {
             $decoded = json_decode($result);
             if (is_array($decoded)) {
                 $result = current($decoded);
             }
+
             throw new \Exception($result);
         }
 
@@ -444,12 +455,12 @@ class TalkApi extends BaseApi
 
     public function getTalkLinksById($talkId)
     {
-        $talkId = (int)$talkId;
+        $talkId = (int) $talkId;
         if (!$talkId) {
             return;
         }
 
-        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links';
+        $talkUrl = $this->baseApiUrl.'/v2.1/talks/'.$talkId.'/links';
 
         return json_decode($this->apiGet($talkUrl))->talk_links;
     }
@@ -491,10 +502,10 @@ class TalkApi extends BaseApi
             return false;
         }
 
-        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links';
+        $talkUrl = $this->baseApiUrl.'/v2.1/talks/'.$talkId.'/links';
         $params = [
             'display_name' => $media['type'],
-            'url' => $media['url'],
+            'url'          => $media['url'],
         ];
         list($status, $result, $headers) = $this->apiPost($talkUrl, $params);
 
@@ -502,33 +513,33 @@ class TalkApi extends BaseApi
             return true;
         }
 
-        throw new Exception("Failed: Adding Talk media");
+        throw new Exception('Failed: Adding Talk media');
     }
 
     protected function updateTalkMedia($talkId, $mediaId, $media)
     {
-        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
+        $talkUrl = $this->baseApiUrl.'/v2.1/talks/'.$talkId.'/links/'.$mediaId;
         $params = [
             'display_name' => $media['type'],
-            'url' => $media['url'],
+            'url'          => $media['url'],
         ];
         list($status, $result, $headers) = $this->apiPut($talkUrl, $params);
         if ($status == 204) {
             return true;
         }
 
-        throw new Exception("Failed: Updating Talk media");
+        throw new Exception('Failed: Updating Talk media');
     }
 
     protected function deleteTalkMedia($talkId, $mediaId)
     {
-        $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
+        $talkUrl = $this->baseApiUrl.'/v2.1/talks/'.$talkId.'/links/'.$mediaId;
         list($status, $result, $headers) = $this->apiDelete($talkUrl);
 
         if ($status == 204) {
             return true;
         }
 
-        throw new Exception("Failed: Deleting Talk media");
+        throw new Exception('Failed: Deleting Talk media');
     }
 }

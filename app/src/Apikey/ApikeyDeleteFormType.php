@@ -4,15 +4,12 @@ namespace Apikey;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Event\EventEntity;
 
 /**
  * Form used to render and validate the submission or editing of a 3rd party application.
  */
 class ApikeyDeleteFormType extends AbstractType
 {
-
     /**
      * Returns the name of this form type.
      *
@@ -38,7 +35,6 @@ class ApikeyDeleteFormType extends AbstractType
                 'apikey_id',
                 'hidden',
                 []
-            )
-        ;
+            );
     }
 }

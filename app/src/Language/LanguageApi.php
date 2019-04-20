@@ -1,4 +1,5 @@
 <?php
+
 namespace Language;
 
 use Application\BaseApi;
@@ -6,13 +7,13 @@ use Application\BaseApi;
 class LanguageApi extends BaseApi
 {
     /**
-     * Retrieve list of languages from the API
+     * Retrieve list of languages from the API.
      *
      * @return array
      */
     public function getLanguages()
     {
-        $url = $this->baseApiUrl . '/v2.1/languages';
+        $url = $this->baseApiUrl.'/v2.1/languages';
         $queryParams['resultsperpage'] = 0;
 
         $result = $this->apiGet($url, $queryParams);
@@ -24,7 +25,7 @@ class LanguageApi extends BaseApi
     }
 
     /**
-     * Return the list of languages in a format suitable for a choice list
+     * Return the list of languages in a format suitable for a choice list.
      *
      * @return array
      */

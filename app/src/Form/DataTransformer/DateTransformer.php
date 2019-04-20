@@ -1,9 +1,10 @@
 <?php
+
 namespace Form\DataTransformer;
 
+use DateTime;
+use DateTimeZone;
 use Symfony\Component\Form\DataTransformerInterface;
-use \DateTime;
-use \DateTimeZone;
 
 class DateTransformer implements DataTransformerInterface
 {
@@ -11,7 +12,7 @@ class DateTransformer implements DataTransformerInterface
 
     public function __construct($timezone = 'UTC')
     {
-        if (! in_array($timezone, DateTimeZone::listIdentifiers(DateTimeZone::ALL))) {
+        if (!in_array($timezone, DateTimeZone::listIdentifiers(DateTimeZone::ALL))) {
             $timezone = 'UTC';
         }
         $this->timezone = new DateTimeZone($timezone);
@@ -35,6 +36,7 @@ class DateTransformer implements DataTransformerInterface
                 $value = $d->format($format);
             }
         }
+
         return $value;
     }
 }

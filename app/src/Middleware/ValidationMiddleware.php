@@ -10,8 +10,8 @@ use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
-use Symfony\Component\Validator\Validator;
 use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator;
 
 /**
  * In this middleware we create the validation services as provided by Symfony and register it as service in the
@@ -80,7 +80,7 @@ class ValidationMiddleware extends Middleware
     {
         $validator = Validation::createValidatorBuilder()
             ->setMetadataFactory(new ClassMetadataFactory(new StaticMethodLoader()))
-            ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app, array()))
+            ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app, []))
             ->setTranslator($this->getTranslator())
             ->setApiVersion(Validation::API_VERSION_2_5)
             ->getValidator();
@@ -100,7 +100,7 @@ class ValidationMiddleware extends Middleware
     {
         $translator->addResource(
             'xliff',
-            $validatorComponentRootFolder . '/Resources/translations/validators.' . $this->locale . '.xlf',
+            $validatorComponentRootFolder.'/Resources/translations/validators.'.$this->locale.'.xlf',
             $this->locale,
             'validators'
         );

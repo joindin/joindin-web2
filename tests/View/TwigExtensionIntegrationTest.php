@@ -20,7 +20,6 @@ class TwigExtensionIntegrationTest extends IntegrationTestCase
         $this->slim->method('urlFor')
             ->willReturn('https://www.joind.in');
 
-
         parent::setUp();
     }
 
@@ -28,7 +27,7 @@ class TwigExtensionIntegrationTest extends IntegrationTestCase
     {
         return [
             new FiltersExtension(),
-            new FunctionsExtension($this->slim)
+            new FunctionsExtension($this->slim),
         ];
     }
 

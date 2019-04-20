@@ -1,9 +1,8 @@
 <?php
+
 namespace Client;
 
 use Application\BaseEntity;
-use DateTime;
-use DateInterval;
 
 class ClientEntity extends BaseEntity
 {
@@ -44,7 +43,7 @@ class ClientEntity extends BaseEntity
 
     public function getConsumerSecret()
     {
-        if (! $this->hasConsumerSecret()) {
+        if (!$this->hasConsumerSecret()) {
             return '';
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace User;
 
 use Application\BaseDb;
@@ -14,12 +15,12 @@ class UserDb extends BaseDb
 
     public function save(UserEntity $user)
     {
-        $data = array(
-            'uri'  => $user->getUri(),
-            'username' => $user->getUsername(),
-            'slug' => $user->getUsername(),
-            'verbose_uri'  => $user->getVerboseUri()
-        );
+        $data = [
+            'uri'          => $user->getUri(),
+            'username'     => $user->getUsername(),
+            'slug'         => $user->getUsername(),
+            'verbose_uri'  => $user->getVerboseUri(),
+        ];
 
         $savedUser = $this->load('uri', $user->getUri());
         if ($savedUser) {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Event\Constraint;
 
 use Symfony\Component\Validator\Constraint;
@@ -32,6 +33,7 @@ class ValidEventIconValidator extends ConstraintValidator
                 $this->context->buildViolation("'%filename%' is not a recognised image file")
                     ->setParameter('%filename%', $filename)
                     ->addViolation();
+
                 return;
             }
 
@@ -42,6 +44,7 @@ class ValidEventIconValidator extends ConstraintValidator
                 $this->context->buildViolation("'%filename%' is not a square image")
                     ->setParameter('%filename%', $filename)
                     ->addViolation();
+
                 return;
             }
 

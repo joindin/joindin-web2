@@ -1,4 +1,5 @@
 <?php
+
 namespace Event;
 
 use Application\BaseEntity;
@@ -9,7 +10,7 @@ class EventEntity extends BaseEntity
     public function getName()
     {
         if (!isset($this->data->name)) {
-            return null;
+            return;
         }
 
         return $this->data->name;
@@ -25,16 +26,16 @@ class EventEntity extends BaseEntity
     public function getFullTimezone()
     {
         if (!isset($this->data->tz_continent) || !isset($this->data->tz_place)) {
-            return null;
+            return;
         }
 
-        return $this->data->tz_continent . "/" . $this->data->tz_place;
+        return $this->data->tz_continent.'/'.$this->data->tz_place;
     }
 
     public function getIcon()
     {
         if (!isset($this->data->icon)) {
-            return null;
+            return;
         }
 
         return $this->data->icon;
@@ -48,7 +49,7 @@ class EventEntity extends BaseEntity
     public function getStartDate()
     {
         if (!isset($this->data->start_date)) {
-            return null;
+            return;
         }
 
         return $this->data->start_date;
@@ -64,7 +65,7 @@ class EventEntity extends BaseEntity
     public function getEndDate()
     {
         if (!isset($this->data->end_date)) {
-            return null;
+            return;
         }
 
         return $this->data->end_date;
@@ -80,7 +81,7 @@ class EventEntity extends BaseEntity
     public function getLocation()
     {
         if (!isset($this->data->location)) {
-            return null;
+            return;
         }
 
         return $this->data->location;
@@ -94,7 +95,7 @@ class EventEntity extends BaseEntity
     public function getDescription()
     {
         if (!isset($this->data->description)) {
-            return null;
+            return;
         }
 
         return $this->data->description;
@@ -106,13 +107,14 @@ class EventEntity extends BaseEntity
 
         return $this;
     }
+
     /**
      * @return array|null
      */
     public function getTags()
     {
         if (!isset($this->data->tags)) {
-            return null;
+            return;
         }
 
         return $this->data->tags;
@@ -128,7 +130,7 @@ class EventEntity extends BaseEntity
     public function getLatitude()
     {
         if (!isset($this->data->latitude)) {
-            return null;
+            return;
         }
 
         return $this->data->latitude;
@@ -144,7 +146,7 @@ class EventEntity extends BaseEntity
     public function getLongitude()
     {
         if (!isset($this->data->longitude)) {
-            return null;
+            return;
         }
 
         return $this->data->longitude;
@@ -160,7 +162,7 @@ class EventEntity extends BaseEntity
     public function getWebsiteAddress()
     {
         if (!isset($this->data->href)) {
-            return null;
+            return;
         }
 
         return $this->data->href;
@@ -169,7 +171,7 @@ class EventEntity extends BaseEntity
     public function getAttendeeCount()
     {
         if (!isset($this->data->attendee_count)) {
-            return null;
+            return;
         }
 
         return $this->data->attendee_count;
@@ -178,7 +180,7 @@ class EventEntity extends BaseEntity
     public function getCommentsCount()
     {
         if (!isset($this->data->event_comments_count)) {
-            return null;
+            return;
         }
 
         return $this->data->event_comments_count;
@@ -187,7 +189,7 @@ class EventEntity extends BaseEntity
     public function getCommentsUri()
     {
         if (!isset($this->data->comments_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->comments_uri;
@@ -196,7 +198,7 @@ class EventEntity extends BaseEntity
     public function getApiUriToMarkAsAttending()
     {
         if (!isset($this->data->attending_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->attending_uri;
@@ -205,7 +207,7 @@ class EventEntity extends BaseEntity
     public function getTalksUri()
     {
         if (!isset($this->data->talks_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->talks_uri;
@@ -214,7 +216,7 @@ class EventEntity extends BaseEntity
     public function getUri()
     {
         if (!isset($this->data->uri)) {
-            return null;
+            return;
         }
 
         return $this->data->uri;
@@ -223,7 +225,7 @@ class EventEntity extends BaseEntity
     public function getVerboseUri()
     {
         if (!isset($this->data->verbose_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->verbose_uri;
@@ -232,7 +234,7 @@ class EventEntity extends BaseEntity
     public function isAttending()
     {
         if (!isset($this->data->attending)) {
-            return null;
+            return;
         }
 
         return $this->data->attending;
@@ -244,7 +246,7 @@ class EventEntity extends BaseEntity
             return false;
         }
 
-        return (bool)$this->data->comments_enabled;
+        return (bool) $this->data->comments_enabled;
     }
 
     public function isPastEvent()
@@ -253,13 +255,13 @@ class EventEntity extends BaseEntity
         $now = new DateTime(null, $endDate->getTimezone());
         $now->setTime(0, 0, 0);
 
-        return ($endDate < $now);
+        return $endDate < $now;
     }
 
     public function getUrlFriendlyName()
     {
         if (!isset($this->data->url_friendly_name)) {
-            return null;
+            return;
         }
 
         return $this->data->url_friendly_name;
@@ -268,7 +270,7 @@ class EventEntity extends BaseEntity
     public function getStub()
     {
         if (!isset($this->data->stub)) {
-            return null;
+            return;
         }
 
         return $this->data->stub;
@@ -288,39 +290,40 @@ class EventEntity extends BaseEntity
      */
     public function getTimezone()
     {
-        if (! isset($this->data->tz_continent)
-            || ! isset($this->data->tz_place)
-            || ! $this->data->tz_continent
-            || ! $this->data->tz_place
+        if (!isset($this->data->tz_continent)
+            || !isset($this->data->tz_place)
+            || !$this->data->tz_continent
+            || !$this->data->tz_place
         ) {
-            return null;
+            return;
         }
 
-        return $this->data->tz_continent . '/' . $this->data->tz_place;
+        return $this->data->tz_continent.'/'.$this->data->tz_place;
     }
 
     public function getAllTalkCommentsUri()
     {
         if (!isset($this->data->all_talk_comments_uri)) {
-            return null;
+            return;
         }
 
         return $this->data->all_talk_comments_uri;
     }
 
     /**
-     * Returns the continent for the set timezone
+     * Returns the continent for the set timezone.
      *
      * @return string
      */
     public function getTzContinent()
     {
         $tz = explode('/', $this->getTimezone());
+
         return $tz[0];
     }
 
     /**
-     * Set the Timezone continent
+     * Set the Timezone continent.
      *
      * @param string $tzContinent
      */
@@ -330,14 +333,14 @@ class EventEntity extends BaseEntity
     }
 
     /**
-     * Returns the city for the set timezone
+     * Returns the city for the set timezone.
      *
      * @return string
      */
     public function getTzPlace()
     {
         $tz = explode('/', $this->getTimezone());
-        if (! isset($tz[1])) {
+        if (!isset($tz[1])) {
             return '';
         }
 
@@ -345,7 +348,7 @@ class EventEntity extends BaseEntity
     }
 
     /**
-     * Set the Timezone place
+     * Set the Timezone place.
      *
      * @param string $tzPlace
      */
@@ -355,7 +358,7 @@ class EventEntity extends BaseEntity
     }
 
     /**
-     * Returns the URL
+     * Returns the URL.
      *
      * This is required by Symfonys PropertyAccessor
      *
@@ -367,7 +370,7 @@ class EventEntity extends BaseEntity
     }
 
     /**
-     * Set the HREF value
+     * Set the HREF value.
      *
      * @param string $href
      */
@@ -421,7 +424,7 @@ class EventEntity extends BaseEntity
     }
 
     /**
-     * Wrapper to getCallForPapersWebsiteAddress
+     * Wrapper to getCallForPapersWebsiteAddress.
      *
      * @return string
      */
@@ -441,7 +444,7 @@ class EventEntity extends BaseEntity
 
     /**
      * Returns the status of the CFP
-     * Baed on start and end dates
+     * Baed on start and end dates.
      *
      * @return string
      */
@@ -555,18 +558,17 @@ class EventEntity extends BaseEntity
     }
 
     /**
-     * Used by the edit form
+     * Used by the edit form.
      */
     public function getNewIcon()
     {
-        return null;
     }
 
     public function getSmallImage()
     {
         if (!isset($this->data->images->small)) {
             // use our default image
-            return "/img/event_icons/none.png";
+            return '/img/event_icons/none.png';
         }
 
         return $this->data->images->small->url;

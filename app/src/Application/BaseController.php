@@ -1,4 +1,5 @@
 <?php
+
 namespace Application;
 
 use Slim\Slim;
@@ -28,25 +29,26 @@ abstract class BaseController
     {
         $app = Slim::getInstance();
         $config = $app->config('custom');
+
         return $config;
     }
 
-    protected function render($template, $data = array(), $status = null)
+    protected function render($template, $data = [], $status = null)
     {
         try {
             $this->application->render($template, $data, $status);
         } catch (Twig_Error_Runtime $e) {
             $this->application->render(
                 'Error/app_load_error.html.twig',
-                array(
+                [
                     'message' => sprintf(
                         'An exception has been thrown during the rendering of a template ("%s").',
                         $e->getMessage()
                     ),
                     -1,
                     null,
-                    $e
-                )
+                    $e,
+                ]
             );
         }
     }
@@ -57,6 +59,7 @@ abstract class BaseController
         if (array_key_exists($name, $_SESSION)) {
             $value = $_SESSION[$name];
         }
+
         return $value;
     }
 

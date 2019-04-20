@@ -7,7 +7,7 @@ use Application\BaseEntity;
 class UserEntity extends BaseEntity
 {
     /**
-     * Getter for username
+     * Getter for username.
      *
      * @return mixed
      */
@@ -17,7 +17,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for full_name
+     * Getter for full_name.
      *
      * @return mixed
      */
@@ -27,45 +27,47 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for twitter_username
+     * Getter for twitter_username.
      *
      * @return mixed
      */
     public function getTwitterUsername()
     {
         $name = str_replace('@', '', $this->data->twitter_username);
+
         return $name;
     }
 
     /**
-     * Getter for biography
+     * Getter for biography.
      *
      * @return mixed
      */
     public function getBiography()
     {
         if (!isset($this->data->biography)) {
-            return null;
+            return;
         }
+
         return $this->data->biography;
     }
 
     /**
-     * Getter for email
+     * Getter for email.
      *
      * @return mixed
      */
     public function getEmail()
     {
         if (!isset($this->data->email)) {
-            return null;
+            return;
         }
 
         return $this->data->email;
     }
 
     /**
-     * Getter for uri
+     * Getter for uri.
      *
      * @return mixed
      */
@@ -75,7 +77,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for verbose_uri
+     * Getter for verbose_uri.
      *
      * @return mixed
      */
@@ -85,7 +87,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for website_uri
+     * Getter for website_uri.
      *
      * @return mixed
      */
@@ -95,7 +97,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for talks_uri
+     * Getter for talks_uri.
      *
      * @return mixed
      */
@@ -105,7 +107,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for attended_events_uri
+     * Getter for attended_events_uri.
      *
      * @return mixed
      */
@@ -115,7 +117,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for hosted_events_uri
+     * Getter for hosted_events_uri.
      *
      * @return mixed
      */
@@ -125,7 +127,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for talk_comments_uri
+     * Getter for talk_comments_uri.
      *
      * @return mixed
      */
@@ -135,7 +137,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for gravatar_hash
+     * Getter for gravatar_hash.
      *
      * @return string|null
      */
@@ -145,7 +147,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for can_edit
+     * Getter for can_edit.
      *
      * @return mixed
      */
@@ -159,7 +161,7 @@ class UserEntity extends BaseEntity
     }
 
     /**
-     * Getter for admin
+     * Getter for admin.
      *
      * @return mixed
      */

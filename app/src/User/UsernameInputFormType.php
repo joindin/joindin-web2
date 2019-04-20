@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Form used to accept input of a username only
+ * Form used to accept input of a username only.
  */
 class UsernameInputFormType extends AbstractType
 {
@@ -39,10 +39,9 @@ class UsernameInputFormType extends AbstractType
                 'username',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
                 ]
-            )
-        ;
+            );
     }
 }
