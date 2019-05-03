@@ -36,6 +36,7 @@ class EventController extends BaseController
         $app->get('/event', array($this, 'index'))->name("events-index");
         $app->get('/event/pending', array($this, 'pending'))->name("events-pending");
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
+        $app->map('/event/import', array($this, 'eventImportCsv'))->via('GET', 'POST')->name("event-import-csv");
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'eventDefault'))->name("event-default");
         $app->get('/event/:friendly_name/details', array($this, 'details'))->name("event-detail");
@@ -1147,6 +1148,28 @@ class EventController extends BaseController
                 'form' => $form->createView(),
             )
         );
+    }
+
+    /**
+     * Upload Data from CSV for this event
+     * @todo Validate & Process uploaded cSV
+     */
+    public function eventImportCsv()
+    {
+        $config = $this->application->config('oauth');
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new EventImportFormType());
+
+        if ($request->isPost()) {
+//             use EventFormImportType to validate the CSV is valid
+//             We possibly want to do some extensive data checking
+//             BEFORE we blindly throw data from here to the API
+        }
+
+        $this->render('Event/import-csv.html.twig', array('form' => $form->createView()));
     }
 
     /**
