@@ -65,7 +65,13 @@ class ApikeyController extends BaseController
         $_SESSION['api_key_page'] = $page;
 
         $tokenApi = $this->getApikeyApi();
-        $tokens   = $tokenApi->getCollection($queryParams);
+        $tokens = $tokenApi->getCollection($queryParams);
+
+        // reset session state if oauth_access_tokens are removed while user is logged in (found during testing)
+        if (!isset($tokens['tokens'])) {
+            unset($_SESSION['api_key_page']);
+            $this->application->redirect($thisUrl);
+        }
 
         // construct index values for page description
         $from = 1;
@@ -78,6 +84,10 @@ class ApikeyController extends BaseController
             if ($to > $tokens['pagination']->total) {
                 $to = $tokens['pagination']->total;
             }
+        }
+
+        if ($to > $tokens['pagination']->total) {
+            $to = $tokens['pagination']->total;
         }
 
         $this->render(
