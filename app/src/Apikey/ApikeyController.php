@@ -17,8 +17,8 @@ class ApikeyController extends BaseController
 
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/user/:username/apikey', array($this, 'index'))->name('apikey-show');
-        $app->get('/user/:username/apikey/:apikey/delete', array($this, 'deleteApiKey'))->via('GET', 'POST')->name('apikey-delete');
+        $app->get('/user/:username/apikey', [$this, 'index'])->name('apikey-show');
+        $app->get('/user/:username/apikey/:apikey/delete', [$this, 'deleteApiKey'])->via('GET', 'POST')->name('apikey-delete');
     }
 
     public function index($username)
@@ -91,14 +91,15 @@ class ApikeyController extends BaseController
         }
 
         $this->render(
-            'Apikey/index.html.twig', [
-            'keys' => $tokens['tokens'],
-            'user' => $_SESSION['user'],
-            'pagination' => $tokens['pagination'],
-            'from' => $from,
-            'to' => $to,
-            'perPage' => $this->resultsPerPage,
-            'page' => $page,
+            'Apikey/index.html.twig',
+            [
+                'keys' => $tokens['tokens'],
+                'user' => $_SESSION['user'],
+                'pagination' => $tokens['pagination'],
+                'from' => $from,
+                'to' => $to,
+                'perPage' => $this->resultsPerPage,
+                'page' => $page,
             ]
         );
     }
@@ -144,7 +145,8 @@ class ApikeyController extends BaseController
                     $apikeyApi->deleteClient($apikey->getApiUri());
 
                     $this->application->flash(
-                        'message', sprintf(
+                        'message',
+                        sprintf(
                             'The API-Key %s has been permanently removed',
                             $apikey->getId()
                         )
