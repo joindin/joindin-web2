@@ -36,7 +36,9 @@
             </tbody>
         {% endif %}
         </table>
-        {% include '_common/pagination.html.twig' with {'pagination': pagination, 'perPage': perPage, 'page': page} %}
+        {%  if pagination.total > perPage %}
+            {% include '_common/pagination.html.twig' with {'pagination': pagination, 'perPage': perPage, 'page': page} %}
+        {% endif %}
     </section>
 
 {% endblock %}
