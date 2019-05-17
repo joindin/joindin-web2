@@ -10,6 +10,11 @@ use Symfony\Component\Form\FormFactoryInterface;
 
 class ApikeyController extends BaseController
 {
+    /**
+     * @var int number of results per pagination page
+     */
+    private $resultsPerPage = 10;
+
     protected function defineRoutes(Slim $app)
     {
         $app->get('/user/:username/apikey', array($this, 'index'))->name('apikey-show');
@@ -32,10 +37,58 @@ class ApikeyController extends BaseController
             );
         }
 
-        $tokenApi = $this->getApikeyApi();
-        $tokens   = $tokenApi->getCollection([]);
+        // construct pagination request data
+        $queryParams = [
+            'resultsperpage' => $this->resultsPerPage,
+        ];
 
-        $this->render('Apikey/index.html.twig', ['keys' => $tokens['tokens'], 'user' => $_SESSION['user']]);
+        // return user to last viewed page (if set)
+        if (!isset($_GET['page'])
+            && !empty($_SESSION['api_key_page'])
+        ) {
+            $page = $_SESSION['api_key_page'];
+        } else {
+            $page = (int) $this->application->request()->get('page');
+        }
+
+        // handle bad request data
+        if ($page < 0) {
+            $page = 0;
+        }
+
+        // define first record in result set
+        if ($page > 0) {
+            $queryParams['start'] = $page * $this->resultsPerPage;
+        }
+
+        // save page position in case user returns
+        $_SESSION['api_key_page'] = $page;
+
+        $tokenApi = $this->getApikeyApi();
+        $tokens   = $tokenApi->getCollection($queryParams);
+
+        // construct index values for page description
+        $from = 1;
+        $to = $this->resultsPerPage;
+
+        if ($page > 0) {
+            $from = $page * $this->resultsPerPage;
+            $to = $from + $this->resultsPerPage;
+
+            if ($to > $tokens['pagination']->total) {
+                $to = $tokens['pagination']->total;
+            }
+        }
+
+        $this->render('Apikey/index.html.twig', [
+            'keys' => $tokens['tokens'],
+            'user' => $_SESSION['user'],
+            'pagination' => $tokens['pagination'],
+            'from' => $from,
+            'to' => $to,
+            'perPage' => $this->resultsPerPage,
+            'page' => $page,
+        ]);
     }
 
     public function deleteApiKey($username, $apikey)
