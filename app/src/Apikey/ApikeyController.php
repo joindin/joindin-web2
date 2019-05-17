@@ -80,7 +80,8 @@ class ApikeyController extends BaseController
             }
         }
 
-        $this->render('Apikey/index.html.twig', [
+        $this->render(
+            'Apikey/index.html.twig', [
             'keys' => $tokens['tokens'],
             'user' => $_SESSION['user'],
             'pagination' => $tokens['pagination'],
@@ -88,7 +89,8 @@ class ApikeyController extends BaseController
             'to' => $to,
             'perPage' => $this->resultsPerPage,
             'page' => $page,
-        ]);
+            ]
+        );
     }
 
     public function deleteApiKey($username, $apikey)
@@ -131,10 +133,12 @@ class ApikeyController extends BaseController
                 try {
                     $apikeyApi->deleteClient($apikey->getApiUri());
 
-                    $this->application->flash('message', sprintf(
-                        'The API-Key %s has been permanently removed',
-                        $apikey->getId()
-                    ));
+                    $this->application->flash(
+                        'message', sprintf(
+                            'The API-Key %s has been permanently removed',
+                            $apikey->getId()
+                        )
+                    );
                     $this->application->redirect(
                         $this->application->urlFor('apikey-show', ['username' => $username])
                     );
