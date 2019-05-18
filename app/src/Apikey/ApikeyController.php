@@ -65,7 +65,7 @@ class ApikeyController extends BaseController
         $_SESSION['api_key_page'] = $page;
 
         $tokenApi = $this->getApikeyApi();
-        $tokens = $tokenApi->getCollection($queryParams);
+        $tokens   = $tokenApi->getCollection($queryParams);
 
         // reset session state if oauth_access_tokens are removed while user is logged in (found during testing)
         if (!isset($tokens['tokens'])) {
@@ -75,11 +75,11 @@ class ApikeyController extends BaseController
 
         // construct index values for page description
         $from = 1;
-        $to = $this->resultsPerPage;
+        $to   = $this->resultsPerPage;
 
         if ($page > 0) {
             $from = $page * $this->resultsPerPage;
-            $to = $from + $this->resultsPerPage;
+            $to   = $from + $this->resultsPerPage;
 
             if ($to > $tokens['pagination']->total) {
                 $to = $tokens['pagination']->total;
@@ -93,13 +93,13 @@ class ApikeyController extends BaseController
         $this->render(
             'Apikey/index.html.twig',
             [
-                'keys' => $tokens['tokens'],
-                'user' => $_SESSION['user'],
+                'keys'       => $tokens['tokens'],
+                'user'       => $_SESSION['user'],
                 'pagination' => $tokens['pagination'],
-                'from' => $from,
-                'to' => $to,
-                'perPage' => $this->resultsPerPage,
-                'page' => $page,
+                'from'       => $from,
+                'to'         => $to,
+                'perPage'    => $this->resultsPerPage,
+                'page'       => $page,
             ]
         );
     }
@@ -129,11 +129,11 @@ class ApikeyController extends BaseController
         }
 
         // default values
-        $data = [];
+        $data               = [];
         $data['apikey_id']  = $apikey->getId();
 
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ApikeyDeleteFormType(), $data);
+        $form    = $factory->create(new ApikeyDeleteFormType(), $data);
 
         $request = $this->application->request();
 
@@ -166,10 +166,10 @@ class ApikeyController extends BaseController
         $this->render(
             'Apikey/delete.html.twig',
             [
-                'apikey' => $apikey,
-                'form' => $form->createView(),
+                'apikey'  => $apikey,
+                'form'    => $form->createView(),
                 'backUri' => $this->application->urlFor('apikey-show', ['username' => $username]),
-                'user' => $_SESSION['user'],
+                'user'    => $_SESSION['user'],
             ]
         );
     }
