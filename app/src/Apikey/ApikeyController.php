@@ -52,13 +52,13 @@ class ApikeyController extends BaseController
         }
 
         // handle bad request data
-        if ($page < 0) {
-            $page = 0;
+        if ($page < 1) {
+            $page = 1;
         }
 
         // define first record in result set
-        if ($page > 0) {
-            $queryParams['start'] = $page * $this->resultsPerPage;
+        if ($page > 1) {
+            $queryParams['start'] = ($page - 1) * $this->resultsPerPage;
         }
 
         // save page position in case user returns
@@ -77,8 +77,8 @@ class ApikeyController extends BaseController
         $from = 1;
         $to   = $this->resultsPerPage;
 
-        if ($page > 0) {
-            $from = $page * $this->resultsPerPage;
+        if ($page > 1) {
+            $from = ($page - 1) * $this->resultsPerPage;
             $to   = $from + $this->resultsPerPage;
 
             if ($to > $tokens['pagination']->total) {
