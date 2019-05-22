@@ -81,6 +81,7 @@ $app->configureMode('development', function () use ($app) {
 
 // register error handlers
 $app->error(function (\Exception $e) use ($app) {
+    error_log(get_class($e) . ': ' . $e->getMessage() . " -- " . $e->getTraceAsString());
     $app->render('Error/error.html.twig', ['exception' => $e]);
 });
 
