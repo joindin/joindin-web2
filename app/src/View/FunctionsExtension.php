@@ -30,7 +30,7 @@ final class FunctionsExtension extends AbstractExtension
 
         return [
             new TwigFunction('urlFor', function ($routeName, $params = array()) use ($app) {
-                $url = $app->urlFor($routeName, $params);
+                $url = rtrim($app->urlFor($routeName, $params), '/');
 
                 return $url;
             }),
