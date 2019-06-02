@@ -36,7 +36,7 @@ class EventController extends BaseController
         $app->get('/event', array($this, 'index'))->name("events-index");
         $app->get('/event/pending', array($this, 'pending'))->name("events-pending");
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
-        $app->map('/event/import', array($this, 'eventImportCsv'))->via('GET', 'POST')->name("event-import-csv");
+        $app->map('/event/:friendly_name/import', array($this, 'eventImportCsv'))->via('GET', 'POST')->name("event-import-csv");
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'eventDefault'))->name("event-default");
         $app->get('/event/:friendly_name/details', array($this, 'details'))->name("event-detail");
@@ -1153,8 +1153,9 @@ class EventController extends BaseController
     /**
      * Upload Data from CSV for this event
      * @todo Validate & Process uploaded cSV
+     * @param string $friendly_name
      */
-    public function eventImportCsv()
+    public function eventImportCsv($friendly_name)
     {
         $config = $this->application->config('oauth');
         $request = $this->application->request();
@@ -1163,10 +1164,35 @@ class EventController extends BaseController
         $factory = $this->application->formFactory;
         $form    = $factory->create(new EventImportFormType());
 
+        //use EventFormImportType to validate the CSV is valid
+        //We possibly want to do some extensive data checking
+        //BEFORE we blindly throw data from here to the API
         if ($request->isPost()) {
-//             use EventFormImportType to validate the CSV is valid
-//             We possibly want to do some extensive data checking
-//             BEFORE we blindly throw data from here to the API
+            try {
+                if (isset($_FILES['event_import']['error']['csv_file'])
+                    && $_FILES['event_import']['error']['csv_file'] == UPLOAD_ERR_OK)
+                {
+                    $handle = fopen($_FILES['event_import']['tmp_name']['csv_file'], "r");
+                    $talks = [];
+                    while(!feof($handle))
+                    {
+                        $talks[] = fgetcsv($handle);
+                    }
+
+                    fclose($handle);
+                    var_dump($talks); exit();
+                }
+            } catch (\Exception $e) {
+                $result = false;
+                $error = $e->getMessage();
+                $messages = json_decode($error);
+                if ($messages) {
+                    $error = implode(', ', $messages);
+                }
+                $form->addError(
+                    new FormError("An error occurred while uploading your event csv: $error")
+                );
+            }
         }
 
         $this->render('Event/import-csv.html.twig', array('form' => $form->createView()));
