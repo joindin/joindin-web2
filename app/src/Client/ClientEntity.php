@@ -2,8 +2,6 @@
 namespace JoindIn\Web\Client;
 
 use JoindIn\Web\Application\BaseEntity;
-use DateTime;
-use DateInterval;
 
 class ClientEntity extends BaseEntity
 {

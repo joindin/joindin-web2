@@ -4,7 +4,6 @@ namespace JoindIn\Web\Event;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Form used to render and validate the submission or editing of a track.

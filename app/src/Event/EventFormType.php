@@ -3,11 +3,11 @@
 namespace JoindIn\Web\Event;
 
 use JoindIn\Web\Event\Constraint\ValidEventIcon;
+use JoindIn\Web\Form\DataTransformer\DateTransformer;
+use JoindIn\Web\Form\DataTransformer\EventTagsTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use JoindIn\Web\Form\DataTransformer\DateTransformer;
-use JoindIn\Web\Form\DataTransformer\EventTagsTransformer;
 
 /**
  * Form used to render and validate the submission of a new event.

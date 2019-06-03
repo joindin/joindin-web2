@@ -1,10 +1,10 @@
 <?php
 namespace JoindIn\Web\Talk;
 
-use JoindIn\Web\Application\BaseEntity;
 use ArrayAccess;
 use DateInterval;
 use DateTime;
+use JoindIn\Web\Application\BaseEntity;
 
 class TalkEntity extends BaseEntity implements ArrayAccess
 {

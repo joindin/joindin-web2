@@ -1,8 +1,6 @@
 <?php
 namespace JoindIn\Web\Application;
 
-use JoindIn\Web\Application\CacheService;
-
 abstract class BaseDb
 {
     /** @var CacheService */

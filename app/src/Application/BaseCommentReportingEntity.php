@@ -1,7 +1,6 @@
 <?php
 namespace JoindIn\Web\Application;
 
-use JoindIn\Web\Application\BaseEntity;
 use stdClass;
 
 abstract class BaseCommentReportingEntity extends BaseEntity

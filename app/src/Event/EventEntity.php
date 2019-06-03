@@ -1,8 +1,8 @@
 <?php
 namespace JoindIn\Web\Event;
 
-use JoindIn\Web\Application\BaseEntity;
 use DateTime;
+use JoindIn\Web\Application\BaseEntity;
 
 class EventEntity extends BaseEntity
 {

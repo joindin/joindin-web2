@@ -2,14 +2,14 @@
 namespace JoindIn\Web\User;
 
 use JoindIn\Web\Application\BaseController;
-use Symfony\Component\Form\FormError;
-use Slim\Slim;
-use JoindIn\Web\Talk\TalkDb;
-use JoindIn\Web\Talk\TalkApi;
-use JoindIn\Web\Event\EventDb;
 use JoindIn\Web\Event\EventApi;
-use Symfony\Component\Form\FormFactoryInterface;
+use JoindIn\Web\Event\EventDb;
+use JoindIn\Web\Talk\TalkApi;
+use JoindIn\Web\Talk\TalkDb;
+use Slim\Slim;
 use stdClass;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
 class UserController extends BaseController

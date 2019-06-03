@@ -2,7 +2,7 @@
 namespace JoindIn\Web\Application;
 
 use Slim\Slim;
-use Twig_Error_Runtime;
+use Twig\Error\RuntimeError;
 
 abstract class BaseController
 {
@@ -35,7 +35,7 @@ abstract class BaseController
     {
         try {
             $this->application->render($template, $data, $status);
-        } catch (Twig_Error_Runtime $e) {
+        } catch (RuntimeError $e) {
             $this->application->render(
                 'Error/app_load_error.html.twig',
                 [

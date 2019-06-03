@@ -1,12 +1,12 @@
 <?php
 namespace JoindIn\Web\Event;
 
+use DateTime;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use JoindIn\Web\Application\BaseApi;
-use DateTime;
-use Exception;
 use JoindIn\Web\Talk\TalkCommentEntity;
 use JoindIn\Web\Talk\TalkCommentReportEntity;
 use JoindIn\Web\User\UserApi;

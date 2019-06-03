@@ -1,9 +1,9 @@
 <?php
 namespace JoindIn\Web\Form\DataTransformer;
 
+use DateTime;
+use DateTimeZone;
 use Symfony\Component\Form\DataTransformerInterface;
-use \DateTime;
-use \DateTimeZone;
 
 class DateTransformer implements DataTransformerInterface
 {

@@ -72,17 +72,17 @@ class ValidationMiddleware extends Middleware
      * Generally this method does not need to be called directly; it is used in a callback that created a shared
      * instance in the container of Slim.
      *
+     * @return ValidatorInterface
      * @see self::call() where this method is used to construct a shared instance in Slim.
      *
-     * @return ValidatorInterface
      */
     public function createValidator()
     {
         $validator = Validation::createValidatorBuilder()
-            ->setMetadataFactory(new LazyLoadingMetadataFactory(new StaticMethodLoader()))
-            ->setConstraintValidatorFactory(new ConstraintValidatorFactory())
-            ->setTranslator($this->getTranslator())
-            ->getValidator();
+                               ->setMetadataFactory(new LazyLoadingMetadataFactory(new StaticMethodLoader()))
+                               ->setConstraintValidatorFactory(new ConstraintValidatorFactory())
+                               ->setTranslator($this->getTranslator())
+                               ->getValidator();
 
         return $validator;
     }
@@ -112,7 +112,7 @@ class ValidationMiddleware extends Middleware
      */
     private function getTranslator()
     {
-        if (!$this->app->translator instanceof Translator) {
+        if ( ! $this->app->translator instanceof Translator) {
             $this->app->translator = new Translator($this->locale, new MessageSelector());
             $this->app->translator->addLoader('array', new ArrayLoader());
             $this->app->translator->addLoader('xliff', new XliffFileLoader());

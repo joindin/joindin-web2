@@ -2,7 +2,6 @@
 namespace JoindIn\Web\Talk;
 
 use JoindIn\Web\Application\BaseCommentEntity;
-use stdClass;
 
 class TalkCommentEntity extends BaseCommentEntity
 {

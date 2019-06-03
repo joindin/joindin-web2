@@ -1,23 +1,20 @@
 <?php
 namespace JoindIn\Web\Event;
 
+use Exception;
 use JoindIn\Web\Application\BaseController;
 use JoindIn\Web\Application\CacheService;
+use JoindIn\Web\Language\LanguageApi;
+use JoindIn\Web\Talk\TalkApi;
+use JoindIn\Web\Talk\TalkDb;
+use JoindIn\Web\Talk\TalkFormType;
+use JoindIn\Web\Talk\TalkTypeApi;
+use JoindIn\Web\User\UserApi;
 use Slim\Exception\Stop;
-use Symfony\Component\Form\Form;
+use Slim\Slim;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Validator\Validator;
-use JoindIn\Web\Talk\TalkDb;
-use JoindIn\Web\Talk\TalkApi;
-use JoindIn\Web\Talk\TalkFormType;
-use JoindIn\Web\Talk\TalkTypeApi;
-use JoindIn\Web\User\UserDb;
-use JoindIn\Web\User\UserApi;
-use Exception;
-use Slim\Slim;
-use JoindIn\Web\Language\LanguageApi;
 
 class EventController extends BaseController
 {

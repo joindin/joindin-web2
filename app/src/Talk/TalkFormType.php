@@ -2,11 +2,11 @@
 
 namespace JoindIn\Web\Talk;
 
+use DateTimeImmutable;
+use JoindIn\Web\Event\EventEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use JoindIn\Web\Event\EventEntity;
-use DateTimeImmutable;
 
 /**
  * Form used to render and validate the submission or editing of a talk.
@@ -19,12 +19,12 @@ class TalkFormType extends AbstractType
     protected $timezone;
 
     /**
-     * @var \DateTimeImmutable
+     * @var DateTimeImmutable
      */
     protected $startDate;
 
     /**
-     * @var \DateTimeImmutable
+     * @var DateTimeImmutable
      */
     protected $endDate;
 
@@ -47,8 +47,8 @@ class TalkFormType extends AbstractType
     {
         $this->timezone  = $event->getFullTimezone();
         $tz              = new \DateTimeZone($this->timezone);
-        $this->startDate = new \DateTimeImmutable($event->getStartDate(), $tz);
-        $this->endDate   = new \DateTimeImmutable($event->getEndDate(), $tz);
+        $this->startDate = new DateTimeImmutable($event->getStartDate(), $tz);
+        $this->endDate   = new DateTimeImmutable($event->getEndDate(), $tz);
 
         $this->languages = $languages;
         $this->talkTypes = $talkTypes;
