@@ -1,7 +1,8 @@
 <?php
 
-namespace Application;
+namespace JoindIn\Web\Tests\Application;
 
+use JoindIn\Web\Application\Config;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -13,9 +14,9 @@ class ConfigTest extends TestCase
     {
         $this->config = new Config(
             [
-                'db' => 'mysql',
-                'engine' => 'fast',
-                'testing' => true,
+                'db'              => 'mysql',
+                'engine'          => 'fast',
+                'testing'         => true,
                 'another setting' => 17,
             ]
         );
@@ -45,7 +46,7 @@ class ConfigTest extends TestCase
     public function testConfigCanGetSetting($settings, $key, $expected): void
     {
         $config = new Config($settings);
-        $value = $config->offsetGet($key);
+        $value  = $config->offsetGet($key);
 
         $this->assertEquals($expected, $value);
     }
