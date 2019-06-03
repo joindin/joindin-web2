@@ -17,7 +17,8 @@ session_set_cookie_params(60*60*24*7); // One week cookie
 session_cache_limiter(false);
 session_start();
 
-$config     = [];
+$config = [];
+
 $configFile = realpath(__DIR__ . '/../config/config.php');
 if (is_readable($configFile)) {
     include $configFile;
@@ -79,6 +80,7 @@ $app->configureMode('development', function () use ($app) {
 
 // register error handlers
 $app->error(function (\Exception $e) use ($app) {
+    error_log(get_class($e) . ': ' . $e->getMessage() . " -- " . $e->getTraceAsString());
     $app->render('Error/error.html.twig', ['exception' => $e]);
 });
 
