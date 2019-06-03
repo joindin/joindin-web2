@@ -1155,7 +1155,7 @@ class EventController extends BaseController
      * @todo Validate & Process uploaded cSV
      * @param string $friendly_name
      */
-    public function eventImportCsv($friendly_name)
+    public function eventImportCsv($eventSlug)
     {
         $config = $this->application->config('oauth');
         $request = $this->application->request();
@@ -1170,13 +1170,39 @@ class EventController extends BaseController
         if ($request->isPost()) {
             try {
                 if (isset($_FILES['event_import']['error']['csv_file'])
-                    && $_FILES['event_import']['error']['csv_file'] == UPLOAD_ERR_OK)
-                {
+                    && $_FILES['event_import']['error']['csv_file'] == UPLOAD_ERR_OK) {
+                    $eventApi = $this->getEventApi();
+                    $event = $eventApi->getByFriendlyUrl($eventSlug);
                     $handle = fopen($_FILES['event_import']['tmp_name']['csv_file'], "r");
                     $talks = [];
-                    while(!feof($handle))
-                    {
-                        $talks[] = fgetcsv($handle);
+
+                    while (!feof($handle)) {
+                        $talk = fgetcsv($handle);
+                        $date_start = new \DateTime();
+                        $date_start->setTimestamp(
+                            strtotime($talk[3].' '.$talk[4])
+                        );
+
+                        $date_end = $date_start->modify( '+'.$talk[5].' minutes');
+
+                        echo "<pre>";
+                        var_dump($date_start);
+                        var_dump($date_end);
+                        exit();
+                        $talk_data = [
+                            'name' => $talk[0],
+                            'description' => $talk[1],
+                            'type' => $talk[7],
+                            'track' => $talk[8],
+                            'language' => $talk[6],
+                            'date_start' => $date_start,
+                            'date_end' => $date_end,
+                            'speakers' => [$talk[2]],
+                            'location' => 'location',
+                        ];
+                        $talk_api = $this->getTalkApi();
+                        $talk_api->addTalk($event->getUri(), $talk_data);
+
                     }
 
                     fclose($handle);
