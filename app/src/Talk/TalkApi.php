@@ -3,7 +3,6 @@ namespace JoindIn\Web\Talk;
 
 use JoindIn\Web\Application\BaseApi;
 use Exception;
-use Talk\Comment;
 use JoindIn\Web\User\UserApi;
 
 class TalkApi extends BaseApi
@@ -493,7 +492,7 @@ class TalkApi extends BaseApi
         }
 
         $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links';
-        $params = [
+        $params  = [
             'display_name' => $media['type'],
             'url'          => $media['url'],
         ];
@@ -509,7 +508,7 @@ class TalkApi extends BaseApi
     protected function updateTalkMedia($talkId, $mediaId, $media)
     {
         $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
-        $params = [
+        $params  = [
             'display_name' => $media['type'],
             'url'          => $media['url'],
         ];
@@ -524,6 +523,7 @@ class TalkApi extends BaseApi
     protected function deleteTalkMedia($talkId, $mediaId)
     {
         $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
+
         list($status, $result, $headers) = $this->apiDelete($talkUrl);
 
         if ($status == 204) {

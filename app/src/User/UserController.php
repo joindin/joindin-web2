@@ -258,7 +258,7 @@ class UserController extends BaseController
     public function profile($username)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
+        $user    = $userApi->getUserByUsername($username);
         if (!$user) {
             Slim::getInstance()->notFound();
         }
@@ -516,12 +516,12 @@ class UserController extends BaseController
         $eventData = $eventDb->load('uri', $eventUri);
         if (isset($eventData['name'])) {
             $eventInfo['url_friendly_name'] = $eventData['url_friendly_name'];
-            $eventInfo['name'] = $eventData['name'];
+            $eventInfo['name']              = $eventData['name'];
         } else {
             $event = $eventApi->getEvent($eventUri);
             if ($event) {
                 $eventInfo['url_friendly_name'] = $event->getUrlFriendlyName();
-                $eventInfo['name'] = $event->getName();
+                $eventInfo['name']              = $event->getName();
             }
         }
 

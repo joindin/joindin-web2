@@ -224,7 +224,7 @@ class ClientController extends BaseController
     private function addClientUsingForm(Form $form)
     {
         $clientApi = $this->getClientApi();
-        $values = $form->getData();
+        $values    = $form->getData();
 
         $result = false;
         try {

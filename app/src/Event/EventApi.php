@@ -367,7 +367,7 @@ class EventApi extends BaseApi
                 ]
             ];
 
-            $request = new Request('POST', $imagesUri);
+            $request  = new Request('POST', $imagesUri);
             $response = $client->send($request, $options);
         } catch (RequestException $e) {
             $body = $e->getResponse()->getBody();

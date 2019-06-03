@@ -16,7 +16,7 @@ class TalkDb extends BaseDb
     {
         $data = $this->cache->loadByKeys($this->keyName, [
             'event_uri' => $eventUri,
-            'slug' => $slug
+            'slug'      => $slug
         ]);
 
         if ($data) {

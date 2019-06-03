@@ -56,7 +56,6 @@ class EventFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         list($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
 
         $timezone = null;
@@ -264,7 +263,7 @@ class EventFormType extends AbstractType
         array_pop($timezones); // Remove UTC from the end of the list
 
         $continents = [];
-        $cities = [];
+        $cities     = [];
 
         foreach ($timezones as $timezone) {
             list($continent, $city) = explode('/', $timezone, 2);

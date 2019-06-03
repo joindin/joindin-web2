@@ -284,9 +284,9 @@ class EventController extends BaseController
         $this->render(
             'Event/comments.html.twig',
             [
-                'event' => $event,
+                'event'     => $event,
                 'quicklink' => $quicklink,
-                'comments' => $comments,
+                'comments'  => $comments,
             ]
         );
     }
@@ -299,7 +299,7 @@ class EventController extends BaseController
         $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
             $comments = $eventApi->getTalkComments(
@@ -346,7 +346,7 @@ class EventController extends BaseController
     public function slides($friendly_name)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if (! $event) {
             $this->redirectToListPage();
@@ -930,7 +930,7 @@ class EventController extends BaseController
                 $this->redirectToDetailPage($event->getUrlFriendlyName());
             }
             $reported_uri = $this->application->request->post('reported_uri');
-            $decision = $this->application->request->post('decision');
+            $decision     = $this->application->request->post('decision');
 
             $eventApi->moderateComment($reported_uri, $decision);
             if ($decision == 'approved') {
@@ -1133,7 +1133,7 @@ class EventController extends BaseController
                 $values = $form->getdata();
 
                 try {
-                    $eventTracksUri = $event->getTracksUri();
+                    $eventTracksUri   = $event->getTracksUri();
                     $updatedTrackUris = [];
                     foreach ($values['tracks'] as $item) {
                         if ($item['uri']) {

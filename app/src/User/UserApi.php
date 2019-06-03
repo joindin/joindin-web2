@@ -69,7 +69,6 @@ class UserApi extends BaseApi
      */
     public function register($data)
     {
-
         list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
 
         if ($status == 201) {
@@ -323,7 +322,7 @@ class UserApi extends BaseApi
     public function getCollection(array $queryParams = [])
     {
         $usersUri = $this->baseApiUrl . '/v2.1/users';
-        $users = (array)json_decode(
+        $users    = (array)json_decode(
             $this->apiGet($usersUri, $queryParams)
         );
         $meta = array_pop($users);

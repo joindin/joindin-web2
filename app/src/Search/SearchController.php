@@ -71,7 +71,6 @@ class SearchController extends BaseController
      */
     public function searchEvents()
     {
-
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $tag     = $this->sanitizeTag($this->application->request()->get('tag'));
         $events  = [];

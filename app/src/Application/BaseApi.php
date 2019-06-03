@@ -170,12 +170,12 @@ abstract class BaseApi
         }
 
         if ($this->proxy) {
-            $contextOpts['http']['proxy'] = $this->proxy;
+            $contextOpts['http']['proxy']           = $this->proxy;
             $contextOpts['http']['request_fulluri'] = true;
         }
 
         $streamContext = stream_context_create($contextOpts);
-        $result = file_get_contents($url, 0, $streamContext);
+        $result        = file_get_contents($url, 0, $streamContext);
         if (false === $result) {
             throw new Exception('Unable to connect to API');
         }

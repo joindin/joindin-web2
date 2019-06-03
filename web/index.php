@@ -52,12 +52,10 @@ $app->view()->appendData(
 );
 
 // Other variables needed by the main layout.html.twig template
-$app->view()->appendData(
-    [
-        'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
-        'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
-    ]
-);
+$app->view()->appendData([
+    'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
+    'user'                => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
+]);
 
 // set Twig base folder, view folder and initialize Joindin filters
 $app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');

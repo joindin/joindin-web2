@@ -518,7 +518,7 @@ class TalkController extends BaseController
         }
 
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $event    = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (! $event->getCanEdit()) {
             $this->application->redirect(

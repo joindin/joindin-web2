@@ -16,7 +16,7 @@ class AuthApi extends BaseApi
      */
     public function login($username, $password, $clientId, $clientSecret)
     {
-        $url = $this->baseApiUrl . '/v2.1/token';
+        $url    = $this->baseApiUrl . '/v2.1/token';
         $params = [
             'grant_type'    => 'password',
             'client_id'     => $clientId,
@@ -44,7 +44,7 @@ class AuthApi extends BaseApi
      */
     public function getTwitterRequestToken($clientId, $clientSecret)
     {
-        $url = $this->baseApiUrl . '/v2.1/twitter/request_token';
+        $url    = $this->baseApiUrl . '/v2.1/twitter/request_token';
         $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
@@ -70,7 +70,7 @@ class AuthApi extends BaseApi
      */
     public function verifyTwitter($clientId, $clientSecret, $token, $verifier)
     {
-        $url = $this->baseApiUrl . '/v2.1/twitter/token';
+        $url    = $this->baseApiUrl . '/v2.1/twitter/token';
         $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
