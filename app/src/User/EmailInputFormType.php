@@ -39,7 +39,7 @@ class EmailInputFormType extends AbstractType
                 'email',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )

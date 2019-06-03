@@ -15,10 +15,10 @@ class UserDb extends BaseDb
     public function save(UserEntity $user)
     {
         $data = [
-            'uri'  => $user->getUri(),
-            'username' => $user->getUsername(),
-            'slug' => $user->getUsername(),
-            'verbose_uri'  => $user->getVerboseUri()
+            'uri'         => $user->getUri(),
+            'username'    => $user->getUsername(),
+            'slug'        => $user->getUsername(),
+            'verbose_uri' => $user->getVerboseUri()
         ];
 
         $savedUser = $this->load('uri', $user->getUri());

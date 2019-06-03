@@ -27,35 +27,55 @@ class EventController extends BaseController
     public function __construct(Slim $app)
     {
         parent::__construct($app);
-        $this->itemsPerPage = 10;
+        $this->itemsPerPage        = 10;
         $this->pendingItemsPerPage = 30;
     }
 
     protected function defineRoutes(Slim $app)
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
-        $app->get('/event', [$this, 'index'])->name("events-index");
-        $app->get('/event/pending', [$this, 'pending'])->name("events-pending");
-        $app->map('/event/submit', [$this, 'submit'])->via('GET', 'POST')->name('event-submit');
-        $app->get('/event/callforpapers', [$this, 'callForPapers'])->name('event-call-for-papers');
-        $app->get('/event/:friendly_name', [$this, 'eventDefault'])->name("event-default");
-        $app->get('/event/:friendly_name/details', [$this, 'details'])->name("event-detail");
-        $app->get('/event/:friendly_name/attendees', [$this, 'attendees'])->name("event-attendees");
-        $app->get('/event/:friendly_name/slides', [$this, 'slides'])->name("event-slides");
-        $app->get('/event/:friendly_name/comments', [$this, 'comments'])->name("event-comments");
+        $app->get('/event', [$this, 'index'])
+            ->name("events-index");
+        $app->get('/event/pending', [$this, 'pending'])
+            ->name("events-pending");
+        $app->map('/event/submit', [$this, 'submit'])
+            ->via('GET', 'POST')
+            ->name('event-submit');
+        $app->get('/event/callforpapers', [$this, 'callForPapers'])
+            ->name('event-call-for-papers');
+        $app->get('/event/:friendly_name', [$this, 'eventDefault'])
+            ->name("event-default");
+        $app->get('/event/:friendly_name/details', [$this, 'details'])
+            ->name("event-detail");
+        $app->get('/event/:friendly_name/attendees', [$this, 'attendees'])
+            ->name("event-attendees");
+        $app->get('/event/:friendly_name/slides', [$this, 'slides'])
+            ->name("event-slides");
+        $app->get('/event/:friendly_name/comments', [$this, 'comments'])
+            ->name("event-comments");
         $app->get('/event/:friendly_name/comments/:comment_hash/report', [$this, 'reportComment'])
             ->name("event-comments-reported");
-        $app->get('/event/:friendly_name/schedule', [$this, 'schedule'])->name("event-schedule");
-        $app->get('/event/:friendly_name/schedule/list(/:starred)', [$this, 'scheduleList'])->name("event-schedule-list");
-        $app->get('/event/:friendly_name/schedule/grid(/:starred)', [$this, 'scheduleGrid'])->name("event-schedule-grid");
-        $app->get('/event/:friendly_name/talk-comments', [$this, 'talkComments'])->name("event-talk-comments");
-        $app->post('/event/:friendly_name/add-comment', [$this, 'addComment'])->name('event-add-comment');
-        $app->map('/event/:friendly_name/edit', [$this, 'edit'])->via('GET', 'POST')->name('event-edit');
-        $app->get('/e/:stub', [$this, 'quicklink'])->name("event-quicklink");
+        $app->get('/event/:friendly_name/schedule', [$this, 'schedule'])
+            ->name("event-schedule");
+        $app->get('/event/:friendly_name/schedule/list(/:starred)', [$this, 'scheduleList'])
+            ->name("event-schedule-list");
+        $app->get('/event/:friendly_name/schedule/grid(/:starred)', [$this, 'scheduleGrid'])
+            ->name("event-schedule-grid");
+        $app->get('/event/:friendly_name/talk-comments', [$this, 'talkComments'])
+            ->name("event-talk-comments");
+        $app->post('/event/:friendly_name/add-comment', [$this, 'addComment'])
+            ->name('event-add-comment');
+        $app->map('/event/:friendly_name/edit', [$this, 'edit'])
+            ->via('GET', 'POST')
+            ->name('event-edit');
+        $app->get('/e/:stub', [$this, 'quicklink'])
+            ->name("event-quicklink");
         $app->get('/event/xhr-attend/:friendly_name', [$this, 'xhrAttend']);
         $app->get('/event/xhr-unattend/:friendly_name', [$this, 'xhrUnattend']);
-        $app->get('/event/attend/:friendly_name', [$this, 'attend'])->name("event-attend");
-        $app->get('/event/unattend/:friendly_name', [$this, 'unattend'])->name("event-unattend");
+        $app->get('/event/attend/:friendly_name', [$this, 'attend'])
+            ->name("event-attend");
+        $app->get('/event/unattend/:friendly_name', [$this, 'unattend'])
+            ->name("event-unattend");
         $app->post('/event/action-pending-event/:friendly_name', [$this, 'actionPendingEvent'])
             ->name("event-action-pending");
         $app->get('/event/view/:eventId(/:extra+)', [$this, 'redirectFromId'])
@@ -65,18 +85,21 @@ class EventController extends BaseController
             ->name("event-reported-comments");
         $app->post('/event/:friendly_name/moderate-comment', [$this, 'moderateComment'])
             ->name("event-moderate-comment");
-        $app->map('/event/:friendly_name/add-talk', [$this, 'addTalk'])->via('GET', 'POST')
+        $app->map('/event/:friendly_name/add-talk', [$this, 'addTalk'])
+            ->via('GET', 'POST')
             ->name("event-add-talk");
-        $app->map('/event/:friendly_name/edit-tracks', [$this, 'editTracks'])->via('GET', 'POST')
+        $app->map('/event/:friendly_name/edit-tracks', [$this, 'editTracks'])
+            ->via('GET', 'POST')
             ->name("event-edit-tracks");
-        $app->map('/event/:friendly_name/claims', [$this, 'talkClaims'])->via('GET', 'POST')
+        $app->map('/event/:friendly_name/claims', [$this, 'talkClaims'])
+            ->via('GET', 'POST')
             ->name("event-talk-claims");
     }
 
     public function index()
     {
         $start = null;
-        $page = (int)$this->application->request()->get('page');
+        $page  = (int)$this->application->request()->get('page');
 
         if (array_key_exists('events_list_middle_start', $_SESSION) && $page !== 0) {
             // use the middle start point that we've remembered, unless it's page zero,
@@ -85,12 +108,12 @@ class EventController extends BaseController
 
             if ($start < 0) {
                 $this->itemsPerPage = $start + $this->itemsPerPage;
-                $start = 0;
+                $start              = 0;
             }
         }
 
         $eventApi = $this->getEventApi();
-        $events = $eventApi->getEvents($this->itemsPerPage, $start, 'all');
+        $events   = $eventApi->getEvents($this->itemsPerPage, $start, 'all');
         if ($start === null) {
             // Find out the start number that has been sent back to us by the API
             if (isset($events['pagination'])) {
@@ -107,9 +130,9 @@ class EventController extends BaseController
         $this->render(
             'Event/index.html.twig',
             [
-                'page' => $page,
+                'page'       => $page,
                 'cfp_events' => $cfpEvents,
-                'events' => $events
+                'events'     => $events
             ]
         );
     }
@@ -128,7 +151,7 @@ class EventController extends BaseController
         $start = ($page -1) * $this->pendingItemsPerPage;
 
         $eventApi = $this->getEventApi();
-        $events = $eventApi->getEvents(
+        $events   = $eventApi->getEvents(
             $this->pendingItemsPerPage,
             $start,
             'pending',
@@ -138,7 +161,7 @@ class EventController extends BaseController
         $this->render(
             'Event/pending.html.twig',
             [
-                'page' => $page,
+                'page'   => $page,
                 'events' => $events
             ]
         );
@@ -152,7 +175,7 @@ class EventController extends BaseController
         $start = ($page -1) * $this->itemsPerPage;
 
         $eventApi = $this->getEventApi();
-        $events = $eventApi->getEvents(
+        $events   = $eventApi->getEvents(
             $this->itemsPerPage,
             $start,
             'cfp',
@@ -162,7 +185,7 @@ class EventController extends BaseController
         $this->render(
             'Event/call-for-papers.html.twig',
             [
-                'page' => $page,
+                'page'   => $page,
                 'events' => $events,
             ]
         );
@@ -217,7 +240,7 @@ class EventController extends BaseController
         $this->render(
             'Event/details.html.twig',
             [
-                'event' => $event,
+                'event'     => $event,
                 'quicklink' => $quicklink,
                 'attendees' => $attendees
             ]
@@ -295,10 +318,10 @@ class EventController extends BaseController
             $this->render(
                 'Event/talk-comments.html.twig',
                 [
-                    'event' => $event,
-                    'page' => $page,
+                    'event'        => $event,
+                    'page'         => $page,
                     'talkComments' => $comments,
-                    'talkSlugs' => $slugs,
+                    'talkSlugs'    => $slugs,
                 ]
             );
         } else {
@@ -332,7 +355,7 @@ class EventController extends BaseController
         $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
 
         $this->render('Event/slides.html.twig', [
-            'event' => $event,
+            'event'  => $event,
             'agenda' => $agenda,
         ]);
     }
@@ -340,7 +363,7 @@ class EventController extends BaseController
     public function scheduleList($friendly_name, $starred = false)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if (! $event) {
             $this->redirectToListPage();
@@ -350,8 +373,8 @@ class EventController extends BaseController
 
         $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
 
-        $request = $this->application->request();
-        $starredOnly = ($starred === 'starred');
+        $request                  = $this->application->request();
+        $starredOnly              = ($starred === 'starred');
         $currentUrlWithoutStarred = str_replace('/starred', '', $request->getResourceUri());
 
 
@@ -373,7 +396,7 @@ class EventController extends BaseController
     public function scheduleGrid($friendly_name, $starred = false)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if (! $event) {
             $this->redirectToListPage();
@@ -381,13 +404,13 @@ class EventController extends BaseController
 
         setcookie('schedule-view', 'grid', strtotime('+2 years'), '/');
 
-        $talkApi = $this->getTalkApi();
+        $talkApi   = $this->getTalkApi();
         $scheduler = new EventScheduler($talkApi);
 
         $schedule = $scheduler->getScheduleData($event);
 
-        $request = $this->application->request();
-        $starredOnly = ($starred === 'starred');
+        $request                  = $this->application->request();
+        $starredOnly              = ($starred === 'starred');
         $currentUrlWithoutStarred = str_replace('/starred', '', $request->getResourceUri());
 
         // Does it end in /schedule/grid or are we on the default event page
@@ -408,7 +431,7 @@ class EventController extends BaseController
     public function quicklink($stub)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByStub($stub);
+        $event    = $eventApi->getByStub($stub);
         if (! $event) {
             $this->redirectToListPage();
         }
@@ -420,12 +443,12 @@ class EventController extends BaseController
     {
         $request = $this->application->request();
         $comment = $request->post('comment');
-        $rating = (int) $request->post('rating');
-        $url = $this->application->urlFor("event-comments", ['friendly_name' => $friendly_name]);
-        $url .= '#add-comment';
+        $rating  = (int)$request->post('rating');
+        $url     = $this->application->urlFor("event-comments", ['friendly_name' => $friendly_name]);
+        $url     .= '#add-comment';
 
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if ($event) {
             try {
                 $eventApi->addComment($event, $comment, $rating);
@@ -456,8 +479,8 @@ class EventController extends BaseController
     public function reportComment($friendly_name, $comment_hash)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
-        $url = $this->application->urlFor("event-comments", ['friendly_name' => $friendly_name]);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+        $url      = $this->application->urlFor("event-comments", ['friendly_name' => $friendly_name]);
 
         $comments = $eventApi->getComments($event->getCommentsUri());
         foreach ($comments as $comment) {
@@ -487,7 +510,7 @@ class EventController extends BaseController
     public function attend($friendly_name)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
             $eventApi->attend($event, $_SESSION['user']);
@@ -504,7 +527,7 @@ class EventController extends BaseController
     public function unattend($friendly_name)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
             $eventApi->unattend($event, $_SESSION['user']);
@@ -651,7 +674,7 @@ class EventController extends BaseController
     public function redirectFromId($eventId, $extra = false)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getEventById($eventId);
+        $event    = $eventApi->getEventById($eventId);
         if (!$event) {
             return Slim::getInstance()->notFound();
         }
@@ -663,14 +686,18 @@ class EventController extends BaseController
                     ['friendly_name' => $event->getUrlFriendlyName()]
                 )
             );
-        } if ($extra && is_array($extra) && ($extra[0] == "comments")) {
+        }
+
+        if ($extra && is_array($extra) && ($extra[0] == "comments")) {
             $this->application->redirect(
                 $this->application->urlFor(
                     'event-comments',
                     ['friendly_name' => $event->getUrlFriendlyName()]
                 )
             );
-        } if ($extra && is_array($extra) && ($extra[0] == "talks")) {
+        }
+
+        if ($extra && is_array($extra) && ($extra[0] == "talks")) {
             $this->application->redirect(
                 $this->application->urlFor(
                     'event-schedule',
@@ -700,7 +727,7 @@ class EventController extends BaseController
     private function addEventUsingForm(FormInterface $form)
     {
         $eventApi = $this->getEventApi();
-        $values = $form->getData();
+        $values   = $form->getData();
 
         $result = false;
         try {
@@ -727,7 +754,7 @@ class EventController extends BaseController
     private function editEventUsingForm(FormInterface $form)
     {
         $eventApi = $this->getEventApi();
-        $values = $form->getData()->toArray();
+        $values   = $form->getData()->toArray();
 
         $result = false;
         try {
@@ -747,8 +774,8 @@ class EventController extends BaseController
                 );
             }
         } catch (\Exception $e) {
-            $result = false;
-            $error = $e->getMessage();
+            $result   = false;
+            $error    = $e->getMessage();
             $messages = json_decode($error);
             if ($messages) {
                 $error = implode(', ', $messages);
@@ -763,8 +790,8 @@ class EventController extends BaseController
 
     protected function getEventApi()
     {
-        $cache = $this->getCache();
-        $eventDb = new EventDb($cache);
+        $cache    = $this->getCache();
+        $eventDb  = new EventDb($cache);
         $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
 
         return $eventApi;
@@ -823,7 +850,7 @@ class EventController extends BaseController
     {
         $this->application->response()->header('Content-Type', 'application/json');
 
-        $api = $this->getEventApi();
+        $api   = $this->getEventApi();
         $event = $api->getByFriendlyUrl($friendly_name);
 
         if ($event) {
@@ -837,7 +864,7 @@ class EventController extends BaseController
     {
         $this->application->response()->header('Content-Type', 'application/json');
 
-        $api = $this->getEventApi();
+        $api   = $this->getEventApi();
         $event = $api->getByFriendlyUrl($friendly_name);
 
         if ($event) {
@@ -850,7 +877,7 @@ class EventController extends BaseController
     public function reportedComments($friendly_name)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
             if (! $event->getCanEdit()) {
@@ -868,7 +895,7 @@ class EventController extends BaseController
             $this->render(
                 'Event/reported-comments.html.twig',
                 [
-                    'event' => $event,
+                    'event'         => $event,
                     'eventComments' => $eventComments,
                     'talkComments'  => $talkComments,
                 ]
@@ -896,7 +923,7 @@ class EventController extends BaseController
         }
 
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
             if (! $event->getCanEdit()) {
@@ -925,9 +952,8 @@ class EventController extends BaseController
             );
         }
 
-
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
             if (!$event->getCanEdit()) {
@@ -944,7 +970,7 @@ class EventController extends BaseController
             foreach ($claims as &$claim) {
                 $claim->user = $userApi->getUser($claim->speaker_uri);
                 $claim->talk = $talkApi->getTalk($claim->talk_uri);
-                $action = $this->application->request->post('action');
+                $action      = $this->application->request->post('action');
 
                 if ($this->application->request->post('display_name')
                     && $this->application->request->post('display_name') == $claim->display_name
@@ -967,7 +993,7 @@ class EventController extends BaseController
             $this->render(
                 'Event/pending-claims.html.twig',
                 [
-                    'event' => $event,
+                    'event'  => $event,
                     'claims' => $claims,
                 ]
             );
@@ -998,7 +1024,7 @@ class EventController extends BaseController
     public function addTalk($friendly_name)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (!$event) {
             return Slim::getInstance()->notFound();
         }
@@ -1008,13 +1034,13 @@ class EventController extends BaseController
         }
 
         $languageApi = $this->getLanguageApi();
-        $languages = $languageApi->getLanguagesChoiceList();
+        $languages   = $languageApi->getLanguagesChoiceList();
 
         $talkTypeApi = $this->getTalkTypeApi();
-        $talkTypes = $talkTypeApi->getTalkTypesChoiceList();
+        $talkTypes   = $talkTypeApi->getTalkTypesChoiceList();
 
         $trackApi = $this->getTrackApi();
-        $tracks = $trackApi->getTracksChoiceList($event->getTracksUri());
+        $tracks   = $trackApi->getTracksChoiceList($event->getTracksUri());
 
         // default values
         $sessionKeys = ['duration', 'language', 'type', 'track'];
@@ -1025,7 +1051,7 @@ class EventController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks), $data);
+        $form    = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks), $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -1041,7 +1067,7 @@ class EventController extends BaseController
 
                 try {
                     $talkApi = $this->getTalkApi();
-                    $talk = $talkApi->addTalk($event->getTalksUri(), $values);
+                    $talk    = $talkApi->addTalk($event->getTalksUri(), $values);
 
                     if (!empty($values['track']) && isset($tracks[$values['track']])) {
                         $talkApi->addTalkToTrack($talk->getTracksUri(), $values['track']);
@@ -1063,7 +1089,7 @@ class EventController extends BaseController
             'Event/add-talk.html.twig',
             [
                 'event' => $event,
-                'form' => $form->createView(),
+                'form'  => $form->createView(),
             ]
         );
     }
@@ -1076,7 +1102,7 @@ class EventController extends BaseController
     public function editTracks($friendly_name)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (!$event) {
             return Slim::getInstance()->notFound();
         }
@@ -1085,8 +1111,8 @@ class EventController extends BaseController
             $this->redirectToDetailPage($event->getUrlFriendlyName());
         }
 
-        $trackApi = $this->getTrackApi();
-        $tracks = $trackApi->getTracks($event->getTracksUri());
+        $trackApi       = $this->getTrackApi();
+        $tracks         = $trackApi->getTracks($event->getTracksUri());
         $numberOfTracks = 0;
         if ($tracks && $tracks['meta']['count']) {
             $data['tracks'] = $tracks['tracks'];
@@ -1097,7 +1123,7 @@ class EventController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new TrackCollectionFormType(), $data);
+        $form    = $factory->create(new TrackCollectionFormType(), $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -1146,7 +1172,7 @@ class EventController extends BaseController
             'Event/edit-tracks.html.twig',
             [
                 'event' => $event,
-                'form' => $form->createView(),
+                'form'  => $form->createView(),
             ]
         );
     }

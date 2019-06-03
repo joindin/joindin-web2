@@ -12,11 +12,19 @@ class ClientController extends BaseController
 {
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/user/:username/client', [$this, 'index'])->name('clients');
-        $app->map('/user/:username/client/create', [$this, 'createClient'])->via('GET', 'POST')->name('client-create');
-        $app->get('/user/:username/client/:clientName', [$this, 'showClient'])->name('client-show');
-        $app->map('/user/:username/client/:clientName/edit', [$this, 'editClient'])->via('GET', 'POST')->name('client-edit');
-        $app->get('/user/:username/client/:clientName/delete', [$this, 'deleteClient'])->via('GET', 'POST')->name('client-delete');
+        $app->get('/user/:username/client', [$this, 'index'])
+            ->name('clients');
+        $app->map('/user/:username/client/create', [$this, 'createClient'])
+            ->via('GET', 'POST')
+            ->name('client-create');
+        $app->get('/user/:username/client/:clientName', [$this, 'showClient'])
+            ->name('client-show');
+        $app->map('/user/:username/client/:clientName/edit', [$this, 'editClient'])
+            ->via('GET', 'POST')
+            ->name('client-edit');
+        $app->get('/user/:username/client/:clientName/delete', [$this, 'deleteClient'])
+            ->via('GET', 'POST')
+            ->name('client-delete');
     }
 
     public function index($username)
@@ -37,7 +45,7 @@ class ClientController extends BaseController
         }
 
         $clientApi = $this->getClientApi();
-        $clients = $clientApi->getCollection([]);
+        $clients   = $clientApi->getCollection([]);
 
         $this->render('Client/index.html.twig', [
             'clients' => $clients['clients'],
@@ -153,14 +161,15 @@ class ClientController extends BaseController
         }
 
         // default values
-        $data = [];
-        $data['application']  = $client->getName();
-        $data['description']  = $client->getDescription();
-        $data['callback_url'] = $client->getCallbackUrl();
+        $data = [
+            'application'  => $client->getName(),
+            'description'  => $client->getDescription(),
+            'callback_url' => $client->getCallbackUrl()
+        ];
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ClientFormType(), $data);
+        $form    = $factory->create(new ClientFormType(), $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -259,11 +268,10 @@ class ClientController extends BaseController
         }
 
         // default values
-        $data = [];
-        $data['client_id']  = $client->getId();
+        $data = ['client_id' => $client->getId()];
 
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ClientDeleteFormType(), $data);
+        $form    = $factory->create(new ClientDeleteFormType(), $data);
 
         $request = $this->application->request();
 

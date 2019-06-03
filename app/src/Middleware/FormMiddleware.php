@@ -106,7 +106,6 @@ class FormMiddleware extends Middleware
      */
     public function createFormFactory()
     {
-
         $builder = Forms::createFormFactoryBuilder()
             ->addExtension(
                 new CsrfExtension(
@@ -157,7 +156,7 @@ class FormMiddleware extends Middleware
     private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
     {
         $reflected = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
-        $path = dirname($reflected->getFileName()) . '/../Resources/views/Form';
+        $path      = dirname($reflected->getFileName()) . '/../Resources/views/Form';
         $loader->addLoader(new \Twig_Loader_Filesystem($path));
     }
 

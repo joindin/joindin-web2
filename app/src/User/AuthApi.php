@@ -50,7 +50,7 @@ class AuthApi extends BaseApi
             'client_secret' => $clientSecret,
         ];
 
-        list ($status, $result, $headers) = $this->apiPost($url, $params);
+        list($status, $result, $headers) = $this->apiPost($url, $params);
         if ($status == 201) {
             // we got one, data is actually in the body
             $data = json_decode($result);
@@ -78,7 +78,7 @@ class AuthApi extends BaseApi
             'verifier'      => $verifier,
         ];
 
-        list ($status, $result, $headers) = $this->apiPost($url, $params);
+        list($status, $result, $headers) = $this->apiPost($url, $params);
         if ($result) {
             $data = json_decode($result);
             if ($data) {
@@ -99,14 +99,14 @@ class AuthApi extends BaseApi
      */
     public function verifyFacebook($clientId, $clientSecret, $code)
     {
-        $url = $this->baseApiUrl . '/v2.1/facebook/token';
+        $url    = $this->baseApiUrl . '/v2.1/facebook/token';
         $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'code'          => $code,
         ];
 
-        list ($status, $result, $headers) = $this->apiPost($url, $params);
+        list($status, $result, $headers) = $this->apiPost($url, $params);
         if ($result) {
             $data = json_decode($result);
             if ($data) {

@@ -19,7 +19,7 @@ class FormMiddlewareTest extends TestCase
 
         $app = $this->createMock(Slim::class);
 
-        $validator = $this->createMock(ValidatorInterface::class);
+        $validator      = $this->createMock(ValidatorInterface::class);
         $app->validator = $validator;
 
         $translator = $this->getMockBuilder(Translator::class)

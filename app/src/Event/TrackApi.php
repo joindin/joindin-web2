@@ -48,7 +48,7 @@ class TrackApi extends BaseApi
     public function updateTrack($trackUri, $data)
     {
         $params = [
-            'track_name' => $data['track_name'],
+            'track_name'        => $data['track_name'],
             'track_description' => $data['track_description'],
         ];
 
@@ -57,7 +57,7 @@ class TrackApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new \Exception("Failed: " . $message);
@@ -72,7 +72,7 @@ class TrackApi extends BaseApi
     public function addTrack($eventTracksUri, $data)
     {
         $params = [
-            'track_name' => $data['track_name'],
+            'track_name'        => $data['track_name'],
             'track_description' => $data['track_description'],
         ];
 
@@ -81,7 +81,7 @@ class TrackApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new \Exception("Failed: " . $message);
@@ -99,7 +99,7 @@ class TrackApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new \Exception("Failed to delete track: " . $message);

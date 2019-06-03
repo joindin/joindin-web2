@@ -1,6 +1,9 @@
 <?php
 namespace JoindIn\Web\Event;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 use JoindIn\Web\Application\BaseApi;
 use DateTime;
 use Exception;
@@ -167,12 +170,12 @@ class EventApi extends BaseApi
 
     public function addComment(EventEntity $event, $comment, $rating = 0)
     {
-        $uri = $event->getCommentsUri();
+        $uri    = $event->getCommentsUri();
         $params = [
             'comment' => $comment,
-            'rating' => $rating,
+            'rating'  => $rating,
         ];
-        list ($status, $result) = $this->apiPost($uri, $params);
+        list($status, $result) = $this->apiPost($uri, $params);
 
         if ($status == 201) {
             return true;
@@ -182,7 +185,7 @@ class EventApi extends BaseApi
 
     public function reportComment($uri)
     {
-        list ($status, $result) = $this->apiPost($uri);
+        list($status, $result) = $this->apiPost($uri);
 
         if ($status == 202) {
             return true;
@@ -192,7 +195,7 @@ class EventApi extends BaseApi
 
     public function attend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
+        list($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
 
         if ($status == 201) {
             return true;
@@ -203,7 +206,7 @@ class EventApi extends BaseApi
 
     public function unattend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
+        list($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
 
         if ($status == 200) {
             return true;
@@ -222,12 +225,10 @@ class EventApi extends BaseApi
      */
     public function getAttendees($attendees_uri, $limit = 0, $verbose = false)
     {
-
         $attendees_uri .= "?resultsperpage={$limit}";
         if ($verbose) {
             $attendees_uri = $attendees_uri . '&verbose=yes';
         }
-
 
         $attendees = (array)json_decode($this->apiGet($attendees_uri));
 
@@ -267,7 +268,7 @@ class EventApi extends BaseApi
             }
         }
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
+        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 201) {
@@ -314,7 +315,7 @@ class EventApi extends BaseApi
         }
 
 
-        list ($status, $result, $headers) = $this->apiPut($data['uri'], $data);
+        list($status, $result, $headers) = $this->apiPut($data['uri'], $data);
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
             $response = $this->getCollection($headers['location']);
@@ -336,20 +337,22 @@ class EventApi extends BaseApi
     public function uploadIcon($imagesUri, $fileName)
     {
         try {
-            $client = new \GuzzleHttp\Client([
+            $client = new Client([
                 "timeout" => 10,
             ]);
 
             $headers = [];
-            $headers["Accept"] = "application/json";
+
+            $headers["Accept"]        = "application/json";
             $headers["Authorization"] = "OAuth {$this->accessToken}";
 
             // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
-            $ip = $_SERVER['REMOTE_ADDR'];
-            $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+            $ip                   = $_SERVER['REMOTE_ADDR'];
+            $agent                = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
             $headers["Forwarded"] = "for=$ip;user-agent=\"$agent\"";
 
             $options = [];
+
             $options['headers'] = $headers;
 
             if ($this->proxy) {
@@ -357,12 +360,16 @@ class EventApi extends BaseApi
             }
 
             // now add the file itself
-            $options['multipart'] = [['name' => 'image',
-                'contents' => fopen($fileName, 'r')]];
+            $options['multipart'] = [
+                [
+                    'name'     => 'image',
+                    'contents' => fopen($fileName, 'r')
+                ]
+            ];
 
-            $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
+            $request = new Request('POST', $imagesUri);
             $response = $client->send($request, $options);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        } catch (RequestException $e) {
             $body = $e->getResponse()->getBody();
             error_log($e->getMessage());
             error_log(json_decode($body)[0]);
@@ -460,7 +467,7 @@ class EventApi extends BaseApi
      */
     public function approveEvent($approval_uri)
     {
-        list ($status, $result, $headers) = $this->apiPost($approval_uri);
+        list($status, $result, $headers) = $this->apiPost($approval_uri);
 
         if ($status == 204) {
             return true;
@@ -476,7 +483,7 @@ class EventApi extends BaseApi
      */
     public function rejectEvent($approval_uri)
     {
-        list ($status, $result, $headers) = $this->apiDelete($approval_uri);
+        list($status, $result, $headers) = $this->apiDelete($approval_uri);
 
         if ($status == 204) {
             return true;
@@ -539,7 +546,7 @@ class EventApi extends BaseApi
     {
         $data['decision'] = $decision;
 
-        list ($status, $result, $headers) = $this->apiPut($reported_uri, $data);
+        list($status, $result, $headers) = $this->apiPut($reported_uri, $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {

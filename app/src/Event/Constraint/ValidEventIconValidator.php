@@ -12,7 +12,7 @@ class ValidEventIconValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $groupName = $constraint->groupname;
-        $keyName = $constraint->keyname;
+        $keyName   = $constraint->keyname;
 
         $files = $_FILES;
         if ($groupName) {
@@ -27,7 +27,7 @@ class ValidEventIconValidator extends ConstraintValidator
             $filename = $files['name'][$keyName];
             // we have a file - is it valid?
             $contents = file_get_contents($files['tmp_name'][$keyName]);
-            $image = @imagecreatefromstring($contents);
+            $image    = @imagecreatefromstring($contents);
             if ($image === false) {
                 $this->context->buildViolation("'%filename%' is not a recognised image file")
                     ->setParameter('%filename%', $filename)
@@ -35,7 +35,7 @@ class ValidEventIconValidator extends ConstraintValidator
                 return;
             }
 
-            $width = imagesx($image);
+            $width  = imagesx($image);
             $height = imagesy($image);
             if ($width !== $height) {
                 imagedestroy($image);

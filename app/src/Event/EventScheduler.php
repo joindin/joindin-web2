@@ -35,7 +35,7 @@ class EventScheduler
      */
     public function getScheduleData(EventEntity $event)
     {
-        $talks = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
+        $talks     = $this->getTalks($event->getTalksUri() . '?start=0&resultsperpage=1000');
         $eventDays = $this->getEventDays($talks);
 
         return $eventDays;
@@ -66,7 +66,7 @@ class EventScheduler
             return [];
         }
 
-        $talks = $talks['talks'];
+        $talks      = $talks['talks'];
         $talksByDay = $this->organiseTalksByDayAndTime($talks);
 
         $tracksByDay = $this->getTracksByDay($talks);

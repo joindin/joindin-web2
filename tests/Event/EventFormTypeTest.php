@@ -33,21 +33,21 @@ class EventFormTypeTest extends TypeTestCase
     public function testSubmitValidData()
     {
         $formData = [
-            "name" => "Community Conference",
-            "description" => "Conference description.",
-            "tags" => ["php","conference","web"],
-            "tz_continent" => "Europe",
-            "tz_place" => "Amsterdam",
-            "start_date" => "2019-01-01",
-            "end_date" => "2019-01-02",
-            "href" => "https://example.com/2019",
+            "name"           => "Community Conference",
+            "description"    => "Conference description.",
+            "tags"           => ["php", "conference", "web"],
+            "tz_continent"   => "Europe",
+            "tz_place"       => "Amsterdam",
+            "start_date"     => "2019-01-01",
+            "end_date"       => "2019-01-02",
+            "href"           => "https://example.com/2019",
             "cfp_start_date" => "2019-01-03",
-            "cfp_end_date" => "2019-01-01",
-            "cfp_url" => "https://example.com/cfp",
-            "location" => "Location",
-            "latitude" => "52.3546273",
-            "longitude" => "4.8284121",
-            "new_icon" => null
+            "cfp_end_date"   => "2019-01-01",
+            "cfp_url"        => "https://example.com/cfp",
+            "location"       => "Location",
+            "latitude"       => "52.3546273",
+            "longitude"      => "4.8284121",
+            "new_icon"       => null
         ];
 
         $form = $this->factory->create(EventFormType::class);
@@ -58,7 +58,7 @@ class EventFormTypeTest extends TypeTestCase
 
         $this->assertEquals($formData, $form->getData());
 
-        $view = $form->createView();
+        $view     = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {

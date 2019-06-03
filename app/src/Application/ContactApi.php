@@ -22,7 +22,7 @@ class ContactApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new \Exception("Failed: " . $message);

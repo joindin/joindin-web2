@@ -57,7 +57,7 @@ class EventFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        list ($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
+        list($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
 
         $timezone = null;
         if (isset($options['data'])) {
@@ -90,7 +90,7 @@ class EventFormType extends AbstractType
                     'text',
                     [
                         'required' => false,
-                        'attr'        => ['placeholder' => 'comma separated, tag, list']
+                        'attr'     => ['placeholder' => 'comma separated, tag, list']
                     ]
                 )->addViewTransformer(new EventTagsTransformer())
             )
@@ -146,7 +146,7 @@ class EventFormType extends AbstractType
                 'location',
                 'text',
                 [
-                    'label' => 'Venue name',
+                    'label'       => 'Venue name',
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -155,7 +155,7 @@ class EventFormType extends AbstractType
                 'text',
                 [
                     'label' => 'Latitude',
-                    'attr' => ['readonly' => 'readonly'],
+                    'attr'  => ['readonly' => 'readonly'],
                 ]
             )
             ->add(
@@ -163,20 +163,20 @@ class EventFormType extends AbstractType
                 'text',
                 [
                     'label' => 'Longitude',
-                    'attr' => ['readonly' => 'readonly'],
+                    'attr'  => ['readonly' => 'readonly'],
                 ]
             )
             ->add(
                 'new_icon',
                 'file',
                 [
-                    'data_class' => null,
-                    'label' => 'Upload new icon',
-                    'required' => false,
-                    'attr'=> [
-                        'class'=>'file',
+                    'data_class'  => null,
+                    'label'       => 'Upload new icon',
+                    'required'    => false,
+                    'attr'        => [
+                        'class' => 'file',
                     ],
-                    'constraints' => [new ValidEventIcon(['groupname' => 'event', 'keyname' =>'new_icon'])],
+                    'constraints' => [new ValidEventIcon(['groupname' => 'event', 'keyname' => 'new_icon'])],
                 ]
             )
         ;
@@ -269,7 +269,7 @@ class EventFormType extends AbstractType
         foreach ($timezones as $timezone) {
             list($continent, $city) = explode('/', $timezone, 2);
             $continents[$continent] = $continent;
-            $cities[$city] = $city;
+            $cities[$city]          = $city;
         }
 
         return [$continents, $cities];
@@ -291,7 +291,7 @@ class EventFormType extends AbstractType
         $result = [];
         foreach ($timezones as $timezone) {
             list($continent, $city) = explode('/', $timezone, 2);
-            $result[$continent][] = $city;
+            $result[$continent][]   = $city;
         }
 
         foreach ($result as $continent => $cities) {

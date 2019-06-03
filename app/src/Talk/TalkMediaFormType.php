@@ -32,7 +32,7 @@ class TalkMediaFormType extends AbstractType
     {
         $builder
             ->add('url', 'text', [
-                'label' => false,
+                'label'    => false,
                 'required' => false,
             ])
             ->add(
