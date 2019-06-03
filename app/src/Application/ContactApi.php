@@ -1,22 +1,20 @@
 <?php
 namespace JoindIn\Web\Application;
 
-use JoindIn\Web\Application\BaseApi;
-
 class ContactApi extends BaseApi
 {
     public function contact($name, $email, $subject, $comment, $clientId, $clientSecret)
     {
-
         $url = $this->baseApiUrl . '/v2.1/contact';
-        $params = array(
+
+        $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'name'          => $name,
             'email'         => $email,
             'subject'       => $subject,
             'comment'       => $comment,
-        );
+        ];
 
         list($status, $result) = $this->apiPost($url, $params);
 

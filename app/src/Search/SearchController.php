@@ -39,8 +39,8 @@ class SearchController extends BaseController
      */
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/search/events', array($this, 'searchEvents'))->name("search-events");
-        $app->get('/search', array($this, 'search'))->name("search");
+        $app->get('/search/events', [$this, 'searchEvents'])->name("search-events");
+        $app->get('/search', [$this, 'search'])->name("search");
     }
 
     /**
@@ -76,7 +76,7 @@ class SearchController extends BaseController
 
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $tag = $this->sanitizeTag($this->application->request()->get('tag'));
-        $events = array();
+        $events = [];
 
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -88,12 +88,12 @@ class SearchController extends BaseController
 
         $this->render(
             'Event/search.html.twig',
-            array(
+            [
                 'events'  => $events,
                 'page'    => $page,
                 'keyword' => $keyword,
                 'tag'     => $tag
-            )
+            ]
         );
     }
 
@@ -103,11 +103,11 @@ class SearchController extends BaseController
     public function search()
     {
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
-        $events = array();
-        $talks = array();
-        $users = array();
-        $eventInfo = array();
-        $pagination = array();
+        $events = [];
+        $talks = [];
+        $users = [];
+        $eventInfo = [];
+        $pagination = [];
 
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -130,7 +130,7 @@ class SearchController extends BaseController
 
         $this->render(
             'Application/search.html.twig',
-            array(
+            [
                 'events'     => $events,
                 'eventInfo'  => $eventInfo,
                 'talks'      => $talks,
@@ -138,7 +138,7 @@ class SearchController extends BaseController
                 'page'       => $page,
                 'pagination' => $pagination,
                 'keyword'    => $keyword
-            )
+            ]
         );
     }
 
@@ -151,7 +151,7 @@ class SearchController extends BaseController
      */
     private function searchEventsByTitleAndTag($page, $keyword, $tag = null)
     {
-        $apiQueryParams = array();
+        $apiQueryParams = [];
 
         if (!empty($keyword)) {
             $apiQueryParams['title'] = $keyword;

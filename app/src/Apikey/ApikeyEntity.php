@@ -1,9 +1,8 @@
 <?php
 namespace JoindIn\Web\Apikey;
 
+use DateTimeImmutable;
 use JoindIn\Web\Application\BaseEntity;
-use DateTime;
-use DateInterval;
 
 class ApikeyEntity extends BaseEntity
 {
@@ -19,12 +18,12 @@ class ApikeyEntity extends BaseEntity
 
     public function getLastUsedDateTime()
     {
-        return new \DateTimeImmutable($this->data->last_used_date);
+        return new DateTimeImmutable($this->data->last_used_date);
     }
 
     public function getCreationDateTime()
     {
-        return new \DateTimeImmutable($this->data->created_date);
+        return new DateTimeImmutable($this->data->created_date);
     }
 
 

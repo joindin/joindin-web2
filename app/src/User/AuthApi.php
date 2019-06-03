@@ -17,13 +17,13 @@ class AuthApi extends BaseApi
     public function login($username, $password, $clientId, $clientSecret)
     {
         $url = $this->baseApiUrl . '/v2.1/token';
-        $params = array(
+        $params = [
             'grant_type'    => 'password',
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'username'      => $username,
             'password'      => $password,
-        );
+        ];
 
         list($status, $result) = $this->apiPost($url, $params);
         if ($result) {
@@ -45,10 +45,10 @@ class AuthApi extends BaseApi
     public function getTwitterRequestToken($clientId, $clientSecret)
     {
         $url = $this->baseApiUrl . '/v2.1/twitter/request_token';
-        $params = array(
+        $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
-        );
+        ];
 
         list ($status, $result, $headers) = $this->apiPost($url, $params);
         if ($status == 201) {
@@ -71,12 +71,12 @@ class AuthApi extends BaseApi
     public function verifyTwitter($clientId, $clientSecret, $token, $verifier)
     {
         $url = $this->baseApiUrl . '/v2.1/twitter/token';
-        $params = array(
+        $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'token'         => $token,
             'verifier'      => $verifier,
-        );
+        ];
 
         list ($status, $result, $headers) = $this->apiPost($url, $params);
         if ($result) {
@@ -100,11 +100,11 @@ class AuthApi extends BaseApi
     public function verifyFacebook($clientId, $clientSecret, $code)
     {
         $url = $this->baseApiUrl . '/v2.1/facebook/token';
-        $params = array(
+        $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'code'          => $code,
-        );
+        ];
 
         list ($status, $result, $headers) = $this->apiPost($url, $params);
         if ($result) {

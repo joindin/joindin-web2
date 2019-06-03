@@ -288,7 +288,7 @@ class EventFormType extends AbstractType
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
 
-        $result = array();
+        $result = [];
         foreach ($timezones as $timezone) {
             list($continent, $city) = explode('/', $timezone, 2);
             $result[$continent][] = $city;

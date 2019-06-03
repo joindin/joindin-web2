@@ -42,8 +42,9 @@ class EventApi extends BaseApi
     public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
         $url = $this->baseApiUrl . '/v2.1/events';
+
         $queryParams['resultsperpage'] = $limit;
-        $queryParams['start'] = $start;
+        $queryParams['start']          = $start;
 
         if ($filter) {
             $queryParams['filter'] = $filter;
@@ -102,7 +103,7 @@ class EventApi extends BaseApi
      */
     public function getEvent($event_uri, $verbose = true)
     {
-        $params = array();
+        $params = [];
         if ($verbose) {
             $params['verbose'] = 'yes';
         }
@@ -155,7 +156,7 @@ class EventApi extends BaseApi
 
         $comments = (array)json_decode($this->apiGet($comment_uri));
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $comment) {
             $commentData[] = new EventCommentEntity($comment);
@@ -167,10 +168,10 @@ class EventApi extends BaseApi
     public function addComment(EventEntity $event, $comment, $rating = 0)
     {
         $uri = $event->getCommentsUri();
-        $params = array(
+        $params = [
             'comment' => $comment,
             'rating' => $rating,
-        );
+        ];
         list ($status, $result) = $this->apiPost($uri, $params);
 
         if ($status == 201) {
@@ -230,7 +231,7 @@ class EventApi extends BaseApi
 
         $attendees = (array)json_decode($this->apiGet($attendees_uri));
 
-        $attendeeData = array();
+        $attendeeData = [];
 
         foreach ($attendees['users'] as $attendee) {
             $attendeeData[] = new UserEntity($attendee);
@@ -254,7 +255,7 @@ class EventApi extends BaseApi
     public function submit(array $data)
     {
         // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        $dateFields = ['start_date', 'end_date', 'cfp_start_date', 'cfp_end_date'];
         foreach ($dateFields as $dateField) {
             if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('Y-m-d');
@@ -300,7 +301,7 @@ class EventApi extends BaseApi
     public function edit(array $data)
     {
         // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        $dateFields = ['start_date', 'end_date', 'cfp_start_date', 'cfp_end_date'];
         foreach ($dateFields as $dateField) {
             if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('c');
@@ -387,12 +388,12 @@ class EventApi extends BaseApi
      *
      * @return array
      */
-    public function getCollection($uri, array $queryParams = array())
+    public function getCollection($uri, array $queryParams = [])
     {
         $events = (array)json_decode($this->apiGet($uri, $queryParams));
         $meta   = array_pop($events);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($events['events'] as $item) {
             $event = new EventEntity($item);
 
@@ -437,7 +438,7 @@ class EventApi extends BaseApi
 
         $meta = array_pop($comments);
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $item) {
             if (isset($item->user_uri)) {

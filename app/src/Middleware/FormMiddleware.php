@@ -140,7 +140,7 @@ class FormMiddleware extends Middleware
     {
         $loader = $env->getLoader();
         if (!$loader instanceof \Twig_Loader_Chain) {
-            $loader = new \Twig_Loader_Chain(array($loader));
+            $loader = new \Twig_Loader_Chain([$loader]);
             $env->setLoader($loader);
         }
 
@@ -170,7 +170,7 @@ class FormMiddleware extends Middleware
      */
     private function createFormTwigExtension($formLayoutTemplate)
     {
-        return new FormExtension(new TwigRenderer(new TwigRendererEngine(array($formLayoutTemplate))));
+        return new FormExtension(new TwigRenderer(new TwigRendererEngine([$formLayoutTemplate])));
     }
 
     /**

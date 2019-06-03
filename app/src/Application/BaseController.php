@@ -26,19 +26,19 @@ abstract class BaseController
 
     private function getConfig()
     {
-        $app = Slim::getInstance();
+        $app    = Slim::getInstance();
         $config = $app->config('custom');
         return $config;
     }
 
-    protected function render($template, $data = array(), $status = null)
+    protected function render($template, $data = [], $status = null)
     {
         try {
             $this->application->render($template, $data, $status);
         } catch (Twig_Error_Runtime $e) {
             $this->application->render(
                 'Error/app_load_error.html.twig',
-                array(
+                [
                     'message' => sprintf(
                         'An exception has been thrown during the rendering of a template ("%s").',
                         $e->getMessage()
@@ -46,7 +46,7 @@ abstract class BaseController
                     -1,
                     null,
                     $e
-                )
+                ]
             );
         }
     }

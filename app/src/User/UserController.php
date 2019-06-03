@@ -23,32 +23,52 @@ class UserController extends BaseController
      */
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/user/logout', array($this, 'logout'))->name('user-logout');
-        $app->map('/user/login', array($this, 'login'))->via('GET', 'POST')->name('user-login');
-        $app->map('/user/register', array($this, 'register'))->via('GET', 'POST')->name('user-register');
-        $app->get('/user/verification', array($this, 'verification'))->name('user-verification');
-        $app->map('/user/resend-verification', array($this, 'resendVerification'))
-            ->via('GET', 'POST')->name('user-resend-verification');
-        $app->map('/user/username-reminder', array($this, 'remindUsername'))
-            ->via('GET', 'POST')->name('user-username-reminder');
-        $app->map('/user/password-reset', array($this, 'resetPassword'))
-            ->via('GET', 'POST')->name('user-password-reset');
-        $app->map('/user/new-password', array($this, 'newPassword'))
-            ->via('GET', 'POST')->name('user-new-password');
-        $app->get('/user/twitter-login', array($this, 'loginWithTwitter'))->name('twitter-login');
-        $app->get('/user/twitter-access', array($this, 'accessTokenFromTwitter'))->name('twitter-callback');
-        $app->get('/user/facebook-access', array($this, 'accessTokenFromFacebook'))->name('facebook-callback');
-        $app->get('/user/:username', array($this, 'profile'))->name('user-profile');
-        $app->get('/user/:username/talks', array($this, 'profileTalks'))->name('user-profile-talks');
-        $app->get('/user/:username/events', array($this, 'profileEvents'))->name('user-profile-events');
-        $app->get('/user/:username/hosted', array($this, 'profileHosted'))->name('user-profile-hosted');
-        $app->get('/user/:username/comments', array($this, 'profileComments'))->name('user-profile-comments');
-        $app->map('/user/:username/edit', array($this, 'profileEdit'))
-            ->via('GET', 'POST')->name('user-profile-edit');
-        $app->get('/user/:username/delete', array($this, 'userDelete'))->name('user-profile-delete');
-        $app->get('/user/view/:userId(/:extra+)', array($this, 'redirectFromId'))
+        $app->get('/user/logout', [$this, 'logout'])
+            ->name('user-logout');
+        $app->map('/user/login', [$this, 'login'])
+            ->via('GET', 'POST')
+            ->name('user-login');
+        $app->map('/user/register', [$this, 'register'])
+            ->via('GET', 'POST')
+            ->name('user-register');
+        $app->get('/user/verification', [$this, 'verification'])
+            ->name('user-verification');
+        $app->map('/user/resend-verification', [$this, 'resendVerification'])
+            ->via('GET', 'POST')
+            ->name('user-resend-verification');
+        $app->map('/user/username-reminder', [$this, 'remindUsername'])
+            ->via('GET', 'POST')
+            ->name('user-username-reminder');
+        $app->map('/user/password-reset', [$this, 'resetPassword'])
+            ->via('GET', 'POST')
+            ->name('user-password-reset');
+        $app->map('/user/new-password', [$this, 'newPassword'])
+            ->via('GET', 'POST')
+            ->name('user-new-password');
+        $app->get('/user/twitter-login', [$this, 'loginWithTwitter'])
+            ->name('twitter-login');
+        $app->get('/user/twitter-access', [$this, 'accessTokenFromTwitter'])
+            ->name('twitter-callback');
+        $app->get('/user/facebook-access', [$this, 'accessTokenFromFacebook'])
+            ->name('facebook-callback');
+        $app->get('/user/:username', [$this, 'profile'])
+            ->name('user-profile');
+        $app->get('/user/:username/talks', [$this, 'profileTalks'])
+            ->name('user-profile-talks');
+        $app->get('/user/:username/events', [$this, 'profileEvents'])
+            ->name('user-profile-events');
+        $app->get('/user/:username/hosted', [$this, 'profileHosted'])
+            ->name('user-profile-hosted');
+        $app->get('/user/:username/comments', [$this, 'profileComments'])
+            ->name('user-profile-comments');
+        $app->map('/user/:username/edit', [$this, 'profileEdit'])
+            ->via('GET', 'POST')
+            ->name('user-profile-edit');
+        $app->get('/user/:username/delete', [$this, 'userDelete'])
+            ->name('user-profile-delete');
+        $app->get('/user/view/:userId(/:extra+)', [$this, 'redirectFromId'])
             ->name('user-redirect-from-id')
-            ->conditions(array('userId' => '\d+'));
+            ->conditions(['userId' => '\d+']);
     }
 
     /**
@@ -112,9 +132,9 @@ class UserController extends BaseController
 
         $this->render(
             'User/register.html.twig',
-            array(
+            [
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -223,9 +243,9 @@ class UserController extends BaseController
 
         $this->render(
             'User/emailverification.html.twig',
-            array(
+            [
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -247,8 +267,8 @@ class UserController extends BaseController
         $talkApi = $this->getTalkApi();
         $eventApi = $this->getEventApi();
 
-        $eventInfo = array(); // look up an event's name and url_friendly_name from its uri
-        $talkInfo = array(); // look up a talk's url_friendly_talk_title from its uri
+        $eventInfo = []; // look up an event's name and url_friendly_name from its uri
+        $talkInfo = []; // look up a talk's url_friendly_talk_title from its uri
 
         $talkCollection = $talkApi->getCollection($user->getTalksUri(), ['verbose' => 'yes', 'resultsperpage' => 5]);
         $talks = false;
@@ -305,7 +325,7 @@ class UserController extends BaseController
 
         echo $this->render(
             'User/profile.html.twig',
-            array(
+            [
                 'thisUser'         => $user,
                 'talks'            => $talks,
                 'eventInfo'        => $eventInfo,
@@ -313,7 +333,7 @@ class UserController extends BaseController
                 'events'           => $events,
                 'hostedEvents'     => $hostedEvents,
                 'talkComments'     => $talkComments,
-            )
+            ]
         );
     }
 
@@ -338,7 +358,7 @@ class UserController extends BaseController
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
         }
 
-        $eventInfo = array();
+        $eventInfo = [];
         if (isset($talkCollection['talks'])) {
             $talks = $talkCollection['talks'];
             foreach ($talks as $talk) {
@@ -351,11 +371,11 @@ class UserController extends BaseController
 
         echo $this->render(
             'User/profile-talks.html.twig',
-            array(
+            [
                 'thisUser'  => $user,
                 'talks'     => $talks,
                 'eventInfo' => $eventInfo,
-            )
+            ]
         );
     }
 
@@ -384,11 +404,11 @@ class UserController extends BaseController
 
         echo $this->render(
             'User/profile-events.html.twig',
-            array(
+            [
                 'thisUser' => $user,
                 'events'   => $eventsCollection['events'],
                 'type'     => 'attended',
-            )
+            ]
         );
     }
 
@@ -418,11 +438,11 @@ class UserController extends BaseController
 
         echo $this->render(
             'User/profile-events.html.twig',
-            array(
+            [
                 'thisUser' => $user,
                 'events'   => $hostedEventsCollection['events'],
                 'type'     => 'hosted',
-            )
+            ]
         );
     }
 
@@ -448,8 +468,8 @@ class UserController extends BaseController
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
         }
 
-        $talkInfo = array();
-        $eventInfo = array();
+        $talkInfo = [];
+        $eventInfo = [];
         foreach ($talkComments as $comment) {
             if (isset($talkInfo[$comment->getTalkUri()])) {
                 continue;
@@ -474,12 +494,12 @@ class UserController extends BaseController
 
         $this->render(
             'User/profile-comments.html.twig',
-            array(
+            [
                 'thisUser'     => $user,
                 'talkComments' => $talkComments,
                 'eventInfo'    => $eventInfo,
                 'talkInfo'     => $talkInfo,
-            )
+            ]
         );
     }
 
@@ -488,7 +508,7 @@ class UserController extends BaseController
         $eventDb = $this->getEventDb();
         $eventApi = $this->getEventApi();
 
-        $eventInfo = array();
+        $eventInfo = [];
         $eventData = $eventDb->load('uri', $eventUri);
         if (isset($eventData['name'])) {
             $eventInfo['url_friendly_name'] = $eventData['url_friendly_name'];
@@ -580,9 +600,9 @@ class UserController extends BaseController
 
         $this->render(
             'User/username-reminder.html.twig',
-            array(
+            [
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -668,11 +688,11 @@ class UserController extends BaseController
 
         $this->render(
             'User/profile-edit.html.twig',
-            array(
+            [
                 'thisUser' => $user,
                 'form' => $form->createView(),
                 'can_change_password' => $canChangePassword,
-            )
+            ]
         );
     }
 
@@ -732,9 +752,9 @@ class UserController extends BaseController
 
         $this->render(
             'User/password-reset.html.twig',
-            array(
+            [
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -778,9 +798,9 @@ class UserController extends BaseController
 
         $this->render(
             'User/new-password.html.twig',
-            array(
+            [
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -911,7 +931,7 @@ class UserController extends BaseController
         $this->application->redirect(
             $this->application->urlFor(
                 'user-profile',
-                array('username' => $user->getUsername())
+                ['username' => $user->getUsername()]
             )
         );
     }

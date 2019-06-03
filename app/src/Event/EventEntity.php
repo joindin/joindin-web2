@@ -449,7 +449,8 @@ class EventEntity extends BaseEntity
     {
         if (!empty($this->getCfpStartDate()) && !empty($this->getCfpEndDate())) {
             $startDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpStartDate());
-            $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpEndDate());
+            $endDate   = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpEndDate());
+
             $now = new DateTime(null, $endDate->getTimezone());
             $now->setTime(0, 0, 0);
 

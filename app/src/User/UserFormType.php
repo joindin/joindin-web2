@@ -98,8 +98,8 @@ class UserFormType extends AbstractType
                         'type' => 'password',
                         'invalid_message' => 'The password fields must match.',
                         'required' => false,
-                        'first_options' => array('label' => 'New password'),
-                        'second_options' => array('label' => 'Repeat new password'),
+                        'first_options' => ['label' => 'New password'],
+                        'second_options' => ['label' => 'Repeat new password'],
                         'constraints' => [new Assert\Length(['min' => 6])],
                     ]
                 );

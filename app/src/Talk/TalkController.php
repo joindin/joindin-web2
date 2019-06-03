@@ -18,23 +18,32 @@ class TalkController extends BaseController
 {
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
-        $app->map('/event/:eventSlug/:talkSlug/edit', array($this, 'editTalk'))->via('GET', 'POST')->name('talk-edit');
-        $app->post('/event/:eventSlug/:talkSlug/star', array($this, 'star'))->name('talk-star');
-        $app->get('/talk/:talkStub', array($this, 'quick'))->name('talk-quicklink');
-        $app->get('/event/:eventSlug/:talkSlug/comments/:commentHash/report', array($this, 'reportComment'))
+        $app->get('/event/:eventSlug/:talkSlug', [$this, 'index'])
+            ->name('talk');
+        $app->map('/event/:eventSlug/:talkSlug/edit', [$this, 'editTalk'])
+            ->via('GET', 'POST')
+            ->name('talk-edit');
+        $app->post('/event/:eventSlug/:talkSlug/star', [$this, 'star'])
+            ->name('talk-star');
+        $app->get('/talk/:talkStub', [$this, 'quick'])
+            ->name('talk-quicklink');
+        $app->get('/event/:eventSlug/:talkSlug/comments/:commentHash/report', [$this, 'reportComment'])
             ->name('talk-report-comment');
-        $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
-        $app->get('/:talkId', array($this, 'quickById'))
+        $app->post('/event/:eventSlug/:talkSlug/add-comment', [$this, 'addComment'])
+            ->name('talk-add-comment');
+        $app->get('/:talkId', [$this, 'quickById'])
             ->name('talk-quick-by-id')
-            ->conditions(array('talkId' => '\d+'));
-        $app->get('/talk/view/:talkId', array($this, 'quickById'))
+            ->conditions(['talkId' => '\d+']);
+        $app->get('/talk/view/:talkId', [$this, 'quickById'])
             ->name('talk-by-id-web1')
-            ->conditions(array('talkId' => '\d+'));
-        $app->post('/event/:eventSlug/:talkSlug/claim', array($this, 'claimTalk'))->name('talk-claim');
-        $app->get('/event/:eventSlug/:talkSlug/unlink/:username', array($this, 'unlinkSpeaker'))
+            ->conditions(['talkId' => '\d+']);
+        $app->post('/event/:eventSlug/:talkSlug/claim', [$this, 'claimTalk'])
+            ->name('talk-claim');
+        $app->get('/event/:eventSlug/:talkSlug/unlink/:username', [$this, 'unlinkSpeaker'])
             ->name('unlink-speaker');
-        $app->map('/event/:eventSlug/:talkSlug/delete', array($this, 'deleteTalk'))->via('GET', 'POST')->name('talk-delete');
+        $app->map('/event/:eventSlug/:talkSlug/delete', [$this, 'deleteTalk'])
+            ->via('GET', 'POST')
+            ->name('talk-delete');
     }
 
     public function index($eventSlug, $talkSlug)
@@ -79,15 +88,15 @@ class TalkController extends BaseController
 
         $this->render(
             'Talk/index.html.twig',
-            array(
-                'talk' => $talk,
-                'event' => $event,
-                'comments' => $comments,
-                'talkSlug' => $talkSlug,
+            [
+                'talk'        => $talk,
+                'event'       => $event,
+                'comments'    => $comments,
+                'talkSlug'    => $talkSlug,
                 'canEditTalk' => $canEditTalk,
                 'canRateTalk' => $canRateTalk,
                 'unclaimed'   => $unclaimed,
-            )
+            ]
         );
     }
 
@@ -260,10 +269,10 @@ class TalkController extends BaseController
             try {
                 $talkApi->claimTalk(
                     $talk->getSpeakersUri(),
-                    array(
+                    [
                         'display_name'  => $display_name,
                         'username'      => $_SESSION['user']->getUsername()
-                    )
+                    ]
                 );
 
                 $this->application->flash(
@@ -278,7 +287,7 @@ class TalkController extends BaseController
             $this->application->flash('claimerror', "No speaker {$display_name} found for this talk.");
         }
 
-        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+        $url = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
         $this->application->redirect($url);
     }
 
@@ -325,7 +334,7 @@ class TalkController extends BaseController
         $this->application->redirect(
             $this->application->urlFor(
                 'talk',
-                array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk['slug'])
+                ['eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk['slug']]
             )
         );
     }
@@ -354,7 +363,7 @@ class TalkController extends BaseController
         $this->application->redirect(
             $this->application->urlFor(
                 'talk',
-                array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk->getUrlFriendlyTalkTitle())
+                ['eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk->getUrlFriendlyTalkTitle()]
             )
         );
     }
@@ -364,7 +373,7 @@ class TalkController extends BaseController
         $request = $this->application->request();
         $comment = trim(strip_tags($request->post('comment')));
         $rating = (int) $request->post('rating');
-        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+        $url = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
 
         if ($comment == '' || $rating == 0) {
             $this->application->flash('error', 'Please provide a comment and rating');
@@ -428,7 +437,7 @@ class TalkController extends BaseController
         $event = $eventApi->getByFriendlyUrl($eventSlug);
         $talkApi = $this->getTalkApi();
         $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
-        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+        $url = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
 
         $comments = $talkApi->getComments($talk->getCommentsUri());
         foreach ($comments as $comment) {

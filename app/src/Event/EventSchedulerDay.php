@@ -35,8 +35,8 @@ class EventSchedulerDay
      */
     public function __construct($date, $talks, $tracks)
     {
-        $this->date = $date;
-        $this->talks = $talks;
+        $this->date   = $date;
+        $this->talks  = $talks;
         $this->tracks = $tracks;
     }
 

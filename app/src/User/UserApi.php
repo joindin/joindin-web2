@@ -23,7 +23,7 @@ class UserApi extends BaseApi
      */
     public function getUser($url)
     {
-        $result = $this->apiGet($url, array('verbose'=>'yes'));
+        $result = $this->apiGet($url, ['verbose' =>'yes']);
 
         if ($result) {
             $data = json_decode($result, false, 512, JSON_BIGINT_AS_STRING);
@@ -99,7 +99,7 @@ class UserApi extends BaseApi
      */
     public function verify($token)
     {
-        $data = array("token" => $token);
+        $data = ["token" => $token];
 
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
 
@@ -121,7 +121,7 @@ class UserApi extends BaseApi
      */
     public function reverify($email)
     {
-        $data = array("email" => $email);
+        $data = ["email" => $email];
 
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
 
@@ -201,7 +201,7 @@ class UserApi extends BaseApi
      */
     public function usernameReminder($email)
     {
-        $data = array("email" => $email);
+        $data = ["email" => $email];
 
         list ($status, $result, $headers) = $this->apiPost(
             $this->baseApiUrl . '/v2.1/emails/reminders/username',
@@ -232,7 +232,7 @@ class UserApi extends BaseApi
      */
     public function passwordReset($username)
     {
-        $data = array("username" => $username);
+        $data = ["username" => $username];
 
         list ($status, $result, $headers) = $this->apiPost(
             $this->baseApiUrl . '/v2.1/emails/reminders/password',
@@ -299,10 +299,10 @@ class UserApi extends BaseApi
      */
     public function resetPassword($token, $password)
     {
-        $data = array(
-            "token" => $token,
+        $data = [
+            "token"    => $token,
             "password" => $password,
-        );
+        ];
 
         list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
 
@@ -330,7 +330,7 @@ class UserApi extends BaseApi
         );
         $meta = array_pop($users);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($users['users'] as $item) {
             $user = new UserEntity($item);
 

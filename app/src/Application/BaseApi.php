@@ -1,6 +1,8 @@
 <?php
 namespace JoindIn\Web\Application;
 
+use Exception;
+
 abstract class BaseApi
 {
     protected $baseApiUrl;
@@ -20,19 +22,22 @@ abstract class BaseApi
         $this->accessToken = $accessToken;
     }
 
-    protected function apiGet($url, $params = array())
+    protected function apiGet($url, $params = [])
     {
         $paramsString = count($params) ? '?' . http_build_query($params, '', '&') : '';
 
-        $contextOpts = array('http' => array(
-            'header' => "Accept: application/json",
-            'timeout' => 10,
-            'ignore_errors' => true,
-        ));
+        $contextOpts = [
+            'http' => [
+                'header'        => "Accept: application/json",
+                'timeout'       => 10,
+                'ignore_errors' => true,
+            ]
+        ];
 
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip    = $_SERVER['REMOTE_ADDR'];
         $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+
         $contextOpts['http']['header'] .= "\r\nForwarded: for=$ip;user-agent=\"$agent\"";
 
         if ($this->accessToken) {
@@ -48,22 +53,24 @@ abstract class BaseApi
         $result = file_get_contents($url . $paramsString, 0, $streamContext);
 
         if (false === $result) {
-            throw new \Exception('Unable to connect to API');
+            throw new Exception('Unable to connect to API');
         }
 
         return $result;
     }
 
-    protected function apiDelete($url, $params = array())
+    protected function apiDelete($url, $params = [])
     {
         $paramsString = count($params) ? '?' . http_build_query($params, '', '&') : '';
 
-        $contextOpts = array('http' => array(
-            'method' => 'DELETE',
-            'header' => "Accept: application/json",
-            'timeout' => 10,
-            'ignore_errors' => true,
-        ));
+        $contextOpts = [
+            'http' => [
+                'method'        => 'DELETE',
+                'header'        => "Accept: application/json",
+                'timeout'       => 10,
+                'ignore_errors' => true,
+            ]
+        ];
 
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -83,7 +90,7 @@ abstract class BaseApi
         $result = file_get_contents($url . $paramsString, 0, $streamContext);
 
         if (false === $result) {
-            throw new \Exception('Unable to connect to API');
+            throw new Exception('Unable to connect to API');
         }
 
         $status = 0;
@@ -93,19 +100,21 @@ abstract class BaseApi
 
         $headers = $this->extractListOfHeaders($http_response_header);
 
-        return array($status, $result, $headers);
+        return [$status, $result, $headers];
     }
 
-    protected function apiPost($url, $params = array())
+    protected function apiPost($url, $params = [])
     {
-        $contextOpts = array('http' => array(
-            'method' => 'POST',
-            'header' => "Content-type: application/json\r\n"
-                      . "Accept: application/json",
-            'content' => json_encode($params),
-            'timeout' => 10,
-            'ignore_errors' => true,
-        ));
+        $contextOpts = [
+            'http' => [
+                'method'        => 'POST',
+                'header'        => "Content-type: application/json\r\n"
+                                   . "Accept: application/json",
+                'content'       => json_encode($params),
+                'timeout'       => 10,
+                'ignore_errors' => true,
+            ]
+        ];
 
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -124,7 +133,7 @@ abstract class BaseApi
         $streamContext = stream_context_create($contextOpts);
         $result = file_get_contents($url, 0, $streamContext);
         if (false === $result) {
-            throw new \Exception('Unable to connect to API');
+            throw new Exception('Unable to connect to API');
         }
 
         $status = 0;
@@ -134,23 +143,26 @@ abstract class BaseApi
 
         $headers = $this->extractListOfHeaders($http_response_header);
 
-        return array($status, $result, $headers);
+        return [$status, $result, $headers];
     }
 
-    protected function apiPut($url, $params = array())
+    protected function apiPut($url, $params = [])
     {
-        $contextOpts = array('http' => array(
-            'method' => 'PUT',
-            'header' => "Content-type: application/json\r\n"
-                . "Accept: application/json",
-            'content' => json_encode($params),
-            'timeout' => 10,
-            'ignore_errors' => true,
-        ));
+        $contextOpts = [
+            'http' => [
+                'method'        => 'PUT',
+                'header'        => "Content-type: application/json\r\n"
+                                   . "Accept: application/json",
+                'content'       => json_encode($params),
+                'timeout'       => 10,
+                'ignore_errors' => true,
+            ]
+        ];
 
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip    = $_SERVER['REMOTE_ADDR'];
         $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+
         $contextOpts['http']['header'] .= "\r\nForwarded: for=$ip;user-agent=\"$agent\"";
 
         if ($this->accessToken) {
@@ -165,7 +177,7 @@ abstract class BaseApi
         $streamContext = stream_context_create($contextOpts);
         $result = file_get_contents($url, 0, $streamContext);
         if (false === $result) {
-            throw new \Exception('Unable to connect to API');
+            throw new Exception('Unable to connect to API');
         }
 
         $status = 0;
@@ -175,7 +187,7 @@ abstract class BaseApi
 
         $headers = $this->extractListOfHeaders($http_response_header);
 
-        return array($status, $result, $headers);
+        return [$status, $result, $headers];
     }
 
     /**
@@ -191,7 +203,7 @@ abstract class BaseApi
      */
     private function extractListOfHeaders(array $rawHeaders)
     {
-        $headers = array();
+        $headers = [];
         foreach ($rawHeaders as $header) {
             $header = explode(':', $header, 2);
             if (count($header) < 2) {
@@ -205,7 +217,7 @@ abstract class BaseApi
     }
 
     /**
-     * @param $access_token
+     * @param $accessToken
      */
     public function setAccessToken($accessToken)
     {

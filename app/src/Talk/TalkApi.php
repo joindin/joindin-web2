@@ -47,7 +47,7 @@ class TalkApi extends BaseApi
         );
         $meta = array_pop($talks);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($talks['talks'] as $item) {
             $talk = new TalkEntity($item);
 
@@ -149,7 +149,7 @@ class TalkApi extends BaseApi
 
         $comments = (array)json_decode($this->apiGet($comment_uri, $params));
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $item) {
             if (isset($item->user_uri)) {
@@ -172,10 +172,10 @@ class TalkApi extends BaseApi
     public function addComment($talk, $rating, $comment)
     {
         $uri = $talk->getCommentsUri();
-        $params = array(
+        $params = [
             'rating' => $rating,
             'comment' => $comment,
-        );
+        ];
         list ($status, $result) = $this->apiPost($uri, $params);
 
         if ($status == 201) {

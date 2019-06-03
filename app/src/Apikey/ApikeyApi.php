@@ -19,7 +19,7 @@ class ApikeyApi extends BaseApi
         );
         $meta  = array_pop($tokens);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($tokens['tokens'] as $item) {
             $talk = new ApikeyEntity($item);
 
@@ -60,7 +60,7 @@ class ApikeyApi extends BaseApi
      */
     public function deleteClient($tokenUri)
     {
-        list ($status, $result, $headers) = $this->apiDelete($tokenUri);
+        list($status, $result, $headers) = $this->apiDelete($tokenUri);
 
         if ($status != 204) {
             $decoded = json_decode($result);
