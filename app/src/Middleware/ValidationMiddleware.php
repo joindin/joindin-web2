@@ -112,7 +112,7 @@ class ValidationMiddleware extends Middleware
      */
     private function getTranslator()
     {
-        if ( ! $this->app->translator instanceof Translator) {
+        if (!$this->app->translator instanceof Translator) {
             $this->app->translator = new Translator($this->locale, new MessageSelector());
             $this->app->translator->addLoader('array', new ArrayLoader());
             $this->app->translator->addLoader('xliff', new XliffFileLoader());
