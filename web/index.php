@@ -27,14 +27,14 @@ if (is_readable($configFile)) {
 }
 
 // Wrap the Config Data with the Application Config object
-$config['slim']['custom'] = new \JoindIn\Web\Application\Config($config['slim']['custom']);
+$config['slim']['custom'] = new JoindIn\Web\Application\Config($config['slim']['custom']);
 
 // initialize Slim
-$app = new \Slim\Slim(
+$app = new Slim\Slim(
     array_merge(
         $config['slim'],
         [
-            'view' => new \Slim\Views\Twig(),
+            'view' => new Slim\Views\Twig(),
         ]
     )
 );
@@ -62,9 +62,9 @@ $app->view()->appendData([
 $app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
 
-$app->view()->getEnvironment()->addExtension(new \JoindIn\Web\View\FiltersExtension());
-$app->view()->getEnvironment()->addExtension(new \Slim\Views\TwigExtension());
-$app->view()->getEnvironment()->addExtension(new \JoindIn\Web\View\FunctionsExtension($app));
+$app->view()->getEnvironment()->addExtension(new JoindIn\Web\View\FiltersExtension());
+$app->view()->getEnvironment()->addExtension(new Slim\Views\TwigExtension());
+$app->view()->getEnvironment()->addExtension(new JoindIn\Web\View\FunctionsExtension($app));
 
 if (isset($config['slim']['twig']['cache'])) {
     $app->view()->getEnvironment()->setCache($config['slim']['twig']['cache']);
@@ -75,11 +75,11 @@ if (isset($config['slim']['twig']['cache'])) {
 $app->configureMode('development', function () use ($app) {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
-    $env->addExtension(new \Twig_Extension_Debug());
+    $env->addExtension(new Twig_Extension_Debug());
 });
 
 // register error handlers
-$app->error(function (\Exception $e) use ($app) {
+$app->error(function (Exception $e) use ($app) {
     error_log(get_class($e) . ': ' . $e->getMessage() . " -- " . $e->getTraceAsString());
     $app->render('Error/error.html.twig', ['exception' => $e]);
 });
@@ -89,18 +89,18 @@ $app->notFound(function () use ($app) {
 });
 
 // register middlewares
-$app->add(new \JoindIn\Web\Middleware\ValidationMiddleware());
+$app->add(new JoindIn\Web\Middleware\ValidationMiddleware());
 
 $csrfSecret = null;
 if (!empty($config['slim']['custom']['csrfSecret'])) {
     $csrfSecret = $config['slim']['custom']['csrfSecret'];
 }
-$app->add(new \JoindIn\Web\Middleware\FormMiddleware($csrfSecret));
+$app->add(new JoindIn\Web\Middleware\FormMiddleware($csrfSecret));
 
 // register services
 $app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
 
-$app->container->singleton(\JoindIn\Web\Application\CacheService::class, function ($container) {
+$app->container->singleton(JoindIn\Web\Application\CacheService::class, function ($container) {
     $redis = $container->settings['custom']['redis'];
     $prefix = $redis['options']['prefix'];
 
@@ -109,67 +109,67 @@ $app->container->singleton(\JoindIn\Web\Application\CacheService::class, functio
     }
 
     $client = new Predis\Client($redis['connection']);
-    return new \JoindIn\Web\Application\CacheService($client, $prefix);
+    return new JoindIn\Web\Application\CacheService($client, $prefix);
 });
-$app->container->singleton(\JoindIn\Web\Application\ContactApi::class, function ($container) {
-    return new \JoindIn\Web\Application\ContactApi($container['settings']['custom'], $container['access_token']);
+$app->container->singleton(JoindIn\Web\Application\ContactApi::class, function ($container) {
+    return new JoindIn\Web\Application\ContactApi($container['settings']['custom'], $container['access_token']);
 });
-$app->container->singleton(\JoindIn\Web\User\UserDb::class, function ($container) {
-    return new \JoindIn\Web\User\UserDb($container[\JoindIn\Web\Application\CacheService::class]);
+$app->container->singleton(JoindIn\Web\User\UserDb::class, function ($container) {
+    return new JoindIn\Web\User\UserDb($container[JoindIn\Web\Application\CacheService::class]);
 });
-$app->container->singleton(\JoindIn\Web\User\UserApi::class, function ($container) {
-    return new \JoindIn\Web\User\UserApi(
+$app->container->singleton(JoindIn\Web\User\UserApi::class, function ($container) {
+    return new JoindIn\Web\User\UserApi(
         $container['settings']['custom'],
         $container['access_token'],
-        $container[\JoindIn\Web\User\UserDb::class]
+        $container[JoindIn\Web\User\UserDb::class]
     );
 });
-$app->container->singleton(\JoindIn\Web\Event\EventDb::class, function ($container) {
-    return new \JoindIn\Web\Event\EventDb($container[\JoindIn\Web\Application\CacheService::class]);
+$app->container->singleton(JoindIn\Web\Event\EventDb::class, function ($container) {
+    return new JoindIn\Web\Event\EventDb($container[JoindIn\Web\Application\CacheService::class]);
 });
-$app->container->singleton(\JoindIn\Web\Event\EventApi::class, function ($container) {
-    return new \JoindIn\Web\Event\EventApi(
+$app->container->singleton(JoindIn\Web\Event\EventApi::class, function ($container) {
+    return new JoindIn\Web\Event\EventApi(
         $container['settings']['custom'],
         $container['access_token'],
-        $container[\JoindIn\Web\Event\EventDb::class],
-        $container[\JoindIn\Web\User\UserApi::class]
+        $container[JoindIn\Web\Event\EventDb::class],
+        $container[JoindIn\Web\User\UserApi::class]
     );
 });
-$app->container->singleton(\JoindIn\Web\Talk\TalkDb::class, function ($container) {
-    return new \JoindIn\Web\Talk\TalkDb($container[\JoindIn\Web\Application\CacheService::class]);
+$app->container->singleton(JoindIn\Web\Talk\TalkDb::class, function ($container) {
+    return new JoindIn\Web\Talk\TalkDb($container[JoindIn\Web\Application\CacheService::class]);
 });
-$app->container->singleton(\JoindIn\Web\Talk\TalkApi::class, function ($container) {
-    return new \JoindIn\Web\Talk\TalkApi(
+$app->container->singleton(JoindIn\Web\Talk\TalkApi::class, function ($container) {
+    return new JoindIn\Web\Talk\TalkApi(
         $container['settings']['custom'],
         $container['access_token'],
-        new \JoindIn\Web\Talk\TalkDb($container[\JoindIn\Web\Application\CacheService::class]),
-        $container[\JoindIn\Web\User\UserApi::class]
+        new JoindIn\Web\Talk\TalkDb($container[JoindIn\Web\Application\CacheService::class]),
+        $container[JoindIn\Web\User\UserApi::class]
     );
 });
-$app->container->singleton(\JoindIn\Web\User\AuthApi::class, function ($container) {
-    return new \JoindIn\Web\User\AuthApi($container['settings']['custom'], $container['access_token']);
+$app->container->singleton(JoindIn\Web\User\AuthApi::class, function ($container) {
+    return new JoindIn\Web\User\AuthApi($container['settings']['custom'], $container['access_token']);
 });
-$app->container->singleton(\JoindIn\Web\Language\LanguageApi::class, function ($container) {
-    return new \JoindIn\Web\Language\LanguageApi($container['settings']['custom'], $container['access_token']);
+$app->container->singleton(JoindIn\Web\Language\LanguageApi::class, function ($container) {
+    return new JoindIn\Web\Language\LanguageApi($container['settings']['custom'], $container['access_token']);
 });
-$app->container->singleton(\JoindIn\Web\Talk\TalkTypeApi::class, function ($container) {
-    return new \JoindIn\Web\Talk\TalkTypeApi($container['settings']['custom'], $container['access_token']);
+$app->container->singleton(JoindIn\Web\Talk\TalkTypeApi::class, function ($container) {
+    return new JoindIn\Web\Talk\TalkTypeApi($container['settings']['custom'], $container['access_token']);
 });
-$app->container->singleton(\JoindIn\Web\Event\TrackApi::class, function ($container) {
-    return new \JoindIn\Web\Event\TrackApi($container['settings']['custom'], $container['access_token']);
+$app->container->singleton(JoindIn\Web\Event\TrackApi::class, function ($container) {
+    return new JoindIn\Web\Event\TrackApi($container['settings']['custom'], $container['access_token']);
 });
-$app->container->singleton(\JoindIn\Web\Client\ClientApi::class, function ($container) {
-    return new \JoindIn\Web\Client\ClientApi($container['settings']['custom'], $container['access_token']);
+$app->container->singleton(JoindIn\Web\Client\ClientApi::class, function ($container) {
+    return new JoindIn\Web\Client\ClientApi($container['settings']['custom'], $container['access_token']);
 });
 
 // register routes
-new \JoindIn\Web\Application\ApplicationController($app);
-new \JoindIn\Web\Event\EventController($app);
-new \JoindIn\Web\Search\SearchController($app);
-new \JoindIn\Web\User\UserController($app);
-new \JoindIn\Web\Talk\TalkController($app);
-new \JoindIn\Web\Client\ClientController($app);
-new \JoindIn\Web\Apikey\ApikeyController($app);
+new JoindIn\Web\Application\ApplicationController($app);
+new JoindIn\Web\Event\EventController($app);
+new JoindIn\Web\Search\SearchController($app);
+new JoindIn\Web\User\UserController($app);
+new JoindIn\Web\Talk\TalkController($app);
+new JoindIn\Web\Client\ClientController($app);
+new JoindIn\Web\Apikey\ApikeyController($app);
 
 // execute application
 $app->run();
