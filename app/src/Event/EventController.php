@@ -1183,7 +1183,7 @@ class EventController extends BaseController
                             strtotime($talk[3].' '.$talk[4])
                         );
 
-                        $date_end = $date_start->modify( '+'.$talk[5].' minutes');
+                        $date_end = $date_start->modify('+'.$talk[5].' minutes');
 
                         echo "<pre>";
                         var_dump($date_start);
@@ -1202,11 +1202,11 @@ class EventController extends BaseController
                         ];
                         $talk_api = $this->getTalkApi();
                         $talk_api->addTalk($event->getUri(), $talk_data);
-
                     }
 
                     fclose($handle);
-                    var_dump($talks); exit();
+                    var_dump($talks);
+                    exit();
                 }
             } catch (\Exception $e) {
                 $result = false;
