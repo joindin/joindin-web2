@@ -1182,24 +1182,23 @@ class EventController extends BaseController
                         $date_start->setTimestamp(
                             strtotime($talk[3].' '.$talk[4])
                         );
+                        $date_end = new \DateTime();
+                        $date_end->setTimestamp(
+                            strtotime($date_start->format($date_end::ATOM).' plus '.$talk[5].' minutes')
+                        );
 
-                        $date_end = $date_start->modify('+'.$talk[5].' minutes');
-
-                        echo "<pre>";
-                        var_dump($date_start);
-                        var_dump($date_end);
-                        exit();
                         $talk_data = [
                             'name' => $talk[0],
                             'description' => $talk[1],
                             'type' => $talk[7],
                             'track' => $talk[8],
                             'language' => $talk[6],
-                            'date_start' => $date_start,
-                            'date_end' => $date_end,
+                            'date_start' => $date_start->format('Y-m-d H:i'),
+                            'date_end' => $date_end->format('Y-m-d H:i'),
                             'speakers' => [$talk[2]],
                             'location' => 'location',
                         ];
+
                         $talk_api = $this->getTalkApi();
                         $talk_api->addTalk($event->getUri(), $talk_data);
                     }
