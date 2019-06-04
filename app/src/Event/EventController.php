@@ -1194,7 +1194,7 @@ class EventController extends BaseController
                             'language' => $talk[6],
                             'start_date' => $date_start->format('c'),
                             'speakers' => [$talk[2]],
-
+                            'duration' => $talk[5],
                         ];
 
                         $talk_api = $this->getTalkApi();
