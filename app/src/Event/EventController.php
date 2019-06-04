@@ -1174,7 +1174,6 @@ class EventController extends BaseController
                     $eventApi = $this->getEventApi();
                     $event = $eventApi->getByFriendlyUrl($eventSlug);
                     $handle = fopen($_FILES['event_import']['tmp_name']['csv_file'], "r");
-                    $talks = [];
 
                     while (!feof($handle)) {
                         $talk = fgetcsv($handle);
@@ -1188,27 +1187,23 @@ class EventController extends BaseController
                         );
 
                         $talk_data = [
-                            'name' => $talk[0],
-                            'description' => $talk[1],
+                            'talk_title' => $talk[0],
+                            'talk_description' => $talk[1],
                             'type' => $talk[7],
                             'track' => $talk[8],
                             'language' => $talk[6],
-                            'date_start' => $date_start->format('Y-m-d H:i'),
-                            'date_end' => $date_end->format('Y-m-d H:i'),
+                            'start_date' => $date_start->format('c'),
                             'speakers' => [$talk[2]],
-                            'location' => 'location',
+
                         ];
 
                         $talk_api = $this->getTalkApi();
-                        $talk_api->addTalk($event->getUri(), $talk_data);
+                        $talk_api->addTalk($event->getTalksUri(), $talk_data);
                     }
 
                     fclose($handle);
-                    var_dump($talks);
-                    exit();
                 }
             } catch (\Exception $e) {
-                $result = false;
                 $error = $e->getMessage();
                 $messages = json_decode($error);
                 if ($messages) {
