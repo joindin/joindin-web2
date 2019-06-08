@@ -980,7 +980,7 @@ class EventController extends BaseController
                     ];
 
                     if ($action == "approve") {
-                        $this->appoveClaimPendingTalk($talkApi, $claim, $data);
+                        $this->approveClaimPendingTalk($talkApi, $claim, $data);
                     } elseif ($action == "reject") {
                         $this->rejectClaimPendingTalk($talkApi, $claim, $data);
                     }
@@ -996,7 +996,8 @@ class EventController extends BaseController
             );
         }
     }
-    private function appoveClaimPendingTalk(TalkApi $talkApi, $claim, $data)
+
+    private function approveClaimPendingTalk(TalkApi $talkApi, $claim, $data)
     {
         $talkApi->claimTalk($claim->approve_claim_uri, $data);
 
