@@ -31,10 +31,6 @@ class TalkMediaFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', 'text', [
-                'label'    => false,
-                'required' => false,
-            ])
             ->add(
                 'type',
                 'choice',
@@ -49,6 +45,10 @@ class TalkMediaFormType extends AbstractType
                     'label' => false,
                 ]
             )
+            ->add('url', 'text', [
+                'label'    => false,
+                'required' => false,
+            ])
         ;
     }
 }
