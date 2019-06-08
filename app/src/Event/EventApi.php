@@ -137,7 +137,7 @@ class EventApi extends BaseApi
     {
         $eventId = (int)$eventId;
         if (!$eventId) {
-            return;
+            return null;
         }
 
         $eventUrl = $this->baseApiUrl . '/v2.1/events/' . $eventId;
@@ -510,7 +510,7 @@ class EventApi extends BaseApi
             $claims_uri = $claims_uri . "?verbose=yes";
         }
         $response = json_decode($this->apiGet($claims_uri));
-        
+
         $reports = [];
 
         foreach ($response->claims as $item) {
