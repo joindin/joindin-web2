@@ -29,7 +29,8 @@
         "symfony/validator":     "~2.8",
         "symfony/security-csrf": "~2.8",
         "symfony/twig-bridge":   "~2.8",
-        "twig/twig":             "~1.15"
+        "twig/twig":             "~1.15",
+        "ext-json":              "*"
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^1.0",
