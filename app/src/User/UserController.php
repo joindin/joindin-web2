@@ -325,7 +325,7 @@ class UserController extends BaseController
             }
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile.html.twig',
             [
                 'thisUser'         => $user,
@@ -371,7 +371,7 @@ class UserController extends BaseController
             }
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile-talks.html.twig',
             [
                 'thisUser'  => $user,
@@ -404,7 +404,7 @@ class UserController extends BaseController
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile-events.html.twig',
             [
                 'thisUser' => $user,
@@ -438,7 +438,7 @@ class UserController extends BaseController
         }
 
 
-        echo $this->render(
+        $this->render(
             'User/profile-events.html.twig',
             [
                 'thisUser' => $user,
