@@ -3,6 +3,9 @@
 namespace JoindIn\Web\User;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -37,14 +40,14 @@ class RegisterFormType extends AbstractType
         $builder
             ->add(
                 'username',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
                 ]
             )
             ->add(
                 'password',
-                'repeated',
+                RepeatedType::class,
                 [
                     'type'            => 'password',
                     'invalid_message' => 'The password fields must match.',
@@ -56,7 +59,7 @@ class RegisterFormType extends AbstractType
             )
             ->add(
                 'email',
-                'text',
+                TextType::class,
                 [
                     'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
@@ -64,7 +67,7 @@ class RegisterFormType extends AbstractType
             )
             ->add(
                 'full_name',
-                'text',
+                TextType::class,
                 [
                     'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 200])],
@@ -72,14 +75,14 @@ class RegisterFormType extends AbstractType
             )
             ->add(
                 'twitter_username',
-                'text',
+                TextType::class,
                 [
                     'required' => false
                 ]
             )
             ->add(
                 'biography',
-                'textarea',
+                TextareaType::class,
                 [
                     'required'   => false,
                     'empty_data' => '',

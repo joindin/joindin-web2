@@ -3,6 +3,7 @@
 namespace JoindIn\Web\Event;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -33,7 +34,7 @@ class TrackCollectionFormType extends AbstractType
         $builder
             ->add(
                 'tracks',
-                'collection',
+                CollectionType::class,
                 [
                     'type'         => new TrackFormType(),
                     'allow_add'    => true,

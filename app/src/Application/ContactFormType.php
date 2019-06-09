@@ -3,6 +3,8 @@
 namespace JoindIn\Web\Application;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -56,7 +58,7 @@ class ContactFormType extends AbstractType
         $builder
             ->add(
                 'name',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
                     'max_length'  => '100',
@@ -64,7 +66,7 @@ class ContactFormType extends AbstractType
             )
             ->add(
                 'email',
-                'text',
+                TextType::class,
                 [
                     'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
@@ -72,7 +74,7 @@ class ContactFormType extends AbstractType
             )
             ->add(
                 'subject',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
                     'max_length'  => '100',
@@ -80,7 +82,7 @@ class ContactFormType extends AbstractType
             )
             ->add(
                 'comment',
-                'textarea',
+                TextareaType::class,
                 [
                     'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
@@ -88,7 +90,7 @@ class ContactFormType extends AbstractType
             )
             ->add(
                 'phone',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\Blank()],
                 ]

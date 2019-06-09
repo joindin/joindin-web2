@@ -3,6 +3,7 @@
 namespace JoindIn\Web\Client;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -34,7 +35,7 @@ class ClientDeleteFormType extends AbstractType
         $builder
             ->add(
                 'client_id',
-                'hidden',
+                HiddenType::class,
                 []
             )
         ;

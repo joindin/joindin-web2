@@ -5,6 +5,12 @@ namespace JoindIn\Web\Talk;
 use DateTimeImmutable;
 use JoindIn\Web\Event\EventEntity;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -78,14 +84,14 @@ class TalkFormType extends AbstractType
         $builder
             ->add(
                 'talk_title',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 'talk_description',
-                'textarea',
+                TextareaType::class,
                 [
                     'constraints' => [new Assert\NotBlank()],
                     'attr'        => ['rows' => '10']
@@ -93,7 +99,7 @@ class TalkFormType extends AbstractType
             )
             ->add(
                 'start_date',
-                'datetime',
+                DateTimeType::class,
                 [
                     'label'          => 'Date and time of talk',
                     'date_widget'    => 'single_text',
@@ -128,7 +134,7 @@ class TalkFormType extends AbstractType
             )
             ->add(
                 'duration',
-                'integer',
+                IntegerType::class,
                 [
                     'label'       => 'Duration (mins)',
                     'precision'   => 0,
@@ -144,21 +150,21 @@ class TalkFormType extends AbstractType
             )
             ->add(
                 'language',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => ['' => '']  + $this->languages
                 ]
             )
             ->add(
                 'type',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => ['' => '']  + $this->talkTypes
                 ]
             )
             ->add(
                 'track',
-                'choice',
+                ChoiceType::class,
                 [
                     'required' => (bool) ! empty($this->tracks),
                     'choices'  => ['' => ''] + $this->tracks
@@ -166,7 +172,7 @@ class TalkFormType extends AbstractType
             )
             ->add(
                 'speakers',
-                'collection',
+                CollectionType::class,
                 [
                     'label'        => 'Speakers!',
                     'type'         => new SpeakerFormType(),
@@ -176,7 +182,7 @@ class TalkFormType extends AbstractType
             )
             ->add(
                 'talk_media',
-                'collection',
+                CollectionType::class,
                 [
                     'label'        => 'Talk Media',
                     'type'         => new TalkMediaFormType(),

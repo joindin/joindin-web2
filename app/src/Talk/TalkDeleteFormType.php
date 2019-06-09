@@ -3,6 +3,7 @@
 namespace JoindIn\Web\Talk;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -34,7 +35,7 @@ class TalkDeleteFormType extends AbstractType
         $builder
             ->add(
                 'talk_uri',
-                'hidden',
+                HiddenType::class,
                 []
             )
         ;
