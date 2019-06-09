@@ -1,5 +1,5 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
 use DateTime;
 
@@ -17,26 +17,26 @@ class EventSchedulerDay
     private $date;
 
     /**
-     * @var Array $talks
+     * @var array
      */
     private $talks;
 
     /**
-     * @var Array $tracks
+     * @var array
      */
     private $tracks;
 
     /**
      * Constructor
      *
-     * @param $date String
-     * @param $talks Array Multi-dimensional associative array of talk objects
-     * @param $tracks Array Indexed array of track names
+     * @param string $date
+     * @param array $talks Multi-dimensional associative array of talk objects
+     * @param array $tracks Indexed array of track names
      */
     public function __construct($date, $talks, $tracks)
     {
-        $this->date = $date;
-        $this->talks = $talks;
+        $this->date   = $date;
+        $this->talks  = $talks;
         $this->tracks = $tracks;
     }
 
@@ -55,7 +55,7 @@ class EventSchedulerDay
     /**
      * Get talks
      *
-     * @return Array
+     * @return array
      */
     public function getTalks()
     {
@@ -65,7 +65,7 @@ class EventSchedulerDay
     /**
      * Get tracks
      *
-     * @return Array
+     * @return array
      */
     public function getTracks()
     {

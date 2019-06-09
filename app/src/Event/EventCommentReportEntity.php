@@ -1,7 +1,7 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Application\BaseCommentReportingEntity;
+use JoindIn\Web\Application\BaseCommentReportingEntity;
 use stdClass;
 
 class EventCommentReportEntity extends BaseCommentReportingEntity

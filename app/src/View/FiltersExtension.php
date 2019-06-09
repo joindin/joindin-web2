@@ -1,26 +1,27 @@
 <?php
 
-namespace View;
+namespace JoindIn\Web\View;
 
-use Twig_Environment;
-use Twig_SimpleFilter;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-final class FiltersExtension extends \Twig_Extension
+final class FiltersExtension extends AbstractExtension
 {
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'img_path',
                 [$this, 'imgPath'],
                 ['needs_environment' => true]
             ),
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'link',
                 [$this, 'link'],
                 ['is_safe' => ['html']]
             ),
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'format_date',
                 [$this, 'formatDate']
             )
@@ -28,14 +29,14 @@ final class FiltersExtension extends \Twig_Extension
     }
 
     /**
-     * @param Twig_Environment $env
-     * @param string           $suffix
-     * @param string           $infix
+     * @param Environment $env
+     * @param string      $suffix
+     * @param string      $infix
      *
      * @return string
      * @throws \Twig_Error_Runtime
      */
-    public function imgPath(Twig_Environment $env, $suffix, $infix)
+    public function imgPath(Environment $env, $suffix, $infix)
     {
         if (!$suffix && $infix = 'event_icons') {
             $suffix = 'none.png';

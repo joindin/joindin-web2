@@ -1,7 +1,7 @@
 <?php
-namespace Language;
+namespace JoindIn\Web\Language;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 
 class LanguageApi extends BaseApi
 {
@@ -13,6 +13,7 @@ class LanguageApi extends BaseApi
     public function getLanguages()
     {
         $url = $this->baseApiUrl . '/v2.1/languages';
+
         $queryParams['resultsperpage'] = 0;
 
         $result = $this->apiGet($url, $queryParams);

@@ -1,20 +1,20 @@
 <?php
-namespace Application;
+namespace JoindIn\Web\Application;
 
-use Event\EventDb;
-use Event\EventApi;
-use User\UserDb;
-use User\UserApi;
+use Exception;
+use JoindIn\Web\Event\EventApi;
+use Slim\Slim;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class ApplicationController extends BaseController
 {
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $app)
     {
-        $app->get('/', array($this, 'index'));
-        $app->get('/about', array($this, 'about'))->name('about');
-        $app->map('/contact', array($this, 'contact'))->via('GET', 'POST')->name('contact');
-        $app->get('/not-allowed', array($this, 'notAllowed'))->name('not-allowed');
-        $app->get('/assets', array($this, 'assets'))->name('assets');
+        $app->get('/', [$this, 'index']);
+        $app->get('/about', [$this, 'about'])->name('about');
+        $app->map('/contact', [$this, 'contact'])->via('GET', 'POST')->name('contact');
+        $app->get('/not-allowed', [$this, 'notAllowed'])->name('not-allowed');
+        $app->get('/assets', [$this, 'assets'])->name('assets');
     }
 
     public function index()
@@ -24,19 +24,19 @@ class ApplicationController extends BaseController
             : $this->application->request()->get('page');
 
         $perPage = 10;
-        $start = ($page -1) * $perPage;
+        $start   = ($page - 1) * $perPage;
 
-        $eventApi = $this->getEventApi();
+        $eventApi  = $this->getEventApi();
         $hotEvents = $eventApi->getEvents($perPage, $start, 'hot');
         $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);
 
         $this->render(
             'Application/index.html.twig',
-            array(
-                'events' => $hotEvents,
+            [
+                'events'     => $hotEvents,
                 'cfp_events' => $cfpEvents,
-                'page' => $page,
-            )
+                'page'       => $page,
+            ]
         );
     }
 
@@ -83,8 +83,8 @@ class ApplicationController extends BaseController
             if ($form->isValid()) {
                 $values = $form->getData();
 
-                $config = $this->application->config('oauth');
-                $clientId = $config['client_id'];
+                $config       = $this->application->config('oauth');
+                $clientId     = $config['client_id'];
                 $clientSecret = $config['client_secret'];
 
                 try {
@@ -99,7 +99,7 @@ class ApplicationController extends BaseController
                     );
                     $this->application->flash('message', "Thank you for contacting us.");
                     $this->application->redirect($this->application->urlFor("contact"));
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->application->flashNow('error', $e->getMessage());
                 }
             }
@@ -126,13 +126,11 @@ class ApplicationController extends BaseController
         );
     }
 
-
     /**
      * Render the notAllowed page
      */
     public function notAllowed()
     {
-
         $this->render('Application/not-allowed.html.twig', [
             'redirect' => $this->application->request->get('redirect')
         ]);

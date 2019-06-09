@@ -1,10 +1,10 @@
 <?php
 
-namespace Event;
+namespace JoindIn\Web\Event;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Form used to render and validate the submission or editing of a track.
@@ -34,10 +34,10 @@ class TrackCollectionFormType extends AbstractType
         $builder
             ->add(
                 'tracks',
-                'collection',
+                CollectionType::class,
                 [
-                    'type' => new TrackFormType(),
-                    'allow_add' => true,
+                    'type'         => new TrackFormType(),
+                    'allow_add'    => true,
                     'allow_delete' => true,
                 ]
             )

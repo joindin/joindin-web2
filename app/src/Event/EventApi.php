@@ -1,13 +1,16 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Application\BaseApi;
 use DateTime;
 use Exception;
-use Talk\TalkCommentEntity;
-use Talk\TalkCommentReportEntity;
-use User\UserApi;
-use User\UserEntity;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
+use JoindIn\Web\Application\BaseApi;
+use JoindIn\Web\Talk\TalkCommentEntity;
+use JoindIn\Web\Talk\TalkCommentReportEntity;
+use JoindIn\Web\User\UserApi;
+use JoindIn\Web\User\UserEntity;
 
 class EventApi extends BaseApi
 {
@@ -42,8 +45,9 @@ class EventApi extends BaseApi
     public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
         $url = $this->baseApiUrl . '/v2.1/events';
+
         $queryParams['resultsperpage'] = $limit;
-        $queryParams['start'] = $start;
+        $queryParams['start']          = $start;
 
         if ($filter) {
             $queryParams['filter'] = $filter;
@@ -61,7 +65,7 @@ class EventApi extends BaseApi
      * and return us an event
      *
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
-     * @return EventEntity The event we found, or false if something went wrong
+     * @return EventEntity|bool The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl)
     {
@@ -80,7 +84,7 @@ class EventApi extends BaseApi
      * and return us an event
      *
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
-     * @return EventEntity The event we found, or false if something went wrong
+     * @return EventEntity|bool The event we found, or false if something went wrong
      */
     public function getByStub($stub)
     {
@@ -102,7 +106,7 @@ class EventApi extends BaseApi
      */
     public function getEvent($event_uri, $verbose = true)
     {
-        $params = array();
+        $params = [];
         if ($verbose) {
             $params['verbose'] = 'yes';
         }
@@ -127,13 +131,13 @@ class EventApi extends BaseApi
      * Get an event by id
      *
      * @param integer $eventId
-     * @return EventEntity
+     * @return EventEntity|null
      */
     public function getEventById($eventId)
     {
         $eventId = (int)$eventId;
         if (!$eventId) {
-            return;
+            return null;
         }
 
         $eventUrl = $this->baseApiUrl . '/v2.1/events/' . $eventId;
@@ -145,7 +149,7 @@ class EventApi extends BaseApi
      * Get comments for given event
      * @param $comment_uri
      * @param bool $verbose
-     * @return EventCommentEntity[]
+     * @return array|EventCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false)
     {
@@ -155,7 +159,7 @@ class EventApi extends BaseApi
 
         $comments = (array)json_decode($this->apiGet($comment_uri));
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $comment) {
             $commentData[] = new EventCommentEntity($comment);
@@ -164,14 +168,14 @@ class EventApi extends BaseApi
         return $commentData;
     }
 
-    public function addComment($event, $comment, $rating = 0)
+    public function addComment(EventEntity $event, $comment, $rating = 0)
     {
-        $uri = $event->getCommentsUri();
-        $params = array(
+        $uri    = $event->getCommentsUri();
+        $params = [
             'comment' => $comment,
-            'rating' => $rating,
-        );
-        list ($status, $result) = $this->apiPost($uri, $params);
+            'rating'  => $rating,
+        ];
+        list($status, $result) = $this->apiPost($uri, $params);
 
         if ($status == 201) {
             return true;
@@ -181,7 +185,7 @@ class EventApi extends BaseApi
 
     public function reportComment($uri)
     {
-        list ($status, $result) = $this->apiPost($uri);
+        list($status, $result) = $this->apiPost($uri);
 
         if ($status == 202) {
             return true;
@@ -191,7 +195,7 @@ class EventApi extends BaseApi
 
     public function attend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
+        list($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
 
         if ($status == 201) {
             return true;
@@ -202,7 +206,7 @@ class EventApi extends BaseApi
 
     public function unattend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
+        list($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
 
         if ($status == 200) {
             return true;
@@ -221,16 +225,14 @@ class EventApi extends BaseApi
      */
     public function getAttendees($attendees_uri, $limit = 0, $verbose = false)
     {
-
         $attendees_uri .= "?resultsperpage={$limit}";
         if ($verbose) {
             $attendees_uri = $attendees_uri . '&verbose=yes';
         }
 
-
         $attendees = (array)json_decode($this->apiGet($attendees_uri));
 
-        $attendeeData = array();
+        $attendeeData = [];
 
         foreach ($attendees['users'] as $attendee) {
             $attendeeData[] = new UserEntity($attendee);
@@ -254,7 +256,7 @@ class EventApi extends BaseApi
     public function submit(array $data)
     {
         // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        $dateFields = ['start_date', 'end_date', 'cfp_start_date', 'cfp_end_date'];
         foreach ($dateFields as $dateField) {
             if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('Y-m-d');
@@ -266,7 +268,7 @@ class EventApi extends BaseApi
             }
         }
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
+        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 201) {
@@ -300,7 +302,7 @@ class EventApi extends BaseApi
     public function edit(array $data)
     {
         // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        $dateFields = ['start_date', 'end_date', 'cfp_start_date', 'cfp_end_date'];
         foreach ($dateFields as $dateField) {
             if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('c');
@@ -313,7 +315,7 @@ class EventApi extends BaseApi
         }
 
 
-        list ($status, $result, $headers) = $this->apiPut($data['uri'], $data);
+        list($status, $result, $headers) = $this->apiPut($data['uri'], $data);
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
             $response = $this->getCollection($headers['location']);
@@ -335,20 +337,22 @@ class EventApi extends BaseApi
     public function uploadIcon($imagesUri, $fileName)
     {
         try {
-            $client = new \GuzzleHttp\Client([
+            $client = new Client([
                 "timeout" => 10,
             ]);
 
             $headers = [];
-            $headers["Accept"] = "application/json";
+
+            $headers["Accept"]        = "application/json";
             $headers["Authorization"] = "OAuth {$this->accessToken}";
 
             // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
-            $ip = $_SERVER['REMOTE_ADDR'];
-            $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+            $ip                   = $_SERVER['REMOTE_ADDR'];
+            $agent                = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
             $headers["Forwarded"] = "for=$ip;user-agent=\"$agent\"";
 
             $options = [];
+
             $options['headers'] = $headers;
 
             if ($this->proxy) {
@@ -356,12 +360,16 @@ class EventApi extends BaseApi
             }
 
             // now add the file itself
-            $options['multipart'] = [['name' => 'image',
-                'contents' => fopen($fileName, 'r')]];
+            $options['multipart'] = [
+                [
+                    'name'     => 'image',
+                    'contents' => fopen($fileName, 'r')
+                ]
+            ];
 
-            $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
+            $request  = new Request('POST', $imagesUri);
             $response = $client->send($request, $options);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        } catch (RequestException $e) {
             $body = $e->getResponse()->getBody();
             error_log($e->getMessage());
             error_log(json_decode($body)[0]);
@@ -387,12 +395,12 @@ class EventApi extends BaseApi
      *
      * @return array
      */
-    public function getCollection($uri, array $queryParams = array())
+    public function getCollection($uri, array $queryParams = [])
     {
         $events = (array)json_decode($this->apiGet($uri, $queryParams));
         $meta   = array_pop($events);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($events['events'] as $item) {
             $event = new EventEntity($item);
 
@@ -437,7 +445,7 @@ class EventApi extends BaseApi
 
         $meta = array_pop($comments);
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $item) {
             if (isset($item->user_uri)) {
@@ -459,7 +467,7 @@ class EventApi extends BaseApi
      */
     public function approveEvent($approval_uri)
     {
-        list ($status, $result, $headers) = $this->apiPost($approval_uri);
+        list($status, $result, $headers) = $this->apiPost($approval_uri);
 
         if ($status == 204) {
             return true;
@@ -475,7 +483,7 @@ class EventApi extends BaseApi
      */
     public function rejectEvent($approval_uri)
     {
-        list ($status, $result, $headers) = $this->apiDelete($approval_uri);
+        list($status, $result, $headers) = $this->apiDelete($approval_uri);
 
         if ($status == 204) {
             return true;
@@ -502,7 +510,7 @@ class EventApi extends BaseApi
             $claims_uri = $claims_uri . "?verbose=yes";
         }
         $response = json_decode($this->apiGet($claims_uri));
-        
+
         $reports = [];
 
         foreach ($response->claims as $item) {
@@ -538,7 +546,7 @@ class EventApi extends BaseApi
     {
         $data['decision'] = $decision;
 
-        list ($status, $result, $headers) = $this->apiPut($reported_uri, $data);
+        list($status, $result, $headers) = $this->apiPut($reported_uri, $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {

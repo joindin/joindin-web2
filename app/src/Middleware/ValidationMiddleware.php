@@ -1,6 +1,6 @@
 <?php
 
-namespace Middleware;
+namespace JoindIn\Web\Middleware;
 
 use Slim\Middleware;
 use Symfony\Component\Translation\Loader\ArrayLoader;
@@ -8,10 +8,10 @@ use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
-use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
-use Symfony\Component\Validator\Validator;
 use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * In this middleware we create the validation services as provided by Symfony and register it as service in the
@@ -72,18 +72,17 @@ class ValidationMiddleware extends Middleware
      * Generally this method does not need to be called directly; it is used in a callback that created a shared
      * instance in the container of Slim.
      *
+     * @return ValidatorInterface
      * @see self::call() where this method is used to construct a shared instance in Slim.
      *
-     * @return Validator
      */
     public function createValidator()
     {
         $validator = Validation::createValidatorBuilder()
-            ->setMetadataFactory(new ClassMetadataFactory(new StaticMethodLoader()))
-            ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app, array()))
-            ->setTranslator($this->getTranslator())
-            ->setApiVersion(Validation::API_VERSION_2_5)
-            ->getValidator();
+                               ->setMetadataFactory(new LazyLoadingMetadataFactory(new StaticMethodLoader()))
+                               ->setConstraintValidatorFactory(new ConstraintValidatorFactory())
+                               ->setTranslator($this->getTranslator())
+                               ->getValidator();
 
         return $validator;
     }
@@ -129,7 +128,7 @@ class ValidationMiddleware extends Middleware
      */
     private function getTranslationsRootFolder()
     {
-        $r = new \ReflectionClass('Symfony\Component\Validator\Validator');
+        $r = new \ReflectionClass(ValidatorInterface::class);
 
         return dirname($r->getFilename());
     }

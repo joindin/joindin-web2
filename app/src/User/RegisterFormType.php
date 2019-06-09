@@ -1,8 +1,11 @@
 <?php
 
-namespace User;
+namespace JoindIn\Web\User;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -37,54 +40,54 @@ class RegisterFormType extends AbstractType
         $builder
             ->add(
                 'username',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
                 ]
             )
             ->add(
                 'password',
-                'repeated',
+                RepeatedType::class,
                 [
-                    'type' => 'password',
+                    'type'            => 'password',
                     'invalid_message' => 'The password fields must match.',
-                    'required' => true,
-                    'first_options'  => array('label' => 'Password'),
-                    'second_options' => array('label' => 'Repeat Password'),
-                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
+                    'required'        => true,
+                    'first_options'   => ['label' => 'Password'],
+                    'second_options'  => ['label' => 'Repeat Password'],
+                    'constraints'     => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
                 ]
             )
             ->add(
                 'email',
-                'text',
+                TextType::class,
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
             ->add(
                 'full_name',
-                'text',
+                TextType::class,
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 200])],
                 ]
             )
             ->add(
                 'twitter_username',
-                'text',
+                TextType::class,
                 [
                     'required' => false
                 ]
             )
             ->add(
                 'biography',
-                'textarea',
+                TextareaType::class,
                 [
-                    'required' => false,
+                    'required'   => false,
                     'empty_data' => '',
-                    'attr' => [
-                        'rows' => 4,
+                    'attr'       => [
+                        'rows'      => 4,
                         'maxlength' => '400'
                     ]
                 ]

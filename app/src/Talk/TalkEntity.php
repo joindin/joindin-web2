@@ -1,10 +1,10 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseEntity;
 use ArrayAccess;
 use DateInterval;
 use DateTime;
+use JoindIn\Web\Application\BaseEntity;
 
 class TalkEntity extends BaseEntity implements ArrayAccess
 {
@@ -61,7 +61,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         }
 
         $start_time = $this->getStartDateTime();
-        $end_time = $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
+        $end_time   = $start_time->add(new DateInterval('PT' . $this->data->duration . 'M'));
 
         return $end_time;
     }

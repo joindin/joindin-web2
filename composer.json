@@ -2,19 +2,12 @@
     "name": "joindin/website",
     "license": "BSD-3-Clause",
     "autoload": {
-        "psr-0":{
-            "Application": ["app/src/", "tests/"],
-            "Form":        ["app/src/", "tests/"],
-            "Language":    ["app/src/", "tests/"],
-            "Middleware":  ["app/src/", "tests/"],
-            "Event":       ["app/src/", "tests/"],
-            "Search":      ["app/src/", "tests/"],
-            "Talk":        ["app/src/", "tests/"],
-            "User":        ["app/src/", "tests/"],
-            "Client":      ["app/src/", "tests/"],
-            "Apikey":      ["app/src/", "tests/"],
-            "View":        ["app/src/", "tests/"]
+        "psr-4":{
+            "JoindIn\\Web\\": "app/src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": { "JoindIn\\Web\\": "tests/" }
     },
     "config": {
         "platform": {
@@ -26,24 +19,33 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "guzzlehttp/guzzle":     "^6.2.1",
-        "monolog/monolog":       "^1.21",
-        "org_heigl/daterange":   "~1.1",
-        "predis/predis":         "~0.8",
-        "slim/slim":             "~2.4",
-        "slim/views":            "~0.1",
-        "symfony/form":          "~2.8",
-        "symfony/validator":     "~2.8",
-        "symfony/security-csrf": "~2.8",
-        "symfony/twig-bridge":   "~2.8",
-        "twig/twig":             "~1.15"
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^6.2.1",
+        "monolog/monolog": "^1.21",
+        "org_heigl/daterange": "~1.1",
+        "predis/predis": "~0.8",
+        "slim/slim": "~2.4",
+        "slim/views": "~0.1",
+        "symfony/console": "^3.4",
+        "symfony/form": "^3.4",
+        "symfony/inflector": "^3.4",
+        "symfony/intl": "^3.4",
+        "symfony/options-resolver": "^3.4",
+        "symfony/property-access": "^3.4",
+        "symfony/security-core": "^3.4",
+        "symfony/security-csrf": "^3.4",
+        "symfony/translation": "^3.4",
+        "symfony/twig-bridge": "^3.4",
+        "symfony/validator": "^3.4",
+        "twig/twig": "~1.15"
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^1.0",
         "phpunit/phpunit": "^8.0",
         "roave/security-advisories": "dev-master",
         "sensiolabs/security-checker": "^5.0",
-        "squizlabs/php_codesniffer": "^3.4"
+        "squizlabs/php_codesniffer": "^3.4",
+        "symfony/debug": "^3.4"
     },
     "scripts": {
         "test": "phpunit -c . tests/",
@@ -59,7 +61,8 @@
             "@lint",
             "@sniff",
             "@security",
-            "@test"
+            "@test",
+            "@coverage"
         ]
     }
 }

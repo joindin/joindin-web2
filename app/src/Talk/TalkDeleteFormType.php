@@ -1,11 +1,10 @@
 <?php
 
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Event\EventEntity;
 
 /**
  * Form used to render and validate the submission or editing of a 3rd party application.
@@ -36,7 +35,7 @@ class TalkDeleteFormType extends AbstractType
         $builder
             ->add(
                 'talk_uri',
-                'hidden',
+                HiddenType::class,
                 []
             )
         ;

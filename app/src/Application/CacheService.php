@@ -1,5 +1,7 @@
 <?php
-namespace Application;
+namespace JoindIn\Web\Application;
+
+use Predis\Client;
 
 /**
  * Class CacheService
@@ -11,10 +13,10 @@ class CacheService
     protected $client;
     protected $keyPrefix;
 
-    public function __construct(\Predis\Client $client, $keyPrefix = '')
+    public function __construct(Client $client, $keyPrefix = '')
     {
         $this->keyPrefix = $keyPrefix;
-        $this->client = $client;
+        $this->client    = $client;
     }
 
     public function save($collection, $data, $keyField, $keyValue)

@@ -1,8 +1,12 @@
 <?php
 
-namespace User;
+namespace JoindIn\Web\User;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -44,37 +48,37 @@ class UserFormType extends AbstractType
         $builder
             ->add(
                 'full_name',
-                'text',
+                TextType::class,
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 'email',
-                'text',
+                TextType::class,
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
             ->add(
                 'twitter_username',
-                'text',
+                TextType::class,
                 [
-                    'required' => false,
+                    'required'   => false,
                     'empty_data' => '',
                     // 'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
             ->add(
                 'biography',
-                'textarea',
+                TextareaType::class,
                 [
-                    'required' => false,
+                    'required'   => false,
                     'empty_data' => '',
-                    'attr' => [
-                        'rows' => 4,
+                    'attr'       => [
+                        'rows'      => 4,
                         'maxlength' => '400'
                     ]
                 ]
@@ -84,23 +88,23 @@ class UserFormType extends AbstractType
             $builder
                 ->add(
                     'old_password',
-                    'password',
+                    PasswordType::class,
                     [
-                        'label' => 'Current password',
+                        'label'    => 'Current password',
                         'required' => false,
                         // 'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                     ]
                 )
                 ->add(
                     'password',
-                    'repeated',
+                    RepeatedType::class,
                     [
-                        'type' => 'password',
+                        'type'            => 'password',
                         'invalid_message' => 'The password fields must match.',
-                        'required' => false,
-                        'first_options' => array('label' => 'New password'),
-                        'second_options' => array('label' => 'Repeat new password'),
-                        'constraints' => [new Assert\Length(['min' => 6])],
+                        'required'        => false,
+                        'first_options'   => ['label' => 'New password'],
+                        'second_options'  => ['label' => 'Repeat new password'],
+                        'constraints'     => [new Assert\Length(['min' => 6])],
                     ]
                 );
         }

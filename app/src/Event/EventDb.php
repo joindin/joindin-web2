@@ -1,8 +1,8 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Application\BaseDb;
-use Application\CacheService;
+use JoindIn\Web\Application\BaseDb;
+use JoindIn\Web\Application\CacheService;
 
 class EventDb extends BaseDb
 {
@@ -14,13 +14,13 @@ class EventDb extends BaseDb
 
     public function save(EventEntity $event)
     {
-        $data = array(
+        $data = [
             "url_friendly_name" => $event->getUrlFriendlyName(),
-            "uri" => $event->getUri(),
-            "stub" => $event->getStub(),
-            "verbose_uri" => $event->getVerboseUri(),
-            "name" => $event->getName(),
-        );
+            "uri"               => $event->getUri(),
+            "stub"              => $event->getStub(),
+            "verbose_uri"       => $event->getVerboseUri(),
+            "name"              => $event->getName(),
+        ];
 
         $this->cache->save($this->keyName, $data, 'uri', $event->getUri());
         $this->cache->save($this->keyName, $data, 'url_friendly_name', $event->getUrlFriendlyName());

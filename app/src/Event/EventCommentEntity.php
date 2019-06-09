@@ -1,7 +1,7 @@
 <?php
-namespace Event;
+namespace JoindIn\Web\Event;
 
-use Application\BaseCommentEntity;
+use JoindIn\Web\Application\BaseCommentEntity;
 
 class EventCommentEntity extends BaseCommentEntity
 {

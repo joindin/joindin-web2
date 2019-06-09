@@ -1,8 +1,9 @@
 <?php
 
-namespace User;
+namespace JoindIn\Web\User;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -37,14 +38,14 @@ class NewPasswordFormType extends AbstractType
         $builder
             ->add(
                 'password',
-                'repeated',
+                RepeatedType::class,
                 [
-                    'type' => 'password',
+                    'type'            => 'password',
                     'invalid_message' => 'The password fields must match.',
-                    'required' => true,
-                    'first_options'  => array('label' => 'Password'),
-                    'second_options' => array('label' => 'Repeat Password'),
-                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
+                    'required'        => true,
+                    'first_options'   => ['label' => 'Password'],
+                    'second_options'  => ['label' => 'Repeat Password'],
+                    'constraints'     => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
                 ]
             )
         ;

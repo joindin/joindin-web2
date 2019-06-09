@@ -1,8 +1,7 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseCommentEntity;
-use stdClass;
+use JoindIn\Web\Application\BaseCommentEntity;
 
 class TalkCommentEntity extends BaseCommentEntity
 {
@@ -44,7 +43,6 @@ class TalkCommentEntity extends BaseCommentEntity
 
     public function canRateTalk($user_uri)
     {
-
         if (isset($this->data->user_uri) && $this->data->user_uri == $user_uri) {
             return false;
         }

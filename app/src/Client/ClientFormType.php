@@ -1,11 +1,13 @@
 <?php
 
-namespace Client;
+namespace JoindIn\Web\Client;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Event\EventEntity;
 
 /**
  * Form used to render and validate the submission or editing of a 3rd party application.
@@ -36,22 +38,22 @@ class ClientFormType extends AbstractType
         $builder
             ->add(
                 'application',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 'description',
-                'textarea',
+                TextareaType::class,
                 [
                     'constraints' => [new Assert\NotBlank()],
-                    'attr'=> ['rows' => '10']
+                    'attr'        => ['rows' => '10']
                 ]
             )
             ->add(
                 'callback_url',
-                'url',
+                UrlType::class,
                 [
                     'constraints' => [
                         new Assert\Url(),

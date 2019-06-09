@@ -1,12 +1,12 @@
 <?php
 
-namespace Application;
+namespace JoindIn\Web\Application;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Form\DataTransformer\DateTransformer;
-use Form\DataTransformer\EventTagsTransformer;
 
 /**
  * Form used to render and validate a contact form.
@@ -58,39 +58,39 @@ class ContactFormType extends AbstractType
         $builder
             ->add(
                 'name',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'max_length' => '100',
+                    'max_length'  => '100',
                 ]
             )
             ->add(
                 'email',
-                'text',
+                TextType::class,
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
             ->add(
                 'subject',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'max_length' => '100',
+                    'max_length'  => '100',
                 ]
             )
             ->add(
                 'comment',
-                'textarea',
+                TextareaType::class,
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 'phone',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\Blank()],
                 ]

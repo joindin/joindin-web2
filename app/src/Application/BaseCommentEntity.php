@@ -1,5 +1,5 @@
 <?php
-namespace Application;
+namespace JoindIn\Web\Application;
 
 abstract class BaseCommentEntity extends BaseEntity
 {

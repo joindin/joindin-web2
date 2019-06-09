@@ -1,9 +1,10 @@
 <?php
 
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Event\EventEntity;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -34,7 +35,7 @@ class TalkMediaFormType extends AbstractType
         $builder
             ->add(
                 'type',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
                         'slides_link'  => 'Slides',
@@ -46,7 +47,7 @@ class TalkMediaFormType extends AbstractType
                     'label' => false,
                 ]
             )
-            ->add('url', 'text', [
+            ->add('url', TextType::class, [
                 'label'    => false,
                 'required' => false,
             ])

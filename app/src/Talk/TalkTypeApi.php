@@ -1,7 +1,7 @@
 <?php
-namespace Talk;
+namespace JoindIn\Web\Talk;
 
-use Application\BaseApi;
+use JoindIn\Web\Application\BaseApi;
 
 class TalkTypeApi extends BaseApi
 {
@@ -12,7 +12,7 @@ class TalkTypeApi extends BaseApi
      */
     public function getTalkTypes()
     {
-        $url = $this->baseApiUrl . '/v2.1/talk_types';
+        $url                           = $this->baseApiUrl . '/v2.1/talk_types';
         $queryParams['resultsperpage'] = 0;
 
         $result = $this->apiGet($url, $queryParams);

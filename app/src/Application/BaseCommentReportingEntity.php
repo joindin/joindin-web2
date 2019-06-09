@@ -1,5 +1,5 @@
 <?php
-namespace Application;
+namespace JoindIn\Web\Application;
 
 use stdClass;
 

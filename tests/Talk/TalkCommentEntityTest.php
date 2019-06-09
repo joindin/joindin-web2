@@ -1,8 +1,8 @@
 <?php
-namespace Tests\Talk;
+namespace JoindIn\Web\Tests\Talk;
 
+use JoindIn\Web\Talk\TalkCommentEntity;
 use PHPUnit\Framework\TestCase;
-use Talk\TalkCommentEntity;
 use stdClass;
 
 class TalkCommentEntityTest extends TestCase
@@ -11,18 +11,18 @@ class TalkCommentEntityTest extends TestCase
 
     public function setUp(): void
     {
-        $this->commentData = new stdClass();
-        $this->commentData->rating              = 5;
-        $this->commentData->comment             = "Test event comment text";
-        $this->commentData->user_display_name   = "Test comment display name";
-        $this->commentData->talk_title          = "Test talk title";
-        $this->commentData->created_date        = "2014-03-02T08:43:44+01:00";
-        $this->commentData->uri                 = "Test comment uri";
-        $this->commentData->verbose_uri         = "Test comment verbose uri";
-        $this->commentData->talk_uri            = "Test talk uri";
-        $this->commentData->talk_comments_uri   = "Test comments uri";
-        $this->commentData->user_uri            = "Test user uri";
-        $this->commentData->source              = "Test comment source";
+        $this->commentData                    = new stdClass();
+        $this->commentData->rating            = 5;
+        $this->commentData->comment           = "Test event comment text";
+        $this->commentData->user_display_name = "Test comment display name";
+        $this->commentData->talk_title        = "Test talk title";
+        $this->commentData->created_date      = "2014-03-02T08:43:44+01:00";
+        $this->commentData->uri               = "Test comment uri";
+        $this->commentData->verbose_uri       = "Test comment verbose uri";
+        $this->commentData->talk_uri          = "Test talk uri";
+        $this->commentData->talk_comments_uri = "Test comments uri";
+        $this->commentData->user_uri          = "Test user uri";
+        $this->commentData->source            = "Test comment source";
     }
 
     public function testBasicCommentsData(): void

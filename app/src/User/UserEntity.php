@@ -1,8 +1,8 @@
 <?php
 
-namespace User;
+namespace JoindIn\Web\User;
 
-use Application\BaseEntity;
+use JoindIn\Web\Application\BaseEntity;
 
 class UserEntity extends BaseEntity
 {
@@ -174,7 +174,7 @@ class UserEntity extends BaseEntity
 
     public function getId()
     {
-        $uri = $this->data->uri;
+        $uri   = $this->data->uri;
         $parts = explode('/', $uri);
 
         return $parts[5];

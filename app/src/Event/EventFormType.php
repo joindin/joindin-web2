@@ -1,12 +1,19 @@
 <?php
 
-namespace Event;
+namespace JoindIn\Web\Event;
 
+use JoindIn\Web\Event\Constraint\ValidEventIcon;
+use JoindIn\Web\Form\DataTransformer\DateTransformer;
+use JoindIn\Web\Form\DataTransformer\EventTagsTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Form\DataTransformer\DateTransformer;
-use Form\DataTransformer\EventTagsTransformer;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -55,8 +62,7 @@ class EventFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        list ($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
+        list($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
 
         $timezone = null;
         if (isset($options['data'])) {
@@ -65,17 +71,17 @@ class EventFormType extends AbstractType
 
         $dateTransformer = new DateTransformer($timezone);
         $builder
-            ->add('addr', 'hidden', ['mapped' => false])
+            ->add('addr', HiddenType::class, ['mapped' => false])
             ->add(
                 'name',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
                 ]
             )
             ->add(
                 'description',
-                'textarea',
+                TextareaType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
                     'attr'        => [
@@ -86,96 +92,96 @@ class EventFormType extends AbstractType
             ->add(
                 $builder->create(
                     'tags',
-                    'text',
+                    TextType::class,
                     [
                         'required' => false,
-                        'attr'        => ['placeholder' => 'comma separated, tag, list']
+                        'attr'     => ['placeholder' => 'comma separated, tag, list']
                     ]
                 )->addViewTransformer(new EventTagsTransformer())
             )
             ->add(
                 'tz_continent',
-                'choice',
+                ChoiceType::class,
                 [
                     'label'       => 'Timezone',
-                    'choices'     => array("Select a continent") + $continents,
+                    'choices'     => array_merge(["Select a continent"], $continents),
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 'tz_place',
-                'choice',
+                ChoiceType::class,
                 [
                     'label'       => 'Timezone city',
-                    'choices'     => array('Select a city') + $cities,
+                    'choices'     => array_merge(['Select a city'], $cities),
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 $builder->create(
                     'start_date',
-                    'text',
+                    TextType::class,
                     $this->getOptionsForDateWidget('Start date')
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'end_date',
-                    'text',
+                    TextType::class,
                     $this->getOptionsForDateWidget('End date')
                 )->addViewTransformer($dateTransformer)
             )
-            ->add('href', 'url', $this->getOptionsForUrlWidget('Website URL'))
+            ->add('href', UrlType::class, $this->getOptionsForUrlWidget('Website URL'))
             ->add(
                 $builder->create(
                     'cfp_start_date',
-                    'text',
+                    TextType::class,
                     $this->getOptionsForDateWidget('Opening date', false)
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'cfp_end_date',
-                    'text',
+                    TextType::class,
                     $this->getOptionsForDateWidget('Closing date', false)
                 )->addViewTransformer($dateTransformer)
             )
-            ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
+            ->add('cfp_url', UrlType::class, $this->getOptionsForUrlWidget('Call for papers URL', false))
             ->add(
                 'location',
-                'text',
+                TextType::class,
                 [
-                    'label' => 'Venue name',
+                    'label'       => 'Venue name',
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 'latitude',
-                'text',
+                TextType::class,
                 [
                     'label' => 'Latitude',
-                    'attr' => ['readonly' => 'readonly'],
+                    'attr'  => ['readonly' => 'readonly'],
                 ]
             )
             ->add(
                 'longitude',
-                'text',
+                TextType::class,
                 [
                     'label' => 'Longitude',
-                    'attr' => ['readonly' => 'readonly'],
+                    'attr'  => ['readonly' => 'readonly'],
                 ]
             )
             ->add(
                 'new_icon',
-                'file',
+                FileType::class,
                 [
-                    'data_class' => null,
-                    'label' => 'Upload new icon',
-                    'required' => false,
-                    'attr'=> [
-                        'class'=>'file',
+                    'data_class'  => null,
+                    'label'       => 'Upload new icon',
+                    'required'    => false,
+                    'attr'        => [
+                        'class' => 'file',
                     ],
-                    'constraints' => [new Constraint\ValidEventIcon(['groupname' => 'event', 'keyname'=>'new_icon'])],
+                    'constraints' => [new ValidEventIcon(['groupname' => 'event', 'keyname' => 'new_icon'])],
                 ]
             )
         ;
@@ -262,13 +268,16 @@ class EventFormType extends AbstractType
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
 
+        $continents = [];
+        $cities     = [];
+
         foreach ($timezones as $timezone) {
             list($continent, $city) = explode('/', $timezone, 2);
             $continents[$continent] = $continent;
-            $cities[$city] = $city;
+            $cities[$city]          = $city;
         }
 
-        return array($continents, $cities);
+        return [$continents, $cities];
     }
 
     /**
@@ -284,10 +293,10 @@ class EventFormType extends AbstractType
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
 
-        $result = array();
+        $result = [];
         foreach ($timezones as $timezone) {
             list($continent, $city) = explode('/', $timezone, 2);
-            $result[$continent][] = $city;
+            $result[$continent][]   = $city;
         }
 
         foreach ($result as $continent => $cities) {

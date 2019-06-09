@@ -1,9 +1,7 @@
 <?php
-namespace Client;
+namespace JoindIn\Web\Client;
 
-use Application\BaseEntity;
-use DateTime;
-use DateInterval;
+use JoindIn\Web\Application\BaseEntity;
 
 class ClientEntity extends BaseEntity
 {
