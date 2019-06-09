@@ -5,12 +5,13 @@ namespace JoindIn\Web\Middleware;
 use Slim\Middleware;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\ResolvedFormTypeFactory;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
@@ -20,6 +21,8 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * Middleware for Slim used to integrate Symfony forms into Slim.
@@ -70,6 +73,7 @@ class FormMiddleware extends Middleware
      * ```
      *
      * @return void
+     * @throws \ReflectionException
      */
     public function call()
     {
@@ -100,9 +104,10 @@ class FormMiddleware extends Middleware
      * Generally this method does not need to be called directly; it is used in a callback that created a shared
      * instance in the container of Slim.
      *
+     * @return FormFactoryInterface
+     * @throws \ReflectionException
      * @see self::call() where this method is used to construct a shared instance in Slim.
      *
-     * @return FormFactoryInterface
      */
     public function createFormFactory()
     {
@@ -138,8 +143,8 @@ class FormMiddleware extends Middleware
     private function getChainingLoader($env)
     {
         $loader = $env->getLoader();
-        if (!$loader instanceof \Twig_Loader_Chain) {
-            $loader = new \Twig_Loader_Chain([$loader]);
+        if (!$loader instanceof ChainLoader) {
+            $loader = new ChainLoader([$loader]);
             $env->setLoader($loader);
         }
 
@@ -149,15 +154,16 @@ class FormMiddleware extends Middleware
     /**
      * Adds a loader to Twig pointing to the location of the default templates for forms.
      *
-     * @param \Twig_Loader_Chain $loader
+     * @param ChainLoader $loader
      *
      * @return void
+     * @throws \ReflectionException
      */
-    private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
+    private function addFormTemplatesFolderToLoader(ChainLoader $loader)
     {
-        $reflected = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
+        $reflected = new \ReflectionClass(FormExtension::class);
         $path      = dirname($reflected->getFileName()) . '/../Resources/views/Form';
-        $loader->addLoader(new \Twig_Loader_Filesystem($path));
+        $loader->addLoader(new FilesystemLoader($path));
     }
 
     /**
@@ -169,7 +175,7 @@ class FormMiddleware extends Middleware
      */
     private function createFormTwigExtension($formLayoutTemplate)
     {
-        return new FormExtension(new TwigRenderer(new TwigRendererEngine([$formLayoutTemplate])));
+        return new FormExtension(new FormRenderer(new TwigRendererEngine([$formLayoutTemplate])));
     }
 
     /**
@@ -200,13 +206,14 @@ class FormMiddleware extends Middleware
      * @param FormFactoryBuilder $builder
      *
      * @return void
+     * @throws \ReflectionException
      */
     protected function addValidatorExtensionToFactoryBuilder(FormFactoryBuilder $builder)
     {
         $builder->addExtension(new ValidatorExtension($this->app->validator));
 
         if (isset($this->app->translator)) {
-            $r = new \ReflectionClass('Symfony\Component\Form\Form');
+            $r = new \ReflectionClass(Form::class);
             $this->app->translator->addResource(
                 'xliff',
                 dirname($r->getFilename()) . '/Resources/translations/validators.' . $this->locale . '.xlf',
