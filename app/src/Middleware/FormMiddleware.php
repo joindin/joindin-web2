@@ -5,6 +5,7 @@ namespace JoindIn\Web\Middleware;
 use Slim\Middleware;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
@@ -175,7 +176,7 @@ class FormMiddleware extends Middleware
      */
     private function createFormTwigExtension($formLayoutTemplate)
     {
-        return new FormExtension(new FormRenderer(new TwigRendererEngine([$formLayoutTemplate])));
+        return new FormExtension(new TwigRenderer(new TwigRendererEngine([$formLayoutTemplate])));
     }
 
     /**
