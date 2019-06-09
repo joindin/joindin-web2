@@ -73,7 +73,7 @@ class UserFormType extends AbstractType
             )
             ->add(
                 'biography',
-                    TextareaType::class,
+                TextareaType::class,
                 [
                     'required'   => false,
                     'empty_data' => '',
