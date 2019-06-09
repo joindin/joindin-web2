@@ -11,7 +11,7 @@ use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * In this middleware we create the validation services as provided by Symfony and register it as service in the
@@ -128,7 +128,7 @@ class ValidationMiddleware extends Middleware
      */
     private function getTranslationsRootFolder()
     {
-        $r = new \ReflectionClass('Symfony\Component\Validator\Validator');
+        $r = new \ReflectionClass(ValidatorInterface::class);
 
         return dirname($r->getFilename());
     }
