@@ -1192,7 +1192,7 @@ class EventController extends BaseController
                             'type' => filter_var($talk[7], FILTER_SANITIZE_STRING),
                             'track' => filter_var($talk[8], FILTER_SANITIZE_STRING),
                             'language' => filter_var($talk[6], FILTER_SANITIZE_STRING),
-                            'start_date' => filter_var($date_start->format('c'), FILTER_SANITIZE_STRING),
+                            'start_date' => $date_start->format('c'),
                             'speakers' => [filter_var($talk[2], FILTER_SANITIZE_STRING)],
                             'duration' => filter_var($talk[5], FILTER_SANITIZE_STRING),
                         ];
