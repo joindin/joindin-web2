@@ -1179,11 +1179,11 @@ class EventController extends BaseController
                         $talk = fgetcsv($handle);
                         $date_start = new \DateTime();
                         $date_start->setTimestamp(
-                            strtotime(filter_var($talk[3], FILTER_SANITIZE_STRING).' '.filter_var($talk[4], FILTER_SANITIZE_STRING)
+                            strtotime(filter_var($talk[3], FILTER_SANITIZE_STRING).' '.filter_var($talk[4], FILTER_SANITIZE_STRING))
                         );
                         $date_end = new \DateTime();
                         $date_end->setTimestamp(
-                            strtotime($date_start->format($date_end::ATOM).' plus '.$talk[5].' minutes')
+                            strtotime($date_start->format($date_end::ATOM).' plus '.filter_var($talk[5], FILTER_SANITIZE_STRING).' minutes')
                         );
 
                         $talk_data = [
