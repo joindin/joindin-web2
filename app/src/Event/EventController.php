@@ -1153,7 +1153,7 @@ class EventController extends BaseController
     /**
      * Upload Data from CSV for this event
      * @todo Validate & Process uploaded cSV
-     * @param string $friendly_name
+     * @param string $eventSlug
      */
     public function eventImportCsv($eventSlug)
     {
