@@ -1179,7 +1179,7 @@ class EventController extends BaseController
                         $talk = fgetcsv($handle);
                         $date_start = new \DateTime();
                         $date_start->setTimestamp(
-                            strtotime($talk[3].' '.$talk[4])
+                            strtotime(filter_var($talk[3], FILTER_SANITIZE_STRING).' '.filter_var($talk[4], FILTER_SANITIZE_STRING)
                         );
                         $date_end = new \DateTime();
                         $date_end->setTimestamp(
@@ -1187,14 +1187,14 @@ class EventController extends BaseController
                         );
 
                         $talk_data = [
-                            'talk_title' => $talk[0],
-                            'talk_description' => $talk[1],
-                            'type' => $talk[7],
-                            'track' => $talk[8],
-                            'language' => $talk[6],
-                            'start_date' => $date_start->format('c'),
-                            'speakers' => [$talk[2]],
-                            'duration' => $talk[5],
+                            'talk_title' => filter_var($talk[0], FILTER_SANITIZE_STRING),
+                            'talk_description' => filter_var($talk[1], FILTER_SANITIZE_STRING),
+                            'type' => filter_var($talk[7], FILTER_SANITIZE_STRING),
+                            'track' => filter_var($talk[8], FILTER_SANITIZE_STRING),
+                            'language' => filter_var($talk[6], FILTER_SANITIZE_STRING),
+                            'start_date' => filter_var($date_start->format('c'), FILTER_SANITIZE_STRING),
+                            'speakers' => [filter_var($talk[2], FILTER_SANITIZE_STRING)],
+                            'duration' => filter_var($talk[5], FILTER_SANITIZE_STRING),
                         ];
 
                         $talk_api = $this->getTalkApi();
