@@ -18,7 +18,7 @@ class GetResolvedUrlListener implements EventSubscriberInterface
     {
         $data = $event->getData();
         
-        if ($data != ''){
+        if ($data != '') {
             $resolver = new UrlResolver();
             try {
                 $redirectURL = $resolver->resolve($data);

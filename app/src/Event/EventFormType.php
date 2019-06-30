@@ -129,11 +129,11 @@ class EventFormType extends AbstractType
             )
             ->add(
                 $builder->create(
-                    'href', 
-                    'url', 
+                    'href',
+                    'url',
                     $this->getOptionsForUrlWidget('Website URL', true)
-                    )->addEventSubscriber(new GetResolvedUrlListener())
-                )
+                )->addEventSubscriber(new GetResolvedUrlListener())
+            )
             ->add(
                 $builder->create(
                     'cfp_start_date',
@@ -150,11 +150,11 @@ class EventFormType extends AbstractType
             )
             ->add(
                 $builder->create(
-                    'cfp_url', 
-                    'url', 
+                    'cfp_url',
+                    'url',
                     $this->getOptionsForUrlWidget('Call for papers URL', false)
-                    )->addEventSubscriber(new GetResolvedUrlListener())
-                )
+                )->addEventSubscriber(new GetResolvedUrlListener())
+            )
             ->add(
                 'location',
                 'text',
