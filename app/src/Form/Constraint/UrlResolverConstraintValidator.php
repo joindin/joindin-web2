@@ -11,13 +11,13 @@ class UrlResolverConstraintValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
-        if ($value !== '') {
+        if ($value === '') {
             return;
         }
 
         $resolver = new UrlResolver();
         try {
-            $redirectURL = $resolver->resolve($value);
+            $resolver->resolve($value);
         } catch (Exception $e) {
             $this->context->addViolation($constraint->message);
         }

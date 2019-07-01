@@ -18,14 +18,16 @@ class GetResolvedUrlListener implements EventSubscriberInterface
     {
         $data = $event->getData();
         
-        if ($data != '') {
-            $resolver = new UrlResolver();
-            try {
-                $redirectURL = $resolver->resolve($data);
-                $event->setData($redirectURL);
-            } catch (\Exception $e) {
-                // We can do nothing with this now, this will be caught by the constraint
-            }
+        if ($data === '') {
+            return;
+        }
+
+        $resolver = new UrlResolver();
+        try {
+            $redirectURL = $resolver->resolve($data);
+            $event->setData($redirectURL);
+        } catch (\Exception $e) {
+            // We can do nothing with this now, this will be caught by the constraint
         }
     }
 
