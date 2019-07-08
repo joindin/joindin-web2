@@ -13,7 +13,6 @@ use Form\Shared\UrlResolver;
  */
 class GetResolvedUrlListener implements EventSubscriberInterface
 {
-
     public function onSubmit(FormEvent $event)
     {
         $data = $event->getData();
