@@ -22,6 +22,10 @@ class GetResolvedUrlListener implements EventSubscriberInterface
             return;
         }
 
+        if ($data === null) {
+            return;
+        }
+
         $resolver = new UrlResolver();
         try {
             $redirectURL = $resolver->resolve($data);

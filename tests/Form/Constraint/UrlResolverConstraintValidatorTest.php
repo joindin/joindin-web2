@@ -36,6 +36,8 @@ class UrlResolverConstraintValidatorTest extends TestCase
             'http://apple.de',
         ], [
             '',
+        ], [
+            null,
         ]];
     }
 

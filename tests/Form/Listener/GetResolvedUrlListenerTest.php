@@ -65,6 +65,8 @@ class GetResolvedUrlListenerTest extends TestCase
             'http://example.unresolvable',
         ], [
             '',
+        ], [
+            null,
         ]];
     }
 }

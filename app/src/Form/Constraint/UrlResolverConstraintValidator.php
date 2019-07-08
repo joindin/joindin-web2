@@ -15,6 +15,10 @@ class UrlResolverConstraintValidator extends ConstraintValidator
             return;
         }
 
+        if ($value === null) {
+            return;
+        }
+
         $resolver = new UrlResolver();
         try {
             $resolver->resolve($value);
