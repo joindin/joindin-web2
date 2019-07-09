@@ -13,12 +13,15 @@ use Form\Shared\UrlResolver;
  */
 class GetResolvedUrlListener implements EventSubscriberInterface
 {
-
     public function onSubmit(FormEvent $event)
     {
         $data = $event->getData();
         
         if ($data === '') {
+            return;
+        }
+
+        if ($data === null) {
             return;
         }
 
@@ -33,6 +36,6 @@ class GetResolvedUrlListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(FormEvents::SUBMIT => 'onSubmit');
+        return [FormEvents::SUBMIT => 'onSubmit'];
     }
 }
