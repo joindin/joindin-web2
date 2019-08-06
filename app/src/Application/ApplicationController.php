@@ -22,9 +22,9 @@ class ApplicationController extends BaseController
             : $this->application->request()->get('page');
 
         $perPage = 10;
-        $start = ($page - 1) * $perPage;
+        $start   = ($page - 1) * $perPage;
 
-        $eventApi = $this->getEventApi();
+        $eventApi  = $this->getEventApi();
         $hotEvents = $eventApi->getEvents($perPage, $start, 'hot');
         $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);
 
@@ -75,7 +75,7 @@ class ApplicationController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ContactFormType());
+        $form    = $factory->create(new ContactFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -83,8 +83,8 @@ class ApplicationController extends BaseController
             if ($form->isValid()) {
                 $values = $form->getData();
 
-                $config = $this->application->config('oauth');
-                $clientId = $config['client_id'];
+                $config       = $this->application->config('oauth');
+                $clientId     = $config['client_id'];
                 $clientSecret = $config['client_secret'];
 
                 try {

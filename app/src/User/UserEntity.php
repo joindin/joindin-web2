@@ -176,7 +176,7 @@ class UserEntity extends BaseEntity
 
     public function getId()
     {
-        $uri = $this->data->uri;
+        $uri   = $this->data->uri;
         $parts = explode('/', $uri);
 
         return $parts[5];

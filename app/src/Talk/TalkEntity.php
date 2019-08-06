@@ -64,7 +64,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         }
 
         $start_time = $this->getStartDateTime();
-        $end_time = $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
+        $end_time   = $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
 
         return $end_time;
     }

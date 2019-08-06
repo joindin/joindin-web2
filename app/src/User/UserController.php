@@ -58,7 +58,7 @@ class UserController extends BaseController
      */
     public function login()
     {
-        $config = $this->application->config('oauth');
+        $config  = $this->application->config('oauth');
         $request = $this->application->request();
 
         $error = false;
@@ -66,14 +66,14 @@ class UserController extends BaseController
             // handle submission of login form
 
             // make a call to the api with granttype=password
-            $username = $request->post('username');
-            $password = $request->post('password');
-            $redirect = $request->post('redirect');
-            $clientId = $config['client_id'];
+            $username     = $request->post('username');
+            $password     = $request->post('password');
+            $redirect     = $request->post('redirect');
+            $clientId     = $config['client_id'];
             $clientSecret = $config['client_secret'];
 
             $authApi = $this->application->container->get(AuthApi::class);
-            $result = $authApi->login($username, $password, $clientId, $clientSecret);
+            $result  = $authApi->login($username, $password, $clientId, $clientSecret);
 
             $this->handleLogin($result, $redirect);
         }
@@ -92,7 +92,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new RegisterFormType());
+        $form    = $factory->create(new RegisterFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -129,7 +129,7 @@ class UserController extends BaseController
      */
     protected function registerUserUsingForm($form)
     {
-        $values = $form->getData();
+        $values  = $form->getData();
         $userApi = $this->getUserApi();
 
         $result = false;
@@ -152,7 +152,7 @@ class UserController extends BaseController
      */
     public function logout()
     {
-        $request = $this->application->request();
+        $request  = $this->application->request();
         $redirect = ($request->get('redirect')) ? $request->get('redirect') : '/';
 
         if (isset($_SESSION['user'])) {
@@ -174,7 +174,7 @@ class UserController extends BaseController
     {
         $request = $this->application->request();
 
-        $token = $request->get('token');
+        $token   = $request->get('token');
         $userApi = $this->getUserApi();
 
         try {
@@ -193,14 +193,14 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new EmailInputFormType());
+        $form    = $factory->create(new EmailInputFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
                 $values = $form->getData();
-                $email = $values['email'];
+                $email  = $values['email'];
 
                 $userApi = $this->getUserApi();
 
@@ -240,20 +240,20 @@ class UserController extends BaseController
     public function profile($username)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
+        $user    = $userApi->getUserByUsername($username);
         if (!$user) {
             Slim::getInstance()->notFound();
         }
 
-        $talkDb = $this->getTalkDb();
-        $talkApi = $this->getTalkApi();
+        $talkDb   = $this->getTalkDb();
+        $talkApi  = $this->getTalkApi();
         $eventApi = $this->getEventApi();
 
         $eventInfo = []; // look up an event's name and url_friendly_name from its uri
-        $talkInfo = []; // look up a talk's url_friendly_talk_title from its uri
+        $talkInfo  = []; // look up a talk's url_friendly_talk_title from its uri
 
         $talkCollection = $talkApi->getCollection($user->getTalksUri(), ['verbose' => 'yes', 'resultsperpage' => 5]);
-        $talks = false;
+        $talks          = false;
         if (isset($talkCollection['talks'])) {
             $talks = $talkCollection['talks'];
             foreach ($talks as $talk) {
@@ -289,12 +289,12 @@ class UserController extends BaseController
             }
             $talkData = $talkDb->load('uri', $comment->getTalkUri());
             if ($talkData) {
-                $eventUri = $talkData['event_uri'];
+                $eventUri                                                    = $talkData['event_uri'];
                 $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talkData['slug'];
             } else {
                 $talk = $talkApi->getTalk($comment->getTalkUri());
                 if ($talk) {
-                    $eventUri = $talk->getEventUri();
+                    $eventUri                                                    = $talk->getEventUri();
                     $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 }
             }
@@ -328,7 +328,7 @@ class UserController extends BaseController
     public function profileTalks($username)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
+        $user    = $userApi->getUserByUsername($username);
         if (!$user) {
             Slim::getInstance()->notFound();
         }
@@ -370,12 +370,12 @@ class UserController extends BaseController
     public function profileEvents($username)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
+        $user    = $userApi->getUserByUsername($username);
         if (!$user) {
             Slim::getInstance()->notFound();
         }
 
-        $eventApi = $this->getEventApi();
+        $eventApi         = $this->getEventApi();
         $eventsCollection = $eventApi->getCollection(
             $user->getAttendedEventsUri(),
             ['verbose' => 'yes', 'resultsperpage' => 0]
@@ -403,12 +403,12 @@ class UserController extends BaseController
     public function profileHosted($username)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
+        $user    = $userApi->getUserByUsername($username);
         if (!$user) {
             Slim::getInstance()->notFound();
         }
 
-        $eventApi = $this->getEventApi();
+        $eventApi               = $this->getEventApi();
         $hostedEventsCollection = $eventApi->getCollection(
             $user->getHostedEventsUri(),
             ['verbose' => 'yes', 'resultsperpage' => 0]
@@ -436,20 +436,20 @@ class UserController extends BaseController
     public function profileComments($username)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
+        $user    = $userApi->getUserByUsername($username);
         if (!$user) {
             Slim::getInstance()->notFound();
         }
 
-        $talkDb = $this->getTalkDb();
-        $talkApi = $this->getTalkApi();
-        $eventApi = $this->getEventApi();
+        $talkDb       = $this->getTalkDb();
+        $talkApi      = $this->getTalkApi();
+        $eventApi     = $this->getEventApi();
         $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 0);
         if (!$talkComments) {
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
         }
 
-        $talkInfo = [];
+        $talkInfo  = [];
         $eventInfo = [];
         foreach ($talkComments as $comment) {
             if (isset($talkInfo[$comment->getTalkUri()])) {
@@ -457,12 +457,12 @@ class UserController extends BaseController
             }
             $talkData = $talkDb->load('uri', $comment->getTalkUri());
             if ($talkData) {
-                $eventUri = $talkData['event_uri'];
+                $eventUri                                                    = $talkData['event_uri'];
                 $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talkData['slug'];
             } else {
                 $talk = $talkApi->getTalk($comment->getTalkUri());
                 if ($talk) {
-                    $eventUri = $talk->getEventUri();
+                    $eventUri                                                    = $talk->getEventUri();
                     $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 }
             }
@@ -486,19 +486,19 @@ class UserController extends BaseController
 
     protected function lookupEventInfo($eventUri)
     {
-        $eventDb = $this->getEventDb();
+        $eventDb  = $this->getEventDb();
         $eventApi = $this->getEventApi();
 
         $eventInfo = [];
         $eventData = $eventDb->load('uri', $eventUri);
         if (isset($eventData['name'])) {
             $eventInfo['url_friendly_name'] = $eventData['url_friendly_name'];
-            $eventInfo['name'] = $eventData['name'];
+            $eventInfo['name']              = $eventData['name'];
         } else {
             $event = $eventApi->getEvent($eventUri);
             if ($event) {
                 $eventInfo['url_friendly_name'] = $event->getUrlFriendlyName();
-                $eventInfo['name'] = $event->getName();
+                $eventInfo['name']              = $event->getName();
             }
         }
 
@@ -551,14 +551,14 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new EmailInputFormType());
+        $form    = $factory->create(new EmailInputFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
                 $values = $form->getData();
-                $email = $values['email'];
+                $email  = $values['email'];
 
                 $userApi = $this->getUserApi();
 
@@ -597,7 +597,7 @@ class UserController extends BaseController
     public function profileEdit($username)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
+        $user    = $userApi->getUserByUsername($username);
         if (!$user) {
             Slim::getInstance()->notFound();
         }
@@ -623,7 +623,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new UserFormType($canChangePassword), $userData);
+        $form    = $factory->create(new UserFormType($canChangePassword), $userData);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -681,7 +681,7 @@ class UserController extends BaseController
     public function userDelete($username)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
+        $user    = $userApi->getUserByUsername($username);
 
         try {
             // LDBG($values);exit;
@@ -704,13 +704,13 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new UsernameInputFormType());
+        $form    = $factory->create(new UsernameInputFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                $values = $form->getData();
+                $values   = $form->getData();
                 $username = $values['username'];
 
                 $userApi = $this->getUserApi();
@@ -748,17 +748,17 @@ class UserController extends BaseController
     public function newPassword()
     {
         $request = $this->application->request();
-        $token = $request->get('token');
+        $token   = $request->get('token');
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new NewPasswordFormType());
+        $form    = $factory->create(new NewPasswordFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
 
             if ($form->isValid()) {
-                $values = $form->getData();
+                $values  = $form->getData();
                 $userApi = $this->getUserApi();
 
                 try {
@@ -793,11 +793,11 @@ class UserController extends BaseController
     public function loginWithTwitter()
     {
         // ask the API for a request token
-        $config = $this->application->config('oauth');
-        $clientId = $config['client_id'];
+        $config       = $this->application->config('oauth');
+        $clientId     = $config['client_id'];
         $clientSecret = $config['client_secret'];
 
-        $authApi = $this->application->container->get(AuthApi::class);
+        $authApi       = $this->application->container->get(AuthApi::class);
         $request_token = $authApi->getTwitterRequestToken($clientId, $clientSecret);
 
         if ($request_token) {
@@ -818,19 +818,19 @@ class UserController extends BaseController
      */
     public function accessTokenFromTwitter()
     {
-        $config = $this->application->config('oauth');
+        $config  = $this->application->config('oauth');
         $request = $this->application->request();
 
         // pass verification to the API so we can log in
-        $clientId = $config['client_id'];
+        $clientId     = $config['client_id'];
         $clientSecret = $config['client_secret'];
 
         // handle incoming vars
-        $token = $request->get('oauth_token');
+        $token    = $request->get('oauth_token');
         $verifier = $request->get('oauth_verifier');
 
         $authApi = $this->application->container->get(AuthApi::class);
-        $result = $authApi->verifyTwitter($clientId, $clientSecret, $token, $verifier);
+        $result  = $authApi->verifyTwitter($clientId, $clientSecret, $token, $verifier);
 
         $this->handleLogin($result);
     }
@@ -840,18 +840,18 @@ class UserController extends BaseController
      */
     public function accessTokenFromFacebook()
     {
-        $config = $this->application->config('oauth');
+        $config  = $this->application->config('oauth');
         $request = $this->application->request();
 
         // pass verification to the API so we can log in
-        $clientId = $config['client_id'];
+        $clientId     = $config['client_id'];
         $clientSecret = $config['client_secret'];
 
         // handle incoming vars
         $code = $request->get('code');
 
         $authApi = $this->application->container->get(AuthApi::class);
-        $result = $authApi->verifyFacebook($clientId, $clientSecret, $code);
+        $result  = $authApi->verifyFacebook($clientId, $clientSecret, $code);
 
         $this->handleLogin($result);
     }
@@ -883,7 +883,7 @@ class UserController extends BaseController
 
         session_regenerate_id(true);
         $_SESSION['access_token'] = $result->access_token;
-        $this->accessToken = $_SESSION['access_token'];
+        $this->accessToken        = $_SESSION['access_token'];
 
         // now get users details
         $userApi = $this->getUserApi();
@@ -906,7 +906,7 @@ class UserController extends BaseController
     public function redirectFromId($userId)
     {
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUserId($userId);
+        $user    = $userApi->getUserByUserId($userId);
         if (!$user) {
             return $this->application->notFound();
         }

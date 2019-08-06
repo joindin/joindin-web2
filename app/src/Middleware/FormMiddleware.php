@@ -51,7 +51,7 @@ class FormMiddleware extends Middleware
     public function __construct($csrfSecret = null, $locale = 'en_UK')
     {
         $this->csrfSecret = $csrfSecret ?: md5(__DIR__);
-        $this->locale = $locale;
+        $this->locale     = $locale;
     }
 
     /**
@@ -81,7 +81,7 @@ class FormMiddleware extends Middleware
         $env->addExtension($this->createFormTwigExtension(self::DEFAULT_LAYOUT));
 
         $formMiddleWare = $this;
-        $csrfSecret = $formMiddleWare->csrfSecret;
+        $csrfSecret     = $formMiddleWare->csrfSecret;
         $this->app->container->singleton(
             self::SERVICE_FORM_FACTORY,
             function () use ($formMiddleWare, $csrfSecret) {
@@ -149,7 +149,7 @@ class FormMiddleware extends Middleware
     private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
     {
         $reflected = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
-        $path = dirname($reflected->getFileName()).'/../Resources/views/Form';
+        $path      = dirname($reflected->getFileName()).'/../Resources/views/Form';
         $loader->addLoader(new \Twig_Loader_Filesystem($path));
     }
 

@@ -42,9 +42,9 @@ class EventApi extends BaseApi
      */
     public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
-        $url = $this->baseApiUrl.'/v2.1/events';
+        $url                           = $this->baseApiUrl.'/v2.1/events';
         $queryParams['resultsperpage'] = $limit;
-        $queryParams['start'] = $start;
+        $queryParams['start']          = $start;
 
         if ($filter) {
             $queryParams['filter'] = $filter;
@@ -174,7 +174,7 @@ class EventApi extends BaseApi
 
     public function addComment($event, $comment, $rating = 0)
     {
-        $uri = $event->getCommentsUri();
+        $uri    = $event->getCommentsUri();
         $params = [
             'comment' => $comment,
             'rating'  => $rating,
@@ -352,16 +352,16 @@ class EventApi extends BaseApi
                 'timeout' => 10,
             ]);
 
-            $headers = [];
-            $headers['Accept'] = 'application/json';
+            $headers                  = [];
+            $headers['Accept']        = 'application/json';
             $headers['Authorization'] = "OAuth {$this->accessToken}";
 
             // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
-            $ip = $_SERVER['REMOTE_ADDR'];
-            $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+            $ip                   = $_SERVER['REMOTE_ADDR'];
+            $agent                = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
             $headers['Forwarded'] = "for=$ip;user-agent=\"$agent\"";
 
-            $options = [];
+            $options            = [];
             $options['headers'] = $headers;
 
             if ($this->proxy) {
@@ -372,7 +372,7 @@ class EventApi extends BaseApi
             $options['multipart'] = [['name' => 'image',
                 'contents'                   => fopen($fileName, 'r'), ]];
 
-            $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
+            $request  = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
             $response = $client->send($request, $options);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $body = $e->getResponse()->getBody();
@@ -404,7 +404,7 @@ class EventApi extends BaseApi
     public function getCollection($uri, array $queryParams = [])
     {
         $events = (array) json_decode($this->apiGet($uri, $queryParams));
-        $meta = array_pop($events);
+        $meta   = array_pop($events);
 
         $collectionData = [];
         foreach ($events['events'] as $item) {

@@ -35,7 +35,7 @@ class EventScheduler
      */
     public function getScheduleData(EventEntity $event)
     {
-        $talks = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
+        $talks     = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
         $eventDays = $this->getEventDays($talks);
 
         return $eventDays;
@@ -68,7 +68,7 @@ class EventScheduler
             return [];
         }
 
-        $talks = $talks['talks'];
+        $talks      = $talks['talks'];
         $talksByDay = $this->organiseTalksByDayAndTime($talks);
 
         $tracksByDay = $this->getTracksByDay($talks);
@@ -96,8 +96,8 @@ class EventScheduler
 
         foreach ($talks as $talk) {
             $dateTime = $talk->getStartDateTime();
-            $date = $dateTime->format('d-m-Y');
-            $time = $dateTime->format('H:i');
+            $date     = $dateTime->format('d-m-Y');
+            $time     = $dateTime->format('H:i');
 
             if (!isset($talksByDay[$date]) || !array_key_exists($date, $talksByDay)) {
                 $talksByDay[$date] = [];
@@ -126,7 +126,7 @@ class EventScheduler
 
         foreach ($talks as $talk) {
             $dateTime = $talk->getStartDateTime();
-            $date = $dateTime->format('d-m-Y');
+            $date     = $dateTime->format('d-m-Y');
 
             if (!isset($tracksByDay[$date]) || !array_key_exists($date, $tracksByDay)) {
                 $tracksByDay[$date] = [];
