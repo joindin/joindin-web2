@@ -24,7 +24,7 @@ class TalkApi extends BaseApi
     public function __construct($config, $accessToken, TalkDb $talkDb, UserApi $userApi)
     {
         parent::__construct($config, $accessToken);
-        $this->talkDb = $talkDb;
+        $this->talkDb  = $talkDb;
         $this->userApi = $userApi;
     }
 
@@ -175,7 +175,7 @@ class TalkApi extends BaseApi
      */
     public function addComment($talk, $rating, $comment)
     {
-        $uri = $talk->getCommentsUri();
+        $uri    = $talk->getCommentsUri();
         $params = [
             'rating'  => $rating,
             'comment' => $comment,
@@ -240,9 +240,9 @@ class TalkApi extends BaseApi
         $agenda = [];
 
         foreach ($talks as $talk) {
-            $date = $talk->getStartDateTime()->format('Y-m-d');
-            $startTime = $talk->getStartDateTime()->format('H:i');
-            $time = "$startTime";
+            $date                   = $talk->getStartDateTime()->format('Y-m-d');
+            $startTime              = $talk->getStartDateTime()->format('H:i');
+            $time                   = "$startTime";
             $agenda[$date][$time][] = $talk;
         }
 
@@ -319,7 +319,7 @@ class TalkApi extends BaseApi
             $data['speakers'] = array_filter($data['speakers']);
         }
         $talkId = basename($talkUri);
-        $media = $this->getTalkLinksById($talkId);
+        $media  = $this->getTalkLinksById($talkId);
         $this->handleTalkLinksUpdate($talkId, $media, $data['talk_media']);
 
         list($status, $result, $headers) = $this->apiPut($talkUri, $data);
@@ -347,7 +347,7 @@ class TalkApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new Exception('Failed: '.$message);
@@ -361,7 +361,7 @@ class TalkApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new Exception('Failed: '.$message);
@@ -386,7 +386,7 @@ class TalkApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new Exception('Failed: '.$message);
@@ -406,7 +406,7 @@ class TalkApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new Exception('Failed to remove talk from track: '.$message);
@@ -420,7 +420,7 @@ class TalkApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new \Exception('Failed to unlink speaker from talk: '.$message);
@@ -503,7 +503,7 @@ class TalkApi extends BaseApi
         }
 
         $talkUrl = $this->baseApiUrl.'/v2.1/talks/'.$talkId.'/links';
-        $params = [
+        $params  = [
             'display_name' => $media['type'],
             'url'          => $media['url'],
         ];
@@ -519,7 +519,7 @@ class TalkApi extends BaseApi
     protected function updateTalkMedia($talkId, $mediaId, $media)
     {
         $talkUrl = $this->baseApiUrl.'/v2.1/talks/'.$talkId.'/links/'.$mediaId;
-        $params = [
+        $params  = [
             'display_name' => $media['type'],
             'url'          => $media['url'],
         ];
@@ -533,7 +533,7 @@ class TalkApi extends BaseApi
 
     protected function deleteTalkMedia($talkId, $mediaId)
     {
-        $talkUrl = $this->baseApiUrl.'/v2.1/talks/'.$talkId.'/links/'.$mediaId;
+        $talkUrl                         = $this->baseApiUrl.'/v2.1/talks/'.$talkId.'/links/'.$mediaId;
         list($status, $result, $headers) = $this->apiDelete($talkUrl);
 
         if ($status == 204) {

@@ -151,7 +151,7 @@ class UserApi extends BaseApi
     public function getUserByUsername($username)
     {
         // fetch via filtering the users collection
-        $url = $this->baseApiUrl.'/v2.1/users';
+        $url    = $this->baseApiUrl.'/v2.1/users';
         $result = $this->apiGet($url, ['username' => $username, 'verbose'=>'yes']);
 
         if ($result) {
@@ -332,7 +332,7 @@ class UserApi extends BaseApi
     public function getCollection(array $queryParams = [])
     {
         $usersUri = $this->baseApiUrl.'/v2.1/users';
-        $users = (array) json_decode(
+        $users    = (array) json_decode(
             $this->apiGet($usersUri, $queryParams)
         );
         $meta = array_pop($users);

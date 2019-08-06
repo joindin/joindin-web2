@@ -251,7 +251,7 @@ class EventApiTest extends TestCase
     public function testDefaultGetTalkCommentsParametersAreSet(): void
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
-        $mockEvent = $this->getMockBuilder('Event\EventApi')
+        $mockEvent   = $this->getMockBuilder('Event\EventApi')
             ->setMethods(['apiGet'])
             ->setConstructorArgs([$this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi])
             ->getMock();
@@ -267,7 +267,7 @@ class EventApiTest extends TestCase
     public function testGetTalkCommentsWithLimitSetsParamsCorrectly(): void
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
-        $mockEvent = $this->getMockBuilder('Event\EventApi')
+        $mockEvent   = $this->getMockBuilder('Event\EventApi')
             ->setMethods(['apiGet'])
             ->setConstructorArgs([$this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi])
             ->getMock();
@@ -283,7 +283,7 @@ class EventApiTest extends TestCase
     public function testGetTalkCommentsWithStartValueSetsParamsCorrectly(): void
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
-        $mockEvent = $this->getMockBuilder('Event\EventApi')
+        $mockEvent   = $this->getMockBuilder('Event\EventApi')
             ->setMethods(['apiGet'])
             ->setConstructorArgs([$this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi])
             ->getMock();
@@ -299,7 +299,7 @@ class EventApiTest extends TestCase
     public function testGetTalkCommentsWithVerboseSetsAllParamsCorrectly(): void
     {
         $comment_uri = 'http://example.com/v2.1/events/1/talk_comments';
-        $mockEvent = $this->getMockBuilder('Event\EventApi')
+        $mockEvent   = $this->getMockBuilder('Event\EventApi')
             ->setMethods(['apiGet'])
             ->setConstructorArgs([$this->mockConfig, null, $this->mockDbEvent, $this->mockUserApi])
             ->getMock();

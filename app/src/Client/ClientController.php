@@ -38,7 +38,7 @@ class ClientController extends BaseController
         }
 
         $clientApi = $this->getClientApi();
-        $clients = $clientApi->getCollection([]);
+        $clients   = $clientApi->getCollection([]);
 
         $this->render('Client/index.html.twig', [
             'clients' => $clients['clients'],
@@ -103,7 +103,7 @@ class ClientController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ClientFormType());
+        $form    = $factory->create(new ClientFormType());
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -159,14 +159,14 @@ class ClientController extends BaseController
         }
 
         // default values
-        $data = [];
-        $data['application'] = $client->getName();
-        $data['description'] = $client->getDescription();
+        $data                 = [];
+        $data['application']  = $client->getName();
+        $data['description']  = $client->getDescription();
         $data['callback_url'] = $client->getCallbackUrl();
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ClientFormType(), $data);
+        $form    = $factory->create(new ClientFormType(), $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -221,7 +221,7 @@ class ClientController extends BaseController
     private function addClientUsingForm(Form $form)
     {
         $clientApi = $this->getClientApi();
-        $values = $form->getData();
+        $values    = $form->getData();
 
         $result = false;
 
@@ -266,11 +266,11 @@ class ClientController extends BaseController
         }
 
         // default values
-        $data = [];
+        $data              = [];
         $data['client_id'] = $client->getId();
 
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ClientDeleteFormType(), $data);
+        $form    = $factory->create(new ClientDeleteFormType(), $data);
 
         $request = $this->application->request();
 

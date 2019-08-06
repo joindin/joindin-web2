@@ -28,7 +28,7 @@ class UrlResolver
         curl_exec($ch);
 
         $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $redirectURL = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+        $redirectURL  = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
         if ($responseCode < 200 || $responseCode >= 300) {
             $this->checkedUrls[$url] = false;

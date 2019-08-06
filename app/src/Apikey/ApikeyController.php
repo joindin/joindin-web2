@@ -33,7 +33,7 @@ class ApikeyController extends BaseController
         }
 
         $tokenApi = $this->getApikeyApi();
-        $tokens = $tokenApi->getCollection([]);
+        $tokens   = $tokenApi->getCollection([]);
 
         $this->render('Apikey/index.html.twig', ['keys' => $tokens['tokens'], 'user' => $_SESSION['user']]);
     }
@@ -65,11 +65,11 @@ class ApikeyController extends BaseController
         }
 
         // default values
-        $data = [];
+        $data              = [];
         $data['apikey_id'] = $apikey->getId();
 
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ApikeyDeleteFormType(), $data);
+        $form    = $factory->create(new ApikeyDeleteFormType(), $data);
 
         $request = $this->application->request();
 

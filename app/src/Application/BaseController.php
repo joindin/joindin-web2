@@ -27,7 +27,7 @@ abstract class BaseController
 
     private function getConfig()
     {
-        $app = Slim::getInstance();
+        $app    = Slim::getInstance();
         $config = $app->config('custom');
 
         return $config;

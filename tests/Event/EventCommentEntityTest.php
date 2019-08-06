@@ -12,16 +12,16 @@ class EventCommentEntityTest extends TestCase
 
     public function setUp(): void
     {
-        $this->commentData = new stdClass();
-        $this->commentData->comment = 'Test event comment text';
-        $this->commentData->user_display_name = 'Test comment display name';
-        $this->commentData->created_date = '2014-03-02T08:43:44+01:00';
-        $this->commentData->comment_uri = 'Test comment uri';
+        $this->commentData                      = new stdClass();
+        $this->commentData->comment             = 'Test event comment text';
+        $this->commentData->user_display_name   = 'Test comment display name';
+        $this->commentData->created_date        = '2014-03-02T08:43:44+01:00';
+        $this->commentData->comment_uri         = 'Test comment uri';
         $this->commentData->verbose_comment_uri = 'Test comment verbose uri';
-        $this->commentData->event_uri = 'Test event uri';
-        $this->commentData->event_comments_uri = 'Test comments uri';
-        $this->commentData->user_uri = 'Test user uri';
-        $this->commentData->source = 'Test comment source';
+        $this->commentData->event_uri           = 'Test event uri';
+        $this->commentData->event_comments_uri  = 'Test comments uri';
+        $this->commentData->user_uri            = 'Test user uri';
+        $this->commentData->source              = 'Test comment source';
     }
 
     public function testBasicCommentsData(): void

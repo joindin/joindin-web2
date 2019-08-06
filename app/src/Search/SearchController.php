@@ -72,8 +72,8 @@ class SearchController extends BaseController
     public function searchEvents()
     {
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
-        $tag = $this->sanitizeTag($this->application->request()->get('tag'));
-        $events = [];
+        $tag     = $this->sanitizeTag($this->application->request()->get('tag'));
+        $events  = [];
 
         $page = ((int) $this->application->request()->get('page') === 0)
             ? 1
@@ -99,11 +99,11 @@ class SearchController extends BaseController
      */
     public function search()
     {
-        $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
-        $events = [];
-        $talks = [];
-        $users = [];
-        $eventInfo = [];
+        $keyword    = $this->sanitizeKeyword($this->application->request()->get('keyword'));
+        $events     = [];
+        $talks      = [];
+        $users      = [];
+        $eventInfo  = [];
         $pagination = [];
 
         $page = ((int) $this->application->request()->get('page') === 0)
@@ -112,8 +112,8 @@ class SearchController extends BaseController
 
         if (!empty($keyword)) {
             $events = $this->searchEventsByTitleAndTag($page, $keyword);
-            $talks = $this->searchTalksByTitle($page, $keyword);
-            $users = $this->searchUsersByKeyword($page, $keyword);
+            $talks  = $this->searchTalksByTitle($page, $keyword);
+            $users  = $this->searchUsersByKeyword($page, $keyword);
 
             // combine pagination data for events and talks
             $pagination = $this->combinePaginationData(
@@ -242,7 +242,7 @@ class SearchController extends BaseController
 
         $events = [];
         foreach ($talks as $talk) {
-            $eventUri = $talk->getEventUri();
+            $eventUri          = $talk->getEventUri();
             $events[$eventUri] = $eventApi->getEvent($eventUri);
         }
 

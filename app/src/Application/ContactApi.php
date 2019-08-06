@@ -6,7 +6,7 @@ class ContactApi extends BaseApi
 {
     public function contact($name, $email, $subject, $comment, $clientId, $clientSecret)
     {
-        $url = $this->baseApiUrl.'/v2.1/contact';
+        $url    = $this->baseApiUrl.'/v2.1/contact';
         $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
@@ -22,7 +22,7 @@ class ContactApi extends BaseApi
             return true;
         }
 
-        $result = json_decode($result);
+        $result  = json_decode($result);
         $message = $result[0];
 
         throw new \Exception('Failed: '.$message);
