@@ -37,6 +37,9 @@
             <li class="{% if getCurrentRoute() == 'event-talk-claims' %}active{% endif %}">
                 <a href="{{ urlFor('event-talk-claims', {"friendly_name": event.getUrlFriendlyName}) }}">Pending talk claims</a>
             </li>
+            <li class="{% if getCurrentRoute() == 'event-import-csv' %}active{% endif %}">
+                <a href="{{ urlFor('event-import-csv', {"friendly_name": event.getUrlFriendlyName}) }}">Event import CSV</a>
+            </li>
         </ul>
     </nav>
     {% endif %}

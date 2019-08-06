@@ -18,7 +18,7 @@ session_cache_limiter(false);
 session_start();
 
 $config = [];
-$configFile = realpath(__DIR__.'/../config/config.php');
+$configFile = realpath(__DIR__ . '/../config/config.php');
 if (is_readable($configFile)) {
     include $configFile;
 } else {
@@ -55,7 +55,7 @@ $app->view()->appendData(
 $app->view()->appendData(
     [
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
-        'user'                => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
+        'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
     ]
 );
 
@@ -81,6 +81,7 @@ $app->configureMode('development', function () use ($app) {
 
 // register error handlers
 $app->error(function (\Exception $e) use ($app) {
+    error_log(get_class($e) . ': ' . $e->getMessage() . " -- " . $e->getTraceAsString());
     $app->render('Error/error.html.twig', ['exception' => $e]);
 });
 
