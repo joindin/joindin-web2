@@ -1178,6 +1178,11 @@ class EventController extends BaseController
                     while (!feof($handle)) {
                         $talk = fgetcsv($handle);
                         $date_start = new \DateTimeImmutable(filter_var($talk[3], FILTER_SANITIZE_STRING).' '.filter_var($talk[4], FILTER_SANITIZE_STRING));
+                        $speakers = explode("|", $talk[2]);
+
+                        foreach ($speakers as $key => $speaker) {
+                            $speakers[$key] = filter_var($speaker, FILTER_SANITIZE_STRING);
+                        }
 
                         $talk_data = [
                             'talk_title' => filter_var($talk[0], FILTER_SANITIZE_STRING),
@@ -1186,7 +1191,7 @@ class EventController extends BaseController
                             'track' => filter_var($talk[8], FILTER_SANITIZE_STRING),
                             'language' => filter_var($talk[6], FILTER_SANITIZE_STRING),
                             'start_date' => $date_start->format('Y-m-d H:i'),
-                            'speakers' => [filter_var($talk[2], FILTER_SANITIZE_STRING)],
+                            'speakers' => $speakers,
                             'duration' => filter_var($talk[5], FILTER_SANITIZE_STRING),
                         ];
 
