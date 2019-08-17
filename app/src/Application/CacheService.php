@@ -14,7 +14,7 @@ class CacheService
     public function __construct(\Predis\Client $client, $keyPrefix = '')
     {
         $this->keyPrefix = $keyPrefix;
-        $this->client = $client;
+        $this->client    = $client;
     }
 
     public function save($collection, $data, $keyField, $keyValue)

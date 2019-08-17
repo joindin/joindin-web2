@@ -12,7 +12,7 @@ class LanguageApi extends BaseApi
      */
     public function getLanguages()
     {
-        $url = $this->baseApiUrl . '/v2.1/languages';
+        $url                           = $this->baseApiUrl . '/v2.1/languages';
         $queryParams['resultsperpage'] = 0;
 
         $result = $this->apiGet($url, $queryParams);

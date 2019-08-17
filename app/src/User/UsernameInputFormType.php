@@ -39,7 +39,7 @@ class UsernameInputFormType extends AbstractType
                 'username',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )

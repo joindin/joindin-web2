@@ -34,7 +34,7 @@ class EventScheduler
      */
     public function getScheduleData(EventEntity $event)
     {
-        $talks = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
+        $talks     = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
         $eventDays = $this->getEventDays($talks);
 
         return $eventDays;
@@ -62,15 +62,15 @@ class EventScheduler
     public function getEventDays($talks)
     {
         if (empty($talks) || empty($talks['talks'])) {
-            return array();
+            return [];
         }
 
-        $talks = $talks['talks'];
+        $talks      = $talks['talks'];
         $talksByDay = $this->organiseTalksByDayAndTime($talks);
 
         $tracksByDay = $this->getTracksByDay($talks);
 
-        $eventDays = array();
+        $eventDays = [];
         foreach ($talksByDay as $date => $talks) {
             $eventDays[] = new EventSchedulerDay($date, $talks, $tracksByDay[$date]);
         }
@@ -88,18 +88,18 @@ class EventScheduler
      */
     protected function organiseTalksByDayAndTime($talks)
     {
-        $talksByDay = array();
+        $talksByDay = [];
 
         foreach ($talks as $talk) {
             $dateTime = $talk->getStartDateTime();
-            $date = $dateTime->format('d-m-Y');
-            $time = $dateTime->format('H:i');
+            $date     = $dateTime->format('d-m-Y');
+            $time     = $dateTime->format('H:i');
 
             if (!isset($talksByDay[$date]) || !array_key_exists($date, $talksByDay)) {
-                $talksByDay[$date] = array();
+                $talksByDay[$date] = [];
             }
             if (!isset($talksByDay[$date][$time]) || !array_key_exists($time, $talksByDay[$date])) {
-                $talksByDay[$date][$time] = array();
+                $talksByDay[$date][$time] = [];
             }
 
             $talksByDay[$date][$time][] = $talk;
@@ -117,14 +117,14 @@ class EventScheduler
      */
     protected function getTracksByDay($talks)
     {
-        $tracksByDay = array();
+        $tracksByDay = [];
 
         foreach ($talks as $talk) {
             $dateTime = $talk->getStartDateTime();
-            $date = $dateTime->format('d-m-Y');
+            $date     = $dateTime->format('d-m-Y');
 
             if (!isset($tracksByDay[$date]) || !array_key_exists($date, $tracksByDay)) {
-                $tracksByDay[$date] = array();
+                $tracksByDay[$date] = [];
             }
 
             $tracks = $talk->getTracks();
