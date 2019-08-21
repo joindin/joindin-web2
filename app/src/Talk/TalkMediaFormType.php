@@ -49,8 +49,8 @@ class TalkMediaFormType extends AbstractType
             )
             ->add('url', 'url', [
                 'constraints' => [new Url()],
-                'label' => false,
-                'required' => false,
+                'label'       => false,
+                'required'    => false,
             ])
         ;
     }
