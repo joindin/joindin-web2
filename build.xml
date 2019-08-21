@@ -3,7 +3,11 @@
 <project name="joindin-responsive" default="build" basedir=".">
  <property name="basedir" value="."/>
 
- <target name="build" depends="phplint,jsvalidate,phpunit,phpcs" />
+ <target name="build" depends="composer,phplint,jsvalidate,phpunit,phpcs" />
+
+ <target name="composer" description="Run composer">
+   <exec command="composer install" logoutput="/dev/stdout" checkreturn="true" />
+ </target>
 
  <target name="phplint" description="Run php -l over the fileset">
    <phplint haltonfailure="true">
@@ -28,7 +32,7 @@
  </target>
 
  <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
-  <exec command="phpunit -c tests/phpunit.xml" logoutput="/dev/stdout" checkreturn="true" />
+  <exec command="vendor/bin/phpunit -c tests/phpunit.xml" logoutput="/dev/stdout" checkreturn="true" />
  </target>
 
  <target name="jsvalidate" description="Use jsvalidate to lint check the JS">

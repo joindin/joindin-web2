@@ -46,19 +46,19 @@ class RegisterFormType extends AbstractType
                 'password',
                 'repeated',
                 [
-                    'type' => 'password',
+                    'type'            => 'password',
                     'invalid_message' => 'The password fields must match.',
-                    'required' => true,
-                    'first_options'  => array('label' => 'Password'),
-                    'second_options' => array('label' => 'Repeat Password'),
-                    'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
+                    'required'        => true,
+                    'first_options'   => ['label' => 'Password'],
+                    'second_options'  => ['label' => 'Repeat Password'],
+                    'constraints'     => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
                 ]
             )
             ->add(
                 'email',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
@@ -66,7 +66,7 @@ class RegisterFormType extends AbstractType
                 'full_name',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 200])],
                 ]
             )
@@ -81,10 +81,10 @@ class RegisterFormType extends AbstractType
                 'biography',
                 'textarea',
                 [
-                    'required' => false,
+                    'required'   => false,
                     'empty_data' => '',
-                    'attr' => [
-                        'rows' => 4,
+                    'attr'       => [
+                        'rows'      => 4,
                         'maxlength' => '400'
                     ]
                 ]

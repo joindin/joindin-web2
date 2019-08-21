@@ -36,6 +36,5 @@ reported by opening an issue or contacting one or more of the project
 maintainers.
 
 This Code of Conduct is adapted from the
-[Contributor Covenant](http://contributor-covenant.org), version 1.2.0,
-available at [http://contributor- covenant.org/version/1/2/0/](http
-://contributor-covenant.org/version/1/2/0/)
+[Contributor Covenant](https://contributor-covenant.org), version 1.2.0,
+available at [https://contributor-covenant.org/version/1/2/0/](https://contributor-covenant.org/version/1/2/0/)

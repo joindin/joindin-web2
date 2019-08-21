@@ -7,9 +7,32 @@
     {% set height = '17' %}
 {% endif %}
 
-    <div class="rating rating-{{ rating }}">
-        <img src="/img/avg-rating-{{ rating }}.png"
+    <div class="rating rating-{{ rating }}" title="Rated {{ rating }}" style="position:relative;">
+        {% for i in 0..4 %}
+            {% set color = 'rating-off' %}
+            {%  if rating == 0 %}
+                {%  set color = 'rating-unrated' %}
+            {%  elseif rating > i %}
+                {% set color = 'rating-on' %}
+            {% endif %}
+            {% set shadow = 'rating-shadow-default' %}
+            {% if userrating and i + 1 == userrating %}
+                {% set shadow = 'rating-shadow-own' %}
+            {% endif %}
+        <span class="fa-stack" style="font-size:0.7em;">
+            <i class="fa fa-joindin-comment fa-stack-2x {{ color }} {{ shadow }}"></i>
+           {% if (rating > i) %}
+            <i class="fa fa-thumbs-o-up fa-stack-1x"></i>
+            {%  endif %}
+        </span>
+        {% endfor %}
+
+        <!--<img src="/img/avg-rating-{{ rating }}.png"
              title="Rated {{ rating }}"
             width="{{ width }}" height="{{ height }}" alt="Rated {{ rating }}"/>
+        {% if userrating %}
+            <img src="/img/user_rating.png" height="{{ height }}" style="position:absolute;top:0; left: {{ width / 5 * (userrating - 1) }}px"/>
+        {% endif %}
+-->
     </div>
 {% endif %}

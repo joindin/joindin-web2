@@ -1,0 +1,28 @@
+--TEST--
+"prettyDuration" function
+--TEMPLATE--
+{{ prettyDuration(duration1) }}
+{{ prettyDuration(duration2) }}
+{{ prettyDuration(duration3) }}
+{{ prettyDuration(duration4) }}
+{{ prettyDuration(duration5) }}
+{{ prettyDuration(duration6) }}
+{{ prettyDuration(duration7) }}
+--DATA--
+return [
+    'duration1' => 1,
+    'duration2' => 30,
+    'duration3' => 60,
+    'duration4' => 61,
+    'duration5' => 70,
+    'duration6' => 121,
+    'duration7' => 140,
+]
+--EXPECT--
+1 minute
+30 minutes
+1 hour
+1 hour, 1 minute
+1 hour, 10 minutes
+2 hours, 1 minute
+2 hours, 20 minutes

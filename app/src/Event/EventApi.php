@@ -2,6 +2,7 @@
 namespace Event;
 
 use Application\BaseApi;
+use DateTime;
 use Exception;
 use Talk\TalkCommentEntity;
 use Talk\TalkCommentReportEntity;
@@ -40,9 +41,9 @@ class EventApi extends BaseApi
      */
     public function getEvents($limit = 10, $start = 1, $filter = null, $verbose = false, array $queryParams = [])
     {
-        $url = $this->baseApiUrl . '/v2.1/events';
+        $url                           = $this->baseApiUrl . '/v2.1/events';
         $queryParams['resultsperpage'] = $limit;
-        $queryParams['start'] = $start;
+        $queryParams['start']          = $start;
 
         if ($filter) {
             $queryParams['filter'] = $filter;
@@ -97,11 +98,11 @@ class EventApi extends BaseApi
      *
      * @param string $event_uri  API talk uri
      * @param bool $verbose  Return verbose data?
-     * @return TalkEntity
+     * @return EventEntity|bool
      */
     public function getEvent($event_uri, $verbose = true)
     {
-        $params = array();
+        $params = [];
         if ($verbose) {
             $params['verbose'] = 'yes';
         }
@@ -144,7 +145,7 @@ class EventApi extends BaseApi
      * Get comments for given event
      * @param $comment_uri
      * @param bool $verbose
-     * @return Comment[]
+     * @return EventCommentEntity[]
      */
     public function getComments($comment_uri, $verbose = false)
     {
@@ -154,7 +155,7 @@ class EventApi extends BaseApi
 
         $comments = (array)json_decode($this->apiGet($comment_uri));
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $comment) {
             $commentData[] = new EventCommentEntity($comment);
@@ -165,12 +166,12 @@ class EventApi extends BaseApi
 
     public function addComment($event, $comment, $rating = 0)
     {
-        $uri = $event->getCommentsUri();
-        $params = array(
+        $uri    = $event->getCommentsUri();
+        $params = [
             'comment' => $comment,
-            'rating' => $rating,
-        );
-        list ($status, $result) = $this->apiPost($uri, $params);
+            'rating'  => $rating,
+        ];
+        list($status, $result) = $this->apiPost($uri, $params);
 
         if ($status == 201) {
             return true;
@@ -180,7 +181,7 @@ class EventApi extends BaseApi
 
     public function reportComment($uri)
     {
-        list ($status, $result) = $this->apiPost($uri);
+        list($status, $result) = $this->apiPost($uri);
 
         if ($status == 202) {
             return true;
@@ -190,7 +191,7 @@ class EventApi extends BaseApi
 
     public function attend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
+        list($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
 
         if ($status == 201) {
             return true;
@@ -201,7 +202,7 @@ class EventApi extends BaseApi
 
     public function unattend(EventEntity $event)
     {
-        list ($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
+        list($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
 
         if ($status == 200) {
             return true;
@@ -220,7 +221,6 @@ class EventApi extends BaseApi
      */
     public function getAttendees($attendees_uri, $limit = 0, $verbose = false)
     {
-
         $attendees_uri .= "?resultsperpage={$limit}";
         if ($verbose) {
             $attendees_uri = $attendees_uri . '&verbose=yes';
@@ -229,7 +229,7 @@ class EventApi extends BaseApi
 
         $attendees = (array)json_decode($this->apiGet($attendees_uri));
 
-        $attendeeData = array();
+        $attendeeData = [];
 
         foreach ($attendees['users'] as $attendee) {
             $attendeeData[] = new UserEntity($attendee);
@@ -253,9 +253,9 @@ class EventApi extends BaseApi
     public function submit(array $data)
     {
         // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        $dateFields = ['start_date', 'end_date', 'cfp_start_date', 'cfp_end_date'];
         foreach ($dateFields as $dateField) {
-            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('Y-m-d');
             }
             if (isset($data[$dateField])) {
@@ -265,7 +265,7 @@ class EventApi extends BaseApi
             }
         }
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
+        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 201) {
@@ -299,9 +299,9 @@ class EventApi extends BaseApi
     public function edit(array $data)
     {
         // Convert datetime objects to strings
-        $dateFields = array('start_date', 'end_date', 'cfp_start_date', 'cfp_end_date');
+        $dateFields = ['start_date', 'end_date', 'cfp_start_date', 'cfp_end_date'];
         foreach ($dateFields as $dateField) {
-            if (isset($data[$dateField]) && $data[$dateField] instanceof \DateTime) {
+            if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('c');
             }
             if (isset($data[$dateField])) {
@@ -312,7 +312,7 @@ class EventApi extends BaseApi
         }
 
 
-        list ($status, $result, $headers) = $this->apiPut($data['uri'], $data);
+        list($status, $result, $headers) = $this->apiPut($data['uri'], $data);
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
             $response = $this->getCollection($headers['location']);
@@ -338,16 +338,16 @@ class EventApi extends BaseApi
                 "timeout" => 10,
             ]);
 
-            $headers = [];
-            $headers["Accept"] = "application/json";
+            $headers                  = [];
+            $headers["Accept"]        = "application/json";
             $headers["Authorization"] = "OAuth {$this->accessToken}";
 
             // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
-            $ip = $_SERVER['REMOTE_ADDR'];
-            $agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+            $ip                   = $_SERVER['REMOTE_ADDR'];
+            $agent                = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
             $headers["Forwarded"] = "for=$ip;user-agent=\"$agent\"";
 
-            $options = [];
+            $options            = [];
             $options['headers'] = $headers;
 
             if ($this->proxy) {
@@ -356,9 +356,9 @@ class EventApi extends BaseApi
 
             // now add the file itself
             $options['multipart'] = [['name' => 'image',
-                'contents' => fopen($fileName, 'r')]];
+                'contents'                   => fopen($fileName, 'r')]];
 
-            $request = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
+            $request  = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
             $response = $client->send($request, $options);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $body = $e->getResponse()->getBody();
@@ -386,12 +386,12 @@ class EventApi extends BaseApi
      *
      * @return array
      */
-    public function getCollection($uri, array $queryParams = array())
+    public function getCollection($uri, array $queryParams = [])
     {
         $events = (array)json_decode($this->apiGet($uri, $queryParams));
         $meta   = array_pop($events);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($events['events'] as $item) {
             $event = new EventEntity($item);
 
@@ -436,12 +436,9 @@ class EventApi extends BaseApi
 
         $meta = array_pop($comments);
 
-        $commentData = array();
+        $commentData = [];
 
         foreach ($comments['comments'] as $item) {
-            if (isset($item->user_uri)) {
-                $item->username = $this->userApi->getUsername($item->user_uri);
-            }
             $commentData['comments'][] = new TalkCommentEntity($item);
         }
 
@@ -458,7 +455,7 @@ class EventApi extends BaseApi
      */
     public function approveEvent($approval_uri)
     {
-        list ($status, $result, $headers) = $this->apiPost($approval_uri);
+        list($status, $result, $headers) = $this->apiPost($approval_uri);
 
         if ($status == 204) {
             return true;
@@ -474,7 +471,7 @@ class EventApi extends BaseApi
      */
     public function rejectEvent($approval_uri)
     {
-        list ($status, $result, $headers) = $this->apiDelete($approval_uri);
+        list($status, $result, $headers) = $this->apiDelete($approval_uri);
 
         if ($status == 204) {
             return true;
@@ -537,7 +534,7 @@ class EventApi extends BaseApi
     {
         $data['decision'] = $decision;
 
-        list ($status, $result, $headers) = $this->apiPut($reported_uri, $data);
+        list($status, $result, $headers) = $this->apiPut($reported_uri, $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {

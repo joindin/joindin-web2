@@ -132,7 +132,7 @@ class FormMiddleware extends Middleware
     {
         $loader = $env->getLoader();
         if (!$loader instanceof \Twig_Loader_Chain) {
-            $loader = new \Twig_Loader_Chain(array($loader));
+            $loader = new \Twig_Loader_Chain([$loader]);
             $env->setLoader($loader);
         }
 
@@ -149,7 +149,7 @@ class FormMiddleware extends Middleware
     private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
     {
         $reflected = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
-        $path = dirname($reflected->getFileName()) . '/../Resources/views/Form';
+        $path      = dirname($reflected->getFileName()) . '/../Resources/views/Form';
         $loader->addLoader(new \Twig_Loader_Filesystem($path));
     }
 
@@ -162,7 +162,7 @@ class FormMiddleware extends Middleware
      */
     private function createFormTwigExtension($formLayoutTemplate)
     {
-        return new FormExtension(new TwigRenderer(new TwigRendererEngine(array($formLayoutTemplate))));
+        return new FormExtension(new TwigRenderer(new TwigRendererEngine([$formLayoutTemplate])));
     }
 
     /**

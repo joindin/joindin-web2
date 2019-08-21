@@ -50,7 +50,7 @@
                         </td>
                         <td class="agenda-cell">
                             <div class="talk-info">
-                                {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'style': 'vertical', 'size': 'small', 'include_rating_placeholder': true} %}
+                                {% include '_common/rating.html.twig' with {'rating': talk.getAverageRating, 'userrating' : talk.getUserRating, 'style': 'vertical', 'size': 'small', 'include_rating_placeholder': true} %}
 
                                 <span class="slides">
                                     {% if talk.slidesLink %}

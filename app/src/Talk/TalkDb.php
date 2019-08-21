@@ -14,10 +14,10 @@ class TalkDb extends BaseDb
 
     public function getUriFor($slug, $eventUri)
     {
-        $data = $this->cache->loadByKeys($this->keyName, array(
+        $data = $this->cache->loadByKeys($this->keyName, [
             'event_uri' => $eventUri,
-            'slug' => $slug
-        ));
+            'slug'      => $slug
+        ]);
 
         if ($data) {
             return $data['uri'];
@@ -38,14 +38,14 @@ class TalkDb extends BaseDb
 
     public function save(TalkEntity $talk)
     {
-        $data = array(
-            'uri' => $talk->getApiUri(),
-            'title' => $talk->getTitle(),
-            'slug' => $talk->getUrlFriendlyTalkTitle(),
+        $data = [
+            'uri'         => $talk->getApiUri(),
+            'title'       => $talk->getTitle(),
+            'slug'        => $talk->getUrlFriendlyTalkTitle(),
             'verbose_uri' => $talk->getApiUri(true),
-            'event_uri' => $talk->getEventUri(),
-            'stub' => $talk->getStub(),
-        );
+            'event_uri'   => $talk->getEventUri(),
+            'stub'        => $talk->getStub(),
+        ];
 
         $savedTalk = $this->load('uri', $talk->getApiUri());
         if ($savedTalk) {
@@ -53,10 +53,10 @@ class TalkDb extends BaseDb
             $data = array_merge($savedTalk, $data);
         }
 
-        $keys = array(
+        $keys = [
             'event_uri' => $talk->getEventUri(),
-            'slug' => $talk->getUrlFriendlyTalkTitle()
-        );
+            'slug'      => $talk->getUrlFriendlyTalkTitle()
+        ];
         $this->cache->saveByKeys($this->keyName, $data, $keys);
         $this->cache->save($this->keyName, $data, 'uri', $talk->getApiUri());
         $this->cache->save($this->keyName, $data, 'stub', $talk->getStub());
