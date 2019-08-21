@@ -24,9 +24,9 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 
 ## Other Resources
 
-* The main website http://joind.in
-* Issues list: http://joindin.jira.com/ (good bug reports ALWAYS welcome!)
-* CI Environment: lots of output and information about tests, deploys etc: http://jenkins.joind.in
+* The main website https://joind.in
+* Issues list: https://github.com/joindin/joindin-web2/issues/ (good bug reports ALWAYS welcome!)
+* CI Environment: lots of output and information about tests, deploys etc: https://jenkins.joind.in
 * Community: We hang out on IRC, pop in with questions or comments! #joind.in on Freenode
 
 ## Global .gitignore
@@ -39,7 +39,9 @@ projects too.
 You can define the gitignore file with a command that looks like this, where the 
 last argument is the file that holds the patterns to ignore: 
 
-    $ git config --global core.excludesfile ~/.gitignore_global
+```bash
+git config --global core.excludesfile ~/.gitignore_global
+```
 
 Octocat gives [a good starting point](https://gist.github.com/octocat/9257657) for what to include, but you can also ignore the files used by your editor:
 
@@ -70,26 +72,54 @@ Since web2 then calls the API, it can be tricky to see what is going on.  You ca
 
 If the proxy tool is running on your host machine, you'll need to understand what IP address the guest thinks your host has, the easiest way to do that is to `vagrant ssh` into the VM and then type `last` to see where it thinks you logged in from.
 
-Alternatively, try [Lorna's blog post about Wiresharking a VM](http://www.lornajane.net/posts/2014/wireshark-capture-on-remote-server).
+Alternatively, try [Lorna's blog post about Wiresharking a VM](https://www.lornajane.net/posts/2014/wireshark-capture-on-remote-server).
 
 ### CODE STYLE
 
-Please do your best to ensure that any code you contributed adheres to the PSR2 coding style. You can run php codesniffer using phing on an individual file like so:
+Please do your best to ensure that any code you contributed adheres to the PSR2 coding style. You can run php codesniffer on an individual file like so:
 
-```
-phing phpcs -Dfilename.php
+```bash
+vendor/bin/phpcs path/of/filename.php
 ```
 
 This will run codesniffer on any file within the regular source for joindin-web2. Wildcards work as does specifying part of the path in case the filename alone results in sniffing more files than you wanted.
 
 To see a summary of the codesniff errors and warnings across the entire project, run
 
-```
-phing phpcs
+```bash
+composer sniff
 ```
 
 This will show the files that still need some attention.
 
+### Testing Code
+
+We use [PHPUnit](https://phpunit.de/documentation.html) for running unit tests against the joindin-web2 codebase.
+
+To run PHPUnit tests, you can go the classic route:
+
+```bash
+vendor/bin/phpunit -c . tests/
+```
+
+You can also use composer to run your tests:
+
+```bash
+composer test
+```
+
+### Code Coverage
+
+Code coverage requires that [xdebug](https://xdebug.org/) be running. If you are using the joindin-vm Vagrant box, you can run your tests from within vagrant:
+
+```bash
+vagrant ssh
+xon # note: this turns on xdebug
+cd ~/joindin-vm/joindin-web2
+composer test
+```
+
+You can see your code coverage report by going to http://localhost:63342/joindin-web2/build/coverage/index.html
 ## License
 
 The joindin-API is developed under a BSD-3 License. You can find the exact wording [in the LICENSE-file](LICENSE)

@@ -13,8 +13,16 @@
                     <h2>{{ thisUser.getFullname }}</h2>
                     <section class="user-details">
                         {% if thisUser.getTwitterUsername %}
-                        Twitter: <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
-                            @{{ thisUser.getTwitterUsername }}</a>
+                            <p>
+                                Twitter:
+                                <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
+                                    @{{ thisUser.getTwitterUsername }}
+                                </a>
+                            </p>
+                        {% endif %}
+
+                        {% if thisUser.getBiography %}
+                            <p>Bio: {{ thisUser.getBiography }}</p>
                         {% endif %}
 
                         {% if thisUser.canEdit %}
@@ -39,10 +47,10 @@
     </section>
 
     {% if flash.getMessages.message %}
-        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+        <div class="alert alert-success">{{flash.getMessages.message | raw}}</div>
     {% endif %}
     {% if flash.getMessages.error %}
-        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+        <div class="alert alert-danger">{{flash.getMessages.error | raw}}</div>
     {% endif %}
     {% set blockCount = 0 %}
     <section class="user-profile-panels">

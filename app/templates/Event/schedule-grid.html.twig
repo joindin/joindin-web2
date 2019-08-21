@@ -22,8 +22,12 @@
         </div>
         <div class="col-xs-6 text-right">
             <div class="btn-group" role="group" aria-label="Style">
-                <a class="btn btn-default" href="{{ urlFor('event-schedule-list', {"friendly_name": event.getUrlFriendlyName}) }}">List</a>
-                <a class="btn btn-default active" href="{{ urlFor('event-schedule-grid', {"friendly_name": event.getUrlFriendlyName}) }}">Grid</a>
+                <a class="btn btn-default" href="{{ urlFor('event-schedule-list', {"friendly_name": event.getUrlFriendlyName, starred: starred}) }}">List</a>
+                <a class="btn btn-default active" href="{{ urlFor('event-schedule-grid', {"friendly_name": event.getUrlFriendlyName, starred: starred}) }}">Grid</a>
+            </div>
+            <div class="btn-group" role="group" aria-label="Style">
+                <a class="btn btn-default {% if not starred_only %}active{% endif %}" href="{{current_url}}">All sessions</a>
+                <a class="btn btn-default {% if starred_only %}active{% endif %}" href="{{current_url}}/starred">Starred only</a>
             </div>
         </div>
     </div>
@@ -67,19 +71,40 @@
             {% set titleTrackMap = [] %}
             {% set titleTypeMap = [] %}
             {% for time, talks in day.talks %}
+            {% set talksnow = 0 %}
+                {% for talk in talks %}
+                    {% if not starred_only or talk.starred %}
+                        {% set talksnow = talksnow+1 %}
+                    {% endif %}
+                {% endfor %}
+                {% set has_talk_for_time_slot = false %}
                 <tr>
                 {% if day.tracks|length <= 1 %}
-                   <th class="time col-xs-2 col-sm-1" rowspan="{{ talks|length }}">{{ time }}</th>
+                    {% set has_time = false %}
                     {% for talk in talks %}
+                        {% if not starred_only or talk.starred %}
+                        {% if not has_time %}
+                        <th class="time col-xs-2 col-sm-1" rowspan="{{ talks|length }}">{{ time }}</th>
+                        {% set has_time = true %}
+                        {% endif %}
                         {% set cell %}
                             {% include '/Event/_common/schedule_cell.html.twig' %}
                         {% endset %}
                         <td class="{{ talk.getTypeClass }} col-xs-10">{{ cell }}</td>
                         </tr>
+                        {% else %}
+                        {% endif %}
                     {% endfor %}
                 {% else %}
-                    <th class="time col-xs-2 col-sm-1">{{ time }}</th>
+                    {% set has_time = false %}
                     {% for talk in talks %}
+
+                        {% if not has_time %}
+                        <th class="time col-xs-2 col-sm-1" rowspan="1">{{ time }}</th>
+                        {% set has_time = true %}
+                        {% set has_talk_for_time_slot = true %}
+                        {% endif %}
+                        {% if not starred_only or talk.starred %}
                         {# build an array of tracks the talk is in #}
                         {% set actualTracks = [] %}
                         {% for talkTrack in talk.tracks %}
@@ -101,8 +126,8 @@
                                         </td>
                                     {% endset %}
                                     {% set trackCellHTMLMap = trackCellHTMLMap|merge({ (trackName) : cell }) %}
-                                    {% set titleTrackMap = titleTrackMap|merge({  (title)  : trackName }) %}
-                                    {% set titleTypeMap = titleTypeMap|merge({ (title) : talk.type }) %}
+                                    {% set titleTrackMap = titleTrackMap|merge({  (talk.url_friendly_talk_title)  : trackName }) %}
+                                    {% set titleTypeMap = titleTypeMap|merge({ (talk.url_friendly_talk_title) : talk.type }) %}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
@@ -112,6 +137,8 @@
                             <td class="{{ talk.getTypeClass }}" colspan={{ day.tracks|length }}>
                                 {% include '/Event/_common/schedule_cell.html.twig' %}
                             </td>
+                        {% endif %}
+                        {% else %}
                         {% endif %}
                     {% endfor %}
 
@@ -130,7 +157,9 @@
                     {% set trackCellHTMLMap = [] %}
                     {% set titleTrackMap = [] %}
                     {% set titleTypeMap = [] %}
-                    <th class="time col-xs-2 col-sm-1">{{ time }}</th>
+                    {% if has_talk_for_time_slot %}
+                    <th class="time col-xs-2 col-sm-1" rowspan="1">{{ time }}</th>
+                    {% endif %}
                 {% endif %}
                 </tr>
             {% endfor %}

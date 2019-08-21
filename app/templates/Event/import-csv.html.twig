@@ -1,0 +1,84 @@
+{% extends '/layout.html.twig' %}
+
+{% block title %}Events - Joind.in{% endblock %}
+
+{% block body %}
+    {% if user.admin %}
+    <div class="page-header">
+        <h1 class="title">Event Import CSV</h1>
+        <nav class="page-nav admin no-top-border">
+            <ul class="nav nav-pills">
+                <li><a href="{{ urlFor('events-pending') }}">Pending events</a></li>
+            </ul>
+        </nav>
+    </div>
+    {% else %}
+        <h1 class="title">Events</h1>
+    {% endif %}
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{ flash.getMessages.message|nl2br }}</div>
+    {% endif %}
+    {% block form %}
+        {% if user %}
+            {{ form_start(form, {'attr' : {'id' : 'event_import'} }) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <fieldset class="col-lg-12">
+                    <legend>Event information</legend>
+                    <div>
+                        Ensure your CSV file does not include a header row. You should also create any Tracks before you
+                        import your talks. You can download an example template
+                        <a href="/files/EventScheduleCSVImportTemplate.csv" target="_blank">here</a>.
+                    </div>
+                    <fieldset class="col-offset-lg-6 col-lg-6 event">
+                        <legend>CSV of Event Data</legend>
+                        <div class="col-lg-6">
+                            {{ form_row(form.csv_file) }}
+                            <p class="help-block">CSV Upload.</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <input type="submit" class="btn btn-primary" value="Submit" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </fieldset>
+            </div>
+            {{ form_end(form) }}
+        {% else %}
+            <h1>Login required</h1>
+            <p>In order to import event data, please log in.</p>
+        {% endif %}
+    {% endblock %}
+    {% include 'Event/_common/event_pagination.html.twig' with {'pagination': events.pagination} %}
+{% endblock %}
+
+{% block extraAside %}
+    <section>
+        <h3>Submit your event</h3>
+        <p>
+            Know of an event happening? Let us know! We love to get the word out about
+            events the community would be interested in and you can help us spread the word!
+        </p>
+        <a href="{{ urlFor('event-submit') }}" class="btn btn-primary col-xs-12">Submit</a>
+    </section>
+    <section>
+        <h3>Open Calls for Papers</h3>
+        {% if cfp_events.events %}
+            {% for event in cfp_events.events %}
+                {% include 'Event/_common/summary_cfp.html.twig' %}
+            {% endfor %}
+            <div>
+                <a href="{{ urlFor( 'event-call-for-papers' ) }}">See more Calls for Papers <i class="fa fa-arrow-circle-o-right"></i></a>
+            </div>
+        {% else %}
+            <p>There are no events with an open call for papers.</p>
+        {% endif %}
+    </section>
+    <section>
+        <h3>Looking for a nearby event?</h3>
+        <p>
+            Have a look at <a href="https://php.ug/#joindin">the map</a> to find what's near you.
+        </p>
+    </section>
+{% endblock %}

@@ -20,9 +20,9 @@
     {% include 'Event/_common/event_nav.html.twig' %}
 
     {% if flash.getMessages.message %}
-        <div class="top-spacer alert alert-success">{{flash.getMessages.message}}</div>
+        <div class="top-spacer alert alert-success">{{flash.getMessages.message | raw}}</div>
     {% endif %}
     {% if flash.getMessages.error %}
-        <div class="top-spacer alert alert-danger">{{flash.getMessages.error}}</div>
+        <div class="top-spacer alert alert-danger">{{flash.getMessages.error | raw}}</div>
     {% endif %}
 </div>

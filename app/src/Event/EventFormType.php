@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Form\DataTransformer\DateTransformer;
 use Form\DataTransformer\EventTagsTransformer;
+use Form\Listener\GetResolvedUrlListener;
+use Form\Constraint\UrlResolverConstraint;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -55,8 +57,7 @@ class EventFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        list ($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
+        list($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
 
         $timezone = null;
         if (isset($options['data'])) {
@@ -88,7 +89,7 @@ class EventFormType extends AbstractType
                     'tags',
                     'text',
                     [
-                        'required' => false,
+                        'required'    => false,
                         'attr'        => ['placeholder' => 'comma separated, tag, list']
                     ]
                 )->addViewTransformer(new EventTagsTransformer())
@@ -98,7 +99,7 @@ class EventFormType extends AbstractType
                 'choice',
                 [
                     'label'       => 'Timezone',
-                    'choices'     => array("Select a continent") + $continents,
+                    'choices'     => ["Select a continent"] + $continents,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -107,7 +108,7 @@ class EventFormType extends AbstractType
                 'choice',
                 [
                     'label'       => 'Timezone city',
-                    'choices'     => array('Select a city') + $cities,
+                    'choices'     => ['Select a city'] + $cities,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -125,7 +126,13 @@ class EventFormType extends AbstractType
                     $this->getOptionsForDateWidget('End date')
                 )->addViewTransformer($dateTransformer)
             )
-            ->add('href', 'url', $this->getOptionsForUrlWidget('Website URL'))
+            ->add(
+                $builder->create(
+                    'href',
+                    'url',
+                    $this->getOptionsForUrlWidget('Website URL', true)
+                )->addEventSubscriber(new GetResolvedUrlListener())
+            )
             ->add(
                 $builder->create(
                     'cfp_start_date',
@@ -140,12 +147,18 @@ class EventFormType extends AbstractType
                     $this->getOptionsForDateWidget('Closing date', false)
                 )->addViewTransformer($dateTransformer)
             )
-            ->add('cfp_url', 'url', $this->getOptionsForUrlWidget('Call for papers URL', false))
+            ->add(
+                $builder->create(
+                    'cfp_url',
+                    'url',
+                    $this->getOptionsForUrlWidget('Call for papers URL', false)
+                )->addEventSubscriber(new GetResolvedUrlListener())
+            )
             ->add(
                 'location',
                 'text',
                 [
-                    'label' => 'Venue name',
+                    'label'       => 'Venue name',
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -154,7 +167,7 @@ class EventFormType extends AbstractType
                 'text',
                 [
                     'label' => 'Latitude',
-                    'attr' => ['readonly' => 'readonly'],
+                    'attr'  => ['readonly' => 'readonly'],
                 ]
             )
             ->add(
@@ -162,7 +175,7 @@ class EventFormType extends AbstractType
                 'text',
                 [
                     'label' => 'Longitude',
-                    'attr' => ['readonly' => 'readonly'],
+                    'attr'  => ['readonly' => 'readonly'],
                 ]
             )
             ->add(
@@ -170,10 +183,10 @@ class EventFormType extends AbstractType
                 'file',
                 [
                     'data_class' => null,
-                    'label' => 'Upload new icon',
-                    'required' => false,
-                    'attr'=> [
-                        'class'=>'file',
+                    'label'      => 'Upload new icon',
+                    'required'   => false,
+                    'attr'       => [
+                        'class'=> 'file',
                     ],
                     'constraints' => [new Constraint\ValidEventIcon(['groupname' => 'event', 'keyname'=>'new_icon'])],
                 ]
@@ -198,7 +211,7 @@ class EventFormType extends AbstractType
      */
     private function getOptionsForUrlWidget($label, $required = true)
     {
-        $constraints = [new Assert\Url()];
+        $constraints = [new Assert\Url(), new UrlResolverConstraint()];
         if ($required) {
             $constraints[] = new Assert\NotBlank();
         }
@@ -236,7 +249,6 @@ class EventFormType extends AbstractType
         return [
             'label'       => $label,
             'required'    => $required,
-            // 'widget'      => 'single_text', // force date widgets to show a single HTML5 'date' input
             'constraints' => $constraints,
             'attr'        => [
                 'class'                     => 'date-picker form-control',
@@ -266,10 +278,10 @@ class EventFormType extends AbstractType
         foreach ($timezones as $timezone) {
             list($continent, $city) = explode('/', $timezone, 2);
             $continents[$continent] = $continent;
-            $cities[$city] = $city;
+            $cities[$city]          = $city;
         }
 
-        return array($continents, $cities);
+        return [$continents, $cities];
     }
 
     /**
@@ -285,10 +297,10 @@ class EventFormType extends AbstractType
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
 
-        $result = array();
+        $result = [];
         foreach ($timezones as $timezone) {
             list($continent, $city) = explode('/', $timezone, 2);
-            $result[$continent][] = $city;
+            $result[$continent][]   = $city;
         }
 
         foreach ($result as $continent => $cities) {

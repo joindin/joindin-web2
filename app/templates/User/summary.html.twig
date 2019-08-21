@@ -1,0 +1,20 @@
+<article class="user row">
+    <div class="gravatar">
+        <img src="{{ gravatar(user.getGravatarHash, 100) }}">
+    </div>
+    <div class="description">
+        <section>
+            <h3>
+                <a href="{{ user.getWebsiteUri }}">{{ user.getFullname }}</a>
+            </h3>
+
+            <p>
+                {% if user.getTwitterUsername %}
+                    Twitter: <a href="https://twitter.com/{{ user.getTwitterUsername }}">
+                    @{{ user.getTwitterUsername }}</a>
+                {% endif %}
+            </p>
+
+        </section>
+    </div>
+</article>

@@ -18,36 +18,36 @@ class TalkController extends BaseController
 {
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/event/:eventSlug/:talkSlug', array($this, 'index'))->name('talk');
-        $app->map('/event/:eventSlug/:talkSlug/edit', array($this, 'editTalk'))->via('GET', 'POST')->name('talk-edit');
-        $app->post('/event/:eventSlug/:talkSlug/star', array($this, 'star'))->name('talk-star');
-        $app->get('/talk/:talkStub', array($this, 'quick'))->name('talk-quicklink');
-        $app->get('/event/:eventSlug/:talkSlug/comments/:commentHash/report', array($this, 'reportComment'))
+        $app->get('/event/:eventSlug/:talkSlug', [$this, 'index'])->name('talk');
+        $app->map('/event/:eventSlug/:talkSlug/edit', [$this, 'editTalk'])->via('GET', 'POST')->name('talk-edit');
+        $app->post('/event/:eventSlug/:talkSlug/star', [$this, 'star'])->name('talk-star');
+        $app->get('/talk/:talkStub', [$this, 'quick'])->name('talk-quicklink');
+        $app->get('/event/:eventSlug/:talkSlug/comments/:commentHash/report', [$this, 'reportComment'])
             ->name('talk-report-comment');
-        $app->post('/event/:eventSlug/:talkSlug/add-comment', array($this, 'addComment'))->name('talk-add-comment');
-        $app->get('/:talkId', array($this, 'quickById'))
+        $app->post('/event/:eventSlug/:talkSlug/add-comment', [$this, 'addComment'])->name('talk-add-comment');
+        $app->get('/:talkId', [$this, 'quickById'])
             ->name('talk-quick-by-id')
-            ->conditions(array('talkId' => '\d+'));
-        $app->get('/talk/view/:talkId', array($this, 'quickById'))
+            ->conditions(['talkId' => '\d+']);
+        $app->get('/talk/view/:talkId', [$this, 'quickById'])
             ->name('talk-by-id-web1')
-            ->conditions(array('talkId' => '\d+'));
-        $app->post('/event/:eventSlug/:talkSlug/claim', array($this, 'claimTalk'))->name('talk-claim');
-        $app->get('/event/:eventSlug/:talkSlug/unlink/:username', array($this, 'unlinkSpeaker'))
+            ->conditions(['talkId' => '\d+']);
+        $app->post('/event/:eventSlug/:talkSlug/claim', [$this, 'claimTalk'])->name('talk-claim');
+        $app->get('/event/:eventSlug/:talkSlug/unlink/:username', [$this, 'unlinkSpeaker'])
             ->name('unlink-speaker');
-        $app->map('/event/:eventSlug/:talkSlug/delete', array($this, 'deleteTalk'))->via('GET', 'POST')->name('talk-delete');
+        $app->map('/event/:eventSlug/:talkSlug/delete', [$this, 'deleteTalk'])->via('GET', 'POST')->name('talk-delete');
     }
 
     public function index($eventSlug, $talkSlug)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $event    = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
             return Slim::getInstance()->notFound();
         }
 
         $talkApi = $this->getTalkApi();
-        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        $talk    = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if (!$talk) {
             return Slim::getInstance()->notFound();
         }
@@ -79,15 +79,15 @@ class TalkController extends BaseController
 
         $this->render(
             'Talk/index.html.twig',
-            array(
-                'talk' => $talk,
-                'event' => $event,
-                'comments' => $comments,
-                'talkSlug' => $talkSlug,
+            [
+                'talk'        => $talk,
+                'event'       => $event,
+                'comments'    => $comments,
+                'talkSlug'    => $talkSlug,
                 'canEditTalk' => $canEditTalk,
                 'canRateTalk' => $canRateTalk,
                 'unclaimed'   => $unclaimed,
-            )
+            ]
         );
     }
 
@@ -101,7 +101,7 @@ class TalkController extends BaseController
         }
 
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $event    = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
             $this->application->notFound();
@@ -109,15 +109,15 @@ class TalkController extends BaseController
         }
 
         $talkApi = $this->getTalkApi();
-        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        $talk    = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if (!$talk) {
             $this->application->notFound();
             return;
         }
-        $talkId = basename($talk['uri']);
+        $talkId    = basename($talk['uri']);
         $talkMedia = $talkApi->getTalkLinksById($talkId);
 
-        $isAdmin = $event->getCanEdit();
+        $isAdmin   = $event->getCanEdit();
         $isSpeaker = $talk->isSpeaker($_SESSION['user']->getUri());
         if (!($isAdmin || $isSpeaker)) {
             $this->application->flash('error', "You do not have permission to do this.");
@@ -127,22 +127,22 @@ class TalkController extends BaseController
         }
 
         $languageApi = $this->getLanguageApi();
-        $languages = $languageApi->getLanguagesChoiceList();
+        $languages   = $languageApi->getLanguagesChoiceList();
 
         $talkTypeApi = $this->getTalkTypeApi();
-        $talkTypes = $talkTypeApi->getTalkTypesChoiceList();
+        $talkTypes   = $talkTypeApi->getTalkTypesChoiceList();
 
         $trackApi = $this->getTrackApi();
-        $tracks = $trackApi->getTracksChoiceList($event->getTracksUri());
+        $tracks   = $trackApi->getTracksChoiceList($event->getTracksUri());
 
         // default values
-        $data = [];
-        $data['talk_title'] = $talk->getTitle();
+        $data                     = [];
+        $data['talk_title']       = $talk->getTitle();
         $data['talk_description'] = $talk->getDescription();
-        $data['start_date'] = $talk->getStartDateTime();
-        $data['duration'] = $talk->getDuration();
-        $data['language'] = $talk->getLanguage();
-        $data['type'] = $talk->getType();
+        $data['start_date']       = $talk->getStartDateTime();
+        $data['duration']         = $talk->getDuration();
+        $data['language']         = $talk->getLanguage();
+        $data['type']             = $talk->getType();
         if ($talk->getTracks()) {
             $data['track'] = $talk->getTracks()[0]->track_uri;
         }
@@ -155,13 +155,13 @@ class TalkController extends BaseController
         foreach ($talkMedia as $media) {
             $data['talk_media'][$media->id] = [
                 'type' => $media->display_name,
-                'url' => $media->url
+                'url'  => $media->url
             ];
         }
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks), $data);
+        $form    = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks), $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -177,7 +177,7 @@ class TalkController extends BaseController
 
                 try {
                     $talkApi = $this->getTalkApi();
-                    $talk = $talkApi->editTalk($talk->getApiUri(), $values);
+                    $talk    = $talkApi->editTalk($talk->getApiUri(), $values);
 
                     if (!empty($values['track']) && isset($tracks[$values['track']])) {
                         $talkTracks = [];
@@ -213,10 +213,10 @@ class TalkController extends BaseController
         $this->render(
             'Talk/edit-talk.html.twig',
             [
-                'talk' => $talk,
-                'event' => $event,
+                'talk'     => $talk,
+                'event'    => $event,
                 'talkSlug' => $talkSlug,
-                'form' => $form->createView(),
+                'form'     => $form->createView(),
             ]
         );
     }
@@ -231,10 +231,10 @@ class TalkController extends BaseController
             );
         }
 
-        $request = $this->application->request();
+        $request      = $this->application->request();
         $display_name = $request->post('display_name');
-        $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $eventApi     = $this->getEventApi();
+        $event        = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
             $this->application->notFound();
@@ -242,14 +242,14 @@ class TalkController extends BaseController
         }
 
         $talkApi = $this->getTalkApi();
-        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        $talk    = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if (!$talk) {
             $this->application->notFound();
             return;
         }
 
         $speakers = $talk->getSpeakers();
-        $valid = false;
+        $valid    = false;
         foreach ($speakers as $speaker) {
             if (! isset($speaker->speaker_uri) && $speaker->speaker_name == $display_name) {
                 $valid = true;
@@ -260,10 +260,10 @@ class TalkController extends BaseController
             try {
                 $talkApi->claimTalk(
                     $talk->getSpeakersUri(),
-                    array(
+                    [
                         'display_name'  => $display_name,
                         'username'      => $_SESSION['user']->getUsername()
-                    )
+                    ]
                 );
 
                 $this->application->flash(
@@ -274,19 +274,18 @@ class TalkController extends BaseController
             } catch (Exception $e) {
                 $this->application->flash('claimerror', $e->getMessage());
             }
-
         } else {
             $this->application->flash('claimerror', "No speaker {$display_name} found for this talk.");
         }
 
-        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+        $url = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
         $this->application->redirect($url);
     }
 
     public function star($eventSlug, $talkSlug)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $event    = $eventApi->getByFriendlyUrl($eventSlug);
         $this->application->contentType('application/json');
 
         if (!$event) {
@@ -295,7 +294,7 @@ class TalkController extends BaseController
         }
 
         $talkApi = $this->getTalkApi();
-        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        $talk    = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if (!$talk) {
             $this->application->notFound();
             return;
@@ -315,10 +314,10 @@ class TalkController extends BaseController
     public function quick($talkStub)
     {
         $talkDb = $this->application->container->get(TalkDb::class);
-        $talk = $talkDb->load('stub', $talkStub);
+        $talk   = $talkDb->load('stub', $talkStub);
 
         $eventDb = $this->application->container->get(EventDb::class);
-        $event = $eventDb->load('uri', $talk['event_uri']);
+        $event   = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
             return \Slim\Slim::getInstance()->notFound();
         }
@@ -326,7 +325,7 @@ class TalkController extends BaseController
         $this->application->redirect(
             $this->application->urlFor(
                 'talk',
-                array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk['slug'])
+                ['eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk['slug']]
             )
         );
     }
@@ -336,7 +335,7 @@ class TalkController extends BaseController
         $eventDb = $this->application->container->get(EventDb::class);
 
         $talkApi = $this->getTalkApi();
-        $talk = $talkApi->getTalkByTalkId($talkId);
+        $talk    = $talkApi->getTalkByTalkId($talkId);
         if (!$talk) {
             return \Slim\Slim::getInstance()->notFound();
         }
@@ -344,7 +343,7 @@ class TalkController extends BaseController
         $event = $eventDb->load('uri', $talk->getEventUri());
         if (!$event) {
             // load from API as not in cache
-            $eventApi = $this->getEventApi();
+            $eventApi    = $this->getEventApi();
             $eventEntity = $eventApi->getEvent($talk->getEventUri());
             if (!$eventEntity) {
                 return \Slim\Slim::getInstance()->notFound();
@@ -355,7 +354,7 @@ class TalkController extends BaseController
         $this->application->redirect(
             $this->application->urlFor(
                 'talk',
-                array('eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk->getUrlFriendlyTalkTitle())
+                ['eventSlug' => $event['url_friendly_name'], 'talkSlug' => $talk->getUrlFriendlyTalkTitle()]
             )
         );
     }
@@ -364,8 +363,8 @@ class TalkController extends BaseController
     {
         $request = $this->application->request();
         $comment = trim(strip_tags($request->post('comment')));
-        $rating = (int) $request->post('rating');
-        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+        $rating  = (int) $request->post('rating');
+        $url     = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
 
         if ($comment == '' || $rating == 0) {
             $this->application->flash('error', 'Please provide a comment and rating');
@@ -382,10 +381,10 @@ class TalkController extends BaseController
         }
 
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $event    = $eventApi->getByFriendlyUrl($eventSlug);
 
         $talkApi = $this->getTalkApi();
-        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        $talk    = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if ($talk) {
             try {
                 $talkApi->addComment($talk, $rating, $comment);
@@ -426,10 +425,10 @@ class TalkController extends BaseController
     public function reportComment($eventSlug, $talkSlug, $commentHash)
     {
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
-        $talkApi = $this->getTalkApi();
-        $talk = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
-        $url = $this->application->urlFor("talk", array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+        $event    = $eventApi->getByFriendlyUrl($eventSlug);
+        $talkApi  = $this->getTalkApi();
+        $talk     = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        $url      = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
 
         $comments = $talkApi->getComments($talk->getCommentsUri());
         foreach ($comments as $comment) {
@@ -467,16 +466,16 @@ class TalkController extends BaseController
         }
 
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $event    = $eventApi->getByFriendlyUrl($eventSlug);
         $eventUri = $event->getUri();
 
         $talkApi = $this->getTalkApi();
-        $talk = $talkApi->getTalkBySlug($talkSlug, $eventUri);
+        $talk    = $talkApi->getTalkBySlug($talkSlug, $eventUri);
         $talkUri = $talk->getApiUri();
 
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($username);
-        $userId = $user->getId();
+        $user    = $userApi->getUserByUsername($username);
+        $userId  = $user->getId();
 
         $unlinkSpeakerUri = $talkUri . "/speakers/" . $userId;
 
@@ -512,7 +511,7 @@ class TalkController extends BaseController
         }
 
         $eventApi = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($eventSlug);
+        $event    = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (! $event->getCanEdit()) {
             $this->application->redirect(
@@ -535,7 +534,7 @@ class TalkController extends BaseController
 
         // default values
         $data              = [];
-        $data['talk_uri'] = $talk->getApiUri();
+        $data['talk_uri']  = $talk->getApiUri();
 
         $factory = $this->application->formFactory;
         $form    = $factory->create(new TalkDeleteFormType(), $data);
@@ -573,7 +572,7 @@ class TalkController extends BaseController
         $this->render(
             'Talk/delete-talk.html.twig',
             [
-                'talk'  => $talk,
+                'talk'    => $talk,
                 'form'    => $form->createView(),
                 'backUri' => $this->application->urlFor('talk', [
                     'eventSlug' => $eventSlug,

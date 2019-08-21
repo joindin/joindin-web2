@@ -38,6 +38,19 @@ class UserEntity extends BaseEntity
     }
 
     /**
+     * Getter for biography
+     *
+     * @return mixed
+     */
+    public function getBiography()
+    {
+        if (!isset($this->data->biography)) {
+            return null;
+        }
+        return $this->data->biography;
+    }
+
+    /**
      * Getter for email
      *
      * @return mixed
@@ -161,7 +174,7 @@ class UserEntity extends BaseEntity
 
     public function getId()
     {
-        $uri = $this->data->uri;
+        $uri   = $this->data->uri;
         $parts = explode('/', $uri);
 
         return $parts[5];

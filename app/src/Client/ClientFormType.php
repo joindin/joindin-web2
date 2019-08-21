@@ -46,7 +46,7 @@ class ClientFormType extends AbstractType
                 'textarea',
                 [
                     'constraints' => [new Assert\NotBlank()],
-                    'attr'=> ['rows' => '10']
+                    'attr'        => ['rows' => '10']
                 ]
             )
             ->add(

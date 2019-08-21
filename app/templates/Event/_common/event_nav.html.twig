@@ -8,7 +8,8 @@
                 {"route":"event-schedule", "name":"Schedule",
                     "active_match": ['event-default', 'event-schedule-list', 'event-schedule-grid']},
                 {"route":"event-comments", "name":"Event comments", "active_match": ['event-comments']},
-                {"route":"event-talk-comments", "name":"Talk comments", "active_match": ['event-talk-comments']}
+                {"route":"event-talk-comments", "name":"Talk comments", "active_match": ['event-talk-comments']},
+                {"route":"event-slides", "name":"Slides", "active_match": ['event-slides']}
             ] %}
 
             {% for item in event_sub_menu %}
@@ -35,6 +36,9 @@
             </li>
             <li class="{% if getCurrentRoute() == 'event-talk-claims' %}active{% endif %}">
                 <a href="{{ urlFor('event-talk-claims', {"friendly_name": event.getUrlFriendlyName}) }}">Pending talk claims</a>
+            </li>
+            <li class="{% if getCurrentRoute() == 'event-import-csv' %}active{% endif %}">
+                <a href="{{ urlFor('event-import-csv', {"friendly_name": event.getUrlFriendlyName}) }}">Event import CSV</a>
             </li>
         </ul>
     </nav>

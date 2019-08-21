@@ -16,18 +16,18 @@ class AuthApi extends BaseApi
      */
     public function login($username, $password, $clientId, $clientSecret)
     {
-        $url = $this->baseApiUrl . '/v2.1/token';
-        $params = array(
+        $url    = $this->baseApiUrl . '/v2.1/token';
+        $params = [
             'grant_type'    => 'password',
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'username'      => $username,
             'password'      => $password,
-        );
+        ];
 
         list($status, $result) = $this->apiPost($url, $params);
         if ($result) {
-            $data = json_decode($result);
+            $data = json_decode($result, false, 512, JSON_BIGINT_AS_STRING);
             if ($data) {
                 return $data;
             }
@@ -44,13 +44,13 @@ class AuthApi extends BaseApi
      */
     public function getTwitterRequestToken($clientId, $clientSecret)
     {
-        $url = $this->baseApiUrl . '/v2.1/twitter/request_token';
-        $params = array(
+        $url    = $this->baseApiUrl . '/v2.1/twitter/request_token';
+        $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
-        );
+        ];
 
-        list ($status, $result, $headers) = $this->apiPost($url, $params);
+        list($status, $result, $headers) = $this->apiPost($url, $params);
         if ($status == 201) {
             // we got one, data is actually in the body
             $data = json_decode($result);
@@ -70,15 +70,15 @@ class AuthApi extends BaseApi
      */
     public function verifyTwitter($clientId, $clientSecret, $token, $verifier)
     {
-        $url = $this->baseApiUrl . '/v2.1/twitter/token';
-        $params = array(
+        $url    = $this->baseApiUrl . '/v2.1/twitter/token';
+        $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'token'         => $token,
             'verifier'      => $verifier,
-        );
+        ];
 
-        list ($status, $result, $headers) = $this->apiPost($url, $params);
+        list($status, $result, $headers) = $this->apiPost($url, $params);
         if ($result) {
             $data = json_decode($result);
             if ($data) {
@@ -99,14 +99,14 @@ class AuthApi extends BaseApi
      */
     public function verifyFacebook($clientId, $clientSecret, $code)
     {
-        $url = $this->baseApiUrl . '/v2.1/facebook/token';
-        $params = array(
+        $url    = $this->baseApiUrl . '/v2.1/facebook/token';
+        $params = [
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'code'          => $code,
-        );
+        ];
 
-        list ($status, $result, $headers) = $this->apiPost($url, $params);
+        list($status, $result, $headers) = $this->apiPost($url, $params);
         if ($result) {
             $data = json_decode($result);
             if ($data) {

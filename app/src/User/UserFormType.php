@@ -46,7 +46,7 @@ class UserFormType extends AbstractType
                 'full_name',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -54,7 +54,7 @@ class UserFormType extends AbstractType
                 'email',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
@@ -62,36 +62,47 @@ class UserFormType extends AbstractType
                 'twitter_username',
                 'text',
                 [
-                    'required' => false,
+                    'required'   => false,
                     'empty_data' => '',
                     // 'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
-        ;
+            ->add(
+                'biography',
+                'textarea',
+                [
+                    'required'   => false,
+                    'empty_data' => '',
+                    'attr'       => [
+                        'rows'      => 4,
+                        'maxlength' => '400'
+                    ]
+                ]
+            );
 
         if ($this->canChangePassword) {
-            $builder->add(
-                'old_password',
-                'password',
-                [
-                    'label' => 'Current password',
-                    'required' => false,
-                    // 'constraints' => [new Assert\NotBlank(), new Assert\Email()],
-                ]
-            )
-            ->add(
-                'password',
-                'repeated',
-                [
-                    'type' => 'password',
-                    'invalid_message' => 'The password fields must match.',
-                    'required' => false,
-                    'first_options'  => array('label' => 'New password'),
-                    'second_options' => array('label' => 'Repeat new password'),
-                    'constraints' => [new Assert\Length(['min' => 6])],
-                ]
-            )
-            ;
+            $builder
+                ->add(
+                    'old_password',
+                    'password',
+                    [
+                        'label'    => 'Current password',
+                        'required' => false,
+                        // 'constraints' => [new Assert\NotBlank(), new Assert\Email()],
+                    ]
+                )
+                ->add(
+                    'password',
+                    'repeated',
+                    [
+                        'type'            => 'password',
+                        'invalid_message' => 'The password fields must match.',
+                        'required'        => false,
+                        'first_options'   => ['label' => 'New password'],
+                        'second_options'  => ['label' => 'Repeat new password'],
+                        'constraints'     => [new Assert\Length(['min' => 6])],
+                    ]
+                );
         }
     }
 }

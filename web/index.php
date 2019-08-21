@@ -4,20 +4,20 @@
 // something which should probably be served as a static file
 
 if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
-	return false;
+    return false;
+}
+if (!ini_get('date.timezone')) {
+    date_default_timezone_set('UTC');
 }
 
 // include dependencies
 require '../vendor/autoload.php';
 
+session_set_cookie_params(60*60*24*7); // One week cookie
 session_cache_limiter(false);
 session_start();
 
-// include view controller
-require '../app/src/View/Filters.php';
-require '../app/src/View/Functions.php';
-
-$config = array();
+$config     = [];
 $configFile = realpath(__DIR__ . '/../config/config.php');
 if (is_readable($configFile)) {
     include $configFile;
@@ -32,9 +32,9 @@ $config['slim']['custom'] = new \Application\Config($config['slim']['custom']);
 $app = new \Slim\Slim(
     array_merge(
         $config['slim'],
-        array(
+        [
             'view' => new \Slim\Views\Twig(),
-        )
+        ]
     )
 );
 
@@ -48,22 +48,24 @@ $app->configureMode('development', function () use ($app) {
 // Pass the current mode to the template, so we can choose to show
 // certain things only if the app is in live/development mode
 $app->view()->appendData(
-    array('slim_mode' => $config['slim']['mode'])
+    ['slim_mode' => $config['slim']['mode']]
 );
 
 // Other variables needed by the main layout.html.twig template
 $app->view()->appendData(
-    array(
+    [
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
-        'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
-    )
+        'user'                => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
+    ]
 );
 
 // set Twig base folder, view folder and initialize Joindin filters
 $app->view()->parserDirectory = realpath(__DIR__ . '/../vendor/Twig/lib/Twig');
 $app->view()->setTemplatesDirectory('../app/templates');
-View\Filters\initialize($app->view()->getEnvironment(), $app);
-View\Functions\initialize($app->view()->getEnvironment(), $app);
+
+$app->view()->getEnvironment()->addExtension(new \View\FiltersExtension());
+$app->view()->getEnvironment()->addExtension(new \Slim\Views\TwigExtension());
+$app->view()->getEnvironment()->addExtension(new \View\FunctionsExtension($app));
 
 if (isset($config['slim']['twig']['cache'])) {
     $app->view()->getEnvironment()->setCache($config['slim']['twig']['cache']);
@@ -79,6 +81,7 @@ $app->configureMode('development', function () use ($app) {
 
 // register error handlers
 $app->error(function (\Exception $e) use ($app) {
+    error_log(get_class($e) . ': ' . $e->getMessage() . " -- " . $e->getTraceAsString());
     $app->render('Error/error.html.twig', ['exception' => $e]);
 });
 
@@ -99,9 +102,15 @@ $app->add(new Middleware\FormMiddleware($csrfSecret));
 $app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
 
 $app->container->singleton(\Application\CacheService::class, function ($container) {
-    $client = new Predis\Client();
-    $keyPrefix = $container->settings['custom']['redisKeyPrefix'];
-    return new \Application\CacheService($client, $keyPrefix);
+    $redis = $container->settings['custom']['redis'];
+    $prefix = $redis['options']['prefix'];
+
+    if ($host = getenv('REDIS_HOST')) {
+        $redis['connection'] = "tcp://$host:6379";
+    }
+
+    $client = new Predis\Client($redis['connection']);
+    return new \Application\CacheService($client, $prefix);
 });
 $app->container->singleton(\Application\ContactApi::class, function ($container) {
     return new \Application\ContactApi($container['settings']['custom'], $container['access_token']);
@@ -135,7 +144,8 @@ $app->container->singleton(\Talk\TalkApi::class, function ($container) {
         $container['settings']['custom'],
         $container['access_token'],
         new \Talk\TalkDb($container[\Application\CacheService::class]),
-        $container[\User\UserApi::class]);
+        $container[\User\UserApi::class]
+    );
 });
 $app->container->singleton(\User\AuthApi::class, function ($container) {
     return new \User\AuthApi($container['settings']['custom'], $container['access_token']);
