@@ -17,7 +17,7 @@ session_set_cookie_params(60*60*24*7); // One week cookie
 session_cache_limiter(false);
 session_start();
 
-$config = [];
+$config     = [];
 $configFile = realpath(__DIR__ . '/../config/config.php');
 if (is_readable($configFile)) {
     include $configFile;
@@ -55,7 +55,7 @@ $app->view()->appendData(
 $app->view()->appendData(
     [
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
-        'user' => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
+        'user'                => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
     ]
 );
 
@@ -102,7 +102,6 @@ $app->add(new Middleware\FormMiddleware($csrfSecret));
 $app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
 
 $app->container->singleton(\Application\CacheService::class, function ($container) {
-
     $redis = $container->settings['custom']['redis'];
     $prefix = $redis['options']['prefix'];
 

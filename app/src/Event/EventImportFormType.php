@@ -62,10 +62,10 @@ class EventImportFormType extends AbstractType
                 'file',
                 [
                     'data_class' => null,
-                    'label' => 'Upload CSV File',
-                    'required' => true,
-                    'attr'=> [
-                        'class'=>'file',
+                    'label'      => 'Upload CSV File',
+                    'required'   => true,
+                    'attr'       => [
+                        'class'=> 'file',
                     ],
                     'constraints' => [new Constraint\ValidCsvFile()],
                 ]
