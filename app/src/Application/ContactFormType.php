@@ -61,14 +61,14 @@ class ContactFormType extends AbstractType
                 'text',
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'max_length' => '100',
+                    'max_length'  => '100',
                 ]
             )
             ->add(
                 'email',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
@@ -77,15 +77,22 @@ class ContactFormType extends AbstractType
                 'text',
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'max_length' => '100',
+                    'max_length'  => '100',
                 ]
             )
             ->add(
                 'comment',
                 'textarea',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
+                ]
+            )
+            ->add(
+                'phone',
+                'text',
+                [
+                    'constraints' => [new Assert\Blank()],
                 ]
             )
         ;

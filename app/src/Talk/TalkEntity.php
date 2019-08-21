@@ -61,7 +61,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         }
 
         $start_time = $this->getStartDateTime();
-        $end_time = $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
+        $end_time   = $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
 
         return $end_time;
     }
@@ -104,9 +104,12 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         return $this->data->average_rating;
     }
 
-    public function getCommentUri()
+    public function getUserRating()
     {
-        return $this->data->comments_uri;
+        if (! isset($this->data->user_rating)) {
+            return false;
+        }
+        return $this->data->user_rating;
     }
 
     public function getUrlFriendlyTalkTitle()

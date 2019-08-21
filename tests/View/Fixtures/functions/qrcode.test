@@ -1,0 +1,10 @@
+--TEST--
+"qrcode" function
+--TEMPLATE--
+{{ qrcode(data1) }}
+--DATA--
+return [
+    'data1' => 'https://www.joind.in'
+]
+--EXPECT--
+https://chart.googleapis.com/chart?cht=qr&amp;chs=300x300&amp;chl=https%3A%2F%2Fwww.joind.in%3Fqr&amp;choe=UTF-8&amp;chld=H

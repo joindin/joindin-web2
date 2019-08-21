@@ -1,0 +1,19 @@
+--TEST--
+"hash" function
+--TEMPLATE--
+{{ hash(test1) }}
+{{ hash(test2) }}
+{{ hash(test3) }}
+{{ hash(test4) }}
+--DATA--
+return [
+    'test1' => 'This is a test',
+    'test2' => 'https://www.joind.in',
+    'test3' => 'I want to be hashed',
+    'test4' => 'info@joind.in'
+]
+--EXPECT--
+ce114e4501d2f4e2dcea3e17b546f339
+a04887f788690742ce5d878ef4a60cef
+07052679c94fb1caa4db2a858d95a166
+9fac50eb1179838875edb34ba532e3f3

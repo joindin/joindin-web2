@@ -1,3 +1,14 @@
+@font-face{
+    font-family:'Glyphicons Halflings';
+    src:url('../fonts/glyphicons-halflings-regular.eot?v=4.7.0');
+    src:url('../fonts/glyphicons-halflings-regular.eot?#iefix&v=4.7.0') format('embedded-opentype'),
+    url('../fonts/glyphicons-halflings-regular.woff?v=4.7.0') format('woff'),
+    url('../fonts/glyphicons-halflings-regular.ttf?v=4.7.0') format('truetype'),
+    url('../fonts/glyphicons-halflings-regular.svg?v=4.7.0#fontawesomeregular') format('svg');
+    font-weight:normal;
+    font-style:normal
+}
+
 body {
     padding-top: 50px;
     font-size: 13px;
@@ -21,6 +32,10 @@ body {
     margin-left: -10px;
     margin-right: -10px;
     padding-bottom: 15px;
+}
+
+.row.phone {
+    display:none;
 }
 
 .navbar-default {
@@ -741,4 +756,29 @@ form ol.tracks li:last-child {
 .toggle-talk-description {
     margin-top: 10px;
     display: none;
+}
+
+.fa-joindin-comment:before {
+    font-family: "Glyphicons Halflings";
+    content:"\e111"
+}
+
+.rating-shadow-default {
+    text-shadow: 0 0 1px black;
+}
+
+.rating-shadow-own {
+    text-shadow: 0px 2px 1px red;
+}
+
+.rating-unrated {
+    color: white;
+}
+
+.rating-off {
+    color: lightgray;
+}
+
+.rating-on {
+    color: rgb(140,220, 96);
 }

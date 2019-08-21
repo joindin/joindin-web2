@@ -22,7 +22,7 @@ class UserApi extends BaseApi
      */
     public function getUser($url)
     {
-        $result = $this->apiGet($url, array('verbose'=>'yes'));
+        $result = $this->apiGet($url, ['verbose'=>'yes']);
 
         if ($result) {
             $data = json_decode($result, false, 512, JSON_BIGINT_AS_STRING);
@@ -59,7 +59,7 @@ class UserApi extends BaseApi
      * Takes the fields from the registration form, and passes them though
      * to the API to register a new user
      *
-     * @param  Form $data   The fields from the registration form
+     * @param array $data   The fields from the registration form
      *
      * @see RegisterFormType::buildForm() for a list of supported fields in the $data array and their constraints.
      *
@@ -69,8 +69,7 @@ class UserApi extends BaseApi
      */
     public function register($data)
     {
-
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
+        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
 
         if ($status == 201) {
             // user URI in $headers['location'] but the user is pending so it's not useful
@@ -98,9 +97,9 @@ class UserApi extends BaseApi
      */
     public function verify($token)
     {
-        $data = array("token" => $token);
+        $data = ["token" => $token];
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
+        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
 
         if ($status == 204) {
             return true;
@@ -112,7 +111,7 @@ class UserApi extends BaseApi
     /**
      * Get the backend to send a new verification token to this email
      *
-     * @param email $email  The email address of the user who needs a new token
+     * @param string $email  The email address of the user who needs a new token
      *
      * @throws \Exception   If an error occurs (not a 202 response)
      *
@@ -120,9 +119,9 @@ class UserApi extends BaseApi
      */
     public function reverify($email)
     {
-        $data = array("email" => $email);
+        $data = ["email" => $email];
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
+        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
 
         if ($status == 202) {
             return true;
@@ -145,14 +144,8 @@ class UserApi extends BaseApi
      */
     public function getUserByUsername($username)
     {
-        // do we already know this username's API URL?
-        $userInfo = $this->userDb->load('username', $username);
-        if ($userInfo) {
-            return $this->getUser($userInfo['uri']);
-        }
-
         // fetch via filtering the users collection
-        $url = $this->baseApiUrl . '/v2.1/users';
+        $url    = $this->baseApiUrl . '/v2.1/users';
         $result = $this->apiGet($url, ['username' => $username, 'verbose'=>'yes']);
 
         if ($result) {
@@ -198,7 +191,7 @@ class UserApi extends BaseApi
     /**
      * Ask the API to email the user to remind them of their username
      *
-     * @param email $email  The email address of the user to remind
+     * @param string $email  The email address of the user to remind
      *
      * @throws \Exception   If an error occurs (not a 202 response)
      *
@@ -206,9 +199,9 @@ class UserApi extends BaseApi
      */
     public function usernameReminder($email)
     {
-        $data = array("email" => $email);
+        $data = ["email" => $email];
 
-        list ($status, $result, $headers) = $this->apiPost(
+        list($status, $result, $headers) = $this->apiPost(
             $this->baseApiUrl . '/v2.1/emails/reminders/username',
             $data
         );
@@ -229,17 +222,17 @@ class UserApi extends BaseApi
     /**
      * Ask the API to email the user a token to reset their password
      *
-     * @param username $username  The username address of the user to remind
+     * @param string $username  The username address of the user to remind
      *
      * @throws \Exception   If an error occurs (not a 202 response)
      *
-     * return bool  True if successful
+     * @return bool  True if successful
      */
     public function passwordReset($username)
     {
-        $data = array("username" => $username);
+        $data = ["username" => $username];
 
-        list ($status, $result, $headers) = $this->apiPost(
+        list($status, $result, $headers) = $this->apiPost(
             $this->baseApiUrl . '/v2.1/emails/reminders/password',
             $data
         );
@@ -270,7 +263,7 @@ class UserApi extends BaseApi
      */
     public function edit($uri, array $data)
     {
-        list ($status, $result, $headers) = $this->apiPut($uri, $data);
+        list($status, $result, $headers) = $this->apiPut($uri, $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
@@ -284,7 +277,7 @@ class UserApi extends BaseApi
 
     public function delete($uri)
     {
-        list ($status, $result) = $this->apiDelete($uri, []);
+        list($status, $result) = $this->apiDelete($uri, []);
 
         if ($status == 204) {
             return true;
@@ -304,12 +297,12 @@ class UserApi extends BaseApi
      */
     public function resetPassword($token, $password)
     {
-        $data = array(
-            "token" => $token,
+        $data = [
+            "token"    => $token,
             "password" => $password,
-        );
+        ];
 
-        list ($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
+        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
 
         if ($status == 204) {
             return true;
@@ -330,12 +323,12 @@ class UserApi extends BaseApi
     public function getCollection(array $queryParams = [])
     {
         $usersUri = $this->baseApiUrl . '/v2.1/users';
-        $users = (array)json_decode(
+        $users    = (array)json_decode(
             $this->apiGet($usersUri, $queryParams)
         );
         $meta = array_pop($users);
 
-        $collectionData = array();
+        $collectionData = [];
         foreach ($users['users'] as $item) {
             $user = new UserEntity($item);
 

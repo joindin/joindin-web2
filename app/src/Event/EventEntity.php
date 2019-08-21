@@ -250,7 +250,7 @@ class EventEntity extends BaseEntity
     public function isPastEvent()
     {
         $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getEndDate());
-        $now = new DateTime(null, $endDate->getTimezone());
+        $now     = new DateTime(null, $endDate->getTimezone());
         $now->setTime(0, 0, 0);
 
         return ($endDate < $now);
@@ -449,8 +449,8 @@ class EventEntity extends BaseEntity
     {
         if (!empty($this->getCfpStartDate()) && !empty($this->getCfpEndDate())) {
             $startDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpStartDate());
-            $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpEndDate());
-            $now = new DateTime(null, $endDate->getTimezone());
+            $endDate   = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpEndDate());
+            $now       = new DateTime(null, $endDate->getTimezone());
             $now->setTime(0, 0, 0);
 
             switch ($now) {
