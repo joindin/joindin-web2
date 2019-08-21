@@ -34,6 +34,10 @@ body {
     padding-bottom: 15px;
 }
 
+.row.phone {
+    display:none;
+}
+
 .navbar-default {
     background-image: none;
     background-color: white;

@@ -12,8 +12,8 @@ class ApikeyController extends BaseController
 {
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/user/:username/apikey', array($this, 'index'))->name('apikey-show');
-        $app->get('/user/:username/apikey/:apikey/delete', array($this, 'deleteApiKey'))->via('GET', 'POST')->name('apikey-delete');
+        $app->get('/user/:username/apikey', [$this, 'index'])->name('apikey-show');
+        $app->get('/user/:username/apikey/:apikey/delete', [$this, 'deleteApiKey'])->via('GET', 'POST')->name('apikey-delete');
     }
 
     public function index($username)
@@ -63,11 +63,11 @@ class ApikeyController extends BaseController
         }
 
         // default values
-        $data = [];
+        $data               = [];
         $data['apikey_id']  = $apikey->getId();
 
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ApikeyDeleteFormType(), $data);
+        $form    = $factory->create(new ApikeyDeleteFormType(), $data);
 
         $request = $this->application->request();
 
@@ -97,10 +97,10 @@ class ApikeyController extends BaseController
         $this->render(
             'Apikey/delete.html.twig',
             [
-                'apikey' => $apikey,
-                'form' => $form->createView(),
+                'apikey'  => $apikey,
+                'form'    => $form->createView(),
                 'backUri' => $this->application->urlFor('apikey-show', ['username' => $username]),
-                'user' => $_SESSION['user'],
+                'user'    => $_SESSION['user'],
             ]
         );
     }
