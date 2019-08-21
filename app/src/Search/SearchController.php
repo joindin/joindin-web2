@@ -39,8 +39,8 @@ class SearchController extends BaseController
      */
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/search/events', array($this, 'searchEvents'))->name("search-events");
-        $app->get('/search', array($this, 'search'))->name("search");
+        $app->get('/search/events', [$this, 'searchEvents'])->name("search-events");
+        $app->get('/search', [$this, 'search'])->name("search");
     }
 
     /**
@@ -73,10 +73,9 @@ class SearchController extends BaseController
      */
     public function searchEvents()
     {
-
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
-        $tag = $this->sanitizeTag($this->application->request()->get('tag'));
-        $events = array();
+        $tag     = $this->sanitizeTag($this->application->request()->get('tag'));
+        $events  = [];
 
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -88,12 +87,12 @@ class SearchController extends BaseController
 
         $this->render(
             'Event/search.html.twig',
-            array(
+            [
                 'events'  => $events,
                 'page'    => $page,
                 'keyword' => $keyword,
                 'tag'     => $tag
-            )
+            ]
         );
     }
 
@@ -102,12 +101,12 @@ class SearchController extends BaseController
      */
     public function search()
     {
-        $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
-        $events = array();
-        $talks = array();
-        $users = array();
-        $eventInfo = array();
-        $pagination = array();
+        $keyword    = $this->sanitizeKeyword($this->application->request()->get('keyword'));
+        $events     = [];
+        $talks      = [];
+        $users      = [];
+        $eventInfo  = [];
+        $pagination = [];
 
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -115,8 +114,8 @@ class SearchController extends BaseController
 
         if (!empty($keyword)) {
             $events = $this->searchEventsByTitleAndTag($page, $keyword);
-            $talks = $this->searchTalksByTitle($page, $keyword);
-            $users = $this->searchUsersByKeyword($page, $keyword);
+            $talks  = $this->searchTalksByTitle($page, $keyword);
+            $users  = $this->searchUsersByKeyword($page, $keyword);
 
             // combine pagination data for events and talks
             $pagination = $this->combinePaginationData(
@@ -130,7 +129,7 @@ class SearchController extends BaseController
 
         $this->render(
             'Application/search.html.twig',
-            array(
+            [
                 'events'     => $events,
                 'eventInfo'  => $eventInfo,
                 'talks'      => $talks,
@@ -138,7 +137,7 @@ class SearchController extends BaseController
                 'page'       => $page,
                 'pagination' => $pagination,
                 'keyword'    => $keyword
-            )
+            ]
         );
     }
 
@@ -151,7 +150,7 @@ class SearchController extends BaseController
      */
     private function searchEventsByTitleAndTag($page, $keyword, $tag = null)
     {
-        $apiQueryParams = array();
+        $apiQueryParams = [];
 
         if (!empty($keyword)) {
             $apiQueryParams['title'] = $keyword;
@@ -181,9 +180,9 @@ class SearchController extends BaseController
     private function searchTalksByTitle($page, $keyword)
     {
         $apiQueryParams = [
-            'title' => $keyword,
+            'title'          => $keyword,
             'resultsperpage' => $this->itemsPerPage,
-            'start' => ($page - 1) * $this->itemsPerPage
+            'start'          => ($page - 1) * $this->itemsPerPage
         ];
 
         return $this->getTalkApi()->getCollection(
@@ -201,10 +200,10 @@ class SearchController extends BaseController
     private function searchUsersByKeyword($page, $keyword)
     {
         $apiQueryParams = [
-            'keyword' => $keyword,
+            'keyword'        => $keyword,
             'resultsperpage' => $this->itemsPerPage,
-            'start' => ($page - 1) * $this->itemsPerPage,
-            'verbose' => 'yes'
+            'start'          => ($page - 1) * $this->itemsPerPage,
+            'verbose'        => 'yes'
         ];
 
         return $this->getUserApi()->getCollection($apiQueryParams);
@@ -245,7 +244,7 @@ class SearchController extends BaseController
 
         $events = [];
         foreach ($talks as $talk) {
-            $eventUri = $talk->getEventUri();
+            $eventUri          = $talk->getEventUri();
             $events[$eventUri] = $eventApi->getEvent($eventUri);
         }
 

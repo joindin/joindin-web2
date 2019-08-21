@@ -12,11 +12,11 @@ class ClientController extends BaseController
 {
     protected function defineRoutes(Slim $app)
     {
-        $app->get('/user/:username/client', array($this, 'index'))->name('clients');
-        $app->map('/user/:username/client/create', array($this, 'createClient'))->via('GET', 'POST')->name('client-create');
-        $app->get('/user/:username/client/:clientName', array($this, 'showClient'))->name('client-show');
-        $app->map('/user/:username/client/:clientName/edit', array($this, 'editClient'))->via('GET', 'POST')->name('client-edit');
-        $app->get('/user/:username/client/:clientName/delete', array($this, 'deleteClient'))->via('GET', 'POST')->name('client-delete');
+        $app->get('/user/:username/client', [$this, 'index'])->name('clients');
+        $app->map('/user/:username/client/create', [$this, 'createClient'])->via('GET', 'POST')->name('client-create');
+        $app->get('/user/:username/client/:clientName', [$this, 'showClient'])->name('client-show');
+        $app->map('/user/:username/client/:clientName/edit', [$this, 'editClient'])->via('GET', 'POST')->name('client-edit');
+        $app->get('/user/:username/client/:clientName/delete', [$this, 'deleteClient'])->via('GET', 'POST')->name('client-delete');
     }
 
     public function index($username)
@@ -37,11 +37,11 @@ class ClientController extends BaseController
         }
 
         $clientApi = $this->getClientApi();
-        $clients = $clientApi->getCollection([]);
+        $clients   = $clientApi->getCollection([]);
 
         $this->render('Client/index.html.twig', [
             'clients' => $clients['clients'],
-            'user' => $_SESSION['user'],
+            'user'    => $_SESSION['user'],
         ]);
     }
 
@@ -49,7 +49,7 @@ class ClientController extends BaseController
     {
         $thisUrl = $this->application->urlFor('client-show', [
             'clientName' => $clientName,
-            'username' => $username,
+            'username'   => $username,
         ]);
 
         if (!isset($_SESSION['user'])) {
@@ -74,7 +74,7 @@ class ClientController extends BaseController
 
         $this->render('Client/details.html.twig', [
             'client' => $client,
-            'user' => $_SESSION['user']
+            'user'   => $_SESSION['user']
         ]);
     }
 
@@ -116,7 +116,7 @@ class ClientController extends BaseController
         $this->render(
             'Client/submit.html.twig',
             [
-                'form' => $form->createView(),
+                'form'    => $form->createView(),
                 'backUri' => $this->application->urlFor('clients', [
                     'username' => $username,
                 ]),
@@ -153,14 +153,14 @@ class ClientController extends BaseController
         }
 
         // default values
-        $data = [];
+        $data                 = [];
         $data['application']  = $client->getName();
         $data['description']  = $client->getDescription();
         $data['callback_url'] = $client->getCallbackUrl();
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ClientFormType(), $data);
+        $form    = $factory->create(new ClientFormType(), $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -190,8 +190,8 @@ class ClientController extends BaseController
         $this->render(
             'Client/edit-client.html.twig',
             [
-                'client' => $client,
-                'form' => $form->createView(),
+                'client'  => $client,
+                'form'    => $form->createView(),
                 'backUri' => $this->application->urlFor('client-show', [
                     'clientName' => $client->getId(),
                     'username'   => $username,
@@ -215,7 +215,7 @@ class ClientController extends BaseController
     private function addClientUsingForm(Form $form)
     {
         $clientApi = $this->getClientApi();
-        $values = $form->getData();
+        $values    = $form->getData();
 
         $result = false;
         try {
@@ -259,11 +259,11 @@ class ClientController extends BaseController
         }
 
         // default values
-        $data = [];
+        $data               = [];
         $data['client_id']  = $client->getId();
 
         $factory = $this->application->formFactory;
-        $form = $factory->create(new ClientDeleteFormType(), $data);
+        $form    = $factory->create(new ClientDeleteFormType(), $data);
 
         $request = $this->application->request();
 
@@ -293,8 +293,8 @@ class ClientController extends BaseController
         $this->render(
             'Client/delete-client.html.twig',
             [
-                'client' => $client,
-                'form' => $form->createView(),
+                'client'  => $client,
+                'form'    => $form->createView(),
                 'backUri' => $this->application->urlFor('client-show', [
                     'clientName' => $client->getId(),
                     'username'   => $username

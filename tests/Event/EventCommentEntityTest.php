@@ -11,7 +11,7 @@ class EventCommentEntityTest extends TestCase
 
     public function setUp(): void
     {
-        $this->commentData = new stdClass();
+        $this->commentData                      = new stdClass();
         $this->commentData->comment             = "Test event comment text";
         $this->commentData->user_display_name   = "Test comment display name";
         $this->commentData->created_date        = "2014-03-02T08:43:44+01:00";

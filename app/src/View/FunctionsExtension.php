@@ -29,7 +29,7 @@ final class FunctionsExtension extends Twig_Extension
         $app = $this->app;
 
         return [
-            new Twig_SimpleFunction('urlFor', function ($routeName, $params = array()) use ($app) {
+            new Twig_SimpleFunction('urlFor', function ($routeName, $params = []) use ($app) {
                 $url = rtrim($app->urlFor($routeName, $params), '/');
 
                 return $url;
@@ -67,22 +67,22 @@ final class FunctionsExtension extends Twig_Extension
                 return $url;
             }),
 
-            new Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = array()) use ($app) {
-                return $app->urlFor('talk', array('eventSlug' => $eventSlug, 'talkSlug' => $talkSlug));
+            new Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = []) use ($app) {
+                return $app->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
             }),
 
             new Twig_SimpleFunction('shortUrlForTalk', function ($talkStub) use ($app) {
                 $scheme = $app->request()->getScheme();
                 $host   = $app->request()->headers('host');
 
-                return "$scheme://$host" . $app->urlFor('talk-quicklink', array('talkStub' => $talkStub));
+                return "$scheme://$host" . $app->urlFor('talk-quicklink', ['talkStub' => $talkStub]);
             }),
 
             new Twig_SimpleFunction('shortUrlForEvent', function ($eventStub) use ($app) {
                 $scheme = $app->request()->getScheme();
                 $host   = $app->request()->headers('host');
 
-                return "$scheme://$host" . $app->urlFor('event-quicklink', array('stub' => $eventStub));
+                return "$scheme://$host" . $app->urlFor('event-quicklink', ['stub' => $eventStub]);
             }),
 
             new Twig_SimpleFunction(
