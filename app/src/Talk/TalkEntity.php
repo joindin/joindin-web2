@@ -104,6 +104,14 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         return $this->data->average_rating;
     }
 
+    public function getUserRating()
+    {
+        if (! isset($this->data->user_rating)) {
+            return false;
+        }
+        return $this->data->user_rating;
+    }
+
     public function getCommentUri()
     {
         return $this->data->comments_uri;
