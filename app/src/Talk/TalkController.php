@@ -52,7 +52,7 @@ class TalkController extends BaseController
             return Slim::getInstance()->notFound();
         }
 
-        $comments = $talkApi->getComments($talk->getCommentUri(), true, 0);
+        $comments = $talkApi->getComments($talk->getCommentsUri(), true, 0);
 
         $canRateTalk = true;
         if (isset($_SESSION['user'])) {
