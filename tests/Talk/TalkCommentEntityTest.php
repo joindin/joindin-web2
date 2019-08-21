@@ -11,7 +11,7 @@ class TalkCommentEntityTest extends TestCase
 
     public function setUp(): void
     {
-        $this->commentData = new stdClass();
+        $this->commentData                      = new stdClass();
         $this->commentData->rating              = 5;
         $this->commentData->comment             = "Test event comment text";
         $this->commentData->user_display_name   = "Test comment display name";
