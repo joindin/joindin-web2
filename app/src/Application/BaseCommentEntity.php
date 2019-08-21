@@ -3,6 +3,15 @@ namespace Application;
 
 abstract class BaseCommentEntity extends BaseEntity
 {
+    public function getUsername()
+    {
+        if (!isset($this->data->username)) {
+            return null;
+        }
+
+        return $this->data->username;
+    }
+
     public function getUserDisplayName()
     {
         if (!isset($this->data->user_display_name)) {
