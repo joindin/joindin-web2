@@ -36,6 +36,7 @@ class EventController extends BaseController
         $app->get('/event', array($this, 'index'))->name("events-index");
         $app->get('/event/pending', array($this, 'pending'))->name("events-pending");
         $app->map('/event/submit', array($this, 'submit'))->via('GET', 'POST')->name('event-submit');
+        $app->map('/event/:friendly_name/import', array($this, 'eventImportCsv'))->via('GET', 'POST')->name("event-import-csv");
         $app->get('/event/callforpapers', array($this, 'callForPapers'))->name('event-call-for-papers');
         $app->get('/event/:friendly_name', array($this, 'eventDefault'))->name("event-default");
         $app->get('/event/:friendly_name/details', array($this, 'details'))->name("event-detail");
@@ -1147,6 +1148,72 @@ class EventController extends BaseController
                 'form' => $form->createView(),
             )
         );
+    }
+
+    /**
+     * Upload Data from CSV for this event
+     * @todo Validate & Process uploaded cSV
+     * @param string $eventSlug
+     */
+    public function eventImportCsv($eventSlug)
+    {
+        $config = $this->application->config('oauth');
+        $request = $this->application->request();
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new EventImportFormType());
+
+        //use EventFormImportType to validate the CSV is valid
+        //We possibly want to do some extensive data checking
+        //BEFORE we blindly throw data from here to the API
+        if ($request->isPost()) {
+            try {
+                if (isset($_FILES['event_import']['error']['csv_file'])
+                    && $_FILES['event_import']['error']['csv_file'] == UPLOAD_ERR_OK) {
+                    $eventApi = $this->getEventApi();
+                    $event = $eventApi->getByFriendlyUrl($eventSlug);
+                    $handle = fopen($_FILES['event_import']['tmp_name']['csv_file'], "r");
+
+                    while (!feof($handle)) {
+                        $talk = fgetcsv($handle);
+                        $date_start = new \DateTimeImmutable(filter_var($talk[3], FILTER_SANITIZE_STRING).' '.filter_var($talk[4], FILTER_SANITIZE_STRING));
+                        $speakers = explode("|", $talk[2]);
+
+                        foreach ($speakers as $key => $speaker) {
+                            $speakers[$key] = filter_var($speaker, FILTER_SANITIZE_STRING);
+                        }
+
+                        $talk_data = [
+                            'talk_title' => filter_var($talk[0], FILTER_SANITIZE_STRING),
+                            'talk_description' => filter_var($talk[1], FILTER_SANITIZE_STRING),
+                            'type' => filter_var($talk[7], FILTER_SANITIZE_STRING),
+                            'track' => filter_var($talk[8], FILTER_SANITIZE_STRING),
+                            'language' => filter_var($talk[6], FILTER_SANITIZE_STRING),
+                            'start_date' => $date_start->format('Y-m-d H:i'),
+                            'speakers' => $speakers,
+                            'duration' => filter_var($talk[5], FILTER_SANITIZE_STRING),
+                        ];
+
+                        $talk_api = $this->getTalkApi();
+                        $talk_api->addTalk($event->getTalksUri(), $talk_data);
+                    }
+
+                    fclose($handle);
+                }
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+                $messages = json_decode($error);
+                if ($messages) {
+                    $error = implode(', ', $messages);
+                }
+                $form->addError(
+                    new FormError("An error occurred while uploading your event csv: $error")
+                );
+            }
+        }
+
+        $this->render('Event/import-csv.html.twig', array('form' => $form->createView()));
     }
 
     /**
