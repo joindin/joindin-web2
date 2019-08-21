@@ -46,7 +46,7 @@ class UserFormType extends AbstractType
                 'full_name',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -54,7 +54,7 @@ class UserFormType extends AbstractType
                 'email',
                 'text',
                 [
-                    'required' => true,
+                    'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
             )
@@ -62,7 +62,7 @@ class UserFormType extends AbstractType
                 'twitter_username',
                 'text',
                 [
-                    'required' => false,
+                    'required'   => false,
                     'empty_data' => '',
                     // 'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                 ]
@@ -71,10 +71,10 @@ class UserFormType extends AbstractType
                 'biography',
                 'textarea',
                 [
-                    'required' => false,
+                    'required'   => false,
                     'empty_data' => '',
-                    'attr' => [
-                        'rows' => 4,
+                    'attr'       => [
+                        'rows'      => 4,
                         'maxlength' => '400'
                     ]
                 ]
@@ -86,7 +86,7 @@ class UserFormType extends AbstractType
                     'old_password',
                     'password',
                     [
-                        'label' => 'Current password',
+                        'label'    => 'Current password',
                         'required' => false,
                         // 'constraints' => [new Assert\NotBlank(), new Assert\Email()],
                     ]
@@ -95,12 +95,12 @@ class UserFormType extends AbstractType
                     'password',
                     'repeated',
                     [
-                        'type' => 'password',
+                        'type'            => 'password',
                         'invalid_message' => 'The password fields must match.',
-                        'required' => false,
-                        'first_options' => array('label' => 'New password'),
-                        'second_options' => array('label' => 'Repeat new password'),
-                        'constraints' => [new Assert\Length(['min' => 6])],
+                        'required'        => false,
+                        'first_options'   => ['label' => 'New password'],
+                        'second_options'  => ['label' => 'Repeat new password'],
+                        'constraints'     => [new Assert\Length(['min' => 6])],
                     ]
                 );
         }
