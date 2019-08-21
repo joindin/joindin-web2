@@ -1,0 +1,11 @@
+--TEST--
+"img_path" filter
+--TEMPLATE--
+{{ icon|img_path("event_icons") }}
+--DATA--
+return [
+    'icon' => 'test',
+]
+--EXPECT--
+https://joind.in/inc/img/event_icons/test
+

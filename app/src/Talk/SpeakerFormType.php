@@ -34,7 +34,7 @@ class SpeakerFormType extends AbstractType
     {
         $builder
             ->add('name', 'text', [
-                'label' => false,
+                'label'    => false,
                 'required' => false,
             ])
         ;

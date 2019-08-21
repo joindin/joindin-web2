@@ -1,0 +1,13 @@
+--TEST--
+"gravatar" function
+--TEMPLATE--
+{{ gravatar(hash1) }}
+{{ gravatar(hash(email1)) }}
+--DATA--
+return [
+    'email1' => 'info@joind.in',
+    'hash1' => '9fac50eb1179838875edb34ba532e3f3'
+]
+--EXPECT--
+https://secure.gravatar.com/avatar/9fac50eb1179838875edb34ba532e3f3?d=mm&amp;s=40
+https://secure.gravatar.com/avatar/9fac50eb1179838875edb34ba532e3f3?d=mm&amp;s=40

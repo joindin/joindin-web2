@@ -8,15 +8,15 @@
     <p>Use this form to get in touch with the team behind Joind.in.  If you have questions or comments about anything on this site, or any other feedback for us, we're pleased to hear from you - just use the form below!</p>
 
     {% if flash.getMessages.message %}
-        <div class="alert alert-success">{{flash.getMessages.message}}</div>
+        <div class="alert alert-success">{{flash.getMessages.message | raw}}</div>
     {% endif %}
     {% if flash.getMessages.error %}
-        <div class="alert alert-danger">{{flash.getMessages.error}}</div>
+        <div class="alert alert-danger">{{flash.getMessages.error | raw}}</div>
     {% endif %}
 
 
 
-    {{ form_start(form, {'attr' : {'id' : 'contact'} }) }}
+    {{ form_start(form, {'attr' : {'id' : 'contact', 'novalidate': 'novalidate' } }) }}
     {{ form_errors(form) }}
     <div class="row">
         <fieldset class="col-xs-12 col-sm-6">
@@ -34,6 +34,13 @@
     <div class="row">
         <fieldset class="col-sm-12">
             {{ form_row(form.comment) }}
+        </fieldset>
+    </div>
+    <div class="row phone">
+        <fieldset class="col-sm-12">
+            <p>Leave this field empty. We do not need your phone number but bots will think we do.</p>
+            <p>Thanks for helping us keep this contact form bot-free!</p>
+            {{ form_row(form.phone) }}
         </fieldset>
     </div>
     <div class="row">

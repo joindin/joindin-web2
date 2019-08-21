@@ -84,7 +84,7 @@
                     {% for talk in talks %}
                         {% if not starred_only or talk.starred %}
                         {% if not has_time %}
-                        <th class="time col-xs-2 col-sm-1" rowspan="1">{{ time }}</th>
+                        <th class="time col-xs-2 col-sm-1" rowspan="{{ talks|length }}">{{ time }}</th>
                         {% set has_time = true %}
                         {% endif %}
                         {% set cell %}
