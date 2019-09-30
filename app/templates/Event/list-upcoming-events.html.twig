@@ -1,13 +1,13 @@
 <section>
     <h2>Current events</h2>
-    {% if hot_events.events %}
-        {% for event in hot_events.events %}
+    {% if upcoming_events.events %}
+        {% for event in upcoming_events.events %}
             {% include 'Event/_common/summary_cfp.html.twig' %}
         {% endfor %}
         <div>
-            <a href="/">See all hot events <i class="fa fa-arrow-circle-o-right"></i></a>
+            <a href="/">See all upcoming events <i class="fa fa-arrow-circle-o-right"></i></a>
         </div>
     {% else %}
-        <p>There are no hot events at the moment.</p>
+        <p>There are no upcoming events at the moment.</p>
     {% endif %}
 </section>
