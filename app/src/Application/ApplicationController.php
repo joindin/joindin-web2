@@ -26,9 +26,9 @@ class ApplicationController extends BaseController
         $perPage = 10;
         $start   = ($page -1) * $perPage;
 
-        $eventApi  = $this->getEventApi();
+        $eventApi       = $this->getEventApi();
         $upcomingEvents = $eventApi->getEvents($perPage, $start, 'upcoming');
-        $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);
+        $cfpEvents      = $eventApi->getEvents(4, 0, 'cfp', true);
 
         $this->render(
             'Application/index.html.twig',
