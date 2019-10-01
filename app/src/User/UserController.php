@@ -602,7 +602,8 @@ class UserController extends BaseController
 
         if (!$user->getCanEdit() || !isset($_SESSION['user'])) {
             $this->application->redirect(
-                $this->application->urlFor('not-allowed') . '?redirect=' . $this->application->urlFor('user-profile-edit', ['username' => $username])
+                $this->application->urlFor('not-allowed') . '?redirect=' . $this->application
+                    ->urlFor('user-profile-edit', ['username' => $username])
             );
         }
 
@@ -869,7 +870,9 @@ class UserController extends BaseController
                 $this->application->flash('error', "Failed to log in");
             }
             if ($result[0] == 'Not verified') {
-                $this->application->flash('error', "User account not verified. <a href='/user/resend-verification'>Click here</a> to resend welcome email.");
+                $message = "User account not verified. <a href='/user/resend-verification'>Click here</a> to resend welcome email.";
+                $this->application
+                    ->flash('error', $message);
             }
 
             if (empty($redirect)) {
