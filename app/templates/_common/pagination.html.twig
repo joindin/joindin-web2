@@ -14,7 +14,7 @@
                     </li>
                 {% endif %}
                 <li class="current hidden-xs"><a href="#">Page {{ page }}</a></li>
-                {% if pagination.next_page and pagination.count >= 10 %}
+                {% if pagination.next_page and pagination.count >= perPage|default(10) %}
                     <li>
                         <a href="?page={{ page + 1 }}{% if keyword %}&amp;keyword={{ keyword }}{% endif %}{% if tag %}&amp;tag={{ tag }}{% endif %}">
                             Next <i class="fa fa-arrow-circle-o-right"></i>

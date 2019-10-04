@@ -7,3 +7,4 @@ node_modules/
 web/inc
 vendor/
 .phpunit.result.cache
+.idea
