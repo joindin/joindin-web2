@@ -36,7 +36,8 @@ class EventController extends BaseController
         $app->get('/event', [$this, 'index'])->name("events-index");
         $app->get('/event/pending', [$this, 'pending'])->name("events-pending");
         $app->map('/event/submit', [$this, 'submit'])->via('GET', 'POST')->name('event-submit');
-        $app->map('/event/:friendly_name/import', [$this, 'eventImportCsv'])->via('GET', 'POST')->name("event-import-csv");
+        $app->map('/event/:friendly_name/import', [$this, 'eventImportCsv'])->via('GET', 'POST')
+                                                                            ->name("event-import-csv");
         $app->get('/event/callforpapers', [$this, 'callForPapers'])->name('event-call-for-papers');
         $app->get('/event/:friendly_name', [$this, 'eventDefault'])->name("event-default");
         $app->get('/event/:friendly_name/details', [$this, 'details'])->name("event-detail");
@@ -46,8 +47,10 @@ class EventController extends BaseController
         $app->get('/event/:friendly_name/comments/:comment_hash/report', [$this, 'reportComment'])
             ->name("event-comments-reported");
         $app->get('/event/:friendly_name/schedule', [$this, 'schedule'])->name("event-schedule");
-        $app->get('/event/:friendly_name/schedule/list(/:starred)', [$this, 'scheduleList'])->name("event-schedule-list");
-        $app->get('/event/:friendly_name/schedule/grid(/:starred)', [$this, 'scheduleGrid'])->name("event-schedule-grid");
+        $app->get('/event/:friendly_name/schedule/list(/:starred)', [$this, 'scheduleList'])
+            ->name("event-schedule-list");
+        $app->get('/event/:friendly_name/schedule/grid(/:starred)', [$this, 'scheduleGrid'])
+            ->name("event-schedule-grid");
         $app->get('/event/:friendly_name/talk-comments', [$this, 'talkComments'])->name("event-talk-comments");
         $app->post('/event/:friendly_name/add-comment', [$this, 'addComment'])->name('event-add-comment');
         $app->map('/event/:friendly_name/edit', [$this, 'edit'])->via('GET', 'POST')->name('event-edit');
@@ -923,7 +926,8 @@ class EventController extends BaseController
     {
         if (!isset($_SESSION['user'])) {
             $this->application->redirect(
-                $this->application->urlFor('not-allowed') . '?redirect=' . $this->application->urlFor('event-talk-claims', ['friendly_name' => $friendly_name])
+                $this->application->urlFor('not-allowed') . '?redirect='
+                . $this->application->urlFor('event-talk-claims', ['friendly_name' => $friendly_name])
             );
         }
 

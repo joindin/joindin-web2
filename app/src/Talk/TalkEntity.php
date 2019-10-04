@@ -112,11 +112,6 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         return $this->data->user_rating;
     }
 
-    public function getCommentUri()
-    {
-        return $this->data->comments_uri;
-    }
-
     public function getUrlFriendlyTalkTitle()
     {
         return $this->data->url_friendly_talk_title;

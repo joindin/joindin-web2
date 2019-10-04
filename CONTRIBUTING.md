@@ -10,8 +10,7 @@ read/subscribe to the following resources:
     https://github.com/joindin/joind.in/wiki/How-to-Contribute-Code
  -  Contributor's mailing list:
     http://groups.google.com/group/joindin-developers
- -  Contributor's IRC channel:
-    #joind.in on Freenode.net
+ -  Contributor's Chat: You can join via [Joindin Slack](https://join.slack.com/t/joindin/shared_invite/enQtNzY2MTEzOTU3ODkwLTMzNTc3ZDFlNTAxMTc2ZjliYjAzNDExZTkzM2NmZDFjYjcyMjNkMWYzMjNhZjE4MzA1MTljZDk2NzNiMzk5MjU)
 
 ## What to work on
 

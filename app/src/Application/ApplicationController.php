@@ -26,14 +26,14 @@ class ApplicationController extends BaseController
         $perPage = 10;
         $start   = ($page -1) * $perPage;
 
-        $eventApi  = $this->getEventApi();
-        $hotEvents = $eventApi->getEvents($perPage, $start, 'hot');
-        $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);
+        $eventApi       = $this->getEventApi();
+        $upcomingEvents = $eventApi->getEvents($perPage, $start, 'upcoming');
+        $cfpEvents      = $eventApi->getEvents(4, 0, 'cfp', true);
 
         $this->render(
             'Application/index.html.twig',
             [
-                'events'     => $hotEvents,
+                'events'     => $upcomingEvents,
                 'cfp_events' => $cfpEvents,
                 'page'       => $page,
             ]
@@ -50,7 +50,7 @@ class ApplicationController extends BaseController
     public function getCurrentEvents($start, $perPage)
     {
         $eventApi = $this->getEventApi();
-        return $eventApi->getEvents($perPage, $start, 'hot');
+        return $eventApi->getEvents($perPage, $start, 'upcoming');
     }
 
     /**
@@ -61,7 +61,7 @@ class ApplicationController extends BaseController
         $this->render(
             'Application/about.html.twig',
             [
-                'hot_events' => $this->getCurrentEvents(0, 5),
+                'upcoming_events' => $this->getCurrentEvents(0, 5),
             ]
         );
     }
@@ -121,7 +121,7 @@ class ApplicationController extends BaseController
         $this->render(
             'Application/assets.html.twig',
             [
-                'hot_events' => $this->getCurrentEvents(0, 5),
+                'upcoming_events' => $this->getCurrentEvents(0, 5),
             ]
         );
     }
