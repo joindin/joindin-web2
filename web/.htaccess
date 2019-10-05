@@ -14,9 +14,4 @@ RewriteRule ^inc/img/rating-(\d)\.gif$ img/avg-rating-$1.png [L]
 RewriteRule ^feed - [NC,G,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} ^(.+)/$
-RewriteRule ^(.+)/$  /$1 [R=301,L]
-
-
-RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php [QSA,L]
