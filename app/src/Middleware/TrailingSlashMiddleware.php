@@ -29,7 +29,7 @@ class TrailingSlashMiddleware extends Middleware
      */
     public function call()
     {
-        $request = $this->app->request;
+        $request = $this->app->request();
         $path    = $request->getPath();
 
         $hasSlash = strlen($path) > 1 && '/' === substr($path, '-1');
