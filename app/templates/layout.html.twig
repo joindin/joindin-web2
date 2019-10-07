@@ -122,7 +122,47 @@
     <footer class="container-fluid" role="footer">
         <div class="row">
             <div class="col-xs-5">
-                <a href="http://github.com/joindin"><i class="fa fa-github-alt"></i> Contribute on Github</a>
+                <nav class="navbar" role="navigation">
+                    <div class="container-fluid">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="/event">Events</a>
+                                </li>
+                                <li>
+                                    <a href="{{ urlFor('about') }}">About</a>
+                                </li>
+                                <li>
+                                    <a href="http://thejoindinfoundation.org" target="_blank">Non-Profit</a>
+                                </li>
+                                <li>
+                                    <a href="https://blog.joind.in" target="_blank">
+                                        <i class="fa fa-wordpress" title="Joindin Blog"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="http://twitter.com/joindin" target="_blank">
+                                        <i class="fa fa-twitter" title="@joindin on Twitter"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="http://github.com/joindin" target="_blank">
+                                        <i class="fa fa-github-alt" title="Contribute on Github"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div><!-- /.navbar-collapse -->
+                    </div><!-- /.container-fluid -->
+                </nav>
             </div>
             <div class="col-xs-7 text-right">
                 Hosted by

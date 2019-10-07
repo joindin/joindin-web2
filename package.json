@@ -6,7 +6,7 @@
   "license": "BSD",
   "private": true,
   "devDependencies": {
-    "grunt": "0.4.2",
-    "grunt-jsvalidate": "0.2.*"
+    "grunt": "^1.0",
+    "grunt-jsvalidate": "^0.2"
   }
 }
