@@ -1183,7 +1183,13 @@ class EventController extends BaseController
 
                     while (!feof($handle)) {
                         $talk       = fgetcsv($handle);
-                        $date_start = new \DateTimeImmutable(filter_var($talk[3], FILTER_SANITIZE_STRING).' '.filter_var($talk[4], FILTER_SANITIZE_STRING));
+                        $date_start = new \DateTimeImmutable(
+                            filter_var($talk[3], FILTER_SANITIZE_STRING)
+                            . ' ' . filter_var(
+                                $talk[4],
+                                FILTER_SANITIZE_STRING
+                            )
+                        );
                         $speakers   = explode("|", $talk[2]);
 
                         foreach ($speakers as $key => $speaker) {
