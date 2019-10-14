@@ -28,15 +28,15 @@
     "require": {
         "guzzlehttp/guzzle":     "^6.2.1",
         "monolog/monolog":       "^1.21",
-        "org_heigl/daterange":   "~1.1",
-        "predis/predis":         "~0.8",
-        "slim/slim":             "~2.4",
-        "slim/views":            "~0.1",
-        "symfony/form":          "~2.8",
-        "symfony/validator":     "~2.8",
-        "symfony/security-csrf": "~2.8",
-        "symfony/twig-bridge":   "~2.8",
-        "twig/twig":             "~1.15"
+        "org_heigl/daterange":   "^1.1",
+        "predis/predis":         "^0.8",
+        "slim/slim":             "^2.4",
+        "slim/views":            "^0.1",
+        "symfony/form":          "^2.8",
+        "symfony/validator":     "^2.8",
+        "symfony/security-csrf": "^2.8",
+        "symfony/twig-bridge":   "^2.8",
+        "twig/twig":             "^1.15"
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^1.0",
