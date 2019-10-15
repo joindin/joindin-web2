@@ -100,7 +100,7 @@
         /** OpenStreetMap */
         var map = L.map('streetmap').setView([{{ event.getLatitude }}, {{ event.getLongitude }}], 14);
         L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
         L.marker([{{ event.getLatitude }}, {{ event.getLongitude }}]).addTo(map)
