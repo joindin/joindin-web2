@@ -17,7 +17,11 @@
                 <div class="row">
                     <h3>
                         <div class="avatar pull-right">
-                            <img src="{{ gravatar(comment.getGravatarHash) }}">
+                            {% if comment.getUserDisplayName %}
+                                <img src="{{ gravatar(comment.getGravatarHash) }}">
+                            {%  else %}
+                                <img src="https://secure.gravatar.com/avatar/00000000000000000000000000000000?f=y&d=mp&s=40">
+                            {% endif %}
                         </div>
                         <div class="meta pull-right-sm pull-right-md pull-left-xs">
                             {% if comment.getUserDisplayName %}
