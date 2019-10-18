@@ -3,40 +3,7 @@
 {% block title %}Talks by {{ thisUser.getFullname }} - Joind.in{% endblock %}
 
 {% block body %}
-    <section class="page-header">
-        <div class="row user-profile">
-            <div class="col-xs-12">
-                <div class="pull-left">
-                    <img src="{{ gravatar(thisUser.getGravatarHash, 100) }}">
-                </div>
-                <div>
-                    <h2>{{ thisUser.getFullname }}</h2>
-                    <section class="user-details">
-                        {% if thisUser.getTwitterUsername %}
-                            <p>
-                                Twitter:
-                                <a href="https://twitter.com/{{ thisUser.getTwitterUsername }}">
-                                    @{{ thisUser.getTwitterUsername }}
-                                </a>
-                            </p>
-                        {% endif %}
-
-                        {% if thisUser.getBiography %}
-                            <p>Bio: {{ thisUser.getBiography }}</p>
-                        {% endif %}
-
-                        <p class="more">
-                            <a href="{{ urlFor('user-profile', {'username': thisUser.getUsername}) }}">
-                                View profile
-                            </a>
-                        </p>
-                    </section>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
+    {% include 'User/profile-navigation.html.twig' %}
     <section class="user-profile-panels">
         <div class="row">
             <div class="col-sm-12">
