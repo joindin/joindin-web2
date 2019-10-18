@@ -571,4 +571,9 @@ class EventEntity extends BaseEntity
 
         return $this->data->images->small->url;
     }
+
+    public function getPending()
+    {
+        return $this->data->pending;
+    }
 }
