@@ -1,0 +1,17 @@
+{
+    "name": "joindin-web2",
+    "short_name": "joindin",
+    "lang": "en",
+    "start_url": "/",
+    "background_color": "#fff",
+    "theme_color": "#fff",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "icons": [{
+        "src": "logo.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
+    "prefer_related_applications": false
+}
