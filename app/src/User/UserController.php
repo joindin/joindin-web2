@@ -2,15 +2,14 @@
 namespace User;
 
 use Application\BaseController;
-use Application\CacheService;
-use Symfony\Component\Form\FormError;
+use Event\EventApi;
+use Event\EventDb;
 use Slim\Slim;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Talk\TalkDb;
 use Talk\TalkApi;
-use Event\EventDb;
-use Event\EventApi;
+use Talk\TalkDb;
 
 class UserController extends BaseController
 {
@@ -339,6 +338,7 @@ class UserController extends BaseController
         }
 
         $eventInfo = [];
+        $talks     = [];
         if (isset($talkCollection['talks'])) {
             $talks = $talkCollection['talks'];
             foreach ($talks as $talk) {

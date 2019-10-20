@@ -2,13 +2,13 @@
 
 namespace Event;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints as Assert;
+use Form\Constraint\UrlResolverConstraint;
 use Form\DataTransformer\DateTransformer;
 use Form\DataTransformer\EventTagsTransformer;
 use Form\Listener\GetResolvedUrlListener;
-use Form\Constraint\UrlResolverConstraint;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Form used to render and validate the submission of a new event.
@@ -275,8 +275,10 @@ class EventFormType extends AbstractType
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
 
+        $continents = [];
+        $cities     = [];
         foreach ($timezones as $timezone) {
-            list($continent, $city) = explode('/', $timezone, 2);
+            [$continent, $city] = explode('/', $timezone, 2);
             $continents[$continent] = $continent;
             $cities[$city]          = $city;
         }

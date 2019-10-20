@@ -831,6 +831,7 @@ class EventController extends BaseController
         $api   = $this->getEventApi();
         $event = $api->getByFriendlyUrl($friendly_name);
 
+        $result = null;
         if ($event) {
             $result = $this->getEventApi()->attend($event, $_SESSION['user']);
         }
@@ -845,6 +846,7 @@ class EventController extends BaseController
         $api   = $this->getEventApi();
         $event = $api->getByFriendlyUrl($friendly_name);
 
+        $result = null;
         if ($event) {
             $result = $this->getEventApi()->unattend($event, $_SESSION['user']);
         }
@@ -1277,6 +1279,7 @@ class EventController extends BaseController
             ['resultsperpage' => 100] // Make sure we get all talks with a single request
         );
 
+        $slugs = [];
         /** @var \Talk\TalkEntity $talk */
         foreach ($talks['talks'] as $talk) {
             $slugs[$talk->getApiUri()] = $talk->getUrlFriendlyTalkTitle();
