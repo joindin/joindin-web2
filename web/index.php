@@ -92,6 +92,7 @@ $app->notFound(function () use ($app) {
 
 // register middlewares
 $app->add(new Middleware\ValidationMiddleware());
+$app->add(new Middleware\TrailingSlashMiddleware());
 
 $csrfSecret = null;
 if (!empty($config['slim']['custom']['csrfSecret'])) {
