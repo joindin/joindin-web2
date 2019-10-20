@@ -278,7 +278,7 @@ class EventFormType extends AbstractType
         $continents = [];
         $cities     = [];
         foreach ($timezones as $timezone) {
-            [$continent, $city] = explode('/', $timezone, 2);
+            [$continent, $city]     = explode('/', $timezone, 2);
             $continents[$continent] = $continent;
             $cities[$city]          = $city;
         }
