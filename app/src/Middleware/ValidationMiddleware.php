@@ -80,7 +80,7 @@ class ValidationMiddleware extends Middleware
     {
         $validator = Validation::createValidatorBuilder()
             ->setMetadataFactory(new ClassMetadataFactory(new StaticMethodLoader()))
-            ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app, []))
+            ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app))
             ->setTranslator($this->getTranslator())
             ->setApiVersion(Validation::API_VERSION_2_5)
             ->getValidator();

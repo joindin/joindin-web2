@@ -302,13 +302,12 @@ class TalkController extends BaseController
 
         try {
             $result = $talkApi->toggleStar($talk);
+            $this->application->status(200);
+            echo json_encode($result);
         } catch (Exception $e) {
             $reason = $e->getMessage();
             $this->application->halt(500, '{ "message": "Failed to toggle star: ' . $reason .'" }');
         }
-
-        $this->application->status(200);
-        echo json_encode($result);
     }
 
     public function quick($talkStub)
