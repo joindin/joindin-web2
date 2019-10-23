@@ -50,8 +50,8 @@ class TrackFormType extends AbstractType
                 'track_description',
                 'textarea',
                 [
-                    'constraints' => [new Assert\NotBlank()],
-                    'attr'        => ['rows' => '2']
+                    'required' => false,
+                    'attr'     => ['rows' => '2']
                 ]
             )
         ;

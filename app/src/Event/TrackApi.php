@@ -49,7 +49,7 @@ class TrackApi extends BaseApi
     {
         $params = [
             'track_name'        => $data['track_name'],
-            'track_description' => $data['track_description'],
+            'track_description' => $data['track_description'] ?? '',
         ];
 
         list($status, $result, $headers) = $this->apiPut($trackUri, $params);
@@ -73,7 +73,7 @@ class TrackApi extends BaseApi
     {
         $params = [
             'track_name'        => $data['track_name'],
-            'track_description' => $data['track_description'],
+            'track_description' => $data['track_description'] ?? '',
         ];
 
         list($status, $result, $headers) = $this->apiPost($eventTracksUri, $params);
