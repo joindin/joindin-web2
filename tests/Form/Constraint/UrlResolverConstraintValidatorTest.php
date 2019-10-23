@@ -4,22 +4,32 @@ namespace Tests\Form\Constraint;
 
 use Form\Constraint\UrlResolverConstraint;
 use Form\Constraint\UrlResolverConstraintValidator;
-use Symfony\Component\Validator\ExecutionContextInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class UrlResolverConstraintValidatorTest extends TestCase
 {
-    /** @dataProvider validateWorksProvider */
-    public function testValidateWorks($base)
+    /**
+     * @dataProvider validateWorksProvider
+     */
+    public function testValidateWorks(string $base = null): void
     {
+        $context = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
+        $context->expects(self::never())
+            ->method('addViolation');
+
         $validator = new UrlResolverConstraintValidator();
-        self::assertNull($validator->validate($base, new UrlResolverConstraint()));
+        $validator->initialize($context);
+
+        $validator->validate($base, new UrlResolverConstraint());
     }
 
-    /** @dataProvider validateFailsProvider */
-    public function testValidateFails($base)
+    /**
+     * @dataProvider validateFailsProvider
+     */
+    public function testValidateFails(string $base): void
     {
-        $context = self::getMockBuilder(ExecutionContextInterface::class)->getMock();
+        $context = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
         $context->expects(self::once())
             ->method('addViolation')
             ->with('Url provided does not resolve.');
@@ -27,24 +37,30 @@ class UrlResolverConstraintValidatorTest extends TestCase
         $validator = new UrlResolverConstraintValidator();
         $validator->initialize($context);
 
-        self::assertNull($validator->validate($base, new UrlResolverConstraint()));
+        $validator->validate($base, new UrlResolverConstraint());
     }
 
-    public function validateWorksProvider() : array
+    public function validateWorksProvider(): array
     {
-        return [[
-            'http://apple.de',
-        ], [
-            '',
-        ], [
-            null,
-        ]];
+        return [
+            [
+                'http://apple.de',
+            ],
+            [
+                '',
+            ],
+            [
+                null,
+            ]
+        ];
     }
 
-    public function validateFailsProvider() : array
+    public function validateFailsProvider(): array
     {
-        return [[
-            'http://example.unresolvable',
-        ]];
+        return [
+            [
+                'http://example.unresolvable',
+            ]
+        ];
     }
 }
