@@ -40,7 +40,7 @@
                     {{ claim.display_name }}
                 </td>
                 <td class="col-sm-2">
-                    {{ claim.user.getFullName() }}
+                    <a href="{{ claim.user.getWebsiteUri() }}">{{ claim.user.getFullName() }}</a>
                 </td>
                 <td class="agenda-cell">
                     {% if claim.approved is defined %}

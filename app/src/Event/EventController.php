@@ -1266,7 +1266,6 @@ class EventController extends BaseController
     }
 
     /**
-     * @param array       $slugs
      * @param EventEntity $event
      */
     private function getTalkSlugsFromApi(EventEntity $event)

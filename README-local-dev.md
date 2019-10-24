@@ -7,3 +7,12 @@ To run the site on http://localhost:8080/, do the following:
 cd web
 php -S localhost:8080 index.php
 ```
+
+### Symfony Local Web Server
+
+You can also use the [Symfony Local Web Server](https://symfony.com/doc/current/setup/symfony_server.html). From the root directory:
+
+```
+symfony server:start -d
+symfony open:local
+```
