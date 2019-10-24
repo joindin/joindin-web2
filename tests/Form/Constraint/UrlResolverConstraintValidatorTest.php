@@ -4,6 +4,8 @@ namespace Tests\Form\Constraint;
 
 use Form\Constraint\UrlResolverConstraint;
 use Form\Constraint\UrlResolverConstraintValidator;
+use Form\Shared\UrlResolver;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -12,29 +14,19 @@ class UrlResolverConstraintValidatorTest extends TestCase
     /**
      * @dataProvider validateWorksProvider
      */
-    public function testValidateWorks(string $base = null): void
+    public function testValidateWorks(bool $expectResolve, string $base = null): void
     {
+        /** @var MockObject|ExecutionContextInterface $context */
         $context = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
         $context->expects(self::never())
             ->method('addViolation');
 
-        $validator = new UrlResolverConstraintValidator();
-        $validator->initialize($context);
+        /** @var MockObject|UrlResolver $urlResolver */
+        $urlResolver = $this->getMockBuilder(UrlResolver::class)->getMock();
+        $urlResolver->expects(self::exactly($expectResolve ? 1 : 0))
+            ->method('resolve');
 
-        $validator->validate($base, new UrlResolverConstraint());
-    }
-
-    /**
-     * @dataProvider validateFailsProvider
-     */
-    public function testValidateFails(string $base): void
-    {
-        $context = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
-        $context->expects(self::once())
-            ->method('addViolation')
-            ->with('Url provided does not resolve.');
-
-        $validator = new UrlResolverConstraintValidator();
+        $validator = new UrlResolverConstraintValidator($urlResolver);
         $validator->initialize($context);
 
         $validator->validate($base, new UrlResolverConstraint());
@@ -44,22 +36,16 @@ class UrlResolverConstraintValidatorTest extends TestCase
     {
         return [
             [
+                true,
                 'http://apple.de',
             ],
             [
+                false,
                 '',
             ],
             [
+                false,
                 null,
-            ]
-        ];
-    }
-
-    public function validateFailsProvider(): array
-    {
-        return [
-            [
-                'http://example.unresolvable',
             ]
         ];
     }
