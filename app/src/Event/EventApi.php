@@ -61,7 +61,7 @@ class EventApi extends BaseApi
      * and return us an event
      *
      * @param string $friendlyUrl The nice url bit of the event (e.g. phpbenelux-conference-2014)
-     * @return EventEntity The event we found, or false if something went wrong
+     * @return EventEntity|false The event we found, or false if something went wrong
      */
     public function getByFriendlyUrl($friendlyUrl)
     {
@@ -80,7 +80,7 @@ class EventApi extends BaseApi
      * and return us an event
      *
      * @param string $stub The short url bit of the event (e.g. phpbnl14)
-     * @return EventEntity The event we found, or false if something went wrong
+     * @return EventEntity|false The event we found, or false if something went wrong
      */
     public function getByStub($stub)
     {
@@ -127,13 +127,13 @@ class EventApi extends BaseApi
      * Get an event by id
      *
      * @param integer $eventId
-     * @return EventEntity
+     * @return EventEntity|null
      */
-    public function getEventById($eventId)
+    public function getEventById($eventId): ?EventEntity
     {
         $eventId = (int)$eventId;
         if (!$eventId) {
-            return;
+            return null;
         }
 
         $eventUrl = $this->baseApiUrl . '/v2.1/events/' . $eventId;
@@ -143,7 +143,7 @@ class EventApi extends BaseApi
 
     /**
      * Get comments for given event
-     * @param $comment_uri
+     * @param string $comment_uri
      * @param bool $verbose
      * @return EventCommentEntity[]
      */
@@ -214,8 +214,8 @@ class EventApi extends BaseApi
 
     /**
      * Get attendees for given event
-     * @param $attendees_uri
-     * @param $limit
+     * @param string $attendees_uri
+     * @param int $limit
      * @param bool $verbose
      * @return UserEntity[]
      */
@@ -376,11 +376,11 @@ class EventApi extends BaseApi
 
     /**
      * Returns a response array containing an 'events' and 'pagination' element.
-
+     *
      * Each event in this response is also stored in the cache so that a relation
      * can be made between the API URLs and Event entities.
      *
-     * @param string $url API Url to query for one or more events. Either a
+     * @param string $uri API Url to query for one or more events. Either a
      *                    listing can be retrieved or a single event.
      * @param array  $queryParams
      *
@@ -498,7 +498,7 @@ class EventApi extends BaseApi
             $claims_uri = $claims_uri . "?verbose=yes";
         }
         $response = json_decode($this->apiGet($claims_uri));
-        
+
         $reports = [];
 
         foreach ($response->claims as $item) {

@@ -28,17 +28,17 @@ class TalkFormType extends AbstractType
     protected $endDate;
 
     /**
-     * @var [string]
+     * @var string[]
      */
     protected $languages;
 
     /**
-     * @var [string]
+     * @var string[]
      */
     protected $talkTypes;
 
     /**
-     * @var [string]
+     * @var string[]
      */
     protected $tracks;
 

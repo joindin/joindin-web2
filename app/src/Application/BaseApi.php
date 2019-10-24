@@ -45,7 +45,7 @@ abstract class BaseApi
         }
 
         $streamContext = stream_context_create($contextOpts);
-        $result        = file_get_contents($url . $paramsString, 0, $streamContext);
+        $result        = file_get_contents($url . $paramsString, false, $streamContext);
 
         if (false === $result) {
             throw new \Exception('Unable to connect to API');
@@ -80,7 +80,7 @@ abstract class BaseApi
         }
 
         $streamContext = stream_context_create($contextOpts);
-        $result        = file_get_contents($url . $paramsString, 0, $streamContext);
+        $result        = file_get_contents($url . $paramsString, false, $streamContext);
 
         if (false === $result) {
             throw new \Exception('Unable to connect to API');
@@ -122,7 +122,7 @@ abstract class BaseApi
         }
 
         $streamContext = stream_context_create($contextOpts);
-        $result        = file_get_contents($url, 0, $streamContext);
+        $result        = file_get_contents($url, false, $streamContext);
         if (false === $result) {
             throw new \Exception('Unable to connect to API');
         }
@@ -163,7 +163,7 @@ abstract class BaseApi
         }
 
         $streamContext = stream_context_create($contextOpts);
-        $result        = file_get_contents($url, 0, $streamContext);
+        $result        = file_get_contents($url, false, $streamContext);
         if (false === $result) {
             throw new \Exception('Unable to connect to API');
         }
@@ -205,7 +205,7 @@ abstract class BaseApi
     }
 
     /**
-     * @param $access_token
+     * @param string $accessToken
      */
     public function setAccessToken($accessToken)
     {

@@ -866,7 +866,7 @@ class UserController extends BaseController
     protected function handleLogin($result, $redirect = '')
     {
         if (!is_object($result)) {
-            if (false === $result || $result[0] == 'Signin failed') {
+            if ($result === false || $result[0] == 'Signin failed') {
                 $this->application->flash('error', "Failed to log in");
             }
             if ($result[0] == 'Not verified') {
