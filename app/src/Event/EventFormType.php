@@ -207,7 +207,7 @@ class EventFormType extends AbstractType
      * @param string  $label
      * @param boolean $required
      *
-     * @return string[]
+     * @return array
      */
     private function getOptionsForUrlWidget($label, $required = true)
     {
@@ -237,7 +237,7 @@ class EventFormType extends AbstractType
      * @param string  $label
      * @param boolean $required
      *
-     * @return string[]
+     * @return array
      */
     private function getOptionsForDateWidget($label, $required = true)
     {
@@ -268,7 +268,7 @@ class EventFormType extends AbstractType
      * value and not a numeric value. Although PHP recognizes 'UTC' as timezone we explicitly remove that because
      * it does not fit with the Joind.in API.
      *
-     * @return string[]
+     * @return array
      */
     public function getListOfTimezoneContinentsAndCities()
     {

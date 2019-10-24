@@ -53,14 +53,14 @@ class ApikeyApi extends BaseApi
     }
 
     /**
-     * @param $tokenUri
+     * @param string $tokenUri
      *
      * @throws \Exception
      * @return bool
      */
     public function deleteClient($tokenUri)
     {
-        list($status, $result, $headers) = $this->apiDelete($tokenUri);
+        [$status, $result, $headers] = $this->apiDelete($tokenUri);
 
         if ($status != 204) {
             $decoded = json_decode($result);

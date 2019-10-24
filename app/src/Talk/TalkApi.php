@@ -67,13 +67,13 @@ class TalkApi extends BaseApi
 
     /**
      * @param integer $talkId
-     * @return TalkEntity
+     * @return TalkEntity|null
      */
     public function getTalkByTalkId($talkId)
     {
         $talkId = (int)$talkId;
         if (!$talkId) {
-            return;
+            return null;
         }
 
         $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId;
@@ -86,7 +86,7 @@ class TalkApi extends BaseApi
      *
      * @param  string $talkSlug
      * @param  string $eventUri
-     * @return TalkEntity
+     * @return TalkEntity|false
      */
     public function getTalkBySlug($talkSlug, $eventUri)
     {
@@ -103,7 +103,7 @@ class TalkApi extends BaseApi
      *
      * @param string $talk_uri  API talk uri
      * @param bool $verbose  Return verbose data?
-     * @return TalkEntity
+     * @return TalkEntity|false
      */
     public function getTalk($talk_uri, $verbose = false)
     {
@@ -131,7 +131,7 @@ class TalkApi extends BaseApi
     /**
      * Get Comments for given talk
      *
-     * @param $comment_uri
+     * @param string $comment_uri
      * @param bool $verbose
      * @return TalkCommentEntity[]
      */
@@ -353,12 +353,12 @@ class TalkApi extends BaseApi
 
         throw new Exception("Failed: " . $message);
     }
-    
+
     /**
      * Add a talk to a track
      *
-     * @param  $talkTracksUri
-     * @param  $trackUri
+     * @param string $talkTracksUri
+     * @param string $trackUri
      *
      * @return  bool
      */
@@ -382,7 +382,7 @@ class TalkApi extends BaseApi
     /**
      * Remove a talk from a track
      *
-     * @param  $removeTrackUri
+     * @param string $removeTrackUri
      *
      * @return  bool
      */
@@ -418,7 +418,7 @@ class TalkApi extends BaseApi
      *
      * Deleting all associated entries should be handled by the API.
      *
-     * @param $clientUri
+     * @param string $clientUri
      *
      * @throws \Exception
      * @return bool
