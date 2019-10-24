@@ -8,6 +8,18 @@ RewriteEngine On
 #
 # RewriteBase /
 
+# Add Security Headers
+<IfModule mod_headers.c>
+  # Protect against XSS attacks
+  Header set X-XSS-Protection "1; mode=block"
+
+  # Protect against page-framing and click-jacking
+  Header set X-Frame-Options SAMEORIGIN
+
+  # Protect against content-sniffing or prevent mime based attacks
+  Header set X-Content-Type-Options nosniff
+</IfModule>
+
 RewriteRule ^inc/img/rating-(\d)\.gif$ img/avg-rating-$1.png [L]
 
 # Send 410 for /feed*
