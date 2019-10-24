@@ -41,13 +41,13 @@ class UserApi extends BaseApi
 
     /**
      * @param integer $userId
-     * @return UserEntity
+     * @return UserEntity|null
      */
     public function getUserByUserId($userId)
     {
         $userId = (int)$userId;
         if (!$userId) {
-            return;
+            return null;
         }
 
         $userUrl = $this->baseApiUrl . '/v2.1/users/' . $userId;

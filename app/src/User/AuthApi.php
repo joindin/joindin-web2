@@ -40,7 +40,7 @@ class AuthApi extends BaseApi
      *
      * @param  string $clientId OAuth client ID
      * @param  string $clientSecret OAuth client secret
-     * @return string The token
+     * @return string|false The token
      */
     public function getTwitterRequestToken($clientId, $clientSecret)
     {

@@ -47,7 +47,7 @@ class SearchController extends BaseController
      * Sanitize the search string - based on stub definition
      *
      * @param string $keyword
-     * @return bool
+     * @return string|null
      */
     protected function sanitizeKeyword($keyword)
     {
@@ -58,7 +58,7 @@ class SearchController extends BaseController
      * Sanitize a tag
      *
      * @param string $tag
-     * @return bool
+     * @return string|null
      */
     protected function sanitizeTag($tag)
     {
@@ -186,7 +186,7 @@ class SearchController extends BaseController
         ];
 
         return $this->getTalkApi()->getCollection(
-            null, // pass empty $talks_uri so the base talks uri will be used
+            '', // pass empty $talks_uri so the base talks uri will be used
             $apiQueryParams
         );
     }

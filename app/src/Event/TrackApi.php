@@ -90,8 +90,7 @@ class TrackApi extends BaseApi
     /**
      * Delete a track
      *
-     * @param  string $trackUri
-     * @param  array $data
+     * @param string $trackUri
      */
     public function deleteTrack($trackUri)
     {
