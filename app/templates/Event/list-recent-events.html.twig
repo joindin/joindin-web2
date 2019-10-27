@@ -1,0 +1,13 @@
+<section>
+    <h2>Recent events</h2>
+    {% if recent_events.events %}
+        {% for event in upcoming_events.events %}
+            {% include 'Event/_common/summary_cfp.html.twig' %}
+        {% endfor %}
+        <div>
+            <a href="/">See all recent events <i class="fa fa-arrow-circle-o-right"></i></a>
+        </div>
+    {% else %}
+        <p>There are no upcoming events at the moment.</p>
+    {% endif %}
+</section>

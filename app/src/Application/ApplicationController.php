@@ -28,14 +28,16 @@ class ApplicationController extends BaseController
 
         $eventApi       = $this->getEventApi();
         $upcomingEvents = $eventApi->getEvents($perPage, $start, 'upcoming');
+        $pastEvents     = $eventApi->getEvents($perPage, $start, 'past');
         $cfpEvents      = $eventApi->getEvents(4, 0, 'cfp', true);
 
         $this->render(
             'Application/index.html.twig',
             [
-                'events'     => $upcomingEvents,
-                'cfp_events' => $cfpEvents,
-                'page'       => $page,
+                'events'      => $upcomingEvents,
+                'past_events' => $pastEvents,
+                'cfp_events'  => $cfpEvents,
+                'page'        => $page,
             ]
         );
     }
