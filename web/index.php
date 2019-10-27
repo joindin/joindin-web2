@@ -3,9 +3,12 @@
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file
 
-if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
+$extensionsRegex = '/\.(js|css|jpg|png|gif|woff2?)$/';
+
+if (preg_match($extensionsRegex, $_SERVER['REQUEST_URI']) === 1) {
     return false;
 }
+
 if (!ini_get('date.timezone')) {
     date_default_timezone_set('UTC');
 }
