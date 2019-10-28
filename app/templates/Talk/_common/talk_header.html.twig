@@ -2,7 +2,7 @@
     <div class="row event">
         <div class="col-xs-12 col-sm-12 title">
             <h1>
-                {{ talk.getTitle | raw }}
+                {{ talk.getTitle }}
                 {% if user %}
                     <span id="{{ event.getUrlFriendlyName }}/{{ talk.getUrlFriendlyTalkTitle }}" class="star-wrapper">
                         <a href="javascript:" class="talk star{% if talk.getStarred %} starred{% endif %}">{% if talk.starred %}&#10029;{% else %}&#10025;{% endif %}</a>
@@ -32,7 +32,8 @@
                         </h3>
                     {% endif %}
                     <h4>
-                        {{ talk.getStartDateTime()|date('l j F Y \\a\\t H:i', event.getFullTimezone) }}
+                        {{ talk.getStartDateTime()|date('l j F Y \\f\\r\\o\\m H:i', event.getFullTimezone) }} to
+                        {{ talk.getEndDateTime()|date('H:i', event.getFullTimezone) }}
                     </h4>
 
                     <p>
