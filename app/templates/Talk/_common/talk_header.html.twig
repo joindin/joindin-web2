@@ -32,7 +32,8 @@
                         </h3>
                     {% endif %}
                     <h4>
-                        {{ talk.getStartDateTime()|date('l j F Y \\a\\t H:i', event.getFullTimezone) }}
+                        {{ talk.getStartDateTime()|date('l j F Y \\f\\r\\o\\m H:i', event.getFullTimezone) }} to
+                        {{ talk.getEndDateTime()|date('H:i', event.getFullTimezone) }}
                     </h4>
 
                     <p>
