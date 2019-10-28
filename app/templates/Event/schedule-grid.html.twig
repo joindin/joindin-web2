@@ -89,7 +89,7 @@
                     {% for talk in talks %}
                         {% if not starred_only or talk.starred %}
                         {% if not has_time %}
-                        <th class="time col-xs-2 col-sm-1" rowspan="{{ talks|length }}">{{ time }}</th>
+                        <th class="time col-xs-2 col-sm-1" rowspan="{{ talks|length }}">{{ time|date('H:i', event.getFullTimezone) }}</th>
                         {% set has_time = true %}
                         {% endif %}
                         {% set cell %}
@@ -105,7 +105,7 @@
                     {% for talk in talks %}
 
                         {% if not has_time %}
-                        <th class="time col-xs-2 col-sm-1" rowspan="1">{{ time }}</th>
+                        <th class="time col-xs-2 col-sm-1" rowspan="1">{{ time|date('H:i', event.getFullTimezone) }}</th>
                         {% set has_time = true %}
                         {% set has_talk_for_time_slot = true %}
                         {% endif %}
@@ -173,7 +173,7 @@
                     {% set titleTrackMap = [] %}
                     {% set titleTypeMap = [] %}
                     {% if has_talk_for_time_slot %}
-                    <th class="time col-xs-2 col-sm-1" rowspan="1">{{ time }}</th>
+                    <th class="time col-xs-2 col-sm-1" rowspan="1">{{ time|date('H:i', event.getFullTimezone) }}</th>
                     {% endif %}
                 {% endif %}
                 </tr>
