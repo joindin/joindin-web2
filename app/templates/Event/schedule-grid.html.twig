@@ -70,11 +70,16 @@
             {% set trackCellHTMLMap = [] %}
             {% set titleTrackMap = [] %}
             {% set titleTypeMap = [] %}
+            {% set cellsToSkip = {} %}
             {% for time, talks in day.talks %}
-            {% set talksnow = 0 %}
+                {% set talksnow = 0 %}
+                {% set minDuration = constant('PHP_INT_MAX') %}
                 {% for talk in talks %}
                     {% if not starred_only or talk.starred %}
                         {% set talksnow = talksnow+1 %}
+                    {% endif %}
+                    {% if talk.duration < minDuration %}
+                        {% set minDuration = talk.duration %}
                     {% endif %}
                 {% endfor %}
                 {% set has_talk_for_time_slot = false %}
@@ -120,8 +125,14 @@
                                        to make Twig think it is a string #}
                                     {% set trackName = track~" " %}
                                     {% set title = talk.title %}
+                                    {% set rowspan = talk.duration // minDuration %}
+                                    {% if rowspan > 1 %}
+                                        {% set cellsToSkip = cellsToSkip|merge({
+                                            (trackName): rowspan - 1
+                                         }) %}
+                                    {% endif %}
                                     {% set cell %}
-                                        <td class="{{ talk.getTypeClass }}">
+                                        <td class="{{ talk.getTypeClass }}" rowspan="{{ rowspan }}">
                                             {% include '/Event/_common/schedule_cell.html.twig' %}
                                         </td>
                                     {% endset %}
@@ -148,6 +159,10 @@
                         {% set trackName = track~" " %}
                         {% if trackName in titleTrackMap %}
                             {{ trackCellHTMLMap[trackName] }}
+                        {% elseif cellsToSkip[trackName] is defined and cellsToSkip[trackName] > 0 %}
+                            {% set cellsToSkip = cellsToSkip|merge({
+                                (trackName): cellsToSkip[trackName] - 1
+                            }) %}
                         {% else %}
                             <td></td>
                         {% endif %}
