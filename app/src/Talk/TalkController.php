@@ -361,7 +361,7 @@ class TalkController extends BaseController
     public function addComment($eventSlug, $talkSlug)
     {
         $request = $this->application->request();
-        $comment = trim(strip_tags($request->post('comment')));
+        $comment = trim(html_entity_decode($request->post('comment')));
         $rating  = (int) $request->post('rating');
         $url     = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
 
