@@ -245,6 +245,7 @@ class UserController extends BaseController
         $talkDb   = $this->getTalkDb();
         $talkApi  = $this->getTalkApi();
         $eventApi = $this->getEventApi();
+        $eventUri = null;
 
         $eventInfo = []; // look up an event's name and url_friendly_name from its uri
         $talkInfo  = []; // look up a talk's url_friendly_talk_title from its uri
@@ -443,6 +444,7 @@ class UserController extends BaseController
         $talkDb       = $this->getTalkDb();
         $talkApi      = $this->getTalkApi();
         $eventApi     = $this->getEventApi();
+        $eventUri     = null;
         $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 0);
         if (!$talkComments) {
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
@@ -866,7 +868,7 @@ class UserController extends BaseController
     protected function handleLogin($result, $redirect = '')
     {
         if (!is_object($result)) {
-            if (false === $result || $result[0] == 'Signin failed') {
+            if ($result === false || $result[0] == 'Signin failed') {
                 $this->application->flash('error', "Failed to log in");
             }
             if ($result[0] == 'Not verified') {

@@ -114,7 +114,7 @@ class ClientApi extends BaseApi
     }
 
     /**
-     * @param $clientUri
+     * @param string $clientUri
      *
      * @throws \Exception
      * @return bool

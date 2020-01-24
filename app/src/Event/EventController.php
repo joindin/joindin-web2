@@ -458,9 +458,10 @@ class EventController extends BaseController
 
     public function reportComment($friendly_name, $comment_hash)
     {
-        $eventApi = $this->getEventApi();
-        $event    = $eventApi->getByFriendlyUrl($friendly_name);
-        $url      = $this->application->urlFor("event-comments", ['friendly_name' => $friendly_name]);
+        $eventApi        = $this->getEventApi();
+        $event           = $eventApi->getByFriendlyUrl($friendly_name);
+        $reportedComment = null;
+        $url             = $this->application->urlFor("event-comments", ['friendly_name' => $friendly_name]);
 
         $comments = $eventApi->getComments($event->getCommentsUri());
         foreach ($comments as $comment) {
@@ -1266,7 +1267,6 @@ class EventController extends BaseController
     }
 
     /**
-     * @param array       $slugs
      * @param EventEntity $event
      */
     private function getTalkSlugsFromApi(EventEntity $event)

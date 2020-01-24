@@ -3,47 +3,41 @@
 namespace Tests\Form\Listener;
 
 use Form\Listener\GetResolvedUrlListener;
+use Form\Shared\UrlResolver;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
 class GetResolvedUrlListenerTest extends TestCase
 {
-
-    /** @dataProvider onSubmitProvider */
-    public function testOnSubmit($base, $resolved)
+    /**
+     * @dataProvider onSubmitProvider
+     */
+    public function testOnSubmit(bool $expectResolve, string $base = null): void
     {
-        $formEvent = self::getMockBuilder(FormEvent::class)
+        /** @var MockObject|FormEvent $formEvent */
+        $formEvent = $this->getMockBuilder(FormEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $formEvent->expects(self::once())
             ->method('getData')
             ->willReturn($base);
-        $formEvent->expects(self::once())
-            ->method('setData')
-            ->with($resolved);
 
-        $listener = new GetResolvedUrlListener();
-        $listener->onSubmit($formEvent);
-    }
-
-    /** @dataProvider failingSubmitProvider */
-    public function testFailingSubmit($base)
-    {
-        $formEvent = self::getMockBuilder(FormEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formEvent->expects(self::once())
-            ->method('getData')
-            ->willReturn($base);
-        $formEvent->expects(self::never())
+        $formEvent->expects(self::exactly($expectResolve ? 1 : 0))
             ->method('setData');
 
-        $listener = new GetResolvedUrlListener();
+        /** @var MockObject|UrlResolver $urlResolver */
+        $urlResolver = $this->getMockBuilder(UrlResolver::class)->getMock();
+        $urlResolver->expects(self::exactly($expectResolve ? 1 : 0))
+            ->method('resolve');
+
+        $listener = new GetResolvedUrlListener($urlResolver);
         $listener->onSubmit($formEvent);
     }
 
-    public function testGetSubscribedEvents()
+    public function testGetSubscribedEvents(): void
     {
         self::assertSame(
             [FormEvents::SUBMIT => 'onSubmit'],
@@ -51,22 +45,21 @@ class GetResolvedUrlListenerTest extends TestCase
         );
     }
 
-    public function onSubmitProvider() : array
+    public function onSubmitProvider(): array
     {
-        return [[
-            'http://apple.de',
-            'https://www.apple.com/de/'
-        ]];
-    }
-
-    public function failingSubmitProvider() : array
-    {
-        return [[
-            'http://example.unresolvable',
-        ], [
-            '',
-        ], [
-            null,
-        ]];
+        return [
+            [
+                true,
+                'http://apple.de',
+            ],
+            [
+                false,
+                '',
+            ],
+            [
+                false,
+                null,
+            ]
+        ];
     }
 }

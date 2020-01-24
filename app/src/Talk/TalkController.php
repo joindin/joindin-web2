@@ -361,7 +361,7 @@ class TalkController extends BaseController
     public function addComment($eventSlug, $talkSlug)
     {
         $request = $this->application->request();
-        $comment = trim(strip_tags($request->post('comment')));
+        $comment = trim(html_entity_decode($request->post('comment')));
         $rating  = (int) $request->post('rating');
         $url     = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
 
@@ -423,11 +423,12 @@ class TalkController extends BaseController
 
     public function reportComment($eventSlug, $talkSlug, $commentHash)
     {
-        $eventApi = $this->getEventApi();
-        $event    = $eventApi->getByFriendlyUrl($eventSlug);
-        $talkApi  = $this->getTalkApi();
-        $talk     = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
-        $url      = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
+        $eventApi         = $this->getEventApi();
+        $event            = $eventApi->getByFriendlyUrl($eventSlug);
+        $reportedComment  = null;
+        $talkApi          = $this->getTalkApi();
+        $talk             = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
+        $url              = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
 
         $comments = $talkApi->getComments($talk->getCommentsUri());
         foreach ($comments as $comment) {

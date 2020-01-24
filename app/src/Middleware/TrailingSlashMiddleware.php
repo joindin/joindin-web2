@@ -32,7 +32,7 @@ class TrailingSlashMiddleware extends Middleware
         $request = $this->app->request();
         $path    = $request->getPath();
 
-        $hasSlash = strlen($path) > 1 && '/' === substr($path, '-1');
+        $hasSlash = strlen($path) > 1 && '/' === substr($path, -1);
 
         if ($this->addSlash && !$hasSlash) {
             $this->app->redirect($path.'/', 301);

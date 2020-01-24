@@ -3,25 +3,13 @@
 {% block title %}{{ event.getName }} Tracks - Joind.in{% endblock %}
 
 {% form_theme form _self %}
-    
+
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
     <h2>Tracks</h2>
 
     {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
     {{ form_errors(form) }}
-{#
-        <div class="row">
-            <fieldset class="col-sm-12">
-                {{ form_row(form.track_name) }}
-            </fieldset>
-        </div>
-        <div class="row">
-            <fieldset class="col-sm-12">
-                {{ form_row(form.track_description) }}
-            </fieldset>
-        </div>
- #}
 
         <div class="row">
             <fieldset class="col-sm-12">
@@ -36,7 +24,7 @@
                 </ol>
             </fieldset>
         </div>
- 
+
         <div class="row">
             <div class="col-sm-12">
                 <input type="submit" class="btn btn-primary pull-right" value="Update" />
