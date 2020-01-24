@@ -93,6 +93,16 @@ $app->notFound(function () use ($app) {
 // register middlewares
 $app->add(new Middleware\ValidationMiddleware());
 $app->add(new Middleware\TrailingSlashMiddleware());
+$app->add(new class extends \Slim\Middleware { // catch Stops thrown in middlewares so they don't get thrown all the way
+    public function call()
+    {
+        try {
+            $this->next->call();
+        } catch (\Slim\Exception\Stop $e) {
+            $this->app->response()->write(ob_get_clean());
+        }
+    }
+});
 
 $csrfSecret = null;
 if (!empty($config['slim']['custom']['csrfSecret'])) {
@@ -175,4 +185,8 @@ new Client\ClientController($app);
 new Apikey\ApikeyController($app);
 
 // execute application
-$app->run();
+try {
+    $app->run();
+} catch (\Slim\Exception\Stop $e) {
+
+}
