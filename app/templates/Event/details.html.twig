@@ -1,7 +1,7 @@
 {% extends 'Event/_common/layout_event_details.html.twig' %}
 
 {% block title %}{{ event.getName }} - Joind.in{% endblock %}
-    
+
 {% block body %}
     {% include 'Event/_common/event_header.html.twig' %}
 
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-6">
-                    Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
+                    Event Website: <a href="{{ event.getWebsiteAddress }}" rel="nofollow noopener noreferrer">{{ event.getWebsiteAddress }}</a> <i class="fa fa-external-link-square"></i>
                     <br>
                     {% if event.stub %}
                         Short URL: <a href="{{ shortUrlForEvent(event.getStub) }}">{{ shortUrlForEvent(event.getStub) }}</a> <i class="fa fa-external-link-square"></i>
@@ -51,12 +51,12 @@
                         {% if event.getCfpStatus == 'Open' %}
                             {{ event.getCfpStatus }} until {{ event.getCfPEndDate|date("j M Y") }}.
                             {% if event.getCfpUrl %}
-                                <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+                                <a href="{{ event.getCfpUrl }}" rel="nofollow noopener noreferrer">Details</a> <i class="fa fa-external-link-square"></i>
                             {% endif %}
                         {% else %}
                             {{ event.getCfpStatus }}.
                             {% if event.getCfpUrl and event.getCfpStatus == 'Pending' %}
-                                <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+                                <a href="{{ event.getCfpUrl }}" rel="nofollow noopener noreferrer">Details</a> <i class="fa fa-external-link-square"></i>
                             {% endif %}
                         {% endif %}
                     {% endif %}

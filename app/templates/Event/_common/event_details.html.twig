@@ -29,7 +29,7 @@ Host{% if event.hosts|length != 1 %}s{% endif %}:
     {% endif %}
 {% endfor %}
 <br>
-Event Website:<br><a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ event.getWebsiteAddress | replace({'http://': '', 'https://': '',}) }}</a> <i class="fa fa-external-link-square"></i>
+Event Website:<br><a href="{{ event.getWebsiteAddress }}" rel="nofollow noopener noreferrer">{{ event.getWebsiteAddress | replace({'http://': '', 'https://': '',}) }}</a> <i class="fa fa-external-link-square"></i>
 
 {% if event.getCfpStatus %}
     <br>
@@ -37,12 +37,12 @@ Event Website:<br><a href="{{ event.getWebsiteAddress }}" rel="nofollow">{{ even
     {% if event.getCfpStatus == 'Open' %}
         {{ event.getCfpStatus }} until {{ event.getCfPEndDate|date("j M Y") }}.
         {% if event.getCfpUrl %}
-            <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+            <a href="{{ event.getCfpUrl }}" rel="nofollow noopener noreferrer">Details</a> <i class="fa fa-external-link-square"></i>
         {% endif %}
     {% else %}
         {{ event.getCfpStatus }}.
         {% if event.getCfpUrl and event.getCfpStatus == 'Pending' %}
-            <a href="{{ event.getCfpUrl }}" rel="nofollow">Details</a> <i class="fa fa-external-link-square"></i>
+            <a href="{{ event.getCfpUrl }}" rel="nofollow noopener noreferrer">Details</a> <i class="fa fa-external-link-square"></i>
         {% endif %}
     {% endif %}
 {% endif %}
