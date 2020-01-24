@@ -185,8 +185,4 @@ new Client\ClientController($app);
 new Apikey\ApikeyController($app);
 
 // execute application
-try {
-    $app->run();
-} catch (\Slim\Exception\Stop $e) {
-
-}
+$app->run();
