@@ -161,7 +161,12 @@ class TalkController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks), $data);
+        $form    = $factory->create(TalkFormType::class, $data, [
+            'event'     => $event,
+            'languages' => $languages,
+            'talkTypes' => $talkTypes,
+            'tracks'    => $tracks,
+        ]);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -537,7 +542,7 @@ class TalkController extends BaseController
         $data['talk_uri']  = $talk->getApiUri();
 
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new TalkDeleteFormType(), $data);
+        $form    = $factory->create(TalkDeleteFormType::class, $data);
 
         $request = $this->application->request();
 

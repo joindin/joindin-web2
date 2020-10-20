@@ -3,6 +3,8 @@
 namespace Event;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Form\DataTransformer\DateTransformer;
@@ -56,10 +58,10 @@ class EventImportFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('addr', 'hidden', ['mapped' => false])
+            ->add('addr', HiddenType::class, ['mapped' => false])
             ->add(
                 'csv_file',
-                'file',
+                FileType::class,
                 [
                     'data_class' => null,
                     'label'      => 'Upload CSV File',

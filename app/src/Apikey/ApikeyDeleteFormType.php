@@ -3,6 +3,7 @@
 namespace Apikey;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Event\EventEntity;
@@ -36,7 +37,7 @@ class ApikeyDeleteFormType extends AbstractType
         $builder
             ->add(
                 'apikey_id',
-                'hidden',
+                HiddenType::class,
                 []
             )
         ;

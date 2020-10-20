@@ -13,7 +13,8 @@
             "User":        ["app/src/", "tests/"],
             "Client":      ["app/src/", "tests/"],
             "Apikey":      ["app/src/", "tests/"],
-            "View":        ["app/src/", "tests/"]
+            "View":        ["app/src/", "tests/"],
+            "Test":        ["app/src/", "tests/"]
         }
     },
     "config": {
@@ -30,12 +31,12 @@
         "monolog/monolog":       "^1.21",
         "org_heigl/daterange":   "^1.1",
         "predis/predis":         "^0.8",
-        "slim/slim":             "^2.4",
+        "slim/slim":             "^2.6",
         "slim/views":            "^0.1",
-        "symfony/form":          "^2.8",
-        "symfony/validator":     "^2.8",
-        "symfony/security-csrf": "^2.8",
-        "symfony/twig-bridge":   "^2.8",
+        "symfony/form":          "^3.4",
+        "symfony/security-csrf": "^3.4",
+        "symfony/twig-bridge":   "^3.4",
+        "symfony/validator":     "^3.4",
         "twig/twig":             "^1.15"
     },
     "require-dev": {
@@ -48,7 +49,7 @@
     "scripts": {
         "test": "phpunit -c . tests/",
         "lint": "parallel-lint --exclude vendor .",
-        "sniff": "phpcs --standard='PSR2' --ignore=**/config.php,**/database.php,vendor,tests/bootstrap.php --extensions=php --runtime-set ignore_warnings_on_exit true -p .",
+        "sniff": "phpcs --standard='PSR2' --ignore=**/config.php,**/database.php,vendor,tests/bootstrap.php,templates --extensions=php --runtime-set ignore_warnings_on_exit true -p .",
         "security": "security-checker security:check composer.lock",
         "coverage": [
             "git diff origin/master... -- > diff.txt",

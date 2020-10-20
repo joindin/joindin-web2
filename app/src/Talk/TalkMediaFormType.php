@@ -4,6 +4,8 @@ namespace Talk;
 
 use Event\EventEntity;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Url;
 
@@ -35,7 +37,7 @@ class TalkMediaFormType extends AbstractType
         $builder
             ->add(
                 'type',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
                         'slides_link'  => 'Slides',
@@ -47,7 +49,7 @@ class TalkMediaFormType extends AbstractType
                     'label' => false,
                 ]
             )
-            ->add('url', 'url', [
+            ->add('url', UrlType::class, [
                 'constraints' => [new Url()],
                 'label'       => false,
                 'required'    => false,

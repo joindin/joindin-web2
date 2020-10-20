@@ -3,7 +3,13 @@
 namespace User;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -11,13 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class UserFormType extends AbstractType
 {
-    protected $canChangePassword;
-
-    public function __construct($canChangePassword)
-    {
-        $this->canChangePassword = $canChangePassword;
-    }
-
     /**
      * Returns the name of this form type.
      *
@@ -44,7 +43,7 @@ class UserFormType extends AbstractType
         $builder
             ->add(
                 'full_name',
-                'text',
+                TextType::class,
                 [
                     'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
@@ -52,7 +51,7 @@ class UserFormType extends AbstractType
             )
             ->add(
                 'email',
-                'text',
+                EmailType::class,
                 [
                     'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
@@ -60,7 +59,7 @@ class UserFormType extends AbstractType
             )
             ->add(
                 'twitter_username',
-                'text',
+                TextType::class,
                 [
                     'required'   => false,
                     'empty_data' => '',
@@ -69,7 +68,7 @@ class UserFormType extends AbstractType
             )
             ->add(
                 'biography',
-                'textarea',
+                TextareaType::class,
                 [
                     'required'   => false,
                     'empty_data' => '',
@@ -80,11 +79,11 @@ class UserFormType extends AbstractType
                 ]
             );
 
-        if ($this->canChangePassword) {
+        if ($options['can_change_password']) {
             $builder
                 ->add(
                     'old_password',
-                    'password',
+                    PasswordType::class,
                     [
                         'label'    => 'Current password',
                         'required' => false,
@@ -93,9 +92,9 @@ class UserFormType extends AbstractType
                 )
                 ->add(
                     'password',
-                    'repeated',
+                    RepeatedType::class,
                     [
-                        'type'            => 'password',
+                        'type'            => PasswordType::class,
                         'invalid_message' => 'The password fields must match.',
                         'required'        => false,
                         'first_options'   => ['label' => 'New password'],
@@ -104,5 +103,12 @@ class UserFormType extends AbstractType
                     ]
                 );
         }
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefined('can_change_password');
+        $resolver->setAllowedTypes('can_change_password', 'bool');
+        $resolver->setDefault('can_change_password', false);
     }
 }
