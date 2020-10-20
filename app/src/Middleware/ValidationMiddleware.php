@@ -81,7 +81,7 @@ class ValidationMiddleware extends Middleware
     {
         $validator = Validation::createValidatorBuilder()
             ->setMetadataFactory(new LazyLoadingMetadataFactory(new StaticMethodLoader()))
-            ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app))
+            ->setConstraintValidatorFactory(new ConstraintValidatorFactory())
             ->setTranslator($this->getTranslator())
             ->getValidator();
 
