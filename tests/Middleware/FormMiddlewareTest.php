@@ -25,7 +25,15 @@ class FormMiddlewareTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->app     = new Slim(['view' => new \Slim\Views\Twig(),]);//->prophesize(Slim::class);
+        $this->app     = new Slim([
+            'slim' => [
+                'twig' => [
+                    'cache' => false,
+                ],
+            ],
+            'view' => new \Slim\Views\Twig(),
+        ]);
+        $this->app->view()->setTemplatesDirectory('app/templates');
         $this->request = $this->prophesize(Request::class);
         $this->next    = $this->prophesize(Middleware::class);
     }
