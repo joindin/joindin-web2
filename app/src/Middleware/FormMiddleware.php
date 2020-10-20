@@ -162,7 +162,7 @@ class FormMiddleware extends Middleware
      */
     private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
     {
-        $reflected = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
+        $reflected = new \ReflectionClass(FormExtension::class);
         $path      = dirname($reflected->getFileName()) . '/../Resources/views/Form';
         $loader->addLoader(new \Twig_Loader_Filesystem($path));
     }
