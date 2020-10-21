@@ -105,7 +105,8 @@ class EventFormType extends AbstractType
                 ChoiceType::class,
                 [
                     'label'       => 'Timezone',
-                    'choices'     => ["Select a continent"] + $continents,
+                    'placeholder' => 'Select a continent',
+                    'choices'     =>  $continents,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
@@ -114,7 +115,8 @@ class EventFormType extends AbstractType
                 ChoiceType::class,
                 [
                     'label'       => 'Timezone city',
-                    'choices'     => ['Select a city'] + $cities,
+                    'placeholder' => 'Select a city',
+                    'choices'     => $cities,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )

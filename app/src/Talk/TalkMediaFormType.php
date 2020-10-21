@@ -40,11 +40,11 @@ class TalkMediaFormType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'slides_link'  => 'Slides',
-                        'video_link'   => 'Video',
-                        'audio_link'   => 'Audio',
-                        'code_link'    => 'Code',
-                        'joindin_link' => 'JoindIn',
+                        'Slides'  => 'slides_link',
+                        'Video'   => 'video_link',
+                        'Audio'   => 'audio_link',
+                        'Code'    => 'code_link',
+                        'JoindIn' => 'joindin_link',
                     ],
                     'label' => false,
                 ]
