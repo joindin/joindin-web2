@@ -106,7 +106,7 @@ class EventFormType extends AbstractType
                 [
                     'label'       => 'Timezone',
                     'placeholder' => 'Select a continent',
-                    'choices'     =>  $continents,
+                    'choices'     => $continents,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )

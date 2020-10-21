@@ -181,7 +181,7 @@ class TalkFormType extends AbstractType
         $resolver->setDefaults([
             'languages' => [],
             'talkTypes' => [],
-            'tracks' => [],
+            'tracks'    => [],
         ]);
     }
 }

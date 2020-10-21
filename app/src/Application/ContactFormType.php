@@ -62,7 +62,7 @@ class ContactFormType extends AbstractType
                 TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'attr' => [
+                    'attr'        => [
                         'maxlength'  => '100',
                     ]
                 ]
@@ -80,7 +80,7 @@ class ContactFormType extends AbstractType
                 TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'attr' => [
+                    'attr'        => [
                         'maxlength'  => '100',
                     ]
                 ]

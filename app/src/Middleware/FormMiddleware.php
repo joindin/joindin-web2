@@ -85,8 +85,8 @@ class FormMiddleware extends Middleware
             $this->initializeTranslator();
         }
 
-        $csrfGenerator = new UriSafeTokenGenerator();
-        $csrfStorage = new NativeSessionTokenStorage();
+        $csrfGenerator    = new UriSafeTokenGenerator();
+        $csrfStorage      = new NativeSessionTokenStorage();
         $csrfTokenManager = new CsrfTokenManager($csrfGenerator, $csrfStorage);
 
         $env = $this->getTwigEnvironment();

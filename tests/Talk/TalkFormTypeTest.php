@@ -37,6 +37,7 @@ class TalkFormTypeTest extends \Test\FormTypeTestCase
         $eventData->url_friendly_name     = "Test event url friendly name";
         $eventData->comments_enabled      = "1";
         $eventData->all_talk_comments_uri = "Test event all talk comments uri";
+
         $event = new EventEntity($eventData);
 
         $form = $this->factory->create(TalkFormType::class, [], ['event' => $event]);
