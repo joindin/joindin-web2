@@ -39,7 +39,7 @@
         "twig/twig":             "^1.15"
     },
     "require-dev": {
-        "jakub-onderka/php-parallel-lint": "^1.0",
+        "php-parallel-lint/php-parallel-lint": "^1.2",
         "phpunit/phpunit": "^8.0",
         "roave/security-advisories": "dev-master",
         "sensiolabs/security-checker": "^5.0",
