@@ -5,12 +5,15 @@ namespace Tests\Middleware;
 use Middleware\TrailingSlashMiddleware;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Slim\Http\Request;
 use Slim\Middleware;
 use Slim\Slim;
 
 class TrailingSlashMiddlewareTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @var \Prophecy\Prophecy\ObjectProphecy|Slim */
     private $app;
     /** @var \Prophecy\Prophecy\ObjectProphecy|Middleware */
