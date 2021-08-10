@@ -67,6 +67,13 @@ class EventScheduler
         }
 
         $talks      = $talks['talks'];
+        usort($talks, function (TalkEntity $a, TalkEntity $b) {
+            return $a->getStartDateTime() <=> $b->getStartDateTime() ?:
+                ($a->getTracks() && $b->getTracks()
+                    ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
+                    : $a['id'] <=> $b['id']);
+        });
+
         $talksByDay = $this->organiseTalksByDayAndTime($talks);
 
         $tracksByDay = $this->getTracksByDay($talks);
@@ -90,12 +97,6 @@ class EventScheduler
     protected function organiseTalksByDayAndTime($talks)
     {
         $talksByDay = [];
-        usort($talks, function (TalkEntity $a, TalkEntity $b) {
-            return $a->getStartDateTime() <=> $b->getStartDateTime() ?:
-                ($a->getTracks() && $b->getTracks()
-                    ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
-                    : $a['id'] <=> $b['id']);
-        });
 
         foreach ($talks as $talk) {
             $dateTime = $talk->getStartDateTime();
