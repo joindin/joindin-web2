@@ -93,7 +93,7 @@ class EventScheduler
 
         usort($talks, function (TalkEntity $a, TalkEntity $b) {
             return $a->getTracks() && $b->getTracks()
-                ? strcasecmp($b->getTracks()[0]['track_uri'], $a->getTracks()[0]['track_uri'])
+                ? strcasecmp($b->getTracks()[0]->track_uri, $a->getTracks()[0]->track_uri)
                 : $b['id'] <=> $a['id'];
         });
 
