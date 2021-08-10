@@ -90,11 +90,11 @@ class EventScheduler
     protected function organiseTalksByDayAndTime($talks)
     {
         $talksByDay = [];
-
         usort($talks, function (TalkEntity $a, TalkEntity $b) {
-            return $a->getTracks() && $b->getTracks()
-                ? strcasecmp($b->getTracks()[0]->track_uri, $a->getTracks()[0]->track_uri)
-                : $b['id'] <=> $a['id'];
+            return $b->getStartDateTime() <=> $a->getStartDateTime() ?:
+                ($a->getTracks() && $b->getTracks()
+                    ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
+                    : $a['id'] <=> $b['id']);
         });
 
         foreach ($talks as $talk) {

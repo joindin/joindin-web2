@@ -227,6 +227,12 @@ class TalkApi extends BaseApi
 
         $agenda = [];
 
+        usort($talks, function (TalkEntity $a, TalkEntity $b) {
+            return $b->getStartDateTime() <=> $a->getStartDateTime() ?:
+                ($a->getTracks() && $b->getTracks()
+                    ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
+                    : $a['id'] <=> $b['id']);
+        });
         foreach ($talks as $talk) {
             $date                   = $talk->getStartDateTime()->format("Y-m-d");
             $startTime              = $talk->getStartDateTime()->format("H:i");
