@@ -2,6 +2,7 @@
 namespace Event;
 
 use Talk\TalkApi;
+use Talk\TalkEntity;
 
 /**
  * Class EventScheduler
@@ -83,12 +84,18 @@ class EventScheduler
      * associative array by day, then by time for each
      * day
      *
-     * @param array $talks
+     * @param TalkEntity[] $talks
      * @return array
      */
     protected function organiseTalksByDayAndTime($talks)
     {
         $talksByDay = [];
+
+        usort($talks, function (TalkEntity $a, TalkEntity $b) {
+            return $a->getTracks() && $b->getTracks()
+                ? strcasecmp($b->getTracks()[0]['track_uri'], $a->getTracks()[0]['track_uri'])
+                : $b['id'] <=> $a['id'];
+        });
 
         foreach ($talks as $talk) {
             $dateTime = $talk->getStartDateTime();
