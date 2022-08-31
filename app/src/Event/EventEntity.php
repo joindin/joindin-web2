@@ -554,6 +554,11 @@ class EventEntity extends BaseEntity
         return $this->data->tracks_uri;
     }
 
+    public function getHostsUri()
+    {
+        return $this->data->hosts_uri;
+    }
+
     /**
      * Used by the edit form
      */

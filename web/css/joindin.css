@@ -790,3 +790,8 @@ form ol.tracks li:last-child {
 .rating-on {
     color: rgb(140,220, 96);
 }
+
+.hostslist .media {
+    margin-top: 0;
+    margin-bottom: 2em;
+}
