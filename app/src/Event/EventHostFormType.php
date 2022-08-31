@@ -62,7 +62,7 @@ class EventHostFormType extends AbstractType
                 'host',
                 'text',
                 [
-                    'label' => 'Add additional host',
+                    'label'       => 'Add additional host',
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 2])],
                 ]
             )

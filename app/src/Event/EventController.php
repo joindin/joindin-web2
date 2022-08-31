@@ -787,7 +787,7 @@ class EventController extends BaseController
 
         $values   = [
             'hosts_uri' => $event->getHostsUri(),
-            'host' => $hostUsername,
+            'host'      => $hostUsername,
         ];
 
         return $eventApi->editHost($values);
@@ -1020,11 +1020,11 @@ class EventController extends BaseController
         }
 
         $userApi = $this->getUserApi();
-        $user = $userApi->getUserByUsername($host_name);
+        $user    = $userApi->getUserByUsername($host_name);
 
         $data = [
             'hosts_uri' => $event->getHostsUri(),
-            'host' => $user->getId(),
+            'host'      => $user->getId(),
         ];
 
         if (!isset($_SESSION['user'])) {
@@ -1091,7 +1091,7 @@ class EventController extends BaseController
                     $result = $this->editEventHostUsingForm($event, $values['host']);
                     if ($result instanceof EventEntity) {
                         $userApi = $this->getUserApi();
-                        $user = $userApi->getUserByUsername($values['host']);
+                        $user    = $userApi->getUserByUsername($values['host']);
                         $this->application->flash(
                             'message',
                             sprintf(

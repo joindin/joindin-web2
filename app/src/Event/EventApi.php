@@ -115,7 +115,7 @@ class EventApi extends BaseApi
             foreach ($event->getHosts() as $hostsInfo) {
                 if (isset($hostsInfo->host_uri)) {
                     $hostsInfo->username = $this->userApi->getUsername($hostsInfo->host_uri);
-                    $hostsInfo->entity = $this->userApi->getUser($hostsInfo->host_uri);
+                    $hostsInfo->entity   = $this->userApi->getUser($hostsInfo->host_uri);
                 }
             }
             return $event;
