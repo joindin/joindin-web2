@@ -115,6 +115,7 @@ class EventApi extends BaseApi
             foreach ($event->getHosts() as $hostsInfo) {
                 if (isset($hostsInfo->host_uri)) {
                     $hostsInfo->username = $this->userApi->getUsername($hostsInfo->host_uri);
+                    $hostsInfo->entity   = $this->userApi->getUser($hostsInfo->host_uri);
                 }
             }
             return $event;
@@ -171,7 +172,7 @@ class EventApi extends BaseApi
             'comment' => $comment,
             'rating'  => $rating,
         ];
-        list($status, $result) = $this->apiPost($uri, $params);
+        [$status, $result] = $this->apiPost($uri, $params);
 
         if ($status == 201) {
             return true;
@@ -181,7 +182,7 @@ class EventApi extends BaseApi
 
     public function reportComment($uri)
     {
-        list($status, $result) = $this->apiPost($uri);
+        [$status, $result] = $this->apiPost($uri);
 
         if ($status == 202) {
             return true;
@@ -191,7 +192,7 @@ class EventApi extends BaseApi
 
     public function attend(EventEntity $event)
     {
-        list($status, $result) = $this->apiPost($event->getApiUriToMarkAsAttending());
+        [$status, $result] = $this->apiPost($event->getApiUriToMarkAsAttending());
 
         if ($status == 201) {
             return true;
@@ -202,7 +203,7 @@ class EventApi extends BaseApi
 
     public function unattend(EventEntity $event)
     {
-        list($status, $result) = $this->apiDelete($event->getApiUriToMarkAsAttending());
+        [$status, $result] = $this->apiDelete($event->getApiUriToMarkAsAttending());
 
         if ($status == 200) {
             return true;
@@ -265,7 +266,7 @@ class EventApi extends BaseApi
             }
         }
 
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/events', $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 201) {
@@ -312,7 +313,7 @@ class EventApi extends BaseApi
         }
 
 
-        list($status, $result, $headers) = $this->apiPut($data['uri'], $data);
+        [$status, $result, $headers] = $this->apiPut($data['uri'], $data);
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
             $response = $this->getCollection($headers['location']);
@@ -320,6 +321,53 @@ class EventApi extends BaseApi
         }
 
         throw new Exception('Your event submission was not accepted, the server reports: ' . $result);
+    }
+
+    /**
+     * Submit a new host to the API and return it.
+     *
+     * If something happened NULL is returned
+     *
+     * @param array $data
+     *
+     * @throws Exception if a status code other than 201 is returned.
+     * @see EventHostFormType::buildForm() for a list of supported fields in the $data array
+     * @return EventEntity|null
+     */
+    public function editHost(array $data)
+    {
+        [$status, $result, $headers] = $this->apiPost($data['hosts_uri'], [
+            'host_name' => $data['host']
+        ]);
+        // if successful, return event entity represented by the URL in the Location header
+        if ($status == 204) {
+            $response = $this->getCollection($headers['location']);
+            return current($response['events']);
+        }
+
+        throw new Exception('Your new host was not accepted, the server reports: ' . $result);
+    }
+
+    /**
+     * Submit a new host to the API and return it.
+     *
+     * If something happened NULL is returned
+     *
+     * @param array $data
+     *
+     * @throws Exception if a status code other than 201 is returned.
+     * @see EventHostFormType::buildForm() for a list of supported fields in the $data array
+     * @return true
+     */
+    public function removeHost(array $data)
+    {
+        [$status, $result, $headers] = $this->apiDelete($data['hosts_uri'] . '/' . $data['host']);
+        // if successful, return event entity represented by the URL in the Location header
+        if ($status == 204) {
+            return true;
+        }
+
+        throw new Exception('Removing the host failed. The server reports: ' . $result);
     }
 
     /**
@@ -455,7 +503,7 @@ class EventApi extends BaseApi
      */
     public function approveEvent($approval_uri)
     {
-        list($status, $result, $headers) = $this->apiPost($approval_uri);
+        [$status, $result, $headers] = $this->apiPost($approval_uri);
 
         if ($status == 204) {
             return true;
@@ -471,7 +519,7 @@ class EventApi extends BaseApi
      */
     public function rejectEvent($approval_uri)
     {
-        list($status, $result, $headers) = $this->apiDelete($approval_uri);
+        [$status, $result, $headers] = $this->apiDelete($approval_uri);
 
         if ($status == 204) {
             return true;
@@ -534,7 +582,7 @@ class EventApi extends BaseApi
     {
         $data['decision'] = $decision;
 
-        list($status, $result, $headers) = $this->apiPut($reported_uri, $data);
+        [$status, $result, $headers] = $this->apiPut($reported_uri, $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {

@@ -1,0 +1,84 @@
+{% extends '/layout.html.twig' %}
+
+{% use '/Event/_common/form.html.twig' %}
+
+{% block title %}Manage hosts of event {{ event.getName }} - Joind.in{% endblock %}
+
+{% block form %}
+    {% if user %}
+        {{ form_start(form, {'attr' : {'id' : 'event'} }) }}
+        <div class="row">
+            <fieldset class="col-sm-6">
+                {{ form_row(form.host) }}
+                {{ form_errors(form) }}
+            </fieldset>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <input type="submit" class="btn btn-primary pull-right" value="Submit" />
+                {% if event.urlFriendlyName is defined %}
+                    <a href="{{ urlFor('event-detail', {friendly_name:event.urlFriendlyName}) }}" class="form-cancel pull-right">Cancel</a>
+                {% endif %}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    {% else %}
+        <h1>Login required</h1>
+        <p>In order to submit an event, please log in.</p>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <h1 class="title">Manage hosts of event {{ event.name }}</h1>
+    <div class="page-header">
+        <div class="row event">
+            <div class="col-sm-12">
+                {% include 'Event/_common/event_nav.html.twig' with {'top_border': false} %}
+            </div>
+        </div>
+    </div>
+
+    {% if flash.getMessages.error %}
+        <div class="alert alert-danger">{{flash.getMessages.error | raw}}</div>
+    {% endif %}
+    {% if flash.getMessages.message %}
+        <div class="alert alert-success">{{flash.getMessages.message | raw}}</div>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>
+                This event is hosted by:
+            </h2>
+            <ul class="row hostslist">
+            {% for host in event.getHosts() %}
+                <li class="media col-sm-3">
+                    <div class="media-left">
+                        <a href="{{ urlFor('user-profile', {username:host.entity.getUserName()}) }}">
+                            <img src="https://secure.gravatar.com/avatar/{{ host.entity.getgravatarhash() }}?d=mm&s=100"/>
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <a class="media-heading" href="{{ urlFor('user-profile', {username:host.entity.getUserName()}) }}">
+                            {{ host.host_name }}
+                        </a>
+                        {% if event.getCanEdit() %}
+                        <a class="btn btn-danger" href="{{ urlFor('event-host-remove', {friendly_name:event.urlFriendlyName, host_name:host.entity.getUserName()}) }}">Remove as host</a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <style>
+        label.required:after {
+            content: ' *'
+        }
+    </style>
+    {% if event.getCanEdit() %}
+    {{ block('form') }}
+    {% endif %}
+{% endblock %}

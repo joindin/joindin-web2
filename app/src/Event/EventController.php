@@ -74,6 +74,10 @@ class EventController extends BaseController
             ->name("event-edit-tracks");
         $app->map('/event/:friendly_name/claims', [$this, 'talkClaims'])->via('GET', 'POST')
             ->name("event-talk-claims");
+        $app->map('/event/:friendly_name/host/:host_name/remove', [$this, 'removeHost'])->via('GET', 'POST')
+            ->name('event-host-remove');
+        $app->map('/event/:friendly_name/host', [$this, 'addHost'])->via('GET', 'POST')
+            ->name('event-hosts');
     }
 
     public function index()
@@ -767,6 +771,28 @@ class EventController extends BaseController
         return $result;
     }
 
+    /**
+     * Submits the form data to the API and returns the edited event, false if there is an error or null
+     * if it is held for moderation.
+     *
+     * Should an error occur will this method append an error message to the form's error collection.
+     *
+     * @param Form $form
+     *
+     * @return EventEntity|null|false
+     */
+    private function editEventHostUsingForm(EventEntity $event, $hostUsername)
+    {
+        $eventApi = $this->getEventApi();
+
+        $values   = [
+            'hosts_uri' => $event->getHostsUri(),
+            'host'      => $hostUsername,
+        ];
+
+        return $eventApi->editHost($values);
+    }
+
     protected function getEventApi()
     {
         $cache    = $this->getCache();
@@ -982,6 +1008,125 @@ class EventController extends BaseController
             );
         }
     }
+
+    public function removeHost($friendly_name, $host_name)
+    {
+        $request = $this->application->request();
+
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+        if (! $event) {
+            $this->redirectToListPage();
+        }
+
+        $userApi = $this->getUserApi();
+        $user    = $userApi->getUserByUsername($host_name);
+
+        $data = [
+            'hosts_uri' => $event->getHostsUri(),
+            'host'      => $user->getId(),
+        ];
+
+        if (!isset($_SESSION['user'])) {
+            $this->application->redirect(
+                $this->application->urlFor('not-allowed') . '?redirect='
+                . $this->application->urlFor('event-hosts', ['friendly_name' => $friendly_name])
+            );
+        }
+
+        try {
+            $eventApi->removeHost($data);
+            $this->application->flash(
+                'message',
+                sprintf(
+                    '<strong>%1$s</strong> was removed as host for this event. Make sure they know about that!',
+                    $user->getFullName()
+                )
+            );
+            $this->application->redirect(
+                $this->application->urlFor('event-hosts', ['friendly_name' => $friendly_name]),
+                204
+            );
+        } catch (Exception $e) {
+            $this->application->flash(
+                'error',
+                $e->getMessage()
+            );
+        }
+
+        $this->application->redirect(
+            $this->application->urlFor('event-hosts', ['friendly_name' => $friendly_name]),
+        );
+    }
+
+    public function addHost($friendly_name)
+    {
+        $request = $this->application->request();
+
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
+        if (! $event) {
+            $this->redirectToListPage();
+        }
+
+        $errors = [];
+
+        /** @var FormFactoryInterface $factory */
+        $factory = $this->application->formFactory;
+        $form    = $factory->create(new EventHostFormType(), array_merge($event->toArray(), [
+            'host' => '',
+        ]));
+        if ($request->isPost()) {
+            if (!isset($_SESSION['user'])) {
+                $this->application->redirect(
+                    $this->application->urlFor('not-allowed') . '?redirect='
+                    . $this->application->urlFor('event-hosts', ['friendly_name' => $friendly_name])
+                );
+            }
+            $form->submit($request->post($form->getName()));
+
+            if ($form->isValid()) {
+                $values = $form->getData();
+                try {
+                    $result = $this->editEventHostUsingForm($event, $values['host']);
+                    if ($result instanceof EventEntity) {
+                        $userApi = $this->getUserApi();
+                        $user    = $userApi->getUserByUsername($values['host']);
+                        $this->application->flash(
+                            'message',
+                            sprintf(
+                                '<strong>%1$s</strong> was added as host. Make sure they know about their new role!',
+                                $user->getFullName()
+                            )
+                        );
+
+                        $this->application->redirect(
+                            $this->application->urlFor('event-hosts', ['friendly_name' => $friendly_name]),
+                            204
+                        );
+                    }
+                } catch (Exception $e) {
+                    $this->application->flash(
+                        'error',
+                        $e->getMessage()
+                    );
+                    $this->application->redirect(
+                        $this->application->urlFor('event-hosts', ['friendly_name' => $friendly_name]),
+                        204
+                    );
+                }
+            }
+        }
+
+        $this->render(
+            'Event/eventhosts.html.twig',
+            [
+                'event'     => $event,
+                'form'      => $event->getCanEdit() ? $form->createView(): '',
+            ]
+        );
+    }
+
     private function appoveClaimPendingTalk($talkApi, $claim, $data)
     {
         $talkApi->claimTalk($claim->approve_claim_uri, $data);
