@@ -114,7 +114,7 @@ $app->add(new Middleware\FormMiddleware($csrfSecret));
 $app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
 
 $app->container->singleton(\Application\CacheService::class, function ($container) {
-    $redis = $container->settings['custom']['redis'];
+    $redis  = $container->settings['custom']['redis'];
     $prefix = $redis['options']['prefix'];
 
     if ($host = getenv('REDIS_HOST')) {
