@@ -12,7 +12,6 @@ use Event\EventEntity;
  */
 class ClientDeleteFormType extends AbstractType
 {
-
     /**
      * Returns the name of this form type.
      *

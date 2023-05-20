@@ -12,7 +12,6 @@ use Event\EventEntity;
  */
 class ClientFormType extends AbstractType
 {
-
     /**
      * Returns the name of this form type.
      *
