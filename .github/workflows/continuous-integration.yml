@@ -10,7 +10,6 @@ permissions:
   contents: read
 
 jobs:
-  jobs:
   dependency-analysis:
     name: "Dependency Analysis"
 
