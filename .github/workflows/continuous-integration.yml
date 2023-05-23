@@ -145,7 +145,7 @@ jobs:
         run: $(which composer) install
 
       - name: "Lint the files"
-        run: vendor/bin/phpcs --standard=psr2 --standard=psr2 --extensions=php --runtime-set ignore_warnings_on_exit true -p .
+        run: vendor/bin/phpcs --standard=psr2 --ignore=vendor --extensions=php --runtime-set ignore_warnings_on_exit true -p .
   tests:
     name: "Tests"
 
