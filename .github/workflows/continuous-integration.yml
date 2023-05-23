@@ -22,7 +22,7 @@ jobs:
 #
 #    steps:
 #      - name: "Checkout"
-#        uses: actions/checkout@master
+#        uses: actions/checkout@v3
 #
 #      - name: "Install PHP with extensions"
 #        uses: shivammathur/setup-php@master
@@ -31,15 +31,16 @@ jobs:
 #          extensions: "gd, intl, json, mbstring, pdo"
 #
 #      - name: "Cache dependencies installed with composer"
-#        uses: actions/cache@v1.0.0
-#        with:
-#          path: ~/.composer/cache
-#          key: php-${{ matrix.php-version }}-composer-locked-${{ hashFiles('**/composer.lock') }}
-#          restore-keys: |
-#            php-${{ matrix.php-version }}-composer-locked-
+#  id: composer-cache
+#  uses: actions/cache@v3
+#  with:
+#    path: vendor
+#    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+#    restore-keys: |
+#      ${{ runner.os }}-php-
 #
 #      - name: "Install dependencies with composer"
-#        run: $(which composer) install
+#        run: composer install --prefer-dist --no-progress
 #
 #      - name: "Run dependency analysis with composer-require-checker"
 #        run: vendor/bin/composer-require-checker --config-file=composer-require-checker.json
@@ -56,7 +57,7 @@ jobs:
 #
 #    steps:
 #      - name: "Checkout"
-#        uses: actions/checkout@master
+#        uses: actions/checkout@v3
 #
 #      - name: "Install PHP with extensions"
 #        uses: shivammathur/setup-php@master
@@ -66,15 +67,16 @@ jobs:
 #          extensions: "gd, intl, json, mbstring, pdo"
 #
 #      - name: "Cache dependencies installed with composer"
-#        uses: actions/cache@v1
-#        with:
-#          path: ~/.composer/cache
-#          key: php-${{ matrix.php-version }}-composer-locked${{ hashFiles('**/composer.lock') }}
-#          restore-keys: |
-#            php-${{ matrix.php-version }}-composer-locked
+#  id: composer-cache
+#  uses: actions/cache@v3
+#  with:
+#    path: vendor
+#    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+#    restore-keys: |
+#      ${{ runner.os }}-php-
 #
 #      - name: "Install dependencies with composer"
-#        run: $(which composer) install
+#        run: composer install --prefer-dist --no-progress
 #
 #      - name: "Run static analysis with phpstan"
 #        run: vendor/bin/phpstan analyze --configuration=phpstan.neon
@@ -90,7 +92,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: "Install PHP with extensions"
         uses: shivammathur/setup-php@master
@@ -100,15 +102,16 @@ jobs:
           coverage: "xdebug"
 
       - name: "Cache dependencies installed with composer"
-        uses: actions/cache@v1
+        id: composer-cache
+        uses: actions/cache@v3
         with:
-          path: ~/.composer/cache
-          key: php-${{ matrix.php-version }}-composer-locked-${{ hashFiles('**/composer.lock') }}
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            php-${{ matrix.php-version }}-composer-locked-
+            ${{ runner.os }}-php-
 
       - name: "Install dependencies with composer"
-        run: $(which composer) install
+        run: composer install --prefer-dist --no-progress
 
       - name: "Lint the files"
         run: vendor/bin/parallel-lint --exclude vendor .
@@ -124,7 +127,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: "Install PHP with extensions"
         uses: shivammathur/setup-php@master
@@ -134,15 +137,16 @@ jobs:
           coverage: "xdebug"
 
       - name: "Cache dependencies installed with composer"
-        uses: actions/cache@v1
+        id: composer-cache
+        uses: actions/cache@v3
         with:
-          path: ~/.composer/cache
-          key: php-${{ matrix.php-version }}-composer-locked-${{ hashFiles('**/composer.lock') }}
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            php-${{ matrix.php-version }}-composer-locked-
+            ${{ runner.os }}-php-
 
       - name: "Install dependencies with composer"
-        run: $(which composer) install
+        run: composer install --prefer-dist --no-progress
 
       - name: "Lint the files"
         run: vendor/bin/phpcs --standard=psr2 --ignore=vendor --extensions=php --runtime-set ignore_warnings_on_exit true -p .
@@ -158,7 +162,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: "Install PHP with extensions"
         uses: shivammathur/setup-php@master
@@ -168,15 +172,16 @@ jobs:
           coverage: "xdebug"
 
       - name: "Cache dependencies installed with composer"
-        uses: actions/cache@v1
+        id: composer-cache
+        uses: actions/cache@v3
         with:
-          path: ~/.composer/cache
-          key: php-${{ matrix.php-version }}-composer-locked-${{ hashFiles('**/composer.lock') }}
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            php-${{ matrix.php-version }}-composer-locked-
+            ${{ runner.os }}-php-
 
       - name: "Install dependencies with composer"
-        run: $(which composer) install
+        run: composer install --prefer-dist --no-progress
 
       - name: "Run tests with phpunit"
         run: vendor/bin/phpunit -c ./phpunit.xml.dist --coverage-clover=build/logs/clover.xml --coverage-text
