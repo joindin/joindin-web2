@@ -117,11 +117,14 @@ jobs:
 #      - name: "Copy configuration"
 #        run: cp config.php.distsrc/ src/config.php
 
-      - name: "Dump Xdebug filter with phpunit"
-        run: vendor/bin/phpunit --dump-xdebug-filter=build/xdebug-filter.php
+#      - name: "Dump Xdebug filter with phpunit"
+#        run: vendor/bin/phpunit --dump-xdebug-filter=build/xdebug-filter.php
+
+#      - name: "Run tests with phpunit"
+#        run: vendor/bin/phpunit --coverage-clover=build/logs/clover.xml --coverage-text --prepend=build/xdebug-filter.php
 
       - name: "Run tests with phpunit"
-        run: vendor/bin/phpunit --coverage-clover=build/logs/clover.xml --coverage-text --prepend=build/xdebug-filter.php
+        run: vendor/bin/phpunit --coverage-clover=build/logs/clover.xml --coverage-text
 
       - name: "Download code coverage uploader for Codecov.io"
         run: curl -s https://codecov.io/bash -o codecov
