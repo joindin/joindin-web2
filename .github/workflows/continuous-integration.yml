@@ -114,8 +114,8 @@ jobs:
       - name: "Create build directory"
         run: mkdir -p build
 
-      - name: "Copy configuration"
-        run: cp src/config.php.dist src/config.php
+#      - name: "Copy configuration"
+#        run: cp config.php.distsrc/ src/config.php
 
       - name: "Dump Xdebug filter with phpunit"
         run: vendor/bin/phpunit --dump-xdebug-filter=build/xdebug-filter.php
