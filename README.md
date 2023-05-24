@@ -26,7 +26,6 @@ This VM will load all three Joind.in projects (joind.in, joindin-vm and joindin-
 
 * The main website https://joind.in
 * Issues list: https://github.com/joindin/joindin-web2/issues/ (good bug reports ALWAYS welcome!)
-* CI Environment: lots of output and information about tests, deploys etc: https://jenkins.joind.in
 * Community: We hang out on Slack, pop in with questions or comments! You can join via [Joindin Slack](https://join.slack.com/t/joindin/shared_invite/enQtNzY2MTEzOTU3ODkwLTMzNTc3ZDFlNTAxMTc2ZjliYjAzNDExZTkzM2NmZDFjYjcyMjNkMWYzMjNhZjE4MzA1MTljZDk2NzNiMzk5MjU)
 
 ## Global .gitignore
