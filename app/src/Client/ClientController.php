@@ -103,7 +103,7 @@ class ClientController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new ClientFormType());
+        $form    = $factory->create(ClientFormType::class);
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -163,7 +163,7 @@ class ClientController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new ClientFormType(), $data);
+        $form    = $factory->create(ClientFormType::class, $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -266,7 +266,7 @@ class ClientController extends BaseController
         $data['client_id']  = $client->getId();
 
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new ClientDeleteFormType(), $data);
+        $form    = $factory->create(ClientDeleteFormType::class, $data);
 
         $request = $this->application->request();
 

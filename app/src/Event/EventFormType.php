@@ -7,6 +7,12 @@ use Form\DataTransformer\DateTransformer;
 use Form\DataTransformer\EventTagsTransformer;
 use Form\Listener\GetResolvedUrlListener;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -66,17 +72,17 @@ class EventFormType extends AbstractType
 
         $dateTransformer = new DateTransformer($timezone);
         $builder
-            ->add('addr', 'hidden', ['mapped' => false])
+            ->add('addr', HiddenType::class, ['mapped' => false])
             ->add(
                 'name',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
                 ]
             )
             ->add(
                 'description',
-                'textarea',
+                TextareaType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 5])],
                     'attr'        => [
@@ -87,7 +93,7 @@ class EventFormType extends AbstractType
             ->add(
                 $builder->create(
                     'tags',
-                    'text',
+                    TextType::class,
                     [
                         'required'    => false,
                         'attr'        => ['placeholder' => 'comma separated, tag, list']
@@ -96,67 +102,69 @@ class EventFormType extends AbstractType
             )
             ->add(
                 'tz_continent',
-                'choice',
+                ChoiceType::class,
                 [
                     'label'       => 'Timezone',
-                    'choices'     => ["Select a continent"] + $continents,
+                    'placeholder' => 'Select a continent',
+                    'choices'     => $continents,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 'tz_place',
-                'choice',
+                ChoiceType::class,
                 [
                     'label'       => 'Timezone city',
-                    'choices'     => ['Select a city'] + $cities,
+                    'placeholder' => 'Select a city',
+                    'choices'     => $cities,
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 $builder->create(
                     'start_date',
-                    'text',
+                    TextType::class,
                     $this->getOptionsForDateWidget('Start date')
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'end_date',
-                    'text',
+                    TextType::class,
                     $this->getOptionsForDateWidget('End date')
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'href',
-                    'url',
+                    UrlType::class,
                     $this->getOptionsForUrlWidget('Website URL', true)
                 )->addEventSubscriber(new GetResolvedUrlListener())
             )
             ->add(
                 $builder->create(
                     'cfp_start_date',
-                    'text',
+                    TextType::class,
                     $this->getOptionsForDateWidget('Opening date', false)
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'cfp_end_date',
-                    'text',
+                    TextType::class,
                     $this->getOptionsForDateWidget('Closing date', false)
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
                 $builder->create(
                     'cfp_url',
-                    'url',
+                    UrlType::class,
                     $this->getOptionsForUrlWidget('Call for papers URL', false)
                 )->addEventSubscriber(new GetResolvedUrlListener())
             )
             ->add(
                 'location',
-                'text',
+                TextType::class,
                 [
                     'label'       => 'Venue name',
                     'constraints' => [new Assert\NotBlank()],
@@ -164,7 +172,7 @@ class EventFormType extends AbstractType
             )
             ->add(
                 'latitude',
-                'text',
+                TextType::class,
                 [
                     'label' => 'Latitude',
                     'attr'  => ['readonly' => 'readonly'],
@@ -172,7 +180,7 @@ class EventFormType extends AbstractType
             )
             ->add(
                 'longitude',
-                'text',
+                TextType::class,
                 [
                     'label' => 'Longitude',
                     'attr'  => ['readonly' => 'readonly'],
@@ -180,7 +188,7 @@ class EventFormType extends AbstractType
             )
             ->add(
                 'new_icon',
-                'file',
+                FileType::class,
                 [
                     'data_class' => null,
                     'label'      => 'Upload new icon',

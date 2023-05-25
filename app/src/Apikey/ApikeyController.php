@@ -134,7 +134,7 @@ class ApikeyController extends BaseController
         $data['apikey_id']  = $apikey->getId();
 
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new ApikeyDeleteFormType(), $data);
+        $form    = $factory->create(ApikeyDeleteFormType::class, $data);
 
         $request = $this->application->request();
 

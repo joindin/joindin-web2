@@ -3,6 +3,7 @@
 namespace Event;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,9 +35,9 @@ class TrackCollectionFormType extends AbstractType
         $builder
             ->add(
                 'tracks',
-                'collection',
+                CollectionType::class,
                 [
-                    'type'         => new TrackFormType(),
+                    'entry_type'   => TrackFormType::class,
                     'allow_add'    => true,
                     'allow_delete' => true,
                 ]

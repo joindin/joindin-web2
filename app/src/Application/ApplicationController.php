@@ -75,7 +75,7 @@ class ApplicationController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new ContactFormType());
+        $form    = $factory->create(ContactFormType::class);
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
