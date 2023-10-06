@@ -897,8 +897,7 @@ class UserController extends BaseController
         if ($user) {
             $_SESSION['user'] = $user;
 
-            if (
-                empty($redirect)
+            if (empty($redirect)
                 || strpos($redirect, '/user/login') === 0
                 || strpos($redirect, '/not-allowed') === 0
             ) {
