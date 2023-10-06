@@ -200,6 +200,12 @@ class TalkController extends BaseController
                         }
                     }
 
+                    if (empty($values['track'])) {
+                        foreach ($talk->getTracks() as $t) {
+                            $talkApi->removeTalkFromTrack($t->remove_track_uri);
+                        }
+                    }
+
                     $talkUrl = $this->application->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
                     $this->application->redirect($talkUrl);
                 } catch (\RuntimeException $e) {
