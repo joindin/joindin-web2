@@ -896,7 +896,12 @@ class UserController extends BaseController
         $user = $userApi->getUser($result->user_uri);
         if ($user) {
             $_SESSION['user'] = $user;
-            if (empty($redirect) || strpos($redirect, '/user/login') === 0) {
+
+            if (
+                empty($redirect)
+                || strpos($redirect, '/user/login') === 0
+                || strpos($redirect, '/not-allowed') === 0
+            ) {
                 $this->application->redirect('/');
             }
             $this->application->redirect($redirect);
