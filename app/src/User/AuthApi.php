@@ -34,32 +34,4 @@ class AuthApi extends BaseApi
         }
         return false;
     }
-
-    /**
-     * Send Twitter verification token to the API to log us in
-     *
-     * @param  string $clientId OAuth client ID
-     * @param  string $clientSecret OAuth client secret
-     */
-    public function verifyTwitter($clientId, $clientSecret, $token, $verifier)
-    {
-        $url    = $this->baseApiUrl . '/v2.1/twitter/token';
-        $params = [
-            'client_id'     => $clientId,
-            'client_secret' => $clientSecret,
-            'token'         => $token,
-            'verifier'      => $verifier,
-        ];
-
-        list($status, $result, $headers) = $this->apiPost($url, $params);
-        if ($result) {
-            $data = json_decode($result);
-            if ($data) {
-                if (isset($data->access_token)) {
-                    return $data;
-                }
-            }
-        }
-        return false;
-    }
 }
