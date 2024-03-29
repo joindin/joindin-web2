@@ -36,33 +36,6 @@ class AuthApi extends BaseApi
     }
 
     /**
-     * Get a request token from the API from Twitter
-     *
-     * @param  string $clientId OAuth client ID
-     * @param  string $clientSecret OAuth client secret
-     * @return string|false The token
-     */
-    public function getTwitterRequestToken($clientId, $clientSecret)
-    {
-        $url    = $this->baseApiUrl . '/v2.1/twitter/request_token';
-        $params = [
-            'client_id'     => $clientId,
-            'client_secret' => $clientSecret,
-        ];
-
-        list($status, $result, $headers) = $this->apiPost($url, $params);
-        if ($status == 201) {
-            // we got one, data is actually in the body
-            $data = json_decode($result);
-            if ($data) {
-                $token = $data->twitter_request_tokens[0];
-                return $token->token;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Send Twitter verification token to the API to log us in
      *
      * @param  string $clientId OAuth client ID

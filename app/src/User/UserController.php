@@ -34,7 +34,6 @@ class UserController extends BaseController
             ->via('GET', 'POST')->name('user-password-reset');
         $app->map('/user/new-password', [$this, 'newPassword'])
             ->via('GET', 'POST')->name('user-new-password');
-        $app->get('/user/twitter-login', [$this, 'loginWithTwitter'])->name('twitter-login');
         $app->get('/user/twitter-access', [$this, 'accessTokenFromTwitter'])->name('twitter-callback');
         $app->get('/user/:username', [$this, 'profile'])->name('user-profile');
         $app->get('/user/:username/talks', [$this, 'profileTalks'])->name('user-profile-talks');
@@ -784,33 +783,6 @@ class UserController extends BaseController
                 'form' => $form->createView(),
             ]
         );
-    }
-
-    /**
-     * This gets a request token via the API, and forwards the user
-     * to Twitter to log in and grant us access
-     */
-    public function loginWithTwitter()
-    {
-        // ask the API for a request token
-        $config       = $this->application->config('oauth');
-        $clientId     = $config['client_id'];
-        $clientSecret = $config['client_secret'];
-
-        $authApi       = $this->application->container->get(AuthApi::class);
-        $request_token = $authApi->getTwitterRequestToken($clientId, $clientSecret);
-
-        if ($request_token) {
-            // forward the user
-            header("Location: https://api.twitter.com/oauth/authenticate?oauth_token=" . $request_token);
-            exit;
-        }
-
-        $this->application->flash(
-            'error',
-            'We could not log you in with twitter'
-        );
-        $this->application->redirect('/');
     }
 
     /**
