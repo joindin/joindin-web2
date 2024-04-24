@@ -39,6 +39,15 @@
                     <p>
                         {{ talk.getType }} in {{ talk.language }} at <a href="{{ urlFor('event-schedule', {"friendly_name": event.getUrlFriendlyName}) }}">{{ event.getName }}</a>
 
+                        {% if not talk.tracks is empty %}
+                            <br>
+                            Track Name:
+                            {% for tracks in talk.tracks %}
+                                {{ tracks.track_name }}
+                                {% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
                         {% for media in talk.talk_media %}
                             <br>
                             {% if media.slides_link is defined %}
