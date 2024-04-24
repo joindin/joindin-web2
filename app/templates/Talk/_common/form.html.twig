@@ -44,6 +44,9 @@
     <div class="row">
         <fieldset class="col-sm-8">
             <label>Talk Media</label>
+            <div>
+                Please enter link(s) to the Slides, Video, Audio, Code, or JoindIn resources that will support your talk.
+            </div>
             <ul class="talk_media" data-prototype="{{ form_widget(form.talk_media.vars.prototype)|e }}">
                 {% for media in form.talk_media %}
                     <li>
