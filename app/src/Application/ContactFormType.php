@@ -3,6 +3,8 @@
 namespace Application;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Form\DataTransformer\DateTransformer;
@@ -14,9 +16,8 @@ use Form\DataTransformer\EventTagsTransformer;
  * Usage (extraneous use of variables is made to illustrate which parts are used):
  *
  * ```
- * $formType = new EventFormType();
  * $factory  = $this->application->formFactory;
- * $form     = $factory->create($formType);
+ * $form     = $factory->create(EventFormType::class);
  * $formName = $form->getName();
  *
  * if ($this->application->request()->isPost()) {
@@ -58,15 +59,17 @@ class ContactFormType extends AbstractType
         $builder
             ->add(
                 'name',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'max_length'  => '100',
+                    'attr'        => [
+                        'maxlength'  => '100',
+                    ]
                 ]
             )
             ->add(
                 'email',
-                'text',
+                TextType::class,
                 [
                     'required'    => true,
                     'constraints' => [new Assert\NotBlank(), new Assert\Email()],
@@ -74,15 +77,17 @@ class ContactFormType extends AbstractType
             )
             ->add(
                 'subject',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank(), new Assert\Length(['max' => 100])],
-                    'max_length'  => '100',
+                    'attr'        => [
+                        'maxlength'  => '100',
+                    ]
                 ]
             )
             ->add(
                 'comment',
-                'textarea',
+                TextareaType::class,
                 [
                     'required'    => true,
                     'constraints' => [new Assert\NotBlank()],
@@ -90,7 +95,7 @@ class ContactFormType extends AbstractType
             )
             ->add(
                 'phone',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\Blank()],
                 ]

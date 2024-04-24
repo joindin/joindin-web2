@@ -91,7 +91,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new RegisterFormType());
+        $form    = $factory->create(RegisterFormType::class);
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -191,7 +191,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new EmailInputFormType());
+        $form    = $factory->create(EmailInputFormType::class);
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -552,7 +552,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new EmailInputFormType());
+        $form    = $factory->create(EmailInputFormType::class);
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -624,7 +624,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new UserFormType($canChangePassword), $userData);
+        $form    = $factory->create(UserFormType::class, $userData, ['can_change_password' => true]);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -705,7 +705,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new UsernameInputFormType());
+        $form    = $factory->create(UsernameInputFormType::class);
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -753,7 +753,7 @@ class UserController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new NewPasswordFormType());
+        $form    = $factory->create(NewPasswordFormType::class);
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));

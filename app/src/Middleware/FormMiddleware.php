@@ -10,14 +10,24 @@ use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\DefaultCsrfProvider;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\ResolvedFormTypeFactory;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
+use Symfony\Component\Security\Csrf\TokenStorage\NativeSessionTokenStorage;
+use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
+use Symfony\Component\Translation\Formatter\MessageFormatter;
+use Symfony\Component\Translation\IdentityTranslator;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
+use Twig\Environment;
+use Twig\RuntimeLoader\FactoryRuntimeLoader;
 
 /**
  * Middleware for Slim used to integrate Symfony forms into Slim.
@@ -75,17 +85,21 @@ class FormMiddleware extends Middleware
             $this->initializeTranslator();
         }
 
+        $csrfGenerator    = new UriSafeTokenGenerator();
+        $csrfStorage      = new NativeSessionTokenStorage();
+        $csrfTokenManager = new CsrfTokenManager($csrfGenerator, $csrfStorage);
+
         $env = $this->getTwigEnvironment();
         $this->addFormTemplatesFolderToLoader($this->getChainingLoader($env));
         $env->addExtension(new TranslationExtension($this->app->translator));
-        $env->addExtension($this->createFormTwigExtension(self::DEFAULT_LAYOUT));
+        $this->addFormTwigExtension(self::DEFAULT_LAYOUT, $csrfTokenManager, $env);
 
         $formMiddleWare = $this;
-        $csrfSecret     = $formMiddleWare->csrfSecret;
+
         $this->app->container->singleton(
             self::SERVICE_FORM_FACTORY,
-            function () use ($formMiddleWare, $csrfSecret) {
-                return $formMiddleWare->createFormFactory($csrfSecret);
+            function () use ($formMiddleWare, $csrfTokenManager) {
+                return $formMiddleWare->createFormFactory($csrfTokenManager);
             }
         );
 
@@ -104,10 +118,10 @@ class FormMiddleware extends Middleware
      *
      * @return FormFactoryInterface
      */
-    public function createFormFactory($csrfSecret)
+    public function createFormFactory($csrfManager)
     {
         $builder = Forms::createFormFactoryBuilder()
-            ->addExtension(new CsrfExtension(new DefaultCsrfProvider($csrfSecret)))
+            ->addExtension(new CsrfExtension($csrfManager))
             ->setResolvedTypeFactory(new ResolvedFormTypeFactory());
 
         if ($this->app->validator) {
@@ -148,7 +162,7 @@ class FormMiddleware extends Middleware
      */
     private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
     {
-        $reflected = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
+        $reflected = new \ReflectionClass(FormExtension::class);
         $path      = dirname($reflected->getFileName()) . '/../Resources/views/Form';
         $loader->addLoader(new \Twig_Loader_Filesystem($path));
     }
@@ -156,13 +170,19 @@ class FormMiddleware extends Middleware
     /**
      * Adds Twig rendering capabilities to the form and use the given template as default basis.
      *
-     * @param string $formLayoutTemplate
-     *
-     * @return FormExtension
+     * @param string           $formLayoutTemplate
+     * @param CsrfTokenManager $csrfTokenManager
+     * @param Environment      $twig
      */
-    private function createFormTwigExtension($formLayoutTemplate)
+    private function addFormTwigExtension($formLayoutTemplate, CsrfTokenManager $csrfTokenManager, Environment $twig)
     {
-        return new FormExtension(new TwigRenderer(new TwigRendererEngine([$formLayoutTemplate])));
+        $formEngine = new TwigRendererEngine([$formLayoutTemplate], $twig);
+        $twig->addRuntimeLoader(new FactoryRuntimeLoader([
+            FormRenderer::class => function () use ($formEngine, $csrfTokenManager) {
+                return new FormRenderer($formEngine, $csrfTokenManager);
+            },
+        ]));
+        $twig->addExtension(new FormExtension());
     }
 
     /**
@@ -172,7 +192,7 @@ class FormMiddleware extends Middleware
      */
     private function initializeTranslator()
     {
-        $this->app->translator = new Translator($this->locale, new MessageSelector());
+        $this->app->translator = new Translator($this->locale, new MessageFormatter());
         $this->app->translator->addLoader('array', new ArrayLoader());
         $this->app->translator->addLoader('xliff', new XliffFileLoader());
     }
@@ -199,7 +219,7 @@ class FormMiddleware extends Middleware
         $builder->addExtension(new ValidatorExtension($this->app->validator));
 
         if (isset($this->app->translator)) {
-            $r = new \ReflectionClass('Symfony\Component\Form\Form');
+            $r = new \ReflectionClass(Form::class);
             $this->app->translator->addResource(
                 'xliff',
                 dirname($r->getFilename()) . '/Resources/translations/validators.' . $this->locale . '.xlf',

@@ -3,7 +3,14 @@
 namespace Talk;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Event\EventEntity;
 
@@ -12,49 +19,6 @@ use Event\EventEntity;
  */
 class TalkFormType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    protected $timezone;
-
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $startDate;
-
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $endDate;
-
-    /**
-     * @var string[]
-     */
-    protected $languages;
-
-    /**
-     * @var string[]
-     */
-    protected $talkTypes;
-
-    /**
-     * @var string[]
-     */
-    protected $tracks;
-
-    public function __construct(EventEntity $event, array $languages, array $talkTypes, array $tracks)
-    {
-        $this->timezone  = $event->getFullTimezone();
-        $tz              = new \DateTimeZone($this->timezone);
-        $this->startDate = new \DateTimeImmutable($event->getStartDate(), $tz);
-        $this->endDate   = new \DateTimeImmutable($event->getEndDate(), $tz);
-
-        $this->languages = $languages;
-        $this->talkTypes = $talkTypes;
-        $this->tracks    = $tracks;
-    }
-
-
     /**
      * Returns the name of this form type.
      *
@@ -75,17 +39,29 @@ class TalkFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var EventEntity $event */
+        $event     = $options['event'];
+        $languages = $options['languages'];
+        $talkTypes = $options['talkTypes'];
+        $tracks    = $options['tracks'];
+
+        $timezone  = $event->getFullTimezone();
+
+        $tz        = new \DateTimeZone($timezone);
+        $startDate = new \DateTimeImmutable($event->getStartDate(), $tz);
+        $endDate   = new \DateTimeImmutable($event->getEndDate(), $tz);
+
         $builder
             ->add(
                 'talk_title',
-                'text',
+                TextType::class,
                 [
                     'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add(
                 'talk_description',
-                'textarea',
+                TextareaType::class,
                 [
                     'constraints' => [new Assert\NotBlank()],
                     'attr'        => ['rows' => '10']
@@ -93,14 +69,14 @@ class TalkFormType extends AbstractType
             )
             ->add(
                 'start_date',
-                'datetime',
+                DateTimeType::class,
                 [
                     'label'          => 'Date and time of talk',
                     'date_widget'    => 'single_text',
                     'time_widget'    => 'single_text',
                     'date_format'    => 'd MMMM y',
-                    'model_timezone' => $this->timezone,
-                    'view_timezone'  => $this->timezone,
+                    'model_timezone' => $timezone,
+                    'view_timezone'  => $timezone,
                     'constraints'    => [
                         new Assert\NotBlank(),
                         new Assert\Date()
@@ -113,8 +89,8 @@ class TalkFormType extends AbstractType
                             'data-date-week-start'      => '1',
                             'data-date-autoclose'       => '1',
                             'data-date-today-highlight' => true,
-                            'data-date-start-date '     => $this->startDate->format('j F Y'),
-                            'data-date-end-date'        => $this->endDate->format('j F Y'),
+                            'data-date-start-date '     => $startDate->format('j F Y'),
+                            'data-date-end-date'        => $endDate->format('j F Y'),
                         ],
                         'time_widget' => [
                             'class'              => 'time-picker form-control',
@@ -128,10 +104,10 @@ class TalkFormType extends AbstractType
             )
             ->add(
                 'duration',
-                'integer',
+                IntegerType::class,
                 [
                     'label'       => 'Duration (mins)',
-                    'precision'   => 0,
+                    'scale'       => 0,
                     'constraints' => [
                         new Assert\NotBlank(),
                         new Assert\Type('integer'),
@@ -144,46 +120,68 @@ class TalkFormType extends AbstractType
             )
             ->add(
                 'language',
-                'choice',
+                ChoiceType::class,
                 [
-                    'choices' => ['' => '']  + $this->languages
+                    'choices' => ['' => '']  + $languages
                 ]
             )
             ->add(
                 'type',
-                'choice',
+                ChoiceType::class,
                 [
-                    'choices' => ['' => '']  + $this->talkTypes
+                    'choices' => ['' => '']  + $talkTypes
                 ]
             )
             ->add(
                 'track',
-                'choice',
+                ChoiceType::class,
                 [
-                    'required' => (bool) !empty($this->tracks),
-                    'choices'  => ['' => '']  + $this->tracks
+                    'required' => (bool) !empty($tracks),
+                    'choices'  => ['' => '']  + $tracks
                 ]
             )
             ->add(
                 'speakers',
-                'collection',
+                CollectionType::class,
                 [
                     'label'        => 'Speakers!',
-                    'type'         => new SpeakerFormType(),
+                    'entry_type'   => SpeakerFormType::class,
                     'allow_add'    => true,
                     'allow_delete' => true,
                 ]
             )
             ->add(
                 'talk_media',
-                'collection',
+                CollectionType::class,
                 [
                     'label'        => 'Talk Media',
-                    'type'         => new TalkMediaFormType(),
+                    'entry_type'   => TalkMediaFormType::class,
                     'allow_add'    => true,
                     'allow_delete' => true,
                 ]
             )
         ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefined([
+            'event',
+            'languages',
+            'talkTypes',
+            'tracks',
+        ]);
+
+        $resolver->setAllowedTypes('event', [EventEntity::class]);
+        $resolver->setAllowedTypes('languages', ['array']);
+        $resolver->setAllowedTypes('talkTypes', ['array']);
+        $resolver->setAllowedTypes('tracks', ['array']);
+
+        $resolver->setRequired('event');
+        $resolver->setDefaults([
+            'languages' => [],
+            'talkTypes' => [],
+            'tracks'    => [],
+        ]);
     }
 }

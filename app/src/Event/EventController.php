@@ -537,7 +537,7 @@ class EventController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new EventFormType());
+        $form    = $factory->create(EventFormType::class);
 
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
@@ -589,7 +589,7 @@ class EventController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new EventFormType(), $event);
+        $form    = $factory->create(EventFormType::class, $event);
         if ($request->isPost()) {
             $form->submit($request->post($form->getName()));
 
@@ -1179,7 +1179,12 @@ class EventController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new TalkFormType($event, $languages, $talkTypes, $tracks), $data);
+        $form    = $factory->create(TalkFormType::class, $data, [
+            'event'     => $event,
+            'languages' => $languages,
+            'talkTypes' => $talkTypes,
+            'tracks'    => $tracks,
+        ]);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -1250,7 +1255,7 @@ class EventController extends BaseController
         }
 
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new TrackCollectionFormType(), $data);
+        $form    = $factory->create(TrackCollectionFormType::class, $data);
 
         $request = $this->application->request();
         if ($request->isPost()) {
@@ -1316,7 +1321,7 @@ class EventController extends BaseController
 
         /** @var FormFactoryInterface $factory */
         $factory = $this->application->formFactory;
-        $form    = $factory->create(new EventImportFormType());
+        $form    = $factory->create(EventImportFormType::class);
 
         //use EventFormImportType to validate the CSV is valid
         //We possibly want to do some extensive data checking
