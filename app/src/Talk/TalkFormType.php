@@ -160,7 +160,7 @@ class TalkFormType extends AbstractType
                 'track',
                 'choice',
                 [
-                    'required' => (bool) !empty($this->tracks),
+                    'required' => false,
                     'choices'  => ['' => '']  + $this->tracks
                 ]
             )
