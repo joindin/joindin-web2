@@ -119,7 +119,7 @@ class TalkController extends BaseController
 
         $isAdmin   = $event->getCanEdit();
         $isSpeaker = $talk->isSpeaker($_SESSION['user']->getUri());
-        if (!($isAdmin || $isSpeaker)) {
+        if (!$isAdmin && !$isSpeaker) {
             $this->application->flash('error', "You do not have permission to do this.");
 
             $talkUrl = $this->application->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
