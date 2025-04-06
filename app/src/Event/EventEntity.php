@@ -22,7 +22,7 @@ class EventEntity extends BaseEntity
         return $this;
     }
 
-    public function getFullTimezone()
+    public function getFullTimezone(): ?string
     {
         if (!isset($this->data->tz_continent) || !isset($this->data->tz_place)) {
             return null;
@@ -286,7 +286,7 @@ class EventEntity extends BaseEntity
      *
      * @return string|null
      */
-    public function getTimezone()
+    public function getTimezone(): ?string
     {
         if (! isset($this->data->tz_continent)
             || ! isset($this->data->tz_place)

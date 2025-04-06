@@ -6,8 +6,7 @@ use Twig_Error_Runtime;
 
 abstract class BaseController
 {
-    /** @var Slim */
-    protected $application;
+    protected \Slim\Slim $application;
 
     protected $accessToken = null;
     protected $cfg;

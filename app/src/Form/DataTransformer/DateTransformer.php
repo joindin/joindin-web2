@@ -7,7 +7,7 @@ use \DateTimeZone;
 
 class DateTransformer implements DataTransformerInterface
 {
-    protected $timezone;
+    protected \DateTimeZone $timezone;
 
     public function __construct($timezone = 'UTC')
     {

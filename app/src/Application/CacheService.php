@@ -8,7 +8,7 @@ namespace Application;
  */
 class CacheService
 {
-    protected $client;
+    protected \Predis\Client $client;
     protected $keyPrefix;
 
     public function __construct(\Predis\Client $client, $keyPrefix = '')

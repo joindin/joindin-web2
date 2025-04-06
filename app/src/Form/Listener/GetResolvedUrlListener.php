@@ -12,10 +12,7 @@ use Form\Shared\UrlResolver;
  */
 class GetResolvedUrlListener implements EventSubscriberInterface
 {
-    /**
-     * @var UrlResolver
-     */
-    private $urlResolver;
+    private \Form\Shared\UrlResolver $urlResolver;
 
     public function __construct(UrlResolver $urlResolver = null)
     {

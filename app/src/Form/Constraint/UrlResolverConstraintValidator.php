@@ -9,10 +9,7 @@ use Form\Shared\UrlResolver;
 
 class UrlResolverConstraintValidator extends ConstraintValidator
 {
-    /**
-     * @var UrlResolver
-     */
-    private $urlResolver;
+    private \Form\Shared\UrlResolver $urlResolver;
 
     public function __construct(UrlResolver $urlResolver = null)
     {

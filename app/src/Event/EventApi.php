@@ -11,15 +11,9 @@ use User\UserEntity;
 
 class EventApi extends BaseApi
 {
-    /**
-     * @var EventDb
-     */
-    protected $eventDb;
+    protected \Event\EventDb $eventDb;
 
-    /**
-     * @var UserApi
-     */
-    protected $userApi;
+    protected \User\UserApi $userApi;
 
     public function __construct($config, $accessToken, EventDb $eventDb, UserApi $userApi)
     {

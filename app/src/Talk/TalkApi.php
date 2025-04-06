@@ -7,15 +7,9 @@ use User\UserApi;
 
 class TalkApi extends BaseApi
 {
-    /**
-     * @var TalkDb
-     */
-    protected $talkDb;
+    protected \Talk\TalkDb $talkDb;
 
-    /**
-     * @var UserApi
-     */
-    protected $userApi;
+    protected \User\UserApi $userApi;
 
     /**
      * @param TalkDb $talkDb

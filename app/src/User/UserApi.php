@@ -5,8 +5,7 @@ use Application\BaseApi;
 
 class UserApi extends BaseApi
 {
-    /** @var UserDb */
-    private $userDb;
+    private \User\UserDb $userDb;
 
     public function __construct($config, $accessToken, UserDb $userDb)
     {

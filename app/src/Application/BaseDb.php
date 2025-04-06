@@ -3,8 +3,7 @@ namespace Application;
 
 abstract class BaseDb
 {
-    /** @var CacheService */
-    protected $cache;
+    protected \Application\CacheService $cache;
 
     /** @var string */
     protected $keyName;

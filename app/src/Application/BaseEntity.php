@@ -5,8 +5,7 @@ use stdClass;
 
 abstract class BaseEntity
 {
-    /** @var stdClass */
-    protected $data;
+    protected \stdClass $data;
 
     /**
      * BaseEntity constructor.

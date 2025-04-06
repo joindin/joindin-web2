@@ -8,10 +8,7 @@ use Slim\Slim;
 
 final class FunctionsExtension extends Twig_Extension
 {
-    /**
-     * @var Slim
-     */
-    private $app;
+    private \Slim\Slim $app;
 
     /**
      * @param Slim $app

@@ -13,7 +13,7 @@ use Talk\TalkEntity;
  */
 class EventScheduler
 {
-    protected $talkApi;
+    protected \Talk\TalkApi $talkApi;
     protected $distinctDates;
 
     /**
