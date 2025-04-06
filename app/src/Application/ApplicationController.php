@@ -47,7 +47,7 @@ class ApplicationController extends BaseController
      * @param int $perPage
      * @return array
      */
-    public function getCurrentEvents($start, $perPage)
+    public function getCurrentEvents($start, $perPage): array
     {
         $eventApi = $this->getEventApi();
         return $eventApi->getEvents($perPage, $start, 'upcoming');

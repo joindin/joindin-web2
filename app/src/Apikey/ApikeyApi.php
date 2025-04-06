@@ -58,7 +58,7 @@ class ApikeyApi extends BaseApi
      * @throws \Exception
      * @return bool
      */
-    public function deleteClient($tokenUri): bool
+    public function deleteClient(string $tokenUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($tokenUri);
 

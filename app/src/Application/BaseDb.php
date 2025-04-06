@@ -13,7 +13,7 @@ abstract class BaseDb
         $this->cache = $cache;
     }
 
-    public function load($keyField, $keyValue)
+    public function load(string $keyField, $keyValue)
     {
         return $this->cache->load($this->keyName, $keyField, $keyValue);
     }

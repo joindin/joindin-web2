@@ -10,7 +10,7 @@ class TrackApi extends BaseApi
      *
      * @return array
      */
-    public function getTracks($url)
+    public function getTracks(string $url)
     {
         $queryParams['resultsperpage'] = 0;
 
@@ -92,7 +92,7 @@ class TrackApi extends BaseApi
      *
      * @param string $trackUri
      */
-    public function deleteTrack($trackUri): bool
+    public function deleteTrack(string $trackUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($trackUri);
         if ($status == 204) {

@@ -19,7 +19,7 @@ class UserApi extends BaseApi
      * @param  string $url User's URI
      * @return mixed       stdClass of user data or false
      */
-    public function getUser($url)
+    public function getUser(string $url)
     {
         $result = $this->apiGet($url, ['verbose'=>'yes']);
 
@@ -252,7 +252,7 @@ class UserApi extends BaseApi
     }
 
 
-    public function delete($uri): bool
+    public function delete(string $uri): bool
     {
         [$status, $result] = $this->apiDelete($uri, []);
 
