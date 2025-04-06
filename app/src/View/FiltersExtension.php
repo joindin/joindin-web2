@@ -72,7 +72,7 @@ final class FiltersExtension extends \Twig_Extension
      */
     public function link($url, $label = '', $class = '')
     {
-        return '<a href="' . $url . '" class="' . $class . '">' . ($label ? $label : $url) . '</a>';
+        return '<a href="' . $url . '" class="' . $class . '">' . ($label ?: $url) . '</a>';
     }
 
     /**

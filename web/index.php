@@ -56,7 +56,7 @@ $app->view()->appendData(
 $app->view()->appendData(
     [
         'google_analytics_id' => $config['slim']['custom']['googleAnalyticsId'],
-        'user'                => (isset($_SESSION['user']) ? $_SESSION['user'] : false),
+        'user'                => ($_SESSION['user'] ?? false),
     ]
 );
 
@@ -111,7 +111,7 @@ if (!empty($config['slim']['custom']['csrfSecret'])) {
 $app->add(new Middleware\FormMiddleware($csrfSecret));
 
 // register services
-$app->container->set('access_token', isset($_SESSION['access_token']) ? $_SESSION['access_token'] : null);
+$app->container->set('access_token', $_SESSION['access_token'] ?? null);
 
 $app->container->singleton(\Application\CacheService::class, function ($container) {
     $redis  = $container->settings['custom']['redis'];

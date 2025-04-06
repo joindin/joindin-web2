@@ -148,7 +148,7 @@ class FormMiddleware extends Middleware
      */
     private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
     {
-        $reflected = new \ReflectionClass('Symfony\Bridge\Twig\Extension\FormExtension');
+        $reflected = new \ReflectionClass(\Symfony\Bridge\Twig\Extension\FormExtension::class);
         $path      = dirname($reflected->getFileName()) . '/../Resources/views/Form';
         $loader->addLoader(new \Twig_Loader_Filesystem($path));
     }
@@ -199,7 +199,7 @@ class FormMiddleware extends Middleware
         $builder->addExtension(new ValidatorExtension($this->app->validator));
 
         if (isset($this->app->translator)) {
-            $r = new \ReflectionClass('Symfony\Component\Form\Form');
+            $r = new \ReflectionClass(\Symfony\Component\Form\Form::class);
             $this->app->translator->addResource(
                 'xliff',
                 dirname($r->getFilename()) . '/Resources/translations/validators.' . $this->locale . '.xlf',

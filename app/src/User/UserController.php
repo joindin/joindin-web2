@@ -148,7 +148,7 @@ class UserController extends BaseController
     public function logout()
     {
         $request  = $this->application->request();
-        $redirect = ($request->get('redirect')) ? $request->get('redirect') : "/";
+        $redirect = $request->get('redirect') ?: "/";
 
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);

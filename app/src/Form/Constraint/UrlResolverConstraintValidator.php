@@ -16,7 +16,7 @@ class UrlResolverConstraintValidator extends ConstraintValidator
 
     public function __construct(UrlResolver $urlResolver = null)
     {
-        $this->urlResolver = $urlResolver === null ? new UrlResolver() : $urlResolver;
+        $this->urlResolver = $urlResolver ?? new UrlResolver();
     }
 
     public function validate($value, Constraint $constraint)
