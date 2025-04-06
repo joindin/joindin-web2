@@ -34,13 +34,13 @@ class TrailingSlashMiddlewareTest extends TestCase
     {
         $this->request->getPath()->willReturn('/');
 
-        $middleware = new TrailingSlashMiddleware();
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware();
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect(Argument::any())->shouldNotBeCalled();
         $this->next->call()->shouldBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
     }
 
     /**
@@ -50,12 +50,12 @@ class TrailingSlashMiddlewareTest extends TestCase
     {
         $this->request->getPath()->willReturn('/events/php-tek2019/');
 
-        $middleware = new TrailingSlashMiddleware();
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware();
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect('/events/php-tek2019', 301)->shouldBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
     }
 
     /**
@@ -65,12 +65,12 @@ class TrailingSlashMiddlewareTest extends TestCase
     {
         $this->request->getPath()->willReturn('/events/php-tek2019');
 
-        $middleware = new TrailingSlashMiddleware();
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware();
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect(Argument::any())->shouldNotBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
         $this->next->call()->shouldHaveBeenCalled();
     }
 
@@ -81,12 +81,12 @@ class TrailingSlashMiddlewareTest extends TestCase
     {
         $this->request->getPath()->willReturn('/events/php-tek2019');
 
-        $middleware = new TrailingSlashMiddleware(true);
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware(true);
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect('/events/php-tek2019/', 301)->shouldBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
     }
 
     /**
@@ -96,11 +96,11 @@ class TrailingSlashMiddlewareTest extends TestCase
     {
         $this->request->getPath()->willReturn('/events/php-tek2019/');
 
-        $middleware = new TrailingSlashMiddleware(true);
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware(true);
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect(Argument::any())->shouldNotBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
     }
 }

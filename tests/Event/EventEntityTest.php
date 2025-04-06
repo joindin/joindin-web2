@@ -40,145 +40,145 @@ class EventEntityTest extends TestCase
 
     public function testBasicEventData(): void
     {
-        $event = new EventEntity($this->eventData);
+        $eventEntity = new EventEntity($this->eventData);
 
         $this->assertEquals(
-            $event->getName(),
+            $eventEntity->getName(),
             "Test event name"
         );
 
         $this->assertEquals(
-            $event->getIcon(),
+            $eventEntity->getIcon(),
             "Test event icon"
         );
 
         $this->assertEquals(
-            $event->getStartDate(),
+            $eventEntity->getStartDate(),
             "Test event start date"
         );
 
         $this->assertEquals(
-            $event->getEndDate(),
+            $eventEntity->getEndDate(),
             "Test event end date"
         );
 
         $this->assertEquals(
-            $event->getLocation(),
+            $eventEntity->getLocation(),
             "Test event location"
         );
 
         $this->assertEquals(
-            $event->getDescription(),
+            $eventEntity->getDescription(),
             "Test event description"
         );
 
         $this->assertEquals(
-            $event->getTags(),
+            $eventEntity->getTags(),
             "Test event tags"
         );
 
         $this->assertEquals(
-            $event->getLatitude(),
+            $eventEntity->getLatitude(),
             "Test event latitude"
         );
 
         $this->assertEquals(
-            $event->getLongitude(),
+            $eventEntity->getLongitude(),
             "Test event longitude"
         );
 
         $this->assertEquals(
-            $event->getWebsiteAddress(),
+            $eventEntity->getWebsiteAddress(),
             "Test event href"
         );
 
         $this->assertEquals(
-            $event->getAttendeeCount(),
+            $eventEntity->getAttendeeCount(),
             "Test event attendee count"
         );
 
         $this->assertEquals(
-            $event->getCommentsCount(),
+            $eventEntity->getCommentsCount(),
             "Test event event comments count"
         );
 
         $this->assertEquals(
-            $event->getCommentsUri(),
+            $eventEntity->getCommentsUri(),
             "Test event comments uri"
         );
 
         $this->assertEquals(
-            $event->getTalksUri(),
+            $eventEntity->getTalksUri(),
             "Test event talks uri"
         );
 
         $this->assertEquals(
-            $event->getUri(),
+            $eventEntity->getUri(),
             "Test event uri"
         );
 
         $this->assertEquals(
-            $event->getVerboseUri(),
+            $eventEntity->getVerboseUri(),
             "Test event verbose uri"
         );
 
         $this->assertEquals(
-            $event->isAttending(),
+            $eventEntity->isAttending(),
             "Test event attending"
         );
 
         $this->assertEquals(
-            $event->getUrlFriendlyName(),
+            $eventEntity->getUrlFriendlyName(),
             "Test event url friendly name"
         );
 
         $this->assertEquals(
-            $event->getStub(),
+            $eventEntity->getStub(),
             "Test event stub"
         );
 
         $this->assertEquals(
-            $event->getApiUriToMarkAsAttending(),
+            $eventEntity->getApiUriToMarkAsAttending(),
             "Test event attending uri"
         );
 
         $this->assertEquals(
             true,
-            $event->areCommentsEnabled()
+            $eventEntity->areCommentsEnabled()
         );
 
         $this->assertEquals(
-            $event->getAllTalkCommentsUri(),
+            $eventEntity->getAllTalkCommentsUri(),
             "Test event all talk comments uri"
         );
     }
 
     public function testNonExistentTestDataDoesntBreak(): void
     {
-        $event = new EventEntity(new stdClass());
+        $eventEntity = new EventEntity(new stdClass());
 
-        $event->getName();
-        $event->getIcon();
-        $event->getStartDate();
-        $event->getEndDate();
-        $event->getLocation();
-        $event->getDescription();
-        $event->getTags();
-        $event->getLatitude();
-        $event->getLongitude();
-        $event->getWebsiteAddress();
-        $event->getAttendeeCount();
-        $event->getCommentsCount();
-        $event->getCommentsUri();
-        $event->getApiUriToMarkAsAttending();
-        $event->getTalksUri();
-        $event->getUri();
-        $event->getVerboseUri();
-        $event->isAttending();
-        $event->getUrlFriendlyName();
-        $event->getStub();
-        $event->getAllTalkCommentsUri();
+        $eventEntity->getName();
+        $eventEntity->getIcon();
+        $eventEntity->getStartDate();
+        $eventEntity->getEndDate();
+        $eventEntity->getLocation();
+        $eventEntity->getDescription();
+        $eventEntity->getTags();
+        $eventEntity->getLatitude();
+        $eventEntity->getLongitude();
+        $eventEntity->getWebsiteAddress();
+        $eventEntity->getAttendeeCount();
+        $eventEntity->getCommentsCount();
+        $eventEntity->getCommentsUri();
+        $eventEntity->getApiUriToMarkAsAttending();
+        $eventEntity->getTalksUri();
+        $eventEntity->getUri();
+        $eventEntity->getVerboseUri();
+        $eventEntity->isAttending();
+        $eventEntity->getUrlFriendlyName();
+        $eventEntity->getStub();
+        $eventEntity->getAllTalkCommentsUri();
 
-        $this->assertEquals(false, $event->areCommentsEnabled());
+        $this->assertEquals(false, $eventEntity->areCommentsEnabled());
     }
 }

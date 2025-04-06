@@ -27,60 +27,60 @@ class TalkCommentEntityTest extends TestCase
 
     public function testBasicCommentsData(): void
     {
-        $comment = new TalkCommentEntity($this->commentData);
+        $talkCommentEntity = new TalkCommentEntity($this->commentData);
 
         $this->assertEquals(
-            $comment->getRating(),
+            $talkCommentEntity->getRating(),
             5
         );
 
         $this->assertEquals(
-            $comment->getUserDisplayName(),
+            $talkCommentEntity->getUserDisplayName(),
             "Test comment display name"
         );
 
         $this->assertEquals(
-            $comment->getCommentDate(),
+            $talkCommentEntity->getCommentDate(),
             "2014-03-02T08:43:44+01:00"
         );
 
         $this->assertEquals(
-            $comment->getComment(),
+            $talkCommentEntity->getComment(),
             "Test event comment text"
         );
 
         $this->assertEquals(
-            $comment->getCommentSource(),
+            $talkCommentEntity->getCommentSource(),
             "Test comment source"
         );
 
         $this->assertEquals(
-            $comment->getTalkTitle(),
+            $talkCommentEntity->getTalkTitle(),
             "Test talk title"
         );
 
         $this->assertEquals(
-            $comment->getTalkUri(),
+            $talkCommentEntity->getTalkUri(),
             "Test talk uri"
         );
 
         $this->assertEquals(
-            $comment->getCommentHash(),
+            $talkCommentEntity->getCommentHash(),
             "80c0c6"
         );
     }
 
     public function testNonExistentTestDataDoesntBreak(): void
     {
-        $comment = new TalkCommentEntity(new stdClass());
+        $talkCommentEntity = new TalkCommentEntity(new stdClass());
 
-        $this->assertNull($comment->getRating());
-        $this->assertNull($comment->getUserDisplayName());
-        $this->assertNull($comment->getCommentDate());
-        $this->assertNull($comment->getComment());
-        $this->assertNull($comment->getCommentSource());
-        $this->assertNull($comment->getTalkTitle());
-        $this->assertNull($comment->getTalkUri());
-        $this->assertNull($comment->getCommentHash());
+        $this->assertNull($talkCommentEntity->getRating());
+        $this->assertNull($talkCommentEntity->getUserDisplayName());
+        $this->assertNull($talkCommentEntity->getCommentDate());
+        $this->assertNull($talkCommentEntity->getComment());
+        $this->assertNull($talkCommentEntity->getCommentSource());
+        $this->assertNull($talkCommentEntity->getTalkTitle());
+        $this->assertNull($talkCommentEntity->getTalkUri());
+        $this->assertNull($talkCommentEntity->getCommentHash());
     }
 }

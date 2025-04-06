@@ -6,9 +6,9 @@ use Application\CacheService;
 
 class TalkDb extends BaseDb
 {
-    public function __construct(CacheService $cache)
+    public function __construct(CacheService $cacheService)
     {
-        parent::__construct($cache);
+        parent::__construct($cacheService);
         $this->keyName = 'talks';
     }
 
@@ -36,29 +36,29 @@ class TalkDb extends BaseDb
         return null;
     }
 
-    public function save(TalkEntity $talk): void
+    public function save(TalkEntity $talkEntity): void
     {
         $data = [
-            'uri'         => $talk->getApiUri(),
-            'title'       => $talk->getTitle(),
-            'slug'        => $talk->getUrlFriendlyTalkTitle(),
-            'verbose_uri' => $talk->getApiUri(true),
-            'event_uri'   => $talk->getEventUri(),
-            'stub'        => $talk->getStub(),
+            'uri'         => $talkEntity->getApiUri(),
+            'title'       => $talkEntity->getTitle(),
+            'slug'        => $talkEntity->getUrlFriendlyTalkTitle(),
+            'verbose_uri' => $talkEntity->getApiUri(true),
+            'event_uri'   => $talkEntity->getEventUri(),
+            'stub'        => $talkEntity->getStub(),
         ];
 
-        $savedTalk = $this->load('uri', $talk->getApiUri());
+        $savedTalk = $this->load('uri', $talkEntity->getApiUri());
         if ($savedTalk) {
             // talk is already known - update this record
             $data = array_merge($savedTalk, $data);
         }
 
         $keys = [
-            'event_uri' => $talk->getEventUri(),
-            'slug'      => $talk->getUrlFriendlyTalkTitle()
+            'event_uri' => $talkEntity->getEventUri(),
+            'slug'      => $talkEntity->getUrlFriendlyTalkTitle()
         ];
         $this->cache->saveByKeys($this->keyName, $data, $keys);
-        $this->cache->save($this->keyName, $data, 'uri', $talk->getApiUri());
-        $this->cache->save($this->keyName, $data, 'stub', $talk->getStub());
+        $this->cache->save($this->keyName, $data, 'uri', $talkEntity->getApiUri());
+        $this->cache->save($this->keyName, $data, 'stub', $talkEntity->getStub());
     }
 }

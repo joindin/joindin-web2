@@ -26,9 +26,9 @@ class UserApi extends BaseApi
         if ($result) {
             $data = json_decode($result, false, 512, JSON_BIGINT_AS_STRING);
             if (isset($data->users[0])) {
-                $user = new UserEntity($data->users[0]);
-                $this->userDb->save($user);
-                return $user;
+                $userEntity = new UserEntity($data->users[0]);
+                $this->userDb->save($userEntity);
+                return $userEntity;
             }
         }
         return false;
@@ -140,9 +140,9 @@ class UserApi extends BaseApi
             if ($data && isset($data->users)) {
                 foreach ($data->users as $userData) {
                     if (strtolower($userData->username) === strtolower($username)) {
-                        $user = new UserEntity($userData);
-                        $this->userDb->save($user);
-                        return $user;
+                        $userEntity = new UserEntity($userData);
+                        $this->userDb->save($userEntity);
+                        return $userEntity;
                     }
                 }
             }

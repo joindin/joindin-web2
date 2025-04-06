@@ -8,13 +8,13 @@ use User\UserApi;
 
 class ApplicationController extends BaseController
 {
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(\Slim\Slim $slim)
     {
-        $app->get('/', [$this, 'index']);
-        $app->get('/about', [$this, 'about'])->name('about');
-        $app->map('/contact', [$this, 'contact'])->via('GET', 'POST')->name('contact');
-        $app->get('/not-allowed', [$this, 'notAllowed'])->name('not-allowed');
-        $app->get('/assets', [$this, 'assets'])->name('assets');
+        $slim->get('/', [$this, 'index']);
+        $slim->get('/about', [$this, 'about'])->name('about');
+        $slim->map('/contact', [$this, 'contact'])->via('GET', 'POST')->name('contact');
+        $slim->get('/not-allowed', [$this, 'notAllowed'])->name('not-allowed');
+        $slim->get('/assets', [$this, 'assets'])->name('assets');
     }
 
     public function index(): void

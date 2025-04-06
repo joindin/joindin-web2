@@ -16,16 +16,16 @@ class GetResolvedUrlListenerTest extends TestCase
      */
     public function testOnSubmit(bool $expectResolve, string $base = null): void
     {
-        /** @var MockObject|FormEvent $formEvent */
-        $formEvent = $this->getMockBuilder(FormEvent::class)
+        /** @var MockObject|FormEvent $mock */
+        $mock = $this->getMockBuilder(FormEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $formEvent->expects(self::once())
+        $mock->expects(self::once())
             ->method('getData')
             ->willReturn($base);
 
-        $formEvent->expects(self::exactly($expectResolve ? 1 : 0))
+        $mock->expects(self::exactly($expectResolve ? 1 : 0))
             ->method('setData');
 
         /** @var MockObject|UrlResolver $urlResolver */
@@ -33,8 +33,8 @@ class GetResolvedUrlListenerTest extends TestCase
         $urlResolver->expects(self::exactly($expectResolve ? 1 : 0))
             ->method('resolve');
 
-        $listener = new GetResolvedUrlListener($urlResolver);
-        $listener->onSubmit($formEvent);
+        $getResolvedUrlListener = new GetResolvedUrlListener($urlResolver);
+        $getResolvedUrlListener->onSubmit($mock);
     }
 
     public function testGetSubscribedEvents(): void

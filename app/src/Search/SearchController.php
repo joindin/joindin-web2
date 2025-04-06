@@ -28,18 +28,18 @@ class SearchController extends BaseController
      */
     protected $itemsPerPage = 10;
 
-    public function __construct(Slim $app)
+    public function __construct(Slim $slim)
     {
-        parent::__construct($app);
+        parent::__construct($slim);
     }
 
     /**
-     * @param Slim $app
+     * @param Slim $slim
      */
-    protected function defineRoutes(Slim $app)
+    protected function defineRoutes(Slim $slim)
     {
-        $app->get('/search/events', [$this, 'searchEvents'])->name("search-events");
-        $app->get('/search', [$this, 'search'])->name("search");
+        $slim->get('/search/events', [$this, 'searchEvents'])->name("search-events");
+        $slim->get('/search', [$this, 'search'])->name("search");
     }
 
     /**

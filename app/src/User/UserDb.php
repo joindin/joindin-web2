@@ -6,28 +6,28 @@ use Application\CacheService;
 
 class UserDb extends BaseDb
 {
-    public function __construct(CacheService $cache)
+    public function __construct(CacheService $cacheService)
     {
-        parent::__construct($cache);
+        parent::__construct($cacheService);
         $this->keyName = 'users';
     }
 
-    public function save(UserEntity $user): void
+    public function save(UserEntity $userEntity): void
     {
         $data = [
-            'uri'          => $user->getUri(),
-            'username'     => $user->getUsername(),
-            'slug'         => $user->getUsername(),
-            'verbose_uri'  => $user->getVerboseUri()
+            'uri'          => $userEntity->getUri(),
+            'username'     => $userEntity->getUsername(),
+            'slug'         => $userEntity->getUsername(),
+            'verbose_uri'  => $userEntity->getVerboseUri()
         ];
 
-        $savedUser = $this->load('uri', $user->getUri());
+        $savedUser = $this->load('uri', $userEntity->getUri());
         if ($savedUser) {
             // user is already known - update this record
             $data = array_merge($savedUser, $data);
         }
 
-        $this->cache->save($this->keyName, $data, 'uri', $user->getUri());
-        $this->cache->save($this->keyName, $data, 'username', $user->getUsername());
+        $this->cache->save($this->keyName, $data, 'uri', $userEntity->getUri());
+        $this->cache->save($this->keyName, $data, 'username', $userEntity->getUsername());
     }
 }

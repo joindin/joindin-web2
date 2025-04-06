@@ -9,15 +9,15 @@ use View\FunctionsExtension;
 
 class TwigExtensionIntegrationTest extends IntegrationTestCase
 {
-    private \PHPUnit\Framework\MockObject\MockObject $slim;
+    private \PHPUnit\Framework\MockObject\MockObject $mockObject;
 
     public function setUp(): void
     {
-        $this->slim = $this->getMockBuilder(Slim::class)
+        $this->mockObject = $this->getMockBuilder(Slim::class)
                            ->disableOriginalConstructor()
                            ->getMock();
 
-        $this->slim->method('urlFor')
+        $this->mockObject->method('urlFor')
             ->willReturn('https://www.joind.in');
 
 
@@ -28,7 +28,7 @@ class TwigExtensionIntegrationTest extends IntegrationTestCase
     {
         return [
             new FiltersExtension(),
-            new FunctionsExtension($this->slim)
+            new FunctionsExtension($this->mockObject)
         ];
     }
 

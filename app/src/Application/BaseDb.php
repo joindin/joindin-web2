@@ -8,9 +8,9 @@ abstract class BaseDb
     /** @var string */
     protected $keyName;
 
-    public function __construct(CacheService $cache)
+    public function __construct(CacheService $cacheService)
     {
-        $this->cache = $cache;
+        $this->cache = $cacheService;
     }
 
     public function load(string $keyField, $keyValue)

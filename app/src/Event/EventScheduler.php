@@ -30,12 +30,12 @@ class EventScheduler
      * Builds schedule data into an array structure
      * for schedule view
      *
-     * @param EventEntity $event
+     * @param EventEntity $eventEntity
      * @return array
      */
-    public function getScheduleData(EventEntity $event): array
+    public function getScheduleData(EventEntity $eventEntity): array
     {
-        $talks     = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
+        $talks     = $this->getTalks($eventEntity->getTalksUri().'?start=0&resultsperpage=1000');
         $eventDays = $this->getEventDays($talks);
 
         return $eventDays;

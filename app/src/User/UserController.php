@@ -16,33 +16,33 @@ class UserController extends BaseController
     /**
      * Routes implemented by this class
      *
-     * @param \Slim $app Slim application instance
+     * @param \Slim $slim Slim application instance
      *
      * @return void
      */
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(\Slim\Slim $slim)
     {
-        $app->get('/user/logout', [$this, 'logout'])->name('user-logout');
-        $app->map('/user/login', [$this, 'login'])->via('GET', 'POST')->name('user-login');
-        $app->map('/user/register', [$this, 'register'])->via('GET', 'POST')->name('user-register');
-        $app->get('/user/verification', [$this, 'verification'])->name('user-verification');
-        $app->map('/user/resend-verification', [$this, 'resendVerification'])
+        $slim->get('/user/logout', [$this, 'logout'])->name('user-logout');
+        $slim->map('/user/login', [$this, 'login'])->via('GET', 'POST')->name('user-login');
+        $slim->map('/user/register', [$this, 'register'])->via('GET', 'POST')->name('user-register');
+        $slim->get('/user/verification', [$this, 'verification'])->name('user-verification');
+        $slim->map('/user/resend-verification', [$this, 'resendVerification'])
             ->via('GET', 'POST')->name('user-resend-verification');
-        $app->map('/user/username-reminder', [$this, 'remindUsername'])
+        $slim->map('/user/username-reminder', [$this, 'remindUsername'])
             ->via('GET', 'POST')->name('user-username-reminder');
-        $app->map('/user/password-reset', [$this, 'resetPassword'])
+        $slim->map('/user/password-reset', [$this, 'resetPassword'])
             ->via('GET', 'POST')->name('user-password-reset');
-        $app->map('/user/new-password', [$this, 'newPassword'])
+        $slim->map('/user/new-password', [$this, 'newPassword'])
             ->via('GET', 'POST')->name('user-new-password');
-        $app->get('/user/:username', [$this, 'profile'])->name('user-profile');
-        $app->get('/user/:username/talks', [$this, 'profileTalks'])->name('user-profile-talks');
-        $app->get('/user/:username/events', [$this, 'profileEvents'])->name('user-profile-events');
-        $app->get('/user/:username/hosted', [$this, 'profileHosted'])->name('user-profile-hosted');
-        $app->get('/user/:username/comments', [$this, 'profileComments'])->name('user-profile-comments');
-        $app->map('/user/:username/edit', [$this, 'profileEdit'])
+        $slim->get('/user/:username', [$this, 'profile'])->name('user-profile');
+        $slim->get('/user/:username/talks', [$this, 'profileTalks'])->name('user-profile-talks');
+        $slim->get('/user/:username/events', [$this, 'profileEvents'])->name('user-profile-events');
+        $slim->get('/user/:username/hosted', [$this, 'profileHosted'])->name('user-profile-hosted');
+        $slim->get('/user/:username/comments', [$this, 'profileComments'])->name('user-profile-comments');
+        $slim->map('/user/:username/edit', [$this, 'profileEdit'])
             ->via('GET', 'POST')->name('user-profile-edit');
-        $app->get('/user/:username/delete', [$this, 'userDelete'])->name('user-profile-delete');
-        $app->get('/user/view/:userId(/:extra+)', [$this, 'redirectFromId'])
+        $slim->get('/user/:username/delete', [$this, 'userDelete'])->name('user-profile-delete');
+        $slim->get('/user/view/:userId(/:extra+)', [$this, 'redirectFromId'])
             ->name('user-redirect-from-id')
             ->conditions(['userId' => '\d+']);
     }
@@ -278,25 +278,25 @@ class UserController extends BaseController
         }
 
         $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 5);
-        foreach ($talkComments as $comment) {
-            if (isset($talkInfo[$comment->getTalkUri()])) {
+        foreach ($talkComments as $talkComment) {
+            if (isset($talkInfo[$talkComment->getTalkUri()])) {
                 continue;
             }
-            $talkData = $talkDb->load('uri', $comment->getTalkUri());
+            $talkData = $talkDb->load('uri', $talkComment->getTalkUri());
             if ($talkData) {
                 $eventUri                                                     = $talkData['event_uri'];
-                $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
+                $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
             } else {
-                $talk = $talkApi->getTalk($comment->getTalkUri());
+                $talk = $talkApi->getTalk($talkComment->getTalkUri());
                 if ($talk) {
                     $eventUri                                                    = $talk->getEventUri();
-                    $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
+                    $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 }
             }
 
             // look up event's name & url_friendly_name from the DB orAPI
-            if (!isset($eventInfo[$comment->getTalkUri()])) {
-                $eventInfo[$comment->getTalkUri()] = $this->lookupEventInfo($eventUri);
+            if (!isset($eventInfo[$talkComment->getTalkUri()])) {
+                $eventInfo[$talkComment->getTalkUri()] = $this->lookupEventInfo($eventUri);
             }
         }
 
@@ -449,25 +449,25 @@ class UserController extends BaseController
 
         $talkInfo  = [];
         $eventInfo = [];
-        foreach ($talkComments as $comment) {
-            if (isset($talkInfo[$comment->getTalkUri()])) {
+        foreach ($talkComments as $talkComment) {
+            if (isset($talkInfo[$talkComment->getTalkUri()])) {
                 continue;
             }
-            $talkData = $talkDb->load('uri', $comment->getTalkUri());
+            $talkData = $talkDb->load('uri', $talkComment->getTalkUri());
             if ($talkData) {
                 $eventUri                                                     = $talkData['event_uri'];
-                $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
+                $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
             } else {
-                $talk = $talkApi->getTalk($comment->getTalkUri());
+                $talk = $talkApi->getTalk($talkComment->getTalkUri());
                 if ($talk) {
                     $eventUri                                                    = $talk->getEventUri();
-                    $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
+                    $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 }
             }
 
             // look up event's name & url_friendly_name from the DB orAPI
-            if (!isset($eventInfo[$comment->getTalkUri()])) {
-                $eventInfo[$comment->getTalkUri()] = $this->lookupEventInfo($eventUri);
+            if (!isset($eventInfo[$talkComment->getTalkUri()])) {
+                $eventInfo[$talkComment->getTalkUri()] = $this->lookupEventInfo($eventUri);
             }
         }
 

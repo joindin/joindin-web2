@@ -19,9 +19,9 @@ class GetResolvedUrlListener implements EventSubscriberInterface
         $this->urlResolver = $urlResolver ?? new UrlResolver();
     }
 
-    public function onSubmit(FormEvent $event): void
+    public function onSubmit(FormEvent $formEvent): void
     {
-        $data = $event->getData();
+        $data = $formEvent->getData();
 
         if ($data === '') {
             return;
@@ -33,7 +33,7 @@ class GetResolvedUrlListener implements EventSubscriberInterface
 
         try {
             $redirectURL = $this->urlResolver->resolve($data);
-            $event->setData($redirectURL);
+            $formEvent->setData($redirectURL);
         } catch (\Exception $e) {
             // We can do nothing with this now, this will be caught by the constraint
         }

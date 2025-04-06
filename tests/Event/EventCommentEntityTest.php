@@ -25,42 +25,42 @@ class EventCommentEntityTest extends TestCase
 
     public function testBasicCommentsData(): void
     {
-        $comment = new EventCommentEntity($this->commentData);
+        $eventCommentEntity = new EventCommentEntity($this->commentData);
 
         $this->assertEquals(
-            $comment->getUserDisplayName(),
+            $eventCommentEntity->getUserDisplayName(),
             "Test comment display name"
         );
 
         $this->assertEquals(
-            $comment->getCommentDate(),
+            $eventCommentEntity->getCommentDate(),
             "2014-03-02T08:43:44+01:00"
         );
 
         $this->assertEquals(
-            $comment->getComment(),
+            $eventCommentEntity->getComment(),
             "Test event comment text"
         );
 
         $this->assertEquals(
-            $comment->getCommentSource(),
+            $eventCommentEntity->getCommentSource(),
             "Test comment source"
         );
 
         $this->assertEquals(
-            $comment->getCommentHash(),
+            $eventCommentEntity->getCommentHash(),
             "80c0c6"
         );
     }
 
     public function testNonExistentTestDataDoesntBreak(): void
     {
-        $comment = new EventCommentEntity(new stdClass());
+        $eventCommentEntity = new EventCommentEntity(new stdClass());
 
-        $this->assertNull($comment->getUserDisplayName());
-        $this->assertNull($comment->getCommentDate());
-        $this->assertNull($comment->getComment());
-        $this->assertNull($comment->getCommentSource());
-        $this->assertNull($comment->getCommentHash());
+        $this->assertNull($eventCommentEntity->getUserDisplayName());
+        $this->assertNull($eventCommentEntity->getCommentDate());
+        $this->assertNull($eventCommentEntity->getComment());
+        $this->assertNull($eventCommentEntity->getCommentSource());
+        $this->assertNull($eventCommentEntity->getCommentHash());
     }
 }

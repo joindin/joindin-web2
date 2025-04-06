@@ -110,16 +110,16 @@ class TalkApi extends BaseApi
         if (!isset($collection['talks'])) {
             return false;
         }
-        $talk = new TalkEntity($collection['talks'][0]);
-        $this->talkDb->save($talk);
+        $talkEntity = new TalkEntity($collection['talks'][0]);
+        $this->talkDb->save($talkEntity);
 
-        foreach ($talk->getSpeakers() as $speakerInfo) {
+        foreach ($talkEntity->getSpeakers() as $speakerInfo) {
             if (isset($speakerInfo->speaker_uri)) {
                 $speakerInfo->username = $this->userApi->getUsername($speakerInfo->speaker_uri);
             }
         }
 
-        return $talk;
+        return $talkEntity;
     }
 
     /**

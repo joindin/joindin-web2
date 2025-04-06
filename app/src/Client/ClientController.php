@@ -10,15 +10,15 @@ use Symfony\Component\Form\FormFactoryInterface;
 
 class ClientController extends BaseController
 {
-    protected function defineRoutes(Slim $app)
+    protected function defineRoutes(Slim $slim)
     {
-        $app->get('/user/:username/client', [$this, 'index'])->name('clients');
-        $app->map('/user/:username/client/create', [$this, 'createClient'])->via('GET', 'POST')
+        $slim->get('/user/:username/client', [$this, 'index'])->name('clients');
+        $slim->map('/user/:username/client/create', [$this, 'createClient'])->via('GET', 'POST')
                                                                            ->name('client-create');
-        $app->get('/user/:username/client/:clientName', [$this, 'showClient'])->name('client-show');
-        $app->map('/user/:username/client/:clientName/edit', [$this, 'editClient'])->via('GET', 'POST')
+        $slim->get('/user/:username/client/:clientName', [$this, 'showClient'])->name('client-show');
+        $slim->map('/user/:username/client/:clientName/edit', [$this, 'editClient'])->via('GET', 'POST')
                                                                                    ->name('client-edit');
-        $app->get('/user/:username/client/:clientName/delete', [$this, 'deleteClient'])->via('GET', 'POST')
+        $slim->get('/user/:username/client/:clientName/delete', [$this, 'deleteClient'])->via('GET', 'POST')
                                                                                        ->name('client-delete');
     }
 

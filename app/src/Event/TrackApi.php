@@ -27,7 +27,7 @@ class TrackApi extends BaseApi
      *
      * @return array
      */
-    public function getTracksChoiceList($url): array
+    public function getTracksChoiceList(string $url): array
     {
         $tracks = [];
 

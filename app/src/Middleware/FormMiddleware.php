@@ -75,10 +75,10 @@ class FormMiddleware extends Middleware
             $this->initializeTranslator();
         }
 
-        $env = $this->getTwigEnvironment();
-        $this->addFormTemplatesFolderToLoader($this->getChainingLoader($env));
-        $env->addExtension(new TranslationExtension($this->app->translator));
-        $env->addExtension($this->createFormTwigExtension(self::DEFAULT_LAYOUT));
+        $twigEnvironment = $this->getTwigEnvironment();
+        $this->addFormTemplatesFolderToLoader($this->getChainingLoader($twigEnvironment));
+        $twigEnvironment->addExtension(new TranslationExtension($this->app->translator));
+        $twigEnvironment->addExtension($this->createFormTwigExtension(self::DEFAULT_LAYOUT));
 
         $formMiddleWare = $this;
         $csrfSecret     = $formMiddleWare->csrfSecret;
@@ -104,15 +104,15 @@ class FormMiddleware extends Middleware
      */
     public function createFormFactory($csrfSecret)
     {
-        $builder = Forms::createFormFactoryBuilder()
+        $formFactoryBuilder = Forms::createFormFactoryBuilder()
             ->addExtension(new CsrfExtension(new DefaultCsrfProvider($csrfSecret)))
             ->setResolvedTypeFactory(new ResolvedFormTypeFactory());
 
         if ($this->app->validator) {
-            $this->addValidatorExtensionToFactoryBuilder($builder);
+            $this->addValidatorExtensionToFactoryBuilder($formFactoryBuilder);
         }
 
-        return $builder->getFormFactory();
+        return $formFactoryBuilder->getFormFactory();
     }
 
     /**
@@ -140,15 +140,15 @@ class FormMiddleware extends Middleware
     /**
      * Adds a loader to Twig pointing to the location of the default templates for forms.
      *
-     * @param \Twig_Loader_Chain $loader
+     * @param \Twig_Loader_Chain $twigLoaderChain
      *
      * @return void
      */
-    private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader): void
+    private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $twigLoaderChain): void
     {
-        $reflected = new \ReflectionClass(\Symfony\Bridge\Twig\Extension\FormExtension::class);
-        $path      = dirname($reflected->getFileName()) . '/../Resources/views/Form';
-        $loader->addLoader(new \Twig_Loader_Filesystem($path));
+        $reflectionClass = new \ReflectionClass(\Symfony\Bridge\Twig\Extension\FormExtension::class);
+        $path      = dirname($reflectionClass->getFileName()) . '/../Resources/views/Form';
+        $twigLoaderChain->addLoader(new \Twig_Loader_Filesystem($path));
     }
 
     /**
@@ -188,19 +188,19 @@ class FormMiddleware extends Middleware
     /**
      * Adds validation capabilities to the form, including translations for the messages.
      *
-     * @param FormFactoryBuilder $builder
+     * @param FormFactoryBuilder $formFactoryBuilder
      *
      * @return void
      */
-    protected function addValidatorExtensionToFactoryBuilder(FormFactoryBuilder $builder)
+    protected function addValidatorExtensionToFactoryBuilder(FormFactoryBuilder $formFactoryBuilder)
     {
-        $builder->addExtension(new ValidatorExtension($this->app->validator));
+        $formFactoryBuilder->addExtension(new ValidatorExtension($this->app->validator));
 
         if (!empty($this->app->translator)) {
-            $r = new \ReflectionClass(\Symfony\Component\Form\Form::class);
+            $reflectionClass = new \ReflectionClass(\Symfony\Component\Form\Form::class);
             $this->app->translator->addResource(
                 'xliff',
-                dirname($r->getFilename()) . '/Resources/translations/validators.' . $this->locale . '.xlf',
+                dirname($reflectionClass->getFilename()) . '/Resources/translations/validators.' . $this->locale . '.xlf',
                 $this->locale,
                 'validators'
             );

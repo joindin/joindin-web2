@@ -8,14 +8,14 @@ use Slim\Slim;
 
 final class FunctionsExtension extends Twig_Extension
 {
-    private \Slim\Slim $app;
+    private \Slim\Slim $slim;
 
     /**
-     * @param Slim $app
+     * @param Slim $slim
      */
-    public function __construct(Slim $app)
+    public function __construct(Slim $slim)
     {
-        $this->app = $app;
+        $this->slim = $slim;
     }
 
     /**
@@ -23,7 +23,7 @@ final class FunctionsExtension extends Twig_Extension
      */
     public function getFunctions()
     {
-        $app = $this->app;
+        $app = $this->slim;
 
         return [
             new Twig_SimpleFunction('urlFor', function ($routeName, $params = []) use ($app): string {
@@ -79,9 +79,9 @@ final class FunctionsExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'dateRange',
                 function ($start, $end, $format = 'd.m.Y', $separator = ' - ') {
-                    $formatter = new \Org_Heigl\DateRange\DateRangeFormatter();
-                    $formatter->setFormat($format);
-                    $formatter->setSeparator($separator);
+                    $dateRangeFormatter = new \Org_Heigl\DateRange\DateRangeFormatter();
+                    $dateRangeFormatter->setFormat($format);
+                    $dateRangeFormatter->setSeparator($separator);
                     if (!$start instanceof \DateTimeInterface) {
                         $start = new \DateTime($start);
                     }
@@ -89,7 +89,7 @@ final class FunctionsExtension extends Twig_Extension
                         $end = new \DateTime($end);
                     }
 
-                    return $formatter->getDateRange($start, $end);
+                    return $dateRangeFormatter->getDateRange($start, $end);
                 }
             ),
 

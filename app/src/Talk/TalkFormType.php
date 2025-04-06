@@ -33,12 +33,12 @@ class TalkFormType extends AbstractType
      */
     protected array $tracks;
 
-    public function __construct(EventEntity $event, array $languages, array $talkTypes, array $tracks)
+    public function __construct(EventEntity $eventEntity, array $languages, array $talkTypes, array $tracks)
     {
-        $this->timezone  = $event->getFullTimezone();
-        $tz              = new \DateTimeZone($this->timezone);
-        $this->startDate = new \DateTimeImmutable($event->getStartDate(), $tz);
-        $this->endDate   = new \DateTimeImmutable($event->getEndDate(), $tz);
+        $this->timezone  = $eventEntity->getFullTimezone();
+        $dateTimeZone              = new \DateTimeZone($this->timezone);
+        $this->startDate = new \DateTimeImmutable($eventEntity->getStartDate(), $dateTimeZone);
+        $this->endDate   = new \DateTimeImmutable($eventEntity->getEndDate(), $dateTimeZone);
 
         $this->languages = $languages;
         $this->talkTypes = $talkTypes;
@@ -59,14 +59,14 @@ class TalkFormType extends AbstractType
     /**
      * Adds fields with their types and validation constraints to this definition.
      *
-     * @param FormBuilderInterface $builder
+     * @param FormBuilderInterface $formBuilder
      * @param array                $options
      *
      * @return void
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'talk_title',
                 'text',

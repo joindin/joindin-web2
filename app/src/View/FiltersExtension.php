@@ -28,14 +28,14 @@ final class FiltersExtension extends \Twig_Extension
     }
 
     /**
-     * @param Twig_Environment $env
+     * @param Twig_Environment $twigEnvironment
      * @param string           $suffix
      * @param string           $infix
      *
      * @return string
      * @throws \Twig_Error_Runtime
      */
-    public function imgPath(Twig_Environment $env, $suffix, string $infix): string
+    public function imgPath(Twig_Environment $twigEnvironment, $suffix, string $infix): string
     {
         if (!$suffix && $infix === 'event_icons') {
             $suffix = 'none.png';
@@ -45,7 +45,7 @@ final class FiltersExtension extends \Twig_Extension
 
         // Allow for migration to local images
         if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
-            $uri = $env->getExtension('slim')->base();
+            $uri = $twigEnvironment->getExtension('slim')->base();
 
             return $uri . $path;
         }

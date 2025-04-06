@@ -16,25 +16,25 @@ use Symfony\Component\Form\FormError;
 
 class TalkController extends BaseController
 {
-    protected function defineRoutes(Slim $app)
+    protected function defineRoutes(Slim $slim)
     {
-        $app->get('/event/:eventSlug/:talkSlug', [$this, 'index'])->name('talk');
-        $app->map('/event/:eventSlug/:talkSlug/edit', [$this, 'editTalk'])->via('GET', 'POST')->name('talk-edit');
-        $app->post('/event/:eventSlug/:talkSlug/star', [$this, 'star'])->name('talk-star');
-        $app->get('/talk/:talkStub', [$this, 'quick'])->name('talk-quicklink');
-        $app->get('/event/:eventSlug/:talkSlug/comments/:commentHash/report', [$this, 'reportComment'])
+        $slim->get('/event/:eventSlug/:talkSlug', [$this, 'index'])->name('talk');
+        $slim->map('/event/:eventSlug/:talkSlug/edit', [$this, 'editTalk'])->via('GET', 'POST')->name('talk-edit');
+        $slim->post('/event/:eventSlug/:talkSlug/star', [$this, 'star'])->name('talk-star');
+        $slim->get('/talk/:talkStub', [$this, 'quick'])->name('talk-quicklink');
+        $slim->get('/event/:eventSlug/:talkSlug/comments/:commentHash/report', [$this, 'reportComment'])
             ->name('talk-report-comment');
-        $app->post('/event/:eventSlug/:talkSlug/add-comment', [$this, 'addComment'])->name('talk-add-comment');
-        $app->get('/:talkId', [$this, 'quickById'])
+        $slim->post('/event/:eventSlug/:talkSlug/add-comment', [$this, 'addComment'])->name('talk-add-comment');
+        $slim->get('/:talkId', [$this, 'quickById'])
             ->name('talk-quick-by-id')
             ->conditions(['talkId' => '\d+']);
-        $app->get('/talk/view/:talkId', [$this, 'quickById'])
+        $slim->get('/talk/view/:talkId', [$this, 'quickById'])
             ->name('talk-by-id-web1')
             ->conditions(['talkId' => '\d+']);
-        $app->post('/event/:eventSlug/:talkSlug/claim', [$this, 'claimTalk'])->name('talk-claim');
-        $app->get('/event/:eventSlug/:talkSlug/unlink/:username', [$this, 'unlinkSpeaker'])
+        $slim->post('/event/:eventSlug/:talkSlug/claim', [$this, 'claimTalk'])->name('talk-claim');
+        $slim->get('/event/:eventSlug/:talkSlug/unlink/:username', [$this, 'unlinkSpeaker'])
             ->name('unlink-speaker');
-        $app->map('/event/:eventSlug/:talkSlug/delete', [$this, 'deleteTalk'])->via('GET', 'POST')->name('talk-delete');
+        $slim->map('/event/:eventSlug/:talkSlug/delete', [$this, 'deleteTalk'])->via('GET', 'POST')->name('talk-delete');
     }
 
     public function index($eventSlug, $talkSlug)
@@ -152,10 +152,10 @@ class TalkController extends BaseController
             }
         }
 
-        foreach ($talkMedia as $media) {
-            $data['talk_media'][$media->id] = [
-                'type' => $media->display_name,
-                'url'  => $media->url
+        foreach ($talkMedia as $talkMedium) {
+            $data['talk_media'][$talkMedium->id] = [
+                'type' => $talkMedium->display_name,
+                'url'  => $talkMedium->url
             ];
         }
 
@@ -181,8 +181,8 @@ class TalkController extends BaseController
 
                     if (!empty($values['track']) && isset($tracks[$values['track']])) {
                         $talkTracks = [];
-                        foreach ($talk->getTracks() as $t) {
-                            $talkTracks[$t->track_uri] = $t->remove_track_uri;
+                        foreach ($talk->getTracks() as $track) {
+                            $talkTracks[$track->track_uri] = $track->remove_track_uri;
                         }
 
                         if (isset($talkTracks[$values['track']])) {
@@ -195,14 +195,14 @@ class TalkController extends BaseController
 
                         // remove all other tracks attached to this talk as we only handle one
                         // track per talk at the moment
-                        foreach ($talkTracks as $remove_track_uri) {
-                            $talkApi->removeTalkFromTrack($remove_track_uri);
+                        foreach ($talkTracks as $talkTrack) {
+                            $talkApi->removeTalkFromTrack($talkTrack);
                         }
                     }
 
                     if (empty($values['track'])) {
-                        foreach ($talk->getTracks() as $t) {
-                            $talkApi->removeTalkFromTrack($t->remove_track_uri);
+                        foreach ($talk->getTracks() as $track) {
+                            $talkApi->removeTalkFromTrack($track->remove_track_uri);
                         }
                     }
 

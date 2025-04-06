@@ -103,16 +103,16 @@ class EventApi extends BaseApi
 
         $event_list = (array)json_decode($this->apiGet($event_uri, $params));
         if (isset($event_list['events']) && isset($event_list['events'][0])) {
-            $event = new EventEntity($event_list['events'][0]);
-            $this->eventDb->save($event);
+            $eventEntity = new EventEntity($event_list['events'][0]);
+            $this->eventDb->save($eventEntity);
 
-            foreach ($event->getHosts() as $hostsInfo) {
+            foreach ($eventEntity->getHosts() as $hostsInfo) {
                 if (isset($hostsInfo->host_uri)) {
                     $hostsInfo->username = $this->userApi->getUsername($hostsInfo->host_uri);
                     $hostsInfo->entity   = $this->userApi->getUser($hostsInfo->host_uri);
                 }
             }
-            return $event;
+            return $eventEntity;
         }
 
         return false;
@@ -183,9 +183,9 @@ class EventApi extends BaseApi
         throw new Exception("Failed to report comment: " . $result);
     }
 
-    public function attend(EventEntity $event): bool
+    public function attend(EventEntity $eventEntity): bool
     {
-        [$status, $result] = $this->apiPost($event->getApiUriToMarkAsAttending());
+        [$status, $result] = $this->apiPost($eventEntity->getApiUriToMarkAsAttending());
 
         if ($status == 201) {
             return true;
@@ -194,9 +194,9 @@ class EventApi extends BaseApi
         throw new Exception("Failed to mark you as attending: " . $result);
     }
 
-    public function unattend(EventEntity $event): bool
+    public function unattend(EventEntity $eventEntity): bool
     {
-        [$status, $result] = $this->apiDelete($event->getApiUriToMarkAsAttending());
+        [$status, $result] = $this->apiDelete($eventEntity->getApiUriToMarkAsAttending());
 
         if ($status == 200) {
             return true;

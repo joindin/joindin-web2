@@ -15,10 +15,10 @@ class ApikeyController extends BaseController
      */
     private int $resultsPerPage = 10;
 
-    protected function defineRoutes(Slim $app)
+    protected function defineRoutes(Slim $slim)
     {
-        $app->get('/user/:username/apikey', [$this, 'index'])->name('apikey-show');
-        $app->get('/user/:username/apikey/:apikey/delete', [$this, 'deleteApiKey'])->via('GET', 'POST')
+        $slim->get('/user/:username/apikey', [$this, 'index'])->name('apikey-show');
+        $slim->get('/user/:username/apikey/:apikey/delete', [$this, 'deleteApiKey'])->via('GET', 'POST')
                                                                                    ->name('apikey-delete');
     }
 
@@ -65,8 +65,8 @@ class ApikeyController extends BaseController
         // save page position in case user returns
         $_SESSION['api_key_page'] = $page;
 
-        $tokenApi = $this->getApikeyApi();
-        $tokens   = $tokenApi->getCollection($queryParams);
+        $apikeyApi = $this->getApikeyApi();
+        $tokens   = $apikeyApi->getCollection($queryParams);
 
         // reset session state if oauth_access_tokens are removed while user is logged in (found during testing)
         if (!isset($tokens['tokens'])) {

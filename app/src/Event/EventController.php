@@ -23,58 +23,58 @@ class EventController extends BaseController
     private $itemsPerPage = 10;
     private int $pendingItemsPerPage = 30;
 
-    public function __construct(Slim $app)
+    public function __construct(Slim $slim)
     {
-        parent::__construct($app);
+        parent::__construct($slim);
     }
 
-    protected function defineRoutes(Slim $app)
+    protected function defineRoutes(Slim $slim)
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
-        $app->get('/event', [$this, 'index'])->name("events-index");
-        $app->get('/event/pending', [$this, 'pending'])->name("events-pending");
-        $app->map('/event/submit', [$this, 'submit'])->via('GET', 'POST')->name('event-submit');
-        $app->map('/event/:friendly_name/import', [$this, 'eventImportCsv'])->via('GET', 'POST')
+        $slim->get('/event', [$this, 'index'])->name("events-index");
+        $slim->get('/event/pending', [$this, 'pending'])->name("events-pending");
+        $slim->map('/event/submit', [$this, 'submit'])->via('GET', 'POST')->name('event-submit');
+        $slim->map('/event/:friendly_name/import', [$this, 'eventImportCsv'])->via('GET', 'POST')
                                                                             ->name("event-import-csv");
-        $app->get('/event/callforpapers', [$this, 'callForPapers'])->name('event-call-for-papers');
-        $app->get('/event/:friendly_name', [$this, 'eventDefault'])->name("event-default");
-        $app->get('/event/:friendly_name/details', [$this, 'details'])->name("event-detail");
-        $app->get('/event/:friendly_name/attendees', [$this, 'attendees'])->name("event-attendees");
-        $app->get('/event/:friendly_name/slides', [$this, 'slides'])->name("event-slides");
-        $app->get('/event/:friendly_name/comments', [$this, 'comments'])->name("event-comments");
-        $app->get('/event/:friendly_name/comments/:comment_hash/report', [$this, 'reportComment'])
+        $slim->get('/event/callforpapers', [$this, 'callForPapers'])->name('event-call-for-papers');
+        $slim->get('/event/:friendly_name', [$this, 'eventDefault'])->name("event-default");
+        $slim->get('/event/:friendly_name/details', [$this, 'details'])->name("event-detail");
+        $slim->get('/event/:friendly_name/attendees', [$this, 'attendees'])->name("event-attendees");
+        $slim->get('/event/:friendly_name/slides', [$this, 'slides'])->name("event-slides");
+        $slim->get('/event/:friendly_name/comments', [$this, 'comments'])->name("event-comments");
+        $slim->get('/event/:friendly_name/comments/:comment_hash/report', [$this, 'reportComment'])
             ->name("event-comments-reported");
-        $app->get('/event/:friendly_name/schedule', [$this, 'schedule'])->name("event-schedule");
-        $app->get('/event/:friendly_name/schedule/list(/:starred)', [$this, 'scheduleList'])
+        $slim->get('/event/:friendly_name/schedule', [$this, 'schedule'])->name("event-schedule");
+        $slim->get('/event/:friendly_name/schedule/list(/:starred)', [$this, 'scheduleList'])
             ->name("event-schedule-list");
-        $app->get('/event/:friendly_name/schedule/grid(/:starred)', [$this, 'scheduleGrid'])
+        $slim->get('/event/:friendly_name/schedule/grid(/:starred)', [$this, 'scheduleGrid'])
             ->name("event-schedule-grid");
-        $app->get('/event/:friendly_name/talk-comments', [$this, 'talkComments'])->name("event-talk-comments");
-        $app->post('/event/:friendly_name/add-comment', [$this, 'addComment'])->name('event-add-comment');
-        $app->map('/event/:friendly_name/edit', [$this, 'edit'])->via('GET', 'POST')->name('event-edit');
-        $app->get('/e/:stub', [$this, 'quicklink'])->name("event-quicklink");
-        $app->get('/event/xhr-attend/:friendly_name', [$this, 'xhrAttend']);
-        $app->get('/event/xhr-unattend/:friendly_name', [$this, 'xhrUnattend']);
-        $app->get('/event/attend/:friendly_name', [$this, 'attend'])->name("event-attend");
-        $app->get('/event/unattend/:friendly_name', [$this, 'unattend'])->name("event-unattend");
-        $app->post('/event/action-pending-event/:friendly_name', [$this, 'actionPendingEvent'])
+        $slim->get('/event/:friendly_name/talk-comments', [$this, 'talkComments'])->name("event-talk-comments");
+        $slim->post('/event/:friendly_name/add-comment', [$this, 'addComment'])->name('event-add-comment');
+        $slim->map('/event/:friendly_name/edit', [$this, 'edit'])->via('GET', 'POST')->name('event-edit');
+        $slim->get('/e/:stub', [$this, 'quicklink'])->name("event-quicklink");
+        $slim->get('/event/xhr-attend/:friendly_name', [$this, 'xhrAttend']);
+        $slim->get('/event/xhr-unattend/:friendly_name', [$this, 'xhrUnattend']);
+        $slim->get('/event/attend/:friendly_name', [$this, 'attend'])->name("event-attend");
+        $slim->get('/event/unattend/:friendly_name', [$this, 'unattend'])->name("event-unattend");
+        $slim->post('/event/action-pending-event/:friendly_name', [$this, 'actionPendingEvent'])
             ->name("event-action-pending");
-        $app->get('/event/view/:eventId(/:extra+)', [$this, 'redirectFromId'])
+        $slim->get('/event/view/:eventId(/:extra+)', [$this, 'redirectFromId'])
             ->name('event-redirect-from-id')
             ->conditions(['eventId' => '\d+']);
-        $app->get('/event/:friendly_name/reported-comments', [$this, 'reportedComments'])
+        $slim->get('/event/:friendly_name/reported-comments', [$this, 'reportedComments'])
             ->name("event-reported-comments");
-        $app->post('/event/:friendly_name/moderate-comment', [$this, 'moderateComment'])
+        $slim->post('/event/:friendly_name/moderate-comment', [$this, 'moderateComment'])
             ->name("event-moderate-comment");
-        $app->map('/event/:friendly_name/add-talk', [$this, 'addTalk'])->via('GET', 'POST')
+        $slim->map('/event/:friendly_name/add-talk', [$this, 'addTalk'])->via('GET', 'POST')
             ->name("event-add-talk");
-        $app->map('/event/:friendly_name/edit-tracks', [$this, 'editTracks'])->via('GET', 'POST')
+        $slim->map('/event/:friendly_name/edit-tracks', [$this, 'editTracks'])->via('GET', 'POST')
             ->name("event-edit-tracks");
-        $app->map('/event/:friendly_name/claims', [$this, 'talkClaims'])->via('GET', 'POST')
+        $slim->map('/event/:friendly_name/claims', [$this, 'talkClaims'])->via('GET', 'POST')
             ->name("event-talk-claims");
-        $app->map('/event/:friendly_name/host/:host_name/remove', [$this, 'removeHost'])->via('GET', 'POST')
+        $slim->map('/event/:friendly_name/host/:host_name/remove', [$this, 'removeHost'])->via('GET', 'POST')
             ->name('event-host-remove');
-        $app->map('/event/:friendly_name/host', [$this, 'addHost'])->via('GET', 'POST')
+        $slim->map('/event/:friendly_name/host', [$this, 'addHost'])->via('GET', 'POST')
             ->name('event-hosts');
     }
 
@@ -385,9 +385,9 @@ class EventController extends BaseController
         setcookie('schedule-view', 'grid', ['expires' => strtotime('+2 years'), 'path' => '/']);
 
         $talkApi   = $this->getTalkApi();
-        $scheduler = new EventScheduler($talkApi);
+        $eventScheduler = new EventScheduler($talkApi);
 
-        $schedule = $scheduler->getScheduleData($event);
+        $schedule = $eventScheduler->getScheduleData($event);
 
         $request                  = $this->application->request();
         $starredOnly              = ($starred === 'starred');
@@ -777,12 +777,12 @@ class EventController extends BaseController
      *
      * @return EventEntity|null|false
      */
-    private function editEventHostUsingForm(EventEntity $event, $hostUsername)
+    private function editEventHostUsingForm(EventEntity $eventEntity, $hostUsername)
     {
         $eventApi = $this->getEventApi();
 
         $values   = [
-            'hosts_uri' => $event->getHostsUri(),
+            'hosts_uri' => $eventEntity->getHostsUri(),
             'host'      => $hostUsername,
         ];
 
@@ -791,8 +791,8 @@ class EventController extends BaseController
 
     protected function getEventApi(): \Event\EventApi
     {
-        $cache    = $this->getCache();
-        $eventDb  = new EventDb($cache);
+        $cacheService    = $this->getCache();
+        $eventDb  = new EventDb($cacheService);
         $eventApi = new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
 
         return $eventApi;
@@ -851,8 +851,8 @@ class EventController extends BaseController
     {
         $this->application->response()->header('Content-Type', 'application/json');
 
-        $api   = $this->getEventApi();
-        $event = $api->getByFriendlyUrl($friendly_name);
+        $eventApi   = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         $result = null;
         if ($event) {
@@ -866,8 +866,8 @@ class EventController extends BaseController
     {
         $this->application->response()->header('Content-Type', 'application/json');
 
-        $api   = $this->getEventApi();
-        $event = $api->getByFriendlyUrl($friendly_name);
+        $eventApi   = $this->getEventApi();
+        $event = $eventApi->getByFriendlyUrl($friendly_name);
 
         $result = null;
         if ($event) {
@@ -1185,8 +1185,8 @@ class EventController extends BaseController
                 $values = $form->getdata();
 
                 // store some values to session for next form
-                foreach ($sessionKeys as $key) {
-                    $_SESSION['add_talk_' . $key] = $values[$key];
+                foreach ($sessionKeys as $sessionKey) {
+                    $_SESSION['add_talk_' . $sessionKey] = $values[$sessionKey];
                 }
 
                 try {
@@ -1377,13 +1377,13 @@ class EventController extends BaseController
      *
      * @return array
      */
-    private function getTalkSlugsForTalkComments(array $comments, EventEntity $event): array
+    private function getTalkSlugsForTalkComments(array $comments, EventEntity $eventEntity): array
     {
         $slugs = $this->getTalkSlugsFromDb($comments);
 
         // If we didn't get all slugs from cache, need to fetch from API
         if (in_array(null, $slugs)) {
-            $slugs = $this->getTalkSlugsFromApi($event);
+            $slugs = $this->getTalkSlugsFromApi($eventEntity);
         }
 
         return $slugs;
@@ -1408,16 +1408,16 @@ class EventController extends BaseController
     }
 
     /**
-     * @param EventEntity $event
+     * @param EventEntity $eventEntity
      * @return mixed[]
      */
-    private function getTalkSlugsFromApi(EventEntity $event): array
+    private function getTalkSlugsFromApi(EventEntity $eventEntity): array
     {
         $talkApi = $this->getTalkApi();
 
         // Fetch talks from the API
         $talks = $talkApi->getCollection(
-            $event->getTalksUri(),
+            $eventEntity->getTalksUri(),
             ['resultsperpage' => 100] // Make sure we get all talks with a single request
         );
 

@@ -192,13 +192,13 @@ abstract class BaseApi
     private function extractListOfHeaders(array $rawHeaders): array
     {
         $headers = [];
-        foreach ($rawHeaders as $header) {
-            $header = explode(':', $header, 2);
-            if (count($header) < 2) {
+        foreach ($rawHeaders as $rawHeader) {
+            $rawHeader = explode(':', $rawHeader, 2);
+            if (count($rawHeader) < 2) {
                 continue;
             }
 
-            $headers[strtolower($header[0])] = trim($header[1]);
+            $headers[strtolower($rawHeader[0])] = trim($rawHeader[1]);
         }
 
         return $headers;

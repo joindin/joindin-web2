@@ -127,8 +127,8 @@ class ValidationMiddleware extends Middleware
      */
     private function getTranslationsRootFolder(): string
     {
-        $r = new \ReflectionClass(\Symfony\Component\Validator\Validator::class);
+        $reflectionClass = new \ReflectionClass(\Symfony\Component\Validator\Validator::class);
 
-        return dirname($r->getFilename());
+        return dirname($reflectionClass->getFilename());
     }
 }

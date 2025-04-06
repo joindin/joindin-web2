@@ -50,12 +50,12 @@ class EventFormType extends AbstractType
      * This method is automatically called by the Form Factory builder and does not need
      * to be called manually, see the class description for usage information.
      *
-     * @param FormBuilderInterface $builder
+     * @param FormBuilderInterface $formBuilder
      * @param array                $options
      *
      * @return void
      */
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         [$continents, $cities] = $this->getListOfTimezoneContinentsAndCities();
 
@@ -65,7 +65,7 @@ class EventFormType extends AbstractType
         }
 
         $dateTransformer = new DateTransformer($timezone);
-        $builder
+        $formBuilder
             ->add('addr', 'hidden', ['mapped' => false])
             ->add(
                 'name',
@@ -85,7 +85,7 @@ class EventFormType extends AbstractType
                 ]
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'tags',
                     'text',
                     [
@@ -113,42 +113,42 @@ class EventFormType extends AbstractType
                 ]
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'start_date',
                     'text',
                     $this->getOptionsForDateWidget('Start date')
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'end_date',
                     'text',
                     $this->getOptionsForDateWidget('End date')
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'href',
                     'url',
                     $this->getOptionsForUrlWidget('Website URL', true)
                 )->addEventSubscriber(new GetResolvedUrlListener())
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'cfp_start_date',
                     'text',
                     $this->getOptionsForDateWidget('Opening date', false)
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'cfp_end_date',
                     'text',
                     $this->getOptionsForDateWidget('Closing date', false)
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'cfp_url',
                     'url',
                     $this->getOptionsForUrlWidget('Call for papers URL', false)

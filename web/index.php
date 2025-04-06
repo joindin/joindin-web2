@@ -83,9 +83,9 @@ $app->configureMode('development', function () use ($app): void {
 });
 
 // register error handlers
-$app->error(function (\Exception $e) use ($app): void {
-    error_log(get_class($e) . ': ' . $e->getMessage() . " -- " . $e->getTraceAsString());
-    $app->render('Error/error.html.twig', ['exception' => $e]);
+$app->error(function (\Exception $exception) use ($app): void {
+    error_log(get_class($exception) . ': ' . $exception->getMessage() . " -- " . $exception->getTraceAsString());
+    $app->render('Error/error.html.twig', ['exception' => $exception]);
 });
 
 $app->notFound(function () use ($app): void {
