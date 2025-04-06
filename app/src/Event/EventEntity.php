@@ -478,7 +478,7 @@ class EventEntity extends BaseEntity
         return $this->data->ID;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return (array) $this->data;
     }

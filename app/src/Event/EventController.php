@@ -494,7 +494,7 @@ class EventController extends BaseController
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
-            $eventApi->attend($event, $_SESSION['user']);
+            $eventApi->attend($event);
         }
 
         $friendlyUrl = $this->application->request()->get('r');
@@ -511,7 +511,7 @@ class EventController extends BaseController
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if ($event) {
-            $eventApi->unattend($event, $_SESSION['user']);
+            $eventApi->unattend($event);
         }
 
         $friendlyUrl = $this->application->request()->get('r');
@@ -656,7 +656,7 @@ class EventController extends BaseController
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getEventById($eventId);
-        if (!$event) {
+        if (!$event instanceof \Event\EventEntity) {
             return Slim::getInstance()->notFound();
         }
 
@@ -856,7 +856,7 @@ class EventController extends BaseController
 
         $result = null;
         if ($event) {
-            $result = $this->getEventApi()->attend($event, $_SESSION['user']);
+            $result = $this->getEventApi()->attend($event);
         }
 
         $this->application->response()->body(json_encode(['success' => $result]));
@@ -871,7 +871,7 @@ class EventController extends BaseController
 
         $result = null;
         if ($event) {
-            $result = $this->getEventApi()->unattend($event, $_SESSION['user']);
+            $result = $this->getEventApi()->unattend($event);
         }
 
         $this->application->response()->body(json_encode(['success' => $result]));
