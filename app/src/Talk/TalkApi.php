@@ -35,7 +35,7 @@ class TalkApi extends BaseApi
      *
      * @return array
      */
-    public function getCollection($talks_uri, array $queryParams = [])
+    public function getCollection($talks_uri, array $queryParams = []): array
     {
         if (empty($talks_uri)) {
             $talks_uri = $this->baseApiUrl . '/v2.1/talks';
@@ -135,7 +135,7 @@ class TalkApi extends BaseApi
      * @param bool $verbose
      * @return TalkCommentEntity[]
      */
-    public function getComments($comment_uri, $verbose = false, $limitTo = null)
+    public function getComments($comment_uri, $verbose = false, $limitTo = null): array
     {
         $params = [];
         if ($verbose) {
@@ -164,7 +164,7 @@ class TalkApi extends BaseApi
      * @param int $rating
      * @param string $comment
      */
-    public function addComment($talk, $rating, $comment)
+    public function addComment($talk, $rating, $comment): bool
     {
         $uri    = $talk->getCommentsUri();
         $params = [
@@ -179,7 +179,7 @@ class TalkApi extends BaseApi
         throw new Exception("Failed to add comment: " . $result);
     }
 
-    public function reportComment($uri)
+    public function reportComment($uri): bool
     {
         [$status, $result] = $this->apiPost($uri);
 
@@ -217,7 +217,7 @@ class TalkApi extends BaseApi
      * @param  string $talksUri
      * @return array
      */
-    public function getAgenda($talksUri)
+    public function getAgenda($talksUri): array
     {
         $talks = $this->getCollection($talksUri . '?start=0&resultsperpage=1000&verbose=yes');
         if (!array_key_exists('talks', $talks)) {
@@ -330,7 +330,7 @@ class TalkApi extends BaseApi
         throw new \RuntimeException($result);
     }
 
-    public function claimTalk($talkSpeakersUri, $data)
+    public function claimTalk($talkSpeakersUri, $data): bool
     {
         [$status, $result, $headers] = $this->apiPost($talkSpeakersUri, $data);
 
@@ -344,7 +344,7 @@ class TalkApi extends BaseApi
         throw new Exception("Failed: " . $message);
     }
 
-    public function rejectTalkClaim($talkSpeakersUri, $data)
+    public function rejectTalkClaim($talkSpeakersUri, $data): bool
     {
         [$status, $result, $headers] = $this->apiDelete($talkSpeakersUri, $data);
 
@@ -366,7 +366,7 @@ class TalkApi extends BaseApi
      *
      * @return  bool
      */
-    public function addTalkToTrack($talkTracksUri, $trackUri)
+    public function addTalkToTrack($talkTracksUri, $trackUri): bool
     {
         $params = [
             'track_uri' => $trackUri,
@@ -390,7 +390,7 @@ class TalkApi extends BaseApi
      *
      * @return  bool
      */
-    public function removeTalkFromTrack($removeTrackUri)
+    public function removeTalkFromTrack($removeTrackUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($removeTrackUri);
         if ($status == 204) {
@@ -403,7 +403,7 @@ class TalkApi extends BaseApi
         throw new Exception("Failed to remove talk from track: " . $message);
     }
 
-    public function unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri)
+    public function unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($unlinkSpeakerUri, []);
 
@@ -427,7 +427,7 @@ class TalkApi extends BaseApi
      * @throws \Exception
      * @return bool
      */
-    public function deleteTalk($clientUri)
+    public function deleteTalk($clientUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($clientUri);
 
@@ -485,7 +485,7 @@ class TalkApi extends BaseApi
         }
     }
 
-    protected function addTalkMedia($talkId, $media)
+    protected function addTalkMedia($talkId, $media): bool
     {
         if (trim($media['url']) === '') {
             return false;
@@ -505,7 +505,7 @@ class TalkApi extends BaseApi
         throw new Exception("Failed: Adding Talk media");
     }
 
-    protected function updateTalkMedia($talkId, $mediaId, $media)
+    protected function updateTalkMedia($talkId, $mediaId, $media): bool
     {
         $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
         $params  = [
@@ -520,7 +520,7 @@ class TalkApi extends BaseApi
         throw new Exception("Failed: Updating Talk media");
     }
 
-    protected function deleteTalkMedia($talkId, $mediaId)
+    protected function deleteTalkMedia($talkId, $mediaId): bool
     {
         $talkUrl                         = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
         [$status, $result, $headers] = $this->apiDelete($talkUrl);

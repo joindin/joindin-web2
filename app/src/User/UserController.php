@@ -482,7 +482,7 @@ class UserController extends BaseController
         );
     }
 
-    protected function lookupEventInfo($eventUri)
+    protected function lookupEventInfo($eventUri): array
     {
         $eventDb  = $this->getEventDb();
         $eventApi = $this->getEventApi();

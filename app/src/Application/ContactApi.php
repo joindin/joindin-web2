@@ -5,7 +5,7 @@ use Application\BaseApi;
 
 class ContactApi extends BaseApi
 {
-    public function contact($name, $email, $subject, $comment, $clientId, $clientSecret)
+    public function contact($name, $email, $subject, $comment, $clientId, $clientSecret): bool
     {
         $url    = $this->baseApiUrl . '/v2.1/contact';
         $params = [

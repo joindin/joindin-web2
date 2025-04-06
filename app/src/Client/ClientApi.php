@@ -11,7 +11,7 @@ class ClientApi extends BaseApi
      *
      * @return array
      */
-    public function getCollection($queryParams)
+    public function getCollection($queryParams): array
     {
         $talks_uri = $this->baseApiUrl . '/v2.1/applications';
 
@@ -119,7 +119,7 @@ class ClientApi extends BaseApi
      * @throws \Exception
      * @return bool
      */
-    public function deleteClient($clientUri)
+    public function deleteClient($clientUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($clientUri);
 

@@ -147,7 +147,7 @@ class EventApi extends BaseApi
      * @param bool $verbose
      * @return EventCommentEntity[]
      */
-    public function getComments($comment_uri, $verbose = false)
+    public function getComments($comment_uri, $verbose = false): array
     {
         if ($verbose) {
             $comment_uri .= '?verbose=yes&resultsperpage=0';
@@ -164,7 +164,7 @@ class EventApi extends BaseApi
         return $commentData;
     }
 
-    public function addComment($event, $comment, $rating = 0)
+    public function addComment($event, $comment, $rating = 0): bool
     {
         $uri    = $event->getCommentsUri();
         $params = [
@@ -179,7 +179,7 @@ class EventApi extends BaseApi
         throw new Exception("Failed to add comment: " . $result);
     }
 
-    public function reportComment($uri)
+    public function reportComment($uri): bool
     {
         [$status, $result] = $this->apiPost($uri);
 
@@ -189,7 +189,7 @@ class EventApi extends BaseApi
         throw new Exception("Failed to report comment: " . $result);
     }
 
-    public function attend(EventEntity $event)
+    public function attend(EventEntity $event): bool
     {
         [$status, $result] = $this->apiPost($event->getApiUriToMarkAsAttending());
 
@@ -200,7 +200,7 @@ class EventApi extends BaseApi
         throw new Exception("Failed to mark you as attending: " . $result);
     }
 
-    public function unattend(EventEntity $event)
+    public function unattend(EventEntity $event): bool
     {
         [$status, $result] = $this->apiDelete($event->getApiUriToMarkAsAttending());
 
@@ -219,7 +219,7 @@ class EventApi extends BaseApi
      * @param bool $verbose
      * @return UserEntity[]
      */
-    public function getAttendees($attendees_uri, $limit = 0, $verbose = false)
+    public function getAttendees($attendees_uri, $limit = 0, $verbose = false): array
     {
         $attendees_uri .= "?resultsperpage={$limit}";
         if ($verbose) {
@@ -354,7 +354,7 @@ class EventApi extends BaseApi
      * @see EventHostFormType::buildForm() for a list of supported fields in the $data array
      * @return true
      */
-    public function removeHost(array $data)
+    public function removeHost(array $data): bool
     {
         [$status, $result, $headers] = $this->apiDelete($data['hosts_uri'] . '/' . $data['host']);
         // if successful, return event entity represented by the URL in the Location header
@@ -374,7 +374,7 @@ class EventApi extends BaseApi
      * @param  string $fileName  the (temp) file to send
      * @return boolean
      */
-    public function uploadIcon($imagesUri, $fileName)
+    public function uploadIcon($imagesUri, $fileName): bool
     {
         try {
             $client = new \GuzzleHttp\Client([
@@ -429,7 +429,7 @@ class EventApi extends BaseApi
      *
      * @return array
      */
-    public function getCollection($uri, array $queryParams = [])
+    public function getCollection($uri, array $queryParams = []): array
     {
         $events = (array)json_decode($this->apiGet($uri, $queryParams));
         $meta   = array_pop($events);
@@ -466,7 +466,7 @@ class EventApi extends BaseApi
      *              'comments' holds the actual talk comment entities
      *              'pagination' holds pagination related meta data
      */
-    public function getTalkComments($comment_uri, $limit = 10, $start = 1, $verbose = false)
+    public function getTalkComments($comment_uri, $limit = 10, $start = 1, $verbose = false): array
     {
         $comment_uri .= '?resultsperpage=' . $limit
                       . '&start=' . $start;
@@ -496,7 +496,7 @@ class EventApi extends BaseApi
      * @param  string $approval_uri
      * @return boolean
      */
-    public function approveEvent($approval_uri)
+    public function approveEvent($approval_uri): bool
     {
         [$status, $result, $headers] = $this->apiPost($approval_uri);
 
@@ -512,7 +512,7 @@ class EventApi extends BaseApi
      * @param  string $approval_uri
      * @return boolean
      */
-    public function rejectEvent($approval_uri)
+    public function rejectEvent($approval_uri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($approval_uri);
 
@@ -522,7 +522,10 @@ class EventApi extends BaseApi
         throw new Exception("Failed to reject event: " . $result);
     }
 
-    public function getReportedEventComments($comment_uri)
+    /**
+     * @return \Event\EventCommentReportEntity[]
+     */
+    public function getReportedEventComments($comment_uri): array
     {
         $response = json_decode($this->apiGet($comment_uri));
 
@@ -535,7 +538,10 @@ class EventApi extends BaseApi
         return $reports;
     }
 
-    public function getPendingClaims($claims_uri, $verbose = false)
+    /**
+     * @return mixed[]
+     */
+    public function getPendingClaims($claims_uri, $verbose = false): array
     {
         if ($verbose) {
             $claims_uri .= "?verbose=yes";
@@ -551,7 +557,10 @@ class EventApi extends BaseApi
         return $reports;
     }
 
-    public function getReportedTalkComments($comment_uri)
+    /**
+     * @return \Talk\TalkCommentReportEntity[]
+     */
+    public function getReportedTalkComments($comment_uri): array
     {
         $response = json_decode($this->apiGet($comment_uri));
 
@@ -573,7 +582,7 @@ class EventApi extends BaseApi
      *
      * @return boolean
      */
-    public function moderateComment($reported_uri, $decision)
+    public function moderateComment($reported_uri, $decision): bool
     {
         $data['decision'] = $decision;
 

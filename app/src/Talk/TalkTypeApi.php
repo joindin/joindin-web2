@@ -28,7 +28,7 @@ class TalkTypeApi extends BaseApi
      *
      * @return array
      */
-    public function getTalkTypesChoiceList()
+    public function getTalkTypesChoiceList(): array
     {
         $types = [];
 

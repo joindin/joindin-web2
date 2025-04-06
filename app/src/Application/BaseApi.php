@@ -189,7 +189,7 @@ abstract class BaseApi
      *
      * @return string[]
      */
-    private function extractListOfHeaders(array $rawHeaders)
+    private function extractListOfHeaders(array $rawHeaders): array
     {
         $headers = [];
         foreach ($rawHeaders as $header) {

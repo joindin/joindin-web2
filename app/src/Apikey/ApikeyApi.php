@@ -10,7 +10,7 @@ class ApikeyApi extends BaseApi
      *
      * @return array
      */
-    public function getCollection($queryParams)
+    public function getCollection($queryParams): array
     {
         $token_uri = $this->baseApiUrl . '/v2.1/token';
 
@@ -58,7 +58,7 @@ class ApikeyApi extends BaseApi
      * @throws \Exception
      * @return bool
      */
-    public function deleteClient($tokenUri)
+    public function deleteClient($tokenUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($tokenUri);
 

@@ -27,7 +27,7 @@ class TrackApi extends BaseApi
      *
      * @return array
      */
-    public function getTracksChoiceList($url)
+    public function getTracksChoiceList($url): array
     {
         $tracks = [];
 
@@ -45,7 +45,7 @@ class TrackApi extends BaseApi
      * @param  string $trackUri
      * @param  array $data
      */
-    public function updateTrack($trackUri, $data)
+    public function updateTrack($trackUri, $data): bool
     {
         $params = [
             'track_name'        => $data['track_name'],
@@ -69,7 +69,7 @@ class TrackApi extends BaseApi
      * @param  string $eventTracksUri
      * @param  array $data
      */
-    public function addTrack($eventTracksUri, $data)
+    public function addTrack($eventTracksUri, $data): bool
     {
         $params = [
             'track_name'        => $data['track_name'],
@@ -92,7 +92,7 @@ class TrackApi extends BaseApi
      *
      * @param string $trackUri
      */
-    public function deleteTrack($trackUri)
+    public function deleteTrack($trackUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($trackUri);
         if ($status == 204) {

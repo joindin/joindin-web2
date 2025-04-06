@@ -28,7 +28,7 @@ class LanguageApi extends BaseApi
      *
      * @return array
      */
-    public function getLanguagesChoiceList()
+    public function getLanguagesChoiceList(): array
     {
         $languages = [];
 

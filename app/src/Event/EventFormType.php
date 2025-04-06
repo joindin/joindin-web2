@@ -294,7 +294,7 @@ class EventFormType extends AbstractType
      *
      * @return string[]
      */
-    public static function getNestedListOfTimezones()
+    public static function getNestedListOfTimezones(): array
     {
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list

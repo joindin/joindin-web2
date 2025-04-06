@@ -63,7 +63,7 @@ class UserApi extends BaseApi
      *
      * @return bool         True if the user is created
      */
-    public function register($data)
+    public function register($data): bool
     {
         [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
 
@@ -87,7 +87,7 @@ class UserApi extends BaseApi
      *
      * @return bool             True if the user is now verified
      */
-    public function verify($token)
+    public function verify($token): bool
     {
         $data = ["token" => $token];
 
@@ -109,7 +109,7 @@ class UserApi extends BaseApi
      *
      * return bool  True if successful
      */
-    public function reverify($email)
+    public function reverify($email): bool
     {
         $data = ["email" => $email];
 
@@ -183,7 +183,7 @@ class UserApi extends BaseApi
      *
      * return bool  True if successful
      */
-    public function usernameReminder($email)
+    public function usernameReminder($email): bool
     {
         $data = ["email" => $email];
 
@@ -210,7 +210,7 @@ class UserApi extends BaseApi
      *
      * @return bool  True if successful
      */
-    public function passwordReset($username)
+    public function passwordReset($username): bool
     {
         $data = ["username" => $username];
 
@@ -253,7 +253,7 @@ class UserApi extends BaseApi
     }
 
 
-    public function delete($uri)
+    public function delete($uri): bool
     {
         [$status, $result] = $this->apiDelete($uri, []);
 
@@ -273,7 +273,7 @@ class UserApi extends BaseApi
      *
      * @return bool             True if the password was changed
      */
-    public function resetPassword($token, $password)
+    public function resetPassword($token, $password): bool
     {
         $data = [
             "token"    => $token,
@@ -298,7 +298,7 @@ class UserApi extends BaseApi
      *
      * @return array
      */
-    public function getCollection(array $queryParams = [])
+    public function getCollection(array $queryParams = []): array
     {
         $usersUri = $this->baseApiUrl . '/v2.1/users';
         $users    = (array)json_decode(

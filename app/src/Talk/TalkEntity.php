@@ -14,7 +14,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
      * @param  string  $userUri
      * @return boolean
      */
-    public function isSpeaker($userUri)
+    public function isSpeaker($userUri): bool
     {
         $speakers = $this->getSpeakers();
         foreach ($speakers as $speaker) {
