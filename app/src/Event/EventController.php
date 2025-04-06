@@ -20,14 +20,12 @@ use Language\LanguageApi;
 
 class EventController extends BaseController
 {
-    private $itemsPerPage;
-    private $pendingItemsPerPage;
+    private $itemsPerPage = 10;
+    private $pendingItemsPerPage = 30;
 
     public function __construct(Slim $app)
     {
         parent::__construct($app);
-        $this->itemsPerPage        = 10;
-        $this->pendingItemsPerPage = 30;
     }
 
     protected function defineRoutes(Slim $app)
@@ -98,15 +96,13 @@ class EventController extends BaseController
 
         $eventApi = $this->getEventApi();
         $events   = $eventApi->getEvents($this->itemsPerPage, $start, 'all');
-        if ($start === null) {
-            // Find out the start number that has been sent back to us by the API
-            if (isset($events['pagination'])) {
-                parse_str(parse_url($events['pagination']->this_page, PHP_URL_QUERY), $parts);
-                if (isset($parts['start'])) {
-                    $start = $parts['start'];
-                }
-                $_SESSION['events_list_middle_start'] = $start;
+        // Find out the start number that has been sent back to us by the API
+        if ($start === null && isset($events['pagination'])) {
+            parse_str(parse_url($events['pagination']->this_page, PHP_URL_QUERY), $parts);
+            if (isset($parts['start'])) {
+                $start = $parts['start'];
             }
+            $_SESSION['events_list_middle_start'] = $start;
         }
 
         $cfpEvents = $eventApi->getEvents(4, 0, 'cfp', true);

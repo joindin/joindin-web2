@@ -371,10 +371,10 @@ class TalkController extends BaseController
         $rating  = (int) $request->post('rating');
         $url     = $this->application->urlFor("talk", ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
 
-        if ($comment == '' || $rating == 0) {
+        if (empty($comment)) {
             $this->application->flash('error', 'Please provide a comment and rating');
 
-            if ($comment != '') {
+            if ($comment !== '') {
                 //If the user provided a comment but no rating, send the comment back
                 $this->application->flash('comment', $comment);
             } else {

@@ -26,14 +26,10 @@ class UserApi extends BaseApi
 
         if ($result) {
             $data = json_decode($result, false, 512, JSON_BIGINT_AS_STRING);
-            if ($data) {
-                if (isset($data->users) && isset($data->users[0])) {
-                    $user = new UserEntity($data->users[0]);
-
-                    $this->userDb->save($user);
-
-                    return $user;
-                }
+            if (isset($data->users[0])) {
+                $user = new UserEntity($data->users[0]);
+                $this->userDb->save($user);
+                return $user;
             }
         }
         return false;
@@ -46,7 +42,7 @@ class UserApi extends BaseApi
     public function getUserByUserId($userId)
     {
         $userId = (int)$userId;
-        if (!$userId) {
+        if ($userId === 0) {
             return null;
         }
 
@@ -77,11 +73,7 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        if (is_array($message)) {
-            $message = current($message);
-        } else {
-            $message = 'User could not be saved';
-        }
+        $message = is_array($message) ? current($message) : 'User could not be saved';
 
         throw new \Exception($message);
     }
@@ -128,11 +120,7 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        if (is_array($message)) {
-            $message = current($message);
-        } else {
-            $message = "Unknown error";
-        }
+        $message = is_array($message) ? current($message) : "Unknown error";
         throw new \Exception($message);
     }
 
@@ -150,14 +138,12 @@ class UserApi extends BaseApi
 
         if ($result) {
             $data = json_decode($result);
-            if ($data) {
-                if (isset($data->users)) {
-                    foreach ($data->users as $userData) {
-                        if (strtolower($userData->username) == strtolower($username)) {
-                            $user = new UserEntity($userData);
-                            $this->userDb->save($user);
-                            return $user;
-                        }
+            if ($data && isset($data->users)) {
+                foreach ($data->users as $userData) {
+                    if (strtolower($userData->username) === strtolower($username)) {
+                        $user = new UserEntity($userData);
+                        $this->userDb->save($user);
+                        return $user;
                     }
                 }
             }
@@ -211,11 +197,7 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        if (is_array($message)) {
-            $message = current($message);
-        } else {
-            $message = "Unknown error";
-        }
+        $message = is_array($message) ? current($message) : "Unknown error";
         throw new \Exception($message);
     }
 
@@ -242,11 +224,7 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        if (is_array($message)) {
-            $message = current($message);
-        } else {
-            $message = "Unknown error";
-        }
+        $message = is_array($message) ? current($message) : "Unknown error";
         throw new \Exception($message);
     }
 

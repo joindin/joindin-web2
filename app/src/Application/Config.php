@@ -11,20 +11,20 @@ class Config implements \ArrayAccess
         $this->settings = $settings;
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet($key, $value)
     {
         throw new \Exception("You cannot set a config value!");
     }
-    public function offsetExists($offset): bool
+    public function offsetExists($key)
     {
-        return isset($this->settings[$offset]);
+        return isset($this->settings[$key]);
     }
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset)
     {
         throw new \Exception("You cannot unset a config value!");
     }
-    public function offsetGet($offset): mixed
+    public function offsetGet($key)
     {
-        return array_key_exists($offset, $this->settings) ? $this->settings[$offset] : null;
+        return $this->settings[$key] ?? null;
     }
 }

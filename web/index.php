@@ -11,7 +11,7 @@ if (!ini_get('date.timezone')) {
 }
 
 // include dependencies
-require '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 session_set_cookie_params(60*60*24*7); // One week cookie
 session_cache_limiter(false);

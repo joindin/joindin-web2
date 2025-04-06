@@ -26,12 +26,11 @@ class SearchController extends BaseController
     /**
      * @var integer The number of search results to show per page
      */
-    protected $itemsPerPage;
+    protected $itemsPerPage = 10;
 
     public function __construct(Slim $app)
     {
         parent::__construct($app);
-        $this->itemsPerPage = 10;
     }
 
     /**

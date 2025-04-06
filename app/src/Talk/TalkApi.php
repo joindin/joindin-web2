@@ -72,7 +72,7 @@ class TalkApi extends BaseApi
     public function getTalkByTalkId($talkId)
     {
         $talkId = (int)$talkId;
-        if (!$talkId) {
+        if ($talkId === 0) {
             return null;
         }
 
@@ -445,8 +445,8 @@ class TalkApi extends BaseApi
     public function getTalkLinksById($talkId)
     {
         $talkId = (int)$talkId;
-        if (!$talkId) {
-            return;
+        if ($talkId === 0) {
+            return null;
         }
 
         $talkUrl = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links';
@@ -487,7 +487,7 @@ class TalkApi extends BaseApi
 
     protected function addTalkMedia($talkId, $media)
     {
-        if (trim($media['url']) == '') {
+        if (trim($media['url']) === '') {
             return false;
         }
 

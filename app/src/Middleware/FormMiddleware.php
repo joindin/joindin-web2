@@ -196,7 +196,7 @@ class FormMiddleware extends Middleware
     {
         $builder->addExtension(new ValidatorExtension($this->app->validator));
 
-        if (isset($this->app->translator)) {
+        if (!empty($this->app->translator)) {
             $r = new \ReflectionClass(\Symfony\Component\Form\Form::class);
             $this->app->translator->addResource(
                 'xliff',

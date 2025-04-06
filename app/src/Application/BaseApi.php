@@ -22,7 +22,7 @@ abstract class BaseApi
 
     protected function apiGet($url, $params = [])
     {
-        $paramsString = count($params) ? '?' . http_build_query($params, '', '&') : '';
+        $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
 
         $contextOpts = ['http' => [
             'header'        => "Accept: application/json",
@@ -56,7 +56,7 @@ abstract class BaseApi
 
     protected function apiDelete($url, $params = [])
     {
-        $paramsString = count($params) ? '?' . http_build_query($params, '', '&') : '';
+        $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
 
         $contextOpts = ['http' => [
             'method'        => 'DELETE',

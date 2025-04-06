@@ -118,7 +118,7 @@ final class FunctionsExtension extends Twig_Extension
                 $hours   = (int)($duration / 60);
                 $minutes = $duration - ($hours * 60);
 
-                if (!$minutes) {
+                if ($minutes === 0) {
                     return sprintf("%d %s", $hours, 'hour');
                 }
 
@@ -137,13 +137,13 @@ final class FunctionsExtension extends Twig_Extension
             new Twig_SimpleFunction('currentPath', function () use ($app) {
                 $request     = $app->request;
                 $params      = $app->request->get();
-                $queryString = http_build_query($params);
 
-                if ($queryString) {
+                if (!empty($params)) {
+                    $queryString = http_build_query($params);
                     return $request->getPath() . urlencode('?' . $queryString);
-                } else {
-                    return $request->getPath();
                 }
+
+                return $request->getPath();
             }),
 
             /**
