@@ -15,7 +15,7 @@ class EventEntity extends BaseEntity
         return $this->data->name;
     }
 
-    public function setName($name)
+    public function setName($name): self
     {
         $this->data->name = $name;
 
@@ -54,7 +54,7 @@ class EventEntity extends BaseEntity
         return $this->data->start_date;
     }
 
-    public function setStartDate($date)
+    public function setStartDate($date): self
     {
         $this->data->start_date = $date;
 
@@ -70,7 +70,7 @@ class EventEntity extends BaseEntity
         return $this->data->end_date;
     }
 
-    public function setEndDate($date)
+    public function setEndDate($date): self
     {
         $this->data->end_date = $date;
 
@@ -100,7 +100,7 @@ class EventEntity extends BaseEntity
         return $this->data->description;
     }
 
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->data->description = $description;
 
@@ -118,7 +118,7 @@ class EventEntity extends BaseEntity
         return $this->data->tags;
     }
 
-    public function setTags($tags)
+    public function setTags($tags): self
     {
         $this->data->tags = $tags;
 
@@ -134,7 +134,7 @@ class EventEntity extends BaseEntity
         return $this->data->latitude;
     }
 
-    public function setLatitude($latitude)
+    public function setLatitude($latitude): self
     {
         $this->data->latitude = $latitude;
 
@@ -150,7 +150,7 @@ class EventEntity extends BaseEntity
         return $this->data->longitude;
     }
 
-    public function setLongitude($longitude)
+    public function setLongitude($longitude): self
     {
         $this->data->longitude = $longitude;
 
@@ -391,7 +391,7 @@ class EventEntity extends BaseEntity
             : null;
     }
 
-    public function setCfpStartDate($date)
+    public function setCfpStartDate($date): self
     {
         $this->data->cfp_start_date = $date;
 
@@ -413,7 +413,7 @@ class EventEntity extends BaseEntity
             : null;
     }
 
-    public function setCfpEndDate($date)
+    public function setCfpEndDate($date): self
     {
         $this->data->cfp_end_date = $date;
 
@@ -432,7 +432,7 @@ class EventEntity extends BaseEntity
             : null;
     }
 
-    public function setCfpUrl($cfpUrl)
+    public function setCfpUrl($cfpUrl): self
     {
         $this->data->cfp_url = $cfpUrl;
 

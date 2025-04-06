@@ -209,7 +209,7 @@ class EventFormType extends AbstractType
      *
      * @return array
      */
-    private function getOptionsForUrlWidget($label, $required = true): array
+    private function getOptionsForUrlWidget(string $label, bool $required = true): array
     {
         $constraints = [new Assert\Url(), new UrlResolverConstraint()];
         if ($required) {
@@ -239,7 +239,7 @@ class EventFormType extends AbstractType
      *
      * @return array
      */
-    private function getOptionsForDateWidget($label, $required = true): array
+    private function getOptionsForDateWidget(string $label, bool $required = true): array
     {
         $constraints = [new Assert\Date()];
         if ($required) {

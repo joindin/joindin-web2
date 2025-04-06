@@ -21,7 +21,7 @@ use Language\LanguageApi;
 class EventController extends BaseController
 {
     private $itemsPerPage = 10;
-    private $pendingItemsPerPage = 30;
+    private int $pendingItemsPerPage = 30;
 
     public function __construct(Slim $app)
     {
@@ -652,7 +652,7 @@ class EventController extends BaseController
      *
      * @param int $eventId
      */
-    public function redirectFromId($eventId, $extra = false)
+    public function redirectFromId(int $eventId, $extra = false)
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getEventById($eventId);
@@ -839,7 +839,7 @@ class EventController extends BaseController
      *
      * @return void
      */
-    private function redirectToDetailPage($friendlyName, $status = 302): void
+    private function redirectToDetailPage($friendlyName, int $status = 302): void
     {
         $this->application->redirect(
             $this->application->urlFor('event-detail', ['friendly_name' => $friendlyName]),
@@ -1123,7 +1123,7 @@ class EventController extends BaseController
         );
     }
 
-    private function appoveClaimPendingTalk($talkApi, $claim, $data): void
+    private function appoveClaimPendingTalk($talkApi, $claim, array $data): void
     {
         $talkApi->claimTalk($claim->approve_claim_uri, $data);
 
@@ -1133,7 +1133,7 @@ class EventController extends BaseController
     /**
      * Reject a talk claim
      */
-    private function rejectClaimPendingTalk($talkApi, $claim, $data): void
+    private function rejectClaimPendingTalk($talkApi, $claim, array $data): void
     {
         $talkApi->rejectTalkClaim($claim->approve_claim_uri, $data);
 

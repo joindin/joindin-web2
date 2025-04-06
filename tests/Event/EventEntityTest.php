@@ -7,7 +7,7 @@ use stdClass;
 
 class EventEntityTest extends TestCase
 {
-    private $eventData;
+    private \stdClass $eventData;
 
     public function setUp(): void
     {

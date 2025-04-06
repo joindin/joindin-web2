@@ -13,7 +13,7 @@ class ApikeyController extends BaseController
     /**
      * @var int number of results per pagination page
      */
-    private $resultsPerPage = 10;
+    private int $resultsPerPage = 10;
 
     protected function defineRoutes(Slim $app)
     {

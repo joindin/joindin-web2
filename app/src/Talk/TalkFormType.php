@@ -12,10 +12,7 @@ use Event\EventEntity;
  */
 class TalkFormType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    protected $timezone;
+    protected ?string $timezone;
 
     protected \DateTimeImmutable $startDate;
 

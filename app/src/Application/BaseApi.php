@@ -20,7 +20,7 @@ abstract class BaseApi
         $this->accessToken = $accessToken;
     }
 
-    protected function apiGet($url, $params = [])
+    protected function apiGet(string $url, $params = [])
     {
         $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
 
@@ -54,7 +54,7 @@ abstract class BaseApi
         return $result;
     }
 
-    protected function apiDelete($url, $params = [])
+    protected function apiDelete(string $url, $params = [])
     {
         $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
 

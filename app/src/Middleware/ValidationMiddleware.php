@@ -94,7 +94,7 @@ class ValidationMiddleware extends Middleware
      *
      * @return void
      */
-    private function addTranslations($translator, $validatorComponentRootFolder): void
+    private function addTranslations($translator, string $validatorComponentRootFolder): void
     {
         $translator->addResource(
             'xliff',

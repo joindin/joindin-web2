@@ -48,7 +48,7 @@ class SearchController extends BaseController
      * @param string $keyword
      * @return string|null
      */
-    protected function sanitizeKeyword($keyword)
+    protected function sanitizeKeyword($keyword): ?string
     {
         return preg_replace("/[^A-Za-z0-9-_[:space:]]/", '', $keyword);
     }
@@ -59,7 +59,7 @@ class SearchController extends BaseController
      * @param string $tag
      * @return string|null
      */
-    protected function sanitizeTag($tag)
+    protected function sanitizeTag($tag): ?string
     {
         return preg_replace("/[^A-Za-z0-9]/", '', $tag);
     }
@@ -80,7 +80,7 @@ class SearchController extends BaseController
             ? 1
             : $this->application->request()->get('page');
 
-        if (!empty($keyword) || !empty($tag)) {
+        if ($keyword !== null && $keyword !== '' && $keyword !== '0' || $tag !== null && $tag !== '' && $tag !== '0') {
             $events = $this->searchEventsByTitleAndTag($page, $keyword, $tag);
         }
 
@@ -111,7 +111,7 @@ class SearchController extends BaseController
             ? 1
             : $this->application->request()->get('page');
 
-        if (!empty($keyword)) {
+        if ($keyword !== null && $keyword !== '' && $keyword !== '0') {
             $events = $this->searchEventsByTitleAndTag($page, $keyword);
             $talks  = $this->searchTalksByTitle($page, $keyword);
             $users  = $this->searchUsersByKeyword($page, $keyword);
@@ -147,15 +147,15 @@ class SearchController extends BaseController
      *
      * @return array
      */
-    private function searchEventsByTitleAndTag($page, $keyword, $tag = null)
+    private function searchEventsByTitleAndTag($page, ?string $keyword, ?string $tag = null): array
     {
         $apiQueryParams = [];
 
-        if (!empty($keyword)) {
+        if ($keyword !== null && $keyword !== '' && $keyword !== '0') {
             $apiQueryParams['title'] = $keyword;
         }
 
-        if (!empty($tag)) {
+        if ($tag !== null && $tag !== '' && $tag !== '0') {
             $apiQueryParams['tags'] = $tag;
         }
 
@@ -176,7 +176,7 @@ class SearchController extends BaseController
      *
      * @return array
      */
-    private function searchTalksByTitle($page, $keyword)
+    private function searchTalksByTitle($page, string $keyword): array
     {
         $apiQueryParams = [
             'title'          => $keyword,
@@ -196,7 +196,7 @@ class SearchController extends BaseController
      *
      * @return array
      */
-    private function searchUsersByKeyword($page, $keyword)
+    private function searchUsersByKeyword($page, string $keyword): array
     {
         $apiQueryParams = [
             'keyword'        => $keyword,

@@ -17,20 +17,20 @@ class CacheService
         $this->client    = $client;
     }
 
-    public function save($collection, $data, $keyField, $keyValue): void
+    public function save(string $collection, $data, string $keyField, $keyValue): void
     {
         $fqKey = $this->keyPrefix . $collection . '-' . $keyField . '-' . substr(md5($keyValue), 0, 6);
         $this->client->set($fqKey, serialize($data));
     }
 
-    public function load($collection, $keyField, $keyValue)
+    public function load(string $collection, string $keyField, $keyValue)
     {
         $fqKey = $this->keyPrefix . $collection . '-' . $keyField . '-' . substr(md5($keyValue), 0, 6);
 
         return unserialize($this->client->get($fqKey));
     }
 
-    public function saveByKeys($collection, $data, array $keys): void
+    public function saveByKeys(string $collection, $data, array $keys): void
     {
         $fqKey = $this->keyPrefix . $collection;
         foreach ($keys as $keyField => $keyValue) {
@@ -39,7 +39,7 @@ class CacheService
         $this->client->set($fqKey, serialize($data));
     }
 
-    public function loadByKeys($collection, array $keys)
+    public function loadByKeys(string $collection, array $keys)
     {
         $fqKey = $this->keyPrefix . $collection;
         foreach ($keys as $keyField => $keyValue) {

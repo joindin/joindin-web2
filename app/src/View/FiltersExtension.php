@@ -35,7 +35,7 @@ final class FiltersExtension extends \Twig_Extension
      * @return string
      * @throws \Twig_Error_Runtime
      */
-    public function imgPath(Twig_Environment $env, $suffix, $infix): string
+    public function imgPath(Twig_Environment $env, $suffix, string $infix): string
     {
         if (!$suffix && $infix === 'event_icons') {
             $suffix = 'none.png';
@@ -70,7 +70,7 @@ final class FiltersExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function link($url, $label = '', $class = ''): string
+    public function link(string $url, $label = '', string $class = ''): string
     {
         return '<a href="' . $url . '" class="' . $class . '">' . ($label ?: $url) . '</a>';
     }

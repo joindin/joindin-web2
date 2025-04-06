@@ -47,7 +47,7 @@ class EventScheduler
      * @param string $talks_uri
      * @return array
      */
-    public function getTalks($talks_uri)
+    public function getTalks($talks_uri): array
     {
         $talks = $this->talkApi->getCollection($talks_uri);
 

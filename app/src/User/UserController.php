@@ -792,7 +792,7 @@ class UserController extends BaseController
      * @param  string           $redirect
      * @return void
      */
-    protected function handleLogin($result, $redirect = '')
+    protected function handleLogin(array $result, $redirect = '')
     {
         if (!is_object($result)) {
             if ($result === false || $result[0] == 'Signin failed') {

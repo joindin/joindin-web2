@@ -12,11 +12,11 @@ use Slim\Slim;
 class TrailingSlashMiddlewareTest extends TestCase
 {
     /** @var \Prophecy\Prophecy\ObjectProphecy|Slim */
-    private $app;
+    private \Prophecy\Prophecy\ObjectProphecy $app;
     /** @var \Prophecy\Prophecy\ObjectProphecy|Middleware */
-    private $next;
+    private \Prophecy\Prophecy\ObjectProphecy $next;
     /** @var \Prophecy\Prophecy\ObjectProphecy|Request */
-    private $request;
+    private \Prophecy\Prophecy\ObjectProphecy $request;
 
     protected function setUp(): void
     {

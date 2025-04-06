@@ -26,7 +26,7 @@ final class FunctionsExtension extends Twig_Extension
         $app = $this->app;
 
         return [
-            new Twig_SimpleFunction('urlFor', function ($routeName, $params = []) use ($app) {
+            new Twig_SimpleFunction('urlFor', function ($routeName, $params = []) use ($app): string {
                 $url = rtrim($app->urlFor($routeName, $params), '/');
 
                 return $url;
@@ -34,11 +34,11 @@ final class FunctionsExtension extends Twig_Extension
 
             new Twig_SimpleFunction('hash', fn($value): string => md5($value)),
 
-            new Twig_SimpleFunction('gravatar', function ($email_hash, $size = 40) {
+            new Twig_SimpleFunction('gravatar', function (string $email_hash, $size = 40): string {
                 $size = ((int)$size == 0) ? 20 : (int)$size;
 
                 $url = 'https://secure.gravatar.com/avatar/' . $email_hash . '?d=mm&s=' . $size;
-                if (empty($email_hash)) {
+                if ($email_hash === '' || $email_hash === '0') {
                     $url .= '&f=y';
                 }
 
@@ -62,14 +62,14 @@ final class FunctionsExtension extends Twig_Extension
 
             new Twig_SimpleFunction('urlForTalk', fn($eventSlug, $talkSlug, $params = []) => $app->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug])),
 
-            new Twig_SimpleFunction('shortUrlForTalk', function ($talkStub) use ($app) {
+            new Twig_SimpleFunction('shortUrlForTalk', function ($talkStub) use ($app): string {
                 $scheme = $app->request()->getScheme();
                 $host   = $app->request()->headers('host');
 
                 return "$scheme://$host" . $app->urlFor('talk-quicklink', ['talkStub' => $talkStub]);
             }),
 
-            new Twig_SimpleFunction('shortUrlForEvent', function ($eventStub) use ($app) {
+            new Twig_SimpleFunction('shortUrlForEvent', function ($eventStub) use ($app): string {
                 $scheme = $app->request()->getScheme();
                 $host   = $app->request()->headers('host');
 
@@ -102,7 +102,7 @@ final class FunctionsExtension extends Twig_Extension
              *     - 120 minutes converts to "2 hours"
              *     - 126 minutes converts to "2 hours, 6 minutes"
              */
-            new Twig_SimpleFunction('prettyDuration', function ($duration) {
+            new Twig_SimpleFunction('prettyDuration', function ($duration): string {
                 $duration = (int)$duration;
 
                 if ($duration < 60) {

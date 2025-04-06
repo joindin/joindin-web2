@@ -115,7 +115,7 @@ $app->add(new Middleware\FormMiddleware($csrfSecret));
 // register services
 $app->container->set('access_token', $_SESSION['access_token'] ?? null);
 
-$app->container->singleton(\Application\CacheService::class, function ($container) {
+$app->container->singleton(\Application\CacheService::class, function ($container): \Application\CacheService {
     $redis  = $container->settings['custom']['redis'];
     $prefix = $redis['options']['prefix'];
 

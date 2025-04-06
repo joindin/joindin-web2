@@ -62,7 +62,7 @@ class ClientApi extends BaseApi
      * and their constraints.
      * @return ClientEntity
      */
-    public function submit(array $data)
+    public function submit(array $data): \Client\ClientEntity
     {
         $values = [
             'name'         => $data['application'],
@@ -93,7 +93,7 @@ class ClientApi extends BaseApi
      * and their constraints.
      * @return ClientEntity
      */
-    public function editClient($clientUri, array $data)
+    public function editClient($clientUri, array $data): \Client\ClientEntity
     {
         $values = [
             'name'         => $data['application'],
@@ -119,7 +119,7 @@ class ClientApi extends BaseApi
      * @throws \Exception
      * @return bool
      */
-    public function deleteClient($clientUri): bool
+    public function deleteClient(string $clientUri): bool
     {
         [$status, $result, $headers] = $this->apiDelete($clientUri);
 

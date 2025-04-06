@@ -7,7 +7,7 @@ use stdClass;
 
 class TalkCommentEntityTest extends TestCase
 {
-    private $commentData;
+    private \stdClass $commentData;
 
     public function setUp(): void
     {

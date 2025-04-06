@@ -7,7 +7,7 @@ use Predis\Client;
 
 class EventApiTest extends TestCase
 {
-    private $mockConfig;
+    private array $mockConfig;
     private MockObject $mockCache;
     private MockObject $mockDbEvent;
     private MockObject $mockUserDb;
