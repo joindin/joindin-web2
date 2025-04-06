@@ -1377,7 +1377,7 @@ class EventController extends BaseController
      *
      * @return array
      */
-    private function getTalkSlugsForTalkComments(array $comments, EventEntity $event)
+    private function getTalkSlugsForTalkComments(array $comments, EventEntity $event): array
     {
         $slugs = $this->getTalkSlugsFromDb($comments);
 

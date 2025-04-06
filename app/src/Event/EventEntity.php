@@ -247,7 +247,7 @@ class EventEntity extends BaseEntity
         return (bool)$this->data->comments_enabled;
     }
 
-    public function isPastEvent()
+    public function isPastEvent(): bool
     {
         $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getEndDate());
         $now     = new DateTime(null, $endDate->getTimezone());
@@ -313,7 +313,7 @@ class EventEntity extends BaseEntity
      *
      * @return string
      */
-    public function getTzContinent()
+    public function getTzContinent(): string
     {
         $tz = explode('/', $this->getTimezone());
         return $tz[0];
@@ -334,7 +334,7 @@ class EventEntity extends BaseEntity
      *
      * @return string
      */
-    public function getTzPlace()
+    public function getTzPlace(): string
     {
         $tz = explode('/', $this->getTimezone());
         if (! isset($tz[1])) {
@@ -445,7 +445,7 @@ class EventEntity extends BaseEntity
      *
      * @return string
      */
-    public function getCfpStatus()
+    public function getCfpStatus(): string
     {
         if (!empty($this->getCfpStartDate()) && !empty($this->getCfpEndDate())) {
             $startDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpStartDate());

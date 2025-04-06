@@ -7,7 +7,7 @@ use DateInterval;
 
 class ClientEntity extends BaseEntity
 {
-    public function getId()
+    public function getId(): string
     {
         return substr($this->data->client_uri, strrpos($this->data->client_uri, '/') + 1);
     }
@@ -37,7 +37,7 @@ class ClientEntity extends BaseEntity
         return $this->data->callback_url;
     }
 
-    public function hasConsumerSecret()
+    public function hasConsumerSecret(): bool
     {
         return isset($this->data->consumer_secret);
     }

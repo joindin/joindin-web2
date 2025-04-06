@@ -33,7 +33,7 @@ class EventScheduler
      * @param EventEntity $event
      * @return array
      */
-    public function getScheduleData(EventEntity $event)
+    public function getScheduleData(EventEntity $event): array
     {
         $talks     = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
         $eventDays = $this->getEventDays($talks);

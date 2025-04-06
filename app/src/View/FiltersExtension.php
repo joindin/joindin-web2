@@ -35,7 +35,7 @@ final class FiltersExtension extends \Twig_Extension
      * @return string
      * @throws \Twig_Error_Runtime
      */
-    public function imgPath(Twig_Environment $env, $suffix, $infix)
+    public function imgPath(Twig_Environment $env, $suffix, $infix): string
     {
         if (!$suffix && $infix === 'event_icons') {
             $suffix = 'none.png';
@@ -58,7 +58,7 @@ final class FiltersExtension extends \Twig_Extension
      *
      * @return false|string
      */
-    public function formatDate($date)
+    public function formatDate($date): string
     {
         return date('D M dS Y', strtotime($date));
     }
@@ -70,7 +70,7 @@ final class FiltersExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function link($url, $label = '', $class = '')
+    public function link($url, $label = '', $class = ''): string
     {
         return '<a href="' . $url . '" class="' . $class . '">' . ($label ?: $url) . '</a>';
     }

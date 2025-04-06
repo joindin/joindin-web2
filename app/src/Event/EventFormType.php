@@ -209,7 +209,7 @@ class EventFormType extends AbstractType
      *
      * @return array
      */
-    private function getOptionsForUrlWidget($label, $required = true)
+    private function getOptionsForUrlWidget($label, $required = true): array
     {
         $constraints = [new Assert\Url(), new UrlResolverConstraint()];
         if ($required) {
@@ -239,7 +239,7 @@ class EventFormType extends AbstractType
      *
      * @return array
      */
-    private function getOptionsForDateWidget($label, $required = true)
+    private function getOptionsForDateWidget($label, $required = true): array
     {
         $constraints = [new Assert\Date()];
         if ($required) {
@@ -270,7 +270,7 @@ class EventFormType extends AbstractType
      *
      * @return array
      */
-    public function getListOfTimezoneContinentsAndCities()
+    public function getListOfTimezoneContinentsAndCities(): array
     {
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list

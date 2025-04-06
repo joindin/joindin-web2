@@ -172,7 +172,7 @@ class UserEntity extends BaseEntity
         return $this->data->admin;
     }
 
-    public function getId()
+    public function getId(): string
     {
         $uri   = $this->data->uri;
         $parts = explode('/', $uri);

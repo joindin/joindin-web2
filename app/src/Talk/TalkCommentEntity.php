@@ -33,7 +33,7 @@ class TalkCommentEntity extends BaseCommentEntity
         return $this->data->uri;
     }
 
-    public function canRateTalk($user_uri)
+    public function canRateTalk($user_uri): bool
     {
         return !(isset($this->data->user_uri) && $this->data->user_uri == $user_uri);
     }

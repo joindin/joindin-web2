@@ -7,7 +7,7 @@ use DateInterval;
 
 class ApikeyEntity extends BaseEntity
 {
-    public function getId()
+    public function getId(): string
     {
         return substr($this->data->token_uri, strrpos($this->data->token_uri, '/') + 1);
     }
