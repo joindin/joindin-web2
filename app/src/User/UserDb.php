@@ -12,7 +12,7 @@ class UserDb extends BaseDb
         $this->keyName = 'users';
     }
 
-    public function save(UserEntity $user)
+    public function save(UserEntity $user): void
     {
         $data = [
             'uri'          => $user->getUri(),

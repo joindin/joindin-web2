@@ -12,7 +12,7 @@ class EventDb extends BaseDb
         $this->keyName = 'events';
     }
 
-    public function save(EventEntity $event)
+    public function save(EventEntity $event): void
     {
         $data = [
             "url_friendly_name" => $event->getUrlFriendlyName(),

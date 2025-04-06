@@ -22,7 +22,7 @@ class ApikeyController extends BaseController
                                                                                    ->name('apikey-delete');
     }
 
-    public function index($username)
+    public function index($username): void
     {
         $thisUrl = $this->application->urlFor('apikey-show', ['username' => $username]);
 
@@ -105,7 +105,7 @@ class ApikeyController extends BaseController
         );
     }
 
-    public function deleteApiKey($username, $apikey)
+    public function deleteApiKey($username, $apikey): void
     {
         $thisUrl = $this->application->urlFor('apikey-delete', ['apikey' => $apikey, 'username' => $username]);
 

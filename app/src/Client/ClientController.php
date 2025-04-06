@@ -22,7 +22,7 @@ class ClientController extends BaseController
                                                                                        ->name('client-delete');
     }
 
-    public function index($username)
+    public function index($username): void
     {
         $thisUrl = $this->application->urlFor('clients', [
             'username' => $username,
@@ -48,7 +48,7 @@ class ClientController extends BaseController
         ]);
     }
 
-    public function showClient($username, $clientName)
+    public function showClient($username, $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-show', [
             'clientName' => $clientName,
@@ -81,7 +81,7 @@ class ClientController extends BaseController
         ]);
     }
 
-    public function createClient($username)
+    public function createClient($username): void
     {
         $thisUrl = $this->application->urlFor('client-create', [
             'username' => $username,
@@ -128,7 +128,7 @@ class ClientController extends BaseController
         );
     }
 
-    public function editClient($username, $clientName)
+    public function editClient($username, $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-edit', [
             'clientName' => $clientName,
@@ -234,7 +234,7 @@ class ClientController extends BaseController
 
 
 
-    public function deleteClient($username, $clientName)
+    public function deleteClient($username, $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-delete', [
             'clientName' => $clientName,

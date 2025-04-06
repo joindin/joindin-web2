@@ -36,7 +36,7 @@ class TalkDb extends BaseDb
         return null;
     }
 
-    public function save(TalkEntity $talk)
+    public function save(TalkEntity $talk): void
     {
         $data = [
             'uri'         => $talk->getApiUri(),

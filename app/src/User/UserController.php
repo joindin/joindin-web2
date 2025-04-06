@@ -52,7 +52,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    public function login()
+    public function login(): void
     {
         $config  = $this->application->config('oauth');
         $request = $this->application->request();
@@ -82,7 +82,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $request = $this->application->request();
 
@@ -145,7 +145,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    public function logout()
+    public function logout(): void
     {
         $request  = $this->application->request();
         $redirect = $request->get('redirect') ?: "/";
@@ -165,7 +165,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    public function verification()
+    public function verification(): void
     {
         $request = $this->application->request();
 
@@ -182,7 +182,7 @@ class UserController extends BaseController
         $this->application->redirect('/');
     }
 
-    public function resendVerification()
+    public function resendVerification(): void
     {
         $request = $this->application->request();
 
@@ -231,7 +231,7 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profile($username)
+    public function profile($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
@@ -320,7 +320,7 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileTalks($username)
+    public function profileTalks($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
@@ -363,7 +363,7 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileEvents($username)
+    public function profileEvents($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
@@ -396,7 +396,7 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileHosted($username)
+    public function profileHosted($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
@@ -430,7 +430,7 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileComments($username)
+    public function profileComments($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
@@ -543,7 +543,7 @@ class UserController extends BaseController
         return $this->application->container->get(EventApi::class);
     }
 
-    public function remindUsername()
+    public function remindUsername(): void
     {
         $request = $this->application->request();
 
@@ -591,7 +591,7 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileEdit($username)
+    public function profileEdit($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
@@ -676,7 +676,7 @@ class UserController extends BaseController
         );
     }
 
-    public function userDelete($username)
+    public function userDelete($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
@@ -696,7 +696,7 @@ class UserController extends BaseController
         $this->application->redirect('/');
     }
 
-    public function resetPassword()
+    public function resetPassword(): void
     {
         $request = $this->application->request();
 
@@ -743,7 +743,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    public function newPassword()
+    public function newPassword(): void
     {
         $request = $this->application->request();
         $token   = $request->get('token');

@@ -69,7 +69,7 @@ class FormMiddleware extends Middleware
      *
      * @return void
      */
-    public function call()
+    public function call(): void
     {
         if (! $this->app->translator instanceof Translator) {
             $this->initializeTranslator();
@@ -144,7 +144,7 @@ class FormMiddleware extends Middleware
      *
      * @return void
      */
-    private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader)
+    private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $loader): void
     {
         $reflected = new \ReflectionClass(\Symfony\Bridge\Twig\Extension\FormExtension::class);
         $path      = dirname($reflected->getFileName()) . '/../Resources/views/Form';
@@ -168,7 +168,7 @@ class FormMiddleware extends Middleware
      *
      * @return void
      */
-    private function initializeTranslator()
+    private function initializeTranslator(): void
     {
         $this->app->translator = new Translator($this->locale, new MessageSelector());
         $this->app->translator->addLoader('array', new ArrayLoader());

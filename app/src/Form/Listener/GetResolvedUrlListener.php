@@ -22,7 +22,7 @@ class GetResolvedUrlListener implements EventSubscriberInterface
         $this->urlResolver = $urlResolver ?? new UrlResolver();
     }
 
-    public function onSubmit(FormEvent $event)
+    public function onSubmit(FormEvent $event): void
     {
         $data = $event->getData();
 

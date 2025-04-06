@@ -181,12 +181,12 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         return $this->data->$offset;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->data->$offset = $value;
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->data->$offset);
     }

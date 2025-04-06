@@ -17,7 +17,7 @@ class ApplicationController extends BaseController
         $app->get('/assets', [$this, 'assets'])->name('assets');
     }
 
-    public function index()
+    public function index(): void
     {
         $page = ((int)$this->application->request()->get('page') === 0)
             ? 1
@@ -56,7 +56,7 @@ class ApplicationController extends BaseController
     /**
      * Render the about page
      */
-    public function about()
+    public function about(): void
     {
         $this->render(
             'Application/about.html.twig',
@@ -69,7 +69,7 @@ class ApplicationController extends BaseController
     /**
      * Render the contact page
      */
-    public function contact()
+    public function contact(): void
     {
         $request = $this->application->request();
 
@@ -116,7 +116,7 @@ class ApplicationController extends BaseController
     /**
      * Render the assets page
      */
-    public function assets()
+    public function assets(): void
     {
         $this->render(
             'Application/assets.html.twig',
@@ -130,7 +130,7 @@ class ApplicationController extends BaseController
     /**
      * Render the notAllowed page
      */
-    public function notAllowed()
+    public function notAllowed(): void
     {
         $this->render('Application/not-allowed.html.twig', [
             'redirect' => $this->application->request->get('redirect')

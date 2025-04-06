@@ -9,7 +9,7 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class ValidEventIconValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         $groupName = $constraint->groupname;
         $keyName   = $constraint->keyname;

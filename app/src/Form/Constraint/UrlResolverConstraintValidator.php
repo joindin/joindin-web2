@@ -19,7 +19,7 @@ class UrlResolverConstraintValidator extends ConstraintValidator
         $this->urlResolver = $urlResolver ?? new UrlResolver();
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if ($value === '') {
             return;

@@ -17,7 +17,7 @@ class CacheService
         $this->client    = $client;
     }
 
-    public function save($collection, $data, $keyField, $keyValue)
+    public function save($collection, $data, $keyField, $keyValue): void
     {
         $fqKey = $this->keyPrefix . $collection . '-' . $keyField . '-' . substr(md5($keyValue), 0, 6);
         $this->client->set($fqKey, serialize($data));
@@ -30,7 +30,7 @@ class CacheService
         return unserialize($this->client->get($fqKey));
     }
 
-    public function saveByKeys($collection, $data, array $keys)
+    public function saveByKeys($collection, $data, array $keys): void
     {
         $fqKey = $this->keyPrefix . $collection;
         foreach ($keys as $keyField => $keyValue) {

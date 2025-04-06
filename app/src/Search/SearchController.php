@@ -70,7 +70,7 @@ class SearchController extends BaseController
      * Will return a list of $limit events
      *
      */
-    public function searchEvents()
+    public function searchEvents(): void
     {
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $tag     = $this->sanitizeTag($this->application->request()->get('tag'));
@@ -98,7 +98,7 @@ class SearchController extends BaseController
     /**
      * Search both events and talks
      */
-    public function search()
+    public function search(): void
     {
         $keyword    = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $events     = [];

@@ -40,7 +40,7 @@ class EventEntity extends BaseEntity
         return $this->data->icon;
     }
 
-    public function setIcon($icon)
+    public function setIcon($icon): void
     {
         $this->data->icon = $icon;
     }
@@ -86,7 +86,7 @@ class EventEntity extends BaseEntity
         return $this->data->location;
     }
 
-    public function setLocation($location)
+    public function setLocation($location): void
     {
         $this->data->location = $location;
     }
@@ -274,7 +274,7 @@ class EventEntity extends BaseEntity
         return $this->data->stub;
     }
 
-    public function setStub($stub)
+    public function setStub($stub): void
     {
         $this->data->stub = $stub;
     }
@@ -324,7 +324,7 @@ class EventEntity extends BaseEntity
      *
      * @param string $tzContinent
      */
-    public function setTzContinent($tzContinent)
+    public function setTzContinent($tzContinent): void
     {
         $this->data->tz_continent = $tzContinent;
     }
@@ -349,7 +349,7 @@ class EventEntity extends BaseEntity
      *
      * @param string $tzPlace
      */
-    public function setTzPlace($tzPlace)
+    public function setTzPlace($tzPlace): void
     {
         $this->data->tz_place = $tzPlace;
     }
@@ -371,7 +371,7 @@ class EventEntity extends BaseEntity
      *
      * @param string $href
      */
-    public function setHref($href)
+    public function setHref($href): void
     {
         $this->data->href = $href;
     }

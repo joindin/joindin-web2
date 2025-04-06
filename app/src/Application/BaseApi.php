@@ -207,7 +207,7 @@ abstract class BaseApi
     /**
      * @param string $accessToken
      */
-    public function setAccessToken($accessToken)
+    public function setAccessToken($accessToken): void
     {
         $this->accessToken = $accessToken;
     }
