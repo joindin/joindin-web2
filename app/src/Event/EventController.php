@@ -353,7 +353,7 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        setcookie('schedule-view', 'list', strtotime('+2 years'), '/');
+        setcookie('schedule-view', 'list', ['expires' => strtotime('+2 years'), 'path' => '/']);
 
         $agenda = $this->getTalkApi()->getAgenda($event->getTalksUri());
 
@@ -386,7 +386,7 @@ class EventController extends BaseController
             $this->redirectToListPage();
         }
 
-        setcookie('schedule-view', 'grid', strtotime('+2 years'), '/');
+        setcookie('schedule-view', 'grid', ['expires' => strtotime('+2 years'), 'path' => '/']);
 
         $talkApi   = $this->getTalkApi();
         $scheduler = new EventScheduler($talkApi);
