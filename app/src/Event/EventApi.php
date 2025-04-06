@@ -151,7 +151,7 @@ class EventApi extends BaseApi
     public function getComments($comment_uri, $verbose = false)
     {
         if ($verbose) {
-            $comment_uri = $comment_uri . '?verbose=yes&resultsperpage=0';
+            $comment_uri .= '?verbose=yes&resultsperpage=0';
         }
 
         $comments = (array)json_decode($this->apiGet($comment_uri));
@@ -224,7 +224,7 @@ class EventApi extends BaseApi
     {
         $attendees_uri .= "?resultsperpage={$limit}";
         if ($verbose) {
-            $attendees_uri = $attendees_uri . '&verbose=yes';
+            $attendees_uri .= '&verbose=yes';
         }
 
 
@@ -477,7 +477,7 @@ class EventApi extends BaseApi
                       . '&start=' . $start;
 
         if ($verbose) {
-            $comment_uri = $comment_uri . '&verbose=yes';
+            $comment_uri .= '&verbose=yes';
         }
 
         $comments = (array)json_decode($this->apiGet($comment_uri));
@@ -543,7 +543,7 @@ class EventApi extends BaseApi
     public function getPendingClaims($claims_uri, $verbose = false)
     {
         if ($verbose) {
-            $claims_uri = $claims_uri . "?verbose=yes";
+            $claims_uri .= "?verbose=yes";
         }
         $response = json_decode($this->apiGet($claims_uri));
 
