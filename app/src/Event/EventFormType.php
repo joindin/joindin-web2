@@ -57,7 +57,7 @@ class EventFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        list($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
+        [$continents, $cities] = $this->getListOfTimezoneContinentsAndCities();
 
         $timezone = null;
         if (isset($options['data'])) {
@@ -301,7 +301,7 @@ class EventFormType extends AbstractType
 
         $result = [];
         foreach ($timezones as $timezone) {
-            list($continent, $city) = explode('/', $timezone, 2);
+            [$continent, $city] = explode('/', $timezone, 2);
             $result[$continent][]   = $city;
         }
 

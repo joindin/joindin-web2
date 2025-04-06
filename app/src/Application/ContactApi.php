@@ -17,7 +17,7 @@ class ContactApi extends BaseApi
             'comment'       => $comment,
         ];
 
-        list($status, $result) = $this->apiPost($url, $params);
+        [$status, $result] = $this->apiPost($url, $params);
 
         if ($status == 202) {
             return true;

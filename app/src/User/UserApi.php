@@ -69,7 +69,7 @@ class UserApi extends BaseApi
      */
     public function register($data)
     {
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
 
         if ($status == 201) {
             // user URI in $headers['location'] but the user is pending so it's not useful
@@ -99,7 +99,7 @@ class UserApi extends BaseApi
     {
         $data = ["token" => $token];
 
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
 
         if ($status == 204) {
             return true;
@@ -121,7 +121,7 @@ class UserApi extends BaseApi
     {
         $data = ["email" => $email];
 
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
 
         if ($status == 202) {
             return true;
@@ -201,7 +201,7 @@ class UserApi extends BaseApi
     {
         $data = ["email" => $email];
 
-        list($status, $result, $headers) = $this->apiPost(
+        [$status, $result, $headers] = $this->apiPost(
             $this->baseApiUrl . '/v2.1/emails/reminders/username',
             $data
         );
@@ -232,7 +232,7 @@ class UserApi extends BaseApi
     {
         $data = ["username" => $username];
 
-        list($status, $result, $headers) = $this->apiPost(
+        [$status, $result, $headers] = $this->apiPost(
             $this->baseApiUrl . '/v2.1/emails/reminders/password',
             $data
         );
@@ -263,7 +263,7 @@ class UserApi extends BaseApi
      */
     public function edit($uri, array $data)
     {
-        list($status, $result, $headers) = $this->apiPut($uri, $data);
+        [$status, $result, $headers] = $this->apiPut($uri, $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
@@ -277,7 +277,7 @@ class UserApi extends BaseApi
 
     public function delete($uri)
     {
-        list($status, $result) = $this->apiDelete($uri, []);
+        [$status, $result] = $this->apiDelete($uri, []);
 
         if ($status == 204) {
             return true;
@@ -302,7 +302,7 @@ class UserApi extends BaseApi
             "password" => $password,
         ];
 
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
 
         if ($status == 204) {
             return true;

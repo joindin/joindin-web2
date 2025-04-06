@@ -171,7 +171,7 @@ class TalkApi extends BaseApi
             'rating'  => $rating,
             'comment' => $comment,
         ];
-        list($status, $result) = $this->apiPost($uri, $params);
+        [$status, $result] = $this->apiPost($uri, $params);
 
         if ($status == 201) {
             return true;
@@ -181,7 +181,7 @@ class TalkApi extends BaseApi
 
     public function reportComment($uri)
     {
-        list($status, $result) = $this->apiPost($uri);
+        [$status, $result] = $this->apiPost($uri);
 
         if ($status == 202) {
             return true;
@@ -197,12 +197,12 @@ class TalkApi extends BaseApi
     public function toggleStar($talk)
     {
         if ($talk->getStarred()) {
-            list($status, $result) = $this->apiDelete($talk->getStarredUri(), []);
+            [$status, $result] = $this->apiDelete($talk->getStarredUri(), []);
             if ($status == 200) {
                 return ['starred' => false];
             }
         } else {
-            list($status, $result) = $this->apiPost($talk->getStarredUri(), []);
+            [$status, $result] = $this->apiPost($talk->getStarredUri(), []);
             if ($status == 201) {
                 return ['starred' => true];
             }
@@ -269,7 +269,7 @@ class TalkApi extends BaseApi
         }
 
 
-        list($status, $result, $headers) = $this->apiPost($talksUri, $data);
+        [$status, $result, $headers] = $this->apiPost($talksUri, $data);
         // if successful, return talk entity represented by the URL in the Location header
         if ($status == 201) {
             $response = $this->getCollection($headers['location']);
@@ -316,7 +316,7 @@ class TalkApi extends BaseApi
         $media  = $this->getTalkLinksById($talkId);
         $this->handleTalkLinksUpdate($talkId, $media, $data['talk_media']);
 
-        list($status, $result, $headers) = $this->apiPut($talkUri, $data);
+        [$status, $result, $headers] = $this->apiPut($talkUri, $data);
 
         // if successful, return talk entity represented by the URL in the Location header
         if ($status == 204) {
@@ -334,7 +334,7 @@ class TalkApi extends BaseApi
 
     public function claimTalk($talkSpeakersUri, $data)
     {
-        list($status, $result, $headers) = $this->apiPost($talkSpeakersUri, $data);
+        [$status, $result, $headers] = $this->apiPost($talkSpeakersUri, $data);
 
         if ($status == 204) {
             return true;
@@ -348,7 +348,7 @@ class TalkApi extends BaseApi
 
     public function rejectTalkClaim($talkSpeakersUri, $data)
     {
-        list($status, $result, $headers) = $this->apiDelete($talkSpeakersUri, $data);
+        [$status, $result, $headers] = $this->apiDelete($talkSpeakersUri, $data);
 
         if ($status == 204) {
             return true;
@@ -374,7 +374,7 @@ class TalkApi extends BaseApi
             'track_uri' => $trackUri,
         ];
 
-        list($status, $result, $headers) = $this->apiPost($talkTracksUri, $params);
+        [$status, $result, $headers] = $this->apiPost($talkTracksUri, $params);
         if ($status == 201) {
             return true;
         }
@@ -394,7 +394,7 @@ class TalkApi extends BaseApi
      */
     public function removeTalkFromTrack($removeTrackUri)
     {
-        list($status, $result, $headers) = $this->apiDelete($removeTrackUri);
+        [$status, $result, $headers] = $this->apiDelete($removeTrackUri);
         if ($status == 204) {
             return true;
         }
@@ -407,7 +407,7 @@ class TalkApi extends BaseApi
 
     public function unlinkVerifiedSpeakerFromTalk($unlinkSpeakerUri)
     {
-        list($status, $result, $headers) = $this->apiDelete($unlinkSpeakerUri, []);
+        [$status, $result, $headers] = $this->apiDelete($unlinkSpeakerUri, []);
 
         if ($status == 204) {
             return true;
@@ -431,7 +431,7 @@ class TalkApi extends BaseApi
      */
     public function deleteTalk($clientUri)
     {
-        list($status, $result, $headers) = $this->apiDelete($clientUri);
+        [$status, $result, $headers] = $this->apiDelete($clientUri);
 
         if ($status != 204) {
             $decoded = json_decode($result);
@@ -498,7 +498,7 @@ class TalkApi extends BaseApi
             'display_name' => $media['type'],
             'url'          => $media['url'],
         ];
-        list($status, $result, $headers) = $this->apiPost($talkUrl, $params);
+        [$status, $result, $headers] = $this->apiPost($talkUrl, $params);
 
         if ($status == 204) {
             return true;
@@ -514,7 +514,7 @@ class TalkApi extends BaseApi
             'display_name' => $media['type'],
             'url'          => $media['url'],
         ];
-        list($status, $result, $headers) = $this->apiPut($talkUrl, $params);
+        [$status, $result, $headers] = $this->apiPut($talkUrl, $params);
         if ($status == 204) {
             return true;
         }
@@ -525,7 +525,7 @@ class TalkApi extends BaseApi
     protected function deleteTalkMedia($talkId, $mediaId)
     {
         $talkUrl                         = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
-        list($status, $result, $headers) = $this->apiDelete($talkUrl);
+        [$status, $result, $headers] = $this->apiDelete($talkUrl);
 
         if ($status == 204) {
             return true;

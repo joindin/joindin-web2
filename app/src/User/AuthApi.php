@@ -25,7 +25,7 @@ class AuthApi extends BaseApi
             'password'      => $password,
         ];
 
-        list($status, $result) = $this->apiPost($url, $params);
+        [$status, $result] = $this->apiPost($url, $params);
         if ($result) {
             $data = json_decode($result, false, 512, JSON_BIGINT_AS_STRING);
             if ($data) {

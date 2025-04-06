@@ -52,7 +52,7 @@ class TrackApi extends BaseApi
             'track_description' => $data['track_description'] ?? '',
         ];
 
-        list($status, $result, $headers) = $this->apiPut($trackUri, $params);
+        [$status, $result, $headers] = $this->apiPut($trackUri, $params);
         if ($status == 204) {
             return true;
         }
@@ -76,7 +76,7 @@ class TrackApi extends BaseApi
             'track_description' => $data['track_description'] ?? '',
         ];
 
-        list($status, $result, $headers) = $this->apiPost($eventTracksUri, $params);
+        [$status, $result, $headers] = $this->apiPost($eventTracksUri, $params);
         if ($status == 201) {
             return true;
         }
@@ -94,7 +94,7 @@ class TrackApi extends BaseApi
      */
     public function deleteTrack($trackUri)
     {
-        list($status, $result, $headers) = $this->apiDelete($trackUri);
+        [$status, $result, $headers] = $this->apiDelete($trackUri);
         if ($status == 204) {
             return true;
         }

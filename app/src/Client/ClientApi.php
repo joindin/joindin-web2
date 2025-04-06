@@ -69,7 +69,7 @@ class ClientApi extends BaseApi
             'description'  => $data['description'],
             'callback_url' => $data['callback_url'],
         ];
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/applications', $values);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/applications', $values);
 
         if ($status != 201) {
             $decoded = json_decode($result);
@@ -100,7 +100,7 @@ class ClientApi extends BaseApi
             'description'  => $data['description'],
             'callback_url' => $data['callback_url'],
         ];
-        list($status, $result, $headers) = $this->apiPut($clientUri, $values);
+        [$status, $result, $headers] = $this->apiPut($clientUri, $values);
 
         if ($status != 201) {
             $decoded = json_decode($result);
@@ -121,7 +121,7 @@ class ClientApi extends BaseApi
      */
     public function deleteClient($clientUri)
     {
-        list($status, $result, $headers) = $this->apiDelete($clientUri);
+        [$status, $result, $headers] = $this->apiDelete($clientUri);
 
         if ($status != 204) {
             $decoded = json_decode($result);
