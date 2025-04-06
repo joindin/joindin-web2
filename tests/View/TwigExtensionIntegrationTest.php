@@ -9,7 +9,7 @@ use View\FunctionsExtension;
 
 class TwigExtensionIntegrationTest extends IntegrationTestCase
 {
-    private $slim;
+    private \PHPUnit\Framework\MockObject\MockObject $slim;
 
     public function setUp(): void
     {

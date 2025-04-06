@@ -149,7 +149,7 @@ final class FunctionsExtension extends Twig_Extension
             /**
              * Create a link to download a QR-Code for the given URL
              */
-            new Twig_SimpleFunction('qrcode', fn($url) => sprintf(
+            new Twig_SimpleFunction('qrcode', fn($url): string => sprintf(
                 'https://quickchart.io/chart?cht=qr&chs=300x300&chl=%s&choe=UTF-8&chld=H',
                 urlencode($url . '?qr')
             ))

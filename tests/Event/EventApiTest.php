@@ -1,17 +1,18 @@
 <?php
 namespace Tests\Event;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Predis\Client;
 
 class EventApiTest extends TestCase
 {
     private $mockConfig;
-    private $mockCache;
-    private $mockDbEvent;
-    private $mockUserDb;
-    private $mockUserApi;
-    private $mockPredisClient;
+    private MockObject $mockCache;
+    private MockObject $mockDbEvent;
+    private MockObject $mockUserDb;
+    private MockObject $mockUserApi;
+    private MockObject $mockPredisClient;
 
     public function setUp(): void
     {
