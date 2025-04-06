@@ -79,7 +79,7 @@ if (isset($config['slim']['twig']['cache'])) {
 $app->configureMode('development', function () use ($app): void {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
-    $env->addExtension(new \Twig_Extension_Debug());
+    $env->addExtension(new \Twig\Extension\DebugExtension());
 });
 
 // register error handlers

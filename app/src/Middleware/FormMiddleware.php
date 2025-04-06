@@ -2,6 +2,7 @@
 
 namespace Middleware;
 
+use ReflectionClass;
 use Slim\Middleware;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
@@ -10,6 +11,7 @@ use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\DefaultCsrfProvider;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Forms;
@@ -18,6 +20,9 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Translator;
+use Twig\Environment;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * Middleware for Slim used to integrate Symfony forms into Slim.
@@ -82,7 +87,7 @@ class FormMiddleware extends Middleware
         $csrfSecret     = $formMiddleWare->csrfSecret;
         $this->app->container->singleton(
             self::SERVICE_FORM_FACTORY,
-            fn() => $formMiddleWare->createFormFactory($csrfSecret)
+            fn(): FormFactoryInterface => $formMiddleWare->createFormFactory($csrfSecret)
         );
 
         $this->next->call();
@@ -97,10 +102,8 @@ class FormMiddleware extends Middleware
      * @param string $csrfSecret
      *
      * @see self::call() where this method is used to construct a shared instance in Slim.
-     *
-     * @return FormFactoryInterface
      */
-    public function createFormFactory($csrfSecret)
+    public function createFormFactory($csrfSecret): FormFactoryInterface
     {
         $formFactoryBuilder = Forms::createFormFactoryBuilder()
             ->addExtension(new CsrfExtension(new DefaultCsrfProvider($csrfSecret)))
@@ -119,17 +122,13 @@ class FormMiddleware extends Middleware
      * We need to add new loaders in Twig and this can only be done with a chained loader as this
      * allows you to combine multiple together. This method retrieves the loader from Twig and replaces
      * it with a chained version if is not already.
-     *
-     * @param \Twig_Environment $env
-     *
-     * @return \Twig_Loader_Chain
      */
-    private function getChainingLoader($env)
+    private function getChainingLoader(Environment $twigEnvironment): ChainLoader
     {
-        $loader = $env->getLoader();
-        if (!$loader instanceof \Twig_Loader_Chain) {
-            $loader = new \Twig_Loader_Chain([$loader]);
-            $env->setLoader($loader);
+        $loader = $twigEnvironment->getLoader();
+        if (!$loader instanceof ChainLoader) {
+            $loader = new ChainLoader([$loader]);
+            $twigEnvironment->setLoader($loader);
         }
 
         return $loader;
@@ -138,17 +137,17 @@ class FormMiddleware extends Middleware
     /**
      * Adds a loader to Twig pointing to the location of the default templates for forms.
      */
-    private function addFormTemplatesFolderToLoader(\Twig_Loader_Chain $twigLoaderChain): void
+    private function addFormTemplatesFolderToLoader(ChainLoader $chainLoader): void
     {
-        $reflectionClass = new \ReflectionClass(\Symfony\Bridge\Twig\Extension\FormExtension::class);
+        $reflectionClass = new ReflectionClass(FormExtension::class);
         $path      = dirname($reflectionClass->getFileName()) . '/../Resources/views/Form';
-        $twigLoaderChain->addLoader(new \Twig_Loader_Filesystem($path));
+        $chainLoader->addLoader(new FilesystemLoader($path));
     }
 
     /**
      * Adds Twig rendering capabilities to the form and use the given template as default basis.
      */
-    private function createFormTwigExtension(string $formLayoutTemplate): \Symfony\Bridge\Twig\Extension\FormExtension
+    private function createFormTwigExtension(string $formLayoutTemplate): FormExtension
     {
         return new FormExtension(new TwigRenderer(new TwigRendererEngine([$formLayoutTemplate])));
     }
@@ -165,26 +164,21 @@ class FormMiddleware extends Middleware
 
     /**
      * Returns the Twig Environment from the application's view layer.
-     *
-     * @return \Twig_Environment
      */
-    private function getTwigEnvironment()
+    private function getTwigEnvironment(): Environment
     {
         return $this->app->view()->getEnvironment();
     }
 
     /**
      * Adds validation capabilities to the form, including translations for the messages.
-     *
-     *
-     * @return void
      */
-    protected function addValidatorExtensionToFactoryBuilder(FormFactoryBuilder $formFactoryBuilder)
+    protected function addValidatorExtensionToFactoryBuilder(FormFactoryBuilder $formFactoryBuilder): void
     {
         $formFactoryBuilder->addExtension(new ValidatorExtension($this->app->validator));
 
         if (!empty($this->app->translator)) {
-            $reflectionClass = new \ReflectionClass(\Symfony\Component\Form\Form::class);
+            $reflectionClass = new ReflectionClass(Form::class);
             $this->app->translator->addResource(
                 'xliff',
                 dirname($reflectionClass->getFilename()) . '/Resources/translations/validators.' . $this->locale . '.xlf',
