@@ -3,6 +3,8 @@
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file
 
+use Application\ContactApi;
+
 if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
     return false;
 }
@@ -124,32 +126,32 @@ $app->container->singleton(\Application\CacheService::class, function ($containe
     $client = new Predis\Client($redis['connection']);
     return new \Application\CacheService($client, $prefix);
 });
-$app->container->singleton(\Application\ContactApi::class, fn($container) => new \Application\ContactApi($container['settings']['custom'], $container['access_token']));
-$app->container->singleton(\User\UserDb::class, fn($container) => new \User\UserDb($container[\Application\CacheService::class]));
-$app->container->singleton(\User\UserApi::class, fn($container) => new \User\UserApi(
+$app->container->singleton(ContactApi::class, fn($container): ContactApi => new ContactApi($container['settings']['custom'], $container['access_token']));
+$app->container->singleton(\User\UserDb::class, fn($container): \User\UserDb => new \User\UserDb($container[\Application\CacheService::class]));
+$app->container->singleton(\User\UserApi::class, fn($container): \User\UserApi => new \User\UserApi(
     $container['settings']['custom'],
     $container['access_token'],
     $container[\User\UserDb::class]
 ));
-$app->container->singleton(\Event\EventDb::class, fn($container) => new \Event\EventDb($container[\Application\CacheService::class]));
-$app->container->singleton(\Event\EventApi::class, fn($container) => new \Event\EventApi(
+$app->container->singleton(\Event\EventDb::class, fn($container): \Event\EventDb => new \Event\EventDb($container[\Application\CacheService::class]));
+$app->container->singleton(\Event\EventApi::class, fn($container): \Event\EventApi => new \Event\EventApi(
     $container['settings']['custom'],
     $container['access_token'],
     $container[\Event\EventDb::class],
     $container[\User\UserApi::class]
 ));
-$app->container->singleton(\Talk\TalkDb::class, fn($container) => new \Talk\TalkDb($container[\Application\CacheService::class]));
-$app->container->singleton(\Talk\TalkApi::class, fn($container) => new \Talk\TalkApi(
+$app->container->singleton(\Talk\TalkDb::class, fn($container): \Talk\TalkDb => new \Talk\TalkDb($container[\Application\CacheService::class]));
+$app->container->singleton(\Talk\TalkApi::class, fn($container): \Talk\TalkApi => new \Talk\TalkApi(
     $container['settings']['custom'],
     $container['access_token'],
     new \Talk\TalkDb($container[\Application\CacheService::class]),
     $container[\User\UserApi::class]
 ));
-$app->container->singleton(\User\AuthApi::class, fn($container) => new \User\AuthApi($container['settings']['custom'], $container['access_token']));
-$app->container->singleton(\Language\LanguageApi::class, fn($container) => new \Language\LanguageApi($container['settings']['custom'], $container['access_token']));
-$app->container->singleton(\Talk\TalkTypeApi::class, fn($container) => new \Talk\TalkTypeApi($container['settings']['custom'], $container['access_token']));
-$app->container->singleton(\Event\TrackApi::class, fn($container) => new \Event\TrackApi($container['settings']['custom'], $container['access_token']));
-$app->container->singleton(\Client\ClientApi::class, fn($container) => new \Client\ClientApi($container['settings']['custom'], $container['access_token']));
+$app->container->singleton(\User\AuthApi::class, fn($container): \User\AuthApi => new \User\AuthApi($container['settings']['custom'], $container['access_token']));
+$app->container->singleton(\Language\LanguageApi::class, fn($container): \Language\LanguageApi => new \Language\LanguageApi($container['settings']['custom'], $container['access_token']));
+$app->container->singleton(\Talk\TalkTypeApi::class, fn($container): \Talk\TalkTypeApi => new \Talk\TalkTypeApi($container['settings']['custom'], $container['access_token']));
+$app->container->singleton(\Event\TrackApi::class, fn($container): \Event\TrackApi => new \Event\TrackApi($container['settings']['custom'], $container['access_token']));
+$app->container->singleton(\Client\ClientApi::class, fn($container): \Client\ClientApi => new \Client\ClientApi($container['settings']['custom'], $container['access_token']));
 
 // register routes
 new Application\ApplicationController($app);

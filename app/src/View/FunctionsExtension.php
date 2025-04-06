@@ -35,7 +35,7 @@ final class FunctionsExtension extends Twig_Extension
                 return $url;
             }),
 
-            new Twig_SimpleFunction('hash', fn($value) => md5($value)),
+            new Twig_SimpleFunction('hash', fn($value): string => md5($value)),
 
             new Twig_SimpleFunction('gravatar', function ($email_hash, $size = 40) {
                 $size = ((int)$size == 0) ? 20 : (int)$size;

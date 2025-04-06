@@ -30,7 +30,7 @@ class TrailingSlashMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function itDoesNotTrimSlashFromRootPath()
+    public function itDoesNotTrimSlashFromRootPath(): void
     {
         $this->request->getPath()->willReturn('/');
 
@@ -46,7 +46,7 @@ class TrailingSlashMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function itWillTrimSlashIfInTrimSlashMode()
+    public function itWillTrimSlashIfInTrimSlashMode(): void
     {
         $this->request->getPath()->willReturn('/events/php-tek2019/');
 
@@ -61,7 +61,7 @@ class TrailingSlashMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function itWillNotRemoveLastCharacterInTrimModeIfItIsNotASlash()
+    public function itWillNotRemoveLastCharacterInTrimModeIfItIsNotASlash(): void
     {
         $this->request->getPath()->willReturn('/events/php-tek2019');
 
@@ -77,7 +77,7 @@ class TrailingSlashMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function itWillAddSlashIfInAddSlashMode()
+    public function itWillAddSlashIfInAddSlashMode(): void
     {
         $this->request->getPath()->willReturn('/events/php-tek2019');
 
@@ -92,7 +92,7 @@ class TrailingSlashMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function itWillNotAddSlashInAddModeIfLastCharacterIsASlash()
+    public function itWillNotAddSlashInAddModeIfLastCharacterIsASlash(): void
     {
         $this->request->getPath()->willReturn('/events/php-tek2019/');
 
