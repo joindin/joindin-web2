@@ -27,7 +27,7 @@ class ClientEntity extends BaseEntity
         return $this->data->consumer_key;
     }
 
-    public function getCreationDateTime()
+    public function getCreationDateTime(): \DateTimeImmutable
     {
         return new \DateTimeImmutable($this->data->created_date);
     }

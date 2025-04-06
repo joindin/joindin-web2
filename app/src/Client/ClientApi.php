@@ -37,7 +37,7 @@ class ClientApi extends BaseApi
      *
      * @return ClientEntity
      */
-    public function getById($id, $queryParams = ['verbose' => 'yes'])
+    public function getById($id, $queryParams = ['verbose' => 'yes']): \Client\ClientEntity
     {
         $clients_uri = $this->baseApiUrl . '/v2.1/applications/' . urlencode($id);
 

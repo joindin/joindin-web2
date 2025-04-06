@@ -789,7 +789,7 @@ class EventController extends BaseController
         return $eventApi->editHost($values);
     }
 
-    protected function getEventApi()
+    protected function getEventApi(): \Event\EventApi
     {
         $cache    = $this->getCache();
         $eventDb  = new EventDb($cache);
@@ -798,21 +798,21 @@ class EventController extends BaseController
         return $eventApi;
     }
 
-    protected function getLanguageApi()
+    protected function getLanguageApi(): \Language\LanguageApi
     {
         $languageApi = new LanguageApi($this->cfg, $this->accessToken);
 
         return $languageApi;
     }
 
-    protected function getTalkTypeApi()
+    protected function getTalkTypeApi(): \Talk\TalkTypeApi
     {
         $talkTypeApi = new TalkTypeApi($this->cfg, $this->accessToken);
 
         return $talkTypeApi;
     }
 
-    protected function getTrackApi()
+    protected function getTrackApi(): \Event\TrackApi
     {
         $trackApi = new TrackApi($this->cfg, $this->accessToken);
 

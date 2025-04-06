@@ -49,7 +49,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         return $this->data->website_uri;
     }
 
-    public function getStartDateTime()
+    public function getStartDateTime(): \DateTime
     {
         return new DateTime($this->data->start_date);
     }

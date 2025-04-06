@@ -158,7 +158,7 @@ class FormMiddleware extends Middleware
      *
      * @return FormExtension
      */
-    private function createFormTwigExtension($formLayoutTemplate)
+    private function createFormTwigExtension($formLayoutTemplate): \Symfony\Bridge\Twig\Extension\FormExtension
     {
         return new FormExtension(new TwigRenderer(new TwigRendererEngine([$formLayoutTemplate])));
     }

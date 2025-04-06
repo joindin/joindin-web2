@@ -36,7 +36,7 @@ class ApikeyApi extends BaseApi
      *
      * @return ApikeyEntity
      */
-    public function getById($id, $queryParams = ['verbose' => 'yes'])
+    public function getById($id, $queryParams = ['verbose' => 'yes']): \Apikey\ApikeyEntity
     {
         $tokens_uri = $this->baseApiUrl . '/v2.1/token/' . urlencode($id);
 

@@ -178,7 +178,7 @@ class ApikeyController extends BaseController
     /**
      * @return ApikeyApi
      */
-    private function getApikeyApi()
+    private function getApikeyApi(): \Apikey\ApikeyApi
     {
         return new ApikeyApi($this->cfg, $this->accessToken);
     }
