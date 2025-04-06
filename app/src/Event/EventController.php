@@ -80,7 +80,11 @@ class EventController extends BaseController
 
     public function index(): void
     {
+        // Start is... magical - in the API, if you leave start null, we get "upcoming".
+        // If we default it to 0, we get all events, including old ones.
+        // Don't 'fix' this one unless you're also fixing the API.
         $start = null;
+
         $page  = (int)$this->application->request()->get('page');
 
         if (array_key_exists('events_list_middle_start', $_SESSION) && $page !== 0) {
@@ -88,9 +92,9 @@ class EventController extends BaseController
             // in which case, we reset in case new events have been added
             $start = $_SESSION['events_list_middle_start'] + ($page * $this->itemsPerPage);
 
-            if ($start < 0) {
+            if ($start < 1) {
                 $this->itemsPerPage = $start + $this->itemsPerPage;
-                $start              = 0;
+                $start              = 1;
             }
         }
 

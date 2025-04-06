@@ -19,9 +19,10 @@ class ApplicationController extends BaseController
 
     public function index(): void
     {
-        $page = ((int)$this->application->request()->get('page') === 0)
-            ? 1
-            : $this->application->request()->get('page');
+        $page = (int)$this->application->request()->get('page', 1);
+        if ($page === 0) {
+            $page = 1;
+        }
 
         $perPage = 10;
         $start   = ($page -1) * $perPage;

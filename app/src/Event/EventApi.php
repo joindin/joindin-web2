@@ -26,12 +26,12 @@ class EventApi extends BaseApi
      * Get a paginated list of events, optionally applying a filter
      *
      * @param integer $limit       Number of events to get per page
-     * @param integer $start       Start value for pagination
+     * @param ?integer $start       Start value for pagination
      * @param mixed  $filter      Filter to apply
      * @param bool    $verbose     get verbose result
      * @param array   $queryParams Additional query params as key => value pairs
      */
-    public function getEvents(int $limit = 10, int $start = 1, $filter = null, bool $verbose = false, array $queryParams = []): array
+    public function getEvents(int $limit = 10, ?int $start = 1, $filter = null, bool $verbose = false, array $queryParams = []): array
     {
         $url                           = $this->baseApiUrl . '/v2.1/events';
         $queryParams['resultsperpage'] = $limit;
