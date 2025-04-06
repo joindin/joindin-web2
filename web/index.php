@@ -39,7 +39,7 @@ $app = new \Slim\Slim(
     )
 );
 
-$app->configureMode('development', function () use ($app) {
+$app->configureMode('development', function () use ($app): void {
     error_reporting(E_ALL & ~E_DEPRECATED);
     ini_set('display_errors', 1);
     ini_set('html_errors', 1);
@@ -74,19 +74,19 @@ if (isset($config['slim']['twig']['cache'])) {
     $app->view()->getEnvironment()->setCache(false);
 }
 
-$app->configureMode('development', function () use ($app) {
+$app->configureMode('development', function () use ($app): void {
     $env = $app->view()->getEnvironment();
     $env->enableDebug();
     $env->addExtension(new \Twig_Extension_Debug());
 });
 
 // register error handlers
-$app->error(function (\Exception $e) use ($app) {
+$app->error(function (\Exception $e) use ($app): void {
     error_log(get_class($e) . ': ' . $e->getMessage() . " -- " . $e->getTraceAsString());
     $app->render('Error/error.html.twig', ['exception' => $e]);
 });
 
-$app->notFound(function () use ($app) {
+$app->notFound(function () use ($app): void {
     $app->render('Error/404.html.twig');
 });
 
