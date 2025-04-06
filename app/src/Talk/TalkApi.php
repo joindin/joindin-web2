@@ -11,9 +11,6 @@ class TalkApi extends BaseApi
 
     protected \User\UserApi $userApi;
 
-    /**
-     * @param TalkDb $talkDb
-     */
     public function __construct($config, $accessToken, TalkDb $talkDb, UserApi $userApi)
     {
         parent::__construct($config, $accessToken);
@@ -25,9 +22,7 @@ class TalkApi extends BaseApi
      * Get all talks associated with an event
      *
      * @param string $talks_uri   API talk uri
-     * @param array  $queryParams
      *
-     * @return array
      */
     public function getCollection($talks_uri, array $queryParams = []): array
     {
@@ -125,7 +120,6 @@ class TalkApi extends BaseApi
     /**
      * Get Comments for given talk
      *
-     * @param string $comment_uri
      * @param bool $verbose
      * @return TalkCommentEntity[]
      */
@@ -207,9 +201,6 @@ class TalkApi extends BaseApi
 
     /**
      * Retreive a list of talks organised by date and time
-     *
-     * @param  string $talksUri
-     * @return array
      */
     public function getAgenda(string $talksUri): array
     {
@@ -357,8 +348,6 @@ class TalkApi extends BaseApi
      *
      * @param string $talkTracksUri
      * @param string $trackUri
-     *
-     * @return  bool
      */
     public function addTalkToTrack($talkTracksUri, $trackUri): bool
     {
@@ -379,10 +368,6 @@ class TalkApi extends BaseApi
 
     /**
      * Remove a talk from a track
-     *
-     * @param string $removeTrackUri
-     *
-     * @return  bool
      */
     public function removeTalkFromTrack(string $removeTrackUri): bool
     {
@@ -416,10 +401,8 @@ class TalkApi extends BaseApi
      *
      * Deleting all associated entries should be handled by the API.
      *
-     * @param string $clientUri
      *
      * @throws \Exception
-     * @return bool
      */
     public function deleteTalk(string $clientUri): bool
     {

@@ -33,8 +33,7 @@ class UserEntity extends BaseEntity
      */
     public function getTwitterUsername()
     {
-        $name = str_replace('@', '', $this->data->twitter_username);
-        return $name;
+        return str_replace('@', '', $this->data->twitter_username);
     }
 
     /**

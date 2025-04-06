@@ -8,7 +8,7 @@ abstract class BaseController
 {
     protected \Slim\Slim $application;
 
-    protected $accessToken = null;
+    protected $accessToken;
     protected $cfg;
 
     public function __construct(Slim $slim)
@@ -23,9 +23,7 @@ abstract class BaseController
 
     private function getConfig()
     {
-        $app    = Slim::getInstance();
-        $config = $app->config('custom');
-        return $config;
+        return Slim::getInstance()->config('custom');
     }
 
     protected function render($template, $data = [], $status = null)

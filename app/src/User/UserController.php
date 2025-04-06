@@ -49,15 +49,11 @@ class UserController extends BaseController
 
     /**
      * Login page
-     *
-     * @return void
      */
     public function login(): void
     {
         $config  = $this->application->config('oauth');
         $request = $this->application->request();
-
-        $error = false;
         if ($request->isPost()) {
             // handle submission of login form
 
@@ -79,8 +75,6 @@ class UserController extends BaseController
 
     /**
      * Registration page
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -142,8 +136,6 @@ class UserController extends BaseController
 
     /**
      * Log out
-     *
-     * @return void
      */
     public function logout(): void
     {
@@ -162,8 +154,6 @@ class UserController extends BaseController
 
     /**
      * Accept a user's email verification
-     *
-     * @return void
      */
     public function verification(): void
     {
@@ -229,7 +219,6 @@ class UserController extends BaseController
      * User profile page
      *
      * @param  string $username User's username
-     * @return void
      */
     public function profile($username): void
     {
@@ -440,7 +429,7 @@ class UserController extends BaseController
 
         $talkDb       = $this->getTalkDb();
         $talkApi      = $this->getTalkApi();
-        $eventApi     = $this->getEventApi();
+        $this->getEventApi();
         $eventUri     = null;
         $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 0);
         if (!$talkComments) {
@@ -589,7 +578,6 @@ class UserController extends BaseController
      * User profile edit page
      *
      * @param  string $username User's username
-     * @return void
      */
     public function profileEdit($username): void
     {
@@ -740,8 +728,6 @@ class UserController extends BaseController
 
     /**
      * Link in password reset email lands here
-     *
-     * @return void
      */
     public function newPassword(): void
     {
@@ -794,23 +780,19 @@ class UserController extends BaseController
      */
     protected function handleLogin(array $result, $redirect = '')
     {
-        if (!is_object($result)) {
-            if ($result === false || $result[0] == 'Signin failed') {
-                $this->application->flash('error', "Failed to log in");
-            }
-            if ($result[0] == 'Not verified') {
-                $message = 'User account not verified. ' .
-                    "<a href='/user/resend-verification'>Click here</a> to resend welcome email.";
-                $this->application
-                    ->flash('error', $message);
-            }
-
-            if (empty($redirect)) {
-                $redirect = '/';
-            }
-            $this->application->redirect($redirect . '#login');
+        if ($result[0] == 'Signin failed') {
+            $this->application->flash('error', "Failed to log in");
         }
-
+        if ($result[0] == 'Not verified') {
+            $message = 'User account not verified. ' .
+                "<a href='/user/resend-verification'>Click here</a> to resend welcome email.";
+            $this->application
+                ->flash('error', $message);
+        }
+        if (empty($redirect)) {
+            $redirect = '/';
+        }
+        $this->application->redirect($redirect . '#login');
         session_regenerate_id(true);
         $_SESSION['access_token'] = $result->access_token;
         $this->accessToken        = $_SESSION['access_token'];

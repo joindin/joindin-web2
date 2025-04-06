@@ -12,7 +12,6 @@ class TalkEntity extends BaseEntity implements ArrayAccess
      * Is user a speaker on this talk?
      *
      * @param  string  $userUri
-     * @return boolean
      */
     public function isSpeaker($userUri): bool
     {
@@ -54,16 +53,15 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         return new DateTime($this->data->start_date);
     }
 
-    public function getEndDateTime()
+    public function getEndDateTime(): ?\DateTime
     {
         if (!$this->data->duration) {
             return null;
         }
 
         $start_time = $this->getStartDateTime();
-        $end_time   = $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
 
-        return $end_time;
+        return $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
     }
 
     public function getDuration()

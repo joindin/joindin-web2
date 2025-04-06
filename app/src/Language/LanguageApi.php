@@ -25,8 +25,6 @@ class LanguageApi extends BaseApi
 
     /**
      * Return the list of languages in a format suitable for a choice list
-     *
-     * @return array
      */
     public function getLanguagesChoiceList(): array
     {

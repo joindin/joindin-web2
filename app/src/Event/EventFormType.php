@@ -49,11 +49,6 @@ class EventFormType extends AbstractType
      *
      * This method is automatically called by the Form Factory builder and does not need
      * to be called manually, see the class description for usage information.
-     *
-     * @param FormBuilderInterface $formBuilder
-     * @param array                $options
-     *
-     * @return void
      */
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
@@ -203,11 +198,6 @@ class EventFormType extends AbstractType
      * - Show a placeholder in the input that demonstrates the format.
      * - Display the right label.
      * - when required add the validation that ensures the field is not empty.
-     *
-     * @param string  $label
-     * @param boolean $required
-     *
-     * @return array
      */
     private function getOptionsForUrlWidget(string $label, bool $required = true): array
     {
@@ -233,11 +223,6 @@ class EventFormType extends AbstractType
      * - Force the widget to be rendered as a HTML5 'date' input.
      * - Display the right label.
      * - when required add the validation that ensures the field is not empty.
-     *
-     * @param string  $label
-     * @param boolean $required
-     *
-     * @return array
      */
     private function getOptionsForDateWidget(string $label, bool $required = true): array
     {
@@ -267,8 +252,6 @@ class EventFormType extends AbstractType
      * Both the key and value contain the name of the timezone continent/city so that the select box will pass a string
      * value and not a numeric value. Although PHP recognizes 'UTC' as timezone we explicitly remove that because
      * it does not fit with the Joind.in API.
-     *
-     * @return array
      */
     public function getListOfTimezoneContinentsAndCities(): array
     {

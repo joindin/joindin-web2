@@ -24,11 +24,6 @@ class SpeakerFormType extends AbstractType
 
     /**
      * Adds fields with their types and validation constraints to this definition.
-     *
-     * @param FormBuilderInterface $formBuilder
-     * @param array                $options
-     *
-     * @return void
      */
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {

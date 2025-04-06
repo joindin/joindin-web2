@@ -42,8 +42,6 @@ class EventSchedulerDay
 
     /**
      * Get date
-     *
-     * @return string
      */
     public function getDate(): string
     {

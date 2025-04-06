@@ -33,9 +33,6 @@ class SearchController extends BaseController
         parent::__construct($slim);
     }
 
-    /**
-     * @param Slim $slim
-     */
     protected function defineRoutes(Slim $slim)
     {
         $slim->get('/search/events', [$this, 'searchEvents'])->name("search-events");
@@ -46,7 +43,6 @@ class SearchController extends BaseController
      * Sanitize the search string - based on stub definition
      *
      * @param string $keyword
-     * @return string|null
      */
     protected function sanitizeKeyword($keyword): ?string
     {
@@ -57,7 +53,6 @@ class SearchController extends BaseController
      * Sanitize a tag
      *
      * @param string $tag
-     * @return string|null
      */
     protected function sanitizeTag($tag): ?string
     {
@@ -144,8 +139,6 @@ class SearchController extends BaseController
      * @param int    $page
      * @param string $keyword
      * @param string $tag
-     *
-     * @return array
      */
     private function searchEventsByTitleAndTag($page, ?string $keyword, ?string $tag = null): array
     {
@@ -172,9 +165,7 @@ class SearchController extends BaseController
 
     /**
      * @param int    $page
-     * @param string $keyword
      *
-     * @return array
      */
     private function searchTalksByTitle($page, string $keyword): array
     {
@@ -192,9 +183,7 @@ class SearchController extends BaseController
 
     /**
      * @param int    $page
-     * @param string $keyword
      *
-     * @return array
      */
     private function searchUsersByKeyword($page, string $keyword): array
     {
@@ -250,11 +239,7 @@ class SearchController extends BaseController
         return $events;
     }
 
-    /**
-     * @param array $paginations
-     *
-     * @return array
-     */
+    
     private function combinePaginationData(array $paginations): array
     {
         $result = [

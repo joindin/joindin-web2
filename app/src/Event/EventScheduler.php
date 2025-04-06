@@ -18,8 +18,6 @@ class EventScheduler
 
     /**
      * Constructor
-     *
-     * @param TalkApi $talkApi
      */
     public function __construct(TalkApi $talkApi)
     {
@@ -29,29 +27,22 @@ class EventScheduler
     /**
      * Builds schedule data into an array structure
      * for schedule view
-     *
-     * @param EventEntity $eventEntity
-     * @return array
      */
     public function getScheduleData(EventEntity $eventEntity): array
     {
         $talks     = $this->getTalks($eventEntity->getTalksUri().'?start=0&resultsperpage=1000');
-        $eventDays = $this->getEventDays($talks);
 
-        return $eventDays;
+        return $this->getEventDays($talks);
     }
 
     /**
      * Retrieves talk collection from API
      *
      * @param string $talks_uri
-     * @return array
      */
     public function getTalks($talks_uri): array
     {
-        $talks = $this->talkApi->getCollection($talks_uri);
-
-        return $talks;
+        return $this->talkApi->getCollection($talks_uri);
     }
 
     /**
@@ -90,7 +81,6 @@ class EventScheduler
      * day
      *
      * @param TalkEntity[] $talks
-     * @return array
      */
     protected function organiseTalksByDayAndTime($talks): array
     {
@@ -119,7 +109,6 @@ class EventScheduler
      * track names by date
      *
      * @param array $talks
-     * @return array
      */
     protected function getTracksByDay($talks): array
     {

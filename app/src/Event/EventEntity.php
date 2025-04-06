@@ -283,8 +283,6 @@ class EventEntity extends BaseEntity
      * Returns the timezone in Continent/Place format or null if the timezone is not provided.
      *
      * @see \DateTimeZone::listIdentifiers() for a list of supported timezones.
-     *
-     * @return string|null
      */
     public function getTimezone(): ?string
     {
@@ -310,8 +308,6 @@ class EventEntity extends BaseEntity
 
     /**
      * Returns the continent for the set timezone
-     *
-     * @return string
      */
     public function getTzContinent(): string
     {
@@ -331,8 +327,6 @@ class EventEntity extends BaseEntity
 
     /**
      * Returns the city for the set timezone
-     *
-     * @return string
      */
     public function getTzPlace(): string
     {
@@ -442,8 +436,6 @@ class EventEntity extends BaseEntity
     /**
      * Returns the status of the CFP
      * Baed on start and end dates
-     *
-     * @return string
      */
     public function getCfpStatus(): string
     {

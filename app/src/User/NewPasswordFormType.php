@@ -26,11 +26,6 @@ class NewPasswordFormType extends AbstractType
      *
      * This method is automatically called by the Form Factory builder and does not need
      * to be called manually, see the class description for usage information.
-     *
-     * @param FormBuilderInterface $formBuilder
-     * @param array                $options
-     *
-     * @return void
      */
     public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {

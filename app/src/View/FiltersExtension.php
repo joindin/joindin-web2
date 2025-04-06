@@ -28,11 +28,8 @@ final class FiltersExtension extends \Twig_Extension
     }
 
     /**
-     * @param Twig_Environment $twigEnvironment
      * @param string           $suffix
-     * @param string           $infix
      *
-     * @return string
      * @throws \Twig_Error_Runtime
      */
     public function imgPath(Twig_Environment $twigEnvironment, $suffix, string $infix): string
@@ -64,11 +61,8 @@ final class FiltersExtension extends \Twig_Extension
     }
 
     /**
-     * @param string $url
      * @param string $label
-     * @param string $class
      *
-     * @return string
      */
     public function link(string $url, $label = '', string $class = ''): string
     {

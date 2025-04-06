@@ -10,9 +10,6 @@ final class FunctionsExtension extends Twig_Extension
 {
     private \Slim\Slim $slim;
 
-    /**
-     * @param Slim $slim
-     */
     public function __construct(Slim $slim)
     {
         $this->slim = $slim;
@@ -27,9 +24,7 @@ final class FunctionsExtension extends Twig_Extension
 
         return [
             new Twig_SimpleFunction('urlFor', function ($routeName, $params = []) use ($app): string {
-                $url = rtrim($app->urlFor($routeName, $params), '/');
-
-                return $url;
+                return rtrim($app->urlFor($routeName, $params), '/');
             }),
 
             new Twig_SimpleFunction('hash', fn($value): string => md5($value)),

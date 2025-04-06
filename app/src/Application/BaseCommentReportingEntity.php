@@ -5,7 +5,7 @@ use stdClass;
 
 abstract class BaseCommentReportingEntity extends BaseEntity
 {
-    protected $comment = null;
+    protected $comment;
 
     public function __construct(stdClass $data)
     {

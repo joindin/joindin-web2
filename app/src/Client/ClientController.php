@@ -48,7 +48,7 @@ class ClientController extends BaseController
         ]);
     }
 
-    public function showClient($username, $clientName): void
+    public function showClient($username, string $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-show', [
             'clientName' => $clientName,
@@ -128,7 +128,7 @@ class ClientController extends BaseController
         );
     }
 
-    public function editClient($username, $clientName): void
+    public function editClient($username, string $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-edit', [
             'clientName' => $clientName,
@@ -211,8 +211,6 @@ class ClientController extends BaseController
      *
      * Should an error occur will this method append an error message to the form's error collection.
      *
-     * @param Form $form
-     *
      * @return ClientEntity|null|false
      */
     private function addClientUsingForm(Form $form)
@@ -234,7 +232,7 @@ class ClientController extends BaseController
 
 
 
-    public function deleteClient($username, $clientName): void
+    public function deleteClient($username, string $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-delete', [
             'clientName' => $clientName,
@@ -307,10 +305,7 @@ class ClientController extends BaseController
         );
     }
 
-    /**
-     * @return ClientApi
-     */
-    private function getClientApi()
+    private function getClientApi(): ClientApi
     {
         return $this->application->container->get(ClientApi::class);
     }
