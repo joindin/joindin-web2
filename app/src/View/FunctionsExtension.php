@@ -35,9 +35,7 @@ final class FunctionsExtension extends Twig_Extension
                 return $url;
             }),
 
-            new Twig_SimpleFunction('hash', function ($value) {
-                return md5($value);
-            }),
+            new Twig_SimpleFunction('hash', fn($value) => md5($value)),
 
             new Twig_SimpleFunction('gravatar', function ($email_hash, $size = 40) {
                 $size = ((int)$size == 0) ? 20 : (int)$size;
@@ -50,9 +48,7 @@ final class FunctionsExtension extends Twig_Extension
                 return $url;
             }),
 
-            new Twig_SimpleFunction('getCurrentRoute', function () use ($app) {
-                return $app->router->getCurrentRoute()->getName();
-            }),
+            new Twig_SimpleFunction('getCurrentRoute', fn() => $app->router->getCurrentRoute()->getName()),
 
             new Twig_SimpleFunction('getCurrentUrl', function ($fullyQualified = false) use ($app) {
                 $url = $_SERVER['REQUEST_URI'];
@@ -67,9 +63,7 @@ final class FunctionsExtension extends Twig_Extension
                 return $url;
             }),
 
-            new Twig_SimpleFunction('urlForTalk', function ($eventSlug, $talkSlug, $params = []) use ($app) {
-                return $app->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug]);
-            }),
+            new Twig_SimpleFunction('urlForTalk', fn($eventSlug, $talkSlug, $params = []) => $app->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug])),
 
             new Twig_SimpleFunction('shortUrlForTalk', function ($talkStub) use ($app) {
                 $scheme = $app->request()->getScheme();
@@ -155,12 +149,10 @@ final class FunctionsExtension extends Twig_Extension
             /**
              * Create a link to download a QR-Code for the given URL
              */
-            new Twig_SimpleFunction('qrcode', function ($url) {
-                return sprintf(
-                    'https://quickchart.io/chart?cht=qr&chs=300x300&chl=%s&choe=UTF-8&chld=H',
-                    urlencode($url . '?qr')
-                );
-            })
+            new Twig_SimpleFunction('qrcode', fn($url) => sprintf(
+                'https://quickchart.io/chart?cht=qr&chs=300x300&chl=%s&choe=UTF-8&chld=H',
+                urlencode($url . '?qr')
+            ))
         ];
     }
 

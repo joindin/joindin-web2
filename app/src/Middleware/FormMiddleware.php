@@ -84,9 +84,7 @@ class FormMiddleware extends Middleware
         $csrfSecret     = $formMiddleWare->csrfSecret;
         $this->app->container->singleton(
             self::SERVICE_FORM_FACTORY,
-            function () use ($formMiddleWare, $csrfSecret) {
-                return $formMiddleWare->createFormFactory($csrfSecret);
-            }
+            fn() => $formMiddleWare->createFormFactory($csrfSecret)
         );
 
         $this->next->call();

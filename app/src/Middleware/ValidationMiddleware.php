@@ -58,9 +58,7 @@ class ValidationMiddleware extends Middleware
         $middleware = $this;
         $this->app->container->singleton(
             self::SERVICE_VALIDATOR,
-            function () use ($middleware) {
-                return $middleware->createValidator();
-            }
+            fn() => $middleware->createValidator()
         );
 
         $this->next->call();

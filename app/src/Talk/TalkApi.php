@@ -108,7 +108,7 @@ class TalkApi extends BaseApi
     public function getTalk($talk_uri, $verbose = false)
     {
         if ($verbose) {
-            $talk_uri = $talk_uri . '?verbose=yes';
+            $talk_uri .= '?verbose=yes';
         }
 
         $collection = (array)json_decode($this->apiGet($talk_uri));
@@ -227,12 +227,10 @@ class TalkApi extends BaseApi
 
         $agenda = [];
 
-        usort($talks, function (TalkEntity $a, TalkEntity $b) {
-            return $a->getStartDateTime() <=> $b->getStartDateTime() ?:
-                ($a->getTracks() && $b->getTracks()
-                    ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
-                    : $a['id'] <=> $b['id']);
-        });
+        usort($talks, fn(TalkEntity $a, TalkEntity $b) => $a->getStartDateTime() <=> $b->getStartDateTime() ?:
+            ($a->getTracks() && $b->getTracks()
+                ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
+                : $a['id'] <=> $b['id']));
         foreach ($talks as $talk) {
             $date                   = $talk->getStartDateTime()->format("Y-m-d");
             $startTime              = $talk->getStartDateTime()->format("H:i");
