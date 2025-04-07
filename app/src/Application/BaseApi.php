@@ -1,4 +1,5 @@
 <?php
+
 namespace Application;
 
 abstract class BaseApi
@@ -22,7 +23,8 @@ abstract class BaseApi
         $this->accessToken = $accessToken;
     }
 
-    private function buildContext(string $httpMethod, string $content = null) {
+    private function buildContext(string $httpMethod, string $content = null)
+    {
         $httpContextOpts = [
             'method'        => $httpMethod,
             'header'        => ['Accept: application/json'],
@@ -38,10 +40,10 @@ abstract class BaseApi
             $httpContextOpts['content'] = $content;
         }
 
-        $ip    = $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
-        $httpContextOpts['header'][] = "Forwarded: for=$ip";
+        $httpContextOpts['header'][] = 'Forwarded: for=' . $ip;
         if ($this->accessToken) {
             $httpContextOpts['header'][] = "Authorization: OAuth " . $this->accessToken;
         }
@@ -54,23 +56,10 @@ abstract class BaseApi
         return stream_context_create(['http' => $httpContextOpts]);
     }
 
-    protected function apiGet(string $url, $params = [])
+    private function makeHttpCall(string $httpMethod, string $url, string $content = null): BaseApiResult
     {
-        $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
-        $result = file_get_contents($url . $paramsString, false, $this->buildContext('GET'));
-
-        if (false === $result) {
-            throw new \RuntimeException('Unable to connect to API');
-        }
-
-        return $result;
-    }
-
-    protected function apiDelete(string $url, $params = [])
-    {
-        $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
-
-        $result = file_get_contents($url . $paramsString, false, $this->buildContext('DELETE'));
+        $context = $this->buildContext($httpMethod, $content);
+        $result  = file_get_contents($url, false, $context);
 
         if (false === $result) {
             throw new \RuntimeException('Unable to connect to API');
@@ -83,45 +72,45 @@ abstract class BaseApi
 
         $headers = $this->extractListOfHeaders($http_response_header);
 
-        return [$status, $result, $headers];
+        return new BaseApiResult($result, (int)$status, $headers);
     }
 
-    protected function apiPost($url, $params = [])
+    protected function apiGet(string $url, array $params = []): string
     {
-        $result = file_get_contents(
-            $url,
-            false,
-            $this->buildContext('POST', json_encode($params))
-        );
-        if (false === $result) {
-            throw new \Exception('Unable to connect to API');
-        }
+        $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
 
-        $status = 0;
-        if (preg_match('@HTTP\/1\.[0|1] (\d+) @', $http_response_header[0], $matches)) {
-            $status = $matches[1];
-        }
-
-        $headers = $this->extractListOfHeaders($http_response_header);
-
-        return [$status, $result, $headers];
+        return $this->makeHttpCall('GET', $url . $paramsString)->get_body();
     }
 
-    protected function apiPut($url, $params = [])
+    /**
+     * @return array{int, string, array}
+     * @throws \JsonException
+     */
+    protected function apiDelete(string $url, array $params = []): array
     {
-        $result = file_get_contents($url, false, $this->buildContext('PUT', json_encode($params)));
-        if (false === $result) {
-            throw new \Exception('Unable to connect to API');
-        }
+        $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
+        $baseApiResult = $this->makeHttpCall('DELETE', $url . $paramsString);
+        return [$baseApiResult->get_status_code(), $baseApiResult->get_body(), $baseApiResult->get_headers()];
+    }
 
-        $status = 0;
-        if (preg_match('@HTTP\/1\.[0|1] (\d+) @', $http_response_header[0], $matches)) {
-            $status = $matches[1];
-        }
+    /**
+     * @return array{int, string, array}
+     * @throws \JsonException
+     */
+    protected function apiPost(string $url, array $params = []): array
+    {
+        $baseApiResult = $this->makeHttpCall('POST', $url, json_encode($params, JSON_THROW_ON_ERROR));
+        return [$baseApiResult->get_status_code(), $baseApiResult->get_body(), $baseApiResult->get_headers()];
+    }
 
-        $headers = $this->extractListOfHeaders($http_response_header);
-
-        return [$status, $result, $headers];
+    /**
+     * @return array{int, string, array}
+     * @throws \JsonException
+     */
+    protected function apiPut(string $url, array $params = []): array
+    {
+        $baseApiResult = $this->makeHttpCall('PUT', $url, json_encode($params, JSON_THROW_ON_ERROR));
+        return [$baseApiResult->get_status_code(), $baseApiResult->get_body(), $baseApiResult->get_headers()];
     }
 
     /**
@@ -151,7 +140,7 @@ abstract class BaseApi
     }
 
     /**
-     * @param string $accessToken
+     * @param string|null $accessToken
      */
     public function setAccessToken(?string $accessToken): void
     {
