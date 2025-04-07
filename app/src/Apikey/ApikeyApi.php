@@ -60,6 +60,7 @@ class ApikeyApi extends BaseApi
             if (is_array($decoded)) {
                 $result = current($decoded);
             }
+
             throw new \Exception($result);
         }
 

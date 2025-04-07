@@ -106,6 +106,7 @@ class EventEntity extends BaseEntity
 
         return $this;
     }
+
     /**
      * @return array|null
      */
@@ -508,27 +509,27 @@ class EventEntity extends BaseEntity
     {
         if (isset($this->data->reported_comments_uri)) {
             return $this->data->reported_comments_uri;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getReportedTalkCommentsUri()
     {
         if (isset($this->data->reported_talk_comments_uri)) {
             return $this->data->reported_talk_comments_uri;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getPendingClaimsUri()
     {
         if (isset($this->data->pending_claims_uri)) {
             return $this->data->pending_claims_uri;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getAttendeesUri()

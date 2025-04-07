@@ -10,6 +10,7 @@ abstract class BaseController
     protected \Slim\Slim $application;
 
     protected $accessToken;
+
     protected $cfg;
 
     public function __construct(Slim $slim)
@@ -31,17 +32,17 @@ abstract class BaseController
     {
         try {
             $this->application->render($template, $data, $status);
-        } catch (RuntimeError $e) {
+        } catch (RuntimeError $runtimeError) {
             $this->application->render(
                 'Error/app_load_error.html.twig',
                 [
                     'message' => sprintf(
                         'An exception has been thrown during the rendering of a template ("%s").',
-                        $e->getMessage()
+                        $runtimeError->getMessage()
                     ),
                     -1,
                     null,
-                    $e
+                    $runtimeError
                 ]
             );
         }
@@ -49,11 +50,11 @@ abstract class BaseController
 
     protected function getSessionVariable($name, $default = null)
     {
-        $value = $default;
         if (array_key_exists($name, $_SESSION)) {
-            $value = $_SESSION[$name];
+            return $_SESSION[$name];
         }
-        return $value;
+
+        return $default;
     }
 
     abstract protected function defineRoutes(Slim $slim);

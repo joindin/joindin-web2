@@ -14,6 +14,7 @@ use Talk\TalkEntity;
 class EventScheduler
 {
     protected \Talk\TalkApi $talkApi;
+
     protected $distinctDates;
 
     /**
@@ -94,6 +95,7 @@ class EventScheduler
             if (!isset($talksByDay[$date]) || !array_key_exists($date, $talksByDay)) {
                 $talksByDay[$date] = [];
             }
+
             if (!isset($talksByDay[$date][$time]) || !array_key_exists($time, $talksByDay[$date])) {
                 $talksByDay[$date][$time] = [];
             }

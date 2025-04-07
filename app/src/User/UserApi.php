@@ -7,7 +7,7 @@ class UserApi extends BaseApi
 {
     private \User\UserDb $userDb;
 
-    public function __construct($config, $accessToken, UserDb $userDb)
+    public function __construct($config, ?string $accessToken, UserDb $userDb)
     {
         parent::__construct($config, $accessToken);
         $this->userDb = $userDb;
@@ -31,6 +31,7 @@ class UserApi extends BaseApi
                 return $userEntity;
             }
         }
+
         return false;
     }
 
@@ -147,6 +148,7 @@ class UserApi extends BaseApi
                 }
             }
         }
+
         return false;
     }
 
@@ -259,7 +261,7 @@ class UserApi extends BaseApi
             return true;
         }
 
-        throw new \Exception("Unable to delete user: $status, $result");
+        throw new \Exception(sprintf('Unable to delete user: %s, %s', $status, $result));
     }
 
     /**

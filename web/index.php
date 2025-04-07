@@ -8,6 +8,7 @@ use Application\ContactApi;
 if (in_array(substr($_SERVER['REQUEST_URI'], -4), ['.css', '.jpg', '.png'])) {
     return false;
 }
+
 if (!ini_get('date.timezone')) {
     date_default_timezone_set('UTC');
 }
@@ -100,7 +101,7 @@ $app->add(new class extends \Slim\Middleware { // catch Stops thrown in middlewa
     {
         try {
             $this->next->call();
-        } catch (\Slim\Exception\Stop $e) {
+        } catch (\Slim\Exception\Stop $stop) {
             $this->app->response()->write(ob_get_clean());
         }
     }
@@ -110,6 +111,7 @@ $csrfSecret = null;
 if (!empty($config['slim']['custom']['csrfSecret'])) {
     $csrfSecret = $config['slim']['custom']['csrfSecret'];
 }
+
 $app->add(new Middleware\FormMiddleware($csrfSecret));
 
 // register services
@@ -120,7 +122,7 @@ $app->container->singleton(\Application\CacheService::class, function ($containe
     $prefix = $redis['options']['prefix'];
 
     if ($host = getenv('REDIS_HOST')) {
-        $redis['connection'] = "tcp://$host:6379";
+        $redis['connection'] = sprintf('tcp://%s:6379', $host);
     }
 
     $client = new Predis\Client($redis['connection']);

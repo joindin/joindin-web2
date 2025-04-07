@@ -125,9 +125,9 @@ class UserController extends BaseController
         $result = false;
         try {
             $result = $userApi->register($values);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $form->addError(
-                new FormError('An error occurred while registering you: ' . $e->getMessage())
+                new FormError('An error occurred while registering you: ' . $exception->getMessage())
             );
         }
 
@@ -145,9 +145,11 @@ class UserController extends BaseController
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
         }
+
         if (isset($_SESSION['access_token'])) {
             unset($_SESSION['access_token']);
         }
+
         session_regenerate_id(true);
         $this->application->redirect($redirect);
     }
@@ -165,7 +167,7 @@ class UserController extends BaseController
         try {
             $userApi->verify($token);
             $this->application->flash('message', "Thank you for verifying your email address. You can now log in.");
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->application->flash('error', "Sorry, your verification link was invalid.");
         }
 
@@ -271,6 +273,7 @@ class UserController extends BaseController
             if (isset($talkInfo[$talkComment->getTalkUri()])) {
                 continue;
             }
+
             $talkData = $talkDb->load('uri', $talkComment->getTalkUri());
             if ($talkData) {
                 $eventUri                                                     = $talkData['event_uri'];
@@ -442,6 +445,7 @@ class UserController extends BaseController
             if (isset($talkInfo[$talkComment->getTalkUri()])) {
                 continue;
             }
+
             $talkData = $talkDb->load('uri', $talkComment->getTalkUri());
             if ($talkData) {
                 $eventUri                                                     = $talkData['event_uri'];
@@ -674,8 +678,8 @@ class UserController extends BaseController
             $result = $userApi->delete($user->getUri());
 
             $this->application->flash('message', 'User has been deleted');
-        } catch (\Exception $e) {
-            $this->application->flash('error', 'There was a problem deleting the user: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->application->flash('error', 'There was a problem deleting the user: ' . $exception->getMessage());
             $this->application->redirect(
                 $this->application->urlFor('user-profile-edit', ['username' => $username])
             );
@@ -783,15 +787,18 @@ class UserController extends BaseController
         if ($result[0] == 'Signin failed') {
             $this->application->flash('error', "Failed to log in");
         }
+
         if ($result[0] == 'Not verified') {
             $message = 'User account not verified. ' .
                 "<a href='/user/resend-verification'>Click here</a> to resend welcome email.";
             $this->application
                 ->flash('error', $message);
         }
+
         if (empty($redirect)) {
             $redirect = '/';
         }
+
         $this->application->redirect($redirect . '#login');
         session_regenerate_id(true);
         $_SESSION['access_token'] = $result->access_token;
@@ -812,8 +819,10 @@ class UserController extends BaseController
             ) {
                 $this->application->redirect('/');
             }
+
             $this->application->redirect($redirect);
         }
+
         unset($_SESSION['access_token']);
         $this->application->flash('error', "Failed to log in. User account problem.");
         $this->application->redirect('/');

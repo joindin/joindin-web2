@@ -11,7 +11,7 @@ class TalkApi extends BaseApi
 
     protected \User\UserApi $userApi;
 
-    public function __construct($config, $accessToken, TalkDb $talkDb, UserApi $userApi)
+    public function __construct($config, ?string $accessToken, TalkDb $talkDb, UserApi $userApi)
     {
         parent::__construct($config, $accessToken);
         $this->talkDb  = $talkDb;
@@ -105,6 +105,7 @@ class TalkApi extends BaseApi
         if (!isset($collection['talks'])) {
             return false;
         }
+
         $talkEntity = new TalkEntity($collection['talks'][0]);
         $this->talkDb->save($talkEntity);
 
@@ -164,6 +165,7 @@ class TalkApi extends BaseApi
         if ($status == 201) {
             return true;
         }
+
         throw new Exception("Failed to add comment: " . $result);
     }
 
@@ -174,6 +176,7 @@ class TalkApi extends BaseApi
         if ($status == 202) {
             return true;
         }
+
         throw new Exception("Failed to report comment: " . $result);
     }
 
@@ -196,7 +199,7 @@ class TalkApi extends BaseApi
             }
         }
 
-        throw new Exception("Failed to toggle star: $status, $result");
+        throw new Exception(sprintf('Failed to toggle star: %s, %s', $status, $result));
     }
 
     /**
@@ -208,6 +211,7 @@ class TalkApi extends BaseApi
         if (!array_key_exists('talks', $talks)) {
             return [];
         }
+
         $talks = $talks['talks'];
 
         $agenda = [];
@@ -219,7 +223,7 @@ class TalkApi extends BaseApi
         foreach ($talks as $talk) {
             $date                   = $talk->getStartDateTime()->format("Y-m-d");
             $startTime              = $talk->getStartDateTime()->format("H:i");
-            $time                   = "$startTime";
+            $time                   = $startTime;
             $agenda[$date][$time][] = $talk;
         }
 
@@ -246,6 +250,7 @@ class TalkApi extends BaseApi
                 if (is_array($value)) {
                     $value = current($value);
                 }
+
                 $value = trim($value);
             });
             $data['speakers'] = array_filter($data['speakers']);
@@ -258,9 +263,11 @@ class TalkApi extends BaseApi
             $response = $this->getCollection($headers['location']);
             return current($response['talks']);
         }
+
         if ($status == 202) {
             return null;
         }
+
         if ($status == 400) {
             $decoded = json_decode($result);
             if (is_array($decoded)) {
@@ -291,10 +298,12 @@ class TalkApi extends BaseApi
                 if (is_array($value)) {
                     $value = current($value);
                 }
+
                 $value = trim($value);
             });
             $data['speakers'] = array_filter($data['speakers']);
         }
+
         $talkId = basename($talkUri);
         $media  = $this->getTalkLinksById($talkId);
         $this->handleTalkLinksUpdate($talkId, $media, $data['talk_media']);
@@ -413,6 +422,7 @@ class TalkApi extends BaseApi
             if (is_array($decoded)) {
                 $result = current($decoded);
             }
+
             throw new \Exception($result);
         }
 
@@ -446,9 +456,11 @@ class TalkApi extends BaseApi
                     )) {
                         $this->updateTalkMedia($talkId, $key, $media);
                     }
+
                     continue 2;
                 }
             }
+
             $this->addTalkMedia($talkId, $media);
         }
 
@@ -458,6 +470,7 @@ class TalkApi extends BaseApi
                     continue 2;
                 }
             }
+
             $this->deleteTalkMedia($talkId, $old->id);
         }
     }

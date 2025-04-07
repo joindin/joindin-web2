@@ -111,6 +111,7 @@ class EventApi extends BaseApi
                     $hostsInfo->entity   = $this->userApi->getUser($hostsInfo->host_uri);
                 }
             }
+
             return $eventEntity;
         }
 
@@ -165,6 +166,7 @@ class EventApi extends BaseApi
         if ($status == 201) {
             return true;
         }
+
         throw new Exception("Failed to add comment: " . $result);
     }
 
@@ -175,6 +177,7 @@ class EventApi extends BaseApi
         if ($status == 202) {
             return true;
         }
+
         throw new Exception("Failed to report comment: " . $result);
     }
 
@@ -209,7 +212,7 @@ class EventApi extends BaseApi
      */
     public function getAttendees(string $attendees_uri, $limit = 0, $verbose = false): array
     {
-        $attendees_uri .= "?resultsperpage={$limit}";
+        $attendees_uri .= '?resultsperpage=' . $limit;
         if ($verbose) {
             $attendees_uri .= '&verbose=yes';
         }
@@ -244,6 +247,7 @@ class EventApi extends BaseApi
             if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('Y-m-d');
             }
+
             if (isset($data[$dateField]) && !strtotime($data[$dateField])) {
                 unset($data[$dateField]);
             }
@@ -256,9 +260,11 @@ class EventApi extends BaseApi
             $response = $this->getCollection($headers['location']);
             return current($response['events']);
         }
+
         if ($status == 202) {
             return null;
         }
+
         if ($status == 400) {
             $decoded = json_decode($result);
             if (is_array($decoded)) {
@@ -287,6 +293,7 @@ class EventApi extends BaseApi
             if (isset($data[$dateField]) && $data[$dateField] instanceof DateTime) {
                 $data[$dateField] = $data[$dateField]->format('c');
             }
+
             if (isset($data[$dateField]) && !strtotime($data[$dateField])) {
                 unset($data[$dateField]);
             }
@@ -365,12 +372,12 @@ class EventApi extends BaseApi
 
             $headers                  = [];
             $headers["Accept"]        = "application/json";
-            $headers["Authorization"] = "OAuth {$this->accessToken}";
+            $headers["Authorization"] = 'OAuth ' . $this->accessToken;
 
             // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
             $ip                   = $_SERVER['REMOTE_ADDR'];
             $agent                = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-            $headers["Forwarded"] = "for=$ip;user-agent=\"$agent\"";
+            $headers["Forwarded"] = sprintf('for=%s;user-agent="%s"', $ip, $agent);
 
             $options            = [];
             $options['headers'] = $headers;
@@ -385,11 +392,11 @@ class EventApi extends BaseApi
 
             $request  = new \GuzzleHttp\Psr7\Request('POST', $imagesUri);
             $response = $client->send($request, $options);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $body = $e->getResponse()->getBody();
-            error_log($e->getMessage());
+        } catch (\GuzzleHttp\Exception\RequestException $requestException) {
+            $body = $requestException->getResponse()->getBody();
+            error_log($requestException->getMessage());
             error_log(json_decode($body)[0]);
-            throw new Exception(json_decode($body)[0], $e->getCode(), $e);
+            throw new Exception(json_decode($body)[0], $requestException->getCode(), $requestException);
         }
 
         if ($response->getStatusCode() == 201) {
@@ -429,6 +436,7 @@ class EventApi extends BaseApi
             // save the URL so we can look up by it
             $this->eventDb->save($event);
         }
+
         $collectionData['pagination'] = $meta;
 
         return $collectionData;
@@ -480,6 +488,7 @@ class EventApi extends BaseApi
         if ($status == 204) {
             return true;
         }
+
         throw new Exception("Failed to approve event: " . $result);
     }
 
@@ -493,6 +502,7 @@ class EventApi extends BaseApi
         if ($status == 204) {
             return true;
         }
+
         throw new Exception("Failed to reject event: " . $result);
     }
 
@@ -520,6 +530,7 @@ class EventApi extends BaseApi
         if ($verbose) {
             $claims_uri .= "?verbose=yes";
         }
+
         $response = json_decode($this->apiGet($claims_uri));
 
         $reports = [];

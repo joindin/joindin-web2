@@ -9,6 +9,7 @@ namespace Application;
 class CacheService
 {
     protected \Predis\Client $client;
+
     protected $keyPrefix;
 
     public function __construct(\Predis\Client $client, $keyPrefix = '')
@@ -36,6 +37,7 @@ class CacheService
         foreach ($keys as $keyField => $keyValue) {
             $fqKey .= '-' . $keyField . '-' . substr(md5($keyValue), 0, 6);
         }
+
         $this->client->set($fqKey, serialize($data));
     }
 

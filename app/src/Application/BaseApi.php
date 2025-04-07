@@ -3,11 +3,13 @@ namespace Application;
 
 abstract class BaseApi
 {
-    protected $baseApiUrl;
-    protected $accessToken;
-    protected $proxy;
+    protected string $baseApiUrl;
 
-    public function __construct($config, $accessToken)
+    protected ?string $accessToken = null;
+
+    protected ?string $proxy = null;
+
+    public function __construct($config, ?string $accessToken)
     {
         if (isset($config['apiUrl'])) {
             $this->baseApiUrl = $config['apiUrl'];
@@ -33,10 +35,10 @@ abstract class BaseApi
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip    = $_SERVER['REMOTE_ADDR'];
         $agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-        $contextOpts['http']['header'] .= "\r\nForwarded: for=$ip;user-agent=\"$agent\"";
+        $contextOpts['http']['header'] .= "\r\nForwarded: for={$ip};user-agent=\"{$agent}\"";
 
         if ($this->accessToken) {
-            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
+            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth " . $this->accessToken;
         }
 
         if ($this->proxy) {
@@ -68,10 +70,10 @@ abstract class BaseApi
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip    = $_SERVER['REMOTE_ADDR'];
         $agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-        $contextOpts['http']['header'] .= "\r\nForwarded: for=$ip;user-agent=\"$agent\"";
+        $contextOpts['http']['header'] .= "\r\nForwarded: for={$ip};user-agent=\"{$agent}\"";
 
         if ($this->accessToken) {
-            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
+            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth " . $this->accessToken;
         }
 
         if ($this->proxy) {
@@ -110,10 +112,11 @@ abstract class BaseApi
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip    = $_SERVER['REMOTE_ADDR'];
         $agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-        $contextOpts['http']['header'] .= "\r\nForwarded: for=$ip;user-agent=\"$agent\"";
+        $contextOpts['http']['header'] .= "\r\nForwarded: for={$ip};user-agent=\"{$agent}\"";
 
         if ($this->accessToken) {
-            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
+            $contextOpts['http']['header'] .= '
+Authorization: OAuth ' . $this->accessToken;
         }
 
         if ($this->proxy) {
@@ -151,10 +154,11 @@ abstract class BaseApi
         // Forwarded header - see RFC 7239 (http://tools.ietf.org/html/rfc7239)
         $ip    = $_SERVER['REMOTE_ADDR'];
         $agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-        $contextOpts['http']['header'] .= "\r\nForwarded: for=$ip;user-agent=\"$agent\"";
+        $contextOpts['http']['header'] .= "\r\nForwarded: for={$ip};user-agent=\"{$agent}\"";
 
         if ($this->accessToken) {
-            $contextOpts['http']['header'] .= "\r\nAuthorization: OAuth {$this->accessToken}";
+            $contextOpts['http']['header'] .= '
+Authorization: OAuth ' . $this->accessToken;
         }
 
         if ($this->proxy) {
@@ -207,7 +211,7 @@ abstract class BaseApi
     /**
      * @param string $accessToken
      */
-    public function setAccessToken($accessToken): void
+    public function setAccessToken(?string $accessToken): void
     {
         $this->accessToken = $accessToken;
     }

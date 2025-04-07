@@ -11,7 +11,7 @@ class TwigExtensionIntegrationTest extends IntegrationTestCase
 {
     private \PHPUnit\Framework\MockObject\MockObject $mockObject;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mockObject = $this->getMockBuilder(Slim::class)
                            ->disableOriginalConstructor()

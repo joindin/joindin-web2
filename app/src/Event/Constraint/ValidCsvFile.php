@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraint;
 class ValidCsvFile extends Constraint
 {
     public $groupname;
+
     public $keyname;
 
     public $message = 'The CSV must be formatted properly';

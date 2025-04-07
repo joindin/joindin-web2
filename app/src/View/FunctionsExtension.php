@@ -52,7 +52,7 @@ final class FunctionsExtension extends AbstractExtension
                     $scheme = $app->request()->getScheme();
                     $host   = $app->request()->headers('host');
 
-                    $url = "$scheme://$host$url";
+                    $url = sprintf('%s://%s%s', $scheme, $host, $url);
                 }
 
                 return $url;
@@ -64,14 +64,14 @@ final class FunctionsExtension extends AbstractExtension
                 $scheme = $app->request()->getScheme();
                 $host   = $app->request()->headers('host');
 
-                return "$scheme://$host" . $app->urlFor('talk-quicklink', ['talkStub' => $talkStub]);
+                return sprintf('%s://%s', $scheme, $host) . $app->urlFor('talk-quicklink', ['talkStub' => $talkStub]);
             }),
 
             new TwigFunction('shortUrlForEvent', function ($eventStub) use ($app): string {
                 $scheme = $app->request()->getScheme();
                 $host   = $app->request()->headers('host');
 
-                return "$scheme://$host" . $app->urlFor('event-quicklink', ['stub' => $eventStub]);
+                return sprintf('%s://%s', $scheme, $host) . $app->urlFor('event-quicklink', ['stub' => $eventStub]);
             }),
 
             new TwigFunction(
@@ -83,6 +83,7 @@ final class FunctionsExtension extends AbstractExtension
                     if (!$start instanceof DateTimeInterface) {
                         $start = new DateTime($start);
                     }
+
                     if (!$end instanceof DateTimeInterface) {
                         $end = new DateTime($end);
                     }
@@ -106,6 +107,7 @@ final class FunctionsExtension extends AbstractExtension
                 if ($duration < 60) {
                     return sprintf("%d %s", $duration, ($duration == 1 ? 'minute' : 'minutes'));
                 }
+
                 if ($duration == 60) {
                     return "1 hour";
                 }

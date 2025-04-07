@@ -9,7 +9,7 @@ class EventEntityTest extends TestCase
 {
     private \stdClass $eventData;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         // Not used at the moment, but it's here for future use when we
         // want to provide data to the class

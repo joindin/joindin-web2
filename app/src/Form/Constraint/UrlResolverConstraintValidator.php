@@ -28,7 +28,7 @@ class UrlResolverConstraintValidator extends ConstraintValidator
 
         try {
             $this->urlResolver->resolve($value);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->context->addViolation($constraint->message);
         }
     }

@@ -124,7 +124,7 @@ class ApikeyController extends BaseController
         $apikeyApi = $this->getApikeyApi();
         try {
             $apikey = $apikeyApi->getById($apikey);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->application->notFound();
             return;
         }
@@ -156,9 +156,9 @@ class ApikeyController extends BaseController
                         $this->application->urlFor('apikey-show', ['username' => $username])
                     );
                     return;
-                } catch (\RuntimeException $e) {
+                } catch (\RuntimeException $exception) {
                     $form->adderror(
-                        new FormError('An error occurred while removing this API-Key: ' . $e->getmessage())
+                        new FormError('An error occurred while removing this API-Key: ' . $exception->getmessage())
                     );
                 }
             }

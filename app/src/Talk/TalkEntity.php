@@ -21,6 +21,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
                 return true;
             }
         }
+
         return false;
     }
 
@@ -89,6 +90,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         if ($verbose) {
             return $this->data->verbose_uri;
         }
+
         return $this->data->uri;
     }
 
@@ -107,6 +109,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         if (! isset($this->data->user_rating)) {
             return false;
         }
+
         return $this->data->user_rating;
     }
 

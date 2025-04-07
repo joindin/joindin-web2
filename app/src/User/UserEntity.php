@@ -46,6 +46,7 @@ class UserEntity extends BaseEntity
         if (!isset($this->data->biography)) {
             return null;
         }
+
         return $this->data->biography;
     }
 

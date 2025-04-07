@@ -19,6 +19,7 @@ class ValidEventIconValidator extends ConstraintValidator
             if (!isset($_FILES[$groupName])) {
                 return;
             }
+
             $files = $_FILES[$groupName];
         }
 

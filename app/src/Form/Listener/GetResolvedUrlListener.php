@@ -34,7 +34,7 @@ class GetResolvedUrlListener implements EventSubscriberInterface
         try {
             $redirectURL = $this->urlResolver->resolve($data);
             $formEvent->setData($redirectURL);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // We can do nothing with this now, this will be caught by the constraint
         }
     }

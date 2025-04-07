@@ -9,7 +9,7 @@ class TalkCommentEntityTest extends TestCase
 {
     private \stdClass $commentData;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->commentData                      = new stdClass();
         $this->commentData->rating              = 5;

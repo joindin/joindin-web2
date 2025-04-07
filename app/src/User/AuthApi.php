@@ -32,6 +32,7 @@ class AuthApi extends BaseApi
                 return $data;
             }
         }
+
         return false;
     }
 }
