@@ -36,7 +36,7 @@ class TalkFormType extends AbstractType
     public function __construct(EventEntity $eventEntity, array $languages, array $talkTypes, array $tracks)
     {
         $this->timezone  = $eventEntity->getFullTimezone();
-        $dateTimeZone              = new \DateTimeZone($this->timezone);
+        $dateTimeZone    = new \DateTimeZone($this->timezone);
         $this->startDate = new \DateTimeImmutable($eventEntity->getStartDate(), $dateTimeZone);
         $this->endDate   = new \DateTimeImmutable($eventEntity->getEndDate(), $dateTimeZone);
 

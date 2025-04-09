@@ -276,12 +276,12 @@ class UserController extends BaseController
 
             $talkData = $talkDb->load('uri', $talkComment->getTalkUri());
             if ($talkData) {
-                $eventUri                                                     = $talkData['event_uri'];
+                $eventUri                                                         = $talkData['event_uri'];
                 $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
             } else {
                 $talk = $talkApi->getTalk($talkComment->getTalkUri());
                 if ($talk) {
-                    $eventUri                                                    = $talk->getEventUri();
+                    $eventUri                                                        = $talk->getEventUri();
                     $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 }
             }
@@ -448,12 +448,12 @@ class UserController extends BaseController
 
             $talkData = $talkDb->load('uri', $talkComment->getTalkUri());
             if ($talkData) {
-                $eventUri                                                     = $talkData['event_uri'];
+                $eventUri                                                         = $talkData['event_uri'];
                 $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
             } else {
                 $talk = $talkApi->getTalk($talkComment->getTalkUri());
                 if ($talk) {
-                    $eventUri                                                    = $talk->getEventUri();
+                    $eventUri                                                        = $talk->getEventUri();
                     $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 }
             }

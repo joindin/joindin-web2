@@ -66,7 +66,7 @@ class ApikeyController extends BaseController
         $_SESSION['api_key_page'] = $page;
 
         $apikeyApi = $this->getApikeyApi();
-        $tokens   = $apikeyApi->getCollection($queryParams);
+        $tokens    = $apikeyApi->getCollection($queryParams);
 
         // reset session state if oauth_access_tokens are removed while user is logged in (found during testing)
         if (!isset($tokens['tokens'])) {

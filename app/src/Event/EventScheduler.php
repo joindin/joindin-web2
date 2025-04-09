@@ -59,7 +59,7 @@ class EventScheduler
         }
 
         $talks      = $talks['talks'];
-        usort($talks, fn(TalkEntity $a, TalkEntity $b): int => $a->getStartDateTime() <=> $b->getStartDateTime() ?:
+        usort($talks, fn (TalkEntity $a, TalkEntity $b): int => $a->getStartDateTime() <=> $b->getStartDateTime() ?:
             ($a->getTracks() && $b->getTracks()
                 ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
                 : $a['id'] <=> $b['id']));

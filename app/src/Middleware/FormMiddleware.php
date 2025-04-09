@@ -87,7 +87,7 @@ class FormMiddleware extends Middleware
         $csrfSecret     = $formMiddleWare->csrfSecret;
         $this->app->container->singleton(
             self::SERVICE_FORM_FACTORY,
-            fn(): FormFactoryInterface => $formMiddleWare->createFormFactory($csrfSecret)
+            fn (): FormFactoryInterface => $formMiddleWare->createFormFactory($csrfSecret)
         );
 
         $this->next->call();
@@ -140,7 +140,7 @@ class FormMiddleware extends Middleware
     private function addFormTemplatesFolderToLoader(ChainLoader $chainLoader): void
     {
         $reflectionClass = new ReflectionClass(FormExtension::class);
-        $path      = dirname($reflectionClass->getFileName()) . '/../Resources/views/Form';
+        $path            = dirname($reflectionClass->getFileName()) . '/../Resources/views/Form';
         $chainLoader->addLoader(new FilesystemLoader($path));
     }
 

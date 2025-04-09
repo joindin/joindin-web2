@@ -216,7 +216,7 @@ class TalkApi extends BaseApi
 
         $agenda = [];
 
-        usort($talks, fn(TalkEntity $a, TalkEntity $b): int => $a->getStartDateTime() <=> $b->getStartDateTime() ?:
+        usort($talks, fn (TalkEntity $a, TalkEntity $b): int => $a->getStartDateTime() <=> $b->getStartDateTime() ?:
             ($a->getTracks() && $b->getTracks()
                 ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
                 : $a['id'] <=> $b['id']));
@@ -512,7 +512,7 @@ class TalkApi extends BaseApi
 
     protected function deleteTalkMedia(string $talkId, string $mediaId): bool
     {
-        $talkUrl                         = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
+        $talkUrl                     = $this->baseApiUrl . '/v2.1/talks/' . $talkId . '/links/' . $mediaId;
         [$status, $result, $headers] = $this->apiDelete($talkUrl);
 
         if ($status == 204) {

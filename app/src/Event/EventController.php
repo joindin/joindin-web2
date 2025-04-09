@@ -390,7 +390,7 @@ class EventController extends BaseController
 
         setcookie('schedule-view', 'grid', ['expires' => strtotime('+2 years'), 'path' => '/']);
 
-        $talkApi   = $this->getTalkApi();
+        $talkApi        = $this->getTalkApi();
         $eventScheduler = new EventScheduler($talkApi);
 
         $schedule = $eventScheduler->getScheduleData($event);
@@ -793,8 +793,8 @@ class EventController extends BaseController
 
     protected function getEventApi(): \Event\EventApi
     {
-        $cacheService    = $this->getCache();
-        $eventDb  = new EventDb($cacheService);
+        $cacheService = $this->getCache();
+        $eventDb      = new EventDb($cacheService);
 
         return new EventApi($this->cfg, $this->accessToken, $eventDb, $this->getUserApi());
     }
@@ -841,8 +841,8 @@ class EventController extends BaseController
     {
         $this->application->response()->header('Content-Type', 'application/json');
 
-        $eventApi   = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         $result = null;
         if ($event) {
@@ -856,8 +856,8 @@ class EventController extends BaseController
     {
         $this->application->response()->header('Content-Type', 'application/json');
 
-        $eventApi   = $this->getEventApi();
-        $event = $eventApi->getByFriendlyUrl($friendly_name);
+        $eventApi = $this->getEventApi();
+        $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         $result = null;
         if ($event) {

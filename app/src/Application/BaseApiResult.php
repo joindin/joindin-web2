@@ -31,6 +31,4 @@ class BaseApiResult
     {
         return $this->body;
     }
-
-    
 }

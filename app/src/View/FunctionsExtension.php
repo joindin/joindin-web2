@@ -30,7 +30,7 @@ final class FunctionsExtension extends AbstractExtension
                 return rtrim($app->urlFor($routeName, $params), '/');
             }),
 
-            new TwigFunction('hash', fn($value): string => md5($value)),
+            new TwigFunction('hash', fn ($value): string => md5($value)),
 
             new TwigFunction('gravatar', function (string $email_hash, $size = 40): string {
                 $size = ((int)$size == 0) ? 20 : (int)$size;
@@ -43,7 +43,7 @@ final class FunctionsExtension extends AbstractExtension
                 return $url;
             }),
 
-            new TwigFunction('getCurrentRoute', fn() => $app->router->getCurrentRoute()->getName()),
+            new TwigFunction('getCurrentRoute', fn () => $app->router->getCurrentRoute()->getName()),
 
             new TwigFunction('getCurrentUrl', function ($fullyQualified = false) use ($app) {
                 $url = $_SERVER['REQUEST_URI'];
@@ -58,7 +58,7 @@ final class FunctionsExtension extends AbstractExtension
                 return $url;
             }),
 
-            new TwigFunction('urlForTalk', fn($eventSlug, $talkSlug, $params = []) => $app->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug])),
+            new TwigFunction('urlForTalk', fn ($eventSlug, $talkSlug, $params = []) => $app->urlFor('talk', ['eventSlug' => $eventSlug, 'talkSlug' => $talkSlug])),
 
             new TwigFunction('shortUrlForTalk', function ($talkStub) use ($app): string {
                 $scheme = $app->request()->getScheme();
@@ -146,7 +146,7 @@ final class FunctionsExtension extends AbstractExtension
             /**
              * Create a link to download a QR-Code for the given URL
              */
-            new TwigFunction('qrcode', fn($url): string => sprintf(
+            new TwigFunction('qrcode', fn ($url): string => sprintf(
                 'https://quickchart.io/chart?cht=qr&chs=300x300&chl=%s&choe=UTF-8&chld=H',
                 urlencode($url . '?qr')
             ))
