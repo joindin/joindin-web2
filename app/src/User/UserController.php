@@ -232,7 +232,7 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $talkDb   = $this->getTalkDb();
@@ -297,7 +297,7 @@ class UserController extends BaseController
             }
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile.html.twig',
             [
                 'thisUser'         => $user,
@@ -322,7 +322,7 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $talkApi = $this->getTalkApi();
@@ -344,7 +344,7 @@ class UserController extends BaseController
             }
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile-talks.html.twig',
             [
                 'thisUser'  => $user,
@@ -365,7 +365,7 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $eventApi         = $this->getEventApi();
@@ -377,7 +377,7 @@ class UserController extends BaseController
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile-events.html.twig',
             [
                 'thisUser' => $user,
@@ -398,7 +398,7 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $eventApi               = $this->getEventApi();
@@ -411,7 +411,7 @@ class UserController extends BaseController
         }
 
 
-        echo $this->render(
+        $this->render(
             'User/profile-events.html.twig',
             [
                 'thisUser' => $user,
@@ -432,7 +432,7 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $talkDb       = $this->getTalkDb();
@@ -593,7 +593,7 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         if (!$user->getCanEdit() || !isset($_SESSION['user'])) {
@@ -622,7 +622,7 @@ class UserController extends BaseController
 
         $request = $this->application->request();
         if ($request->isPost()) {
-            if ($request->post('submit') == 'Cancel') {
+            if ($request->post('submit') === 'Cancel') {
                 $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
             }
 
@@ -835,7 +835,7 @@ class UserController extends BaseController
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUserId($userId);
         if (!$user) {
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
         $this->application->redirect(
