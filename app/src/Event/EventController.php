@@ -197,7 +197,7 @@ class EventController extends BaseController
                 $this->redirectToDetailPage($event->getUrlFriendlyName(), 301);
             }
 
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
         $action = 'scheduleList';
@@ -214,7 +214,7 @@ class EventController extends BaseController
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if (! $event) {
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
         $quicklink = $this->application->request()->headers("host")
@@ -239,7 +239,7 @@ class EventController extends BaseController
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
 
         if (! $event) {
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
 
@@ -260,7 +260,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (! $event) {
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
         $quicklink = $this->application->request()->headers("host")
@@ -658,7 +658,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getEventById($eventId);
         if (!$event instanceof \Event\EventEntity) {
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
         if ($extra && is_array($extra) && ($extra[0] == "talk_comments")) {
@@ -1135,7 +1135,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (!$event) {
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
         if (!$event->getCanEdit()) {
@@ -1213,7 +1213,7 @@ class EventController extends BaseController
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (!$event) {
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
         if (!$event->getCanEdit()) {
