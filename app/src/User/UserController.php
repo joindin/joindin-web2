@@ -63,11 +63,16 @@ class UserController extends BaseController
             $redirect     = $request->post('redirect');
             $clientId     = $config['client_id'];
             $clientSecret = $config['client_secret'];
-
+            /** @var AuthApi $authApi */
             $authApi = $this->application->container->get(AuthApi::class);
-            $result  = $authApi->login($username, $password, $clientId, $clientSecret);
+            try {
+                $result = $authApi->login($username, $password, $clientId, $clientSecret);
+            } catch (\RuntimeException $exception) {
+                $this->handleLoginError($exception, $redirect);
+                return;
+            }
 
-            $this->handleLogin($result, $redirect);
+            $this->handleLoginSuccess($result, $redirect);
         }
 
         $this->application->redirect('/');
@@ -782,31 +787,29 @@ class UserController extends BaseController
      * @param  string           $redirect
      * @return void
      */
-    protected function handleLogin(array $result, $redirect = '')
+    protected function handleLoginError(\RuntimeException $exception, string $redirect = '/')
     {
-        if ($result[0] == 'Signin failed') {
+        if ($exception->getMessage() === 'Signin failed') {
             $this->application->flash('error', "Failed to log in");
         }
 
-        if ($result[0] == 'Not verified') {
-            $message = 'User account not verified. ' .
-                "<a href='/user/resend-verification'>Click here</a> to resend welcome email.";
-            $this->application
-                ->flash('error', $message);
-        }
-
-        if (empty($redirect)) {
-            $redirect = '/';
+        if ($exception->getMessage() === 'Not verified') {
+            $message = 'User account not verified. ' . "<a href='/user/resend-verification'>Click here</a> to resend welcome email.";
+            $this->application->flash('error', $message);
         }
 
         $this->application->redirect($redirect . '#login');
+    }
+
+    protected function handleLoginSuccess(\stdClass $result, string $redirect = '/')
+    {
         session_regenerate_id(true);
+
         $_SESSION['access_token'] = $result->access_token;
         $this->accessToken        = $_SESSION['access_token'];
 
         // now get users details
         $userApi = $this->getUserApi();
-
         $userApi->setAccessToken($this->accessToken);
 
         $user = $userApi->getUser($result->user_uri);
