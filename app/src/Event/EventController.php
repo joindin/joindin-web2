@@ -7,12 +7,11 @@ use Slim\Exception\Stop;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Validator\Validator;
+use Symfony\Component\Form\FormInterface;
 use Talk\TalkDb;
 use Talk\TalkApi;
 use Talk\TalkFormType;
 use Talk\TalkTypeApi;
-use User\UserDb;
 use User\UserApi;
 use Exception;
 use Slim\Slim;
@@ -20,14 +19,9 @@ use Language\LanguageApi;
 
 class EventController extends BaseController
 {
-    private $itemsPerPage = 10;
+    private int $itemsPerPage = 10;
 
     private int $pendingItemsPerPage = 30;
-
-    public function __construct(Slim $slim)
-    {
-        parent::__construct($slim);
-    }
 
     protected function defineRoutes(Slim $slim): void
     {
@@ -201,7 +195,7 @@ class EventController extends BaseController
         }
 
         $action = 'scheduleList';
-        if (isset($_COOKIE['schedule-view']) && $_COOKIE['schedule-view'] == 'grid') {
+        if (isset($_COOKIE['schedule-view']) && $_COOKIE['schedule-view'] === 'grid') {
             $action = 'scheduleGrid';
         }
 
@@ -319,7 +313,7 @@ class EventController extends BaseController
     public function schedule(string $friendly_name): void
     {
         $scheduleView = 'list';
-        if (isset($_COOKIE['schedule-view']) && $_COOKIE['schedule-view'] == 'grid') {
+        if (isset($_COOKIE['schedule-view']) && $_COOKIE['schedule-view'] === 'grid') {
             $scheduleView = 'grid';
         }
 
@@ -653,15 +647,15 @@ class EventController extends BaseController
      * Handles redirecting web1 event urls to web2
      * e.g. /event/view/3 -> /event/myevent
      */
-    public function redirectFromId(int $eventId, $extra = false)
+    public function redirectFromId(int $eventId, $extra = false): void
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getEventById($eventId);
-        if (!$event instanceof \Event\EventEntity) {
+        if (!$event instanceof EventEntity) {
             $this->application->notFound();
         }
 
-        if ($extra && is_array($extra) && ($extra[0] == "talk_comments")) {
+        if ($extra && is_array($extra) && ($extra[0] === "talk_comments")) {
             $this->application->redirect(
                 $this->application->urlFor(
                     'event-talk-comments',
@@ -670,7 +664,7 @@ class EventController extends BaseController
             );
         }
 
-        if ($extra && is_array($extra) && ($extra[0] == "comments")) {
+        if ($extra && is_array($extra) && ($extra[0] === "comments")) {
             $this->application->redirect(
                 $this->application->urlFor(
                     'event-comments',
@@ -679,7 +673,7 @@ class EventController extends BaseController
             );
         }
 
-        if ($extra && is_array($extra) && ($extra[0] == "talks")) {
+        if ($extra && is_array($extra) && ($extra[0] === "talks")) {
             $this->application->redirect(
                 $this->application->urlFor(
                     'event-schedule',
@@ -705,7 +699,7 @@ class EventController extends BaseController
      *
      * @return EventEntity|null|false
      */
-    private function addEventUsingForm(Form $form)
+    private function addEventUsingForm(FormInterface $form)
     {
         $eventApi = $this->getEventApi();
         $values   = $form->getData();
@@ -731,7 +725,7 @@ class EventController extends BaseController
      *
      * @return EventEntity|null|false
      */
-    private function editEventUsingForm(Form $form)
+    private function editEventUsingForm(FormInterface $form)
     {
         $eventApi = $this->getEventApi();
         $values   = $form->getData()->toArray();
@@ -924,7 +918,7 @@ class EventController extends BaseController
             $decision     = $this->application->request->post('decision');
 
             $eventApi->moderateComment($reported_uri, $decision);
-            if ($decision == 'approved') {
+            if ($decision === 'approved') {
                 $this->application->flash('message', 'Report accepted.');
             } else {
                 $this->application->flash('message', 'Report rejected. Comment has been republished.');
@@ -966,18 +960,18 @@ class EventController extends BaseController
                 $action      = $this->application->request->post('action');
 
                 if ($this->application->request->post('display_name')
-                    && $this->application->request->post('display_name') == $claim->display_name
-                    && $this->application->request->post('username') == $claim->user->getUsername()
-                    && $this->application->request->post("talk") == $claim->talk->getStub()
+                    && $this->application->request->post('display_name') === $claim->display_name
+                    && $this->application->request->post('username') === $claim->user->getUsername()
+                    && $this->application->request->post('talk') === $claim->talk->getStub()
                 ) {
                     $data = [
                         'display_name'  => $this->application->request->post('display_name'),
                         'username'      => $this->application->request->post('username'),
                     ];
 
-                    if ($action == "approve") {
+                    if ($action === 'approve') {
                         $this->appoveClaimPendingTalk($talkApi, $claim, $data);
-                    } elseif ($action == "reject") {
+                    } elseif ($action === 'reject') {
                         $this->rejectClaimPendingTalk($talkApi, $claim, $data);
                     }
                 }
@@ -995,8 +989,6 @@ class EventController extends BaseController
 
     public function removeHost(string $friendly_name, $host_name): void
     {
-        $this->application->request();
-
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
         if (! $event) {
@@ -1139,7 +1131,7 @@ class EventController extends BaseController
         }
 
         if (!$event->getCanEdit()) {
-            $this->application->flash('error', "You do not have permission to do this.");
+            $this->application->flash('error', 'You do not have permission to do this.');
             $this->redirectToDetailPage($event->getUrlFriendlyName());
         }
 
@@ -1184,7 +1176,7 @@ class EventController extends BaseController
                         $talkApi->addTalkToTrack($talk->getTracksUri(), $values['track']);
                     }
 
-                    $this->application->flash('message', "Talk added");
+                    $this->application->flash('message', 'Talk added');
                     $this->application->redirect(
                         $this->application->urlFor('event-schedule', ['friendly_name' => $event->getUrlFriendlyName()])
                     );
@@ -1217,7 +1209,7 @@ class EventController extends BaseController
         }
 
         if (!$event->getCanEdit()) {
-            $this->application->flash('error', "You do not have permission to do this.");
+            $this->application->flash('error', 'You do not have permission to do this.');
             $this->redirectToDetailPage($event->getUrlFriendlyName());
         }
 
@@ -1262,7 +1254,7 @@ class EventController extends BaseController
                         }
                     }
 
-                    $this->application->flash('message', "Tracks updated");
+                    $this->application->flash('message', 'Tracks updated');
                     $this->application->redirect(
                         $this->application->urlFor(
                             'event-edit-tracks',
@@ -1305,10 +1297,10 @@ class EventController extends BaseController
         if ($request->isPost()) {
             try {
                 if (isset($_FILES['event_import']['error']['csv_file'])
-                    && $_FILES['event_import']['error']['csv_file'] == UPLOAD_ERR_OK) {
+                    && $_FILES['event_import']['error']['csv_file'] === UPLOAD_ERR_OK) {
                     $eventApi = $this->getEventApi();
                     $event    = $eventApi->getByFriendlyUrl($eventSlug);
-                    $handle   = fopen($_FILES['event_import']['tmp_name']['csv_file'], "r");
+                    $handle   = fopen($_FILES['event_import']['tmp_name']['csv_file'], 'r');
 
                     while (!feof($handle)) {
                         $talk       = fgetcsv($handle);
@@ -1379,7 +1371,8 @@ class EventController extends BaseController
 
         /** @var \Talk\TalkCommentEntity $comment */
         foreach ($comments as $comment) {
-            $slugs[$comment->getTalkUri()] = $talkDb->getSlugFor($comment->getTalkUri());
+            $uri         = $comment->getTalkUri();
+            $slugs[$uri] = $talkDb->getSlugFor($uri);
         }
 
         return $slugs;
