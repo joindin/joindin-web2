@@ -5,6 +5,7 @@ use Application\BaseController;
 use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
+use Symfony\Component\Form\FormFactoryInterface;
 use User\UserDb;
 use User\UserApi;
 use Exception;
@@ -16,7 +17,7 @@ use Symfony\Component\Form\FormError;
 
 class TalkController extends BaseController
 {
-    protected function defineRoutes(Slim $slim)
+    protected function defineRoutes(Slim $slim): void
     {
         $slim->get('/event/:eventSlug/:talkSlug', [$this, 'index'])->name('talk');
         $slim->map('/event/:eventSlug/:talkSlug/edit', [$this, 'editTalk'])->via('GET', 'POST')->name('talk-edit');
@@ -43,13 +44,13 @@ class TalkController extends BaseController
         $event    = $eventApi->getByFriendlyUrl($eventSlug);
 
         if (!$event) {
-            return Slim::getInstance()->notFound();
+            Slim::getInstance()->notFound();
         }
 
         $talkApi = $this->getTalkApi();
         $talk    = $talkApi->getTalkBySlug($talkSlug, $event->getUri());
         if (!$talk) {
-            return Slim::getInstance()->notFound();
+            Slim::getInstance()->notFound();
         }
 
         $comments = $talkApi->getComments($talk->getCommentsUri(), true, 0);
@@ -327,7 +328,7 @@ class TalkController extends BaseController
         $eventDb = $this->application->container->get(EventDb::class);
         $event   = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
-            return \Slim\Slim::getInstance()->notFound();
+            Slim::getInstance()->notFound();
         }
 
         $this->application->redirect(
@@ -345,7 +346,7 @@ class TalkController extends BaseController
         $talkApi = $this->getTalkApi();
         $talk    = $talkApi->getTalkByTalkId($talkId);
         if (!$talk) {
-            return \Slim\Slim::getInstance()->notFound();
+            Slim::getInstance()->notFound();
         }
 
         $event = $eventDb->load('uri', $talk->getEventUri());
@@ -354,7 +355,7 @@ class TalkController extends BaseController
             $eventApi    = $this->getEventApi();
             $eventEntity = $eventApi->getEvent($talk->getEventUri());
             if (!$eventEntity) {
-                return \Slim\Slim::getInstance()->notFound();
+                Slim::getInstance()->notFound();
             }
 
             $event['url_friendly_name'] = $eventEntity->getUrlFriendlyName();

@@ -28,7 +28,7 @@ abstract class BaseController
         return Slim::getInstance()->config('custom');
     }
 
-    protected function render($template, $data = [], $status = null)
+    protected function render($template, $data = [], $status = null): void
     {
         try {
             $this->application->render($template, $data, $status);
@@ -48,14 +48,16 @@ abstract class BaseController
         }
     }
 
-    protected function getSessionVariable($name, $default = null)
+    /**
+     * @param array-key $name
+     * @param $default
+     *
+     * @return mixed|null
+     */
+    protected function getSessionVariable(string $name, $default = null)
     {
-        if (array_key_exists($name, $_SESSION)) {
-            return $_SESSION[$name];
-        }
-
-        return $default;
+        return $_SESSION[$name] ?? $default;
     }
 
-    abstract protected function defineRoutes(Slim $slim);
+    abstract protected function defineRoutes(Slim $slim): void;
 }

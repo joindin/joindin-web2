@@ -33,7 +33,7 @@ class SearchController extends BaseController
         parent::__construct($slim);
     }
 
-    protected function defineRoutes(Slim $slim)
+    protected function defineRoutes(Slim $slim): void
     {
         $slim->get('/search/events', [$this, 'searchEvents'])->name("search-events");
         $slim->get('/search', [$this, 'search'])->name("search");
@@ -239,7 +239,7 @@ class SearchController extends BaseController
         return $events;
     }
 
-    
+
     private function combinePaginationData(array $paginations): array
     {
         $result = [

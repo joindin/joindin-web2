@@ -15,7 +15,7 @@ class ApikeyController extends BaseController
      */
     private int $resultsPerPage = 10;
 
-    protected function defineRoutes(Slim $slim)
+    protected function defineRoutes(Slim $slim): void
     {
         $slim->get('/user/:username/apikey', [$this, 'index'])->name('apikey-show');
         $slim->get('/user/:username/apikey/:apikey/delete', [$this, 'deleteApiKey'])->via('GET', 'POST')

@@ -7,10 +7,11 @@ use Slim\Slim;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 class ClientController extends BaseController
 {
-    protected function defineRoutes(Slim $slim)
+    protected function defineRoutes(Slim $slim): void
     {
         $slim->get('/user/:username/client', [$this, 'index'])->name('clients');
         $slim->map('/user/:username/client/create', [$this, 'createClient'])->via('GET', 'POST')
@@ -213,7 +214,7 @@ class ClientController extends BaseController
      *
      * @return ClientEntity|null|false
      */
-    private function addClientUsingForm(Form $form)
+    private function addClientUsingForm(FormInterface $form)
     {
         $clientApi = $this->getClientApi();
         $values    = $form->getData();

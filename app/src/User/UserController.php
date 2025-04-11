@@ -16,11 +16,11 @@ class UserController extends BaseController
     /**
      * Routes implemented by this class
      *
-     * @param \Slim $slim Slim application instance
+     * @param Slim $slim Slim application instance
      *
      * @return void
      */
-    protected function defineRoutes(\Slim\Slim $slim)
+    protected function defineRoutes(Slim $slim): void
     {
         $slim->get('/user/logout', [$this, 'logout'])->name('user-logout');
         $slim->map('/user/login', [$this, 'login'])->via('GET', 'POST')->name('user-login');

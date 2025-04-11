@@ -3,12 +3,14 @@ namespace Application;
 
 use Event\EventDb;
 use Event\EventApi;
+use Slim\Slim;
+use Symfony\Component\Form\FormFactoryInterface;
 use User\UserDb;
 use User\UserApi;
 
 class ApplicationController extends BaseController
 {
-    protected function defineRoutes(\Slim\Slim $slim)
+    protected function defineRoutes(Slim $slim): void
     {
         $slim->get('/', [$this, 'index']);
         $slim->get('/about', [$this, 'about'])->name('about');
@@ -46,8 +48,7 @@ class ApplicationController extends BaseController
      */
     public function getCurrentEvents(int $start, int $perPage): array
     {
-        $eventApi = $this->getEventApi();
-        return $eventApi->getEvents($perPage, $start, 'upcoming');
+        return $this->getEventApi()->getEvents($perPage, $start, 'upcoming');
     }
 
     /**

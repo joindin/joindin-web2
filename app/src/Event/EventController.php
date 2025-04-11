@@ -29,7 +29,7 @@ class EventController extends BaseController
         parent::__construct($slim);
     }
 
-    protected function defineRoutes(Slim $slim)
+    protected function defineRoutes(Slim $slim): void
     {
         // named routes first; should an event pick the same name then at least our actions take precedence
         $slim->get('/event', [$this, 'index'])->name("events-index");
@@ -755,7 +755,7 @@ class EventController extends BaseController
             }
         } catch (\Exception $exception) {
             $result   = false;
-            $error    = $e->getMessage();
+            $error    = $exception->getMessage();
             $messages = json_decode($error);
             if ($messages) {
                 $error = implode(', ', $messages);
