@@ -11,11 +11,11 @@ use User\UserEntity;
 
 class EventApi extends BaseApi
 {
-    protected \Event\EventDb $eventDb;
+    protected EventDb $eventDb;
 
-    protected \User\UserApi $userApi;
+    protected UserApi $userApi;
 
-    public function __construct($config, $accessToken, EventDb $eventDb, UserApi $userApi)
+    public function __construct($config, ?string $accessToken, EventDb $eventDb, UserApi $userApi)
     {
         parent::__construct($config, $accessToken);
         $this->eventDb = $eventDb;
@@ -170,7 +170,7 @@ class EventApi extends BaseApi
         throw new Exception("Failed to add comment: " . $result);
     }
 
-    public function reportComment($uri): bool
+    public function reportComment(string $uri): bool
     {
         [$status, $result] = $this->apiPost($uri);
 
@@ -478,10 +478,8 @@ class EventApi extends BaseApi
 
     /**
      * Approve a pending event by POSTing to approval_uri
-     *
-     * @param  string $approval_uri
      */
-    public function approveEvent($approval_uri): bool
+    public function approveEvent(string $approval_uri): bool
     {
         [$status, $result, $headers] = $this->apiPost($approval_uri);
 
@@ -561,11 +559,10 @@ class EventApi extends BaseApi
     /**
      * Moderate a comment by PUT'ing a decision to the reported_uri.
      *
-     * @param string $reported_uri
      * @param string $decision
      * @throws Exception on error
      */
-    public function moderateComment($reported_uri, $decision): bool
+    public function moderateComment(string $reported_uri, $decision): bool
     {
         $data['decision'] = $decision;
 

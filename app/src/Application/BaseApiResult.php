@@ -7,7 +7,9 @@ namespace Application;
 class BaseApiResult
 {
     private array $headers;
+
     private int $statusCode;
+
     private string $body;
 
     public function __construct(string $body, int $statusCode, array $headers)

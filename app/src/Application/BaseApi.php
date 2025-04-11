@@ -37,6 +37,7 @@ abstract class BaseApi
             if ($content === null) {
                 throw new \InvalidArgumentException('Content must be provided for POST/PUT requests');
             }
+
             $httpContextOpts['content'] = $content;
         }
 
@@ -139,9 +140,6 @@ abstract class BaseApi
         return $headers;
     }
 
-    /**
-     * @param string|null $accessToken
-     */
     public function setAccessToken(?string $accessToken): void
     {
         $this->accessToken = $accessToken;

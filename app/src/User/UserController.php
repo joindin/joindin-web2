@@ -784,16 +784,15 @@ class UserController extends BaseController
      * update the session.
      *
      * @param  \stdClass|false  $result
-     * @param  string           $redirect
      * @return void
      */
-    protected function handleLoginError(\RuntimeException $exception, string $redirect = '/')
+    protected function handleLoginError(\RuntimeException $runtimeException, string $redirect = '/')
     {
-        if ($exception->getMessage() === 'Signin failed') {
+        if ($runtimeException->getMessage() === 'Signin failed') {
             $this->application->flash('error', "Failed to log in");
         }
 
-        if ($exception->getMessage() === 'Not verified') {
+        if ($runtimeException->getMessage() === 'Not verified') {
             $message = 'User account not verified. ' . "<a href='/user/resend-verification'>Click here</a> to resend welcome email.";
             $this->application->flash('error', $message);
         }
@@ -816,7 +815,7 @@ class UserController extends BaseController
         if ($user) {
             $_SESSION['user'] = $user;
 
-            if (empty($redirect)
+            if ($redirect === '' || $redirect === '0'
                 || strpos($redirect, '/user/login') === 0
                 || strpos($redirect, '/not-allowed') === 0
             ) {

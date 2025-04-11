@@ -31,7 +31,7 @@ class AuthApi extends BaseApi
             } catch (\JsonException $e) {
                 // If json_decode fails, it means the response is not valid JSON.
                 // We need to throw an exception with the error message.
-                throw new \RuntimeException('Invalid JSON response: ' . $e->getMessage());
+                throw new \RuntimeException('Invalid JSON response: ' . $e->getMessage(), $e->getCode(), $e);
             }
 
             if (is_array($data)) {
