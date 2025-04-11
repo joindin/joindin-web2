@@ -54,13 +54,8 @@ class TalkApi extends BaseApi
         return $collectionData;
     }
 
-    /**
-     * @param integer $talkId
-     * @return TalkEntity|null
-     */
-    public function getTalkByTalkId($talkId)
+    public function getTalkByTalkId(int $talkId): ?\Talk\TalkEntity
     {
-        $talkId = (int)$talkId;
         if ($talkId === 0) {
             return null;
         }
@@ -92,9 +87,8 @@ class TalkApi extends BaseApi
      *
      * @param string $talk_uri  API talk uri
      * @param bool $verbose  Return verbose data?
-     * @return TalkEntity|false
      */
-    public function getTalk(string $talk_uri, $verbose = false)
+    public function getTalk(string $talk_uri, bool $verbose = false): ?TalkEntity
     {
         if ($verbose) {
             $talk_uri .= '?verbose=yes';
@@ -103,7 +97,7 @@ class TalkApi extends BaseApi
         $collection = (array)json_decode($this->apiGet($talk_uri));
 
         if (!isset($collection['talks'])) {
-            return false;
+            return null;
         }
 
         $talkEntity = new TalkEntity($collection['talks'][0]);
@@ -121,10 +115,10 @@ class TalkApi extends BaseApi
     /**
      * Get Comments for given talk
      *
-     * @param bool $verbose
+     *
      * @return TalkCommentEntity[]
      */
-    public function getComments(string $comment_uri, $verbose = false, $limitTo = null): array
+    public function getComments(string $comment_uri, bool $verbose = false, $limitTo = null): array
     {
         $params = [];
         if ($verbose) {
@@ -146,34 +140,27 @@ class TalkApi extends BaseApi
         return $commentData;
     }
 
-    /**
-     * Add a comment
-     *
-     * @param TalkEntity $talk
-     * @param int $rating
-     * @param string $comment
-     */
-    public function addComment($talk, $rating, $comment): bool
+    public function addComment(TalkEntity $talkEntity, int $rating, string $comment): bool
     {
-        $uri    = $talk->getCommentsUri();
+        $uri    = $talkEntity->getCommentsUri();
         $params = [
             'rating'  => $rating,
             'comment' => $comment,
         ];
         [$status, $result] = $this->apiPost($uri, $params);
 
-        if ($status == 201) {
+        if ($status === 201) {
             return true;
         }
 
         throw new Exception("Failed to add comment: " . $result);
     }
 
-    public function reportComment($uri): bool
+    public function reportComment(string $uri): bool
     {
         [$status, $result] = $this->apiPost($uri);
 
-        if ($status == 202) {
+        if ($status === 202) {
             return true;
         }
 
@@ -189,12 +176,12 @@ class TalkApi extends BaseApi
     {
         if ($talk->getStarred()) {
             [$status, $result] = $this->apiDelete($talk->getStarredUri(), []);
-            if ($status == 200) {
+            if ($status === 200) {
                 return ['starred' => false];
             }
         } else {
             [$status, $result] = $this->apiPost($talk->getStarredUri(), []);
-            if ($status == 201) {
+            if ($status === 201) {
                 return ['starred' => true];
             }
         }
@@ -233,10 +220,9 @@ class TalkApi extends BaseApi
     /**
      * Add a talk to an event
      *
-     * @param string $talksUri
      * @param array $data
      */
-    public function addTalk($talksUri, $data)
+    public function addTalk(string $talksUri, $data)
     {
         array_walk($data, function (&$value): void {
             if ($value instanceof \DateTimeInterface) {
@@ -281,10 +267,9 @@ class TalkApi extends BaseApi
     /**
      * Edit a talk
      *
-     * @param string $talkUri
      * @param array $data
      */
-    public function editTalk($talkUri, $data)
+    public function editTalk(string $talkUri, $data)
     {
         array_walk($data, function (&$value): void {
             if ($value instanceof \DateTimeInterface) {
@@ -324,7 +309,7 @@ class TalkApi extends BaseApi
         throw new \RuntimeException($result);
     }
 
-    public function claimTalk($talkSpeakersUri, $data): bool
+    public function claimTalk(string $talkSpeakersUri, $data): bool
     {
         [$status, $result, $headers] = $this->apiPost($talkSpeakersUri, $data);
 
@@ -355,10 +340,9 @@ class TalkApi extends BaseApi
     /**
      * Add a talk to a track
      *
-     * @param string $talkTracksUri
      * @param string $trackUri
      */
-    public function addTalkToTrack($talkTracksUri, $trackUri): bool
+    public function addTalkToTrack(string $talkTracksUri, $trackUri): bool
     {
         $params = [
             'track_uri' => $trackUri,

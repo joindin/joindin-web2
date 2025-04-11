@@ -17,8 +17,6 @@ class UserController extends BaseController
      * Routes implemented by this class
      *
      * @param Slim $slim Slim application instance
-     *
-     * @return void
      */
     protected function defineRoutes(Slim $slim): void
     {
@@ -440,7 +438,7 @@ class UserController extends BaseController
         $this->getEventApi();
         $eventUri     = null;
         $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 0);
-        if (!$talkComments) {
+        if ($talkComments === []) {
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
         }
 
@@ -501,42 +499,27 @@ class UserController extends BaseController
         return $eventInfo;
     }
 
-    /**
-     * @return UserApi
-     */
-    private function getUserApi()
+    private function getUserApi(): UserApi
     {
         return $this->application->container->get(UserApi::class);
     }
 
-    /**
-     * @return TalkDb
-     */
-    private function getTalkDb()
+    private function getTalkDb(): TalkDb
     {
         return $this->application->container->get(TalkDb::class);
     }
 
-    /**
-     * @return TalkApi
-     */
-    private function getTalkApi()
+    private function getTalkApi(): TalkApi
     {
         return $this->application->container->get(TalkApi::class);
     }
 
-    /**
-     * @return EventDb
-     */
-    private function getEventDb()
+    private function getEventDb(): EventDb
     {
         return $this->application->container->get(EventDb::class);
     }
 
-    /**
-     * @return EventApi
-     */
-    private function getEventApi()
+    private function getEventApi(): EventApi
     {
         return $this->application->container->get(EventApi::class);
     }
@@ -830,7 +813,7 @@ class UserController extends BaseController
         $this->application->redirect('/');
     }
 
-    public function redirectFromId($userId)
+    public function redirectFromId($userId): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUserId($userId);

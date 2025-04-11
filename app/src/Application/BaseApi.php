@@ -78,7 +78,7 @@ abstract class BaseApi
 
     protected function apiGet(string $url, array $params = []): string
     {
-        $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
+        $paramsString = $params !== [] ? '?' . http_build_query($params, '', '&') : '';
 
         return $this->makeHttpCall('GET', $url . $paramsString)->get_body();
     }
@@ -89,7 +89,7 @@ abstract class BaseApi
      */
     protected function apiDelete(string $url, array $params = []): array
     {
-        $paramsString = count($params) > 0 ? '?' . http_build_query($params, '', '&') : '';
+        $paramsString = $params !== [] ? '?' . http_build_query($params, '', '&') : '';
         $baseApiResult = $this->makeHttpCall('DELETE', $url . $paramsString);
         return [$baseApiResult->get_status_code(), $baseApiResult->get_body(), $baseApiResult->get_headers()];
     }

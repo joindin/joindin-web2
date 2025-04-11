@@ -202,7 +202,7 @@ class EventController extends BaseController
         return $this->$action($friendly_name);
     }
 
-    public function details(string $friendly_name)
+    public function details(string $friendly_name): void
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
@@ -227,7 +227,7 @@ class EventController extends BaseController
         );
     }
 
-    public function attendees(string $friendly_name)
+    public function attendees(string $friendly_name): void
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
@@ -249,7 +249,7 @@ class EventController extends BaseController
         );
     }
 
-    public function comments(string $friendly_name)
+    public function comments(string $friendly_name): void
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
@@ -1102,7 +1102,7 @@ class EventController extends BaseController
         );
     }
 
-    private function appoveClaimPendingTalk($talkApi, $claim, array $data): void
+    private function appoveClaimPendingTalk(\Talk\TalkApi $talkApi, $claim, array $data): void
     {
         $talkApi->claimTalk($claim->approve_claim_uri, $data);
 
@@ -1112,7 +1112,7 @@ class EventController extends BaseController
     /**
      * Reject a talk claim
      */
-    private function rejectClaimPendingTalk($talkApi, $claim, array $data): void
+    private function rejectClaimPendingTalk(\Talk\TalkApi $talkApi, $claim, array $data): void
     {
         $talkApi->rejectTalkClaim($claim->approve_claim_uri, $data);
 
@@ -1122,7 +1122,7 @@ class EventController extends BaseController
     /**
      * Add a talk to the event
      */
-    public function addTalk(string $friendly_name)
+    public function addTalk(string $friendly_name): void
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
@@ -1200,7 +1200,7 @@ class EventController extends BaseController
     /**
      * Edit tracks for this event
      */
-    public function editTracks(string $friendly_name)
+    public function editTracks(string $friendly_name): void
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($friendly_name);
@@ -1400,34 +1400,22 @@ class EventController extends BaseController
         return $slugs;
     }
 
-    /**
-     * @return CacheService
-     */
-    private function getCache()
+    private function getCache(): CacheService
     {
         return $this->application->container->get(CacheService::class);
     }
 
-    /**
-     * @return TalkDb
-     */
-    private function getTalkDb()
+    private function getTalkDb(): TalkDb
     {
         return $this->application->container->get(TalkDb::class);
     }
 
-    /**
-     * @return TalkApi
-     */
-    private function getTalkApi()
+    private function getTalkApi(): TalkApi
     {
         return $this->application->container->get(TalkApi::class);
     }
 
-    /**
-     * @return UserApi
-     */
-    private function getUserApi()
+    private function getUserApi(): UserApi
     {
         return $this->application->container->get(UserApi::class);
     }

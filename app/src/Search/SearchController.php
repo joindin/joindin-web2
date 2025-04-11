@@ -2,13 +2,9 @@
 namespace Search;
 
 use Application\BaseController;
-use Application\CacheService;
 use Event\EventApi;
-use Event\EventDb;
 use Slim\Slim;
 use Talk\TalkApi;
-use Talk\TalkDb;
-use User\UserDb;
 use User\UserApi;
 
 /**
@@ -197,26 +193,17 @@ class SearchController extends BaseController
         return $this->getUserApi()->getCollection($apiQueryParams);
     }
 
-    /**
-     * @return EventApi
-     */
-    protected function getEventApi()
+    protected function getEventApi(): EventApi
     {
         return $this->application->container->get(EventApi::class);
     }
 
-    /**
-     * @return TalkApi
-     */
-    protected function getTalkApi()
+    protected function getTalkApi(): TalkApi
     {
         return $this->application->container->get(TalkApi::class);
     }
 
-    /**
-     * @return UserApi
-     */
-    private function getUserApi()
+    private function getUserApi(): UserApi
     {
         return $this->application->container->get(UserApi::class);
     }

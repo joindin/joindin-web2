@@ -2,15 +2,12 @@
 namespace Talk;
 
 use Application\BaseController;
-use Application\CacheService;
 use Event\EventDb;
 use Event\EventApi;
 use Symfony\Component\Form\FormFactoryInterface;
-use User\UserDb;
 use User\UserApi;
 use Exception;
 use Slim\Slim;
-use Talk\TalkTypeApi;
 use Language\LanguageApi;
 use Event\TrackApi;
 use Symfony\Component\Form\FormError;
@@ -38,7 +35,7 @@ class TalkController extends BaseController
         $slim->map('/event/:eventSlug/:talkSlug/delete', [$this, 'deleteTalk'])->via('GET', 'POST')->name('talk-delete');
     }
 
-    public function index(string $eventSlug, string $talkSlug)
+    public function index(string $eventSlug, string $talkSlug): void
     {
         $eventApi = $this->getEventApi();
         $event    = $eventApi->getByFriendlyUrl($eventSlug);
@@ -320,11 +317,13 @@ class TalkController extends BaseController
         }
     }
 
-    public function quick($talkStub)
+    public function quick(string $talkStub): void
     {
+        /** @var TalkDb $talkDb */
         $talkDb = $this->application->container->get(TalkDb::class);
         $talk   = $talkDb->load('stub', $talkStub);
 
+        /** @var EventDb $eventDb */
         $eventDb = $this->application->container->get(EventDb::class);
         $event   = $eventDb->load('uri', $talk['event_uri']);
         if (!$event) {
@@ -339,12 +338,13 @@ class TalkController extends BaseController
         );
     }
 
-    public function quickById($talkId)
+    public function quickById($talkId): void
     {
+        /** @var EventDb $eventDb */
         $eventDb = $this->application->container->get(EventDb::class);
 
         $talkApi = $this->getTalkApi();
-        $talk    = $talkApi->getTalkByTalkId($talkId);
+        $talk    = $talkApi->getTalkByTalkId((int) $talkId);
         if (!$talk) {
             $this->application->notFound();
         }
@@ -369,7 +369,7 @@ class TalkController extends BaseController
         );
     }
 
-    public function addComment(string $eventSlug, $talkSlug): void
+    public function addComment(string $eventSlug, string $talkSlug): void
     {
         $request = $this->application->request();
         $comment = trim(html_entity_decode($request->post('comment')));
@@ -598,50 +598,32 @@ class TalkController extends BaseController
         );
     }
 
-    /**
-     * @return EventApi
-     */
-    private function getEventApi()
+    private function getEventApi(): EventApi
     {
         return $this->application->container->get(EventApi::class);
     }
 
-    /**
-     * @return TalkApi
-     */
-    private function getTalkApi()
+    private function getTalkApi(): TalkApi
     {
         return $this->application->container->get(TalkApi::class);
     }
 
-    /**
-     * @return UserApi
-     */
-    private function getUserApi()
+    private function getUserApi(): UserApi
     {
         return $this->application->container->get(UserApi::class);
     }
 
-    /**
-     * @return LanguageApi
-     */
-    protected function getLanguageApi()
+    protected function getLanguageApi(): LanguageApi
     {
         return $this->application->container->get(LanguageApi::class);
     }
 
-    /**
-     * @return TalkTypeApi
-     */
-    protected function getTalkTypeApi()
+    protected function getTalkTypeApi(): TalkTypeApi
     {
         return $this->application->container->get(TalkTypeApi::class);
     }
 
-    /**
-     * @return TrackApi
-     */
-    protected function getTrackApi()
+    protected function getTrackApi(): TrackApi
     {
         return $this->application->container->get(TrackApi::class);
     }

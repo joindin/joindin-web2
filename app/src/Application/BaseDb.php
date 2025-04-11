@@ -3,10 +3,9 @@ namespace Application;
 
 abstract class BaseDb
 {
-    protected \Application\CacheService $cache;
+    protected CacheService $cache;
 
-    /** @var string */
-    protected $keyName;
+    protected string $keyName;
 
     public function __construct(CacheService $cacheService)
     {
