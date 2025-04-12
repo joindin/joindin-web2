@@ -80,7 +80,13 @@ abstract class BaseApi
     {
         $paramsString = $params !== [] ? '?' . http_build_query($params, '', '&') : '';
 
-        return $this->makeHttpCall('GET', $url . $paramsString)->get_body();
+        $baseApiResult = $this->makeHttpCall('GET', $url . $paramsString);
+
+        if ($baseApiResult->get_status_code() >= 200 && $baseApiResult->get_status_code() < 300) {
+            return $baseApiResult->get_body();
+        }
+
+        throw new \RuntimeException('Unable to get API result; see error logs');
     }
 
     /**
