@@ -176,11 +176,14 @@ class TalkApi extends BaseApi
     {
         if ($talk->getStarred()) {
             [$status, $result] = $this->apiDelete($talk->getStarredUri(), []);
-            if ($status === 200) {
+            // API returns HTTP 205: Reset Content, to indicate the user agent should reset the view.
+            // The code was checking for HTTP 200 before, not sure why so keeping it in just to be on the safe side.
+            if ($status === 200 || $status === 205) {
                 return ['starred' => false];
             }
         } else {
             [$status, $result] = $this->apiPost($talk->getStarredUri(), []);
+            // For adding a star, the API returns HTTP 201: Created.
             if ($status === 201) {
                 return ['starred' => true];
             }
