@@ -16,7 +16,7 @@ class NewPasswordFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'new_password';
     }

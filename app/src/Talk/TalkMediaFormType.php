@@ -17,7 +17,7 @@ class TalkMediaFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'talk_media';
     }

@@ -23,7 +23,7 @@ class UserFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'email_input';
     }

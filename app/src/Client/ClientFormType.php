@@ -17,7 +17,7 @@ class ClientFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'client';
     }

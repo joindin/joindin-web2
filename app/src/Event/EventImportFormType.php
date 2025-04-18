@@ -37,7 +37,7 @@ class EventImportFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'event_import';
     }
