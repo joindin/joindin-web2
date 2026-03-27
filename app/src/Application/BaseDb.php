@@ -3,18 +3,16 @@ namespace Application;
 
 abstract class BaseDb
 {
-    /** @var CacheService */
-    protected $cache;
+    protected CacheService $cache;
 
-    /** @var string */
-    protected $keyName;
+    protected string $keyName;
 
-    public function __construct(CacheService $cache)
+    public function __construct(CacheService $cacheService)
     {
-        $this->cache = $cache;
+        $this->cache = $cacheService;
     }
 
-    public function load($keyField, $keyValue)
+    public function load(string $keyField, $keyValue)
     {
         return $this->cache->load($this->keyName, $keyField, $keyValue);
     }

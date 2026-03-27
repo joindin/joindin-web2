@@ -12,11 +12,13 @@ use Slim\Slim;
 class TrailingSlashMiddlewareTest extends TestCase
 {
     /** @var \Prophecy\Prophecy\ObjectProphecy|Slim */
-    private $app;
+    private \Prophecy\Prophecy\ObjectProphecy $app;
+
     /** @var \Prophecy\Prophecy\ObjectProphecy|Middleware */
-    private $next;
+    private \Prophecy\Prophecy\ObjectProphecy $next;
+
     /** @var \Prophecy\Prophecy\ObjectProphecy|Request */
-    private $request;
+    private \Prophecy\Prophecy\ObjectProphecy $request;
 
     protected function setUp(): void
     {
@@ -30,77 +32,77 @@ class TrailingSlashMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function itDoesNotTrimSlashFromRootPath()
+    public function itDoesNotTrimSlashFromRootPath(): void
     {
         $this->request->getPath()->willReturn('/');
 
-        $middleware = new TrailingSlashMiddleware();
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware();
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect(Argument::any())->shouldNotBeCalled();
         $this->next->call()->shouldBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
     }
 
     /**
      * @test
      */
-    public function itWillTrimSlashIfInTrimSlashMode()
+    public function itWillTrimSlashIfInTrimSlashMode(): void
     {
         $this->request->getPath()->willReturn('/events/php-tek2019/');
 
-        $middleware = new TrailingSlashMiddleware();
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware();
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect('/events/php-tek2019', 301)->shouldBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
     }
 
     /**
      * @test
      */
-    public function itWillNotRemoveLastCharacterInTrimModeIfItIsNotASlash()
+    public function itWillNotRemoveLastCharacterInTrimModeIfItIsNotASlash(): void
     {
         $this->request->getPath()->willReturn('/events/php-tek2019');
 
-        $middleware = new TrailingSlashMiddleware();
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware();
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect(Argument::any())->shouldNotBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
         $this->next->call()->shouldHaveBeenCalled();
     }
 
     /**
      * @test
      */
-    public function itWillAddSlashIfInAddSlashMode()
+    public function itWillAddSlashIfInAddSlashMode(): void
     {
         $this->request->getPath()->willReturn('/events/php-tek2019');
 
-        $middleware = new TrailingSlashMiddleware(true);
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware(true);
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect('/events/php-tek2019/', 301)->shouldBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
     }
 
     /**
      * @test
      */
-    public function itWillNotAddSlashInAddModeIfLastCharacterIsASlash()
+    public function itWillNotAddSlashInAddModeIfLastCharacterIsASlash(): void
     {
         $this->request->getPath()->willReturn('/events/php-tek2019/');
 
-        $middleware = new TrailingSlashMiddleware(true);
-        $middleware->setApplication($this->app->reveal());
-        $middleware->setNextMiddleware($this->next->reveal());
+        $trailingSlashMiddleware = new TrailingSlashMiddleware(true);
+        $trailingSlashMiddleware->setApplication($this->app->reveal());
+        $trailingSlashMiddleware->setNextMiddleware($this->next->reveal());
 
         $this->app->redirect(Argument::any())->shouldNotBeCalled();
-        $middleware->call();
+        $trailingSlashMiddleware->call();
     }
 }

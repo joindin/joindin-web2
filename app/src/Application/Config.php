@@ -4,7 +4,7 @@ namespace Application;
 
 class Config implements \ArrayAccess
 {
-    protected $settings;
+    protected array $settings;
 
     public function __construct(array $settings = [])
     {
@@ -15,16 +15,19 @@ class Config implements \ArrayAccess
     {
         throw new \Exception("You cannot set a config value!");
     }
+
     public function offsetExists($key)
     {
         return isset($this->settings[$key]);
     }
+
     public function offsetUnset($offset)
     {
         throw new \Exception("You cannot unset a config value!");
     }
+
     public function offsetGet($key)
     {
-        return array_key_exists($key, $this->settings) ? $this->settings[$key] : null;
+        return $this->settings[$key] ?? null;
     }
 }

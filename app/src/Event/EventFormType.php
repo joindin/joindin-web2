@@ -39,7 +39,7 @@ class EventFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'event';
     }
@@ -49,15 +49,10 @@ class EventFormType extends AbstractType
      *
      * This method is automatically called by the Form Factory builder and does not need
      * to be called manually, see the class description for usage information.
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return void
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        list($continents, $cities) = $this->getListOfTimezoneContinentsAndCities();
+        [$continents, $cities] = $this->getListOfTimezoneContinentsAndCities();
 
         $timezone = null;
         if (isset($options['data'])) {
@@ -65,7 +60,7 @@ class EventFormType extends AbstractType
         }
 
         $dateTransformer = new DateTransformer($timezone);
-        $builder
+        $formBuilder
             ->add('addr', 'hidden', ['mapped' => false])
             ->add(
                 'name',
@@ -85,7 +80,7 @@ class EventFormType extends AbstractType
                 ]
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'tags',
                     'text',
                     [
@@ -113,42 +108,42 @@ class EventFormType extends AbstractType
                 ]
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'start_date',
                     'text',
                     $this->getOptionsForDateWidget('Start date')
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'end_date',
                     'text',
                     $this->getOptionsForDateWidget('End date')
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'href',
                     'url',
                     $this->getOptionsForUrlWidget('Website URL', true)
                 )->addEventSubscriber(new GetResolvedUrlListener())
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'cfp_start_date',
                     'text',
                     $this->getOptionsForDateWidget('Opening date', false)
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'cfp_end_date',
                     'text',
                     $this->getOptionsForDateWidget('Closing date', false)
                 )->addViewTransformer($dateTransformer)
             )
             ->add(
-                $builder->create(
+                $formBuilder->create(
                     'cfp_url',
                     'url',
                     $this->getOptionsForUrlWidget('Call for papers URL', false)
@@ -203,13 +198,8 @@ class EventFormType extends AbstractType
      * - Show a placeholder in the input that demonstrates the format.
      * - Display the right label.
      * - when required add the validation that ensures the field is not empty.
-     *
-     * @param string  $label
-     * @param boolean $required
-     *
-     * @return array
      */
-    private function getOptionsForUrlWidget($label, $required = true)
+    private function getOptionsForUrlWidget(string $label, bool $required = true): array
     {
         $constraints = [new Assert\Url(), new UrlResolverConstraint()];
         if ($required) {
@@ -233,13 +223,8 @@ class EventFormType extends AbstractType
      * - Force the widget to be rendered as a HTML5 'date' input.
      * - Display the right label.
      * - when required add the validation that ensures the field is not empty.
-     *
-     * @param string  $label
-     * @param boolean $required
-     *
-     * @return array
      */
-    private function getOptionsForDateWidget($label, $required = true)
+    private function getOptionsForDateWidget(string $label, bool $required = true): array
     {
         $constraints = [new Assert\Date()];
         if ($required) {
@@ -267,10 +252,8 @@ class EventFormType extends AbstractType
      * Both the key and value contain the name of the timezone continent/city so that the select box will pass a string
      * value and not a numeric value. Although PHP recognizes 'UTC' as timezone we explicitly remove that because
      * it does not fit with the Joind.in API.
-     *
-     * @return array
      */
-    public function getListOfTimezoneContinentsAndCities()
+    public function getListOfTimezoneContinentsAndCities(): array
     {
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
@@ -294,15 +277,15 @@ class EventFormType extends AbstractType
      *
      * @return string[]
      */
-    public static function getNestedListOfTimezones()
+    public static function getNestedListOfTimezones(): array
     {
         $timezones = \DateTimeZone::listIdentifiers();
         array_pop($timezones); // Remove UTC from the end of the list
 
         $result = [];
         foreach ($timezones as $timezone) {
-            list($continent, $city) = explode('/', $timezone, 2);
-            $result[$continent][]   = $city;
+            [$continent, $city]   = explode('/', $timezone, 2);
+            $result[$continent][] = $city;
         }
 
         foreach ($result as $continent => $cities) {

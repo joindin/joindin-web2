@@ -12,42 +12,33 @@ use Event\EventEntity;
  */
 class TalkFormType extends AbstractType
 {
-    /**
-     * @var string
-     */
-    protected $timezone;
+    protected ?string $timezone;
 
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $startDate;
+    protected \DateTimeImmutable $startDate;
 
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $endDate;
+    protected \DateTimeImmutable $endDate;
 
     /**
      * @var string[]
      */
-    protected $languages;
+    protected array $languages;
 
     /**
      * @var string[]
      */
-    protected $talkTypes;
+    protected array $talkTypes;
 
     /**
      * @var string[]
      */
-    protected $tracks;
+    protected array $tracks;
 
-    public function __construct(EventEntity $event, array $languages, array $talkTypes, array $tracks)
+    public function __construct(EventEntity $eventEntity, array $languages, array $talkTypes, array $tracks)
     {
-        $this->timezone  = $event->getFullTimezone();
-        $tz              = new \DateTimeZone($this->timezone);
-        $this->startDate = new \DateTimeImmutable($event->getStartDate(), $tz);
-        $this->endDate   = new \DateTimeImmutable($event->getEndDate(), $tz);
+        $this->timezone  = $eventEntity->getFullTimezone();
+        $dateTimeZone    = new \DateTimeZone($this->timezone);
+        $this->startDate = new \DateTimeImmutable($eventEntity->getStartDate(), $dateTimeZone);
+        $this->endDate   = new \DateTimeImmutable($eventEntity->getEndDate(), $dateTimeZone);
 
         $this->languages = $languages;
         $this->talkTypes = $talkTypes;
@@ -67,15 +58,10 @@ class TalkFormType extends AbstractType
 
     /**
      * Adds fields with their types and validation constraints to this definition.
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return void
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'talk_title',
                 'text',
@@ -136,7 +122,7 @@ class TalkFormType extends AbstractType
                         new Assert\NotBlank(),
                         new Assert\Type('integer'),
                         new Assert\Regex([
-                            'pattern' => '/^[0-9]\d*$/',
+                            'pattern' => '/^[1-9]\d*$/',
                             'message' => 'Value must be a positive number.'
                         ]),
                     ],

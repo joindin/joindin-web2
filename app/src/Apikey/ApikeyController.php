@@ -13,16 +13,16 @@ class ApikeyController extends BaseController
     /**
      * @var int number of results per pagination page
      */
-    private $resultsPerPage = 10;
+    private int $resultsPerPage = 10;
 
-    protected function defineRoutes(Slim $app)
+    protected function defineRoutes(Slim $slim): void
     {
-        $app->get('/user/:username/apikey', [$this, 'index'])->name('apikey-show');
-        $app->get('/user/:username/apikey/:apikey/delete', [$this, 'deleteApiKey'])->via('GET', 'POST')
+        $slim->get('/user/:username/apikey', [$this, 'index'])->name('apikey-show');
+        $slim->get('/user/:username/apikey/:apikey/delete', [$this, 'deleteApiKey'])->via('GET', 'POST')
                                                                                    ->name('apikey-delete');
     }
 
-    public function index($username)
+    public function index($username): void
     {
         $thisUrl = $this->application->urlFor('apikey-show', ['username' => $username]);
 
@@ -65,8 +65,8 @@ class ApikeyController extends BaseController
         // save page position in case user returns
         $_SESSION['api_key_page'] = $page;
 
-        $tokenApi = $this->getApikeyApi();
-        $tokens   = $tokenApi->getCollection($queryParams);
+        $apikeyApi = $this->getApikeyApi();
+        $tokens    = $apikeyApi->getCollection($queryParams);
 
         // reset session state if oauth_access_tokens are removed while user is logged in (found during testing)
         if (!isset($tokens['tokens'])) {
@@ -105,7 +105,7 @@ class ApikeyController extends BaseController
         );
     }
 
-    public function deleteApiKey($username, $apikey)
+    public function deleteApiKey($username, $apikey): void
     {
         $thisUrl = $this->application->urlFor('apikey-delete', ['apikey' => $apikey, 'username' => $username]);
 
@@ -124,7 +124,7 @@ class ApikeyController extends BaseController
         $apikeyApi = $this->getApikeyApi();
         try {
             $apikey = $apikeyApi->getById($apikey);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->application->notFound();
             return;
         }
@@ -156,9 +156,9 @@ class ApikeyController extends BaseController
                         $this->application->urlFor('apikey-show', ['username' => $username])
                     );
                     return;
-                } catch (\RuntimeException $e) {
+                } catch (\RuntimeException $exception) {
                     $form->adderror(
-                        new FormError('An error occurred while removing this API-Key: ' . $e->getmessage())
+                        new FormError('An error occurred while removing this API-Key: ' . $exception->getmessage())
                     );
                 }
             }
@@ -175,10 +175,7 @@ class ApikeyController extends BaseController
         );
     }
 
-    /**
-     * @return ApikeyApi
-     */
-    private function getApikeyApi()
+    private function getApikeyApi(): \Apikey\ApikeyApi
     {
         return new ApikeyApi($this->cfg, $this->accessToken);
     }

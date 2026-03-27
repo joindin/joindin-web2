@@ -16,48 +16,42 @@ class UserController extends BaseController
     /**
      * Routes implemented by this class
      *
-     * @param \Slim $app Slim application instance
-     *
-     * @return void
+     * @param Slim $slim Slim application instance
      */
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $slim): void
     {
-        $app->get('/user/logout', [$this, 'logout'])->name('user-logout');
-        $app->map('/user/login', [$this, 'login'])->via('GET', 'POST')->name('user-login');
-        $app->map('/user/register', [$this, 'register'])->via('GET', 'POST')->name('user-register');
-        $app->get('/user/verification', [$this, 'verification'])->name('user-verification');
-        $app->map('/user/resend-verification', [$this, 'resendVerification'])
+        $slim->get('/user/logout', [$this, 'logout'])->name('user-logout');
+        $slim->map('/user/login', [$this, 'login'])->via('GET', 'POST')->name('user-login');
+        $slim->map('/user/register', [$this, 'register'])->via('GET', 'POST')->name('user-register');
+        $slim->get('/user/verification', [$this, 'verification'])->name('user-verification');
+        $slim->map('/user/resend-verification', [$this, 'resendVerification'])
             ->via('GET', 'POST')->name('user-resend-verification');
-        $app->map('/user/username-reminder', [$this, 'remindUsername'])
+        $slim->map('/user/username-reminder', [$this, 'remindUsername'])
             ->via('GET', 'POST')->name('user-username-reminder');
-        $app->map('/user/password-reset', [$this, 'resetPassword'])
+        $slim->map('/user/password-reset', [$this, 'resetPassword'])
             ->via('GET', 'POST')->name('user-password-reset');
-        $app->map('/user/new-password', [$this, 'newPassword'])
+        $slim->map('/user/new-password', [$this, 'newPassword'])
             ->via('GET', 'POST')->name('user-new-password');
-        $app->get('/user/:username', [$this, 'profile'])->name('user-profile');
-        $app->get('/user/:username/talks', [$this, 'profileTalks'])->name('user-profile-talks');
-        $app->get('/user/:username/events', [$this, 'profileEvents'])->name('user-profile-events');
-        $app->get('/user/:username/hosted', [$this, 'profileHosted'])->name('user-profile-hosted');
-        $app->get('/user/:username/comments', [$this, 'profileComments'])->name('user-profile-comments');
-        $app->map('/user/:username/edit', [$this, 'profileEdit'])
+        $slim->get('/user/:username', [$this, 'profile'])->name('user-profile');
+        $slim->get('/user/:username/talks', [$this, 'profileTalks'])->name('user-profile-talks');
+        $slim->get('/user/:username/events', [$this, 'profileEvents'])->name('user-profile-events');
+        $slim->get('/user/:username/hosted', [$this, 'profileHosted'])->name('user-profile-hosted');
+        $slim->get('/user/:username/comments', [$this, 'profileComments'])->name('user-profile-comments');
+        $slim->map('/user/:username/edit', [$this, 'profileEdit'])
             ->via('GET', 'POST')->name('user-profile-edit');
-        $app->get('/user/:username/delete', [$this, 'userDelete'])->name('user-profile-delete');
-        $app->get('/user/view/:userId(/:extra+)', [$this, 'redirectFromId'])
+        $slim->get('/user/:username/delete', [$this, 'userDelete'])->name('user-profile-delete');
+        $slim->get('/user/view/:userId(/:extra+)', [$this, 'redirectFromId'])
             ->name('user-redirect-from-id')
             ->conditions(['userId' => '\d+']);
     }
 
     /**
      * Login page
-     *
-     * @return void
      */
-    public function login()
+    public function login(): void
     {
         $config  = $this->application->config('oauth');
         $request = $this->application->request();
-
-        $error = false;
         if ($request->isPost()) {
             // handle submission of login form
 
@@ -67,11 +61,16 @@ class UserController extends BaseController
             $redirect     = $request->post('redirect');
             $clientId     = $config['client_id'];
             $clientSecret = $config['client_secret'];
-
+            /** @var AuthApi $authApi */
             $authApi = $this->application->container->get(AuthApi::class);
-            $result  = $authApi->login($username, $password, $clientId, $clientSecret);
+            try {
+                $result = $authApi->login($username, $password, $clientId, $clientSecret);
+            } catch (\RuntimeException $exception) {
+                $this->handleLoginError($exception, $redirect);
+                return;
+            }
 
-            $this->handleLogin($result, $redirect);
+            $this->handleLoginSuccess($result, $redirect);
         }
 
         $this->application->redirect('/');
@@ -79,10 +78,8 @@ class UserController extends BaseController
 
     /**
      * Registration page
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $request = $this->application->request();
 
@@ -131,9 +128,9 @@ class UserController extends BaseController
         $result = false;
         try {
             $result = $userApi->register($values);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $form->addError(
-                new FormError('An error occurred while registering you: ' . $e->getMessage())
+                new FormError('An error occurred while registering you: ' . $exception->getMessage())
             );
         }
 
@@ -142,30 +139,28 @@ class UserController extends BaseController
 
     /**
      * Log out
-     *
-     * @return void
      */
-    public function logout()
+    public function logout(): void
     {
         $request  = $this->application->request();
-        $redirect = ($request->get('redirect')) ? $request->get('redirect') : "/";
+        $redirect = $request->get('redirect') ?: "/";
 
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
         }
+
         if (isset($_SESSION['access_token'])) {
             unset($_SESSION['access_token']);
         }
+
         session_regenerate_id(true);
         $this->application->redirect($redirect);
     }
 
     /**
      * Accept a user's email verification
-     *
-     * @return void
      */
-    public function verification()
+    public function verification(): void
     {
         $request = $this->application->request();
 
@@ -175,14 +170,14 @@ class UserController extends BaseController
         try {
             $userApi->verify($token);
             $this->application->flash('message', "Thank you for verifying your email address. You can now log in.");
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->application->flash('error', "Sorry, your verification link was invalid.");
         }
 
         $this->application->redirect('/');
     }
 
-    public function resendVerification()
+    public function resendVerification(): void
     {
         $request = $this->application->request();
 
@@ -229,14 +224,13 @@ class UserController extends BaseController
      * User profile page
      *
      * @param  string $username User's username
-     * @return void
      */
-    public function profile($username)
+    public function profile($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $talkDb   = $this->getTalkDb();
@@ -278,29 +272,30 @@ class UserController extends BaseController
         }
 
         $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 5);
-        foreach ($talkComments as $comment) {
-            if (isset($talkInfo[$comment->getTalkUri()])) {
+        foreach ($talkComments as $talkComment) {
+            if (isset($talkInfo[$talkComment->getTalkUri()])) {
                 continue;
             }
-            $talkData = $talkDb->load('uri', $comment->getTalkUri());
+
+            $talkData = $talkDb->load('uri', $talkComment->getTalkUri());
             if ($talkData) {
-                $eventUri                                                     = $talkData['event_uri'];
-                $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
+                $eventUri                                                         = $talkData['event_uri'];
+                $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
             } else {
-                $talk = $talkApi->getTalk($comment->getTalkUri());
+                $talk = $talkApi->getTalk($talkComment->getTalkUri());
                 if ($talk) {
-                    $eventUri                                                    = $talk->getEventUri();
-                    $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
+                    $eventUri                                                        = $talk->getEventUri();
+                    $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 }
             }
 
             // look up event's name & url_friendly_name from the DB orAPI
-            if (!isset($eventInfo[$comment->getTalkUri()])) {
-                $eventInfo[$comment->getTalkUri()] = $this->lookupEventInfo($eventUri);
+            if (!isset($eventInfo[$talkComment->getTalkUri()])) {
+                $eventInfo[$talkComment->getTalkUri()] = $this->lookupEventInfo($eventUri);
             }
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile.html.twig',
             [
                 'thisUser'         => $user,
@@ -320,12 +315,12 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileTalks($username)
+    public function profileTalks($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $talkApi = $this->getTalkApi();
@@ -347,7 +342,7 @@ class UserController extends BaseController
             }
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile-talks.html.twig',
             [
                 'thisUser'  => $user,
@@ -363,12 +358,12 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileEvents($username)
+    public function profileEvents($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $eventApi         = $this->getEventApi();
@@ -380,7 +375,7 @@ class UserController extends BaseController
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
         }
 
-        echo $this->render(
+        $this->render(
             'User/profile-events.html.twig',
             [
                 'thisUser' => $user,
@@ -396,12 +391,12 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileHosted($username)
+    public function profileHosted($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $eventApi               = $this->getEventApi();
@@ -414,7 +409,7 @@ class UserController extends BaseController
         }
 
 
-        echo $this->render(
+        $this->render(
             'User/profile-events.html.twig',
             [
                 'thisUser' => $user,
@@ -430,44 +425,45 @@ class UserController extends BaseController
      * @param  string $username User's username
      * @return void
      */
-    public function profileComments($username)
+    public function profileComments($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         $talkDb       = $this->getTalkDb();
         $talkApi      = $this->getTalkApi();
-        $eventApi     = $this->getEventApi();
+        $this->getEventApi();
         $eventUri     = null;
         $talkComments = $talkApi->getComments($user->getTalkCommentsUri(), true, 0);
-        if (!$talkComments) {
+        if ($talkComments === []) {
             $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
         }
 
         $talkInfo  = [];
         $eventInfo = [];
-        foreach ($talkComments as $comment) {
-            if (isset($talkInfo[$comment->getTalkUri()])) {
+        foreach ($talkComments as $talkComment) {
+            if (isset($talkInfo[$talkComment->getTalkUri()])) {
                 continue;
             }
-            $talkData = $talkDb->load('uri', $comment->getTalkUri());
+
+            $talkData = $talkDb->load('uri', $talkComment->getTalkUri());
             if ($talkData) {
-                $eventUri                                                     = $talkData['event_uri'];
-                $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
+                $eventUri                                                         = $talkData['event_uri'];
+                $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title']  = $talkData['slug'];
             } else {
-                $talk = $talkApi->getTalk($comment->getTalkUri());
+                $talk = $talkApi->getTalk($talkComment->getTalkUri());
                 if ($talk) {
-                    $eventUri                                                    = $talk->getEventUri();
-                    $talkInfo[$comment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
+                    $eventUri                                                        = $talk->getEventUri();
+                    $talkInfo[$talkComment->getTalkUri()]['url_friendly_talk_title'] = $talk->getUrlFriendlyTalkTitle();
                 }
             }
 
             // look up event's name & url_friendly_name from the DB orAPI
-            if (!isset($eventInfo[$comment->getTalkUri()])) {
-                $eventInfo[$comment->getTalkUri()] = $this->lookupEventInfo($eventUri);
+            if (!isset($eventInfo[$talkComment->getTalkUri()])) {
+                $eventInfo[$talkComment->getTalkUri()] = $this->lookupEventInfo($eventUri);
             }
         }
 
@@ -482,7 +478,7 @@ class UserController extends BaseController
         );
     }
 
-    protected function lookupEventInfo($eventUri)
+    protected function lookupEventInfo($eventUri): array
     {
         $eventDb  = $this->getEventDb();
         $eventApi = $this->getEventApi();
@@ -503,47 +499,32 @@ class UserController extends BaseController
         return $eventInfo;
     }
 
-    /**
-     * @return UserApi
-     */
-    private function getUserApi()
+    private function getUserApi(): UserApi
     {
         return $this->application->container->get(UserApi::class);
     }
 
-    /**
-     * @return TalkDb
-     */
-    private function getTalkDb()
+    private function getTalkDb(): TalkDb
     {
         return $this->application->container->get(TalkDb::class);
     }
 
-    /**
-     * @return TalkApi
-     */
-    private function getTalkApi()
+    private function getTalkApi(): TalkApi
     {
         return $this->application->container->get(TalkApi::class);
     }
 
-    /**
-     * @return EventDb
-     */
-    private function getEventDb()
+    private function getEventDb(): EventDb
     {
         return $this->application->container->get(EventDb::class);
     }
 
-    /**
-     * @return EventApi
-     */
-    private function getEventApi()
+    private function getEventApi(): EventApi
     {
         return $this->application->container->get(EventApi::class);
     }
 
-    public function remindUsername()
+    public function remindUsername(): void
     {
         $request = $this->application->request();
 
@@ -589,14 +570,13 @@ class UserController extends BaseController
      * User profile edit page
      *
      * @param  string $username User's username
-     * @return void
      */
-    public function profileEdit($username)
+    public function profileEdit($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
         if (!$user) {
-            Slim::getInstance()->notFound();
+            $this->application->notFound();
         }
 
         if (!$user->getCanEdit() || !isset($_SESSION['user'])) {
@@ -625,7 +605,7 @@ class UserController extends BaseController
 
         $request = $this->application->request();
         if ($request->isPost()) {
-            if ($request->post('submit') == 'Cancel') {
+            if ($request->post('submit') === 'Cancel') {
                 $this->application->redirect($this->application->urlFor('user-profile', ['username' => $username]));
             }
 
@@ -676,7 +656,7 @@ class UserController extends BaseController
         );
     }
 
-    public function userDelete($username)
+    public function userDelete($username): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUsername($username);
@@ -686,8 +666,8 @@ class UserController extends BaseController
             $result = $userApi->delete($user->getUri());
 
             $this->application->flash('message', 'User has been deleted');
-        } catch (\Exception $e) {
-            $this->application->flash('error', 'There was a problem deleting the user: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            $this->application->flash('error', 'There was a problem deleting the user: ' . $exception->getMessage());
             $this->application->redirect(
                 $this->application->urlFor('user-profile-edit', ['username' => $username])
             );
@@ -696,7 +676,7 @@ class UserController extends BaseController
         $this->application->redirect('/');
     }
 
-    public function resetPassword()
+    public function resetPassword(): void
     {
         $request = $this->application->request();
 
@@ -740,10 +720,8 @@ class UserController extends BaseController
 
     /**
      * Link in password reset email lands here
-     *
-     * @return void
      */
-    public function newPassword()
+    public function newPassword(): void
     {
         $request = $this->application->request();
         $token   = $request->get('token');
@@ -789,60 +767,58 @@ class UserController extends BaseController
      * update the session.
      *
      * @param  \stdClass|false  $result
-     * @param  string           $redirect
      * @return void
      */
-    protected function handleLogin($result, $redirect = '')
+    protected function handleLoginError(\RuntimeException $runtimeException, string $redirect = '/')
     {
-        if (!is_object($result)) {
-            if ($result === false || $result[0] == 'Signin failed') {
-                $this->application->flash('error', "Failed to log in");
-            }
-            if ($result[0] == 'Not verified') {
-                $message = 'User account not verified. ' .
-                    "<a href='/user/resend-verification'>Click here</a> to resend welcome email.";
-                $this->application
-                    ->flash('error', $message);
-            }
-
-            if (empty($redirect)) {
-                $redirect = '/';
-            }
-            $this->application->redirect($redirect . '#login');
+        if ($runtimeException->getMessage() === 'Signin failed') {
+            $this->application->flash('error', "Failed to log in");
         }
 
+        if ($runtimeException->getMessage() === 'Not verified') {
+            $message = 'User account not verified. ' . "<a href='/user/resend-verification'>Click here</a> to resend welcome email.";
+            $this->application->flash('error', $message);
+        }
+
+        $this->application->redirect($redirect . '#login');
+    }
+
+    protected function handleLoginSuccess(\stdClass $result, string $redirect = '/')
+    {
         session_regenerate_id(true);
+
         $_SESSION['access_token'] = $result->access_token;
         $this->accessToken        = $_SESSION['access_token'];
 
         // now get users details
         $userApi = $this->getUserApi();
-
         $userApi->setAccessToken($this->accessToken);
 
         $user = $userApi->getUser($result->user_uri);
         if ($user) {
             $_SESSION['user'] = $user;
 
-            if (empty($redirect)
+            if ($redirect === '' || $redirect === '0'
                 || strpos($redirect, '/user/login') === 0
                 || strpos($redirect, '/not-allowed') === 0
             ) {
                 $this->application->redirect('/');
             }
+
             $this->application->redirect($redirect);
         }
+
         unset($_SESSION['access_token']);
         $this->application->flash('error', "Failed to log in. User account problem.");
         $this->application->redirect('/');
     }
 
-    public function redirectFromId($userId)
+    public function redirectFromId($userId): void
     {
         $userApi = $this->getUserApi();
         $user    = $userApi->getUserByUserId($userId);
         if (!$user) {
-            return $this->application->notFound();
+            $this->application->notFound();
         }
 
         $this->application->redirect(

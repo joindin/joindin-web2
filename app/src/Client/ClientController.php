@@ -7,22 +7,23 @@ use Slim\Slim;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 class ClientController extends BaseController
 {
-    protected function defineRoutes(Slim $app)
+    protected function defineRoutes(Slim $slim): void
     {
-        $app->get('/user/:username/client', [$this, 'index'])->name('clients');
-        $app->map('/user/:username/client/create', [$this, 'createClient'])->via('GET', 'POST')
+        $slim->get('/user/:username/client', [$this, 'index'])->name('clients');
+        $slim->map('/user/:username/client/create', [$this, 'createClient'])->via('GET', 'POST')
                                                                            ->name('client-create');
-        $app->get('/user/:username/client/:clientName', [$this, 'showClient'])->name('client-show');
-        $app->map('/user/:username/client/:clientName/edit', [$this, 'editClient'])->via('GET', 'POST')
+        $slim->get('/user/:username/client/:clientName', [$this, 'showClient'])->name('client-show');
+        $slim->map('/user/:username/client/:clientName/edit', [$this, 'editClient'])->via('GET', 'POST')
                                                                                    ->name('client-edit');
-        $app->get('/user/:username/client/:clientName/delete', [$this, 'deleteClient'])->via('GET', 'POST')
+        $slim->get('/user/:username/client/:clientName/delete', [$this, 'deleteClient'])->via('GET', 'POST')
                                                                                        ->name('client-delete');
     }
 
-    public function index($username)
+    public function index($username): void
     {
         $thisUrl = $this->application->urlFor('clients', [
             'username' => $username,
@@ -48,7 +49,7 @@ class ClientController extends BaseController
         ]);
     }
 
-    public function showClient($username, $clientName)
+    public function showClient($username, string $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-show', [
             'clientName' => $clientName,
@@ -70,7 +71,7 @@ class ClientController extends BaseController
         $clientApi = $this->getClientApi();
         try {
             $client = $clientApi->getById($clientName);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->application->notFound();
             return;
         }
@@ -81,7 +82,7 @@ class ClientController extends BaseController
         ]);
     }
 
-    public function createClient($username)
+    public function createClient($username): void
     {
         $thisUrl = $this->application->urlFor('client-create', [
             'username' => $username,
@@ -128,7 +129,7 @@ class ClientController extends BaseController
         );
     }
 
-    public function editClient($username, $clientName)
+    public function editClient($username, string $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-edit', [
             'clientName' => $clientName,
@@ -150,7 +151,7 @@ class ClientController extends BaseController
         $clientApi = $this->getClientApi();
         try {
             $client = $clientApi->getById($clientName);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->application->notFound();
             return;
         }
@@ -211,11 +212,9 @@ class ClientController extends BaseController
      *
      * Should an error occur will this method append an error message to the form's error collection.
      *
-     * @param Form $form
-     *
      * @return ClientEntity|null|false
      */
-    private function addClientUsingForm(Form $form)
+    private function addClientUsingForm(FormInterface $form)
     {
         $clientApi = $this->getClientApi();
         $values    = $form->getData();
@@ -223,9 +222,9 @@ class ClientController extends BaseController
         $result = false;
         try {
             $result = $clientApi->submit($values);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $form->addError(
-                new FormError('an error occurred while submitting your client: ' . $e->getMessage())
+                new FormError('an error occurred while submitting your client: ' . $exception->getMessage())
             );
         }
 
@@ -234,7 +233,7 @@ class ClientController extends BaseController
 
 
 
-    public function deleteClient($username, $clientName)
+    public function deleteClient($username, string $clientName): void
     {
         $thisUrl = $this->application->urlFor('client-delete', [
             'clientName' => $clientName,
@@ -256,7 +255,7 @@ class ClientController extends BaseController
         $clientApi = $this->getClientApi();
         try {
             $client = $clientApi->getById($clientName);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->application->notFound();
             return;
         }
@@ -285,9 +284,9 @@ class ClientController extends BaseController
                         $this->application->urlFor('clients', ['username' => $username])
                     );
                     return;
-                } catch (\RuntimeException $e) {
+                } catch (\RuntimeException $exception) {
                     $form->adderror(
-                        new FormError('An error occurred while removing this client: ' . $e->getmessage())
+                        new FormError('An error occurred while removing this client: ' . $exception->getmessage())
                     );
                 }
             }
@@ -307,10 +306,7 @@ class ClientController extends BaseController
         );
     }
 
-    /**
-     * @return ClientApi
-     */
-    private function getClientApi()
+    private function getClientApi(): ClientApi
     {
         return $this->application->container->get(ClientApi::class);
     }

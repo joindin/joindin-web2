@@ -9,17 +9,14 @@ use Form\Shared\UrlResolver;
 
 class UrlResolverConstraintValidator extends ConstraintValidator
 {
-    /**
-     * @var UrlResolver
-     */
-    private $urlResolver;
+    private \Form\Shared\UrlResolver $urlResolver;
 
     public function __construct(UrlResolver $urlResolver = null)
     {
-        $this->urlResolver = $urlResolver === null ? new UrlResolver() : $urlResolver;
+        $this->urlResolver = $urlResolver ?? new UrlResolver();
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if ($value === '') {
             return;
@@ -31,7 +28,7 @@ class UrlResolverConstraintValidator extends ConstraintValidator
 
         try {
             $this->urlResolver->resolve($value);
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->context->addViolation($constraint->message);
         }
     }

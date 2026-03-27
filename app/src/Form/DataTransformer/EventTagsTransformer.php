@@ -10,6 +10,7 @@ class EventTagsTransformer implements DataTransformerInterface
         if (! is_array($value)) {
             return $value;
         }
+
         return implode(', ', $value);
     }
 
@@ -18,6 +19,7 @@ class EventTagsTransformer implements DataTransformerInterface
         if (is_Array($value)) {
             return $value;
         }
+
         return array_map('trim', explode(',', $value));
     }
 }

@@ -10,7 +10,6 @@ abstract class BaseCommentReportingEntity extends BaseEntity
     public function __construct(stdClass $data)
     {
         parent::__construct($data);
-        $this->comment = null;
     }
 
     public function getComment()

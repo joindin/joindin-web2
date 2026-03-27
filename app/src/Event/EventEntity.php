@@ -15,14 +15,14 @@ class EventEntity extends BaseEntity
         return $this->data->name;
     }
 
-    public function setName($name)
+    public function setName($name): self
     {
         $this->data->name = $name;
 
         return $this;
     }
 
-    public function getFullTimezone()
+    public function getFullTimezone(): ?string
     {
         if (!isset($this->data->tz_continent) || !isset($this->data->tz_place)) {
             return null;
@@ -40,7 +40,7 @@ class EventEntity extends BaseEntity
         return $this->data->icon;
     }
 
-    public function setIcon($icon)
+    public function setIcon($icon): void
     {
         $this->data->icon = $icon;
     }
@@ -54,7 +54,7 @@ class EventEntity extends BaseEntity
         return $this->data->start_date;
     }
 
-    public function setStartDate($date)
+    public function setStartDate($date): self
     {
         $this->data->start_date = $date;
 
@@ -70,7 +70,7 @@ class EventEntity extends BaseEntity
         return $this->data->end_date;
     }
 
-    public function setEndDate($date)
+    public function setEndDate($date): self
     {
         $this->data->end_date = $date;
 
@@ -86,7 +86,7 @@ class EventEntity extends BaseEntity
         return $this->data->location;
     }
 
-    public function setLocation($location)
+    public function setLocation($location): void
     {
         $this->data->location = $location;
     }
@@ -100,12 +100,13 @@ class EventEntity extends BaseEntity
         return $this->data->description;
     }
 
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->data->description = $description;
 
         return $this;
     }
+
     /**
      * @return array|null
      */
@@ -118,7 +119,7 @@ class EventEntity extends BaseEntity
         return $this->data->tags;
     }
 
-    public function setTags($tags)
+    public function setTags($tags): self
     {
         $this->data->tags = $tags;
 
@@ -134,7 +135,7 @@ class EventEntity extends BaseEntity
         return $this->data->latitude;
     }
 
-    public function setLatitude($latitude)
+    public function setLatitude($latitude): self
     {
         $this->data->latitude = $latitude;
 
@@ -150,7 +151,7 @@ class EventEntity extends BaseEntity
         return $this->data->longitude;
     }
 
-    public function setLongitude($longitude)
+    public function setLongitude($longitude): self
     {
         $this->data->longitude = $longitude;
 
@@ -247,7 +248,7 @@ class EventEntity extends BaseEntity
         return (bool)$this->data->comments_enabled;
     }
 
-    public function isPastEvent()
+    public function isPastEvent(): bool
     {
         $endDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getEndDate());
         $now     = new DateTime(null, $endDate->getTimezone());
@@ -274,7 +275,7 @@ class EventEntity extends BaseEntity
         return $this->data->stub;
     }
 
-    public function setStub($stub)
+    public function setStub($stub): void
     {
         $this->data->stub = $stub;
     }
@@ -283,10 +284,8 @@ class EventEntity extends BaseEntity
      * Returns the timezone in Continent/Place format or null if the timezone is not provided.
      *
      * @see \DateTimeZone::listIdentifiers() for a list of supported timezones.
-     *
-     * @return string|null
      */
-    public function getTimezone()
+    public function getTimezone(): ?string
     {
         if (! isset($this->data->tz_continent)
             || ! isset($this->data->tz_place)
@@ -310,10 +309,8 @@ class EventEntity extends BaseEntity
 
     /**
      * Returns the continent for the set timezone
-     *
-     * @return string
      */
-    public function getTzContinent()
+    public function getTzContinent(): string
     {
         $tz = explode('/', $this->getTimezone());
         return $tz[0];
@@ -324,17 +321,15 @@ class EventEntity extends BaseEntity
      *
      * @param string $tzContinent
      */
-    public function setTzContinent($tzContinent)
+    public function setTzContinent($tzContinent): void
     {
         $this->data->tz_continent = $tzContinent;
     }
 
     /**
      * Returns the city for the set timezone
-     *
-     * @return string
      */
-    public function getTzPlace()
+    public function getTzPlace(): string
     {
         $tz = explode('/', $this->getTimezone());
         if (! isset($tz[1])) {
@@ -349,7 +344,7 @@ class EventEntity extends BaseEntity
      *
      * @param string $tzPlace
      */
-    public function setTzPlace($tzPlace)
+    public function setTzPlace($tzPlace): void
     {
         $this->data->tz_place = $tzPlace;
     }
@@ -371,7 +366,7 @@ class EventEntity extends BaseEntity
      *
      * @param string $href
      */
-    public function setHref($href)
+    public function setHref($href): void
     {
         $this->data->href = $href;
     }
@@ -391,7 +386,7 @@ class EventEntity extends BaseEntity
             : null;
     }
 
-    public function setCfpStartDate($date)
+    public function setCfpStartDate($date): self
     {
         $this->data->cfp_start_date = $date;
 
@@ -413,7 +408,7 @@ class EventEntity extends BaseEntity
             : null;
     }
 
-    public function setCfpEndDate($date)
+    public function setCfpEndDate($date): self
     {
         $this->data->cfp_end_date = $date;
 
@@ -432,7 +427,7 @@ class EventEntity extends BaseEntity
             : null;
     }
 
-    public function setCfpUrl($cfpUrl)
+    public function setCfpUrl($cfpUrl): self
     {
         $this->data->cfp_url = $cfpUrl;
 
@@ -442,10 +437,8 @@ class EventEntity extends BaseEntity
     /**
      * Returns the status of the CFP
      * Baed on start and end dates
-     *
-     * @return string
      */
-    public function getCfpStatus()
+    public function getCfpStatus(): string
     {
         if (!empty($this->getCfpStartDate()) && !empty($this->getCfpEndDate())) {
             $startDate = DateTime::createFromFormat(DateTime::ISO8601, $this->getCfpStartDate());
@@ -478,7 +471,7 @@ class EventEntity extends BaseEntity
         return $this->data->ID;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return (array) $this->data;
     }
@@ -516,27 +509,27 @@ class EventEntity extends BaseEntity
     {
         if (isset($this->data->reported_comments_uri)) {
             return $this->data->reported_comments_uri;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getReportedTalkCommentsUri()
     {
         if (isset($this->data->reported_talk_comments_uri)) {
             return $this->data->reported_talk_comments_uri;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getPendingClaimsUri()
     {
         if (isset($this->data->pending_claims_uri)) {
             return $this->data->pending_claims_uri;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getAttendeesUri()

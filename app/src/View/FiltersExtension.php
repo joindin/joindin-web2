@@ -2,25 +2,27 @@
 
 namespace View;
 
-use Twig_Environment;
-use Twig_SimpleFilter;
+use Twig\Environment;
+use Twig\Error\RuntimeError;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-final class FiltersExtension extends \Twig_Extension
+final class FiltersExtension extends AbstractExtension
 {
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'img_path',
                 [$this, 'imgPath'],
                 ['needs_environment' => true]
             ),
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'link',
                 [$this, 'link'],
                 ['is_safe' => ['html']]
             ),
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'format_date',
                 [$this, 'formatDate']
             )
@@ -28,14 +30,11 @@ final class FiltersExtension extends \Twig_Extension
     }
 
     /**
-     * @param Twig_Environment $env
      * @param string           $suffix
-     * @param string           $infix
      *
-     * @return string
-     * @throws \Twig_Error_Runtime
+     * @throws RuntimeError
      */
-    public function imgPath(Twig_Environment $env, $suffix, $infix)
+    public function imgPath(Environment $twigEnvironment, $suffix, string $infix): string
     {
         if (!$suffix && $infix === 'event_icons') {
             $suffix = 'none.png';
@@ -45,7 +44,7 @@ final class FiltersExtension extends \Twig_Extension
 
         // Allow for migration to local images
         if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path)) {
-            $uri = $env->getExtension('slim')->base();
+            $uri = $twigEnvironment->getExtension('slim')->base();
 
             return $uri . $path;
         }
@@ -58,29 +57,17 @@ final class FiltersExtension extends \Twig_Extension
      *
      * @return false|string
      */
-    public function formatDate($date)
+    public function formatDate($date): string
     {
         return date('D M dS Y', strtotime($date));
     }
 
-    /**
-     * @param string $url
-     * @param string $label
-     * @param string $class
-     *
-     * @return string
-     */
-    public function link($url, $label = '', $class = '')
+    public function link(string $url, string $label = '', string $class = ''): string
     {
-        return '<a href="' . $url . '" class="' . $class . '">' . ($label ? $label : $url) . '</a>';
+        return '<a href="' . $url . '" class="' . $class . '">' . ($label ?: $url) . '</a>';
     }
 
-    /**
-     * Returns the name of the extension.
-     *
-     * @return string The extension name
-     */
-    public function getName()
+    public function getName(): string
     {
         return self::class;
     }

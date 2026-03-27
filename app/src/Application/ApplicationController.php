@@ -3,25 +3,28 @@ namespace Application;
 
 use Event\EventDb;
 use Event\EventApi;
+use Slim\Slim;
+use Symfony\Component\Form\FormFactoryInterface;
 use User\UserDb;
 use User\UserApi;
 
 class ApplicationController extends BaseController
 {
-    protected function defineRoutes(\Slim\Slim $app)
+    protected function defineRoutes(Slim $slim): void
     {
-        $app->get('/', [$this, 'index']);
-        $app->get('/about', [$this, 'about'])->name('about');
-        $app->map('/contact', [$this, 'contact'])->via('GET', 'POST')->name('contact');
-        $app->get('/not-allowed', [$this, 'notAllowed'])->name('not-allowed');
-        $app->get('/assets', [$this, 'assets'])->name('assets');
+        $slim->get('/', [$this, 'index']);
+        $slim->get('/about', [$this, 'about'])->name('about');
+        $slim->map('/contact', [$this, 'contact'])->via('GET', 'POST')->name('contact');
+        $slim->get('/not-allowed', [$this, 'notAllowed'])->name('not-allowed');
+        $slim->get('/assets', [$this, 'assets'])->name('assets');
     }
 
-    public function index()
+    public function index(): void
     {
-        $page = ((int)$this->application->request()->get('page') === 0)
-            ? 1
-            : $this->application->request()->get('page');
+        $page = (int)$this->application->request()->get('page', 1);
+        if ($page === 0) {
+            $page = 1;
+        }
 
         $perPage = 10;
         $start   = ($page -1) * $perPage;
@@ -42,21 +45,16 @@ class ApplicationController extends BaseController
 
     /**
      * Get latest current events
-     *
-     * @param int $start
-     * @param int $perPage
-     * @return array
      */
-    public function getCurrentEvents($start, $perPage)
+    public function getCurrentEvents(int $start, int $perPage): array
     {
-        $eventApi = $this->getEventApi();
-        return $eventApi->getEvents($perPage, $start, 'upcoming');
+        return $this->getEventApi()->getEvents($perPage, $start, 'upcoming');
     }
 
     /**
      * Render the about page
      */
-    public function about()
+    public function about(): void
     {
         $this->render(
             'Application/about.html.twig',
@@ -69,7 +67,7 @@ class ApplicationController extends BaseController
     /**
      * Render the contact page
      */
-    public function contact()
+    public function contact(): void
     {
         $request = $this->application->request();
 
@@ -116,7 +114,7 @@ class ApplicationController extends BaseController
     /**
      * Render the assets page
      */
-    public function assets()
+    public function assets(): void
     {
         $this->render(
             'Application/assets.html.twig',
@@ -130,25 +128,19 @@ class ApplicationController extends BaseController
     /**
      * Render the notAllowed page
      */
-    public function notAllowed()
+    public function notAllowed(): void
     {
         $this->render('Application/not-allowed.html.twig', [
             'redirect' => $this->application->request->get('redirect')
         ]);
     }
 
-    /**
-     * @return EventApi
-     */
-    private function getEventApi()
+    private function getEventApi(): EventApi
     {
         return $this->application->container->get(EventApi::class);
     }
 
-    /**
-     * @return ContactApi
-     */
-    private function getContactApi()
+    private function getContactApi(): ContactApi
     {
         return $this->application->container->get(ContactApi::class);
     }

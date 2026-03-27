@@ -7,13 +7,14 @@ use \DateTimeZone;
 
 class DateTransformer implements DataTransformerInterface
 {
-    protected $timezone;
+    protected \DateTimeZone $timezone;
 
     public function __construct($timezone = 'UTC')
     {
         if (! in_array($timezone, DateTimeZone::listIdentifiers(DateTimeZone::ALL))) {
             $timezone = 'UTC';
         }
+
         $this->timezone = new DateTimeZone($timezone);
     }
 
@@ -33,6 +34,7 @@ class DateTransformer implements DataTransformerInterface
             $d     = new DateTime($value, $this->timezone);
             $value = $d->format($format);
         }
+
         return $value;
     }
 }

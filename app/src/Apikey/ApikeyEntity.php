@@ -7,7 +7,7 @@ use DateInterval;
 
 class ApikeyEntity extends BaseEntity
 {
-    public function getId()
+    public function getId(): string
     {
         return substr($this->data->token_uri, strrpos($this->data->token_uri, '/') + 1);
     }
@@ -17,12 +17,12 @@ class ApikeyEntity extends BaseEntity
         return $this->data->application;
     }
 
-    public function getLastUsedDateTime()
+    public function getLastUsedDateTime(): \DateTimeImmutable
     {
         return new \DateTimeImmutable($this->data->last_used_date);
     }
 
-    public function getCreationDateTime()
+    public function getCreationDateTime(): \DateTimeImmutable
     {
         return new \DateTimeImmutable($this->data->created_date);
     }

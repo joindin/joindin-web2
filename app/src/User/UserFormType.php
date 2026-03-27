@@ -23,7 +23,7 @@ class UserFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'email_input';
     }
@@ -33,15 +33,10 @@ class UserFormType extends AbstractType
      *
      * This method is automatically called by the Form Factory builder and does not need
      * to be called manually, see the class description for usage information.
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return void
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'full_name',
                 'text',
@@ -81,7 +76,7 @@ class UserFormType extends AbstractType
             );
 
         if ($this->canChangePassword) {
-            $builder
+            $formBuilder
                 ->add(
                     'old_password',
                     'password',

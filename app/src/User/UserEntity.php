@@ -33,8 +33,7 @@ class UserEntity extends BaseEntity
      */
     public function getTwitterUsername()
     {
-        $name = str_replace('@', '', $this->data->twitter_username);
-        return $name;
+        return str_replace('@', '', $this->data->twitter_username);
     }
 
     /**
@@ -47,6 +46,7 @@ class UserEntity extends BaseEntity
         if (!isset($this->data->biography)) {
             return null;
         }
+
         return $this->data->biography;
     }
 
@@ -172,7 +172,7 @@ class UserEntity extends BaseEntity
         return $this->data->admin;
     }
 
-    public function getId()
+    public function getId(): string
     {
         $uri   = $this->data->uri;
         $parts = explode('/', $uri);

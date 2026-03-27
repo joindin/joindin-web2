@@ -13,13 +13,12 @@ use Talk\TalkEntity;
  */
 class EventScheduler
 {
-    protected $talkApi;
+    protected \Talk\TalkApi $talkApi;
+
     protected $distinctDates;
 
     /**
      * Constructor
-     *
-     * @param TalkApi $talkApi
      */
     public function __construct(TalkApi $talkApi)
     {
@@ -29,29 +28,22 @@ class EventScheduler
     /**
      * Builds schedule data into an array structure
      * for schedule view
-     *
-     * @param EventEntity $event
-     * @return array
      */
-    public function getScheduleData(EventEntity $event)
+    public function getScheduleData(EventEntity $eventEntity): array
     {
-        $talks     = $this->getTalks($event->getTalksUri().'?start=0&resultsperpage=1000');
-        $eventDays = $this->getEventDays($talks);
+        $talks     = $this->getTalks($eventEntity->getTalksUri().'?start=0&resultsperpage=1000');
 
-        return $eventDays;
+        return $this->getEventDays($talks);
     }
 
     /**
      * Retrieves talk collection from API
      *
      * @param string $talks_uri
-     * @return array
      */
-    public function getTalks($talks_uri)
+    public function getTalks($talks_uri): array
     {
-        $talks = $this->talkApi->getCollection($talks_uri);
-
-        return $talks;
+        return $this->talkApi->getCollection($talks_uri);
     }
 
     /**
@@ -60,19 +52,17 @@ class EventScheduler
      * @param array $talks
      * @return array Array of EventSchedulerDay objects
      */
-    public function getEventDays($talks)
+    public function getEventDays($talks): array
     {
         if (empty($talks) || empty($talks['talks'])) {
             return [];
         }
 
         $talks      = $talks['talks'];
-        usort($talks, function (TalkEntity $a, TalkEntity $b) {
-            return $a->getStartDateTime() <=> $b->getStartDateTime() ?:
-                ($a->getTracks() && $b->getTracks()
-                    ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
-                    : $a['id'] <=> $b['id']);
-        });
+        usort($talks, fn (TalkEntity $a, TalkEntity $b): int => $a->getStartDateTime() <=> $b->getStartDateTime() ?:
+            ($a->getTracks() && $b->getTracks()
+                ? strcasecmp($a->getTracks()[0]->track_uri, $b->getTracks()[0]->track_uri)
+                : $a['id'] <=> $b['id']));
 
         $talksByDay = $this->organiseTalksByDayAndTime($talks);
 
@@ -92,9 +82,8 @@ class EventScheduler
      * day
      *
      * @param TalkEntity[] $talks
-     * @return array
      */
-    protected function organiseTalksByDayAndTime($talks)
+    protected function organiseTalksByDayAndTime($talks): array
     {
         $talksByDay = [];
 
@@ -106,6 +95,7 @@ class EventScheduler
             if (!isset($talksByDay[$date]) || !array_key_exists($date, $talksByDay)) {
                 $talksByDay[$date] = [];
             }
+
             if (!isset($talksByDay[$date][$time]) || !array_key_exists($time, $talksByDay[$date])) {
                 $talksByDay[$date][$time] = [];
             }
@@ -121,9 +111,8 @@ class EventScheduler
      * track names by date
      *
      * @param array $talks
-     * @return array
      */
-    protected function getTracksByDay($talks)
+    protected function getTracksByDay($talks): array
     {
         $tracksByDay = [];
 
@@ -137,7 +126,7 @@ class EventScheduler
 
             $tracks = $talk->getTracks();
 
-            if (is_array($tracks) && !empty($tracks)) {
+            if (is_array($tracks) && $tracks !== []) {
                 foreach ($tracks as $track) {
                     //obtain array of unique track names as array key
                     $tracksByDay[$date][$track->track_name] = true;

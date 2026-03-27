@@ -2,13 +2,9 @@
 namespace Search;
 
 use Application\BaseController;
-use Application\CacheService;
 use Event\EventApi;
-use Event\EventDb;
 use Slim\Slim;
 use Talk\TalkApi;
-use Talk\TalkDb;
-use User\UserDb;
 use User\UserApi;
 
 /**
@@ -26,30 +22,25 @@ class SearchController extends BaseController
     /**
      * @var integer The number of search results to show per page
      */
-    protected $itemsPerPage;
+    protected $itemsPerPage = 10;
 
-    public function __construct(Slim $app)
+    public function __construct(Slim $slim)
     {
-        parent::__construct($app);
-        $this->itemsPerPage = 10;
+        parent::__construct($slim);
     }
 
-    /**
-     * @param Slim $app
-     */
-    protected function defineRoutes(Slim $app)
+    protected function defineRoutes(Slim $slim): void
     {
-        $app->get('/search/events', [$this, 'searchEvents'])->name("search-events");
-        $app->get('/search', [$this, 'search'])->name("search");
+        $slim->get('/search/events', [$this, 'searchEvents'])->name("search-events");
+        $slim->get('/search', [$this, 'search'])->name("search");
     }
 
     /**
      * Sanitize the search string - based on stub definition
      *
      * @param string $keyword
-     * @return string|null
      */
-    protected function sanitizeKeyword($keyword)
+    protected function sanitizeKeyword($keyword): ?string
     {
         return preg_replace("/[^A-Za-z0-9-_[:space:]]/", '', $keyword);
     }
@@ -58,9 +49,8 @@ class SearchController extends BaseController
      * Sanitize a tag
      *
      * @param string $tag
-     * @return string|null
      */
-    protected function sanitizeTag($tag)
+    protected function sanitizeTag($tag): ?string
     {
         return preg_replace("/[^A-Za-z0-9]/", '', $tag);
     }
@@ -71,7 +61,7 @@ class SearchController extends BaseController
      * Will return a list of $limit events
      *
      */
-    public function searchEvents()
+    public function searchEvents(): void
     {
         $keyword = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $tag     = $this->sanitizeTag($this->application->request()->get('tag'));
@@ -81,7 +71,7 @@ class SearchController extends BaseController
             ? 1
             : $this->application->request()->get('page');
 
-        if (!empty($keyword) || !empty($tag)) {
+        if ($keyword !== null && $keyword !== '' && $keyword !== '0' || $tag !== null && $tag !== '' && $tag !== '0') {
             $events = $this->searchEventsByTitleAndTag($page, $keyword, $tag);
         }
 
@@ -99,7 +89,7 @@ class SearchController extends BaseController
     /**
      * Search both events and talks
      */
-    public function search()
+    public function search(): void
     {
         $keyword    = $this->sanitizeKeyword($this->application->request()->get('keyword'));
         $events     = [];
@@ -112,7 +102,7 @@ class SearchController extends BaseController
             ? 1
             : $this->application->request()->get('page');
 
-        if (!empty($keyword)) {
+        if ($keyword !== null && $keyword !== '' && $keyword !== '0') {
             $events = $this->searchEventsByTitleAndTag($page, $keyword);
             $talks  = $this->searchTalksByTitle($page, $keyword);
             $users  = $this->searchUsersByKeyword($page, $keyword);
@@ -145,18 +135,16 @@ class SearchController extends BaseController
      * @param int    $page
      * @param string $keyword
      * @param string $tag
-     *
-     * @return array
      */
-    private function searchEventsByTitleAndTag($page, $keyword, $tag = null)
+    private function searchEventsByTitleAndTag($page, ?string $keyword, ?string $tag = null): array
     {
         $apiQueryParams = [];
 
-        if (!empty($keyword)) {
+        if ($keyword !== null && $keyword !== '' && $keyword !== '0') {
             $apiQueryParams['title'] = $keyword;
         }
 
-        if (!empty($tag)) {
+        if ($tag !== null && $tag !== '' && $tag !== '0') {
             $apiQueryParams['tags'] = $tag;
         }
 
@@ -173,11 +161,9 @@ class SearchController extends BaseController
 
     /**
      * @param int    $page
-     * @param string $keyword
      *
-     * @return array
      */
-    private function searchTalksByTitle($page, $keyword)
+    private function searchTalksByTitle($page, string $keyword): array
     {
         $apiQueryParams = [
             'title'          => $keyword,
@@ -193,11 +179,9 @@ class SearchController extends BaseController
 
     /**
      * @param int    $page
-     * @param string $keyword
      *
-     * @return array
      */
-    private function searchUsersByKeyword($page, $keyword)
+    private function searchUsersByKeyword($page, string $keyword): array
     {
         $apiQueryParams = [
             'keyword'        => $keyword,
@@ -209,26 +193,17 @@ class SearchController extends BaseController
         return $this->getUserApi()->getCollection($apiQueryParams);
     }
 
-    /**
-     * @return EventApi
-     */
-    protected function getEventApi()
+    protected function getEventApi(): EventApi
     {
         return $this->application->container->get(EventApi::class);
     }
 
-    /**
-     * @return TalkApi
-     */
-    protected function getTalkApi()
+    protected function getTalkApi(): TalkApi
     {
         return $this->application->container->get(TalkApi::class);
     }
 
-    /**
-     * @return UserApi
-     */
-    private function getUserApi()
+    private function getUserApi(): UserApi
     {
         return $this->application->container->get(UserApi::class);
     }
@@ -238,7 +213,7 @@ class SearchController extends BaseController
      *
      * @return array An array of event entities where event uri is the key
      */
-    private function getEventInfoForTalks(array $talks)
+    private function getEventInfoForTalks(array $talks): array
     {
         $eventApi = $this->getEventApi();
 
@@ -251,12 +226,8 @@ class SearchController extends BaseController
         return $events;
     }
 
-    /**
-     * @param array $paginations
-     *
-     * @return array
-     */
-    private function combinePaginationData(array $paginations)
+
+    private function combinePaginationData(array $paginations): array
     {
         $result = [
             'count' => 0,

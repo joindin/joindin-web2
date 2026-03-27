@@ -48,19 +48,15 @@ class ValidationMiddleware extends Middleware
      * This validator must only be called if you are not using the forms functionality; when using forms you
      * can use the 'constraints' option of a Field Definition to add validation. See the Symfony documentation
      * for more information.
-     *
-     * @return void
      */
-    public function call()
+    public function call(): void
     {
         $this->addTranslations($this->getTranslator(), $this->getTranslationsRootFolder());
 
         $middleware = $this;
         $this->app->container->singleton(
             self::SERVICE_VALIDATOR,
-            function () use ($middleware) {
-                return $middleware->createValidator();
-            }
+            fn () => $middleware->createValidator()
         );
 
         $this->next->call();
@@ -78,25 +74,21 @@ class ValidationMiddleware extends Middleware
      */
     public function createValidator()
     {
-        $validator = Validation::createValidatorBuilder()
+        return Validation::createValidatorBuilder()
             ->setMetadataFactory(new ClassMetadataFactory(new StaticMethodLoader()))
             ->setConstraintValidatorFactory(new ConstraintValidatorFactory($this->app))
             ->setTranslator($this->getTranslator())
             ->setApiVersion(Validation::API_VERSION_2_5)
             ->getValidator();
-
-        return $validator;
     }
 
     /**
      * Adds all messages related to validation to the translator.
      *
      * @param Translator $translator
-     * @param string     $validatorComponentRootFolder
      *
-     * @return void
      */
-    private function addTranslations($translator, $validatorComponentRootFolder)
+    private function addTranslations($translator, string $validatorComponentRootFolder): void
     {
         $translator->addResource(
             'xliff',
@@ -124,13 +116,11 @@ class ValidationMiddleware extends Middleware
 
     /**
      * Returns the folder where the translations for the validator are stored.
-     *
-     * @return string
      */
-    private function getTranslationsRootFolder()
+    private function getTranslationsRootFolder(): string
     {
-        $r = new \ReflectionClass('Symfony\Component\Validator\Validator');
+        $reflectionClass = new \ReflectionClass(\Symfony\Component\Validator\Validator::class);
 
-        return dirname($r->getFilename());
+        return dirname($reflectionClass->getFilename());
     }
 }

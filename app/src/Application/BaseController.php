@@ -2,23 +2,22 @@
 namespace Application;
 
 use Slim\Slim;
+use Twig\Error\RuntimeError;
 use Twig_Error_Runtime;
 
 abstract class BaseController
 {
-    /** @var Slim */
-    protected $application;
+    protected \Slim\Slim $application;
 
     protected $accessToken;
+
     protected $cfg;
 
-    public function __construct(Slim $app)
+    public function __construct(Slim $slim)
     {
-        $this->application = $app;
-        $this->defineRoutes($app);
+        $this->application = $slim;
+        $this->defineRoutes($slim);
         $this->cfg = $this->getConfig();
-
-        $this->accessToken = null;
         if (isset($_SESSION['access_token'])) {
             $this->accessToken = $_SESSION['access_token'];
         }
@@ -26,39 +25,39 @@ abstract class BaseController
 
     private function getConfig()
     {
-        $app    = Slim::getInstance();
-        $config = $app->config('custom');
-        return $config;
+        return Slim::getInstance()->config('custom');
     }
 
-    protected function render($template, $data = [], $status = null)
+    protected function render($template, $data = [], $status = null): void
     {
         try {
             $this->application->render($template, $data, $status);
-        } catch (Twig_Error_Runtime $e) {
+        } catch (RuntimeError $runtimeError) {
             $this->application->render(
                 'Error/app_load_error.html.twig',
                 [
                     'message' => sprintf(
                         'An exception has been thrown during the rendering of a template ("%s").',
-                        $e->getMessage()
+                        $runtimeError->getMessage()
                     ),
                     -1,
                     null,
-                    $e
+                    $runtimeError
                 ]
             );
         }
     }
 
-    protected function getSessionVariable($name, $default = null)
+    /**
+     * @param array-key $name
+     * @param $default
+     *
+     * @return mixed|null
+     */
+    protected function getSessionVariable(string $name, $default = null)
     {
-        $value = $default;
-        if (array_key_exists($name, $_SESSION)) {
-            $value = $_SESSION[$name];
-        }
-        return $value;
+        return $_SESSION[$name] ?? $default;
     }
 
-    abstract protected function defineRoutes(Slim $app);
+    abstract protected function defineRoutes(Slim $slim): void;
 }

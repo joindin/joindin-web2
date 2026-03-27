@@ -16,9 +16,9 @@ class UrlResolverConstraintValidatorTest extends TestCase
      */
     public function testValidateWorks(bool $expectResolve, string $base = null): void
     {
-        /** @var MockObject|ExecutionContextInterface $context */
-        $context = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
-        $context->expects(self::never())
+        /** @var MockObject|ExecutionContextInterface $mock */
+        $mock = $this->getMockBuilder(ExecutionContextInterface::class)->getMock();
+        $mock->expects(self::never())
             ->method('addViolation');
 
         /** @var MockObject|UrlResolver $urlResolver */
@@ -26,10 +26,10 @@ class UrlResolverConstraintValidatorTest extends TestCase
         $urlResolver->expects(self::exactly($expectResolve ? 1 : 0))
             ->method('resolve');
 
-        $validator = new UrlResolverConstraintValidator($urlResolver);
-        $validator->initialize($context);
+        $urlResolverConstraintValidator = new UrlResolverConstraintValidator($urlResolver);
+        $urlResolverConstraintValidator->initialize($mock);
 
-        $validator->validate($base, new UrlResolverConstraint());
+        $urlResolverConstraintValidator->validate($base, new UrlResolverConstraint());
     }
 
     public function validateWorksProvider(): array

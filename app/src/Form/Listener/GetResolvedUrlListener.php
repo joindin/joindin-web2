@@ -12,19 +12,16 @@ use Form\Shared\UrlResolver;
  */
 class GetResolvedUrlListener implements EventSubscriberInterface
 {
-    /**
-     * @var UrlResolver
-     */
-    private $urlResolver;
+    private \Form\Shared\UrlResolver $urlResolver;
 
     public function __construct(UrlResolver $urlResolver = null)
     {
-        $this->urlResolver = $urlResolver === null ? new UrlResolver() : $urlResolver;
+        $this->urlResolver = $urlResolver ?? new UrlResolver();
     }
 
-    public function onSubmit(FormEvent $event)
+    public function onSubmit(FormEvent $formEvent): void
     {
-        $data = $event->getData();
+        $data = $formEvent->getData();
 
         if ($data === '') {
             return;
@@ -36,8 +33,8 @@ class GetResolvedUrlListener implements EventSubscriberInterface
 
         try {
             $redirectURL = $this->urlResolver->resolve($data);
-            $event->setData($redirectURL);
-        } catch (\Exception $e) {
+            $formEvent->setData($redirectURL);
+        } catch (\Exception $exception) {
             // We can do nothing with this now, this will be caught by the constraint
         }
     }

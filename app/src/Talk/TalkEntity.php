@@ -12,9 +12,8 @@ class TalkEntity extends BaseEntity implements ArrayAccess
      * Is user a speaker on this talk?
      *
      * @param  string  $userUri
-     * @return boolean
      */
-    public function isSpeaker($userUri)
+    public function isSpeaker($userUri): bool
     {
         $speakers = $this->getSpeakers();
         foreach ($speakers as $speaker) {
@@ -22,6 +21,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
                 return true;
             }
         }
+
         return false;
     }
 
@@ -49,21 +49,20 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         return $this->data->website_uri;
     }
 
-    public function getStartDateTime()
+    public function getStartDateTime(): \DateTime
     {
         return new DateTime($this->data->start_date);
     }
 
-    public function getEndDateTime()
+    public function getEndDateTime(): ?\DateTime
     {
         if (!$this->data->duration) {
             return null;
         }
 
         $start_time = $this->getStartDateTime();
-        $end_time   = $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
 
-        return $end_time;
+        return $start_time->add(new DateInterval('PT'.$this->data->duration.'M'));
     }
 
     public function getDuration()
@@ -91,6 +90,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         if ($verbose) {
             return $this->data->verbose_uri;
         }
+
         return $this->data->uri;
     }
 
@@ -109,6 +109,7 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         if (! isset($this->data->user_rating)) {
             return false;
         }
+
         return $this->data->user_rating;
     }
 
@@ -181,12 +182,12 @@ class TalkEntity extends BaseEntity implements ArrayAccess
         return $this->data->$offset;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->data->$offset = $value;
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->data->$offset);
     }

@@ -37,7 +37,7 @@ class EventImportFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'event_import';
     }
@@ -47,15 +47,10 @@ class EventImportFormType extends AbstractType
      *
      * This method is automatically called by the Form Factory builder and does not need
      * to be called manually, see the class description for usage information.
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return void
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add('addr', 'hidden', ['mapped' => false])
             ->add(
                 'csv_file',

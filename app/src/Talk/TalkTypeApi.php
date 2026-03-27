@@ -25,10 +25,8 @@ class TalkTypeApi extends BaseApi
 
     /**
      * Return the list of talk types in a format suitable for a choice list
-     *
-     * @return array
      */
-    public function getTalkTypesChoiceList()
+    public function getTalkTypesChoiceList(): array
     {
         $types = [];
 

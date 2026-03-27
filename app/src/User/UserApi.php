@@ -5,10 +5,9 @@ use Application\BaseApi;
 
 class UserApi extends BaseApi
 {
-    /** @var UserDb */
-    private $userDb;
+    private \User\UserDb $userDb;
 
-    public function __construct($config, $accessToken, UserDb $userDb)
+    public function __construct($config, ?string $accessToken, UserDb $userDb)
     {
         parent::__construct($config, $accessToken);
         $this->userDb = $userDb;
@@ -20,22 +19,19 @@ class UserApi extends BaseApi
      * @param  string $url User's URI
      * @return mixed       stdClass of user data or false
      */
-    public function getUser($url)
+    public function getUser(string $url)
     {
         $result = $this->apiGet($url, ['verbose'=>'yes']);
 
         if ($result) {
             $data = json_decode($result, false, 512, JSON_BIGINT_AS_STRING);
-            if ($data) {
-                if (isset($data->users) && isset($data->users[0])) {
-                    $user = new UserEntity($data->users[0]);
-
-                    $this->userDb->save($user);
-
-                    return $user;
-                }
+            if (isset($data->users[0])) {
+                $userEntity = new UserEntity($data->users[0]);
+                $this->userDb->save($userEntity);
+                return $userEntity;
             }
         }
+
         return false;
     }
 
@@ -46,7 +42,7 @@ class UserApi extends BaseApi
     public function getUserByUserId($userId)
     {
         $userId = (int)$userId;
-        if (!$userId) {
+        if ($userId === 0) {
             return null;
         }
 
@@ -67,9 +63,9 @@ class UserApi extends BaseApi
      *
      * @return bool         True if the user is created
      */
-    public function register($data)
+    public function register($data): bool
     {
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/users', $data);
 
         if ($status == 201) {
             // user URI in $headers['location'] but the user is pending so it's not useful
@@ -77,11 +73,7 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        if (is_array($message)) {
-            $message = current($message);
-        } else {
-            $message = 'User could not be saved';
-        }
+        $message = is_array($message) ? current($message) : 'User could not be saved';
 
         throw new \Exception($message);
     }
@@ -95,11 +87,11 @@ class UserApi extends BaseApi
      *
      * @return bool             True if the user is now verified
      */
-    public function verify($token)
+    public function verify($token): bool
     {
         $data = ["token" => $token];
 
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/users/verifications', $data);
 
         if ($status == 204) {
             return true;
@@ -117,22 +109,18 @@ class UserApi extends BaseApi
      *
      * return bool  True if successful
      */
-    public function reverify($email)
+    public function reverify($email): bool
     {
         $data = ["email" => $email];
 
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/emails/verifications', $data);
 
         if ($status == 202) {
             return true;
         }
 
         $message = json_decode($result);
-        if (is_array($message)) {
-            $message = current($message);
-        } else {
-            $message = "Unknown error";
-        }
+        $message = is_array($message) ? current($message) : "Unknown error";
         throw new \Exception($message);
     }
 
@@ -150,18 +138,17 @@ class UserApi extends BaseApi
 
         if ($result) {
             $data = json_decode($result);
-            if ($data) {
-                if (isset($data->users)) {
-                    foreach ($data->users as $userData) {
-                        if (strtolower($userData->username) == strtolower($username)) {
-                            $user = new UserEntity($userData);
-                            $this->userDb->save($user);
-                            return $user;
-                        }
+            if ($data && isset($data->users)) {
+                foreach ($data->users as $userData) {
+                    if (strtolower($userData->username) === strtolower($username)) {
+                        $userEntity = new UserEntity($userData);
+                        $this->userDb->save($userEntity);
+                        return $userEntity;
                     }
                 }
             }
         }
+
         return false;
     }
 
@@ -197,11 +184,11 @@ class UserApi extends BaseApi
      *
      * return bool  True if successful
      */
-    public function usernameReminder($email)
+    public function usernameReminder($email): bool
     {
         $data = ["email" => $email];
 
-        list($status, $result, $headers) = $this->apiPost(
+        [$status, $result, $headers] = $this->apiPost(
             $this->baseApiUrl . '/v2.1/emails/reminders/username',
             $data
         );
@@ -211,11 +198,7 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        if (is_array($message)) {
-            $message = current($message);
-        } else {
-            $message = "Unknown error";
-        }
+        $message = is_array($message) ? current($message) : "Unknown error";
         throw new \Exception($message);
     }
 
@@ -228,11 +211,11 @@ class UserApi extends BaseApi
      *
      * @return bool  True if successful
      */
-    public function passwordReset($username)
+    public function passwordReset($username): bool
     {
         $data = ["username" => $username];
 
-        list($status, $result, $headers) = $this->apiPost(
+        [$status, $result, $headers] = $this->apiPost(
             $this->baseApiUrl . '/v2.1/emails/reminders/password',
             $data
         );
@@ -242,11 +225,7 @@ class UserApi extends BaseApi
         }
 
         $message = json_decode($result);
-        if (is_array($message)) {
-            $message = current($message);
-        } else {
-            $message = "Unknown error";
-        }
+        $message = is_array($message) ? current($message) : "Unknown error";
         throw new \Exception($message);
     }
 
@@ -256,14 +235,13 @@ class UserApi extends BaseApi
      * @see http://joindin.github.io/joindin-api/users.html for a list of supported
      * fields in the $data array
      *
-     * @param array $data
      *
      * @throws \Exception if unsuccessful
      * @return UserEntity
      */
     public function edit($uri, array $data)
     {
-        list($status, $result, $headers) = $this->apiPut($uri, $data);
+        [$status, $result, $headers] = $this->apiPut($uri, $data);
 
         // if successful, return event entity represented by the URL in the Location header
         if ($status == 204) {
@@ -275,15 +253,15 @@ class UserApi extends BaseApi
     }
 
 
-    public function delete($uri)
+    public function delete(string $uri): bool
     {
-        list($status, $result) = $this->apiDelete($uri, []);
+        [$status, $result] = $this->apiDelete($uri, []);
 
         if ($status == 204) {
             return true;
         }
 
-        throw new \Exception("Unable to delete user: $status, $result");
+        throw new \Exception(sprintf('Unable to delete user: %s, %s', $status, $result));
     }
 
     /**
@@ -295,14 +273,14 @@ class UserApi extends BaseApi
      *
      * @return bool             True if the password was changed
      */
-    public function resetPassword($token, $password)
+    public function resetPassword($token, $password): bool
     {
         $data = [
             "token"    => $token,
             "password" => $password,
         ];
 
-        list($status, $result, $headers) = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
+        [$status, $result, $headers] = $this->apiPost($this->baseApiUrl . '/v2.1/users/passwords', $data);
 
         if ($status == 204) {
             return true;
@@ -314,13 +292,11 @@ class UserApi extends BaseApi
     /**
      * Get all users for the specified query params
      *
-     * @param array         $queryParams
      *
      * @throws \Exception   if unable to connect to API
      *
-     * @return array
      */
-    public function getCollection(array $queryParams = [])
+    public function getCollection(array $queryParams = []): array
     {
         $usersUri = $this->baseApiUrl . '/v2.1/users';
         $users    = (array)json_decode(

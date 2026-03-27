@@ -9,7 +9,7 @@ class ConfigTest extends TestCase
     /** @var Config */
     protected $config;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->config = new Config(
             [
@@ -42,7 +42,7 @@ class ConfigTest extends TestCase
     /**
      * @dataProvider getSettings
      */
-    public function testConfigCanGetSetting($settings, $key, $expected): void
+    public function testConfigCanGetSetting(array $settings, $key, $expected): void
     {
         $config = new Config($settings);
         $value  = $config->offsetGet($key);

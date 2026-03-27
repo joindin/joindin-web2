@@ -10,7 +10,7 @@ class TrackApi extends BaseApi
      *
      * @return array
      */
-    public function getTracks($url)
+    public function getTracks(string $url)
     {
         $queryParams['resultsperpage'] = 0;
 
@@ -24,10 +24,8 @@ class TrackApi extends BaseApi
 
     /**
      * Return the list of tracks in a format suitable for a choice list
-     *
-     * @return array
      */
-    public function getTracksChoiceList($url)
+    public function getTracksChoiceList(string $url): array
     {
         $tracks = [];
 
@@ -45,14 +43,14 @@ class TrackApi extends BaseApi
      * @param  string $trackUri
      * @param  array $data
      */
-    public function updateTrack($trackUri, $data)
+    public function updateTrack($trackUri, $data): bool
     {
         $params = [
             'track_name'        => $data['track_name'],
             'track_description' => $data['track_description'] ?? '',
         ];
 
-        list($status, $result, $headers) = $this->apiPut($trackUri, $params);
+        [$status, $result, $headers] = $this->apiPut($trackUri, $params);
         if ($status == 204) {
             return true;
         }
@@ -69,14 +67,14 @@ class TrackApi extends BaseApi
      * @param  string $eventTracksUri
      * @param  array $data
      */
-    public function addTrack($eventTracksUri, $data)
+    public function addTrack($eventTracksUri, $data): bool
     {
         $params = [
             'track_name'        => $data['track_name'],
             'track_description' => $data['track_description'] ?? '',
         ];
 
-        list($status, $result, $headers) = $this->apiPost($eventTracksUri, $params);
+        [$status, $result, $headers] = $this->apiPost($eventTracksUri, $params);
         if ($status == 201) {
             return true;
         }
@@ -89,12 +87,10 @@ class TrackApi extends BaseApi
 
     /**
      * Delete a track
-     *
-     * @param string $trackUri
      */
-    public function deleteTrack($trackUri)
+    public function deleteTrack(string $trackUri): bool
     {
-        list($status, $result, $headers) = $this->apiDelete($trackUri);
+        [$status, $result, $headers] = $this->apiDelete($trackUri);
         if ($status == 204) {
             return true;
         }

@@ -24,10 +24,7 @@ class TrailingSlashMiddleware extends Middleware
         $this->addSlash = $addSlash;
     }
 
-    /**
-     * @return void
-     */
-    public function call()
+    public function call(): void
     {
         $request = $this->app->request();
         $path    = $request->getPath();

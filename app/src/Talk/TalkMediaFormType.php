@@ -17,22 +17,17 @@ class TalkMediaFormType extends AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'talk_media';
     }
 
     /**
      * Adds fields with their types and validation constraints to this definition.
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return void
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add(
                 'type',
                 'choice',

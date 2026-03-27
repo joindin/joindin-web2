@@ -42,10 +42,8 @@ class EventSchedulerDay
 
     /**
      * Get date
-     *
-     * @return string
      */
-    public function getDate()
+    public function getDate(): string
     {
         $date = new DateTime($this->date);
 
